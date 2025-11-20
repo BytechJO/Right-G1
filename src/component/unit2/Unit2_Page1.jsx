@@ -7,7 +7,7 @@ import Unit2_Page1_Read from "./Unit2_Pag1_Read";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-import allUnit2 from "../../assets/unit1/sounds";
+import allUnit2 from "../../assets/unit1/sounds/P10-11.mp3";
 const Unit2_Page1 = ({ openPopup }) => {
   const captionsExample = [
     { start: 0, end: 4.25, text: " Page 10, Unit 2, Stella's Birthday. " },
