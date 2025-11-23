@@ -176,20 +176,20 @@
 }
 
 /* المحتوى الرئيسي */
-.q3-content {
+.unit2-q3-content {
   display: flex;
   align-items: center;
-  /* gap: 2rem; */
+  gap: 1rem;
   flex-wrap: nowrap;
   /* margin-bottom: 25px; */
-  flex-direction: column;
+  flex-direction: row;
 }
 
 /* الصورة الرئيسية */
 
 .q3-main-img {
   width: auto;
-  height: 300px;
+  height: 360px;
 }
 
 /* الخيارات */
@@ -269,7 +269,7 @@
 
 /* --------- Tablets (992px↓) ---------- */
 @media (max-width: 992px) {
-  .q3-content {
+  .unit2-q3-content {
     flex-direction: column;
     gap: 1.5rem;
   }
@@ -278,17 +278,34 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-items: center;
   }
+
+    .q3-title {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
   .q3-main-img {
-    height: 200px;
+    height: 180px !important;
   }
 
   .q3-options {
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+  }
+
+  .q3-option-item {
+    width: 90%;
   }
 
   .q3-option-img {
-    width: 130px;
-    height: 130px;
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .q3-number {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
   }
 }
 

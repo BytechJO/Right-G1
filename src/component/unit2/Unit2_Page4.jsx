@@ -1,9 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_4 from "../../assets/img_unit2/imgs/Right 1 Unit 02 Stell Birthday4.jpg";
 import "./Unit2_Page4.css";
-import { FaHeadphones } from "react-icons/fa";
-import { PiCursorClickBold } from "react-icons/pi";
-import CD12_Pg13_Grammar2_AdultLady from "../../assets/img_unit2/sounds-unit2/CD12.Pg13.Grammar2_Adult Lady.mp3";
+import CD12_Pg13_Grammar2_AdultLady from "../../assets/img_unit2/sounds-unit2/U2 Right Grammar P13.mp3";
 import Pg13_2_1_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg13.2.1_Adult Lady.mp3";
 import Pg13_2_2_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg13.2.2_Adult Lady.mp3";
 import Pg13_2_3_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg13.2.3_Adult Lady.mp3";
@@ -16,17 +14,27 @@ import Pg13_5_1_Tom from "../../assets/img_unit2/sounds-unit2/Pg13.5.1_Tom.mp3";
 import Pg13_5_2_Sarah from "../../assets/img_unit2/sounds-unit2/Pg13.5.2_Sarah.mp3";
 import Pg13_6_1_Helen from "../../assets/img_unit2/sounds-unit2/Pg13.6.1_Helen.mp3";
 import Pg13_6_2_Sarah from "../../assets/img_unit2/sounds-unit2/Pg13.6.2_Sarah.mp3";
-import Popup from "../Popup/Popup";
+import video from "../../assets/img_unit2/sounds-unit2/p13.mp4";
+import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 
 const Unit2_Page4 = ({ openPopup }) => {
-  const [activePopup, setActivePopup] = useState(null);
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 4.07, text: " Page 13, exercise 2. Right Grammar. " },
+    { start: 4.10, end: 5.12, text: " What is it? " },
+    {start: 5.15, end: 6.15,text: "It’s a cake.",},
+    {start: 6.19,end: 7.21,text: "What are these?",},
+    { start: 7.25, end: 9.04, text: "These are presents. " },
+    { start: 9.07, end: 11.29, text: "What is it? It's a birthday cake. " },
+    { start: 11.32, end: 15.04, text: "What are these? These are presents." },
+    { start: 15.07, end: 18.22, text: "Is it a train? Yes, it is. " },
+    {
+      start: 18.26,
+      end: 21.24,
+      text: "Is it a cake? No, it isn't.",
+    },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -117,6 +125,38 @@ const Unit2_Page4 = ({ openPopup }) => {
         <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
 
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 60 60"
+        onClick={() =>
+          openPopup(
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <video
+                style={{
+                  height: "auto",
+                  width: "85%",
+                  borderRadius: "5%",
+                }}
+                controls
+              >
+                <source src={video} type="video/mp4" />
+              </video>
+            </div>
+          )
+        }
+        className="pauseBtn-icon-CD-unit2-page4-1 hover:scale-110 transition"
+      >
+        <image href={pauseBtn} x="0" y="0" width="60" height="60" />
+      </svg>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

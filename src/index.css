@@ -121,10 +121,11 @@ img {
   position: absolute;
   transform: translate(-50%, -50%);
   cursor: pointer;
+  padding: 5px;
 }
 .headset-icon-CD-page4-1 {
-  top: 7.5%;
-  right: 7.5%;
+  top: 6.5%;
+  right: 8.2%;
 }
 
 #num-4-page4 {
@@ -152,13 +153,14 @@ img {
 
 .headset-icon-CD-page4-2 {
   position: absolute;
-  top: 61%;
-  left: 27%;
+  top: 60.5%;
+  left: 26%;
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 2px;
   padding: 5px; */
   cursor: pointer;
+  padding: 5px;
 }
 
 .click-icon-page4 {

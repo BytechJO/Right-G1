@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import pizza2 from "../../assets/img_unit2/imgs/Pizza (2).jpg";
-import boy from "../../assets/img_unit2/imgs/boy2.jpg";
+import boy from "../../assets/img_unit2/imgs/boy 02.png";
 import paint from "../../assets/img_unit2/imgs/Paint.jpg";
 import pincle from "../../assets/img_unit2/imgs/Pencel.jpg";
 import ValidationAlert from "../Popup/ValidationAlert"; // تأكدي إنها موجودة

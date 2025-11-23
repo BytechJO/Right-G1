@@ -85,7 +85,7 @@ const Unit2_Page7_Q3 = () => {
           display: "flex",
           flexDirection: "column",
           gap: "30px",
-          width: "30%",
+          width: "60%",
           justifyContent: "flex-start",
         }}
       >

@@ -135,7 +135,7 @@
   line-height: 1.4;
   z-index: 2000;
   overflow-y: auto;
-  height: 81px;
+  height: 120px;
   width: 215px;
   /* max-height: 120px; */
 }
@@ -167,17 +167,6 @@
   background: transparent;
 }
 
-/* حركة لطيفة */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(20%) translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(20%) translateY(0);
-  }
-}
 
 .settings-wrapper {
   position: relative;

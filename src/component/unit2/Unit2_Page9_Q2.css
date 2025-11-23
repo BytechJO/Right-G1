@@ -57,8 +57,8 @@
   /* background: #b7eaff; */
   border-radius: 20px;
   font-size: 25px;
-  min-width: 100px;
-  text-align: center;
+  min-width: 120px;
+     text-align: start;
   border: 2px solid transparent;
 }
 

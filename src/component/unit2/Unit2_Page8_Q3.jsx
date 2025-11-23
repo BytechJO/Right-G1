@@ -30,7 +30,7 @@ const Unit2_Page8_Q3 = () => {
   const [showContinue, setShowContinue] = useState(false);
   // زر الكابشن
   const [isMuted, setIsMuted] = useState(false);
-  const stopAtSecond =7;
+  const stopAtSecond =7.3;
   const [paused, setPaused] = useState(false);
   const changeSpeed = (rate) => {
     if (!audioRef.current) return;

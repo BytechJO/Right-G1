@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import page_5 from "../../assets/unit1/imgs/Pages/Right 1 Unit 01 Good Morning World 2_page-0005.jpg";
-import page5_CD2 from "../../assets/unit1/sounds/page5all.mp3";
+import page5_CD2 from "../../assets/unit1/sounds/P5 meet my cat.mp3";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 import img1 from "../../assets/unit1/imgs/P2 listen and read 01.svg";
 import img2 from "../../assets/unit1/imgs/Table22.svg";
@@ -22,11 +22,15 @@ import Pg5_2_4_Adult from "../../assets/unit1/sounds/Pg5_2.4_Adult Lady.mp3";
 import Pg5_1_2_Lolo from "../../assets/unit1/sounds/Pg5_1.2_Lolo.mp3";
 import Pg5_1_1_Bebo from "../../assets/unit1/sounds/Pg5_1.1_Bebo.mp3";
 const Page5 = ({ openPopup }) => {
-
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 3.09, text: "Page 5. Meet my cat." },
+    { start: 3.13, end: 5.02, text: "Hello. How are you? " },
+    {
+      start: 5.06,
+      end: 8.19,
+      text: "I'm Stella. This is my cat. Her name is Lolo.",
+    },
+    { start: 8.25, end: 11.25, text: "She is one year old. She likes people." },
   ];
 
   // أصوات الصور
@@ -42,7 +46,7 @@ const Page5 = ({ openPopup }) => {
     new Audio(Pg5_1_1_Bebo),
     new Audio(Pg5_1_2_Lolo),
   ];
-  
+
   return (
     <div className="page_5-background">
       <img src={page_5} />
@@ -50,7 +54,7 @@ const Page5 = ({ openPopup }) => {
       <svg
         width="30"
         height="30"
-        viewBox="0 0 90 90"
+        viewBox="0 0 60 60"
         id="CD-1-page5"
         onClick={() =>
           openPopup(
@@ -60,7 +64,7 @@ const Page5 = ({ openPopup }) => {
         }
         className="headset-icon-CD-page5 hover:scale-110 transition"
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
 
       <svg

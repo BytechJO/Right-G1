@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Page8_Q2.css";
-import img1 from "../../assets/unit1/imgs/table.svg";
-import img2 from "../../assets/unit1/imgs/taxi.svg";
-import img3 from "../../assets/unit1/imgs/deer3.svg";
-import img4 from "../../assets/unit1/imgs/dish2.svg";
+import img1 from "../../assets/unit1/imgs/Table (1).svg";
+import img2 from "../../assets/unit1/imgs/Taxi (1).svg";
+import img3 from "../../assets/unit1/imgs/deer23.svg";
+import img4 from "../../assets/unit1/imgs/dish23.svg";
 
 const exerciseData = {
   pairs: [

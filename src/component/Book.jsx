@@ -11,7 +11,7 @@ import { RiBookOpenLine } from "react-icons/ri";
 import { AiOutlineBook } from "react-icons/ai";
 import { IoMdMenu } from "react-icons/io";
 import Popup from "./Popup/Popup";
-import logo from "../assets/unit1/imgs/PreissMurphy Logo.svg";
+import logo from "../assets/unit1/imgs/PreissMurphy Logo-BGSDEhSA (1).svg";
 //===================== unit 1 pages
 import Page1 from "./unit1/Page1";
 import Page2 from "./unit1/Page2";
@@ -134,12 +134,12 @@ export default function Book() {
     <Unit2_Page10 openPopup={openPopup} />,
     <Unit2_Page11 openPopup={openPopup} />,
     <Unit2_Page12 openPopup={openPopup} />,
-    // <Unit3_Page1 />,
-    // <Unit3_Page2 />,
-    // <Unit3_Page3 />,
-    // <Unit3_Page4 />,
-    // <Unit3_Page5 />,
-    // <Unit3_Page6 />,
+    <Unit3_Page1 openPopup={openPopup}/>,
+    <Unit3_Page2 openPopup={openPopup}/>,
+    <Unit3_Page3 openPopup={openPopup}/>,
+    <Unit3_Page4 openPopup={openPopup}/>,
+    <Unit3_Page5 openPopup={openPopup}/>,
+    <Unit3_Page6 openPopup={openPopup}/>,
     // <Unit4_Page1 />,
     // <Unit4_Page2 />,
     // <Unit4_Page3 />,

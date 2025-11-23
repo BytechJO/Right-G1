@@ -34,19 +34,19 @@
 
 .img-box2 img {
   width: auto;
-  height: 100px;
+  height: 120px;
   border-radius: 10px;
 }
 
 .word-box2 {
   position: relative;
-  font-size: 18px;
+  font-size: 23px;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
 }
 
-.dot2 {
+.dot22 {
   width: 14px;
   height: 14px;
   background: red;
@@ -56,17 +56,31 @@
 }
 
 .end-dot2 {
-  bottom: -15px;
+
+  transform: translateX(-50%);
+
+  position: absolute !important;
+  top: -30px; /* عدّلي الرقم حسب مكان الجمل */
+}
+.word-box2:nth-child(1) .end-dot2 { left: 5%; }
+.word-box2:nth-child(2) .end-dot2 { left: 27%; }
+.word-box2:nth-child(3) .end-dot2 { left: 91%; }
+.start-dot2 {
+  position: absolute !important;
+  top: 135px; /* عدّلي الرقم حسب موقعك */
   left: 50%;
   transform: translateX(-50%);
 }
 
-.start-dot2 {
-  top: 50%;
-  right: -20px;
-  transform: translateY(-50%);
+.img-box2:nth-child(1) .start-dot2 {
+  left: 15%;
 }
-
+.img-box2:nth-child(2) .start-dot2 {
+  left: 50%;
+}
+.img-box2:nth-child(3) .start-dot2 {
+  left: 85%;
+}
 .lines-layer2 {
   position: absolute;
   top: 0;

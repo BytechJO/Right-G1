@@ -79,7 +79,7 @@ const Page4 = ({ openPopup }) => {
           }
           className="headset-icon-CD-page4-1 hover:scale-110 transition"
         >
-          <image href={audioBtn} x="0" y="0" width="45" height="45" />
+          <image href={audioBtn} x="0" y="0" width="60" height="60" />
         </svg>
 
         <svg
@@ -113,7 +113,7 @@ const Page4 = ({ openPopup }) => {
           }
           className="headset-icon-CD-page4-2 hover:scale-110 transition"
         >
-          <image href={audioBtn} x="0" y="0" width="45" height="45" />
+          <image href={audioBtn} x="0" y="0" width="60" height="60" />
         </svg>
 
         <svg

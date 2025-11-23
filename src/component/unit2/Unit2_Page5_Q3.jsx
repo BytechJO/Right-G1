@@ -69,7 +69,7 @@ const Unit2_Page5_Q3 = () => {
             <span className="ex-A">B</span> Ask and answer.
           </h5>
 
-          <div className="q3-content">
+          <div className="unit2-q3-content">
             {/* الصورة الرئيسية */}
             <div className="q3-main-img-box">
               <img src={presentImg} alt="main" className="q3-main-img" />

@@ -27,12 +27,21 @@ const Page7 = ({ openPopup }) => {
 
     checkAreaAndPlaySound(xPercent, yPercent);
   };
-
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 4.05, text: "Page 7, exercise 2. Right grammar. " },
+    { start: 4.09, end: 4.45, text: "Good morning." },
+    { start: 4.47, end: 6.16, text: "Good afternoon." },
+    { start: 6.20, end:7.27, text: "Good evening. " },
+    { start: 7.30, end: 9.01, text: "Goodbye. " },
+    { start: 9.05, end: 10.16, text: "Good morning, Mom. " },
+     { start: 10.20, end: 12.05, text: "Good morning, Stella. " },
+    { start: 12.09, end: 13.12, text: "Good afternoon. " },
+    { start: 13.16, end: 15.01, text: "Good afternoon." },
+    { start: 15.05, end: 16.13, text: "Good evening" },
+    { start: 16.17, end: 17.24, text: "Good evening" },
+    { start: 17.27, end: 19.04, text: "Goodbye, Stella." },
   ];
+
   const clickableAreas = [
     { x1: 6.33, y1: 9.4, x2: 28.43, y2: 13.3, sound: Pg7_2_1_AdultLady },
     { x1: 29.25, y1: 9.4, x2: 50.14, y2: 13.3, sound: Pg7_2_2_AdultLady },

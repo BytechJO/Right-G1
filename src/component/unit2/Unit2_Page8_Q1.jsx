@@ -131,7 +131,7 @@ const Unit2_Page8_Q1 = () => {
       >
         <div className="page8-q1-container">
           <h5 className="header-title-page8">
-            <span className="ex-A">B</span>Read and match.
+           D Read, look, and match.
           </h5>
 
           <div className="container12" ref={containerRef}>

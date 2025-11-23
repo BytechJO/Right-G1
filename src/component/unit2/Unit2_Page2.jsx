@@ -36,11 +36,13 @@ const Unit2_Page2 = ({ openPopup }) => {
     new Audio(Pg11_1_1_Bebo),
     new Audio(Pg11_1_2_Lolo_Take),
   ];
- const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+  const captionsExample = [
+    { start: 0, end: 2.0, text: "Page11. Birthdays Are Fun" },
+    { start: 2.05, end: 5.2, text: "Hi, everyone. Today is my birthday." },
+    { start: 5.24, end:7.2, text: " I'm seven years old." },
+    { start: 7.24, end: 9.0, text: "  My friends are here. It's fun." },
   ];
+
   return (
     <div className="unit2-page-background">
       <img src={page_2} />
@@ -48,7 +50,6 @@ const Unit2_Page2 = ({ openPopup }) => {
         width="30"
         height="30"
         viewBox="0 0 90 90"
- 
         onClick={() =>
           openPopup(
             <AudioWithCaption

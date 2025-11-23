@@ -1,9 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../assets/img_unit2/imgs/Right 1 Unit 02 Stell Birthday3.jpg";
 import "./Unit2_Page3.css";
-import { FaHeadphones } from "react-icons/fa";
-import Popup from "../Popup/Popup";
-import CD11_Pg12_Grammar1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD11.Pg12_Grammar1_Adult Lady.mp3";
+import CD11_Pg12_Grammar1_AdultLady from "../../assets/img_unit2/sounds-unit2/U2 Right Grammar P12.mp3";
 import Pg12_1_1_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg12_1.1_Adult Lady.mp3";
 import Pg12_1_2_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg12_1.2_Adult Lady.mp3";
 import Pg12_1_3_AdultLady from "../../assets/img_unit2/sounds-unit2/Pg12_1.3_Adult Lady.mp3";
@@ -18,14 +16,36 @@ import Pg12_4_2_Stella from "../../assets/img_unit2/sounds-unit2/Pg12_4.2_Stella
 import Pg12_4_3_Hansel from "../../assets/img_unit2/sounds-unit2/Pg12_4.3_Hansel.mp3";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-
+import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
+import video from "../../assets/img_unit2/sounds-unit2/p12 1920.mp4";
 const Unit2_Page3 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 3.22, text: "Page 12, Exercise 1. Right Grammar." },
+    {start: 3.25,end: 7.11,text: " How old are you? I'm seven years old.",},
+    {
+      start: 7.15,
+      end:11.02,
+      text: " When is your birthday? My birthday is in August.",
+    },
+    {
+      start: 11.06,
+      end: 13.11,
+      text: "It is on Tuesday. ",
+    },
+    { start:13.15, end: 14.22, text: "How old are you, Sara? " },
+    { start: 14.26, end: 16.05, text: "I'm three years old. " },
+    { start: 16.09, end: 17.24, text: "When is your birthday party, Stella? " },
+    { start: 17.27, end: 19.16, text: "It is on Tuesday. " },
+    {
+      start: 19.20,
+      end: 22.10,
+      text: "Happy birthday! This is for you, Stella. ",
+    },
+    { start: 22.14, end: 23.10, text: "Thank you.  " },
+    { start: 23.14, end:25.05, text: "You're welcome. Open it." },
   ];
+
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -115,6 +135,38 @@ const Unit2_Page3 = ({ openPopup }) => {
         <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
 
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 60 60"
+        onClick={() =>
+          openPopup(
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <video
+                style={{
+                  height: "auto",
+                  width: "85%",
+                  borderRadius: "5%",
+                }}
+                controls
+              >
+                <source src={video} type="video/mp4" />
+              </video>
+            </div>
+          )
+        }
+        className="pauseBtn-icon-CD-unit2-page3-1 hover:scale-110 transition"
+      >
+        <image href={pauseBtn} x="0" y="0" width="60" height="60" />
+      </svg>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

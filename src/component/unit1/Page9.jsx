@@ -9,10 +9,14 @@ import AudioWithCaption from "../AudioWithCaption";
 const Page9 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 2.29, text: " Page 9, exercise F." },
+    { start: 2.32, end:4.11, text: "Let's sing." },
+    { start: 4.15, end: 6.0, text: "Good morning, good morning." },
+    { start: 6.04, end: 10.02, text: " How are you? How are you? How are you?" },
+    { start: 10.06, end: 11.19, text: " Good morning, good morning." },
+    { start: 11.23, end: 15.19, text: "You are well? I am too." },
   ];
+
   return (
     <div className="page_9-background">
       <img src={page_9} />
@@ -20,7 +24,7 @@ const Page9 = ({ openPopup }) => {
       <svg
         width="30"
         height="30"
-        viewBox="0 0 90 90"
+        viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
             <div
@@ -37,7 +41,7 @@ const Page9 = ({ openPopup }) => {
         }
         className="headset-icon-CD-page9 hover:scale-110 transition"
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
 
       <svg

@@ -211,7 +211,16 @@ export default function Page9_Q2() {
         <div className="container3" ref={containerRef}>
           <div className="word-section1">
             {["Good", "Fine,", "How"].map((word, i) => (
-              <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width:"100%",
+                  justifyContent:"flex-end"
+                }}
+              >
                 <h5
                   key={i}
                   className={
@@ -223,18 +232,19 @@ export default function Page9_Q2() {
                     color: wordColors[i],
                     cursor: "pointer",
                     position: "relative",
+                    textAlign:"start",
+                    width:"100%"
                   }}
                   onClick={() => handleWordClick(i)}
                 >
                   {word}
-
-                  <div
-                    className="dot1 start-dot1"
-                    data-letter={word}
-                    onMouseDown={handleDotDown}
-                    onTouchStart={handleDotDown}
-                  ></div>
-                </h5>
+                </h5>{" "}
+                <div
+                  className="dot1 start-dot1"
+                  data-letter={word}
+                  onMouseDown={handleDotDown}
+                  onTouchStart={handleDotDown}
+                ></div>
                 {wrongWords.includes(word) && ( // ⭐ تم التعديل هون
                   <span className="error-mark3">X</span>
                 )}
@@ -244,8 +254,15 @@ export default function Page9_Q2() {
 
           <div className="word-section2">
             {["thank you", "are you", "afternoon"].map((word, i) => (
-              <>
-                {" "}
+              <div  style={{
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width:"100%",
+                  justifyContent:"flex-start"
+                }}>
+               <div className="dot1 end-dot1" data-image={word}></div>
                 <h5
                   key={i + 3}
                   className={
@@ -260,10 +277,11 @@ export default function Page9_Q2() {
                   }}
                   onClick={() => handleWordClick(i + 3)}
                 >
-                  <div className="dot1 end-dot1" data-image={word}></div>
+                 
                   {word}
-                </h5>
-              </>
+                </h5> 
+               
+              </div>
             ))}
           </div>
 

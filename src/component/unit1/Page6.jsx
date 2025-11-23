@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import page_6 from "../../assets/unit1/imgs/Pages/Right 1 Unit 01 Good Morning World 2_page-0006.jpg";
-import CD4_Pg6_Grammar1_AdultLady from "../../assets/unit1/sounds/All Page 6.mp3";
+import CD4_Pg6_Grammar1_AdultLady from "../../assets/unit1/sounds/Right Grammar 1 P6.mp3";
 import Pg6_1_1_AdultLady from "../../assets/unit1/sounds/Pg6_1.1_Adult Lady.mp3";
 import Pg6_1_2_AdultLady from "../../assets/unit1/sounds/Pg6_1.2_Adult Lady.mp3";
 import Pg6_1_3_AdultLady from "../../assets/unit1/sounds/Pg6_1.3_Adult Lady.mp3";
@@ -19,10 +19,17 @@ const Page6 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 4.05, text: "Page 6, exercise 1. Right grammar. " },
+    { start: 4.09, end: 7.17, text: "Hello, I'm Stella. This is John." },
+    { start: 7.20, end: 8.15, text: "Hello. " },
+    { start: 8.19, end: 9.18, text: "How are you?  " },
+    { start: 9.20, end: 11.12, text: "Fine. Thank you." },
+    { start: 11.16, end: 13.02, text: "Goodbye, Harley. " },
+     { start: 13.06, end: 15.23, text: "Nice to meet you. Nice to meet you." },
+    { start: 15.27, end: 17.24, text: "Hello. How are you? " },
+    { start: 17.27, end: 18.24, text: "Fine. Thank you." },
   ];
+
   // 🟩 مناطق مستطيلة (x1,y1,x2,y2)
   const clickableAreas = [
     { x1: 7.0, y1: 10.0, x2: 43.0, y2: 14.0, sound: Pg6_1_1_AdultLady },

@@ -1,10 +1,7 @@
 import page24 from "../../assets/img_unit2/imgs/Right 1 Unit 02 Stell Birthday11.jpg";
 import React, { useState, useRef } from "react";
-
 import "./Unit2_Page11.css";
-import { FaHeadphones } from "react-icons/fa";
-import Popup from "../Popup/Popup";
-import sound1 from "../../assets/img_unit2/sounds-unit2/Pg20_Reading1_Adult Lady.mp3";
+import sound1 from "../../assets/img_unit2/sounds-unit2/Reading 20-21.mp3";
 import sound2 from "../../assets/img_unit2/sounds-unit2/Pg20_1.1_Adult Lady.mp3";
 import sound3 from "../../assets/img_unit2/sounds-unit2/Pg20_1.2_Adult Lady.mp3";
 import sound4 from "../../assets/img_unit2/sounds-unit2/Pg20_1.3_Adult Lady.mp3";
@@ -13,14 +10,65 @@ import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 
-import video3 from "../../assets/unit1/sounds/STORY (1).mp4"
+import video3 from "../../assets/unit1/sounds/STORY (1).mp4";
 const Unit2_Page11 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
+    { start: 0, end: 3.17, text: "Page 20 Reading. It's a Bunny." },
+    {
+      start: 3.20,
+      end: 7.18,
+      text: " Today is Stella's birthday. Her friends are at her party. ",
+    },
+    {
+      start: 7.21,
+      end: 14.01,
+      text: "There is a big birthday cake. Harley asks Stella how old she is. She is seven years old. ",
+    },
+    {
+      start: 14.05,
+      end: 18.26,
+      text: "Harley, Hansel, and John see the cupcakes. They look delicious.",
+    },
+    {
+      start: 18.30,
+      end: 26.09,
+      text: "Hansel eats a lot of cupcakes. His tummy hurts. John tells him it is not good to eat so many sweets.",
+    },
+    {
+      start: 26.12,
+      end: 34.00,
+      text: "Now, it's time for presents. Mom gives Stella her present. Stella is so excited.",
+    },
+    {
+      start: 34.04,
+      end: 37.05,
+      text: "Stella opens the present. What can it be?  ",
+    },
+    {
+      start: 37.09,
+      end: 45.09,
+      text: "The present from mom is a bunny. It is very cute and white. Stella names her new bunny Tilly.",
+    },
+    {
+      start: 45.12,
+      end: 54.04,
+      text: "Tilly hops and chases Lolo. Lolo is surprised. Stella and Sara laugh and laugh. This is the best birthday.",
+    },
   ];
+
+  /**
+
+
+
+ 
+
+
+
+
+
+   */
+
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -99,38 +147,38 @@ const Unit2_Page11 = ({ openPopup }) => {
       >
         <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
-          <svg
-              width="30"
-              height="30"
-              viewBox="0 0 60 60"
-              onClick={() =>
-                openPopup(
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignContent: "center",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  >
-                    <video
-                      style={{
-                        height: "auto",
-                        width: "85%",
-                        borderRadius:"5%"
-                      }}
-                      controls
-                    >
-                      <source src={video3} type="video/mp4" />
-                    </video>
-                  </div>
-                )
-              }
-              className="pauseBtn-icon-CD-page21 hover:scale-110 transition"
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 60 60"
+        onClick={() =>
+          openPopup(
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+                height: "100%",
+                width: "100%",
+              }}
             >
-              <image href={pauseBtn} x="0" y="0" width="60" height="60" />
-            </svg>
+              <video
+                style={{
+                  height: "auto",
+                  width: "85%",
+                  borderRadius: "5%",
+                }}
+                controls
+              >
+                <source src={video3} type="video/mp4" />
+              </video>
+            </div>
+          )
+        }
+        className="pauseBtn-icon-CD-page21 hover:scale-110 transition"
+      >
+        <image href={pauseBtn} x="0" y="0" width="60" height="60" />
+      </svg>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
