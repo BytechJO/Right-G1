@@ -15,18 +15,15 @@
   gap: 10px;
 }
 
-
-.audio-inner-vocab{
-    background: #e2f1ff;
-    padding: 12px 18px;
-    border-radius: 8px;
-    display: flex;
-    gap: 10px;
-    height: 35px;
-    align-items: center;
+.audio-inner-vocab {
+  background: #e2f1ff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  height: 35px;
+  align-items: center;
 }
-
-
 
 /* زر التشغيل */
 .audio-play-btn {
@@ -63,7 +60,6 @@
 
 /* زر الفقاعة */
 .audio-bubble-btn {
-
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -126,38 +122,61 @@
 
 .caption-popup {
   position: absolute;
-  top: -60px; /* ترتفع فوق الزر */
+  bottom: 48px; /* يطلع فوق الزر */
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  padding: 8px 12px;
-  border-radius: 10px;
-  width: 200px;
-  height: inherit;
-  font-size: 13px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 999;
-  animation: fadeIn 0.2s ease-out;
-  white-space: normal;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #d0d7e2;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  color: #1d4f7b;
+  line-height: 1.4;
+  z-index: 2000;
+  overflow-y: auto;
+  height: 81px;
+  width: 215px;
+  /* max-height: 120px; */
 }
 
-/* مثلث الببل */
-.caption-popup::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 8px;
-  border-style: solid;
-  border-color: white transparent transparent transparent;
+
+/* الكلمات */
+.caption-word {
+  display: inline-block;
+  margin-right: 4px;
 }
 
-/* الكلمة الهايلايت */
+/* الكلمة المفعّلة
 .caption-word.highlight {
-  background: yellow;
-  padding: 2px 4px;
-  border-radius: 4px;
+  background: #1d4f7b;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 6px;
+} */
+
+/* Scrollbar مرتب */
+.caption-popup::-webkit-scrollbar {
+  width: 5px;
+}
+.caption-popup::-webkit-scrollbar-thumb {
+  background: #1d4f7b60;
+  border-radius: 5px;
+}
+.caption-popup::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* حركة لطيفة */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(20%) translateY(0);
+  }
 }
 
 .settings-wrapper {
@@ -198,8 +217,6 @@
 .settings-popup input[type="range"] {
   width: 100%;
 }
-
-
 
 .mute-btn {
   margin-top: 8px;
@@ -266,7 +283,7 @@
   position: absolute;
   top: 40px;
   left: 0;
-  width: 180px;
+  width: 250px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -277,7 +294,7 @@
 
 .caption-word.highlight {
   color: #2c5287;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 /*================ SETTINGS POPUP ================*/
@@ -306,7 +323,6 @@
   justify-content: center;
 }
 
-
 .settings-btn {
   background: transparent;
   border: none;
@@ -323,7 +339,7 @@
 }
 
 .audio-bubble-btn.active {
-     background: rgba(29, 79, 123, 0.15);
+  background: rgba(29, 79, 123, 0.15);
   box-shadow: 0 0 6px rgba(29, 79, 123, 0.4);
 }
 

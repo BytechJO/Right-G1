@@ -4,14 +4,10 @@ import { TbMessageCircle } from "react-icons/tb";
 import { IoMdSettings } from "react-icons/io";
 import "./AudioWithCaption.css";
 
-const AudioWithCaption = ({
-  src,
-  captions ,
-  onCaptionChange,
-}) => {
+const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
   const audioRef = useRef(null);
   const settingsRef = useRef(null);
-
+  const captionRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -78,6 +74,20 @@ const AudioWithCaption = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  useEffect(() => {
+  if (activeIndex === -1) return;
+
+  const container = captionRef.current;
+  const activeElement = document.getElementById(`caption-${activeIndex}`);
+
+  if (container && activeElement) {
+    container.scrollTo({
+      top: activeElement.offsetTop - 40,
+      behavior: "smooth",
+    });
+  }
+}, [activeIndex]);
+
 
   return (
     <div className="audio-popup">
@@ -132,10 +142,11 @@ const AudioWithCaption = ({
           </div>
 
           {showCaption && (
-            <div className="caption-popup">
+            <div className="caption-popup" ref={captionRef}>
               {captions.map((cap, index) => (
                 <span
                   key={index}
+                  id={`caption-${index}`}
                   className={`caption-word ${
                     activeIndex === index ? "highlight" : ""
                   }`}
