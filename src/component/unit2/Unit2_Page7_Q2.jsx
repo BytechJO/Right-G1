@@ -145,7 +145,7 @@ const Unit2_Page7_Q2 = () => {
               )}
 
               <div
-                className="dot22 start-dot2"
+                className="dot22 start-dot22"
                 data-image="img1"
                 onMouseDown={handleDotDown2}
               ></div>
@@ -157,7 +157,7 @@ const Unit2_Page7_Q2 = () => {
                 <span className="error-mark-img">✕</span>
               )}
               <div
-                className="dot22 start-dot2"
+                className="dot22 start-dot22"
                 data-image="img2"
                 onMouseDown={handleDotDown2}
               ></div>
@@ -169,7 +169,7 @@ const Unit2_Page7_Q2 = () => {
                 <span className="error-mark-img">✕</span>
               )}
               <div
-                className="dot22 start-dot2"
+                className="dot22 start-dot22"
                 data-image="img3"
                 onMouseDown={handleDotDown2}
               ></div>
@@ -184,7 +184,7 @@ const Unit2_Page7_Q2 = () => {
                 Hello! I’m Hansel.
               </h5>
               <div
-                className="dot22 end-dot2"
+                className="dot22 end-dot22"
                 data-word="Hello! I’m Hansel."
               ></div>
             </div>
@@ -194,7 +194,7 @@ const Unit2_Page7_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 Good morning!
               </h5>
-              <div className="dot22 end-dot2" data-word="Good morning!"></div>
+              <div className="dot22 end-dot22" data-word="Good morning!"></div>
             </div>
 
             <div className="word-box2">
@@ -202,7 +202,7 @@ const Unit2_Page7_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 Goodbye!
               </h5>
-              <div className="dot22 end-dot2" data-word="Goodbye!"></div>
+              <div className="dot22 end-dot22" data-word="Goodbye!"></div>
             </div>
           </div>
 

@@ -55,30 +55,30 @@
   pointer-events: auto !important;
 }
 
-.end-dot2 {
+.end-dot22 {
 
   transform: translateX(-50%);
 
   position: absolute !important;
   top: -30px; /* عدّلي الرقم حسب مكان الجمل */
 }
-.word-box2:nth-child(1) .end-dot2 { left: 5%; }
-.word-box2:nth-child(2) .end-dot2 { left: 27%; }
-.word-box2:nth-child(3) .end-dot2 { left: 91%; }
-.start-dot2 {
+.word-box2:nth-child(1) .end-dot22 { left: 5%; }
+.word-box2:nth-child(2) .end-dot22 { left: 27%; }
+.word-box2:nth-child(3) .end-dot22 { left: 91%; }
+.start-dot22 {
   position: absolute !important;
   top: 135px; /* عدّلي الرقم حسب موقعك */
   left: 50%;
   transform: translateX(-50%);
 }
 
-.img-box2:nth-child(1) .start-dot2 {
+.img-box2:nth-child(1) .start-dot22 {
   left: 15%;
 }
-.img-box2:nth-child(2) .start-dot2 {
+.img-box2:nth-child(2) .start-dot22 {
   left: 50%;
 }
-.img-box2:nth-child(3) .start-dot2 {
+.img-box2:nth-child(3) .start-dot22 {
   left: 85%;
 }
 .lines-layer2 {

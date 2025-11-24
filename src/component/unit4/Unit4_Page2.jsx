@@ -3,8 +3,8 @@ import page_2 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and
 import { FaHeadphones } from "react-icons/fa";
 import { PiCursorClickBold } from "react-icons/pi";
 import Popup from "../Popup/Popup";
-import soundMyPicture from "../../assets/unit4/sounds/CD27Pg29_Intro1_Adult Lady.mp3";
-import soundListen from "../../assets/unit4/sounds/Pg29_Instruction2_Adult Lady.mp3";
+import soundMyPicture from "../../assets/unit4/sounds/U4P29 My Picture.mp3";
+import soundListen from "../../assets/unit4/sounds/U4P29 listen read repeat.mp3";
 import Pg29_1_1_Bebo from "../../assets/unit4/sounds/Pg29_1.1_Bebo.mp3";
 import Pg29_1_1_Tom from "../../assets/unit4/sounds/Pg29_1.1_Tom.mp3";
 import Pg29_1_2_Lolo from "../../assets/unit4/sounds/Pg29_1.2_Lolo.mp3";
@@ -12,13 +12,13 @@ import Pg29_2_1_AdultLady from "../../assets/unit4/sounds/Pg29_2.1_Adult Lady.mp
 import Pg29_2_2_AdultLady from "../../assets/unit4/sounds/Pg29_2.2_Adult Lady.mp3";
 import Pg29_2_3_AdultLady from "../../assets/unit4/sounds/Pg29_2.3_Adult Lady.mp3";
 import Pg29_2_4_AdultLady from "../../assets/unit4/sounds/Pg29_2.4_Adult Lady.mp3";
-import img1 from "../../assets/unit3/imgs3/Short a.svg";
-import img2 from "../../assets/unit3/imgs3/bat.svg";
-import img3 from "../../assets/unit3/imgs3/cap.svg";
-import img4 from "../../assets/unit3/imgs3/dad.svg";
-import CD28Pg29_Instruction1_AdultLady from "../../assets/unit4/sounds/CD28Pg29_Instruction1_Adult Lady.mp3";
-import repeat1 from "../../assets/img_unit2/imgs/listen and repeat 02.svg";
-import repeat2 from "../../assets/img_unit2/imgs/listen and repeat 03.svg";
+import img1 from "../../assets/unit4/imgs/V.svg";
+import img2 from "../../assets/unit4/imgs/van.svg";
+import img3 from "../../assets/unit4/imgs/vet.svg";
+import img4 from "../../assets/unit4/imgs/vest.svg";
+import CD28Pg29_Instruction1_AdultLady from "../../assets/unit4/sounds/U4P29 Listen and read along.mp3";
+import repeat1 from "../../assets/unit4/imgs/listen and repeat 02.svg";
+import repeat2 from "../../assets/unit4/imgs/listen and repeat 03.svg";
 import read from "../../assets/unit1/imgs/P1 listen and repeat 01.svg";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
@@ -95,7 +95,7 @@ const Unit4_Page2 = ({ openPopup }) => {
             <FourImagesWithAudio
               images={[read, repeat1, repeat2]}
               audioSrc={soundListen}
-              checkpoints={[0, 4.90, 7.14]}
+              checkpoints={[0, 4.30, 6.21]}
               popupOpen={true}
               titleQ={`Listen, read, and repeat.`}
               audioArr={imageSounds2}
@@ -118,7 +118,7 @@ const Unit4_Page2 = ({ openPopup }) => {
             <FourImagesWithAudio
               images={[Rabbit, img1, img2, img3, img4]}
               audioSrc={CD28Pg29_Instruction1_AdultLady}
-              checkpoints={[0, 4.0, 5.10, 6.09, 7.03]}
+              checkpoints={[0, 4.05, 5.10, 6.13, 7.03]}
               popupOpen={true}
               titleQ={"Listen and read along."}
               audioArr={imageSounds}

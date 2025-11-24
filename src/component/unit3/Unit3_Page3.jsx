@@ -11,7 +11,7 @@ import sound6 from "../../assets/unit3/sound3/Pg24_4.1_Male Teacher.mp3";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
-import video from "../../assets/img_unit2/sounds-unit2/p12 1920.mp4";
+import video from "../../assets/unit3/sound3/p24.mp4";
 const Unit3_Page3 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const captionsExample = [

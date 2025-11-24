@@ -1,0 +1,78 @@
+.row-content10-review3-p2-q1{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+
+.question-wrapper10 {
+  margin: auto;
+  font-size: 1.4rem;
+}
+
+.row2-review3-p2-q1 {
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.q-img-review3-p2-q1 {
+  width: auto;
+  height: 170px;
+}
+
+.q-input-review3-p2-q1 {
+  border-bottom: 2px solid #000000;
+  padding: 5px 8px;
+  /* border-radius: 6px; */
+  font-size: 18px;
+  width: 170px;
+  text-align: center; /* توسيط أفقي */
+  vertical-align: middle; /* توسيط عمودي */
+  line-height: normal;
+}
+
+
+.num-span {
+  color: #2c5287;
+  font-weight: 700;
+}
+
+.error-mark-input {
+  position: absolute;
+  top: -10px;
+  right: 5px;
+  width: 26px;
+  height: 26px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 999999;
+  border: 2px solid white;
+}
+
+
+
+
+.q-input:focus {
+  border-color: gray; /* هنا يصير اللون رمادي */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* ظل خفيف لطيف */
+}
+
+@media (max-width: 991px) {
+  .row-content10-review3-p2-q1{
+    grid-template-columns: repeat(2, 1fr); /* 2 كروت */
+    gap: 5px;
+    width: auto;
+  }
+ .q-img-review3-p2-q1 {
+  width: auto;
+  height: 80px;
+}
+}

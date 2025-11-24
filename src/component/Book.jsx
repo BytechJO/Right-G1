@@ -53,6 +53,12 @@ import Unit4_Page4 from "./unit4/Unit4_Page4";
 import Unit4_Page5 from "./unit4/Unit4_Page5";
 import Unit4_Page6 from "./unit4/Unit4_Page6";
 
+//=================== Review3,4
+import Review3_Page1 from "./Review_Unit3,4/Review3_Page1";
+import Review3_Page2 from "./Review_Unit3,4/Review3_Page2 ";
+import Review4_Page1 from "./Review_Unit3,4/Review4_Page1";
+import Review4_Page2 from "./Review_Unit3,4/Review4_Page2";
+
 export default function Book() {
   const [pageIndex, setPageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1100);
@@ -134,18 +140,22 @@ export default function Book() {
     <Unit2_Page10 openPopup={openPopup} />,
     <Unit2_Page11 openPopup={openPopup} />,
     <Unit2_Page12 openPopup={openPopup} />,
-    <Unit3_Page1 openPopup={openPopup}/>,
-    <Unit3_Page2 openPopup={openPopup}/>,
-    <Unit3_Page3 openPopup={openPopup}/>,
-    <Unit3_Page4 openPopup={openPopup}/>,
-    <Unit3_Page5 openPopup={openPopup}/>,
-    <Unit3_Page6 openPopup={openPopup}/>,
+    <Unit3_Page1 openPopup={openPopup} />,
+    <Unit3_Page2 openPopup={openPopup} />,
+    <Unit3_Page3 openPopup={openPopup} />,
+    <Unit3_Page4 openPopup={openPopup} />,
+    <Unit3_Page5 openPopup={openPopup} />,
+    <Unit3_Page6 openPopup={openPopup} />,
     <Unit4_Page1 openPopup={openPopup} />,
     <Unit4_Page2 openPopup={openPopup} />,
     <Unit4_Page3 openPopup={openPopup} />,
     <Unit4_Page4 openPopup={openPopup} />,
     <Unit4_Page5 openPopup={openPopup} />,
     <Unit4_Page6 openPopup={openPopup} />,
+    <Review3_Page1 openPopup={openPopup} />,
+    <Review3_Page2 openPopup={openPopup} />,
+    <Review4_Page1 openPopup={openPopup} />,
+    <Review4_Page2 openPopup={openPopup} />,
   ];
   const hideArrows = zoom > 1;
   const [isDragging, setIsDragging] = useState(false);
@@ -207,7 +217,7 @@ export default function Book() {
             <img
               src={logo}
               alt="J1 Logo"
-            style={{height:"40px" ,width:"100px"}}
+              style={{ height: "40px", width: "100px" }}
             />
 
             {/* TABS */}

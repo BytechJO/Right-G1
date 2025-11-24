@@ -1,0 +1,25 @@
+.wrong-x-review4-p2-q3 {
+  position: absolute;
+  top: -14px;
+  right: -11px;
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  background: red;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.question-box-review3-p2-q3 {
+  border-radius: 10px;
+  padding: 15px 25px;
+  width: 50%;
+
+  position: relative;
+  width: 100%;
+}

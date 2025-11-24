@@ -1,0 +1,39 @@
+.unit4-q2-p6-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.div-unit4-q2-p6-forall {
+  width: 60%;
+}
+
+
+.unit4-q2-p6-table {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.unit4-q2-p6-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.unit4-q2-p6-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  width: 40%;
+}
+
+.unit4-q2-p6-canvas {
+  border: 3px solid #6ec1ff;
+  background: #ffffff;
+  border-radius: 12px;
+  height: 100px !important;
+  width: 260px !important;
+  box-sizing: border-box;
+  cursor: crosshair;
+}

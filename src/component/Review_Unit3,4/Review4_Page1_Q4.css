@@ -1,0 +1,16 @@
+.wrong-icon {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: red;
+  color: white;
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+border: 2px solid white;
+}

@@ -52,7 +52,7 @@ const Unit2_Page10_Q1 = () => {
   const [checked, setChecked] = useState(false);
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (checked) return; // 🔒 بعد الفحص لا يمكن التعديل
+ 
 
     setCircledWords((prev) => ({
       ...prev,

@@ -8,7 +8,7 @@ import sound3 from "../../assets/unit3/sound3/Pg25_2.3_Adult Lady.mp3";
 import sound4 from "../../assets/unit3/sound3/Pg25_3.1_Female Teacher.mp3";
 import sound5 from "../../assets/unit3/sound3/Pg25_4.1_Female Teacher.mp3";
 import sound6 from "../../assets/unit3/sound3/Pg25_5.1_Female Teacher.mp3";
-import video from "../../assets/img_unit2/sounds-unit2/p13.mp4";
+import video from "../../assets/unit3/sound3/p25.mp4";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";

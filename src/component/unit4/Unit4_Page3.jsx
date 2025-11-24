@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and Colors3.jpg";
 import "./Unit4_Page3.css";
-import CD29_Pg30_Grammar1_AdultLady from "../../assets/unit4/sounds/CD29.Pg30_Grammar1_Adult Lady.mp3";
+import CD29_Pg30_Grammar1_AdultLady from "../../assets/unit4/sounds/U4P31 Grammar.mp3";
 import Pg12_1_1_AdultLady from "../../assets/unit4/sounds/Pg30_1.1_Adult Lady.mp3";
 import Pg12_1_2_AdultLady from "../../assets/unit4/sounds/Pg30_1.2_Adult Lady.mp3";
 import Pg12_1_3_AdultLady from "../../assets/unit4/sounds/Pg30_1.3_Adult Lady.mp3";
@@ -14,7 +14,7 @@ import Pg12_3_2_Stella from "../../assets/unit4/sounds/Pg30_4.2_Hansel.mp3";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
-import video from "../../assets/img_unit2/sounds-unit2/p12 1920.mp4";
+import video from "../../assets/unit4/sounds/p30.mp4";
 const Unit4_Page3 = ({ openPopup }) => {
   const captionsExample = [
     { start: 0, end: 4.1, text: "Page 24, Exercise 1. Right Grammar." },

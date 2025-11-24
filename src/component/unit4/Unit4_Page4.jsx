@@ -3,7 +3,7 @@ import page_4 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and
 import "./Unit4_Page4.css";
 import { FaHeadphones } from "react-icons/fa";
 import { PiCursorClickBold } from "react-icons/pi";
-import CD30_Pg31_Grammar2_AdultLady from "../../assets/unit4/sounds/CD30.Pg31_Grammar2_Adult Lady.mp3";
+import CD30_Pg31_Grammar2_AdultLady from "../../assets/unit4/sounds/U4P31 Grammar.mp3";
 import Pg31_2_1_AdultLady from "../../assets/unit4/sounds/Pg31_2.1_Adult Lady.mp3";
 import Pg31_2_2_AdultLady from "../../assets/unit4/sounds/Pg31_2.2_Adult Lady.mp3";
 import Pg31_2_3_AdultLady from "../../assets/unit4/sounds/Pg31_2.3_Adult Lady.mp3";
@@ -15,7 +15,7 @@ import Pg31_4_1_Helen from "../../assets/unit4/sounds/Pg31_4.1_Helen.mp3";
 import Pg31_4_2_Stella from "../../assets/unit4/sounds/Pg31_4.2_Stella.mp3";
 import Pg31_5_1_Sarah from "../../assets/unit4/sounds/Pg31_5.1_Sarah.mp3";
 import Pg31_5_2_Jack from "../../assets/unit4/sounds/Pg31_5.2_Jack.mp3";
-import video from "../../assets/img_unit2/sounds-unit2/p13.mp4";
+import video from "../../assets/unit4/sounds/p31.mp4";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
