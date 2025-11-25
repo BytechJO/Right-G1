@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import page_1 from "../../assets/unit4/imgs/Right G1- Class Book_00036.jpg";
-import { FaHeadphones } from "react-icons/fa";
-import { PiCursorClickBold } from "react-icons/pi";
-import Popup from "../Popup/Popup";
+import page_1 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and Colors9.jpg";
 import "./Review4_Page1.css";
-import song from "../../assets/unit4/sounds/Pg33_Song_Adult Lady.mp3";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import AudioWithCaption from "../AudioWithCaption";
 import Review4_Page1_Q2 from "./Review4_Page1_Q2";
 import Review4_Page1_Q3 from "./Review4_Page1_Q3";
 import Review4_Page1_Q4 from "./Review4_Page1_Q4";

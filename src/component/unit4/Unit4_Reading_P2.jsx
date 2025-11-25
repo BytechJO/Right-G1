@@ -1,5 +1,5 @@
 import React, {  useRef } from "react";
-import page25 from "../../assets/unit4/imgs/Right G1- Class Book_00039.jpg";
+import page25 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and Colors12.jpg";
 // import "./Unit2_Page11.css";/
 import { FaHeadphones } from "react-icons/fa";
 import sound1 from "../../assets/unit4/sounds/Pg39_1.5_Adult Lady.mp3"

@@ -1,4 +1,4 @@
-import page_1 from "../../assets/unit5/Right G1- Class Book_00040.jpg";
+import page_1 from "../../assets/unit5/imgs/Right G1- Class Book_00040.jpg";
 import "./Unit5_Page1.css";
 import Pg22_U3_Intro_AdultLady from "../../assets/unit3/sound3/U3 Page 22-23.mp3";
 import AudioWithCaption from "../AudioWithCaption";

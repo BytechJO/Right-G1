@@ -205,20 +205,7 @@ const Unit5_Page1_Vocab = () => {
                     }}
                   />
 
-                  <label>Speed</label>
-                  <div className="speed-buttons">
-                    {[0.75, 1, 1.25, 1.5].map((rate) => (
-                      <button
-                        key={rate}
-                        className={`speed-rate ${
-                          activeSpeed === rate ? "active" : ""
-                        }`}
-                        onClick={() => changeSpeed(rate)}
-                      >
-                        {rate}x
-                      </button>
-                    ))}
-                  </div>
+              
                 </div>
               )}
             </div>

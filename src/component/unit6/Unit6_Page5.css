@@ -1,0 +1,256 @@
+.headset-icon-CD-unit6-page5 {
+  position: absolute;
+  padding: 5px;
+  top: 26%;
+  right: 18%;
+  cursor: pointer;
+}
+
+/* EDIT: علامة الخطأ فقط */
+.wrong-x2 {
+  position: absolute;
+  top: -11px;
+  right: -22px;
+  background: red;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: 2px solid white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop 0.2s ease-in-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.check-box1 {
+  transition: transform 0.25s ease;
+}
+
+.check-box1.selected1 {
+  transform: scale(1.28);
+}
+
+.click-icon-unit6-page5-1 {
+  position: absolute;
+  padding: 5px;
+  top: 8%;
+  left: 33%;
+  cursor: pointer;
+}
+.click-icon-unit6-page5-2 {
+  position: absolute;
+  padding: 5px;
+  top: 27%;
+  left: 39%;
+  cursor: pointer;
+}
+.click-icon-unit6-page5-3 {
+  position: absolute;
+  padding: 5px;
+  top: 42%;
+  left: 28%;
+  cursor: pointer;
+}
+
+.click-icon-unit6-page5-4 {
+  position: absolute;
+  padding: 5px;
+  bottom: 24.5%;
+  left: 25.5%;
+  cursor: pointer;
+}
+
+.letter {
+  border: 2px solid #2c5287;
+  height: 35px;
+  width: 35px;
+  border-radius: 20px;
+  position: absolute;
+  top: -9%;
+  left: 42%;
+  background-color: #2c5287;
+  color: beige;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+#b-0 {
+  left: 19%;
+}
+
+#b-1 {
+  left: 48.5%;
+}
+
+#p-2 {
+  right: 17%;
+}
+
+.bp-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.bp-item {
+  text-align: center;
+}
+
+.bp-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.bp-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.bp-option {
+  font-size: 28px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: 0.2s;
+  border: 2px solid transparent;
+}
+
+.bp-option:hover {
+  transform: scale(1.2);
+}
+
+.selected {
+  border: 3px solid #2c5287 !important;
+  background: #ffffff;
+  /* color: white; */
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.unit2-q3-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.q3-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.q3-B {
+  background-color: #38bdf8;
+  border-radius: 8px;
+  padding: 0 10px;
+  color: white;
+  margin-right: 10px;
+}
+
+/* المحتوى الرئيسي */
+.q3-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  margin-bottom: 25px;
+}
+
+/* الصورة الرئيسية */
+
+.q3-main-img {
+  width: auto;
+  height: 300px;
+}
+
+/* الخيارات */
+.q3-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.2rem;
+}
+
+.q3-option-item {
+  display: flex;
+  align-items: center;
+  /* gap: 1rem; */
+  cursor: pointer;
+  /* padding: 8px; */
+  border-radius: 10px;
+  transition: 0.3s;
+  border: 2px solid transparent;
+}
+.q3-number {
+  font-size: 25px;
+  font-weight: 600;
+  background: white;
+  color: #2c5287;
+  /* border: 2px solid #2c5287; */
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* دائرة دوماً */
+  transition: 0.2s; /* سلاسة */
+}
+
+.q3-option-item.active .q3-number {
+  color: #2c5287;
+  border-color: #2c5287;
+  border: 3px solid;
+  transform: scale(1.1); /* كبر بسيط بدون تغيير الحجم الحقيقي*/
+}
+
+.q3-option-img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+/* لما تكون الإجابة غلط */
+/* .wrong-answer {
+  color: red !important;
+  border-color: red !important;
+  font-weight: bold;
+} */
+
+/* إشارة X الحمراء */
+.wrong-x {
+  margin-left: 6px;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  position: relative;
+  bottom: 56px;
+  border: 2px solid white;
+  height: 25px;
+  display: flex;
+  width: 25px;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background-color: red;
+  left: 14px;
+}

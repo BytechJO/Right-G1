@@ -1,4 +1,4 @@
-import page24 from "../../assets/unit4/imgs/Right G1- Class Book_00038.jpg";
+import page24 from "../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and Colors11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
 import sound1 from "../../assets/unit4/sounds/U4ReadingP38-39.mp3";
@@ -66,10 +66,10 @@ const Unit4_Reading_P1 = ({ openPopup }) => {
     checkAreaAndPlaySound(xPercent, yPercent);
   };
   const clickableAreas = [
-    { x1: 15.9, y1: 39.4, x2: 51.14, y2: 44.0, sound: sound2 },
+    { x1: 15.9, y1: 39.4, x2: 51.5, y2: 45.5, sound: sound2 },
     { x1: 56.0, y1: 39.1, x2: 93.9, y2: 44.0, sound: sound3 },
     { x1: 16.0, y1: 84.0, x2: 52.9, y2: 89.5, sound: sound4 },
-    { x1: 56.0, y1: 84.5, x2: 93.7, y2: 90.9, sound: sound5 },
+    { x1: 56.0, y1: 84.5, x2: 93.7, y2: 93.9, sound: sound5 },
   ];
 
   const checkAreaAndPlaySound = (x, y) => {

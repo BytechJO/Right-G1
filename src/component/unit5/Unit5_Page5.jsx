@@ -1,4 +1,4 @@
-import page_5 from "../../assets/unit5/Right G1- Class Book_00044.jpg";
+import page_5 from "../../assets/unit5/imgs/Right G1- Class Book_00044.jpg";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
 import "./Unit5_Page5.css";
 import Unit5_Page5_Q1 from "./Unit5_Page5_Q1";

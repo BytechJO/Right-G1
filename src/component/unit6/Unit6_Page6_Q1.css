@@ -1,0 +1,40 @@
+.unit5-wrapper {
+  width: 90%;
+  margin: auto;
+  font-family: "Poppins", sans-serif;
+}
+.answer-input-unit5-p6-q1 {
+  border-bottom: 2px solid black;
+}
+.img-unit5-p6-q1 {
+  height: 150px;
+  width: auto;
+}
+
+.section-one-unit5-p6-q1 {
+  display: flex;
+  align-items: center;
+}
+.section-two-unit5-p6-q1 {
+  display: flex;
+  align-items: center;
+}
+.section-three-unit5-p6-q1 {
+  display: flex;
+  align-items: center;
+}
+.section-four-unit5-p6-q1 {
+  display: flex;
+  align-items: center;
+}
+
+.content-input-unit5-p6-q1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container-unit5-p6-q1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 43px;
+}

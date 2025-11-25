@@ -4,7 +4,7 @@ const Page3 = ({ goToUnit }) => {
   const clickableAreas = [
     {
       title: "Unit 6",
-      startIndex: 4,
+      startIndex: 46,
       top: "9%",
       left: "14%",
       width: "20%",

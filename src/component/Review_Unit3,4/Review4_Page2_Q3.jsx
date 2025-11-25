@@ -13,7 +13,7 @@ const Review4_Page2_Q3 = () => {
   // 🔥 الداتا المطابقة للصورة
   const items = [
     {
-      img:img1,
+      img: img1,
       options: ["vest", "van"],
       correctIndex: 0,
     },
@@ -23,19 +23,18 @@ const Review4_Page2_Q3 = () => {
       correctIndex: 1,
     },
     {
-      img:img3,
+      img: img3,
       options: ["fish", "van"],
       correctIndex: 1,
     },
     {
-      img:img4,
+      img: img4,
       options: ["vet", "vest"],
       correctIndex: 0,
     },
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
- 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
@@ -104,13 +103,16 @@ const Review4_Page2_Q3 = () => {
               className="question-box-review3-p2-q3"
               style={{ width: "100%" }}
             >
-              <img
-                src={q.img}
-                className="q3-image"
-                style={{ height: "120px", width: "auto" }}
-              />
+              <div className="img-div-review3-p2-q3">
+                {" "}
+                <img
+                  src={q.img}
+                  className="q3-image-review3-p2-q3"
+                  style={{ height: "120px", width: "auto" }}
+                />
+              </div>
 
-              <div className="options-row">
+              <div className="options-row-review3-p2-q3">
                 {q.options.map((word, optIndex) => {
                   const isSelected = answers[i] === optIndex;
                   const isCorrect = optIndex === q.correctIndex;
@@ -119,7 +121,7 @@ const Review4_Page2_Q3 = () => {
                     <p
                       key={optIndex}
                       className={`
-                    option-word
+                    option-word-review3-p2-q3
                     ${isSelected ? "selected" : ""}
                     ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                     ${showResult && isCorrect ? "correct" : ""}

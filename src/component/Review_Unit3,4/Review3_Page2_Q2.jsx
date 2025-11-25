@@ -73,7 +73,7 @@ const Review3_Page2_Q2 = () => {
         }}
       >
         <div className="review3-p2-q2-content-container">
-          <h5 className="header-title-page8">E Circle the short a words.</h5>
+          <h5 className="header-title-page8">E Circle the <span style={{ color: "red" }}>short a</span> words.</h5>
 
           <div className="review3-p2-q2-sentence-container2">
             {sentences.map((sentence, sIndex) => (

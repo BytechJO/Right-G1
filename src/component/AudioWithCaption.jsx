@@ -183,43 +183,8 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
                 }}
               />
 
-              {/* السرعة */}
-              <label>Speed</label>
-              <div className="speed-buttons">
-                <button
-                  className={`speed-rate ${
-                    activeSpeed === 0.75 ? "active" : ""
-                  }`}
-                  onClick={() => changeSpeed(0.75)}
-                >
-                  0.75x
-                </button>
-
-                <button
-                  className={`speed-rate ${activeSpeed === 1 ? "active" : ""}`}
-                  onClick={() => changeSpeed(1)}
-                >
-                  1x
-                </button>
-
-                <button
-                  className={`speed-rate ${
-                    activeSpeed === 1.25 ? "active" : ""
-                  }`}
-                  onClick={() => changeSpeed(1.25)}
-                >
-                  1.25x
-                </button>
-
-                <button
-                  className={`speed-rate ${
-                    activeSpeed === 1.5 ? "active" : ""
-                  }`}
-                  onClick={() => changeSpeed(1.5)}
-                >
-                  1.5x
-                </button>
-              </div>
+             
+             
             </div>
           )}
         </div>

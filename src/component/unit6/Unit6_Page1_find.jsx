@@ -1,25 +1,24 @@
 import React, { useState } from "react";
-import find_img from "../../assets/img_unit2/imgs/find img.jpg"
-import find_title from "../../assets/img_unit2/imgs/unit2_page1_findTitle.png"
-import Popup from "../Popup/Popup";
+import find_img from "../../assets/unit3/imgs3/G1_U3_Pg_22-23 copy.jpg";
 import ValidationAlert from "../Popup/ValidationAlert";
-const Unit2_Page1_find = () => {
+import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
+const Unit6_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
 
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 20,
-    y1: 67,
-    x2: 26,
-    y2: 72,
+    x1: 42,
+    y1: 14,
+    x2: 48,
+    y2: 40,
   };
 
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-
+    console.log(xPercent, yPercent);
 
     setClickedPoint({
       x: xPercent,
@@ -57,22 +56,31 @@ const Unit2_Page1_find = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-  
+       <div
+        style={{
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+      <div style={{ display: "flex" ,justifyContent: "center",width:"100%"}}>
+        <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
+        <h5 className="header-title-page8">
+          I need your help. Can you help me find the boy shutting the window in
+          the picture?
+        </h5>
+      </div>
       <div style={{ position: "relative", display: "inline-block" }}>
-        <img
-          src={find_title}
-          style={{
-            height: "200px",
-            width: "auto",
-            position: "absolute",
-            bottom: "2%",
-            right: "6%",
-          }}
-        />
         <img
           src={find_img}
           alt="interactive"
-          style={{ cursor: "pointer", height: "460px" ,width:"auto" }}
+          style={{
+            width: "auto",
+            height: "75vh",
+            cursor: "pointer",
+            display: "block",
+          }}
           onClick={handleImageClick}
         />
 
@@ -109,13 +117,10 @@ const Unit2_Page1_find = () => {
           ></div>
         )}
       </div>
-
+</div>
       <div
-        style={{
-          marginTop: "18px",
-          display: "flex",
-          justifyContent: "space-around",
-        }}
+      className="action-buttons-container "
+
       >
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
@@ -128,4 +133,4 @@ const Unit2_Page1_find = () => {
   );
 };
 
-export default Unit2_Page1_find;
+export default Unit6_Page1_find;

@@ -19,7 +19,7 @@ const data = [
   },
   {
     img: dish,
-    question: "Is it a blue",
+    question: "Is it a blue ?",
     correct: "square Yes, it is",
   },
 ];
@@ -115,7 +115,7 @@ const Review4_Page1_Q4 = () => {
                 margin: "20px",
               }}
             >
-              <span className="q-number">{index + 1}.</span>
+              <span className="q-number" style={{ fontSize: "20px", fontWeight: "600" ,color:"#2c5287"}}>{index + 1}.</span>
               <img
                 src={item.img}
                 className="shape-img"
@@ -125,13 +125,19 @@ const Review4_Page1_Q4 = () => {
 
               <div
                 className="question-text"
-                style={{ display: "flex", alignItems: "center" ,position:"relative"}}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  position: "relative",
+                }}
               >
-                <h6>{item.question}</h6>
+                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
+                  {item.question}
+                </h6>
                 <input
                   type="text"
                   className="q-input"
-                  placeholder="Write your answer..."
+                  placeholder=""
                   value={answers[index]}
                   onChange={(e) => handleChange(e.target.value, index)}
                 />

@@ -60,12 +60,22 @@ import Review4_Page1 from "./Review_Unit3,4/Review4_Page1";
 import Review4_Page2 from "./Review_Unit3,4/Review4_Page2";
 import Unit4_Reading_P1 from "./unit4/Unit4_Reading_P1";
 import Unit4_Reading_P2 from "./unit4/Unit4_Reading_P2";
+
+//================== unit 5 pages
 import Unit5_Page1 from "./unit5/Unit5_Page1";
 import Unit5_Page2 from "./unit5/Unit5_Page2";
 import Unit5_Page3 from "./unit5/Unit5_Page3";
 import Unit5_Page4 from "./unit5/Unit5_Page4";
 import Unit5_Page5 from "./unit5/Unit5_Page5";
 import Unit5_Page6 from "./unit5/Unit5_Page6";
+import Unit6_Page1 from "./unit6/Unit6_Page1";
+import Unit6_Page2 from "./unit6/Unit6_Page2";
+import Unit6_Page3 from "./unit6/Unit6_Page3";
+import Unit6_Page4 from "./unit6/Unit6_Page4";
+import Unit6_Page5 from "./unit6/Unit6_Page5";
+import Unit6_Page6 from "./unit6/Unit6_Page6";
+
+//================== unit 6 pages
 
 export default function Book() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -172,6 +182,12 @@ export default function Book() {
     <Unit5_Page4 openPopup={openPopup} />,
     <Unit5_Page5 openPopup={openPopup} />,
     <Unit5_Page6 openPopup={openPopup} />,
+    <Unit6_Page1 openPopup={openPopup} />,
+    <Unit6_Page2 openPopup={openPopup} />,
+    <Unit6_Page3 openPopup={openPopup} />,
+    <Unit6_Page4 openPopup={openPopup} />,
+    <Unit6_Page5 openPopup={openPopup} />,
+    <Unit6_Page6 openPopup={openPopup} />,
   ];
   const hideArrows = zoom > 1;
   const [isDragging, setIsDragging] = useState(false);

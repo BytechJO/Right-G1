@@ -89,7 +89,7 @@ const Review3_Page1_Q1 = () => {
     <div className="page8-wrapper">
       <div className="page8-content">
         <header className="header-title-page8">
-          <span className="ex-A">A</span> Look and number.
+          A Look and number.
         </header>
 
         {/* ✅ الصور */}

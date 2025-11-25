@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review3_Page2_Q3.css";
-import sound1 from "../../assets/unit4/sounds/CD33.Pg35_Instruction1_Adult Lady.mp3";
+import sound1 from "../../assets/unit4/sounds/U4P35EXEF.mp3";
 import img1 from "../../assets/unit4/imgs/U4P35EXEF-01-01.svg";
 import img2 from "../../assets/unit4/imgs/U4P35EXEF-01-02.svg";
 import img3 from "../../assets/unit4/imgs/U4P35EXEF-02-01.svg";
@@ -28,7 +28,7 @@ const Review3_Page2_Q3 = () => {
   const [showContinue, setShowContinue] = useState(false);
   // زر الكابشن
   const [isMuted, setIsMuted] = useState(false);
-  const stopAtSecond = 11;
+  const stopAtSecond = 6.5;
   const [paused, setPaused] = useState(false);
   const changeSpeed = (rate) => {
     if (!audioRef.current) return;
@@ -270,20 +270,7 @@ const Review3_Page2_Q3 = () => {
                       }}
                     />
 
-                    <label>Speed</label>
-                    <div className="speed-buttons">
-                      {[0.75, 1, 1.25, 1.5].map((rate) => (
-                        <button
-                          key={rate}
-                          className={`speed-rate ${
-                            activeSpeed === rate ? "active" : ""
-                          }`}
-                          onClick={() => changeSpeed(rate)}
-                        >
-                          {rate}x
-                        </button>
-                      ))}
-                    </div>
+                  
                   </div>
                 )}
               </div>

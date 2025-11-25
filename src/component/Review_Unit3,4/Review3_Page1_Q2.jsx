@@ -197,6 +197,7 @@ const Review3_Page1_Q2 = () => {
                   onChange={(e) =>
                     setUserInputs((prev) => ({ ...prev, 1: e.target.value }))
                   }
+                  style={{color:"red"}}
                   readOnly
                 />
               </div>

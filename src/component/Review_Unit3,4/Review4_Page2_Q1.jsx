@@ -297,20 +297,7 @@ const Review4_Page2_Q1 = () => {
                     }}
                   />
 
-                  <label>Speed</label>
-                  <div className="speed-buttons">
-                    {[0.75, 1, 1.25, 1.5].map((rate) => (
-                      <button
-                        key={rate}
-                        className={`speed-rate ${
-                          activeSpeed === rate ? "active" : ""
-                        }`}
-                        onClick={() => changeSpeed(rate)}
-                      >
-                        {rate}x
-                      </button>
-                    ))}
-                  </div>
+                 
                 </div>
               )}
             </div>
@@ -334,7 +321,7 @@ const Review4_Page2_Q1 = () => {
                 {p.before}
 
                 {/* الصورة بين before و input */}
-                <img src={p.middleImg} className="middle-img" alt="" />
+              
 
                 <div className="input-wrapper">
                   <input
@@ -351,6 +338,7 @@ const Review4_Page2_Q1 = () => {
                 </div>
 
                 {p.after}
+                  <img src={p.middleImg} className="middle-img" alt="" />
               </span>
             ))}
 

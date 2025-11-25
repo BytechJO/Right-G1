@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Unit3_Page5_Q4.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-
+import img from "../../assets/unit3/imgs3/U3P26EXEC.svg";
 const Unit3_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },
@@ -104,7 +104,9 @@ const Unit3_Page5_Q4 = () => {
   };
 
   return (
-    <div className="unit3-q4-container3"   style={{
+    <div
+      className="unit3-q4-container3"
+      style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -121,71 +123,68 @@ const Unit3_Page5_Q4 = () => {
           justifyContent: "flex-start",
         }}
       >
-      <h5 className="header-title-page8">
-        <span className="letter-of-Q"> C</span>Write the sentence.
-      </h5>
+        <h5 className="header-title-page8">
+          <span className="letter-of-Q"> C</span>Write the sentence.
+        </h5>
 
-      <div className="unit3-q4-alphabet-box">
-        <div className="unit3-q4-row">
-          {data.map((c, i) => (
-            <div className="unit3-q4-letter-char">
-              <div className="unit3-q4-data">
-                <span key={i} className="unit3-q4-cell">
-                  {c.letter}
-                </span>
-              </div>
-              <div className="unit3-q4-data">
-                <span key={i} className="unit3-q4-cell number">
-                  {c.number}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="unit3-q4-words">
-          {questionGroups.map((group, groupIndex) => (
-            <div className="unit3-q4-word-group" key={groupIndex}>
-              {group.map((num, letterIndex) => (
-                <div className="unit3-q4-input-h6" key={letterIndex}>
-                  <h6 style={{fontSize:"20px"}}>{num}</h6>
-                  <div className="unit3-q4-input-wrapper">
-                    {" "}
-                    {/* ⭐ تم التعديل هون */}
-                    <input
-                      className="unit3-q4-inputs"
-                      maxLength={1}
-                      value={letters[groupIndex][letterIndex]}
-                      onChange={(e) =>
-                        handleInputChange(
-                          e.target.value,
-                          groupIndex,
-                          letterIndex
-                        )
-                      }
-                    />
-                    {wrongInputs.includes(`${groupIndex}-${letterIndex}`) && (
-                      <span className="error-mark1">✕</span> // ⭐ تم التعديل هون
-                    )}
-                  </div>
+        <div className="unit3-q4-alphabet-box">
+          <div className="unit3-q4-row">
+            {data.map((c, i) => (
+              <div className="unit3-q4-letter-char">
+                <div className="unit3-q4-data">
+                  <span key={i} className="unit3-q4-cell">
+                    {c.letter}
+                  </span>
                 </div>
-              ))}
-            </div>
-          ))}
-          <img
-            src="/ddddddd/dddddd"
-            style={{ height: "100px", width: "130px" }}
-          />
-        </div>
+                <div className="unit3-q4-data">
+                  <span key={i} className="unit3-q4-cell number">
+                    {c.number}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        <div className="unit3-q4-sentence">
-          {formedWords.map((word, i) => (
-            <span key={i} className="unit3-q4-sentence-word">
-              {word}
-            </span>
-          ))}
+          <div className="unit3-q4-words">
+            {questionGroups.map((group, groupIndex) => (
+              <div className="unit3-q4-word-group" key={groupIndex}>
+                {group.map((num, letterIndex) => (
+                  <div className="unit3-q4-input-h6" key={letterIndex}>
+                    <h6 style={{ fontSize: "20px" }}>{num}</h6>
+                    <div className="unit3-q4-input-wrapper">
+                      {" "}
+                      {/* ⭐ تم التعديل هون */}
+                      <input
+                        className="unit3-q4-inputs"
+                        maxLength={1}
+                        value={letters[groupIndex][letterIndex]}
+                        onChange={(e) =>
+                          handleInputChange(
+                            e.target.value,
+                            groupIndex,
+                            letterIndex
+                          )
+                        }
+                      />
+                      {wrongInputs.includes(`${groupIndex}-${letterIndex}`) && (
+                        <span className="error-mark1">✕</span> // ⭐ تم التعديل هون
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+            <img src={img} style={{ height: "auto", width: "190px" }} />
+          </div>
+
+          <div className="unit3-q4-sentence">
+            {formedWords.map((word, i) => (
+              <span key={i} className="unit3-q4-sentence-word">
+                {word}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
       </div>
       <div className="action-buttons-container">
         <button

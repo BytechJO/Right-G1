@@ -1,6 +1,6 @@
-import page_6 from "../../assets/unit5/Right G1- Class Book_00045.jpg";
+import page_6 from "../../assets/unit5/imgs/Right G1- Class Book_00045.jpg";
 import "./Unit5_Page6.css";
-import Unit5_Page6_Q2 from "./Unit5_Page6_Q2";
+import Unit5_Page6_Q1 from "./Unit5_Page6_Q1";
 import Unit5_Page6_Q3 from "./Unit5_Page6_Q3";
 import CD25_Pg27_Song_AdultLady from "../../assets/unit3/sound3/U3P27LetsSing.mp3";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
@@ -33,7 +33,7 @@ const Unit5_Page6 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page6_Q2 /> */}
+              <Unit5_Page6_Q1 />
             </>,
             false
           )
@@ -50,7 +50,7 @@ const Unit5_Page6 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page6_Q3 /> */}
+              <Unit5_Page6_Q3 />
             </>,
             false
           )
