@@ -35,7 +35,7 @@ const Review4_Page2_Q3 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showResult) return; // يمنع التغيير بعد التشييك
+ 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
@@ -107,7 +107,7 @@ const Review4_Page2_Q3 = () => {
               <img
                 src={q.img}
                 className="q3-image"
-                style={{ height: "100px", width: "auto" }}
+                style={{ height: "120px", width: "auto" }}
               />
 
               <div className="options-row">

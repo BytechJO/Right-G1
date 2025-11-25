@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit4_Page5_Q3.css";
-
+import img from "../../assets/unit4/imgs/U4P32ExeB.svg"
 export default function Unit4_Page5_Q3() {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
@@ -133,7 +133,7 @@ export default function Unit4_Page5_Q3() {
         </h5>
 
         <div className="matching-wrapper2" ref={containerRef}>
-          <img src="./dddddddddd" style={{ height: "150px", width: "auto" }} />
+          <img src={img} style={{ height: "150px", width: "auto" }} />
           <div className="column2 left-column">
             {["It’s a red", "It’s a blue", "It’s a brown"].map((word, i) => (
               <div className="word-row2" key={i}>

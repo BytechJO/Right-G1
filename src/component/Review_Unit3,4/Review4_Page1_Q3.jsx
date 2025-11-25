@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import "./Review4_Page1_Q3.css";
 import ValidationAlert from "../Popup/ValidationAlert";
+import img1 from "../../assets/unit4/imgs/U4P36EXEC-01.svg"
+import img2 from "../../assets/unit4/imgs/U4P36EXEC-02.svg"
+import img3 from "../../assets/unit4/imgs/U4P36EXEC-03.svg"
+import img4 from "../../assets/unit4/imgs/U4P36EXEC-04.svg"
 const shapesData = [
-  { id: 1, shape: "circle", img: "/circle.png" },
-  { id: 2, shape: "square", img: "/square.png" },
-  { id: 3, shape: "triangle", img: "/triangle.png" },
-  { id: 4, shape: "rectangle", img: "/rect.png" },
+  { id: 1, shape: "circle", img: img1 },
+  { id: 2, shape: "square", img: img2 },
+  { id: 3, shape: "triangle", img: img3 },
+  { id: 4, shape: "rectangle", img: img4 },
 ];
 
 const options = ["triangle", "circle", "square", "rectangle"];

@@ -37,7 +37,7 @@ const Review4_Page1 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() => openPopup(<>
-        {/* <Review4_Page1_Q1/> */}
+        <Review4_Page1_Q1/>
         </>, false)}
         className="click-icon-review4-page1-1 hover:scale-110 transition"
       >

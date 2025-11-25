@@ -3,11 +3,14 @@ import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review3_Page2_Q3.css";
 import sound1 from "../../assets/unit4/sounds/CD33.Pg35_Instruction1_Adult Lady.mp3";
-import img1 from "../../assets/unit4/imgs/U4P35EXEF-01.svg";
-import img2 from "../../assets/unit4/imgs/U4P35EXEF-02.svg";
-import img3 from "../../assets/unit4/imgs/U4P35EXEF-03.svg";
-import img4 from "../../assets/unit4/imgs/U4P35EXEF-04.svg";
-
+import img1 from "../../assets/unit4/imgs/U4P35EXEF-01-01.svg";
+import img2 from "../../assets/unit4/imgs/U4P35EXEF-01-02.svg";
+import img3 from "../../assets/unit4/imgs/U4P35EXEF-02-01.svg";
+import img4 from "../../assets/unit4/imgs/U4P35EXEF-02-02.svg";
+import img5 from "../../assets/unit4/imgs/U4P35EXEF-03-01.svg";
+import img6 from "../../assets/unit4/imgs/U4P35EXEF-03-02.svg";
+import img7 from "../../assets/unit4/imgs/U4P35EXEF-04-01.svg";
+import img8 from "../../assets/unit4/imgs/U4P35EXEF-04-02.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
@@ -38,28 +41,28 @@ const Review3_Page2_Q3 = () => {
       id: 1,
       items: [
         { img: img1, word: "dates", isShortA: false },
-        { img: "./ddddddddddddddddd", word: "bag", isShortA: true },
+        { img: img2, word: "bag", isShortA: true },
       ],
     },
     {
       id: 2,
       items: [
-        { img: img2, word: "lake", isShortA: false },
-        { img: "./ddddddddddddddddd", word: "hat", isShortA: true },
+        { img: img3, word: "lake", isShortA: false },
+        { img: img4, word: "hat", isShortA: true },
       ],
     },
     {
       id: 3,
       items: [
-        { img: img3, word: "flag", isShortA: true },
-        { img: "./ddddddddddddddddd", word: "shape", isShortA: false },
+        { img: img5, word: "flag", isShortA: true },
+        { img: img6, word: "shape", isShortA: false },
       ],
     },
     {
       id: 4,
       items: [
-        { img: img4, word: "cape", isShortA: false },
-        { img: "./ddddddddddddddddd", word: "fan", isShortA: true },
+        { img: img7, word: "cape", isShortA: false },
+        { img: img8, word: "fan", isShortA: true },
       ],
     },
   ];

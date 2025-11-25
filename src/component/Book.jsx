@@ -58,6 +58,8 @@ import Review3_Page1 from "./Review_Unit3,4/Review3_Page1";
 import Review3_Page2 from "./Review_Unit3,4/Review3_Page2 ";
 import Review4_Page1 from "./Review_Unit3,4/Review4_Page1";
 import Review4_Page2 from "./Review_Unit3,4/Review4_Page2";
+import Unit4_Reading_P1 from "./unit4/Unit4_Reading_P1";
+import Unit4_Reading_P2 from "./unit4/Unit4_Reading_P2";
 
 export default function Book() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -156,6 +158,8 @@ export default function Book() {
     <Review3_Page2 openPopup={openPopup} />,
     <Review4_Page1 openPopup={openPopup} />,
     <Review4_Page2 openPopup={openPopup} />,
+    <Unit4_Reading_P1 openPopup={openPopup} />,
+    <Unit4_Reading_P2 openPopup={openPopup} />,
   ];
   const hideArrows = zoom > 1;
   const [isDragging, setIsDragging] = useState(false);

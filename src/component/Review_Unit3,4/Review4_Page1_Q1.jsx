@@ -7,9 +7,11 @@ import ValidationAlert from "../Popup/ValidationAlert";
 const Review4_Page1_Q1 = () => {
   // ✅ الإحداثيات كلها نسب مئوية (نسبة من الصورة)
   const clickableAreas = [
-    { x: 14, y: 7.5, w: 27.8, h: 10 }, // غيّري هاي الأرقام حسب ما بدك
+    { x: 73, y: 10.5, w: 24.8, h: 11 },
+    { x: 72, y: 52.5, w: 25.8, h: 11 },
+    { x: 44, y: 52.5, w: 16.8, h: 11 }, // غيّري هاي الأرقام حسب ما بدك
   ];
-
+  const correctAnswers = ["blue", "red", "is this"];
   const [inputs, setInputs] = useState(Array(clickableAreas.length).fill(""));
 
   const handleInputChange = (value, index) => {
@@ -19,12 +21,49 @@ const Review4_Page1_Q1 = () => {
   };
 
   const handleCheck = () => {
+    // 1️⃣ فحص الحقول الفارغة
     if (inputs.some((value) => value.trim() === "")) {
-      ValidationAlert.info();
+      ValidationAlert.info("Please complete all answers.");
       return;
     }
-    let scoreMessage = ``;
-    ValidationAlert.success(scoreMessage);
+
+    // 2️⃣ مقارنة الإجابات
+    const results = inputs.map((value, index) => {
+      return value
+        .trim()
+        .toLowerCase()
+        .includes(correctAnswers[index].toLowerCase());
+    });
+
+    const correctCount = results.filter((r) => r === true).length;
+    const wrongCount = results.length - correctCount;
+
+    let color =
+      correctCount === results.length
+        ? "green"
+        : correctCount === 0
+        ? "red"
+        : "orange";
+
+    const scoreMessage = `
+    <div style="font-size:20px; text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score:${correctCount}/${results.length}
+      </span>
+    </div>
+  `;
+    // 4️⃣ الحالات المختلفة
+    if (correctCount === results.length) {
+      ValidationAlert.success(scoreMessage);
+    } else if (wrongCount === results.length) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
+
+    console.log(inputs);
+    console.log(correctAnswers);
+    console.log(results);
   };
 
   const handleReset = () => {
@@ -50,7 +89,7 @@ const Review4_Page1_Q1 = () => {
         }}
       >
         <h5 className="header-title-page8" id="ex-d">
-          <span className="ex-A">D</span> Ask and answer.
+          A Look, read, and write.
         </h5>
 
         {/* ✅ الصورة هي المرجع */}
@@ -65,23 +104,21 @@ const Review4_Page1_Q1 = () => {
         >
           <img
             src={conversation}
-            // style={{
-            //   position: "absolute",
-            //   inset: 0,
-            //   width: "100%",
-            //   height: "100%",
-            //   objectFit: "contain",
-            // }}
+            style={{
+              inset: 0,
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+            }}
           />
-     <img
+          <img
             src={conversation2}
-            // style={{
-            //   position: "absolute",
-            //   inset: 0,
-            //   width: "100%",
-            //   height: "100%",
-            //   objectFit: "contain",
-            // }}
+            style={{
+              inset: 0,
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+            }}
           />
           {clickableAreas.map((area, index) => (
             <input

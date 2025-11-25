@@ -62,23 +62,35 @@ const Unit4_Page2 = ({ openPopup }) => {
     new Audio(Pg29_1_2_Lolo),
   ];
   const captionsExample = [
-    { start: 0, end: 2.0, text: "Page11. Birthdays Are Fun" },
-    { start: 2.05, end: 5.2, text: "Hi, everyone. Today is my birthday." },
-    { start: 5.24, end: 7.2, text: " I'm seven years old." },
-    { start: 7.24, end: 9.0, text: "  My friends are here. It's fun." },
+    { start: 0, end: 3.10, text: "Page 29, my picture. " },
+    {
+      start: 3.13,
+      end: 7.13,
+      text: "This is a house. The roof is a triangle.",
+    },
+    {
+      start: 7.17,
+      end: 12.25,
+      text: " The door is a square. The windows are circles.",
+    },
+    { start: 12.28, end: 15.12, text: " The frame is a rectangle." },
+    { start: 15.15, end: 19.15, text: " It is green, blue, brown and yellow." },
+    { start: 19.18, end: 21.17, text: "I like my picture. " },
   ];
-
 
   return (
     <div className="unit4-page-background" style={{ position: "relative" }}>
       <img src={page_2} />
-       <svg
+      <svg
         width="30"
         height="30"
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <AudioWithCaption src={soundMyPicture} captions={captionsExample} />,
+            <AudioWithCaption
+              src={soundMyPicture}
+              captions={captionsExample}
+            />,
             true
           )
         }
@@ -86,7 +98,7 @@ const Unit4_Page2 = ({ openPopup }) => {
       >
         <image href={audioBtn} x="0" y="0" width="90" height="90" />
       </svg>
-       <svg
+      <svg
         width="30"
         height="30"
         viewBox="0 0 90 90"
@@ -95,7 +107,7 @@ const Unit4_Page2 = ({ openPopup }) => {
             <FourImagesWithAudio
               images={[read, repeat1, repeat2]}
               audioSrc={soundListen}
-              checkpoints={[0, 4.30, 6.21]}
+              checkpoints={[0, 4.6, 6.21]}
               popupOpen={true}
               titleQ={`Listen, read, and repeat.`}
               audioArr={imageSounds2}
@@ -107,9 +119,8 @@ const Unit4_Page2 = ({ openPopup }) => {
       >
         <image href={audioBtn} x="0" y="0" width="90" height="90" />
       </svg>
-     
- 
-       <svg
+
+      <svg
         width="30"
         height="30"
         viewBox="0 0 90 90"
@@ -118,7 +129,7 @@ const Unit4_Page2 = ({ openPopup }) => {
             <FourImagesWithAudio
               images={[Rabbit, img1, img2, img3, img4]}
               audioSrc={CD28Pg29_Instruction1_AdultLady}
-              checkpoints={[0, 4.05, 5.10, 6.13, 7.03]}
+              checkpoints={[0, 4.05, 5.1, 6.13, 7.03]}
               popupOpen={true}
               titleQ={"Listen and read along."}
               audioArr={imageSounds}
@@ -130,7 +141,6 @@ const Unit4_Page2 = ({ openPopup }) => {
       >
         <image href={arrowBtn} x="0" y="0" width="90" height="90" />
       </svg>
-     
     </div>
   );
 };

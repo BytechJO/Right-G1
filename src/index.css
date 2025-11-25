@@ -43,7 +43,9 @@ input:focus {
   position: relative;
   z-index: 99999999;
 }
-
+.selected{
+  cursor: pointer;
+}
 .page_1-background,
 .page_2-background,
 .page_3-background,

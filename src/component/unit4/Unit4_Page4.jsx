@@ -20,16 +20,20 @@ import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 const Unit2_Page4 = ({ openPopup }) => {
-
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 4.13, text: "Page 25, Exercise 2: Right Grammar." },
-    { start: 4.16, end: 5.21, text: "Open your book." },
-    { start: 5.24, end: 7.02, text: "Close your book. " },
-    { start: 7.05, end: 8.29, text: "Take out your pencil." },
-    { start: 8.31, end: 10.11, text: "Open your book. " },
-    { start: 10.14, end: 11.24, text: "Close your book." },
-    { start: 11.27, end: 13.12, text: "Take out your pencil." },
+    { start: 0, end: 4.18, text: "Page 31, exercise 2, Right Grammar. " },
+    { start: 4.21, end: 6.00, text: "What shape is it? " },
+    { start: 6.03, end: 7.07, text: "It's a circle." },
+    { start: 7.10, end: 8.15, text: "Is it a triangle?" },
+    { start: 8.18, end: 10.07, text: "Yes, it is." },
+    { start: 10.10, end: 12.00, text: "No, it isn't. " },
+    { start: 12.03, end: 14.09, text: "Is it a triangle? " },
+    { start: 14.12, end: 16.12, text: "No, it isn't. It's a circle. " },
+    { start: 18.17, end: 18.13, text: "What shape is it?" },
+    { start: 20.13, end: 20.10, text: "It's a rectangle. " },
+     { start: 20.13, end: 23.19, text: "Is it a triangle on the swing set? " },
+    { start: 23.22, end: 25.20, text: "Yes, it is." },
   ];
 
   const handleImageClick = (e) => {
@@ -44,7 +48,7 @@ const Unit2_Page4 = ({ openPopup }) => {
   const clickableAreas = [
     { x1: 8.3, y1: 10.5, x2: 29.5, y2: 14.0, sound: Pg31_2_1_AdultLady },
     { x1: 64.17, y1: 10.15, x2: 77.14, y2: 14.0, sound: Pg31_2_2_AdultLady },
-    { x1:  8.3, y1: 14.2, x2: 29.5, y2: 17.4, sound: Pg31_2_3_AdultLady },
+    { x1: 8.3, y1: 14.2, x2: 29.5, y2: 17.4, sound: Pg31_2_3_AdultLady },
     { x1: 64.0, y1: 14.0, x2: 77.0, y2: 17.0, sound: Pg31_2_4_AdultLady },
     { x1: 80.19, y1: 14.0, x2: 92.5, y2: 17.0, sound: Pg31_2_5_AdultLady },
     { x1: 7.6, y1: 20.8, x2: 25.8, y2: 24, sound: Pg31_3_1_Tom },
@@ -120,7 +124,7 @@ const Unit2_Page4 = ({ openPopup }) => {
       >
         <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
-  <svg
+      <svg
         width="30"
         height="30"
         viewBox="0 0 60 60"

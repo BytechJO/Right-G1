@@ -6,18 +6,24 @@ import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { CgPlayPauseO } from "react-icons/cg";
 import sound1 from "../../assets/unit4/sounds/U4P37EXEE.mp3";
+import img1 from "../../assets/unit4/imgs/U4P37EEXEE-01-01.svg"
+import img2 from "../../assets/unit4/imgs/U4P37EEXEE-01-02.svg"
+import img3 from "../../assets/unit4/imgs/U4P37EEXEE-02-01.svg"
+import img4 from "../../assets/unit4/imgs/U4P37EEXEE-02-02.svg"
+import img5 from "../../assets/unit4/imgs/U4P37EEXEE-03-01.svg"
+import img6 from "../../assets/unit4/imgs/U4P37EEXEE-03-02.svg"
 const data = [
   {
     parts: [
       {
         before: "The ",
-        middleImg: "./tffffffffffffffffffffff",
+        middleImg: img1,
         blank: 1,
         after: "ork",
       },
       {
         before: " is on the ",
-        middleImg: "./sssssssssssssssss",
+        middleImg: img2,
         blank: 2,
         after: "et.",
       },
@@ -28,13 +34,13 @@ const data = [
     parts: [
       {
         before: "The ",
-        middleImg: "./sssssssssssssssss",
+        middleImg: img3,
         blank: 1,
         after: "ish",
       },
       {
         before: " is in the ",
-        middleImg: "./sssssssssssssssss",
+        middleImg: img4,
         blank: 2,
         after: "an.",
       },
@@ -45,13 +51,13 @@ const data = [
     parts: [
       {
         before: "The ",
-        middleImg: "./sssssssssssssssss",
+        middleImg: img5,
         blank: 1,
         after: "est",
       },
       {
         before: " is on my",
-        middleImg: "./sssssssssssssssss",
+        middleImg: img6,
         blank: 2,
         after: "eet",
       },
