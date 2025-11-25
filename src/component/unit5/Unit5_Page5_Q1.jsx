@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit5_Page5.css";
+import "./Unit5_Page5_Q1.css";
 import sound1 from "../../assets/unit1/sounds/P14Q2.mp3";
-import bat from "../../assets/img_unit2/imgs/bat.jpg";
-import box from "../../assets/img_unit2/imgs/box.jpg";
-import bucket from "../../assets/img_unit2/imgs/bucket.jpg";
-import boat from "../../assets/img_unit2/imgs/boat.jpg";
+import bat from "../../assets/unit5/imgs/U5P44EXEA1-01.svg"
+import box from "../../assets/unit5/imgs/U5P44EXEA1-02.svg";
+import bucket from "../../assets/unit5/imgs/U5P44EXEA1-03.svg";
+import boat from "../../assets/unit5/imgs/U5P44EXEA1-04.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";

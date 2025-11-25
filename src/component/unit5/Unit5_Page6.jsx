@@ -1,4 +1,4 @@
-import page_6 from "../../assets/unit5/imgs/Right G1- Class Book_00045.jpg";
+import page_6 from "../../assets/unit5/imgs/Right 1 Unit 05 Welcome to My Class6.jpg";
 import "./Unit5_Page6.css";
 import Unit5_Page6_Q1 from "./Unit5_Page6_Q1";
 import Unit5_Page6_Q3 from "./Unit5_Page6_Q3";

@@ -1,22 +1,28 @@
 import React, { useState } from "react";
 import "./Unit5_Page5_Q2.css";
 import ValidationAlert from "../Popup/ValidationAlert";
+import img1 from "../../assets/unit5/imgs/U5P44EXEA2-01.svg"
+import img2 from "../../assets/unit5/imgs/U5P44EXEA2-02.svg"
+import img3 from "../../assets/unit5/imgs/U5P44EXEA2-03.svg"
+import img4 from "../../assets/unit5/imgs/U5P44EXEA2-04.svg"
+import img5 from "../../assets/unit5/imgs/U5P44EXEA2-05.svg"
+import img6 from "../../assets/unit5/imgs/U5P44EXEA2-06.svg"
 const data = [
   {
     id: 1,
     images: [
-      { id: 1, src: "/img/kite.png", value: "kite" },
-      { id: 2, src: "/img/girl.png", value: "girl" },
-      { id: 3, src: "/img/key.png", value: "key" },
+      { id: 1, src: img1, value: "kite" },
+      { id: 2, src: img2, value: "girl" },
+      { id: 3, src: img3, value: "key" },
     ],
     correct: ["kite", "key"],
   },
   {
     id: 2,
     images: [
-      { id: 1, src: "/img/grass.png", value: "grass" },
-      { id: 2, src: "/img/kitchen.png", value: "kitchen" },
-      { id: 3, src: "/img/garden.png", value: "garden" },
+      { id: 1, src: img4, value: "grass" },
+      { id: 2, src: img5, value: "kitchen" },
+      { id: 3, src: img6, value: "garden" },
     ],
     correct: ["grass", "garden"],
   },

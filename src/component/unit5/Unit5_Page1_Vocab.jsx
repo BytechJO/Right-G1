@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import backgroundImage from "../../assets/unit3/imgs3/G1_U3_Pg_22-23 copy.jpg";
-import page2_2 from "../../assets/img_unit2/imgs/unit2 vocab-3CQVwmCm.jpg";
+import backgroundImage from "../../assets/unit5/imgs/P40-41.jpg";
+import page2_2 from "../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
 import vocabulary from "../../assets/unit3/sound3/Pg22_Vocabulary_Adult Lady.mp3";
 import { CgPlayPauseO } from "react-icons/cg";
 import num1 from "../../assets/unit3/imgs3/Num1.svg";
@@ -10,6 +10,7 @@ import num4 from "../../assets/unit3/imgs3/Num4.svg";
 import num5 from "../../assets/unit3/imgs3/Num5.svg";
 import num6 from "../../assets/unit3/imgs3/Num6.svg";
 import num7 from "../../assets/unit3/imgs3/Num7.svg";
+import num8 from "../../assets/unit5/imgs/Num8.svg";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
@@ -47,6 +48,7 @@ const Unit5_Page1_Vocab = () => {
     { start: 14.7, end: 17.2 }, // Good morning
     { start: 17.3, end: 19.8 },
     { start: 19.9, end: 23.6 },
+    { start: 23.7, end: 25.6 },
   ];
   useEffect(() => {
     const audio = mainAudioRef.current;
@@ -113,7 +115,7 @@ const Unit5_Page1_Vocab = () => {
     }
   };
 
-  const nums = [num1, num2, num3, num4, num5, num6, num7];
+  const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
 
   return (
     <>
@@ -204,8 +206,6 @@ const Unit5_Page1_Vocab = () => {
                       mainAudioRef.current.volume = e.target.value;
                     }}
                   />
-
-              
                 </div>
               )}
             </div>
@@ -230,7 +230,7 @@ const Unit5_Page1_Vocab = () => {
             <img
               src={page2_2}
               style={{
-                height: "210px",
+                height: "230px",
                 width: "auto",
                 position: "absolute",
                 bottom: "0%",
@@ -242,16 +242,17 @@ const Unit5_Page1_Vocab = () => {
             {/* النصوص */}
             <div
               className="vocab_container"
-              style={{ bottom: "2%", right: "0.5%" }}
+              style={{ bottom: "2%", right: "8.5%" }}
             >
               {[
-                "numbers",
-                "Close your book.",
-                "Open your book",
-                "Make a line.",
-                "Listen! ",
-                "Quiet! ",
-                "Take out your pencil.",
+                "board",
+                " map",
+                " book",
+                "globe",
+                "poster",
+                "trash bin",
+                "desk",
+                "chair",
               ].map((text, i) => (
                 <h6 key={i} className={activeIndex === i ? "active" : ""}>
                   {i + 1} {text}

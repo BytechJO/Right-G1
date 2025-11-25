@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import find_img from "../../assets/unit3/imgs3/G1_U3_Pg_22-23 copy.jpg";
+import find_img from "../../assets/unit5/imgs/P40-41.jpg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 const Unit5_Page1_find = () => {
@@ -8,10 +8,10 @@ const Unit5_Page1_find = () => {
 
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 42,
-    y1: 14,
-    x2: 48,
-    y2: 40,
+    x1: 44.25,
+    y1: 28.76,
+    x2:55.99,
+    y2: 40.27,
   };
 
   const handleImageClick = (e) => {
@@ -56,7 +56,7 @@ const Unit5_Page1_find = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-       <div
+      <div
         style={{
           textAlign: "center",
           display: "flex",
@@ -64,64 +64,62 @@ const Unit5_Page1_find = () => {
           alignItems: "center",
         }}
       >
-      <div style={{ display: "flex" ,justifyContent: "center",width:"100%"}}>
-        <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
-        <h5 className="header-title-page8">
-          I need your help. Can you help me find the boy shutting the window in
-          the picture?
-        </h5>
-      </div>
-      <div style={{ position: "relative", display: "inline-block" }}>
-        <img
-          src={find_img}
-          alt="interactive"
-          style={{
-            width: "auto",
-            height: "75vh",
-            cursor: "pointer",
-            display: "block",
-          }}
-          onClick={handleImageClick}
-        />
-
-        {/* ✅ الدائرة الحمراء في مكان الكبس */}
-        {clickedPoint && (
-          <div
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+        >
+          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
+          <h5 className="header-title-page8">
+            I need your help. Can you help me find the bookshelf in the picture?
+          </h5>
+        </div>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <img
+            src={find_img}
+            alt="interactive"
             style={{
-              position: "absolute",
-              top: `${clickedPoint.y}%`,
-              left: `${clickedPoint.x}%`,
-              width: "3%",
-              height: "3%",
-              backgroundColor: "red",
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
+              width: "auto",
+              height: "75vh",
+              cursor: "pointer",
+              display: "block",
             }}
-          ></div>
-        )}
+            onClick={handleImageClick}
+          />
 
-        {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-        {checkResult === "success" && (
-          <div
-            style={{
-              position: "absolute",
-              top: `${targetArea.y1}%`,
-              left: `${targetArea.x1}%`,
-              width: `${targetArea.x2 - targetArea.x1}%`,
-              height: `${targetArea.y2 - targetArea.y1}%`,
-              backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
-              borderRadius: "8px",
-              pointerEvents: "none",
-            }}
-          ></div>
-        )}
+          {/* ✅ الدائرة الحمراء في مكان الكبس */}
+          {clickedPoint && (
+            <div
+              style={{
+                position: "absolute",
+                top: `${clickedPoint.y}%`,
+                left: `${clickedPoint.x}%`,
+                width: "3%",
+                height: "3%",
+                backgroundColor: "red",
+                borderRadius: "50%",
+                transform: "translate(-50%, -50%)",
+                pointerEvents: "none",
+              }}
+            ></div>
+          )}
+
+          {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
+          {checkResult === "success" && (
+            <div
+              style={{
+                position: "absolute",
+                top: `${targetArea.y1}%`,
+                left: `${targetArea.x1}%`,
+                width: `${targetArea.x2 - targetArea.x1}%`,
+                height: `${targetArea.y2 - targetArea.y1}%`,
+                backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
+                borderRadius: "8px",
+                pointerEvents: "none",
+              }}
+            ></div>
+          )}
+        </div>
       </div>
-</div>
-      <div
-      className="action-buttons-container "
-
-      >
+      <div className="action-buttons-container ">
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
         </button>

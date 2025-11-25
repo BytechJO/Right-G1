@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Unit5_Page5_Q4.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-
+import img from "../../assets/unit5/imgs/U5P44EXEC.svg"
 const Unit5_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },
@@ -188,7 +188,7 @@ const Unit5_Page5_Q4 = () => {
               </div>
             ))}
             <img
-              src="/ddddddd/dddddd"
+              src={img}
               style={{ height: "100px", width: "130px" }}
             />
           </div>

@@ -1,13 +1,13 @@
-import Pg22_1_1_AdultLady from "../../assets/unit3/sound3/Pg22_1.1_Adult Lady.mp3";
-import Pg22_1_2_AdultLady from "../../assets/unit3/sound3/Pg22_1.2_Adult Lady.mp3";
-import Pg22_1_3_AdultLady from "../../assets/unit3/sound3/Pg22_1.3_Adult Lady.mp3";
-import Pg22_1_4_AdultLady from "../../assets/unit3/sound3/Pg22_1.4_Adult Lady.mp3";
-import img1 from "../../assets/unit3/imgs3/Short a.svg";
-import img2 from "../../assets/unit3/imgs3/ant.svg";
-import img3 from "../../assets/unit3/imgs3/pan.svg";
-import img4 from "../../assets/unit3/imgs3/rat.svg";
+import Pg22_1_1_AdultLady from "../../assets/unit5/sounds/Pg40_1.2_Adult Lady.mp3";
+import Pg22_1_2_AdultLady from "../../assets/unit5/sounds/Pg40_1.3_Adult Lady.mp3";
+import Pg22_1_3_AdultLady from "../../assets/unit5/sounds/Pg40_1.4_Adult Lady.mp3";
+import Pg22_1_4_AdultLady from "../../assets/unit5/sounds/Pg40_1.5_Adult Lady.mp3";
+import img1 from "../../assets/unit5/imgs/G.svg";
+import img2 from "../../assets/unit5/imgs/girl.svg";
+import img3 from "../../assets/unit5/imgs/green.svg";
+import img4 from "../../assets/unit5/imgs/garden.svg";
 import FourImagesWithAudio from "../FourImagesWithAudio";
-import longAudio from "../../assets/unit3/sound3/U3P22-listen and read along.mp3";
+import longAudio from "../../assets/unit5/sounds/Pg40_1.1_Adult Lady.mp3";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 const Unit5_Page1_Read = () => {
   const imageSounds = [

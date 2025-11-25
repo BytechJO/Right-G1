@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import deer from "../../assets/unit4/imgs/U4P36EXED-01.svg";
+import deer from "../../assets/unit5/imgs/U5P44EXEB.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit5_Page5_Q3.css";
 

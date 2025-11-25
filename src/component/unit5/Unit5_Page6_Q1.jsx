@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Unit5_Page6_Q1.css";
-import partyhats from "../../assets/img_unit2/imgs/party hats..jpg";
-import present from "../../assets/img_unit2/imgs/Present1.jpg";
+import img1 from "../../assets/unit5/imgs/U5P45EXED-01.svg";
+import img2 from "../../assets/unit5/imgs/U5P45EXED-02.svg";
+import img3 from "../../assets/unit5/imgs/U5P45EXED-03.svg";
+import img4 from "../../assets/unit5/imgs/U5P45EXED-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 const Unit5_Page6_Q1 = () => {
   const [answers, setAnswers] = useState([]);
@@ -112,7 +114,7 @@ const Unit5_Page6_Q1 = () => {
 
           <div className="content-container-unit5-p6-q1">
             <div className="section-one-unit5-p6-q1">
-              <span>1</span> <img src={partyhats} className="img-unit5-p6-q1" />
+              <span>1</span> <img src={img1} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <input
                   type="text"
@@ -146,7 +148,7 @@ const Unit5_Page6_Q1 = () => {
             </div>
 
             <div className="section-two-unit5-p6-q1">
-              <span>2</span> <img src={present} className="img-unit5-p6-q1" />
+              <span>2</span> <img src={img2} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
@@ -189,7 +191,7 @@ const Unit5_Page6_Q1 = () => {
             </div>
 
             <div className="section-three-unit5-p6-q1">
-              <span>3</span> <img src={partyhats} className="img-unit5-p6-q1" />
+              <span>3</span> <img src={img3} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <input
                   type="text"
@@ -212,7 +214,7 @@ const Unit5_Page6_Q1 = () => {
               </div>
             </div>
             <div className="section-four-unit5-p6-q1">
-              <span>4</span> <img src={partyhats} className="img-unit5-p6-q1" />
+              <span>4</span> <img src={img4} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
