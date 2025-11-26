@@ -108,7 +108,7 @@ const Unit5_Page5_Q3 = () => {
               src={deer}
               className="shape-img-unit5-p5-q3"
               alt=""
-              style={{ height: "250px", width: "auto" }}
+              style={{ height: "320px", width: "auto" }}
             />
             <div className="group-input-unit5-p5-q3">
               {data.map((item, index) => (
