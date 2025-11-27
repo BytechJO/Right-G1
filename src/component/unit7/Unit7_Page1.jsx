@@ -1,13 +1,13 @@
-import page_1 from "../../assets/unit5/imgs/Right 1 Unit 05 Welcome to My Class.jpg";
-import "./Unit5_Page1.css";
-import Pg22_U3_Intro_AdultLady from "../../assets/unit5/sounds/U5P40-41.mp3";
+import page_1 from "../../assets/unit7/img/Right G1- Class Book_00058.jpg";
+import "./Unit7_Page1.css";
+import Pg22_U3_Intro_AdultLady from "../../assets/unit7/sound/CD52.Pg58_U7.Intro_Adult Lady.mp3";
 import AudioWithCaption from "../AudioWithCaption";
-import Unit5_Page1_find from "./Unit5_Page1_find";
-import Unit5_Page1_Vocab from "./Unit5_Page1_Vocab";
-import Unit5_Page1_Read from "./Unit5_Pag1_Read";
+import Unit7_Page1_find from "./Unit7_Page1_find";
+import Unit7_Page1_Vocab from "./Unit7_Page1_Vocab";
+import Unit7_Page1_Read from "./Unit7_Pag1_Read";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-const Unit5_Page1 = ({ openPopup }) => {
+const Unit7_Page1 = ({ openPopup }) => {
   const captionsExample = [
     { start: 0, end: 4.09, text: "Page 40, Unit 5: Welcome to My Class." },
     { start: 4.12, end: 7.26, text: "Page 40, Unit 5 Vocabulary: " },
@@ -17,13 +17,13 @@ const Unit5_Page1 = ({ openPopup }) => {
     { start: 14.24, end: 17.22, text: "4.	Globe. " },
     { start: 17.25, end: 20.02, text: "5.	Poster." },
     { start: 20.05, end: 22.17, text: "6.	trash bin." },
-    { start: 22.20, end: 24.24, text: "7.	Desk." },
+    { start: 22.2, end: 24.24, text: "7.	Desk." },
     { start: 24.27, end: 27.07, text: "8.	Chair." },
-    { start: 27.10, end: 30.09, text: "Page 40. Listen and read along" },
+    { start: 27.1, end: 30.09, text: "Page 40. Listen and read along" },
     { start: 30.12, end: 34.24, text: "G, girl, green, garden. " },
     {
       start: 34.27,
-      end: 49.80,
+      end: 49.8,
       text: "Page 41. The things on my desk. ",
     },
     {
@@ -78,7 +78,7 @@ const Unit5_Page1 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              <Unit5_Page1_find />
+              <Unit7_Page1_find />
             </>,
             false
           )
@@ -94,7 +94,7 @@ const Unit5_Page1 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              <Unit5_Page1_Vocab />
+              <Unit7_Page1_Vocab />
             </>,
             false
           )
@@ -110,7 +110,7 @@ const Unit5_Page1 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              <Unit5_Page1_Read />
+              <Unit7_Page1_Read />
             </>,
             false
           )
@@ -123,4 +123,4 @@ const Unit5_Page1 = ({ openPopup }) => {
   );
 };
 
-export default Unit5_Page1;
+export default Unit7_Page1;
