@@ -4,21 +4,20 @@
   position: absolute;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  position: absolute;
   padding: 5px;
 }
 
 .headset-icon-CD-unit6-page2-1 {
-  top: 5%;
-  right: 3.5%;
+  top: 7%;
+  right: 0.5%;
 }
 
 .headset-icon-CD-unit6-page2-2 {
-  bottom: 27%;
-  right: 3%;
+  bottom: 28%;
+  right: 8%;
 }
 
 .click-icon-unit6-page2-1 {
   bottom: 11%;
-  right: 19.5%;
+  right: 38.5%;
 }

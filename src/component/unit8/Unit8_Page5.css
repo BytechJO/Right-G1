@@ -1,10 +1,10 @@
-.headset-icon-CD-unit6-page5 {
+/* .headset-icon-CD-unit6-page5 {
   position: absolute;
   padding: 5px;
   top: 26%;
   right: 18%;
   cursor: pointer;
-}
+} */
 
 /* EDIT: علامة الخطأ فقط */
 .wrong-x2 {
@@ -43,7 +43,7 @@
   transform: scale(1.28);
 }
 
-.click-icon-unit6-page5-1 {
+/* .click-icon-unit6-page5-1 {
   position: absolute;
   padding: 5px;
   top: 8%;
@@ -71,7 +71,7 @@
   bottom: 24.5%;
   left: 25.5%;
   cursor: pointer;
-}
+} */
 
 .letter {
   border: 2px solid #2c5287;

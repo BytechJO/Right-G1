@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../assets/img_unit2/imgs/bey.jpg";
+import img1 from "../../assets/unit6/imgs/U6P50EXEA2-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P50EXEA2-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P50EXEA2-03.svg";
+import img4 from "../../assets/unit6/imgs/U6P50EXEA2-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit6_Page5_Q2.css";
 
@@ -267,7 +268,7 @@ const Unit6_Page5_Q2 = () => {
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img3} alt="" />{" "}
+                <img src={img4} alt="" />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img4"

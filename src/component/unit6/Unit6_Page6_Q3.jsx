@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../assets/img_unit2/imgs/bey.jpg";
+import img1 from "../../assets/unit6/imgs/U6P51EXEF-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P51EXEF-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P51EXEF-03.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit6_Page6_Q3.css";
 
@@ -196,7 +196,7 @@ const Unit6_Page6_Q2 = () => {
             {/* الصور */}
             <div className="match-images-row2">
               <div className="img-box2">
-                <img src={img1} alt="" />
+                <img src={img1} alt=""  className="img-box2-unit6-p6-q3"/>
 
                 <div
                   className="dot22-unit6-q7 end-dot22-unit6-q7"
@@ -205,7 +205,7 @@ const Unit6_Page6_Q2 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img2} alt="" />{" "}
+                <img src={img2} alt=""  className="img-box2-unit6-p6-q3"/>{" "}
                 <div
                   className="dot22-unit6-q7 end-dot22-unit6-q7"
                   data-image="img2"
@@ -213,7 +213,7 @@ const Unit6_Page6_Q2 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img3} alt="" />{" "}
+                <img src={img3} alt="" className="img-box2-unit6-p6-q3" />{" "}
                 <div
                   className="dot22-unit6-q7 end-dot22-unit6-q7"
                   data-image="img3"

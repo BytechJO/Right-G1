@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import deer from "../../assets/unit4/imgs/U4P34EXEA-01.svg";
-import duck from "../../assets/unit4/imgs/U4P34EXEA-02.svg";
-import taxi from "../../assets/unit4/imgs/U4P34EXEA-03.svg";
-import tiger from "../../assets/unit4/imgs/U4P34EXEA-04.svg";
+import deer from "../../assets/unit6/imgs/U6P52EXEB-01.svg";
+import duck from "../../assets/unit6/imgs/U6P52EXEB-02.svg";
+import taxi from "../../assets/unit6/imgs/U6P52EXEB-03.svg";
+import tiger from "../../assets/unit6/imgs/U6P52EXEB-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review5_Page1_Q2.css";
 const Review5_Page1_Q2 = () => {
@@ -120,10 +120,12 @@ const Review5_Page1_Q2 = () => {
               flexDirection: "row",
               marginBottom: "20px",
               marginTop: "40px",
+              justifyContent:"space-between"
             }}
           >
             {data.map((item, index) => (
               <>
+              <span style={{color:"darkblue" ,fontSize:"22px",fontWeight:"700"}}>{index+1}</span>
                 <img
                   key={index}
                   src={item.src}

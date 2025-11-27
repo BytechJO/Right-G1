@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Unit5_Page5_Q2.css";
+import "./Unit7_Page5_Q2.css";
 import ValidationAlert from "../Popup/ValidationAlert";
 import img1 from "../../assets/unit5/imgs/U5P44EXEA2-01.svg";
 import img2 from "../../assets/unit5/imgs/U5P44EXEA2-02.svg";
@@ -10,25 +10,31 @@ import img6 from "../../assets/unit5/imgs/U5P44EXEA2-06.svg";
 const data = [
   {
     id: 1,
+    letter: "w",
     images: [
-      { id: 1, src: img1, value: "kite" },
-      { id: 2, src: img2, value: "girl" },
-      { id: 3, src: img3, value: "key" },
+      { id: 1, src: img1, value: 1 },
+      { id: 2, src: img2, value: 2 },
+      { id: 3, src: img3, value: 3 },
+      { id: 4, src: img2, value: 4 },
+      { id: 5, src: img3, value: 5 },
     ],
-    correct: ["kite", "key"],
+    correct: [1, 3, 4],
   },
   {
     id: 2,
+    letter: "h",
     images: [
-      { id: 1, src: img4, value: "grass" },
-      { id: 2, src: img5, value: "kitchen" },
-      { id: 3, src: img6, value: "garden" },
+      { id: 1, src: img4, value: 1 },
+      { id: 2, src: img5, value: 2 },
+      { id: 3, src: img6, value: 3 },
+      { id: 4, src: img5, value: 4 },
+      { id: 5, src: img6, value: 5 },
     ],
-    correct: ["grass", "garden"],
+    correct: [2, 3, 4],
   },
 ];
 
-export default function Unit5_Page5_Q2() {
+export default function Unit7_Page5_Q2() {
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -43,7 +49,7 @@ export default function Unit5_Page5_Q2() {
       }
 
       // 2️⃣ إذا حاول يختار أكثر من 2 → نمنعه
-      if (current.length >= 2) {
+      if (current.length >= 3) {
         return prev;
       }
 
@@ -130,8 +136,9 @@ export default function Unit5_Page5_Q2() {
       >
         <div className="circle-wrapper-Unit5_Page5_Q2">
           <h5 className="header-title-page8">
-            <span style={{ color: "purple" }}>2</span> Which pictures begin with
-            the same sound? Circle.
+            <span style={{ color: "purple" }}>2</span>Which pictures begin with
+            the <span style={{ color: "red" }}>same sound </span>? Listen and
+            circle
           </h5>
 
           {data.map((q) => (
@@ -144,10 +151,20 @@ export default function Unit5_Page5_Q2() {
                   fontWeight: "700",
                 }}
               >
-                {q.id}.
+                {q.id}
               </span>
-
-              <div className="images-row-Unit5_Page5_Q2">
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  marginLeft:"5px"
+                }}
+              >
+                {" "}
+                {q.letter}
+              </span>
+              <div className="images-row-Unit7_Page5_Q2">
                 {q.images.map((img) => {
                   const isSelected = answers[q.id]?.includes(img.value);
                   const isWrong =

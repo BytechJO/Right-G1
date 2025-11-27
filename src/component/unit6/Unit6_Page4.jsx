@@ -1,13 +1,15 @@
 import React, { useState, useRef } from "react";
-import page_4 from "../../assets/unit6/imgs/Right G1- Class Book_00049.jpg";
+import page_4 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park4.jpg";
 import "./Unit6_Page4.css";
 import CD23_pg25_Grammar2_AdultLady from "../../assets/unit3/sound3/U3P25RG2.mp3";
-import sound1 from "../../assets/unit3/sound3/Pg25_2.1_Adult Lady.mp3";
-import sound2 from "../../assets/unit3/sound3/Pg25_2.2_Adult Lady.mp3";
-import sound3 from "../../assets/unit3/sound3/Pg25_2.3_Adult Lady.mp3";
-import sound4 from "../../assets/unit3/sound3/Pg25_3.1_Female Teacher.mp3";
-import sound5 from "../../assets/unit3/sound3/Pg25_4.1_Female Teacher.mp3";
-import sound6 from "../../assets/unit3/sound3/Pg25_5.1_Female Teacher.mp3";
+import sound1 from "../../assets/unit6/sounds/Pg49_2.1_Adult Lady.mp3";
+import sound2 from "../../assets/unit6/sounds/Pg49_2.2_Adult Lady.mp3";
+import sound3 from "../../assets/unit6/sounds/Pg49_2.3_Adult Lady.mp3";
+import sound4 from "../../assets/unit6/sounds/Pg49_2.4_Adult Lady.mp3";
+import sound5 from "../../assets/unit6/sounds/Pg49_3.1_Harley.mp3";
+import sound6 from "../../assets/unit6/sounds/Pg49_3.2_Helen_Take 3.mp3";
+import sound7 from "../../assets/unit6/sounds/Pg49_4.1_Stella.mp3";
+import sound8 from "../../assets/unit6/sounds/Pg49_4.2_Harley.mp3";
 import video from "../../assets/unit3/sound3/p25.mp4";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
@@ -36,12 +38,14 @@ const Unit6_Page4 = ({ openPopup }) => {
     checkAreaAndPlaySound(xPercent, yPercent);
   };
   const clickableAreas = [
-    { x1: 9.07, y1: 10.5, x2: 30.43, y2: 14.0, sound: sound1 },
-    { x1: 9.07, y1: 15.4, x2: 30.43, y2: 18.7, sound: sound2 },
-    { x1: 66.4, y1: 13.4, x2: 89.9, y2: 17.0, sound: sound3 },
-    { x1: 11.11, y1: 22.9, x2: 30.4, y2: 26.4, sound: sound4 },
-    { x1: 55.5, y1: 22.5, x2: 75.4, y2: 26.2, sound: sound5 },
-    { x1: 30.4, y1: 60.0, x2: 55.6, y2: 63.5, sound: sound6 },
+    { x1: 8.10, y1: 10.5, x2: 36.43, y2: 14.1, sound: sound1 },
+    { x1: 8.10, y1: 15.4, x2: 31.43, y2: 19.1, sound: sound2 },
+    { x1: 69.6, y1: 11.0, x2: 82.1, y2: 14.10, sound: sound3 },
+    { x1: 69.6, y1: 16.2, x2: 84.5, y2: 19.4, sound: sound4 },
+    { x1: 8.75, y1: 26.2, x2: 39.06, y2: 29.6, sound: sound5 },
+    { x1: 51.8, y1: 26.9, x2: 64.8, y2: 30.12, sound: sound6 },
+      { x1: 63.74, y1: 63.6, x2: 87.5, y2: 67.1, sound: sound7 },
+    { x1: 78.4, y1: 82.9, x2: 93.6, y2: 63.5, sound: sound8 },
   ];
 
   const checkAreaAndPlaySound = (x, y) => {

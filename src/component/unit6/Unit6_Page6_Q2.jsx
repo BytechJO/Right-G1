@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA1-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA1-02.svg";
+import bat from "../../assets/unit6/imgs/U6P51EXEE-01.svg";
+import cap from "../../assets/unit6/imgs/U6P51EXEE-02.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit6_Page6_Q2.css";
 const Unit6_Page6_Q2 = () => {
@@ -120,7 +120,7 @@ const Unit6_Page6_Q2 = () => {
             <div className="question-box-unit4-page5-q1" key={i}>
               <span style={{fontSize:"22px" ,fontWeight:"600" ,color:"#1d4f7b"}}>{i+1}</span>
               <div className="img-option-unit6-p6-q2">
-                <img src={item.img} className="q-img-unit4-page5-q1" />
+                <img src={item.img} className="q-img-unit4-page5-q1" style={{height:"auto",width:"200px"}} />
 
                 {/* f / v choices */}
                 <div className="choices-unit6-page6-q2 ">

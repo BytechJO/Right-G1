@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Unit6_Page5_Q1.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-import img1 from "../../assets/unit3/imgs3/P27exeE-01.svg";
-import img2 from "../../assets/unit3/imgs3/P27exeE-02.svg";
-import img3 from "../../assets/unit3/imgs3/P27exeE-03.svg";
-import img4 from "../../assets/unit3/imgs3/P27exeE-04.svg";
+import img1 from "../../assets/unit6/imgs/U6P50EXEA1-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P50EXEA1-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P50EXEA1-03.svg";
+import img4 from "../../assets/unit6/imgs/U6P50EXEA1-04.svg";
 import sound from "../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";

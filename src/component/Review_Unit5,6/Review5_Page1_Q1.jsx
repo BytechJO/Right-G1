@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 // import "./Unit5_Page6_Q1.css";
-import img1 from "../../assets/unit5/imgs/U5P45EXED-01.svg";
-import img2 from "../../assets/unit5/imgs/U5P45EXED-02.svg";
-import img3 from "../../assets/unit5/imgs/U5P45EXED-03.svg";
-import img4 from "../../assets/unit5/imgs/U5P45EXED-04.svg";
+import img1 from "../../assets/unit6/imgs/U6P52EXEA-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P52EXEA-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P52EXEA-03.svg";
+import img4 from "../../assets/unit6/imgs/U6P52EXEA-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 const Review5_Page1_Q1 = () => {
   const [answers, setAnswers] = useState([]);

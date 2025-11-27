@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import page_2 from "../../assets/unit6/imgs/Right G1- Class Book_00047.jpg";
+import page_2 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park2.jpg";
 import soundSong from "../../assets/unit3/sound3/come and sing.mp3";
 import sound1 from "../../assets/unit6/sounds/Pg47_1.1_Bebo.mp3";
 import sound2_2 from "../../assets/unit6/sounds/Pg47_1.2_Lolo.mp3";
@@ -8,13 +8,13 @@ import sound4 from "../../assets/unit6/sounds/Pg47_2.2_Adult Lady.mp3";
 import sound5 from "../../assets/unit6/sounds/Pg47_2.3_Adult Lady.mp3";
 import sound6 from "../../assets/unit6/sounds/Pg47_2.4_Adult Lady.mp3";
 import sound7 from "../../assets/unit3/sound3/U3P23-listen and read along.mp3";
-import img1 from "../../assets/unit3/imgs3/Short a.svg";
-import img2 from "../../assets/unit3/imgs3/bat.svg";
-import img3 from "../../assets/unit3/imgs3/cap.svg";
-import img4 from "../../assets/unit3/imgs3/dad.svg";
+import img1 from "../../assets/unit6/imgs/short i.svg";
+import img2 from "../../assets/unit6/imgs/wig.svg";
+import img3 from "../../assets/unit6/imgs/mitt.svg";
+import img4 from "../../assets/unit6/imgs/dig.svg";
 import CD21_Pg23_Instruction1_AdultLady from "../../assets/unit3/sound3/U3P23 listen read and repeat.mp3";
-import repeat1 from "../../assets/unit3/imgs3/listen and repeat 02.svg";
-import repeat2 from "../../assets/unit3/imgs3/listen and repeat 03.svg";
+import repeat1 from "../../assets/unit6/imgs/listen and repeat 02.svg";
+import repeat2 from "../../assets/unit6/imgs/listen and repeat 03.svg";
 import read from "../../assets/unit1/imgs/P1 listen and repeat 01.svg";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
@@ -44,7 +44,7 @@ const Unit6_Page2 = ({ openPopup }) => {
   ];
 
   return (
-    <div className="unit6-page-background">
+    <div className="unit2-page-background">
       <img src={page_2} />
 
       <svg

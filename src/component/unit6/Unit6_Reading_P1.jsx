@@ -1,4 +1,4 @@
-import page24 from "../../assets/unit6/imgs/Right G1- Class Book_00056.jpg";
+import page24 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
 import sound1 from "../../assets/unit4/sounds/U4ReadingP38-39.mp3";

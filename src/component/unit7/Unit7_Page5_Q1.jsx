@@ -1,140 +1,80 @@
 import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit5_Page5_Q1.css";
-import sound1 from "../../assets/unit1/sounds/P14Q2.mp3";
-import bat from "../../assets/unit5/imgs/U5P44EXEA1-01.svg"
-import box from "../../assets/unit5/imgs/U5P44EXEA1-02.svg";
-import bucket from "../../assets/unit5/imgs/U5P44EXEA1-03.svg";
-import boat from "../../assets/unit5/imgs/U5P44EXEA1-04.svg";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
-const Unit5_Page5_Q1 = () => {
-  const [answers, setAnswers] = useState([null, null, null, null]);
-  const audioRef = useRef(null);
+import "./Unit7_Page5_Q1.css";
+import img1 from "../../assets/unit4/imgs/U4P37EXEG-01.svg";
+import img2 from "../../assets/unit4/imgs/U4P37EXEG-02.svg";
+import img3 from "../../assets/unit4/imgs/U4P37EXEG-03.svg";
+import img4 from "../../assets/unit4/imgs/U4P37EXEG-04.svg";
+const Unit7_Page5_Q1 = () => {
+  const [answers, setAnswers] = useState(Array(4).fill(null));
   const [showResult, setShowResult] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [activeSpeed, setActiveSpeed] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  // زر الكابشن
-  const [isMuted, setIsMuted] = useState(false);
-  const stopAtSecond = 11;
-  const [paused, setPaused] = useState(false);
-  const changeSpeed = (rate) => {
-    if (!audioRef.current) return;
-    audioRef.current.playbackRate = rate;
-    setActiveSpeed(rate);
-  };
+
+  // 🔥 الداتا المطابقة للصورة
   const items = [
-    { img: bat, correct: "g" },
-    { img: box, correct: "k" },
-    { img: bucket, correct: "k" },
-    { img: boat, correct: "g" },
+    {
+      img: img1,
+      options: ["house", "hand"],
+      correctIndex: 0,
+    },
+    {
+      img: img2,
+      options: ["water", "window"],
+      correctIndex: 0,
+    },
+    {
+      img: img3,
+      options: ["woman", "water"],
+      correctIndex: 1,
+    },
+    {
+      img: img4,
+      options: ["house", "hat"],
+      correctIndex: 1,
+    },
   ];
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
 
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 250);
-
-    // ⚡⚡ هنا الإضافة الوحيدة
-    const handleEnded = () => {
-      audio.currentTime = 0; // يرجع لأول ثانية
-      audio.pause(); // يوقف
-      setPaused(true); // زر البلاي يصير Play
-      setShowContinue(true); // يظهر زر Continue
-      // setActiveIndex(null); // يشيل الأنيميشن عن الكلمات
-    };
-
-    const handleClickOutside = (e) => {
-      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-        setShowSettings(false);
-      }
-    };
-
-    // audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("ended", handleEnded); // 👈 الإضافة
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("ended", handleEnded); // 👈 تنظيف الإضافة
-      document.removeEventListener("mousedown", handleClickOutside);
-      clearInterval(interval);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-
-    return () => clearInterval(timer);
-  }, []);
-  const handleSelect = (index, value) => {
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
+  const handleSelect = (qIndex, optionIndex) => {
+    const newAns = [...answers];
+    newAns[qIndex] = optionIndex;
+    setAnswers(newAns);
+    setShowResult(false);
   };
 
   const checkAnswers = () => {
     if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please answer all items first.");
+      ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
-    const correctCount = answers.filter(
-      (a, i) => a?.toLowerCase() === items[i].correct?.toLowerCase()
+    let correctCount = answers.filter(
+      (ans, i) => ans === items[i].correctIndex
     ).length;
 
     const total = items.length;
-    const color =
+
+    let color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-        <span style="color:${color}; font-weight:bold;">
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold">
           Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    if (correctCount === total) ValidationAlert.success(msg);
+    else if (correctCount === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
 
-    setTimeout(() => setShowResult(true), 200);
+    setShowResult(true);
   };
 
-  const resetAnswers = () => {
+  const reset = () => {
     setAnswers(Array(items.length).fill(null));
     setShowResult(false);
   };
-  const togglePlay = () => {
-    const audio = audioRef.current;
 
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-    } else {
-      audio.pause();
-      setPaused(true);
-    }
-  };
   return (
     <div
       style={{
@@ -156,183 +96,79 @@ const Unit5_Page5_Q1 = () => {
         <div>
           <h5 className="header-title-page8">
             <span className="ex-A">A</span>
-            <span style={{ color: "purple" }}>1</span> Does it begin with<span style={{ color: "red" }}>g</span> or{" "}
-            <span style={{ color: "red" }}>k</span> ? Listen and circle.
+            <span style={{ color: "purple" }}>1</span>
+            Look, read, and circle.
           </h5>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="audio-popup-vocab">
-            <div className="audio-inner-vocab">
-              {/* Play / Pause */}
-              <button
-                className="audio-play-btn"
-                style={{ height: "30px", width: "30px" }}
-                onClick={togglePlay}
-              >
-                {paused ? <FaPlay size={22} /> : <FaPause size={22} />}
-              </button>
-
-              {/* Slider */}
-              <input
-                type="range"
-                min="0"
-                max={audioRef.current?.duration || 0}
-                value={audioRef.current?.currentTime || 0}
-                className="audio-slider"
-                onChange={(e) => {
-                  if (!audioRef.current) return;
-                  audioRef.current.currentTime = e.target.value;
-                }}
-              />
-
-              {/* Current Time */}
-              <span className="audio-time">
-                {new Date((audioRef.current?.currentTime || 0) * 1000)
-                  .toISOString()
-                  .substring(14, 19)}
-              </span>
-
-              {/* Total Time */}
-              <span className="audio-time">
-                {new Date((audioRef.current?.duration || 0) * 1000)
-                  .toISOString()
-                  .substring(14, 19)}
-              </span>
-
-              {/* Mute */}
-              <button
-                className="mute-btn-outside"
-                onClick={() => {
-                  audioRef.current.muted = !audioRef.current.muted;
-                  setIsMuted(!isMuted);
-                }}
-              >
-                {audioRef.current?.muted ? (
-                  <FaVolumeMute size={22} color="#1d4f7b" />
-                ) : (
-                  <FaVolumeUp size={22} color="#1d4f7b" />
-                )}
-              </button>
-              <div className="settings-wrapper" ref={settingsRef}>
-                <button
-                  className={`settings-btn ${showSettings ? "active" : ""}`}
-                  onClick={() => setShowSettings(!showSettings)}
+        <div className="container-unit7-p5-q1">
+          {items.map((q, i) => (
+            <div
+              key={i}
+              className="question-box-unit7-p5-q1"
+              style={{ width: "100%" }}
+            >
+              
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
                 >
-                  <IoMdSettings size={22} color="#1d4f7b" />
-                </button>
+                  {i + 1}
+                </span>
+              
 
-                {showSettings && (
-                  <div className="settings-popup">
-                    <label>Volume</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.05"
-                      value={volume}
-                      onChange={(e) => {
-                        setVolume(e.target.value);
-                        audioRef.current.volume = e.target.value;
-                      }}
-                    />
+              <div style={{ display: "flex", gap: "10px" ,flexDirection:"column"}}>
+                <div className="img-div-unit7-p5-q1">
+                  <img
+                    src={q.img}
+                    className="q3-image-unit7-p5-q1"
+                    style={{ height: "140px", width: "auto" }}
+                  />
+                </div>
 
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <audio ref={audioRef}>
-            <source src={sound1} type="audio/mp3" />
-          </audio>
-        </div>
-        <div
-          className="imgFeild"
-          style={{
-            display: "flex",
-            gap: "13px",
-            flexDirection: "column",
-          }}
-        >
-          <div className="gk-container">
-            {items.map((item, index) => (
-              <div className="gk-item" key={index}>
-                <img src={item.img} className="gk-image" />
-                <div className="gk-options">
-                  {/* B OPTION */}
-                  <span
-                    className={`gk-option 
-                    ${answers[index] === "g" ? "selected" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "g" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "g")}
-                  >
-                    g
-                    {showResult &&
-                      answers[index] === "g" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-x">X</span>
-                      )}
-                  </span>
+                <div className="options-row-unit7-p5-q1">
+                  {q.options.map((word, optIndex) => {
+                    const isSelected = answers[i] === optIndex;
+                    const isCorrect = optIndex === q.correctIndex;
 
-                  {/* P OPTION */}
-                  <span
-                    className={`gk-option 
-                    ${answers[index] === "k" ? "selected" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "k" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "k")}
-                  >
-                    k
-                    {showResult &&
-                      answers[index] === "k" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-x">X</span>
-                      )}
-                  </span>
+                    return (
+                      <p
+                        key={optIndex}
+                        className={`
+                    option-word-unit7-p5-q1
+                    ${isSelected ? "selected3" : ""}
+                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
+                    ${showResult && isCorrect ? "correct" : ""}
+                  `}
+                        onClick={() => handleSelect(i, optIndex)}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "relative",
+                        }}
+                      >
+                        {word}
+                        {showResult && isSelected && !isCorrect && (
+                          <span className="wrong-x-review4-p2-q3">✕</span>
+                        )}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
       <div className="action-buttons-container">
-        <button onClick={resetAnswers} className="try-again-button">
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        {showContinue && (
-          <button className="play-btn swal-continue" onClick={togglePlay}>
-            {paused ? (
-              <>
-                Continue
-                <svg width="20" height="20" viewBox="0 0 30 30">
-                  <image href={pauseBtn} x="0" y="0" width="30" height="30" />
-                </svg>
-              </>
-            ) : (
-              <>
-                Pause
-                <CgPlayPauseO size={20} style={{ color: "red" }} />
-              </>
-            )}
-          </button>
-        )}
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>
@@ -340,4 +176,4 @@ const Unit5_Page5_Q1 = () => {
   );
 };
 
-export default Unit5_Page5_Q1;
+export default Unit7_Page5_Q1;

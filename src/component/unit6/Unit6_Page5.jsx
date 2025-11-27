@@ -1,4 +1,4 @@
-import page_5 from "../../assets/unit6/imgs/Right G1- Class Book_00050.jpg";
+import page_5 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park5.jpg";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
 import "./Unit6_Page5.css";
 import Unit6_Page5_Q1 from "./Unit6_Page5_Q1";
@@ -8,7 +8,7 @@ import Unit6_Page5_Q3 from "./Unit6_Page5_Q3";
 import Unit6_Page5_Q4 from "./Unit6_Page5_Q4";
 const Unit6_Page5 = ({ openPopup }) => {
   return (
-    <div className="unit5-page-background">
+    <div className="unit5-page-background" >
       <img src={page_5} />
 
       <svg
@@ -23,7 +23,7 @@ const Unit6_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-1 hover:scale-110 transition"
+        className="click-icon-unit6-page5-1 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -39,7 +39,7 @@ const Unit6_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-2  hover:scale-110 transition"
+        className="click-icon-unit6-page5-2  hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -55,7 +55,7 @@ const Unit6_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-3 hover:scale-110 transition"
+        className="click-icon-unit6-page5-3 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -72,7 +72,7 @@ const Unit6_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-4 hover:scale-110 transition"
+        className="click-icon-unit6-page5-4 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>

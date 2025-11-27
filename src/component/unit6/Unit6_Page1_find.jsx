@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import find_img from "../../assets/unit3/imgs3/G1_U3_Pg_22-23 copy.jpg";
+import find_img from "../../assets/unit6/imgs/G1_U6_Pg_46-47 copy.jpg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 const Unit6_Page1_find = () => {
@@ -8,9 +8,9 @@ const Unit6_Page1_find = () => {
 
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 42,
-    y1: 14,
-    x2: 48,
+    x1: 0.1,
+    y1: 29.4,
+    x2: 83.7,
     y2: 40,
   };
 

@@ -1,10 +1,10 @@
 import page_5 from "../../assets/unit7/img/Right G1- Class Book_00062.jpg";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
 import "./Unit7_Page5.css";
-// import Unit5_Page5_Q1 from "./Unit5_Page5_Q1";
-// import Unit5_Page5_Q2 from "./Unit5_Page5_Q2";
-// import Unit7_Page5_Q3 from "./Unit5_Page5_Q3";
-// import Unit7_Page5_Q4 from "./Unit5_Page5_Q4";
+import Unit7_Page5_Q1 from "./Unit7_Page5_Q1";
+import Unit7_Page5_Q2 from "./Unit7_Page5_Q2";
+import Unit7_Page5_Q3 from "./Unit7_Page5_Q3";
+import Unit7_Page5_Q4 from "./Unit7_Page5_Q4";
 const Unit7_Page5 = ({ openPopup }) => {
   return (
     <div className="unit5-page-background">
@@ -17,7 +17,7 @@ const Unit7_Page5 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page5_Q1 /> */}
+              <Unit7_Page5_Q1 />
             </>,
             false
           )
@@ -33,7 +33,7 @@ const Unit7_Page5 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page5_Q2 /> */}
+              <Unit7_Page5_Q2 />
             </>,
             false
           )
@@ -49,7 +49,7 @@ const Unit7_Page5 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page5_Q3 /> */}
+              <Unit7_Page5_Q3 />
             </>,
             false
           )
@@ -66,7 +66,7 @@ const Unit7_Page5 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit5_Page5_Q4 /> */}
+              <Unit7_Page5_Q4 />
             </>,
             false
           )

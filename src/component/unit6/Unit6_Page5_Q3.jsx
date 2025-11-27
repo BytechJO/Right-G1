@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../assets/unit4/imgs/U4P32ExeA2-03.svg";
-import dad from "../../assets/unit4/imgs/U4P32ExeA2-04.svg";
+import bat from "../../assets/unit6/imgs/U6P50EXEB-01.svg";
+import cap from "../../assets/unit6/imgs/U6P50EXEB-02.svg";
+import ant from "../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import dad from "../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit6_Page5_Q3.css";
 const Unit6_Page5_Q3 = () => {
@@ -14,7 +14,7 @@ const Unit6_Page5_Q3 = () => {
     const newAnswers = [...answers];
     newAnswers[index] = value.toLowerCase();
     setAnswers(newAnswers);
-    setWrongInputs([])
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
@@ -82,11 +82,14 @@ const Unit6_Page5_Q3 = () => {
         <h5 className="header-title-page8">
           <span className="letter-of-Q">B</span>Read, look, and write.
         </h5>
-        <div className="row-content10-unit3-page6-q1">
+        <div
+          className="row-content10-unit3-page6-q1"
+          style={{ alignItems: "flex-start" }}
+        >
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">1</span>
-              <h6>climb a tree</h6>
+              <h6 style={{ fontSize: "22px" }}>climb a tree</h6>
             </div>
             <img src={bat} alt="" className="q-img-unit3-page6-q1" />
             <span style={{ position: "relative", display: "flex" }}>
@@ -104,9 +107,13 @@ const Unit6_Page5_Q3 = () => {
             </span>
           </div>
 
-          <div className="row2-unit3-page6-q1">
+          <div
+            className="row2-unit3-page6-q1"
+            style={{ alignItems: "flex-start" }}
+          >
             <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">2</span> <h6>fly a kite</h6>
+              <span className="num-span">2</span>{" "}
+              <h6 style={{ fontSize: "22px" }}>fly a kite</h6>
             </div>
             <img src={cap} alt="" className="q-img-unit3-page6-q1" />
             <span style={{ position: "relative", display: "flex" }}>
@@ -124,9 +131,13 @@ const Unit6_Page5_Q3 = () => {
             </span>
           </div>
 
-          <div className="row2-unit3-page6-q1">
+          <div
+            className="row2-unit3-page6-q1"
+            style={{ alignItems: "flex-start" }}
+          >
             <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">3</span> <h6>fish</h6>
+              <span className="num-span">3</span>{" "}
+              <h6 style={{ fontSize: "22px" }}>fish</h6>
             </div>
             <img src={ant} alt="" className="q-img-unit3-page6-q1" />
             <span style={{ position: "relative", display: "flex" }}>
@@ -144,10 +155,13 @@ const Unit6_Page5_Q3 = () => {
             </span>
           </div>
 
-          <div className="row2-unit3-page6-q1">
+          <div
+            className="row2-unit3-page6-q1"
+            style={{ alignItems: "flex-start" }}
+          >
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">4</span>
-             <h6>ride a bike</h6> 
+              <h6 style={{ fontSize: "22px" }}>ride a bike</h6>
             </div>
             <img src={dad} alt="" className="q-img-unit3-page6-q1" />
             <span style={{ position: "relative", display: "flex" }}>

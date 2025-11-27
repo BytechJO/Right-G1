@@ -2,16 +2,16 @@
 .click-icon-unit6-page1-1,
 .headset-icon-CD-unit6-page1-2,
 .click-icon-unit6-page1-2 {
-  position: absolute;
+  /* position: absolute;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  position: absolute;
+  position: absolute; */
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 2px; */
-  padding: 5px;
+  /* padding: 5px; */
 }
-
+/* 
 .headset-icon-CD-unit6-page1-1 {
   top: 7%;
   right: 11.5%;
@@ -65,4 +65,4 @@
 #num-7-unit6 {
   left: 33%;
   bottom: 28.5%;
-}
+} */

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Unit5_Page5_Q4.css";
+import "./Unit7_Page5_Q4.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-import img from "../../assets/unit5/imgs/U5P44EXEC.svg"
-const Unit5_Page5_Q4 = () => {
+import img from "../../assets/unit5/imgs/U5P44EXEC.svg";
+const Unit7_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },
     { letter: "b", number: 2 },
@@ -33,8 +33,9 @@ const Unit5_Page5_Q4 = () => {
   ];
 
   const questionGroups = [
-    [23, 8, 1, 20, 19], // __what's_____
-    [20, 8, 9, 19], // this
+    [1, 18, 5], // are
+    [25, 15, 21], // you
+    [8, 1, 16, 16, 25],//happy
   ];
   const [bigInput, setBigInput] = useState("");
   const [bigInputWrong, setBigInputWrong] = useState(false);
@@ -49,7 +50,7 @@ const Unit5_Page5_Q4 = () => {
   };
 
   const formedWords = letters.map((group) => group.join(""));
-  const fullSentence = "This is a ruler";
+  const fullSentence = "No, I’m not. I’m sad";
 
   const handleCheckAnswers = () => {
     // 1️⃣ التحقق من وجود فراغات
@@ -187,10 +188,7 @@ const Unit5_Page5_Q4 = () => {
                 ))}
               </div>
             ))}
-            <img
-              src={img}
-              style={{ height: "100px", width: "130px" }}
-            />
+            <img src={img} style={{ height: "100px", width: "130px" }} />
           </div>
 
           <div className="unit3-q4-sentence">
@@ -233,4 +231,4 @@ const Unit5_Page5_Q4 = () => {
   );
 };
 
-export default Unit5_Page5_Q4;
+export default Unit7_Page5_Q4;

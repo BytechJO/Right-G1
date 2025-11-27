@@ -1,4 +1,4 @@
-import page_6 from "../../assets/unit6/imgs/Right G1- Class Book_00051.jpg";
+import page_6 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park6.jpg";
 import "./Unit6_Page6.css";
 import Unit6_Page6_Q2 from "./Unit6_Page6_Q2";
 import Unit6_Page6_Q3 from "./Unit6_Page6_Q3";

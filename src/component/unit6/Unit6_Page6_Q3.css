@@ -22,3 +22,11 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+
+.img-box2-unit6-p6-q3{
+  width: 170;
+    height: auto;
+    border-radius: 10px;
+    position: relative;
+}

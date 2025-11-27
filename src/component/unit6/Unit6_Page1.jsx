@@ -1,4 +1,4 @@
-import page_1 from "../../assets/unit6/imgs/Right G1- Class Book_00046.jpg";
+import page_1 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park.jpg";
 import "./Unit6_Page1.css";
 import Pg22_U3_Intro_AdultLady from "../../assets/unit6/sounds/CD3.Pg56_Reading1_Adult Lady.mp3";
 import AudioWithCaption from "../AudioWithCaption";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import page_1 from "../../assets/unit6/imgs/Right G1- Class Book_00054.jpg";
+import page_1 from "../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park9.jpg";
 import "./Review6_Page1.css";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
 import Review6_Page1_Q1 from "./Review6_Page1_Q1";
