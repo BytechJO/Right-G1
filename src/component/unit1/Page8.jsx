@@ -4,7 +4,9 @@ import Page8_Q3 from "./Page8_Q3";
 import Page8_Q2 from "./Page8_Q2";
 import Page8_Q1 from "./Page8_Q1";
 import Page8_Q4 from "./Page8_Q4";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
+
 const Page8 = ({ openPopup }) => {
   return (
     <div className="page_8-background">

@@ -1,68 +1,87 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../assets/unit4/imgs/U4P32ExeA2-03.svg";
-import dad from "../../assets/unit4/imgs/U4P32ExeA2-04.svg";
+import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page5_Q3.css";
-const Unit6_Page5_Q3 = () => {
-  const correctAnswers = ["fly a kite", "fish", "ride a bike", "climb a tree"];
-  const [answers, setAnswers] = useState(["", "", "", ""]);
-  const [wrongInputs, setWrongInputs] = useState([]);
+import "./Unit8_Page5_Q3.css";
+import img1 from "../../assets/unit6/imgs/U6P54EXEA-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P54EXEA-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P54EXEA-03.svg";
+import img4 from "../../assets/unit6/imgs/U6P54EXEA-04.svg";
+const Unit8_Page5_Q3 = () => {
+  const [answers, setAnswers] = useState(Array(4).fill(null));
+  const [showResult, setShowResult] = useState(false);
 
-  const handleChange = (value, index) => {
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([])
+  // 🔥 الداتا المطابقة للصورة
+  const items = [
+    {
+      img: img1,
+      text: "Touch your",
+      options: ["arm", "hand"],
+      correctIndex: 0,
+    },
+    {
+      img: img2,
+      text: "Raise your",
+      options: ["hand.", "leg."],
+      correctIndex: 1,
+    },
+    {
+      img: img3,
+      text: "Bend your",
+      options: ["knee.", "eye."],
+      correctIndex: 0,
+    },
+    {
+      img: img4,
+      text: "Open your",
+      options: ["nose.", "mouth."],
+      correctIndex: 1,
+    },
+  ];
+
+  const handleSelect = (qIndex, optionIndex) => {
+    const newAns = [...answers];
+    newAns[qIndex] = optionIndex;
+    setAnswers(newAns);
+    setShowResult(false);
   };
 
   const checkAnswers = () => {
-    if (answers.some((ans) => ans.trim() === "")) {
-      ValidationAlert.info("Please fill in all the blanks before checking!");
+    if (answers.includes(null)) {
+      ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
-    let tempScore = 0;
-    let wrong = [];
-    answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        tempScore++;
-      } else {
-        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
-      }
-    });
-    setWrongInputs(wrong);
+    let correctCount = answers.filter(
+      (ans, i) => ans === items[i].correctIndex
+    ).length;
 
-    const total = correctAnswers.length;
-    const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
+    const total = items.length;
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
-      </span>
-    </div>
-  `;
+    let color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) ValidationAlert.success(msg);
+    else if (correctCount === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+
+    setShowResult(true);
   };
 
   const reset = () => {
-    setAnswers(["", "", "", ""]);
-    setWrongInputs([]);
+    setAnswers(Array(items.length).fill(null));
+    setShowResult(false);
   };
 
   return (
     <div
-      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -79,98 +98,89 @@ const Unit6_Page5_Q3 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="letter-of-Q">B</span>Read, look, and write.
-        </h5>
-        <div className="row-content10-unit3-page6-q1">
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">1</span>
-              <h6>climb a tree</h6>
-            </div>
-            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 0)}
-                  value={answers[0]}
-                />
-                {wrongInputs.includes(0) && (
-                  <span className="error-mark-input">✕</span>
-                )}
+        <div>
+          <h5 className="header-title-page8"><span className="letter-of-Q"> B</span> Read, look, and circle.</h5>
+        </div>
+        <div className="container-review6-p1-q1">
+          {items.map((q, i) => (
+            <div
+              key={i}
+              className="question-box-unit8-p5-q3"
+              style={{ width: "100%" }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "80%",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
+                  {q.text}
+                </h6>
               </div>
-            </span>
-          </div>
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">2</span> <h6>fly a kite</h6>
-            </div>
-            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 1)}
-                  value={answers[1]}
-                />{" "}
-                {wrongInputs.includes(1) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+              <div style={{ display: "flex", gap: "10px" ,flexDirection:"column"}}>
+                
+                  <img
+                    src={q.img}
+                    className="q3-image-review6-p1-q1"
+                    style={{ height: "130px", width: "auto" }}
+                  />
+                
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">3</span> <h6>fish</h6>
-            </div>
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 2)}
-                  value={answers[2]}
-                />{" "}
-                {wrongInputs.includes(2) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+                <div className="options-row-unit8-p5-q3">
+                  {q.options.map((word, optIndex) => {
+                    const isSelected = answers[i] === optIndex;
+                    const isCorrect = optIndex === q.correctIndex;
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">4</span>
-             <h6>ride a bike</h6> 
-            </div>
-            <img src={dad} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 3)}
-                  value={answers[3]}
-                />{" "}
-                {wrongInputs.includes(3) && (
-                  <span className="error-mark-input">✕</span>
-                )}
+                    return (
+                      <p
+                        key={optIndex}
+                        className={`
+                    option-word-review6-p1-q1
+                    ${isSelected ? "selected3" : ""}
+                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
+                    ${showResult && isCorrect ? "correct" : ""}
+                  `}
+                        onClick={() => handleSelect(i, optIndex)}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "relative",
+                        }}
+                      >
+                        {word}
+                        {showResult && isSelected && !isCorrect && (
+                          <span className="wrong-x-review4-p2-q3">✕</span>
+                        )}
+                      </p>
+                    );
+                  })}
+                </div>
               </div>
-            </span>
-          </div>
+            </div>
+          ))}
         </div>
       </div>
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button onClick={checkAnswers} className="check-button2">
+
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>
@@ -178,4 +188,4 @@ const Unit6_Page5_Q3 = () => {
   );
 };
 
-export default Unit6_Page5_Q3;
+export default Unit8_Page5_Q3;

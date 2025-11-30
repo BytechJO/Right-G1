@@ -38,7 +38,7 @@ const Unit7_Page6 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page6-2 hover:scale-110 transition"
+        className="click-icon-unit7-page6-2 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -55,7 +55,7 @@ const Unit7_Page6 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page6-3  hover:scale-110 transition"
+        className="click-icon-unit7-page6-3  hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -80,7 +80,7 @@ const Unit7_Page6 = ({ openPopup }) => {
             true
           )
         }
-        className="headset-icon-CD-unit5-page6-1 hover:scale-110 transition"
+        className="headset-icon-CD-unit7-page6-1 hover:scale-110 transition"
       >
         <image href={audioBtn} x="0" y="0" width="90" height="90" />
       </svg>

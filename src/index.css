@@ -32,13 +32,17 @@ input:focus {
   transition: background-color 0.2s ease, border 0.1s ease;
 }
 
-.clickable-area:hover {
-  background-color: rgba(255, 0, 0, 0.078); /* لون أصفر فاتح */
-  border: 2px solid rgba(255, 0, 0, 0.8); /* إطار أصفر واضح */
-  border-radius: 8px; /* ممكن تخليها 0 لو بدك زوايا حادة */
+
+
+.highlight {
+ background-color: rgba(255, 0, 0, 0.078); /* لون أصفر فاتح */
+  border: 2px solid rgba(255, 0, 0, 0.8);
+   border-radius: 8px; /* ممكن تخليها 0 لو بدك زوايا حادة */
+  cursor: pointer;
+} 
+svg{
   cursor: pointer;
 }
-
 .navbar-fixed {
   position: relative;
   z-index: 99999999;
@@ -46,6 +50,10 @@ input:focus {
 .selected{
   cursor: pointer;
 }
+
+
+
+
 .page_1-background,
 .page_2-background,
 .page_3-background,
@@ -57,6 +65,7 @@ input:focus {
 .page_9-background,
 .unit2-page-background {
   background-color: #ffffff;
+   /* background-color: #bc90ff; */
   /* overflow: hidden; */
   position: relative;
   display: flex;
@@ -99,6 +108,7 @@ img {
 }
 .vocab_container h6 {
   transition: transform 0.2s ease, color 0.2s;
+  cursor: pointer;
 }
 
 .vocab_container h6.active {

@@ -7,15 +7,14 @@ import num3 from "../../assets/unit1/imgs/Page 01/Num3.svg";
 import num4 from "../../assets/unit1/imgs/Page 01/Num4.svg";
 import num5 from "../../assets/unit1/imgs/Page 01/Num5.svg";
 import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
+import { TbMessageCircle } from "react-icons/tb";
 import vocabulary from "../../assets/unit1/sounds/Pg4_Vocabulary_Adult Lady.mp3";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import "../../index.css"; // ✅ نضيف ملف CSS خارجي
 
 const Page4_vocabulary = () => {
   const mainAudioRef = useRef(null);
-
+  const [clickedIndex, setClickedIndex] = useState(null);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
@@ -26,14 +25,12 @@ const Page4_vocabulary = () => {
   const [activeSpeed, setActiveSpeed] = useState(1);
   const settingsRef = useRef(null);
   const [forceRender, setForceRender] = useState(0);
-  // زر الكابشن
-  const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-  const changeSpeed = (rate) => {
-    if (!mainAudioRef.current) return;
-    mainAudioRef.current.playbackRate = rate;
-    setActiveSpeed(rate);
-  };
+  const [showCaption, setShowCaption] = useState(false);
+
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
     { start: 2.8, end: 5.0 }, // Goodbye
@@ -44,52 +41,36 @@ const Page4_vocabulary = () => {
   ];
 
   useEffect(() => {
-    const audio = mainAudioRef.current;
-    if (!audio) return;
+  const audio = mainAudioRef.current;
+  if (!audio) return;
 
-    audio.currentTime = 0;
-    audio.play();
+  audio.currentTime = 0;
+  audio.play();
 
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 250);
-
-    const handleTimeUpdate = () => {
-      const current = audio.currentTime;
-      const currentWordIndex = wordTimings.findIndex(
-        (t) => current >= t.start && current <= t.end
-      );
-      setActiveIndex(currentWordIndex !== -1 ? currentWordIndex : null);
-    };
-
-    // ⚡⚡ هنا الإضافة الوحيدة
-    const handleEnded = () => {
-      audio.currentTime = 0; // يرجع لأول ثانية
-      audio.pause(); // يوقف
-      setPaused(true); // زر البلاي يصير Play
-      setShowContinue(true); // يظهر زر Continue
-      setActiveIndex(null); // يشيل الأنيميشن عن الكلمات
-    };
-    const handleClickOutside = (e) => {
-      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-        setShowSettings(false);
-      }
-    };
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("ended", handleEnded); // 👈 الإضافة
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      document.removeEventListener("mousedown", handleClickOutside);
-      audio.removeEventListener("ended", handleEnded); // 👈 تنظيف الإضافة
+  const interval = setInterval(() => {
+    if (audio.currentTime >= stopAtSecond) {
+      audio.pause();
+      setPaused(true);
+      setIsPlaying(false)
+      setShowContinue(true);
       clearInterval(interval);
-    };
-  }, []);
+    }
+  }, 100);
+
+  // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
+  const handleEnded = () => {
+    setActiveIndex(null);
+    setPaused(true);
+    setShowContinue(true);
+  };
+
+  audio.addEventListener("ended", handleEnded);
+
+  return () => {
+    clearInterval(interval);
+    audio.removeEventListener("ended", handleEnded);
+  };
+}, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -99,17 +80,22 @@ const Page4_vocabulary = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const togglePlay = () => {
-    const audio = mainAudioRef.current;
+ const togglePlay = () => {
+  const audio = mainAudioRef.current;
 
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-    } else {
-      audio.pause();
-      setPaused(true);
-    }
-  };
+  if (!audio) return;
+
+  if (audio.paused) {
+    audio.play();
+    setPaused(false);
+    setIsPlaying(true)
+  } else {
+    audio.pause();
+    setPaused(true);
+    setIsPlaying(false)
+  }
+};
+
   const nums = [num1, num2, num3, num4, num5];
 
   return (
@@ -121,95 +107,98 @@ const Page4_vocabulary = () => {
           justifyContent: "flex-start",
           margin: "0px 20px",
           position: "relative",
-          left: "-10.5%",
-          top: "-2%",
           alignItems: "center",
         }}
       >
         <div className="audio-popup-vocab">
-          <div className="audio-inner-vocab">
+          <div className="audio-inner player-ui">
+            <audio
+              ref={mainAudioRef}
+              src={vocabulary}
+              onTimeUpdate={(e) => {
+                const time = e.target.currentTime;
+                setCurrent(time);
+
+                // تشغيل لون الكلمات
+                const idx = wordTimings.findIndex(
+                  (t) => time >= t.start && time <= t.end
+                );
+                setActiveIndex(idx !== -1 ? idx : null);
+              }}
+              onLoadedMetadata={(e) => setDuration(e.target.duration)}
+            ></audio>
             {/* Play / Pause */}
-            <button
-              className="audio-play-btn"
-              style={{ height: "30px", width: "30px" }}
-              onClick={togglePlay}
-            >
-              {paused ? <FaPlay size={18} /> : <FaPause size={18} />}
-            </button>
+            {/* الوقت - السلايدر - الوقت */}
+            <div className="top-row">
+              <span className="audio-time">
+                {new Date(current * 1000).toISOString().substring(14, 19)}
+              </span>
 
-            {/* Slider */}
-            <input
-              type="range"
-              min="0"
-              max={mainAudioRef.current?.duration || 0}
-              value={mainAudioRef.current?.currentTime || 0}
-              className="audio-slider"
-              onChange={(e) => {
-                if (!mainAudioRef.current) return;
-                mainAudioRef.current.currentTime = e.target.value;
-              }}
-            />
+              <input
+                type="range"
+                className="audio-slider"
+                min="0"
+                max={duration}
+                value={current}
+                onChange={(e) => {
+                  mainAudioRef.current.currentTime = e.target.value;
+                  updateCaption(Number(e.target.value));
+                }}
+                style={{
+                  background: `linear-gradient(to right, #8247ffff ${
+                    (current / duration) * 100
+                  }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                }}
+              />
 
-            {/* Current Time */}
-            <span className="audio-time">
-              {new Date((mainAudioRef.current?.currentTime || 0) * 1000)
-                .toISOString()
-                .substring(14, 19)}
-            </span>
-
-            {/* Total Time */}
-            <span className="audio-time">
-              {new Date((mainAudioRef.current?.duration || 0) * 1000)
-                .toISOString()
-                .substring(14, 19)}
-            </span>
-
-            {/* Mute */}
-            <button
-              className="mute-btn-outside"
-              onClick={() => {
-                mainAudioRef.current.muted = !mainAudioRef.current.muted;
-                setIsMuted(!isMuted);
-              }}
-            >
-              {mainAudioRef.current?.muted ? (
-                <FaVolumeMute size={22} color="#1d4f7b" />
-              ) : (
-                <FaVolumeUp size={22} color="#1d4f7b" />
-              )}
-            </button>
-            <div className="settings-wrapper" ref={settingsRef}>
-              <button
-                className={`settings-btn ${showSettings ? "active" : ""}`}
-                onClick={() => setShowSettings(!showSettings)}
+              <span className="audio-time">
+                {new Date(duration * 1000).toISOString().substring(14, 19)}
+              </span>
+            </div>
+            {/* الأزرار 3 أزرار بنفس السطر */}
+            <div className="bottom-row">
+              {/* فقاعة */}
+              <div
+                className={`round-btn ${showCaption ? "active" : ""}`}
+                onClick={() => setShowCaption(!showCaption)}
               >
-                <IoMdSettings size={22} color="#1d4f7b" />
+                <TbMessageCircle size={36} />
+              </div>
+
+              {/* Play */}
+              <button className="play-btn2" onClick={togglePlay}>
+                {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
               </button>
 
-              {showSettings && (
-                <div className="settings-popup">
-                  <label>Volume</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={volume}
-                    onChange={(e) => {
-                      setVolume(e.target.value);
-                      mainAudioRef.current.volume = e.target.value;
-                    }}
-                  />
+              {/* Settings */}
+              <div className="settings-wrapper" ref={settingsRef}>
+                <button
+                  className={`round-btn ${showSettings ? "active" : ""}`}
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <IoMdSettings size={36} />
+                </button>
 
-               
-                </div>
-              )}
-            </div>
+                {showSettings && (
+                  <div className="settings-popup">
+                    <label>Volume</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={volume}
+                      onChange={(e) => {
+                        setVolume(e.target.value);
+                        audioRef.current.volume = e.target.value;
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>{" "}
           </div>
         </div>
-        <audio ref={mainAudioRef}>
-          <source src={vocabulary} type="audio/mp3" />
-        </audio>
       </div>
       <div
         style={{
@@ -244,7 +233,18 @@ const Page4_vocabulary = () => {
                 "Hello!",
                 "Good morning!",
               ].map((text, i) => (
-                <h6 key={i} className={activeIndex === i ? "active" : ""}>
+                <h6
+                  key={i}
+                  className={
+                    activeIndex === i || clickedIndex === i ? "active" : ""
+                  }
+                  onClick={() => {
+                    setClickedIndex(i);
+
+                    // يرجع يشيل الانيميشن بعد 500ms (حسب زمن أنيميشنك)
+                    setTimeout(() => setClickedIndex(null), 500);
+                  }}
+                >
                   {i + 1} {text}
                 </h6>
               ))}
@@ -255,7 +255,9 @@ const Page4_vocabulary = () => {
             <img
               key={i}
               src={num}
-              className={`num-img ${activeIndex === i ? "active" : ""}`}
+              className={`num-img ${
+                activeIndex === i || clickedIndex === i ? "active" : ""
+              }`}
               style={{
                 height: "20px",
                 width: "auto",
@@ -274,25 +276,6 @@ const Page4_vocabulary = () => {
           </div>
         </div>
       </div>{" "}
-      {showContinue && (
-        <div className="action-buttons-container ">
-          <button className="play-btn swal-continue" onClick={togglePlay}>
-            {paused ? (
-              <>
-                Continue
-                <svg width="20" height="20" viewBox="0 0 30 30">
-                  <image href={pauseBtn} x="0" y="0" width="30" height="30" />
-                </svg>
-              </>
-            ) : (
-              <>
-                Pause
-                <CgPlayPauseO size={20} style={{ color: "red" }} />
-              </>
-            )}
-          </button>
-        </div>
-      )}
     </>
   );
 };

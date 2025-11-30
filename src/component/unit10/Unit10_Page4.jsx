@@ -109,7 +109,7 @@ const Unit10_Page4 = ({ openPopup }) => {
             true
           )
         }
-        className="headset-icon-CD-unit6-page4-1 hover:scale-110 transition"
+        className="headset-icon-CD-unit10-page4-1 hover:scale-110 transition"
       >
         <image href={audioBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -141,7 +141,7 @@ const Unit10_Page4 = ({ openPopup }) => {
             </div>
           )
         }
-        className="pauseBtn-icon-CD-unit6-page4-1  hover:scale-110 transition"
+        className="pauseBtn-icon-CD-unit10-page4-1  hover:scale-110 transition"
       >
         <image href={pauseBtn} x="0" y="0" width="60" height="60" />
       </svg>

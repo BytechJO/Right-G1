@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { GrLinkNext } from "react-icons/gr";
 import { IoMdArrowBack } from "react-icons/io";
-import next from "../assets/unit1/imgs/next btn.svg";
-import back from "../assets/unit1/imgs/back btn.svg";
+import next from "../assets/unit1/imgs/Page 01/next btn.svg";
+import back from "../assets/unit1/imgs/Page 01/back btn.svg";
 import { FaHome } from "react-icons/fa";
 import { MdOutlineZoomIn } from "react-icons/md";
 import { MdOutlineZoomOut } from "react-icons/md";
@@ -10,6 +10,13 @@ import { LuFullscreen } from "react-icons/lu";
 import { RiBookOpenLine } from "react-icons/ri";
 import { AiOutlineBook } from "react-icons/ai";
 import { IoMdMenu } from "react-icons/io";
+import home from "../assets/unit1/imgs/Page 01/home.svg";
+import fullScreen from "../assets/unit1/imgs/Page 01/fullscreen.svg";
+import menu from "../assets/unit1/imgs/Page 01/menu.svg";
+import onePage from "../assets/unit1/imgs/Page 01/one page.svg";
+import openBook from "../assets/unit1/imgs/Page 01/open-book.svg";
+import zoomIn from "../assets/unit1/imgs/Page 01/zoom in.svg";
+import zoomOut from "../assets/unit1/imgs/Page 01/zoom out.svg";
 import Popup from "./Popup/Popup";
 import logo from "../assets/unit1/imgs/PreissMurphy Logo-BGSDEhSA (1).svg";
 //===================== unit 1 pages
@@ -101,6 +108,11 @@ import Unit8_Page4 from "./unit8/Unit8_Page4";
 import Unit8_Page5 from "./unit8/Unit8_Page5";
 import Unit8_Page6 from "./unit8/Unit8_Page6";
 
+//================ review 7,8
+import Review7_Page1 from "./Review_Unit7,8/Review7_Page1";
+import Review7_Page2 from "./Review_Unit7,8/Review7_Page2";
+import Review8_Page1 from "./Review_Unit7,8/Review8_Page1";
+import Review8_Page2 from "./Review_Unit7,8/Review8_Page2";
 //================== Unit 9
 import Unit9_Page1 from "./unit9/Unit9_Page1";
 import Unit9_Page2 from "./unit9/Unit9_Page2";
@@ -183,71 +195,71 @@ export default function Book() {
     <Page7 openPopup={openPopup} />,
     <Page8 openPopup={openPopup} />,
     <Page9 openPopup={openPopup} />,
-    <Unit2_Page1 openPopup={openPopup} />,
-    <Unit2_Page2 openPopup={openPopup} />,
-    <Unit2_Page3 openPopup={openPopup} />,
-    <Unit2_Page4 openPopup={openPopup} />,
-    <Unit2_Page5 openPopup={openPopup} />,
-    <Unit2_Page6 openPopup={openPopup} />,
-    <Unit2_Page7 openPopup={openPopup} />,
-    <Unit2_Page8 openPopup={openPopup} />,
-    <Unit2_Page9 openPopup={openPopup} />,
-    <Unit2_Page10 openPopup={openPopup} />,
-    <Unit2_Page11 openPopup={openPopup} />,
-    <Unit2_Page12 openPopup={openPopup} />,
-    <Unit3_Page1 openPopup={openPopup} />,
-    <Unit3_Page2 openPopup={openPopup} />,
-    <Unit3_Page3 openPopup={openPopup} />,
-    <Unit3_Page4 openPopup={openPopup} />,
-    <Unit3_Page5 openPopup={openPopup} />,
-    <Unit3_Page6 openPopup={openPopup} />,
-    <Unit4_Page1 openPopup={openPopup} />,
-    <Unit4_Page2 openPopup={openPopup} />,
-    <Unit4_Page3 openPopup={openPopup} />,
-    <Unit4_Page4 openPopup={openPopup} />,
-    <Unit4_Page5 openPopup={openPopup} />,
-    <Unit4_Page6 openPopup={openPopup} />,
-    <Review3_Page1 openPopup={openPopup} />,
-    <Review3_Page2 openPopup={openPopup} />,
-    <Review4_Page1 openPopup={openPopup} />,
-    <Review4_Page2 openPopup={openPopup} />,
-    <Unit4_Reading_P1 openPopup={openPopup} />,
-    <Unit4_Reading_P2 openPopup={openPopup} />,
-    <Unit5_Page1 openPopup={openPopup} />,
-    <Unit5_Page2 openPopup={openPopup} />,
-    <Unit5_Page3 openPopup={openPopup} />,
-    <Unit5_Page4 openPopup={openPopup} />,
-    <Unit5_Page5 openPopup={openPopup} />,
-    <Unit5_Page6 openPopup={openPopup} />,
-    <Unit6_Page1 openPopup={openPopup} />,
-    <Unit6_Page2 openPopup={openPopup} />,
-    <Unit6_Page3 openPopup={openPopup} />,
-    <Unit6_Page4 openPopup={openPopup} />,
-    <Unit6_Page5 openPopup={openPopup} />,
-    <Unit6_Page6 openPopup={openPopup} />,
-    <Review5_Page1 openPopup={openPopup} />,
-    <Review5_Page2 openPopup={openPopup} />,
-    <Review6_Page1 openPopup={openPopup} />,
-    <Review6_Page2 openPopup={openPopup} />,
-    <Unit6_Reading_P1 openPopup={openPopup} />,
-    <Unit6_Reading_P2 openPopup={openPopup} />,
-    <Unit7_Page1 openPopup={openPopup} />,
-    <Unit7_Page2 openPopup={openPopup} />,
-    <Unit7_Page3 openPopup={openPopup} />,
-    <Unit7_Page4 openPopup={openPopup} />,
-    <Unit7_Page5 openPopup={openPopup} />,
-    <Unit7_Page6 openPopup={openPopup} />,
+    // <Unit2_Page1 openPopup={openPopup} />,
+    // <Unit2_Page2 openPopup={openPopup} />,
+    // <Unit2_Page3 openPopup={openPopup} />,
+    // <Unit2_Page4 openPopup={openPopup} />,
+    // <Unit2_Page5 openPopup={openPopup} />,
+    // <Unit2_Page6 openPopup={openPopup} />,
+    // <Unit2_Page7 openPopup={openPopup} />,
+    // <Unit2_Page8 openPopup={openPopup} />,
+    // <Unit2_Page9 openPopup={openPopup} />,
+    // <Unit2_Page10 openPopup={openPopup} />,
+    // <Unit2_Page11 openPopup={openPopup} />,
+    // <Unit2_Page12 openPopup={openPopup} />,
+    // <Unit3_Page1 openPopup={openPopup} />,
+    // <Unit3_Page2 openPopup={openPopup} />,
+    // <Unit3_Page3 openPopup={openPopup} />,
+    // <Unit3_Page4 openPopup={openPopup} />,
+    // <Unit3_Page5 openPopup={openPopup} />,
+    // <Unit3_Page6 openPopup={openPopup} />,
+    // <Unit4_Page1 openPopup={openPopup} />,
+    // <Unit4_Page2 openPopup={openPopup} />,
+    // <Unit4_Page3 openPopup={openPopup} />,
+    // <Unit4_Page4 openPopup={openPopup} />,
+    // <Unit4_Page5 openPopup={openPopup} />,
+    // <Unit4_Page6 openPopup={openPopup} />,
+    // <Review3_Page1 openPopup={openPopup} />,
+    // <Review3_Page2 openPopup={openPopup} />,
+    // <Review4_Page1 openPopup={openPopup} />,
+    // <Review4_Page2 openPopup={openPopup} />,
+    // <Unit4_Reading_P1 openPopup={openPopup} />,
+    // <Unit4_Reading_P2 openPopup={openPopup} />,
+    // <Unit5_Page1 openPopup={openPopup} />,
+    // <Unit5_Page2 openPopup={openPopup} />,
+    // <Unit5_Page3 openPopup={openPopup} />,
+    // <Unit5_Page4 openPopup={openPopup} />,
+    // <Unit5_Page5 openPopup={openPopup} />,
+    // <Unit5_Page6 openPopup={openPopup} />,
+    // <Unit6_Page1 openPopup={openPopup} />,
+    // <Unit6_Page2 openPopup={openPopup} />,
+    // <Unit6_Page3 openPopup={openPopup} />,
+    // <Unit6_Page4 openPopup={openPopup} />,
+    // <Unit6_Page5 openPopup={openPopup} />,
+    // <Unit6_Page6 openPopup={openPopup} />,
+    // <Review5_Page1 openPopup={openPopup} />,
+    // <Review5_Page2 openPopup={openPopup} />,
+    // <Review6_Page1 openPopup={openPopup} />,
+    // <Review6_Page2 openPopup={openPopup} />,
+    // <Unit6_Reading_P1 openPopup={openPopup} />,
+    // <Unit6_Reading_P2 openPopup={openPopup} />,
+    // <Unit7_Page1 openPopup={openPopup} />,
+    // <Unit7_Page2 openPopup={openPopup} />,
+    // <Unit7_Page3 openPopup={openPopup} />,
+    // <Unit7_Page4 openPopup={openPopup} />,
+    // <Unit7_Page5 openPopup={openPopup} />,
+    // <Unit7_Page6 openPopup={openPopup} />,
     // <Unit8_Page1 openPopup={openPopup} />,
     // <Unit8_Page2 openPopup={openPopup} />,
     // <Unit8_Page3 openPopup={openPopup} />,
     // <Unit8_Page4 openPopup={openPopup} />,
     // <Unit8_Page5 openPopup={openPopup} />,
     // <Unit8_Page6 openPopup={openPopup} />,
-    // // should chang to review for unit 7+8
-    // <Review5_Page1 openPopup={openPopup} />,
-    // <Review5_Page2 openPopup={openPopup} />,
-    // <Review6_Page1 openPopup={openPopup} />,
-    // <Review6_Page2 openPopup={openPopup} />,
+    // should chang to review for unit 7+8
+    // <Review7_Page1 openPopup={openPopup} />,
+    // <Review7_Page2 openPopup={openPopup} />,
+    // <Review8_Page1 openPopup={openPopup} />,
+    // <Review8_Page2 openPopup={openPopup} />,
     // <Unit6_Reading_P1 openPopup={openPopup} />,
     // <Unit6_Reading_P2 openPopup={openPopup} />,
     // <Unit9_Page1 openPopup={openPopup} />,
@@ -315,15 +327,14 @@ export default function Book() {
         className="w-full flex flex-col pb-20"
         style={{ overflowX: "hidden", overflowY: "auto" }}
       >
-        {/* NAVBAR */}
-        <nav className="w-full bg-[#2c5287] text-white border-b shadow px-6 py-2 flex items-center justify-between">
-          {/* LEFT SECTION: LOGO + TABS */}
+        <nav className="w-full bg-white border-b shadow px-2 py-2 flex items-center justify-between">
+          {/* LEFT SECTION */}
           <div className="flex items-center gap-10">
-            {/* 🔵 LOGO بدل النص */}
+            {/* LOGO */}
             <img
               src={logo}
               alt="J1 Logo"
-              style={{ height: "40px", width: "100px" }}
+              style={{ height: "40px", width: "100px",background:"blueviolet" }}
             />
 
             {/* TABS */}
@@ -332,16 +343,18 @@ export default function Book() {
                 { id: "student", label: "Student’s Book" },
                 { id: "work", label: "Workbook" },
                 { id: "teacher", label: "Teacher’s Book" },
+                { id: "flash", label: "Flashcards" },
+                { id: "poster", label: "Posters" },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`
-            px-2 rounded-lg font-medium transition-all duration-300
+            px-4 py-1 rounded-xl border font-medium transition-all duration-200 text-[15px]
             ${
               activeTab === tab.id
-                ? "bg-white text-[#2c5287] shadow-md scale-95 border-b-4 border-yellow-400"
-                : "bg-transparent text-gray-200 hover:text-white hover:bg-white/10"
+                ? "border-[#6B40C8] text-[#6B40C8] bg-[#f6f0ff]"
+                : "border-[#b99cfa] text-[#6B40C8] hover:bg-purple-50"
             }
           `}
                 >
@@ -353,7 +366,7 @@ export default function Book() {
 
           {/* RIGHT SECTION */}
           <div className="flex items-center gap-4">
-            <span className="cursor-pointer hover:text-gray-300">
+            <span className="cursor-pointer text-[#6B40C8] hover:opacity-75">
               Student Edition
             </span>
           </div>
@@ -541,70 +554,91 @@ export default function Book() {
         <footer
           className="w-full bg-white border-t border-gray-300 shadow
              flex items-center justify-center gap-3 
-             py-1.5 fixed bottom-0 left-0 z-[9999]"
+             py-0 fixed bottom-0 left-0 z-[9999]"
         >
-          <button
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 90 90"
             onClick={() => setIsSidebarOpen(true)}
-            className="absolute left-3 bg-[#2c5287] text-white p-0.5 rounded-lg shadow hover:bg-[#426ca7] transition"
+            className="absolute left-3 text-white p-0.5 rounded-lg shadow hover:bg-[#bc90ff] transition"
           >
-            <IoMdMenu size={18} />
-          </button>
+            <image href={menu} x="0" y="0" width="90" height="90" />
+          </svg>
+
           {/* HOME BUTTON */}
           {pageIndex !== 1 && pageIndex !== 2 && (
-            <button
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 90 90"
               onClick={goToIndex}
-              className="bg-[#2c5287] text-white rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition"
+              className="absolute left-12 text-white rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition"
             >
-              <FaHome size={18} />
-            </button>
+              <image href={home} x="0" y="0" width="90" height="90" />
+            </svg>
           )}
-          <button
-            onClick={() => setZoom((z) => z + 0.2)}
-            className="bg-[#2c5287] text-white rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition"
-          >
-            <MdOutlineZoomIn size={18} />
-          </button>
 
-          <button
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 90 90"
+            onClick={() => setZoom((z) => z + 0.2)}
+            className="text-white rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition"
+          >
+            <image href={zoomIn} x="0" y="0" width="90" height="90" />
+          </svg>
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 90 90"
             onClick={() => {
               setZoom(1); // يرجع الحجم الأصلي
               setOffset({ x: 0, y: 0 }); // يرجع المكان الأصلي
               setIsPanning(false); // يوقف السحب
             }}
-            className="bg-[#2c5287] text-white rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition"
+            className="text-white rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition"
           >
-            <MdOutlineZoomOut size={18} />
-          </button>
+            <image href={zoomOut} x="0" y="0" width="90" height="90" />
+          </svg>
 
-          <button
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 90 90"
             onClick={toggleFullScreen}
-            className="bg-[#2c5287] text-white rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition"
+            className="text-white rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition"
           >
-            <LuFullscreen size={18} />
-          </button>
+            <image href={fullScreen} x="0" y="0" width="90" height="90" />
+          </svg>
           {!isMobile && (
             <>
-              <button
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 90 90"
                 onClick={() => setViewMode("single")}
-                className={`rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition ${
+                className={`rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition ${
                   viewMode === "single"
-                    ? "bg-[#2c5287] text-white"
-                    : "bg-gray-300 text-gray-900"
+                    ? "text-white"
+                    : " text-gray-900"
                 }`}
               >
-                <AiOutlineBook size={18} />
-              </button>
-
-              <button
+                <image href={onePage} x="0" y="0" width="90" height="90" />
+              </svg>
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 90 90"
                 onClick={() => setViewMode("spread")}
-                className={`rounded-lg p-0.5 shadow hover:bg-[#426ca7] transition ${
+                className={`rounded-lg p-0.5 shadow hover:bg-[#bc90ff] transition ${
                   viewMode === "spread"
-                    ? "bg-[#2c5287] text-white"
-                    : "bg-gray-300 text-gray-900"
+                    ? " text-white"
+                    : " text-gray-900"
                 }`}
               >
-                <RiBookOpenLine size={18} />
-              </button>
+                <image href={openBook} x="0" y="0" width="90" height="90" />
+              </svg>
             </>
           )}
 

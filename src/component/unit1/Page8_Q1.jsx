@@ -16,6 +16,7 @@ import { CgPlayPauseO } from "react-icons/cg";
 const Page8_Q1 = () => {
   const audioRef = useRef(null);
   const clickAudioRef = useRef(null);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const data = [
     {
@@ -122,8 +123,8 @@ const Page8_Q1 = () => {
         i === index ? { ...a, [field]: value.toLowerCase() } : a
       )
     );
-    setWrongLetters(data.map(() => false))
-    setWrongNumbers(data.map(() => false))
+    setWrongLetters(data.map(() => false));
+    setWrongNumbers(data.map(() => false));
   };
 
   const playSound = (src) => {
@@ -190,262 +191,268 @@ const Page8_Q1 = () => {
     }
   };
   return (
- <div className="page8-wrapper">
-  <div className="page8-content">
-      <header className="header-title-page8">
-        <span className="ex-A">A</span> 1 Listen and write the missing letters.
-        Number the pictures.
-      </header>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          margin: "30px 0px",
-        }}
-      >
-        <div className="audio-popup-vocab">
-          <div className="audio-inner-vocab">
-            {/* Play / Pause */}
-            <button
-              className="audio-play-btn"
-              style={{ height: "30px", width: "30px" }}
-              onClick={togglePlay}
-            >
-              {paused ? <FaPlay size={22} /> : <FaPause size={22} />}
-            </button>
-
-            {/* Slider */}
-            <input
-              type="range"
-              min="0"
-              max={audioRef.current?.duration || 0}
-              value={audioRef.current?.currentTime || 0}
-              className="audio-slider"
-              onChange={(e) => {
-                if (!audioRef.current) return;
-                audioRef.current.currentTime = e.target.value;
-              }}
-            />
-
-            {/* Current Time */}
-            <span className="audio-time">
-              {new Date((audioRef.current?.currentTime || 0) * 1000)
-                .toISOString()
-                .substring(14, 19)}
-            </span>
-
-            {/* Total Time */}
-            <span className="audio-time">
-              {new Date((audioRef.current?.duration || 0) * 1000)
-                .toISOString()
-                .substring(14, 19)}
-            </span>
-
-            {/* Mute */}
-            <button
-              className="mute-btn-outside"
-              onClick={() => {
-                audioRef.current.muted = !audioRef.current.muted;
-                setIsMuted(!isMuted);
-              }}
-            >
-              {audioRef.current?.muted ? (
-                <FaVolumeMute size={22} color="#1d4f7b" />
-              ) : (
-                <FaVolumeUp size={22} color="#1d4f7b" />
-              )}
-            </button>
-            <div className="settings-wrapper" ref={settingsRef}>
+    <div className="page8-wrapper">
+      <div className="page8-content">
+        <header className="header-title-page8">
+          <span className="ex-A">A</span> 1 Listen and write the missing
+          letters. Number the pictures.
+        </header>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            margin: "30px 0px",
+          }}
+        >
+          <div className="audio-popup-read">
+            <div className="audio-inner player-ui">
+              {/* Play / Pause */}
               <button
-                className={`settings-btn ${showSettings ? "active" : ""}`}
-                onClick={() => setShowSettings(!showSettings)}
+                className="audio-play-btn"
+                style={{ height: "30px", width: "30px" }}
+                onClick={togglePlay}
               >
-                <IoMdSettings size={22} color="#1d4f7b" />
+                {paused ? <FaPlay size={22} /> : <FaPause size={22} />}
               </button>
 
-              {showSettings && (
-                <div className="settings-popup">
-                  <label>Volume</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={volume}
-                    onChange={(e) => {
-                      setVolume(e.target.value);
-                      audioRef.current.volume = e.target.value;
-                    }}
-                  />
+              {/* Slider */}
+              <input
+                type="range"
+                min="0"
+                max={audioRef.current?.duration || 0}
+                value={audioRef.current?.currentTime || 0}
+                className="audio-slider"
+                onChange={(e) => {
+                  if (!audioRef.current) return;
+                  audioRef.current.currentTime = e.target.value;
+                }}
+              />
 
-                 
+              {/* Current Time */}
+              <span className="audio-time">
+                {new Date((audioRef.current?.currentTime || 0) * 1000)
+                  .toISOString()
+                  .substring(14, 19)}
+              </span>
+
+              {/* Total Time */}
+              <span className="audio-time">
+                {new Date((audioRef.current?.duration || 0) * 1000)
+                  .toISOString()
+                  .substring(14, 19)}
+              </span>
+
+              {/* Mute */}
+              <button
+                className="mute-btn-outside"
+                onClick={() => {
+                  audioRef.current.muted = !audioRef.current.muted;
+                  setIsMuted(!isMuted);
+                }}
+              >
+                {audioRef.current?.muted ? (
+                  <FaVolumeMute size={22} color="#1d4f7b" />
+                ) : (
+                  <FaVolumeUp size={22} color="#1d4f7b" />
+                )}
+              </button>
+              <div className="settings-wrapper" ref={settingsRef}>
+                <button
+                  className={`settings-btn ${showSettings ? "active" : ""}`}
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <IoMdSettings size={22} color="#1d4f7b" />
+                </button>
+
+                {showSettings && (
+                  <div className="settings-popup">
+                    <label>Volume</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={volume}
+                      onChange={(e) => {
+                        setVolume(e.target.value);
+                        audioRef.current.volume = e.target.value;
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <audio ref={audioRef}>
+            <source src={CD6_Pg8_Instruction1_AdultLady} type="audio/mp3" />
+          </audio>
+        </div>
+        <audio ref={clickAudioRef} style={{ display: "none" }} />
+
+        {/* ✅ الكلمات */}
+        <div
+          className="div-input"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "30px",
+            // marginLeft:"40px",
+            width: "100%",
+          }}
+        >
+          {displayOrder.map((dataIndex, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                position: "relative",
+              }}
+            >
+              <span className="number-of-q">{index + 1}</span>
+              <input
+                type="text"
+                maxLength="1"
+                className="char-input"
+                value={answers[dataIndex].letter}
+                onChange={(e) =>
+    !showAnswer && updateAnswer(dataIndex, "letter", e.target.value)
+  }
+  disabled={showAnswer}
+                style={{
+                  width: "40px",
+                  textAlign: "center",
+                  fontSize: "30px",
+                  marginRight: "5px",
+                }}
+              />
+
+              <span
+                style={{
+                  textAlign: "center",
+                  fontSize: "25px",
+                }}
+              >
+                {data[dataIndex].word.slice(1)}
+              </span>
+              {wrongLetters[dataIndex] && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "56%",
+                    top: "19%",
+                    transform: "translateY(-50%)",
+                    width: "25px",
+                    height: "25px",
+                    background: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                  }}
+                >
+                  X
                 </div>
               )}
             </div>
-          </div>
+          ))}
         </div>
-        <audio ref={audioRef}>
-          <source src={CD6_Pg8_Instruction1_AdultLady} type="audio/mp3" />
-        </audio>
-      </div>
-      <audio ref={clickAudioRef} style={{ display: "none" }} />
 
-      {/* ✅ الكلمات */}
-      <div
-        className="div-input"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "30px",
-          // marginLeft:"40px",
-          width:"100%"
-        }}
-      >
-        {displayOrder.map((dataIndex, index) => (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              position: "relative",
-            }}
-          >
-            <span className="number-of-q">{index + 1}</span>
-            <input
-              type="text"
-              maxLength="1"
-              className="char-input"
-              value={answers[dataIndex].letter}
-              onChange={(e) =>
-                updateAnswer(dataIndex, "letter", e.target.value)
-              }
-              style={{
-                width: "40px",
-                textAlign: "center",
-                fontSize: "30px",
-                marginRight: "5px",
-              }}
+        {/* ✅ الصور */}
+        <div
+          className="exercise-image-div"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
+            marginBottom: "20px",
+          }}
+        >
+          {data.map((item, index) => (
+            <img
+              key={index}
+              src={item.src}
+              className="exercise-image"
+              onClick={() => playSound(item.sound)}
             />
+          ))}
+        </div>
 
-            <span
-              style={{
-                textAlign: "center",
-                fontSize: "25px",
-              }}
+        {/* ✅ مربعات الأرقام + علامة الخطأ */}
+        <div className="exercise-container">
+          {data.map((item, index) => (
+            <div
+              key={index}
+              className="exercise-item"
+              style={{ position: "relative" }}
             >
-              {data[dataIndex].word.slice(1)}
-            </span>
-            {wrongLetters[dataIndex] && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: "56%",
-                  top: "19%",
-                  transform: "translateY(-50%)",
-                  width: "25px",
-                  height: "25px",
-                  background: "red",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                X
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+              <input
+                type="text"
+                maxLength="1"
+                className="missing-input"
+                value={answers[index].number}
+                onChange={(e) =>
+    !showAnswer && updateAnswer(index, "number", e.target.value)
+  }
+  disabled={showAnswer}
+              />
 
-      {/* ✅ الصور */}
-      <div
-        className="exercise-image-div"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          marginBottom: "20px",
-        }}
-      >
-        {data.map((item, index) => (
-          <img
-            key={index}
-            src={item.src}
-            className="exercise-image"
-            onClick={() => playSound(item.sound)}
-          />
-        ))}
+              {wrongNumbers[index] && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "-17px",
+                    top: "5%",
+                    transform: "translateY(-50%)",
+                    width: "25px",
+                    height: "25px",
+                    background: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                  }}
+                >
+                  X
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-
-      {/* ✅ مربعات الأرقام + علامة الخطأ */}
-      <div className="exercise-container">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="exercise-item"
-            style={{ position: "relative" }}
-          >
-            <input
-              type="text"
-              maxLength="1"
-              className="missing-input"
-              value={answers[index].number}
-              onChange={(e) => updateAnswer(index, "number", e.target.value)}
-            />
-
-            {wrongNumbers[index] && (
-              <div
-                style={{
-                  position: "absolute",
-                  right: "-17px",
-                  top: "5%",
-                  transform: "translateY(-50%)",
-                  width: "25px",
-                  height: "25px",
-                  background: "red",
-                  color: "white",
-                  borderRadius: "50%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  border: "2px solid white",
-                }}
-              >
-                X
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-</div>
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-        {showContinue && (
-          <button className="play-btn swal-continue" onClick={togglePlay}>
-            {paused ? (
-              <>
-                Continue
-                <svg width="20" height="20" viewBox="0 0 30 30">
-                  <image href={pauseBtn} x="0" y="0" width="30" height="30" />
-                </svg>
-              </>
-            ) : (
-              <>
-                Pause
-                <CgPlayPauseO size={20} style={{ color: "red" }} />
-              </>
-            )}
-          </button>
-        )}
+      
+        <button className="swal-continue"
+          onClick={() => {
+            setShowAnswer(true);
+
+            // عرض الإجابات الصحيحة
+            setAnswers(
+              data.map((item) => ({
+                letter: item.missing,
+                number: item.num,
+              }))
+            );
+
+            // إخفاء علامات الخطأ
+            setWrongLetters(data.map(() => false));
+            setWrongNumbers(data.map(() => false));
+          }}
+          
+        >
+          Show Answer 👁️
+        </button>
 
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓

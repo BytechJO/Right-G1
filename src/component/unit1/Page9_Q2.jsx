@@ -6,6 +6,8 @@ export default function Page9_Q2() {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
+  const [firstDot, setFirstDot] = useState(null);
+
   let startPoint = null;
 
   // 🎨 ألوان الكلمات
@@ -36,74 +38,36 @@ export default function Page9_Q2() {
     setSelectedWordIndex(null);
   };
 
-  const handleDotDown = (e) => {
-    e.preventDefault(); // مهم لمنع التمرير على الموبايل
-
-    const isTouch = e.type === "touchstart";
-    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-
-    startPoint = e.target;
-
+  // ==========================
+  // ⭐ Click to Connect Logic
+  // ==========================
+  const handleStartDotClick = (e) => {
     const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
 
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
-
-    window.addEventListener("mousemove", followMouse);
-    window.addEventListener("mouseup", stopDrawingLine);
-
-    window.addEventListener("touchmove", followMouse);
-    window.addEventListener("touchend", stopDrawingLine);
+    setFirstDot({
+      word: e.target.dataset.letter,
+      x: e.target.getBoundingClientRect().left - rect.left + 8,
+      y: e.target.getBoundingClientRect().top - rect.top + 8,
+    });
   };
 
-  const followMouse = (e) => {
-    const isTouch = e.type === "touchmove";
-    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: clientX - rect.left,
-        y2: clientY - rect.top,
-      },
-    ]);
-  };
-
-  const stopDrawingLine = (e) => {
-    const isTouch = e.type === "touchend";
-    const clientX = isTouch ? e.changedTouches[0].clientX : e.clientX;
-    const clientY = isTouch ? e.changedTouches[0].clientY : e.clientY;
-
-    window.removeEventListener("mousemove", followMouse);
-    window.removeEventListener("mouseup", stopDrawingLine);
-    window.removeEventListener("touchmove", followMouse);
-    window.removeEventListener("touchend", stopDrawingLine);
-
-    const endDot = document.elementFromPoint(clientX, clientY);
-
-    if (!endDot || !endDot.classList.contains("end-dot1")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
+  const handleEndDotClick = (e) => {
+    if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
 
     const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
-      word: startPoint.dataset.letter,
-      image: endDot.dataset.image,
+      x1: firstDot.x,
+      y1: firstDot.y,
+      x2: e.target.getBoundingClientRect().left - rect.left + 8,
+      y2: e.target.getBoundingClientRect().top - rect.top + 8,
+      word: firstDot.word,
+      image: e.target.dataset.image,
     };
 
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
+    setLines((prev) => [...prev, newLine]);
+
+    setFirstDot(null);
   };
 
   useEffect(() => {
@@ -217,8 +181,8 @@ export default function Page9_Q2() {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  width:"100%",
-                  justifyContent:"flex-end"
+                  width: "100%",
+                  justifyContent: "flex-end",
                 }}
               >
                 <h5
@@ -232,8 +196,8 @@ export default function Page9_Q2() {
                     color: wordColors[i],
                     cursor: "pointer",
                     position: "relative",
-                    textAlign:"start",
-                    width:"100%"
+                    textAlign: "start",
+                    width: "100%",
                   }}
                   onClick={() => handleWordClick(i)}
                 >
@@ -242,8 +206,7 @@ export default function Page9_Q2() {
                 <div
                   className="dot1 start-dot1"
                   data-letter={word}
-                  onMouseDown={handleDotDown}
-                  onTouchStart={handleDotDown}
+                  onClick={handleStartDotClick}
                 ></div>
                 {wrongWords.includes(word) && ( // ⭐ تم التعديل هون
                   <span className="error-mark3">X</span>
@@ -254,15 +217,21 @@ export default function Page9_Q2() {
 
           <div className="word-section2">
             {["thank you", "are you", "afternoon"].map((word, i) => (
-              <div  style={{
+              <div
+                style={{
                   position: "relative",
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  width:"100%",
-                  justifyContent:"flex-start"
-                }}>
-               <div className="dot1 end-dot1" data-image={word}></div>
+                  width: "100%",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <div
+                  className="dot1 end-dot1"
+                  data-image={word}
+                  onClick={handleEndDotClick}
+                ></div>
                 <h5
                   key={i + 3}
                   className={
@@ -277,10 +246,8 @@ export default function Page9_Q2() {
                   }}
                   onClick={() => handleWordClick(i + 3)}
                 >
-                 
                   {word}
-                </h5> 
-               
+                </h5>
               </div>
             ))}
           </div>

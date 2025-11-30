@@ -1,7 +1,8 @@
 import page_6 from "../../assets/unit8/imgs/Right G1- Class Book_00069.jpg";
 import "./Unit8_Page6.css";
+import Unit8_Page6_Q1 from "./Unit8_Page6_Q1";
 // import Unit6_Page6_Q2 from "./Unit6_Page6_Q2";
-// import Unit6_Page6_Q3 from "./Unit6_Page6_Q3";
+import Unit8_Page6_Q3 from "./Unit8_Page6_Q3";
 import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
 import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
 import AudioWithCaption from "../AudioWithCaption";
@@ -23,7 +24,7 @@ const Unit8_Page6 = ({ openPopup }) => {
   ];
 
   return (
-    <div className="unit6-page-background">
+    <div className="unit8-page-background">
       <img src={page_6} />
       <svg
         width="30"
@@ -32,7 +33,7 @@ const Unit8_Page6 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit6_Page6_Q2 /> */}
+              <Unit8_Page6_Q1 />
             </>,
             false
           )
@@ -49,7 +50,7 @@ const Unit8_Page6 = ({ openPopup }) => {
         onClick={() =>
           openPopup(
             <>
-              {/* <Unit6_Page6_Q3 /> */}
+              <Unit8_Page6_Q3 />
             </>,
             false
           )

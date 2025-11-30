@@ -14,8 +14,8 @@ import Page4_Interactive1 from "./Page4_Interactive1";
 import Page4_vocabulary from "./Page4_vocabulary";
 import AudioWithCaption from "../AudioWithCaption";
 import FourImagesWithAudio from "../FourImagesWithAudio";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import longAudio from "../../assets/unit1/sounds/pg4-instruction1-adult-lady_9KnGFLcl.mp3";
 
 const Page4 = ({ openPopup }) => {

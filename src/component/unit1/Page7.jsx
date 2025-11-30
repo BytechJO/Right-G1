@@ -12,12 +12,17 @@ import Pg7_4_2_ModifiedJack from "../../assets/unit1/sounds/Pg7_4.2_Modified Jac
 import Pg7_5_1_Dad from "../../assets/unit1/sounds/Pg7_5.1_Dad.mp3";
 import Pg7_5_2_Mom from "../../assets/unit1/sounds/Pg7_5.2_Mom.mp3";
 import Pg7_6_1_Mom from "../../assets/unit1/sounds/Pg7_6.1_Mom and Dad.mp3";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import video2 from "../../assets/unit1/sounds/p7 1920.mp4"
 import AudioWithCaption from "../AudioWithCaption";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 const Page7 = ({ openPopup }) => {
   const audioRef = useRef(null);
+   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [hoverEnabled, setHoverEnabled] = useState(true);
+    const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -66,10 +71,17 @@ const Page7 = ({ openPopup }) => {
     if (area) playSound(area.sound);
   };
   const playSound = (soundPath) => {
-    console.log(soundPath);
     if (audioRef.current) {
       audioRef.current.src = soundPath;
       audioRef.current.play();
+      setIsPlaying(true);
+      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setHoveredAreaIndex(null);
+        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+      };
     }
   };
 
@@ -79,7 +91,11 @@ const Page7 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          className="clickable-area"
+          className={`clickable-area ${
+            hoveredAreaIndex === index || activeAreaIndex === index
+              ? "highlight"
+              : ""
+          }`}
           style={{
             position: "absolute",
             left: `${area.x1}%`,
@@ -87,8 +103,16 @@ const Page7 = ({ openPopup }) => {
             width: `${area.x2 - area.x1}%`,
             height: `${area.y2 - area.y1}%`,
           }}
-          onClick={() => playSound(area.sound)}
-          onMouseEnter={(e) => (e.target.style.cursor = "pointer")}
+         onClick={() => {
+            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            playSound(area.sound);
+          }}
+       onMouseEnter={() => {
+  if (!isPlaying) setHoveredAreaIndex(index);
+}}
+onMouseLeave={() => {
+  if (!isPlaying) setHoveredAreaIndex(null);
+}}
         ></div>
       ))}
 

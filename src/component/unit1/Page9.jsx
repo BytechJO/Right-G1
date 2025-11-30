@@ -3,8 +3,8 @@ import page_9 from "../../assets/unit1/imgs/Pages/Right 1 Unit 01 Good Morning W
 import Page9_Q1 from "./Page9_Q1";
 import Page9_Q2 from "./Page9_Q2";
 import song from "../../assets/unit1/sounds/pg9-song-all.mp3";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../AudioWithCaption";
 const Page9 = ({ openPopup }) => {
   const audioRef = useRef(null);

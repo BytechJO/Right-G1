@@ -66,7 +66,7 @@ const Unit9_Page2 = ({ openPopup }) => {
             true
           )
         }
-        className="headset-icon-CD-unit5-page2-1 hover:scale-110 transition"
+        className="headset-icon-CD-unit9-page2-1 hover:scale-110 transition"
       >
         <image href={audioBtn} x="0" y="0" width="90" height="90" />
       </svg>
@@ -87,7 +87,7 @@ const Unit9_Page2 = ({ openPopup }) => {
             false
           )
         }
-        className="headset-icon-CD-unit5-page2-2 hover:scale-110 transition"
+        className="headset-icon-CD-unit9-page2-2 hover:scale-110 transition"
       >
         <image href={audioBtn} x="0" y="0" width="90" height="90" />
       </svg>
@@ -109,7 +109,7 @@ const Unit9_Page2 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page2-1 hover:scale-110 transition"
+        className="click-icon-unit9-page2-1 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>

@@ -16,13 +16,8 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const [volume, setVolume] = useState(1);
-  const [playbackRate, setPlaybackRate] = useState(1);
 
   const [showSettings, setShowSettings] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-
-  const [speedIndicator, setSpeedIndicator] = useState("");
-  const [activeSpeed, setActiveSpeed] = useState(1); // السرعة المختارة
 
   // تحديث الهايلايت حسب الوقت
   const updateCaption = (time) => {
@@ -47,22 +42,6 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
     setIsPlaying(!isPlaying);
   };
 
-  // ميوت
-  const toggleMute = () => {
-    audioRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
-  };
-
-  // تغيير السرعة
-  const changeSpeed = (rate) => {
-    setActiveSpeed(rate);
-    setPlaybackRate(rate);
-    audioRef.current.playbackRate = rate;
-
-    setSpeedIndicator(rate + "x");
-    setTimeout(() => setSpeedIndicator(""), 1000);
-  };
-
   // إغلاق settings عند الضغط خارج
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -75,140 +54,125 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   useEffect(() => {
-  if (activeIndex === -1) return;
+    if (activeIndex === -1) return;
 
-  const container = captionRef.current;
-  const activeElement = document.getElementById(`caption-${activeIndex}`);
+    const activeElement = document.getElementById(`caption-${activeIndex}`);
 
-  if (container && activeElement) {
-    container.scrollTo({
-      top: activeElement.offsetTop - 40,
-      behavior: "smooth",
-    });
-  }
-}, [activeIndex]);
-
+    if (activeElement) {
+      activeElement.scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
+    }
+  }, [activeIndex]);
 
   return (
     <div className="audio-popup">
       {/* مؤشر السرعة */}
-      {speedIndicator && (
-        <div className="speed-indicator">Speed: {speedIndicator}</div>
-      )}
-
-      <div className="audio-inner">
-        {/* التشغيل */}
-        <button className="audio-play-btn" onClick={togglePlay}>
-          {isPlaying ? <FaPause size={22} /> : <FaPlay size={22} />}
-        </button>
-
-        {/* السلايدر */}
-        <input
-          type="range"
-          className="audio-slider"
-          min="0"
-          max={duration}
-          value={current}
-          onChange={(e) => {
-            audioRef.current.currentTime = e.target.value;
-            updateCaption(Number(e.target.value));
+      <div className="audio-inner player-ui">
+        <audio
+          ref={audioRef}
+          src={src}
+          onTimeUpdate={(e) => {
+            setCurrent(e.target.currentTime);
+            updateCaption(e.target.currentTime);
+          }}
+          onLoadedMetadata={(e) => setDuration(e.target.duration)}
+          onEnded={() => {
+            audioRef.current.currentTime = 0;
+setIsPlaying(false)
+            setActiveIndex(-1); // يرجّع الهايلايت لأول سطر
           }}
         />
+        {/* الوقت - السلايدر - الوقت */}
+        <div className="top-row">
+          <span className="audio-time">
+            {new Date(current * 1000).toISOString().substring(14, 19)}
+          </span>
 
-        <span className="audio-time">
-          {new Date(current * 1000).toISOString().substring(14, 19)}
-        </span>
+          <input
+            type="range"
+            className="audio-slider"
+            min="0"
+            max={duration}
+            value={current}
+            onChange={(e) => {
+              audioRef.current.currentTime = e.target.value;
+              updateCaption(Number(e.target.value));
+            }}
+            style={{
+              background: `linear-gradient(to right, #8247ffff ${
+                (current / duration) * 100
+              }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+            }}
+          />
 
-        <span className="audio-time">
-          {new Date(duration * 1000).toISOString().substring(14, 19)}
-        </span>
-
-        {/* ميوت */}
-        <button className="mute-btn-outside" onClick={toggleMute}>
-          {isMuted ? (
-            <FaVolumeMute size={22} color="#1d4f7b" />
-          ) : (
-            <FaVolumeUp size={22} color="#1d4f7b" />
-          )}
-        </button>
-
-        {/* زر الفقاعة */}
-        <div className="bubble-wrapper">
+          <span className="audio-time">
+            {new Date(duration * 1000).toISOString().substring(14, 19)}
+          </span>
+        </div>
+        {/* الأزرار 3 أزرار بنفس السطر */}
+        <div className="bottom-row">
+          {/* فقاعة */}
           <div
-            className={`audio-bubble-btn ${showCaption ? "active" : ""}`}
+            className={`round-btn ${showCaption ? "active" : ""}`}
             onClick={() => setShowCaption(!showCaption)}
           >
-            <TbMessageCircle size={22} color="#1d4f7b" />
+            <TbMessageCircle size={40} />
           </div>
 
-          {showCaption && (
-            <div className="caption-popup" ref={captionRef}>
-              {captions.map((cap, index) => (
-                <>
-                <span
-                  key={index}
-                  id={`caption-${index}`}
-                  className={`caption-word ${
-                    activeIndex === index ? "highlight" : ""
-                  }`}
-                >
-                  {cap.text + " "}
-                  
-                </span>
-                <br/></>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* زر الإعدادات */}
-        <div className="settings-wrapper" ref={settingsRef}>
-          <button
-            className={`settings-btn ${showSettings ? "active" : ""}`}
-            onClick={() => setShowSettings(!showSettings)}
-          >
-            <IoMdSettings size={22} color="#1d4f7b" />
+          {/* Play */}
+          <button className="play-btn" onClick={togglePlay}>
+            {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
           </button>
 
-          {showSettings && (
-            <div className="settings-popup">
-              {/* الصوت */}
-              <label>Volume</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={volume}
-                onChange={(e) => {
-                  setVolume(e.target.value);
-                  audioRef.current.volume = e.target.value;
-                }}
-              />
+          {/* Settings */}
+          <div className="settings-wrapper" ref={settingsRef}>
+            <button
+              className={`round-btn ${showSettings ? "active" : ""}`}
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              <IoMdSettings size={40} />
+            </button>
 
-             
-             
+            {showSettings && (
+              <div className="settings-popup">
+                <label>Volume</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={volume}
+                  onChange={(e) => {
+                    setVolume(e.target.value);
+                    audioRef.current.volume = e.target.value;
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>{" "}
+        {/* الكابشن تحت الأزرار */}
+        {showCaption && (
+          <>
+            <h3 style={{ fontSize: "20px", fontWeight: "500" }}>
+              Audio Transcript:
+            </h3>
+            <div className="caption-box" ref={captionRef}>
+              {captions?.map((cap, i) => (
+                <p
+                  key={i}
+                  id={`caption-${i}`}
+                  className={i === activeIndex ? "active-caption" : ""}
+                >
+                  {cap.text}
+                </p>
+              ))}
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
-
-      {/* عنصر الصوت */}
-      <audio
-        ref={audioRef}
-        src={src}
-        onLoadedMetadata={() => setDuration(audioRef.current.duration)}
-        onTimeUpdate={() => {
-          const time = audioRef.current.currentTime;
-          setCurrent(time);
-          updateCaption(time);
-        }}
-        onEnded={() => {
-          setIsPlaying(false);
-          audioRef.current.currentTime = 0;
-          setCurrent(0);
-        }}
-      />
     </div>
   );
 };

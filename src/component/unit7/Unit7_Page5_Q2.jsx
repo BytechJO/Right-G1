@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./Unit7_Page5_Q2.css";
 import ValidationAlert from "../Popup/ValidationAlert";
 import img1 from "../../assets/unit5/imgs/U5P44EXEA2-01.svg";
@@ -7,6 +7,10 @@ import img3 from "../../assets/unit5/imgs/U5P44EXEA2-03.svg";
 import img4 from "../../assets/unit5/imgs/U5P44EXEA2-04.svg";
 import img5 from "../../assets/unit5/imgs/U5P44EXEA2-05.svg";
 import img6 from "../../assets/unit5/imgs/U5P44EXEA2-06.svg";
+import sound from "../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
+import { IoMdSettings } from "react-icons/io";
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 const data = [
   {
     id: 1,
@@ -38,6 +42,72 @@ export default function Unit7_Page5_Q2() {
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const mainAudioRef = useRef(null);
+  const [showContinue, setShowContinue] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const stopAtSecond = 3.5;
+
+  // إعدادات الصوت
+  const [showSettings, setShowSettings] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const settingsRef = useRef(null);
+  const [forceRender, setForceRender] = useState(0);
+  // زر الكابشن
+  const [isMuted, setIsMuted] = useState(false);
+  useEffect(() => {
+    const audio = mainAudioRef.current;
+    if (!audio) return;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    const interval = setInterval(() => {
+      if (audio.currentTime >= stopAtSecond) {
+        audio.pause();
+        setPaused(true);
+        setShowContinue(true); // 👈 خلي الكبسة تضل ظاهرة دائماً بعد ثانية 3
+        clearInterval(interval);
+      }
+    }, 200);
+
+    const handleTimeUpdate = () => {
+      const current = audio.currentTime;
+      const index = wordTimings.findIndex(
+        (t) => current >= t.start && current <= t.end
+      );
+      setActiveIndex(index !== -1 ? index : null);
+    };
+    // ⚡⚡ هنا الإضافة الوحيدة
+    const handleEnded = () => {
+      audio.currentTime = 0; // يرجع لأول ثانية
+      audio.pause(); // يوقف
+      setPaused(true); // زر البلاي يصير Play
+      setShowContinue(true); // يظهر زر Continue
+      setActiveIndex(null); // يشيل الأنيميشن عن الكلمات
+    };
+    const handleClickOutside = (e) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+        setShowSettings(false);
+      }
+    };
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded); // 👈 الإضافة
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      document.removeEventListener("mousedown", handleClickOutside);
+      audio.removeEventListener("ended", handleEnded); // 👈 تنظيف الإضافة
+      clearInterval(interval);
+    };
+  }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setForceRender((prev) => prev + 1);
+    }, 1000); // كل ثانية
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleSelect = (qId, value) => {
     setAnswers((prev) => {
@@ -115,7 +185,17 @@ export default function Unit7_Page5_Q2() {
     setSubmitted(false);
     setScore(null);
   };
+  const togglePlay = () => {
+    const audio = mainAudioRef.current;
 
+    if (audio.paused) {
+      audio.play();
+      setPaused(false);
+    } else {
+      audio.pause();
+      setPaused(true);
+    }
+  };
   return (
     <div
       style={{
@@ -140,9 +220,103 @@ export default function Unit7_Page5_Q2() {
             the <span style={{ color: "red" }}>same sound </span>? Listen and
             circle
           </h5>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
+            <div className="audio-popup-vocab">
+              <div className="audio-inner-vocab">
+                {/* Play / Pause */}
+                <button
+                  className="audio-play-btn"
+                  style={{ height: "30px", width: "30px" }}
+                  onClick={togglePlay}
+                >
+                  {paused ? <FaPlay size={18} /> : <FaPause size={18} />}
+                </button>
 
+                {/* Slider */}
+                <input
+                  type="range"
+                  min="0"
+                  max={mainAudioRef.current?.duration || 0}
+                  value={mainAudioRef.current?.currentTime || 0}
+                  className="audio-slider"
+                  onChange={(e) => {
+                    if (!mainAudioRef.current) return;
+                    mainAudioRef.current.currentTime = e.target.value;
+                  }}
+                />
+
+                {/* Current Time */}
+                <span className="audio-time">
+                  {new Date((mainAudioRef.current?.currentTime || 0) * 1000)
+                    .toISOString()
+                    .substring(14, 19)}
+                </span>
+
+                {/* Total Time */}
+                <span className="audio-time">
+                  {new Date((mainAudioRef.current?.duration || 0) * 1000)
+                    .toISOString()
+                    .substring(14, 19)}
+                </span>
+
+                {/* Mute */}
+                <button
+                  className="mute-btn-outside"
+                  onClick={() => {
+                    mainAudioRef.current.muted = !mainAudioRef.current.muted;
+                    setIsMuted(!isMuted);
+                  }}
+                >
+                  {mainAudioRef.current?.muted ? (
+                    <FaVolumeMute size={22} color="#1d4f7b" />
+                  ) : (
+                    <FaVolumeUp size={22} color="#1d4f7b" />
+                  )}
+                </button>
+                <div className="settings-wrapper" ref={settingsRef}>
+                  <button
+                    className={`settings-btn ${showSettings ? "active" : ""}`}
+                    onClick={() => setShowSettings(!showSettings)}
+                  >
+                    <IoMdSettings size={22} color="#1d4f7b" />
+                  </button>
+
+                  {showSettings && (
+                    <div className="settings-popup">
+                      <label>Volume</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={volume}
+                        onChange={(e) => {
+                          setVolume(e.target.value);
+                          mainAudioRef.current.volume = e.target.value;
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <audio ref={mainAudioRef}>
+              <source src={sound} type="audio/mp3" />
+            </audio>
+          </div>
           {data.map((q) => (
-            <div key={q.id} className="question-row-Unit5_Page5_Q2">
+            <div
+              key={q.id}
+              className="question-row-Unit5_Page5_Q2"
+              style={{
+                marginTop: "15px",
+              }}
+            >
               <span
                 className="q-number"
                 style={{
@@ -158,7 +332,7 @@ export default function Unit7_Page5_Q2() {
                   color: "#2c5287",
                   fontSize: "20px",
                   fontWeight: "700",
-                  marginLeft:"5px"
+                  marginLeft: "5px",
                 }}
               >
                 {" "}

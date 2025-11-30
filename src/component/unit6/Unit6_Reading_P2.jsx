@@ -20,8 +20,8 @@ const Unit6_Reading_P2 = () => {
     checkAreaAndPlaySound(xPercent, yPercent);
   };
   const clickableAreas = [
-    { x1: 9.0, y1: 39.0, x2: 45.8, y2: 43.9, sound: sound1 },
-    { x1: 49.0, y1: 39.2, x2: 85.4, y2: 43.1, sound: sound2 },
+    { x1: 9.0, y1: 39.0, x2: 45.8, y2: 46.3, sound: sound1 },
+    { x1: 49.0, y1: 39.2, x2: 85.4, y2: 44.1, sound: sound2 },
     { x1: 9.0, y1: 84.5, x2: 45.0, y2: 91.2, sound: sound3 },
     { x1: 49.0, y1: 84.5, x2: 86.5, y2: 91.0, sound: sound4 },
   ];

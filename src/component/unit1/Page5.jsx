@@ -11,8 +11,8 @@ import repeat2 from "../../assets/unit1/imgs/P1 listen and repeat 03.svg";
 import longsound from "../../assets/unit1/sounds/pg5-instruction2-adult-lady_B2grO9RW.mp3";
 import longsound2 from "../../assets/unit1/sounds/cd3pg5-instruction1-adult-lady_6kd2jrIk.mp3";
 import read from "../../assets/unit1/imgs/P1 listen and repeat 01.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import FourImagesWithAudio from "../FourImagesWithAudio";
 import Pg5_2_1_Adult from "../../assets/unit1/sounds/Pg5_2.1_Adult Lady.mp3";

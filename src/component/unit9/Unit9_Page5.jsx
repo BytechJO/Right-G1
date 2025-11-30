@@ -22,7 +22,7 @@ const Unit9_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-1 hover:scale-110 transition"
+        className="click-icon-unit9-page5-1 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -38,7 +38,7 @@ const Unit9_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-2  hover:scale-110 transition"
+        className="click-icon-unit9-page5-2  hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -54,7 +54,7 @@ const Unit9_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-3 hover:scale-110 transition"
+        className="click-icon-unit9-page5-3 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -71,7 +71,7 @@ const Unit9_Page5 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit5-page5-4 hover:scale-110 transition"
+        className="click-icon-unit9-page5-4 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>

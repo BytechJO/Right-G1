@@ -12,20 +12,23 @@ import Pg6_2_2_ModifiedStella from "../../assets/unit1/sounds/Pg6_2.2_Modified S
 import Pg6_3_1_Harley from "../../assets/unit1/sounds/Pg6_3.1_Harley.mp3";
 import Pg6_3_2_ModifiedHarley from "../../assets/unit1/sounds/Pg6_3.2_Modified Harley.mp3";
 import AudioWithCaption from "../AudioWithCaption";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 import video from "../../assets/unit1/sounds/Grammer P6 Video.mp4";
 const Page6 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hoverEnabled, setHoverEnabled] = useState(true);
+  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
     { start: 0, end: 4.05, text: "Page 6, exercise 1. Right grammar. " },
     { start: 4.09, end: 7.17, text: "Hello, I'm Stella. This is John." },
-    { start: 7.20, end: 8.15, text: "Hello. " },
+    { start: 7.2, end: 8.15, text: "Hello. " },
     { start: 8.19, end: 9.18, text: "How are you?  " },
-    { start: 9.20, end: 11.12, text: "Fine. Thank you." },
+    { start: 9.2, end: 11.12, text: "Fine. Thank you." },
     { start: 11.16, end: 13.02, text: "Goodbye, Harley. " },
-     { start: 13.06, end: 15.23, text: "Nice to meet you. Nice to meet you." },
+    { start: 13.06, end: 15.23, text: "Nice to meet you. Nice to meet you." },
     { start: 15.27, end: 17.24, text: "Hello. How are you? " },
     { start: 17.27, end: 18.24, text: "Fine. Thank you." },
   ];
@@ -53,6 +56,14 @@ const Page6 = ({ openPopup }) => {
     if (audioRef.current) {
       audioRef.current.src = soundPath;
       audioRef.current.play();
+      setIsPlaying(true);
+      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setHoveredAreaIndex(null);
+        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+      };
     }
   };
 
@@ -69,7 +80,11 @@ const Page6 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          className="clickable-area"
+          className={`clickable-area ${
+            hoveredAreaIndex === index || activeAreaIndex === index
+              ? "highlight"
+              : ""
+          }`}
           style={{
             position: "absolute",
             left: `${area.x1}%`,
@@ -77,9 +92,17 @@ const Page6 = ({ openPopup }) => {
             width: `${area.x2 - area.x1}%`,
             height: `${area.y2 - area.y1}%`,
           }}
-          onClick={() => playSound(area.sound)}
-          onMouseEnter={() => setHoveredAreaIndex(index)}
-          onMouseLeave={() => setHoveredAreaIndex(null)}
+          onClick={() => {
+            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            playSound(area.sound);
+          }}
+       onMouseEnter={() => {
+  if (!isPlaying) setHoveredAreaIndex(index);
+}}
+onMouseLeave={() => {
+  if (!isPlaying) setHoveredAreaIndex(null);
+}}
+
         ></div>
       ))}
 
@@ -128,7 +151,7 @@ const Page6 = ({ openPopup }) => {
                 style={{
                   height: "auto",
                   width: "85%",
-                  borderRadius:"5%"
+                  borderRadius: "5%",
                 }}
                 controls
               >

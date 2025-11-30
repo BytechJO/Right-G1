@@ -1,23 +1,26 @@
-import React, { useState, useRef } from "react";
-import img1 from "../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../assets/img_unit2/imgs/bey.jpg";
+import React, { useRef, useState } from "react";
+import img1 from "../../assets/unit1/imgs/Read and match 01.png";
+import img2 from "../../assets/unit1/imgs/Read and match 02.png";
+import "./Unit8_Page6_Q3.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page6_Q3.css";
-
-const Unit6_Page6_Q2 = () => {
+const Unit8_Page6_Q3 = () => {
   const [lines, setLines] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const containerRef = useRef(null);
   let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
 
   const correctMatches = [
-    { word: "Can it climb a tree? Yes, it can.", image: "img3" },
-    { word: "Can she fly a kite? Yes, she can.", image: "img1" },
-    { word: "Can he ride a bike? Yes, he can.", image: "img2" },
+    { word: "Touch your arm.", image: "img1" },
+    { word: "Open your eye.", image: "img2" },
   ];
 
-  const handleDotDown2 = (e) => {
+  const handleDotDown = (e) => {
+    e.preventDefault(); // مهم لمنع التمرير على الموبايل
+
+    const isTouch = e.type === "touchstart";
+    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+
     startPoint = e.target;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -26,32 +29,43 @@ const Unit6_Page6_Q2 = () => {
 
     setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
 
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+    window.addEventListener("mousemove", followMouse);
+    window.addEventListener("mouseup", stopDrawingLine);
+
+    window.addEventListener("touchmove", followMouse);
+    window.addEventListener("touchend", stopDrawingLine);
   };
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
+  const followMouse = (e) => {
+    const isTouch = e.type === "touchmove";
+    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
 
+    const rect = containerRef.current.getBoundingClientRect();
     setLines((prev) => [
       ...prev.slice(0, -1),
       {
         x1: startPoint.getBoundingClientRect().left - rect.left + 8,
         y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
+        x2: clientX - rect.left,
+        y2: clientY - rect.top,
       },
     ]);
   };
 
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
+  const stopDrawingLine = (e) => {
+    const isTouch = e.type === "touchend";
+    const clientX = isTouch ? e.changedTouches[0].clientX : e.clientX;
+    const clientY = isTouch ? e.changedTouches[0].clientY : e.clientY;
 
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
+    window.removeEventListener("mousemove", followMouse);
+    window.removeEventListener("mouseup", stopDrawingLine);
+    window.removeEventListener("touchmove", followMouse);
+    window.removeEventListener("touchend", stopDrawingLine);
 
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot22-unit6-q7")) {
+    const endDot = document.elementFromPoint(clientX, clientY);
+
+    if (!endDot || !endDot.classList.contains("end-dot")) {
       setLines((prev) => prev.slice(0, -1));
       return;
     }
@@ -63,15 +77,14 @@ const Unit6_Page6_Q2 = () => {
       y1: startPoint.getBoundingClientRect().top - rect.top + 8,
       x2: endDot.getBoundingClientRect().left - rect.left + 8,
       y2: endDot.getBoundingClientRect().top - rect.top + 8,
-
-      // ✅ تصحيح تخزين البيانات
+      word: startPoint.dataset.letter,
       image: endDot.dataset.image,
-      word: startPoint.dataset.word,
     };
 
     setLines((prev) => [...prev.slice(0, -1), newLine]);
   };
-  const checkAnswers2 = () => {
+
+  const checkAnswers = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -80,33 +93,30 @@ const Unit6_Page6_Q2 = () => {
       return;
     }
 
+    let wrong = []; // ⭐ تم التعديل هون
     let correctCount = 0;
-    let wrong = [];
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
         (pair) => pair.word === line.word && pair.image === line.image
       );
-
-      if (isCorrect) {
-        correctCount++;
-      } else {
-        wrong.push(line.word); // ✅ خزّني اسم صورة الخطأ فقط
-      }
+      if (isCorrect) correctCount++;
+      else wrong.push(line.word); // ⭐ تم التعديل هون
     });
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
+    setWrongWords(wrong); // ⭐ تم التعديل هون
 
     const total = correctMatches.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+           Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
@@ -114,143 +124,91 @@ const Unit6_Page6_Q2 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">B Read, look, and match.</h5>
+    <div className="matching-wrapper">
+      <div className="matching-scale">
+        <h5 className="header-title-page8">
+          <span className="ex-A">F</span>Read and match.
+        </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <h5>
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    1{" "}
-                  </span>
-                  Can it climb a tree?
-                  <br /> Yes, it can.
-                  {wrongImages.includes(
-                    "Can it climb a tree? Yes, it can."
-                  ) && <span className="error-mark-img">✕</span>}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can it climb a tree? Yes, it can."
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
+        <div className="container1" ref={containerRef}>
+          {/* row 1 */}
+          <div className="matching-row">
+            <div className="word-with-dot">
+              <span className="span-num">1</span>
 
-              <div className="word-box2">
-                <h5>
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    2
-                  </span>
-                  Can she fly a kite?
-                  <br />
-                  Yes, she can.
-                  {wrongImages.includes(
-                    "Can she fly a kite? Yes, she can."
-                  ) && <span className="error-mark-img">✕</span>}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can she fly a kite? Yes, she can."
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
+              <span className="word-text">
+                Touch your arm.
+                {wrongWords.includes("Touch your arm.") && ( // ⭐ تم التعديل هون
+                  <span className="error-mark">✕</span>
+                )}
+              </span>
 
-              <div className="word-box2">
-                <h5>
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    3
-                  </span>
-                  Can he ride a bike?
-                  <br />
-                  Yes, he can.
-                  {wrongImages.includes("Can he ride a bike? Yes, he can.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
+              <div className="dot-wrapper">
                 <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can he ride a bike? Yes, he can."
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
-            </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img src={img1} alt="" />
-
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img1"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img2} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img2"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img3} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img3"
+                  className="dot start-dot"
+                  data-letter="Touch your arm."
+                  onMouseDown={handleDotDown}
+                  onTouchStart={handleDotDown}
                 ></div>
               </div>
             </div>
 
-            {/* الجمل */}
-
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+            <div className="img-with-dot">
+              <div className="dot-wrapper">
+                <div className="dot end-dot" data-image="img2"></div>
+              </div>
+              <img src={img2} className="matched-img" alt="" />
+            </div>
           </div>
+
+          {/* row 2 */}
+          <div className="matching-row">
+            <div className="word-with-dot">
+              <span className="span-num">2</span>
+
+              <span className="word-text">
+               Open your eye.
+                {wrongWords.includes("Open your eye.") && ( // ⭐ تم التعديل هون
+                  <span className="error-mark">✕</span>
+                )}
+              </span>
+
+              <div className="dot-wrapper">
+                <div
+                  className="dot start-dot"
+                  data-letter="Open your eye."
+                  onMouseDown={handleDotDown}
+                  onTouchStart={handleDotDown}
+                ></div>
+              </div>
+            </div>
+
+            <div className="img-with-dot">
+              <div className="dot-wrapper">
+                <div className="dot end-dot" data-image="img1"></div>
+              </div>
+              <img src={img1} className="matched-img" alt="" />
+            </div>
+          </div>
+
+          <svg className="lines-layer">
+            {lines.map((line, i) => (
+              <line key={i} {...line} stroke="red" strokeWidth="3" />
+            ))}
+          </svg>
         </div>
-      </div>
+      </div>{" "}
       <div className="action-buttons-container">
         <button
           onClick={() => {
             setLines([]);
-            setWrongImages([]);
+            setWrongWords([]);
           }}
           className="try-again-button"
         >
           Start Again ↻
         </button>
-        <button onClick={checkAnswers2} className="check-button2">
+        <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>
@@ -258,4 +216,4 @@ const Unit6_Page6_Q2 = () => {
   );
 };
 
-export default Unit6_Page6_Q2;
+export default Unit8_Page6_Q3

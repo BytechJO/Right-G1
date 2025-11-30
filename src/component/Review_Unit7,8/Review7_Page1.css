@@ -1,0 +1,31 @@
+.click-icon-review5-page1-2 {
+  position: absolute;
+  /* background-color: #6bcff6;
+  border-radius: 20px;
+  border: rgb(255, 255, 255) solid 3px; */
+  padding: 5px;
+  top: 11%;
+  left: 39%;
+  cursor: pointer;
+}
+
+.click-icon-review5-page1-1 {
+  position: absolute;
+  /* background-color: #6bcff6;
+  border-radius: 20px;
+  border: rgb(255, 255, 255) solid 3px; */
+  padding: 5px;
+  bottom: 35%;
+  left: 41%;
+  cursor: pointer;
+}
+.click-icon-review5-page1-3 {
+  position: absolute;
+  /* background-color: #6bcff6;
+  border-radius: 20px;
+  border: rgb(255, 255, 255) solid 3px; */
+  padding: 5px;
+  top: 33%;
+  left: 62.5%;
+  cursor: pointer;
+}

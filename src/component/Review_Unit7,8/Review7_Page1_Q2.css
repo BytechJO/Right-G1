@@ -1,0 +1,34 @@
+.exercise-container-review5-p1-q2 {
+width: 90%;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: start;
+  justify-content: center;
+}
+
+
+.exercise-image-review5-p1-q2{
+  /* cursor: pointer; */
+    transition: 0.2s;
+    height: 120px;
+    width: auto;
+    /* border: solid 2px #6ec1ff; */
+    border-radius: 13px;
+    /* margin-left: 10px;*/
+}
+
+.missing-input-review5-p1-q2 {
+    width: 38px;
+    height: 38px;
+    border: 2px solid #6ec1ff;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    transition: transform 0.2s 
+ease, font-size 0.2s 
+ease;
+}

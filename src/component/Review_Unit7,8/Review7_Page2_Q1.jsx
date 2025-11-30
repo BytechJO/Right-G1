@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA1-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA1-02.svg";
+import bat from "../../assets/unit6/imgs/U6P53EXED-01.svg";
+import cap from "../../assets/unit6/imgs/U6P53EXED-02.svg";
+import ant from "../../assets/unit6/imgs/U6P53EXED-03.svg";
+import dad from "../../assets/unit6/imgs/U6P53EXED-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page6_Q2.css";
-const Unit6_Page6_Q2 = () => {
+import "./Review5_Page2_Q1.css";
+const Review5_Page2_Q1 = () => {
   const items = [
-    { img: bat, correct: "can", correctInput: "can swim.", input: "She" },
-    {
-      img: cap,
-      correct: "can't",
-      correctInput: "He can’t fly a kite.",
-      input: "",
-    },
+    { img: bat, correct: "g", correctInput: "girl" },
+    { img: cap, correct: "k", correctInput: "kitchen" },
+    { img: ant, correct: "k", correctInput: "key" },
+    { img: dad, correct: "g", correctInput: "garden" },
   ];
 
-  const [selected, setSelected] = useState(["", ""]);
-  const [answers, setAnswers] = useState(["", ""]);
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [selected, setSelected] = useState(["", "", "", ""]);
+
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const handleSelect = (value, index) => {
@@ -30,11 +30,11 @@ const Unit6_Page6_Q2 = () => {
     newAns[index] = value;
     setAnswers(newAns);
     setShowResult(false);
+    setWrongInputs([]);
   };
-
   const resetAll = () => {
-    setSelected(["", ""]);
-    setAnswers(["", ""]);
+    setSelected(["", "", "", ""]);
+    setAnswers(["", "", "", ""]);
     setWrongInputs([]);
     setShowResult(false);
   };
@@ -58,7 +58,7 @@ const Unit6_Page6_Q2 = () => {
     items.forEach((item, i) => {
       const circleCorrect = selected[i] === item.correct;
       const inputCorrect =
-        answers[i].trim().toLowerCase() === item.correctInput.toLowerCase();
+        answers[i].toLowerCase() === item.correctInput[0].toLowerCase();
 
       // نقطة للدائرة + نقطة للكتابة
       if (circleCorrect) score++;
@@ -112,78 +112,82 @@ const Unit6_Page6_Q2 = () => {
         }}
       >
         <h5 className="header-title-page8">
-          <span className="letter-of-Q">E</span> Look, circle, and write.
+          D Does it begin with <span style={{ color: "red" }}>g </span>or
+          <span style={{ color: "red" }}>k </span> ? Circle and write.
         </h5>
 
-        <div className="question-grid-unit6-page6-q2">
+        <div className="question-grid-unit4-page5-q1">
           {items.map((item, i) => (
             <div className="question-box-unit4-page5-q1" key={i}>
-              <span style={{fontSize:"22px" ,fontWeight:"600" ,color:"#1d4f7b"}}>{i+1}</span>
-              <div className="img-option-unit6-p6-q2">
+              <div style={{display:"flex"}}>
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  {i + 1}
+                </span>
                 <img src={item.img} className="q-img-unit4-page5-q1" />
-
-                {/* f / v choices */}
-                <div className="choices-unit6-page6-q2 ">
-                  <div className="circle-wrapper">
-                    <div
-                      className={`circle-choice-unit6-page6-q2  ${
-                        selected[i] === "can" ? "active" : ""
-                      }`}
-                      onClick={() => handleSelect("can", i)}
-                    >
-                      can
-                    </div>
-
-                    {/* X فوق دائرة f إذا كانت غلط */}
-                    {showResult &&
-                      selected[i] === "can" &&
-                      selected[i] !== item.correct && (
-                        <div className="wrong-mark">✕</div>
-                      )}
-                  </div>
-               
+              </div>
+              {/* g/ v choices */}
+              <div className="choices-unit4-page5-q1">
                 <div className="circle-wrapper">
                   <div
-                    className={`circle-choice-unit6-page6-q2 ${
-                      selected[i] === "can't" ? "active" : ""
+                    className={`circle-choice-review5-page2-q1 ${
+                      selected[i] === "g" ? "active" : ""
                     }`}
-                    onClick={() => handleSelect("can't", i)}
+                    onClick={() => handleSelect("g", i)}
                   >
-                    can't
+                    g
+                  </div>
+
+                  {/* X فوق دائرة f إذا كانت غلط */}
+                  {showResult &&
+                    selected[i] === "g" &&
+                    selected[i] !== item.correct && (
+                      <div className="wrong-mark">✕</div>
+                    )}
+                </div>
+
+                <div className="circle-wrapper">
+                  <div
+                    className={`circle-choice-review5-page2-q1 ${
+                      selected[i] === "k" ? "active" : ""
+                    }`}
+                    onClick={() => handleSelect("k", i)}
+                  >
+                    k
                   </div>
 
                   {/* X فوق دائرة v إذا كانت غلط */}
                   {showResult &&
-                    selected[i] === "can't" &&
+                    selected[i] === "k" &&
                     selected[i] !== item.correct && (
                       <div className="wrong-mark">✕</div>
                     )}
                 </div>
               </div>
- </div>
+
               {/* writing input */}
-              <div className="input-wrapper-unit6-p6-q2">
-                {item.input}
+              <div key={item.id} className="word-row-review5-p2-q1">
                 <input
                   type="text"
-                  className="write-input-unit4-page5-q1"
+                  maxLength={1}
                   value={answers[i]}
                   onChange={(e) => handleInput(e.target.value, i)}
+                  className="first-letter-input-review5-p2-q1"
                 />
-
-                {/* X فوق الإنبت إذا كانت الكلمة غلط */}
-                {showResult &&
-                  answers[i].trim() !== "" &&
-                  answers[i].trim().toLowerCase() !==
-                    item.correctInput.toLowerCase() &&
-                  wrongInputs.includes(i) && (
-                    <div className="wrong-mark">✕</div>
-                  )}
+                {showResult && (
+                  <div className="wrong-mark-review5-p2-q1">✕</div>
+                )}
+                <span className="rest-word">{item.correctInput.slice(1)}</span>
               </div>
             </div>
           ))}
         </div>
-      </div>{" "}
+      </div>
       <div className="action-buttons-container">
         <button onClick={resetAll} className="try-again-button">
           Start Again ↻
@@ -196,4 +200,4 @@ const Unit6_Page6_Q2 = () => {
   );
 };
 
-export default Unit6_Page6_Q2;
+export default Review5_Page2_Q1;

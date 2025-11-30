@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Unit6_Page5_Q4.css";
+import "./Unit8_Page5_Q4.css";
 import ValidationAlert from "../Popup/ValidationAlert";
 
-const Unit6_Page5_Q4 = () => {
+const Unit8_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },
     { letter: "b", number: 2 },
@@ -33,14 +33,10 @@ const Unit6_Page5_Q4 = () => {
   ];
 
   const questionGroups = [
-    [3, 1, 14], // __what's_____
-    [25, 15, 21], // this
-    [18, 9, 4, 5], // this
-    [1], // this
-    [2, 9, 11, 5], // this
+    [18, 1, 9, 19, 5], //Raise
+    [25, 15, 21, 18], //your
+    [8, 1, 14, 4], // hand
   ];
-  const [bigInput, setBigInput] = useState("");
-  const [bigInputWrong, setBigInputWrong] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]); // ⭐ تم التعديل هون
   const [letters, setLetters] = useState(
     questionGroups.map((group) => group.map(() => ""))
@@ -52,54 +48,38 @@ const Unit6_Page5_Q4 = () => {
   };
 
   const formedWords = letters.map((group) => group.join(""));
-  // const fullSentence = "This is a ruler";
+  const fullSentence = formedWords.join(" ");
 
   const handleCheckAnswers = () => {
- // 1️⃣ check empty fields
-const hasEmpty = letters.some((group) =>
-  group.some((letter) => letter === "")
-);
-if (hasEmpty) {
-  ValidationAlert.info(
-    "Oops!",
-    "Please complete all fields before checking."
-  );
-  return;
-}
-
-// 2️⃣ count correct inputs
-let correctCount = 0;
-let total = letters.flat().length + 1; // +1 for big input
-let wrong = [];
-
-// --- check big input ---
-let isBigCorrect = true;
-
-if (bigInput.trim() === "") {
-  isBigCorrect = false;
-  setBigInputWrong(true);
-} else {
-  isBigCorrect = true;
-  setBigInputWrong(false);
-  correctCount++; // big input is correct if not empty
-}
-
-// --- check small inputs ---
-for (let g = 0; g < letters.length; g++) {
-  for (let l = 0; l < letters[g].length; l++) {
-    const letter = letters[g][l];
-    const correctNum = data.find((d) => d.letter === letter)?.number;
-
-    if (correctNum === questionGroups[g][l]) {
-      correctCount++;
-    } else {
-      wrong.push(`${g}-${l}`);
+    // 1️⃣ التحقق من وجود فراغات
+    const hasEmpty = letters.some((group) =>
+      group.some((letter) => letter === "")
+    );
+    if (hasEmpty) {
+      ValidationAlert.info(
+        "Oops!",
+        "Please complete all fields before checking."
+      );
+      return;
     }
-  }
-}
 
-setWrongInputs(wrong);
+    // 2️⃣ حساب عدد الصحيحة
+    let correctCount = 0;
+    let total = letters.flat().length;
+    let wrong = []; // ⭐ تم التعديل هون
+    for (let g = 0; g < letters.length; g++) {
+      for (let l = 0; l < letters[g].length; l++) {
+        const letter = letters[g][l];
+        const correctNum = data.find((d) => d.letter === letter)?.number;
 
+        if (correctNum === questionGroups[g][l]) {
+          correctCount++;
+        } else {
+          wrong.push(`${g}-${l}`); // ⭐ تم التعديل هون
+        }
+      }
+    }
+    setWrongInputs(wrong); // ⭐ تم التعديل هون
     // 3️⃣ تحديد اللون حسب السكور
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -113,10 +93,7 @@ setWrongInputs(wrong);
     </div>
   `;
 
-    // 🔹 3) التحقق من الجملة الكبيرة
-    // const correctSentence = fullSentence.trim().toLowerCase(); // from small inputs
-
-    // الآن الشرط رح يكون صحيح
+    // 5️⃣ عرض الرسالة حسب الحالة
     if (correctCount === total) {
       ValidationAlert.success(scoreMessage);
     } else if (correctCount === 0) {
@@ -127,40 +104,23 @@ setWrongInputs(wrong);
   };
 
   return (
-    <div
-      className="unit3-q4-container3"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="container8">
         <h5 className="header-title-page8">
-          <span className="letter-of-Q"> C</span>Answer the question..
+          <span className="letter-of-Q"> C</span>Write the sentence.
         </h5>
 
-        <div className="unit3-q4-alphabet-box">
-          <div className="unit3-q4-row">
+        <div className="alphabet-box">
+          <div className="row">
             {data.map((c, i) => (
-              <div className="unit3-q4-letter-char">
-                <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell">
+              <div className="letter-char">
+                <div className="data">
+                  <span key={i} className="cell1">
                     {c.letter}
                   </span>
                 </div>
-                <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell number">
+                <div className="data">
+                  <span key={i} className="cell1 number">
                     {c.number}
                   </span>
                 </div>
@@ -168,17 +128,22 @@ setWrongInputs(wrong);
             ))}
           </div>
 
-          <div className="unit3-q4-words">
+          <div className="words">
             {questionGroups.map((group, groupIndex) => (
-              <div className="unit3-q4-word-group" key={groupIndex}>
+              <div className="word-group" key={groupIndex}>
                 {group.map((num, letterIndex) => (
-                  <div className="unit3-q4-input-h6" key={letterIndex}>
-                    <h6 style={{ fontSize: "20px" }}>{num}</h6>
-                    <div className="unit3-q4-input-wrapper">
+                  <div className="input-h6" key={letterIndex}>
+                    <h6
+                      className="unit1-page8-q4-nums"
+                      style={{ fontSize: "25px" }}
+                    >
+                      {num}
+                    </h6>
+                    <div className="input-wrapper">
                       {" "}
                       {/* ⭐ تم التعديل هون */}
                       <input
-                        className="unit3-q4-inputs"
+                        className="inputs"
                         maxLength={1}
                         value={letters[groupIndex][letterIndex]}
                         onChange={(e) =>
@@ -190,7 +155,7 @@ setWrongInputs(wrong);
                         }
                       />
                       {wrongInputs.includes(`${groupIndex}-${letterIndex}`) && (
-                        <span className="error-mark1-unit4-page5-q4">✕</span> // ⭐ تم التعديل هون
+                        <span className="error-mark1">✕</span> // ⭐ تم التعديل هون
                       )}
                     </div>
                   </div>
@@ -199,44 +164,31 @@ setWrongInputs(wrong);
             ))}
           </div>
 
-          <div className="unit3-q4-sentence">
-            <div
-              className="big-answer-wrapper"
-              style={{ position: "relative", marginTop: "30px" }}
-            >
-              <input
-                type="text"
-                className="big-answer-input"
-                placeholder="Write the answer here..."
-                value={bigInput}
-                onChange={(e) => setBigInput(e.target.value.toLowerCase())}
-              />
-
-              {bigInputWrong && (
-                <span className="error-mark1-unit4-page5-q4">✕</span>
-              )}
-            </div>
+          <div className="sentence">
+            {formedWords.map((word, i) => (
+              <span key={i} className="sentence-word">
+                {word}
+              </span>
+            ))}
           </div>
         </div>
-      </div>
-      <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLetters(questionGroups.map((group) => group.map(() => "")));
-            setWrongInputs([]);
-            setBigInputWrong(false);
-            setBigInput("");
-          }}
-          className="try-again-button"
-        >
-          Start Again ↻
-        </button>
-        <button onClick={handleCheckAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
+        <div className="action-buttons-container">
+          <button
+            onClick={() => {
+              setLetters(questionGroups.map((group) => group.map(() => "")));
+              setWrongInputs([]);
+            }}
+            className="try-again-button"
+          >
+            Start Again ↻
+          </button>
+          <button onClick={handleCheckAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Unit6_Page5_Q4;
+export default Unit8_Page5_Q4;

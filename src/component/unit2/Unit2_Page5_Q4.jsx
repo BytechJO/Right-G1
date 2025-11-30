@@ -117,12 +117,12 @@ const Unit2_Page5_Q4 = () => {
             {data.map((c, i) => (
               <div className="letter-char">
                 <div className="data">
-                  <span key={i} className="cell">
+                  <span key={i} className="cell1">
                     {c.letter}
                   </span>
                 </div>
                 <div className="data">
-                  <span key={i} className="cell number">
+                  <span key={i} className="cell1 number">
                     {c.number}
                   </span>
                 </div>
