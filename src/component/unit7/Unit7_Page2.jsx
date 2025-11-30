@@ -9,7 +9,7 @@ import sound6 from "../../assets/unit7/sound/Pg59_2.4_Adult Lady.mp3";
 import sound7 from "../../assets/unit7/sound/CD54.Pg59_Instruction1_Adult Lady.mp3";
 import img1 from "../../assets/unit5/imgs/K.svg";
 import img2 from "../../assets/unit5/imgs/Key.svg";
-import img3 from "../../assets/unit5/imgs/kite.svg";
+// import img3 from "../../assets/unit5/imgs/kite.svg";
 import img4 from "../../assets/unit5/imgs/kitchen.svg";
 import CD21_Pg23_Instruction1_AdultLady from "../../assets/unit5/sounds/U5P41 listen and repeat (1).mp3";
 import repeat1 from "../../assets/unit5/imgs/listen and repeat 02.svg";
