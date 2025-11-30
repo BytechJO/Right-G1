@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../assets/img_unit2/imgs/bey.jpg";
+import img1 from "../../assets/unit6/imgs/U6P55EXEE-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P55EXEE-02.svg";
+import img3 from "../../assets/unit6/imgs/U6P55EXEE-03.svg";
+import img4 from "../../assets/unit6/imgs/U6P55EXEE-04.svg";
+import img5 from "../../assets/unit6/imgs/U6P55EXEE-05.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review6_Page2_Q2.css";
 
@@ -151,7 +153,7 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <div>
-                  <h5 className="h5-unit6-p5-q2">
+                  <h5 className="h5-review6-p2-q2">
                     sit
                     {wrongImages.includes("sit") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -177,7 +179,7 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <div>
-                  <h5 className="h5-unit6-p5-q2">
+                  <h5 className="h5-review6-p2-q2">
                     pin
                     {wrongImages.includes("pin") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -203,7 +205,7 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <div>
-                  <h5 className="h5-unit6-p5-q2">
+                  <h5 className="h5-review6-p2-q2">
                     wig
                     {wrongImages.includes("wig") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -227,7 +229,7 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <div>
-                  <h5 className="h5-unit6-p5-q2">
+                  <h5 className="h5-review6-p2-q2">
                     big
                     {wrongImages.includes("big") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -251,7 +253,7 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>5 </span>
                 <div>
-                  <h5 className="h5-unit6-p5-q2">
+                  <h5 className="h5-review6-p2-q2">
                     hill
                     {wrongImages.includes("hill") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -292,14 +294,14 @@ const Review6_Page2_Q2 = () => {
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img3} alt="" />{" "}
+                <img src={img4} alt="" />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img4"
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img3} alt="" />{" "}
+                <img src={img5} alt="" />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img5"

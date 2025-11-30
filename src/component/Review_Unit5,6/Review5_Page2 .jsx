@@ -14,7 +14,7 @@ import Review5_Page2_Q3 from "./Review5_Page2_Q3";
 
 const Review5_Page2 = ({ openPopup }) => {
   return (
-    <div className="review3-page2-background" style={{ position: "relative" }}>
+    <div className="review5-page2-background" style={{ position: "relative" }}>
       <img src={page_2} />
 
       <svg
@@ -29,7 +29,7 @@ const Review5_Page2 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-review3-page2-2 hover:scale-110 transition"
+        className="click-icon-review5-page2-2 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -46,7 +46,7 @@ const Review5_Page2 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-review3-page2-3  hover:scale-110 transition"
+        className="click-icon-review5-page2-3  hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
       </svg>
@@ -59,7 +59,7 @@ const Review5_Page2 = ({ openPopup }) => {
         
         <Review5_Page2_Q3/>
         </>)}
-        className="click-icon-review3-page2-1 hover:scale-110 transition"
+        className="click-icon-review5-page2-1 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="90" height="90" />
       </svg>

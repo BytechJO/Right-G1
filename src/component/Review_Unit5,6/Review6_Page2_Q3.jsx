@@ -113,7 +113,7 @@ const Review6_Page2_Q3 = () => {
           <div className="review3-p2-q2-sentence-container2">
             {sentences.map((sentence, sIndex) => (
               <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num">{sIndex + 1}</span>
+                <span className="review3-p2-q2-num" style={{ color: "#2c5287", fontWeight: "700" }}>{sIndex + 1}</span>
 
                 <div className="review3-p2-q2-word-box">
                   {[sentence.word1, sentence.word2, sentence.word3].map(

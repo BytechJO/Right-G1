@@ -1,25 +1,25 @@
-.click-icon-review4-page1-2 {
+.click-icon-review6-page1-2 {
   position: absolute;
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-  top: 27.5%;
-  left: 41.5%;
+  top: 44.5%;
+  left: 40.5%;
   cursor: pointer;
 }
 
-.click-icon-review4-page1-1 {
+.click-icon-review6-page1-1 {
   position: absolute;
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-  top: 9%;
-  left: 39%;
+  top: 9.5%;
+  left: 41%;
   cursor: pointer;
 }
-.click-icon-review4-page1-3 {
+.click-icon-review6-page1-3 {
   position: absolute;
   /* background-color: #6bcff6;
   border-radius: 20px;
@@ -30,13 +30,13 @@
 
   cursor: pointer;
 }
-.click-icon-review4-page1-4 {
+.click-icon-review6-page1-4 {
   position: absolute;
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-  bottom: 22%;
-  left: 38.5%;
+ bottom: 26%;
+    left: 30.5%;
   cursor: pointer;
 }

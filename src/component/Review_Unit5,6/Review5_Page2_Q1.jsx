@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA1-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA1-02.svg";
-import ant from "../../assets/unit4/imgs/U4P32ExeA1-03.svg";
-import dad from "../../assets/unit4/imgs/U4P32ExeA1-04.svg";
+import bat from "../../assets/unit6/imgs/U6P53EXED-01.svg";
+import cap from "../../assets/unit6/imgs/U6P53EXED-02.svg";
+import ant from "../../assets/unit6/imgs/U6P53EXED-03.svg";
+import dad from "../../assets/unit6/imgs/U6P53EXED-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review5_Page2_Q1.css";
 const Review5_Page2_Q1 = () => {
@@ -30,7 +30,7 @@ const Review5_Page2_Q1 = () => {
     newAns[index] = value;
     setAnswers(newAns);
     setShowResult(false);
-    setWrongInputs([])
+    setWrongInputs([]);
   };
   const resetAll = () => {
     setSelected(["", "", "", ""]);
@@ -112,14 +112,25 @@ const Review5_Page2_Q1 = () => {
         }}
       >
         <h5 className="header-title-page8">
-          D Does it begin with g or k? Circle and write.
+          D Does it begin with <span style={{ color: "red" }}>g </span>or
+          <span style={{ color: "red" }}>k </span> ? Circle and write.
         </h5>
 
         <div className="question-grid-unit4-page5-q1">
           {items.map((item, i) => (
             <div className="question-box-unit4-page5-q1" key={i}>
-              <img src={item.img} className="q-img-unit4-page5-q1" />
-
+              <div style={{display:"flex"}}>
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <img src={item.img} className="q-img-unit4-page5-q1" />
+              </div>
               {/* g/ v choices */}
               <div className="choices-unit4-page5-q1">
                 <div className="circle-wrapper">

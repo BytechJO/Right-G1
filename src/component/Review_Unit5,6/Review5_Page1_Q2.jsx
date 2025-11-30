@@ -125,7 +125,7 @@ const Review5_Page1_Q2 = () => {
           >
             {data.map((item, index) => (
               <>
-              <span style={{color:"darkblue" ,fontSize:"22px",fontWeight:"700"}}>{index+1}</span>
+              <span style={{color:"#2c5287" ,fontSize:"22px",fontWeight:"700"}}>{index+1}</span>
                 <img
                   key={index}
                   src={item.src}
@@ -197,7 +197,7 @@ const Review5_Page1_Q2 = () => {
                           border: "2px solid white",
                         }}
                       >
-                        X
+                        ✕
                       </div>
                     )}
                   </div>

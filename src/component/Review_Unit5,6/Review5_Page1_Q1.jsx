@@ -111,7 +111,7 @@ const Review5_Page1_Q1 = () => {
 
           <div className="content-container-unit5-p6-q1">
             <div className="section-one-unit5-p6-q1">
-              <span>1</span> <img src={img1} className="img-unit5-p6-q1" />
+              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>1</span> <img src={img1} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <input
                   type="text"
@@ -142,7 +142,7 @@ const Review5_Page1_Q1 = () => {
             </div>
 
             <div className="section-two-unit5-p6-q1">
-              <span>2</span> <img src={img2} className="img-unit5-p6-q1" />
+              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>2</span> <img src={img2} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
@@ -198,7 +198,7 @@ const Review5_Page1_Q1 = () => {
             </div>
 
             <div className="section-three-unit5-p6-q1">
-              <span>3</span> <img src={img3} className="img-unit5-p6-q1" />
+              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>3</span> <img src={img3} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative" }}>
                   <input
@@ -243,7 +243,7 @@ const Review5_Page1_Q1 = () => {
               </div>
             </div>
             <div className="section-four-unit5-p6-q1">
-              <span>4</span> <img src={img4} className="img-unit5-p6-q1" />
+              <span style={{ color: "#2c5287", fontWeight: "700" ,fontSize:"20px"}}>4</span> <img src={img4} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div
                   style={{

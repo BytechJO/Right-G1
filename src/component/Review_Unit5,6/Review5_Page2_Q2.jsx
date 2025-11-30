@@ -7,7 +7,7 @@ import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import ValidationAlert from "../Popup/ValidationAlert";
 
 // Example images imports. Replace with your actual paths.
-// import img1a from "../../assets/unit4/imgs/goose.png";
+import img1a from "../../assets/unit6/imgs/U6P53EXEE-01.svg";
 // import img1b from "../../assets/unit4/imgs/gate.png";
 // import img1c from "../../assets/unit4/imgs/kiwi.png";
 
@@ -25,7 +25,7 @@ import ValidationAlert from "../Popup/ValidationAlert";
 
 const Review5_Page2_Q2 = () => {
   const groups = [
-    { images: ["./img1a", "./img1b", "./img1c"], different: 2 },
+    { images: [img1a, "./img1b", "./img1c"], different: 2 },
     { images: ["./img2a", "./img2b", "./img2c"], different: 1 },
     { images: ["./img3a", "./img3b", "./img3c"], different: 0 },
     { images: ["./img4a", "./img4b", "./img4c"], different: 2 },

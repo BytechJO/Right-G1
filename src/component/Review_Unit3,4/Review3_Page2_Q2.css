@@ -42,7 +42,7 @@
 }
 
 .review3-p2-q2-word.circled {
-  border: 2px solid #1c7ed6;
+  /* border: 2px solid #1c7ed6; */
   padding: 3px 10px;
   border-radius: 10px;
   background: #d0ebff;
@@ -62,6 +62,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+      z-index: 9;
+      border: 2px solid white;
 }
 
 /* 📱 ريسبونيف */

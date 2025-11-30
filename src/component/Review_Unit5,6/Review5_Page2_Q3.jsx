@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Review5_Page2_Q3.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-
+import img1 from "../../assets/unit6/imgs/U6P53EXEF-01.svg";
+import img2 from "../../assets/unit6/imgs/U6P53EXEF-02.svg";
 const Review5_Page2_Q3 = () => {
   // ===============================
   // 🔵 1) الأسئلة (كلها داخل نفس الكومبونينت)
@@ -17,20 +18,20 @@ const Review5_Page2_Q3 = () => {
         { type: "text", value: "." },
       ],
       correct: ["girl", "garden"],
-      image: "/img1.png",
+      image: img1,
     },
 
     {
       id: 2,
       parts: [
         { type: "text", value: "The" },
-        { type: "blank", options: ["key", "girl"] },
+        { type: "blank", options: ["key", "kite"] },
         { type: "text", value: "is" },
-        { type: "blank", options: ["kite", "green"] },
+        { type: "blank", options: ["girl", "green"] },
         { type: "text", value: "." },
       ],
       correct: ["kite", "green"],
-      image: "/img2.png",
+      image: img2,
     },
   ];
 
@@ -48,7 +49,7 @@ const Review5_Page2_Q3 = () => {
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
-    setShowResult(false)
+    setShowResult(false);
   };
 
   // ===============================
@@ -119,7 +120,16 @@ const Review5_Page2_Q3 = () => {
           {questions.map((q, qIndex) => (
             <div className="question-row-review5-p2-q3" key={q.id}>
               <div className="sentence-review5-p2-q3">
-                <span className="header-title-page8">{q.id}</span>
+                <span
+                  className="header-title-page8"
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  {q.id}
+                </span>
                 {q.parts.map((part, pIndex) => {
                   if (part.type === "text") {
                     return (
@@ -146,11 +156,14 @@ const Review5_Page2_Q3 = () => {
                         {part.options.map((opt, optIndex) => {
                           const isSelected =
                             answers[qIndex][actualBlankIndex] === opt;
+                          const isWrongSelected =
+                            showResult &&
+                            isSelected &&
+                            opt !== q.correct[actualBlankIndex];
 
                           return (
-                            <>
+                            <div key={optIndex} className="option-wrapper">
                               <span
-                                key={optIndex}
                                 className={`option-word-review5-p2-q3 ${
                                   isSelected ? "selected2" : ""
                                 }`}
@@ -160,13 +173,11 @@ const Review5_Page2_Q3 = () => {
                               >
                                 {opt}
                               </span>
-                              {/* Display X only when result is shown */}
-                              {showResult &&
-                                isSelected &&
-                                opt !== q.correct[actualBlankIndex] && (
-                                  <div className="wrong-mark">✕</div>
-                                )}
-                            </>
+
+                              {isWrongSelected && (
+                                <div className="wrong-mark">✕</div>
+                              )}
+                            </div>
                           );
                         })}
                       </span>

@@ -138,7 +138,18 @@ const Review5_Page1_Q3 = () => {
             {/* الصور */}
             <div className="match-images-row2">
               <div className="img-box2">
-                <img src={img1} alt="" />
+                <div style={{display:"flex",gap:"10px"}}>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    1
+                  </span>
+                  <img src={img1} alt="" />
+                </div>
                 <h5
                   style={{
                     border: "2px solid #2effeaff",
@@ -165,7 +176,18 @@ const Review5_Page1_Q3 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img2} alt="img" />
+                <div style={{display:"flex",gap:"10px"}}>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    2
+                  </span>
+                  <img src={img2} alt="img" />
+                </div>
                 <h5
                   style={{
                     border: "2px solid #2effeaff",
@@ -191,7 +213,18 @@ const Review5_Page1_Q3 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img3} alt="" />
+                <div style={{display:"flex",gap:"10px"}}>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    3
+                  </span>
+                  <img src={img3} alt="" />
+                </div>
                 <h5
                   style={{
                     border: "2px solid #2effeaff",
@@ -216,7 +249,18 @@ const Review5_Page1_Q3 = () => {
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img4} alt="" />
+                <div style={{display:"flex",gap:"10px"}}>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    4
+                  </span>
+                  <img src={img4} alt="" />
+                </div>
                 <h5
                   style={{
                     border: "2px solid #2effeaff",

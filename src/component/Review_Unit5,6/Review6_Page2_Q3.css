@@ -4,7 +4,6 @@
 .container-review3-p2-q3 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
- 
   width: 100%;
 }
 
@@ -90,6 +89,29 @@
 }
 
 
+.review3-p2-q2-word {
+  position: relative;      /* مهم جداً */
+  display: inline-block;   /* حتى يبقى حجم العنصر ثابت */
+  padding: 5px 8px;
+}
+
+.circled {
+  /* احذفي أي border يزيد الحجم */
+  border: none;
+}
+
+.circled::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #2c5287;
+  border-radius: 50%;
+  pointer-events: none;
+}
 
 @media (max-width: 990px) {
 .q3-image-review3-p2-q3 {

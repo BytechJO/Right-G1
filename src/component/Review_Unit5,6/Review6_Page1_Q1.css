@@ -14,8 +14,8 @@
 .question-box-review6-p1-q1 {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  align-items: flex-start;
+  /* gap: 15px; */
 }
 
 /* ============================
@@ -28,7 +28,7 @@
 
 .img-div-review6-p1-q1 {
   object-fit: contain;
-  border: 3px solid rgb(0, 179, 255);
+  /* border: 3px solid rgb(0, 179, 255); */
   border-radius: 12px;
   /* padding: 10px; */
   background: white;

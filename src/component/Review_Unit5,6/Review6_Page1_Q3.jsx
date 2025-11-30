@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import deer from "../../assets/unit5/imgs/U5P44EXEB.svg";
+import deer from "../../assets/unit6/imgs/U6P54EXEC-01.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Review6_Page1_Q3.css"
 
@@ -122,7 +122,7 @@ const Review6_Page1_Q3 = () => {
                 >
                   <span
                     className="q-number"
-                    style={{ color: "#0d47a1", fontWeight: "600" }}
+                    style={{ color: "#0d47a1", fontWeight: "700",fontSize:"20px" }}
                   >
                     {index + 1}.
                   </span>
