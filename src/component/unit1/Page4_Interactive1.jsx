@@ -5,7 +5,7 @@ import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
 const Page4_Interactive1 = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
-
+  const [showAnswer, setShowAnswer] = useState(false);
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
     x1: 28,
@@ -74,56 +74,63 @@ const Page4_Interactive1 = () => {
   const handleStartAgain = () => {
     setClickedPoint(null);
     setCheckResult(null);
+    setShowAnswer(false)
+  };
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
+    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
   };
 
   return (
     <div>
-    <div
-      style={{
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "center",width:"100%" }}>
-        <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
-        <h5 className="header-title-page8">
-          I need your help. Can you help me find the restaurant in the picture?
-        </h5>
-      </div>
-      <div style={{  position: "relative" }}>
-        <img
-          src={backgroundImage}
-          alt="interactive"
-          onClick={handleImageClick}
-          style={{
-            width: "auto",
-            height: "75vh",
-            cursor: "pointer",
-            display: "block",
-          }}
-        />
-
-        {/* ✅ الدائرة الحمراء في مكان الكبس */}
-        {clickedPoint && (
-          <div
+      <div
+        style={{
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+        >
+          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
+          <h5 className="header-title-page8">
+            I need your help. Can you help me find the restaurant in the
+            picture?
+          </h5>
+        </div>
+        <div style={{ position: "relative" }}>
+          <img
+            src={backgroundImage}
+            alt="interactive"
+            onClick={handleImageClick}
             style={{
-              position: "absolute",
-              top: `${clickedPoint.y}%`,
-              left: `${clickedPoint.x}%`,
-              width: "3%",
-              height: "3%",
-              backgroundColor: "red",
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
+              width: "auto",
+              height: "75vh",
+              cursor: "pointer",
+              display: "block",
             }}
-          ></div>
-        )}
+          />
 
-        {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-        {checkResult === "success" && (
+          {/* ✅ الدائرة الحمراء في مكان الكبس */}
+          {clickedPoint && (
+            <div
+              style={{
+                position: "absolute",
+                top: `${clickedPoint.y}%`,
+                left: `${clickedPoint.x}%`,
+                width: "3%",
+                height: "3%",
+                backgroundColor: "red",
+                borderRadius: "50%",
+                transform: "translate(-50%, -50%)",
+                pointerEvents: "none",
+              }}
+            ></div>
+          )}
+    {(checkResult === "success" || showAnswer) && (
           <div
             style={{
               position: "absolute",
@@ -131,27 +138,28 @@ const Page4_Interactive1 = () => {
               left: `${targetArea.x1}%`,
               width: `${targetArea.x2 - targetArea.x1}%`,
               height: `${targetArea.y2 - targetArea.y1}%`,
-              backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
+              backgroundColor: "rgba(0, 255, 0, 0.55)",
               borderRadius: "8px",
               pointerEvents: "none",
             }}
           ></div>
         )}
+         
+        </div>
+    
       </div>
-
-     
-    </div>
-     <div
-     className="action-buttons-container "
-       
-      >
+      <div className="action-buttons-container ">
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
+        </button>
+        <button className="show-answer-btn" onClick={handleShowAnswer}>
+          Show Answer 
         </button>
         <button className="check-button2" onClick={handleCheck}>
           Check Answer ✓
         </button>
-      </div></div>
+      </div>
+    </div>
   );
 };
 

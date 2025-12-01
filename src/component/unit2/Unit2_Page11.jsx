@@ -7,8 +7,9 @@ import sound3 from "../../assets/img_unit2/sounds-unit2/Pg20_1.2_Adult Lady.mp3"
 import sound4 from "../../assets/img_unit2/sounds-unit2/Pg20_1.3_Adult Lady.mp3";
 import sound5 from "../../assets/img_unit2/sounds-unit2/Pg20_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../AudioWithCaption";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 
 import video3 from "../../assets/unit1/sounds/STORY (1).mp4";
 const Unit2_Page11 = ({ openPopup }) => {

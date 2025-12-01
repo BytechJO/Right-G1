@@ -5,8 +5,8 @@ import Unit2_Page1_find from "./Unit2_Page1_find";
 import Unit2_Page1_Vocab from "./Unit2_Page1_Vocab";
 import Unit2_Page1_Read from "./Unit2_Pag1_Read";
 import AudioWithCaption from "../AudioWithCaption";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import allUnit2 from "../../assets/unit1/sounds/P10-11.mp3";
 const Unit2_Page1 = ({ openPopup }) => {
   const captionsExample = [

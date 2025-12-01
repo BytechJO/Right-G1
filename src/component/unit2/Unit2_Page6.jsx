@@ -4,8 +4,9 @@ import song from "../../assets/img_unit2/sounds-unit2/Pg15.Sing_Adult Lady.mp3";
 import "./Unit2_Page6.css";
 import Unit2_Page6_Q1 from "./Unit2_Page6_Q1";
 import Unit2_Page6_Q2 from "./Unit2_Page6_Q2";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 
 const Unit2_Page6 = ({ openPopup }) => {

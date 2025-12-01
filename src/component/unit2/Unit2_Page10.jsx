@@ -10,8 +10,9 @@ import Unit2_Page10_Q1 from "./Unit2_Page10_Q1";
 import Unit2_Page10_Q3 from "./Unit2_Page10_Q3";
 import Unit2_Page10_Q2 from "./Unit2_Page10_Q2";
 import Unit2_Page10_Q4 from "./Unit2_Page10_Q4";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 
 const Unit2_Page10 = ({ openPopup }) => {
