@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Unit3_Page6_Q2.css";
 import ValidationAlert from "../Popup/ValidationAlert";
-import img1 from "../../assets/unit3/imgs3/P27exeE-01.svg"
-import img2 from "../../assets/unit3/imgs3/P27exeE-02.svg"
-import img3 from "../../assets/unit3/imgs3/P27exeE-03.svg"
-import img4 from "../../assets/unit3/imgs3/P27exeE-04.svg"
+import img1 from "../../assets/unit3/imgs3/P27exeE-01.svg";
+import img2 from "../../assets/unit3/imgs3/P27exeE-02.svg";
+import img3 from "../../assets/unit3/imgs3/P27exeE-03.svg";
+import img4 from "../../assets/unit3/imgs3/P27exeE-04.svg";
 const Unit3_Page6_Q2 = () => {
   const questions = [
     {
@@ -30,13 +30,26 @@ const Unit3_Page6_Q2 = () => {
 
   const [answers, setAnswers] = useState({});
   const [showResult, setShowResult] = useState([]);
+  const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
 
   const selectAnswer = (id, value) => {
+    if (showCorrectAnswers) return;
     setAnswers({ ...answers, [id]: value });
-    setShowResult([])
+    setShowResult([]);
+  };
+  const showAnswersFunc = () => {
+    const correctMap = {};
+    questions.forEach((q) => {
+      correctMap[q.id] = q.correct;
+    });
+
+    setAnswers(correctMap);
+    setShowResult(questions.map(() => "correct"));
+    setShowCorrectAnswers(true);
   };
 
   const checkAnswers = () => {
+    if (showCorrectAnswers) return;
     // 1) فحص الخانات الفارغة
     const isEmpty = questions.some((q) => !answers[q.id]);
     if (isEmpty) {
@@ -75,6 +88,7 @@ const Unit3_Page6_Q2 = () => {
   const resetAnswers = () => {
     setAnswers({});
     setShowResult([]);
+    setShowCorrectAnswers(false);
   };
 
   return (
@@ -107,7 +121,9 @@ const Unit3_Page6_Q2 = () => {
             <div key={q.id} className="unit3-q5-question-box">
               <p
                 className="unit3-q5-question-text"
-                style={{ fontSize: "20px" }}
+                style={{
+                  fontSize: "20px",
+                }}
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>
                   {q.id}.
@@ -131,7 +147,7 @@ const Unit3_Page6_Q2 = () => {
                     </div>
 
                     {showResult[index] === "wrong" && answers[q.id] === "✓" && (
-                      <div className="unit3-q5-wrong-icon">X</div>
+                      <div className="unit3-q5-wrong-icon">✕</div>
                     )}
                   </div>
 
@@ -147,7 +163,7 @@ const Unit3_Page6_Q2 = () => {
                     </div>
 
                     {showResult[index] === "wrong" && answers[q.id] === "✗" && (
-                      <div className="unit3-q5-wrong-icon">X</div>
+                      <div className="unit3-q5-wrong-icon">✕</div>
                     )}
                   </div>
                 </div>
@@ -159,6 +175,10 @@ const Unit3_Page6_Q2 = () => {
           <button onClick={resetAnswers} className="try-again-button">
             Start Again ↻
           </button>
+          <button onClick={showAnswersFunc} className="show-answer-btn">
+            Show Answer
+          </button>
+
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>

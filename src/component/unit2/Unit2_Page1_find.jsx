@@ -31,6 +31,7 @@ const Unit2_Page1_find = () => {
   };
 
   const handleCheck = () => {
+      if (showAnswer) return;
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",

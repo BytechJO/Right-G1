@@ -59,6 +59,7 @@ export default function Page8_Q3() {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers = () => {
+    if (showAnswer) return;
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -250,7 +251,7 @@ export default function Page8_Q3() {
           }}
           className="show-answer-btn swal-continue"
         >
-          Show Answer 
+          Show Answer
         </button>
 
         <button onClick={checkAnswers} className="check-button2">

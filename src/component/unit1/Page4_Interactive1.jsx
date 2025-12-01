@@ -33,6 +33,7 @@ const Page4_Interactive1 = () => {
   };
 
   const handleCheck = () => {
+      if (showAnswer) return;
     // 1️⃣ إذا الطالب ما ضغط على الصورة
     if (!clickedPoint) {
       ValidationAlert.info(

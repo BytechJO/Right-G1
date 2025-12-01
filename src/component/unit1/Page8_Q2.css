@@ -436,7 +436,7 @@ ease;
 }
 
 .wrong-drop::after {
-  content: "X";
+  content: "✕";
   position: absolute;
   top: -8px;
   right: -8px;

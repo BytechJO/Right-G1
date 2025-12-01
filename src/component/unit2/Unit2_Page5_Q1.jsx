@@ -41,10 +41,11 @@ const Unit2_Page5_Q1 = () => {
   const resetAnswers = () => {
     setAnswers(Array(exerciseData.length).fill(null));
     setResults(Array(exerciseData.length).fill(null)); // ✅ اخفاء الأخطاء عند الإعادة
-    setShowAnswer(false)
+    setShowAnswer(false);
   };
 
   const checkAnswers = () => {
+    if (showAnswer) return;
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please choose for all rows first.");
       return;
@@ -140,7 +141,7 @@ const Unit2_Page5_Q1 = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "space-around",
-                    cursor:"pointer"
+                    cursor: "pointer",
                   }}
                   onClick={() => {
                     if (showAnswer) return; // ❌ يمنع التعديل بعد Show Answer
@@ -161,7 +162,7 @@ const Unit2_Page5_Q1 = () => {
                       width: "130px",
                       height: "130px",
                       objectFit: "contain",
-               
+                      marginLeft: "0px",
                     }}
                   />
 

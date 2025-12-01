@@ -7,11 +7,10 @@ import bat from "../../assets/img_unit2/imgs/bat.jpg";
 import box from "../../assets/img_unit2/imgs/box.jpg";
 import bucket from "../../assets/img_unit2/imgs/bucket.jpg";
 import boat from "../../assets/img_unit2/imgs/boat.jpg";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
+
 const Unit2_Page5_Q2 = () => {
   const [answers, setAnswers] = useState([null, null, null, null]);
   const audioRef = useRef(null);
@@ -88,6 +87,7 @@ const Unit2_Page5_Q2 = () => {
   };
 
   const checkAnswers = () => {
+     if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
       return;
@@ -115,14 +115,14 @@ const Unit2_Page5_Q2 = () => {
 
     setTimeout(() => setShowResult(true), 200);
   };
-const handleShowAnswer = () => {
-  // تحديد الإجابات الصحيحة تلقائياً
-  const correctAnswers = items.map((item) => item.correct);
+  const handleShowAnswer = () => {
+    // تحديد الإجابات الصحيحة تلقائياً
+    const correctAnswers = items.map((item) => item.correct);
 
-  setAnswers(correctAnswers);
-  setShowResult(true);
-  setShowAnswer(true); // يمنع أي تعديل بعد هيك
-};
+    setAnswers(correctAnswers);
+    setShowResult(true);
+    setShowAnswer(true); // يمنع أي تعديل بعد هيك
+  };
 
   const resetAnswers = () => {
     setAnswers(Array(items.length).fill(null));
@@ -333,7 +333,7 @@ const handleShowAnswer = () => {
           Start Again ↻
         </button>
         <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer 
+          Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓

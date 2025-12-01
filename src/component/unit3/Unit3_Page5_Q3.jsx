@@ -11,6 +11,7 @@ const Unit3_Page5_Q3 = () => {
 
   // النتيجة لكل خانة (صح/غلط)
   const [showResult, setShowResult] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   // الإجابات الصحيحة
   const correctData = ["5", "3", "2", "8"];
@@ -21,10 +22,17 @@ const Unit3_Page5_Q3 = () => {
   // تحديث خانة الإدخال
   const handleChange = (index, value) => {
     setAnswers((prev) => prev.map((a, i) => (i === index ? value : a)));
-    setShowResult([])
+    setShowResult([]);
+    setShowAnswer(false);
+  };
+  const handleShowAnswer = () => {
+    setShowAnswer(true); // تفعيل وضع إظهار الإجابات
+    setShowResult([]); // إخفاء إكسات
+    setAnswers(correctData); // تعبئة كل الخانات بالإجابات الصحيحة
   };
 
   const checkAnswers = () => {
+    if (showAnswer) return;
     // ❗ الخطوة 1: فحص الخانات الفارغة
     if (answers.includes("")) {
       ValidationAlert.info("Please fill all answer boxes before checking!");
@@ -62,6 +70,7 @@ const Unit3_Page5_Q3 = () => {
   const resetAnswers = () => {
     setAnswers(["5", "", "", ""]);
     setShowResult([]);
+    setShowAnswer(false)
   };
 
   return (
@@ -104,7 +113,7 @@ const Unit3_Page5_Q3 = () => {
                   className={`unit3-q3-input ${
                     index === 0 ? "first-input" : ""
                   }`}
-                  readOnly={index === 0} // ❗ ممنوع تتغير
+                  readOnly={index === 0 || showAnswer} // ← new 👈 منع التعديل بعد Show Answer
                 />
 
                 {/* إشارة X */}
@@ -120,6 +129,10 @@ const Unit3_Page5_Q3 = () => {
         <button onClick={resetAnswers} className="try-again-button">
           Start Again ↻
         </button>
+        <button onClick={handleShowAnswer} className="show-answer-btn">
+          Show Answer
+        </button>
+
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>

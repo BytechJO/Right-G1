@@ -68,6 +68,7 @@ const Unit2_Page8_Q1 = () => {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers2 = () => {
+    if (showAnswer) return;
 
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
@@ -76,7 +77,7 @@ const Unit2_Page8_Q1 = () => {
       );
       return;
     }
-    if (showAnswer) return;
+   
     let wrong = [];
     let correctCount = 0;
 
@@ -277,9 +278,10 @@ const Unit2_Page8_Q1 = () => {
           <button
             onClick={() => {
               setLines([]);
+               setShowAnswer(false);
               setWrongWords([]);
               setFirstDot(null);
-              setShowAnswer(false);
+             
             }}
             className="try-again-button"
           >
@@ -307,10 +309,10 @@ const Unit2_Page8_Q1 = () => {
                 x2: getDotPosition(`[data-image="${line.image}"]`).x,
                 y2: getDotPosition(`[data-image="${line.image}"]`).y,
               }));
-
+      setShowAnswer(true);
               setLines(finalLines);
               setWrongImages([]);
-              setShowAnswer(true);
+        
             }}
             className="show-answer-btn swal-continue"
           >

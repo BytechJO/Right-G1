@@ -291,7 +291,7 @@ const Unit2_Page1_Vocab = () => {
           <img
             src={backgroundImage}
             alt="interactive"
-            style={{ height: "76vh" }}
+            style={{ height: "85vh" }}
           />
         </div>
       </div>

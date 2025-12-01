@@ -60,10 +60,11 @@ const Page4_vocabulary = () => {
   // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
   const handleEnded = () => {
      audio.currentTime = 0;
-    setActiveIndex(null);
+   setIsPlaying(false)  
     setPaused(true);
     setShowContinue(true);
-    setIsPlaying(false)
+   
+    setActiveIndex(null);
   };
 
   audio.addEventListener("ended", handleEnded);
@@ -273,7 +274,7 @@ const Page4_vocabulary = () => {
             <img
               src={backgroundImage}
               alt="interactive"
-              style={{ height: "76vh" }}
+              style={{ height: "85vh" }}
             />
           </div>
         </div>

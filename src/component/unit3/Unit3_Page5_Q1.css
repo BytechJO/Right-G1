@@ -38,6 +38,10 @@
   font-weight: 700;
 }
 
+.show-answer-red {
+  color: red !important;
+  font-weight: bold;
+}
 .error-mark-input {
   position: absolute;
   top: -10px;

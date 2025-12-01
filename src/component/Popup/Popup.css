@@ -14,14 +14,14 @@
   overflow-x: hidden;
 }
 
-/* الشكل العام
+/* الشكل العام */
 .popup-content {
   position: relative;
   background: #fff;
   border-radius: 12px;
   padding: 20px;
   animation: fadeIn 0.2s ease;
-} */
+}
 
 /* إذا داخلها Audio → حجم طبيعي */
 .audio-size {

@@ -5,16 +5,20 @@ import ant from "../../assets/unit3/imgs3/P26exeA1-03.svg";
 import dad from "../../assets/unit3/imgs3/P26exeA1-04.svg";
 import ValidationAlert from "../Popup/ValidationAlert";
 import "./Unit3_Page5_Q1.css";
+
 const Unit3_Page5_Q1 = () => {
   const correctAnswers = ["bat", "cap", "ant", "dad"];
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false); // ⬅ جديد
 
   const handleChange = (value, index) => {
+    if (showAnswer) return; // ⛔ منع التعديل بعد Show Answer
+
     const newAnswers = [...answers];
     newAnswers[index] = value.toLowerCase();
     setAnswers(newAnswers);
-    setWrongInputs([])
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
@@ -25,13 +29,12 @@ const Unit3_Page5_Q1 = () => {
 
     let tempScore = 0;
     let wrong = [];
+
     answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        tempScore++;
-      } else {
-        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
-      }
+      if (ans === correctAnswers[i]) tempScore++;
+      else wrong.push(i);
     });
+
     setWrongInputs(wrong);
 
     const total = correctAnswers.length;
@@ -39,26 +42,30 @@ const Unit3_Page5_Q1 = () => {
       tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
 
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${tempScore} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    if (tempScore === total) ValidationAlert.success(scoreMessage);
+    else if (tempScore === 0) ValidationAlert.error(scoreMessage);
+    else ValidationAlert.warning(scoreMessage);
   };
 
   const reset = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
+    setShowAnswer(false); // ⬅ إعادة تفعيل الإجابة
   };
+
+  const handleShowAnswer = () => {
+    setAnswers(correctAnswers); // عرض الإجابات
+    setShowAnswer(true); // تفعيل اللون الأحمر + منع التعديل
+    setWrongInputs([]); // إخفاء الإكس
+  };
+
   return (
     <div
       className="question-wrapper-unit3-page6-q1"
@@ -78,96 +85,51 @@ const Unit3_Page5_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
+        <h5 className="header-title-page8">
+          <span className="ex-A">A</span>
+          <span style={{ color: "purple" }}>1</span> Look and write.
+        </h5>
 
-      <h5 className="header-title-page8">
-        <span className="ex-A">A</span>
-        <span style={{ color: "purple" }}>1</span> Look and write.
-      </h5>
-      <div className="row-content10-unit3-page6-q1">
-        <div className="row2-unit3-page6-q1">
-          <div style={{ display: "flex", gap: "15px" }}>
-            <span className="num-span">1</span>{" "}
-            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
-          </div>
-          <span style={{ position: "relative", display: "flex" }}>
-            <div className="input-wrapper-unit3-page6-q1">
-              <input
-                type="text"
-                className="q-input-unit3-page6-q1"
-                onChange={(e) => handleChange(e.target.value, 0)}
-                value={answers[0]}
-              />
-              {wrongInputs.includes(0) && (
-                <span className="error-mark-input">✕</span>
-              )}
-            </div>
-          </span>
-        </div>
+        <div className="row-content10-unit3-page6-q1">
+          {["bat", "cap", "ant", "dad"].map((_, i) => (
+            <div className="row2-unit3-page6-q1" key={i}>
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span className="num-span">{i + 1}</span>{" "}
+                <img
+                  src={[bat, cap, ant, dad][i]}
+                  alt=""
+                  className="q-img-unit3-page6-q1"
+                />
+              </div>
 
-        <div className="row2-unit3-page6-q1">
-          <div style={{ display: "flex", gap: "15px" }}>
-            <span className="num-span">2</span>{" "}
-            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-          </div>
-          <span style={{ position: "relative", display: "flex" }}>
-            <div className="input-wrapper-unit3-page6-q1">
-              <input
-                type="text"
-                className="q-input-unit3-page6-q1"
-                onChange={(e) => handleChange(e.target.value, 1)}
-                value={answers[1]}
-              />{" "}
-              {wrongInputs.includes(1) && (
-                <span className="error-mark-input">✕</span>
-              )}
-            </div>
-          </span>
-        </div>
+              <span style={{ position: "relative", display: "flex" }}>
+                <div className="input-wrapper-unit3-page6-q1">
+                  <input
+                    type="text"
+                    className={`q-input-unit3-page6-q1 ${
+                      showAnswer ? "show-answer-red" : ""
+                    }`}
+                    value={answers[i]}
+                    onChange={(e) => handleChange(e.target.value, i)}
+                    disabled={showAnswer}
+                  />
 
-        <div className="row2-unit3-page6-q1">
-          <div style={{ display: "flex", gap: "15px" }}>
-            <span className="num-span">3</span>{" "}
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-          </div>
-          <span style={{ position: "relative", display: "flex" }}>
-            <div className="input-wrapper-unit3-page6-q1">
-              <input
-                type="text"
-                className="q-input-unit3-page6-q1"
-                onChange={(e) => handleChange(e.target.value, 2)}
-                value={answers[2]}
-              />{" "}
-              {wrongInputs.includes(2) && (
-                <span className="error-mark-input">✕</span>
-              )}
+                  {wrongInputs.includes(i) && !showAnswer && (
+                    <span className="error-mark-input">✕</span>
+                  )}
+                </div>
+              </span>
             </div>
-          </span>
-        </div>
-
-        <div className="row2-unit3-page6-q1">
-          <div style={{ display: "flex", gap: "15px" }}>
-            <span className="num-span">4</span>{" "}
-            <img src={dad} alt="" className="q-img-unit3-page6-q1" />
-          </div>
-          <span style={{ position: "relative", display: "flex" }}>
-            <div className="input-wrapper-unit3-page6-q1">
-              <input
-                type="text"
-                className="q-input-unit3-page6-q1"
-                onChange={(e) => handleChange(e.target.value, 3)}
-                value={answers[3]}
-              />{" "}
-              {wrongInputs.includes(3) && (
-                <span className="error-mark-input">✕</span>
-              )}
-            </div>
-          </span>
+          ))}
         </div>
       </div>
-</div>
+
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻
+        </button>
+        <button onClick={handleShowAnswer} className="show-answer-btn">
+          Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓

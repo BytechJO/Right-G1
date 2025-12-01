@@ -38,9 +38,24 @@ const Unit3_Page5_Q4 = () => {
     [12, 9, 14, 5], // line
   ];
   const [wrongInputs, setWrongInputs] = useState([]); // ⭐ تم التعديل هون
+  const [showAnswer, setShowAnswer] = useState(false);
   const [letters, setLetters] = useState(
     questionGroups.map((group) => group.map(() => ""))
   );
+
+   // ========================
+  //  ✔ Show Answer
+  // ========================
+  const handleShowAnswer = () => {
+    const correctLetters = questionGroups.map((group) =>
+      group.map((num) => data.find((d) => d.number === num).letter)
+    );
+
+    setLetters(correctLetters);
+    setWrongInputs([]);
+    setShowAnswer(true);
+  };
+
   const handleInputChange = (value, groupIndex, letterIndex) => {
     const updated = [...letters];
     updated[groupIndex][letterIndex] = value.toLowerCase();
@@ -51,6 +66,7 @@ const Unit3_Page5_Q4 = () => {
   const fullSentence = formedWords.join(" ");
 
   const handleCheckAnswers = () => {
+     if (showAnswer) return;
     // 1️⃣ التحقق من وجود فراغات
     const hasEmpty = letters.some((group) =>
       group.some((letter) => letter === "")
@@ -137,7 +153,7 @@ const Unit3_Page5_Q4 = () => {
                   </span>
                 </div>
                 <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell number">
+                  <span key={i} className="unit3-q4-cell number1">
                     {c.number}
                   </span>
                 </div>
@@ -165,6 +181,10 @@ const Unit3_Page5_Q4 = () => {
                             letterIndex
                           )
                         }
+                         style={{
+                          color: showAnswer ? "red" : "black", // 🔥 لوّن الأحمر عند Show Answer
+                          fontWeight: showAnswer ? "bold" : "normal",
+                        }}
                       />
                       {wrongInputs.includes(`${groupIndex}-${letterIndex}`) && (
                         <span className="error-mark1">✕</span> // ⭐ تم التعديل هون
@@ -191,10 +211,17 @@ const Unit3_Page5_Q4 = () => {
           onClick={() => {
             setLetters(questionGroups.map((group) => group.map(() => "")));
             setWrongInputs([]);
+             setShowAnswer(false);
           }}
           className="try-again-button"
         >
           Start Again ↻
+        </button>
+         <button
+          onClick={handleShowAnswer}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
         </button>
         <button onClick={handleCheckAnswers} className="check-button2">
           Check Answer ✓

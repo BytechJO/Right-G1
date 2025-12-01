@@ -21,7 +21,6 @@ const Page7 = ({ openPopup }) => {
   const audioRef = useRef(null);
    const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [hoverEnabled, setHoverEnabled] = useState(true);
     const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();

@@ -95,7 +95,7 @@ const Unit2_Page10_Q4 = () => {
                 <div className="input-wrapper">
                   <input
                     type="text"
-                    className={`q-input ${showAnswer ? "show-answer-red" : ""}`}
+                    className={`q-input ${showAnswer ? "show-answer-red1" : ""}`}
                     onChange={(e) => handleChange(e.target.value, 0)}
                     value={answers[0]}
                     disabled={showAnswer} // يمنع الكتابة بعد Show Answer
@@ -114,7 +114,7 @@ const Unit2_Page10_Q4 = () => {
                 <div className="input-wrapper">
                   <input
                     type="text"
-                    className={`q-input ${showAnswer ? "show-answer-red" : ""}`}
+                    className={`q-input ${showAnswer ? "show-answer-red1" : ""}`}
                     onChange={(e) => handleChange(e.target.value, 1)}
                     value={answers[1]}
                     disabled={showAnswer} // يمنع الكتابة بعد Show Answer
@@ -133,7 +133,7 @@ const Unit2_Page10_Q4 = () => {
                 <div className="input-wrapper">
                   <input
                     type="text"
-                    className={`q-input ${showAnswer ? "show-answer-red" : ""}`}
+                    className={`q-input ${showAnswer ? "show-answer-red1" : ""}`}
                     onChange={(e) => handleChange(e.target.value, 2)}
                     value={answers[2]}
                     disabled={showAnswer} // يمنع الكتابة بعد Show Answer
@@ -152,7 +152,7 @@ const Unit2_Page10_Q4 = () => {
                 <div className="input-wrapper">
                   <input
                     type="text"
-                    className={`q-input ${showAnswer ? "show-answer-red" : ""}`}
+                    className={`q-input ${showAnswer ? "show-answer-red1" : ""}`}
                     onChange={(e) => handleChange(e.target.value, 3)}
                     value={answers[3]}
                     disabled={showAnswer} // يمنع الكتابة بعد Show Answer

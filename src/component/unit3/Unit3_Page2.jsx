@@ -17,8 +17,8 @@ import repeat1 from "../../assets/unit3/imgs3/listen and repeat 02.svg";
 import repeat2 from "../../assets/unit3/imgs3/listen and repeat 03.svg";
 import read from "../../assets/unit1/imgs/P1 listen and repeat 01.svg";
 import Rabbit from "../../assets/img_unit2/imgs/Rabbit.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import FourImagesWithAudio from "../FourImagesWithAudio";
 import "./Unit3_Page2.css";

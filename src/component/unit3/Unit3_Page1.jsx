@@ -5,9 +5,8 @@ import AudioWithCaption from "../AudioWithCaption";
 import Unit3_Page1_find from "./Unit3_Page1_find";
 import Unit3_Page1_Vocab from "./Unit3_Page1_Vocab";
 import Unit3_Page1_Read from "./Unit3_Pag1_Read";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 const Unit3_Page1 = ({ openPopup }) => {
   const captionsExample = [
     { start: 0, end: 4.02, text: "Page 22, unit 3. Let's go to school. " },

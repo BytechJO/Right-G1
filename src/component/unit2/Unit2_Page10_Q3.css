@@ -76,10 +76,7 @@
   border-color: #2c5287;
   transform: scale(1.1);
 }
-.option-letter.selected.correct-answer {
-  border-color: #0a8f00 !important;
-  font-weight: bold;
-}
+
 
 
 .option-letter {

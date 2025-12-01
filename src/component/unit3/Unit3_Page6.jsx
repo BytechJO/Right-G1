@@ -3,8 +3,9 @@ import "./Unit3_Page6.css";
 import Unit3_Page6_Q2 from "./Unit3_Page6_Q2";
 import Unit3_Page6_Q3 from "./Unit3_Page6_Q3";
 import CD25_Pg27_Song_AdultLady from "../../assets/unit3/sound3/U3P27LetsSing.mp3";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
+import pauseBtn from "../../assets/unit1/imgs/Page 01/Right Video Button.svg";
 import AudioWithCaption from "../AudioWithCaption";
 
 const Unit3_Page6 = ({ openPopup }) => {

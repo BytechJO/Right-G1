@@ -67,6 +67,8 @@ const handleStartDotClick = (e) => {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers2 = () => {
+      if (showAnswer) return;
+
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
