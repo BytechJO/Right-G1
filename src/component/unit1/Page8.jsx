@@ -11,61 +11,101 @@ const Page8 = ({ openPopup }) => {
   return (
     <div className="page_8-background">
       <img src={page_8} />
-      <svg
-          width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Page8_Q1 />
-            </>,
-            false
-          )
-        }
+      <div
         className="click-icon-page8-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-          width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Page8_Q2 />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <>
+                <Page8_Q1 />
+              </>,
+              false
+            )
+          }
+          // className="click-icon-page8-1 hover:scale-110 transition"
+        >
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+      <div
         className="click-icon-page8-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-        width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Page8_Q3 />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <>
+                <Page8_Q2 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+          // className="click-icon-page8-2 hover:scale-110 transition"
+        >
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+
+      <div
         className="click-icon-page8-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-          width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <>
+                <Page8_Q3 />
+              </>,
+              false
+            )
+          }
+          // className="click-icon-page8-3 hover:scale-110 transition"
+          style={{ overflow: "visible" }}
+        >
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+         <div
+        className="click-icon-page8-4 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
             <>
@@ -74,10 +114,19 @@ const Page8 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-page8-4 hover:scale-110 transition"
+        // className="click-icon-page8-4 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        <image
+          href={arrowBtn}
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          preserveAspectRatio="xMidYMid meet"
+        />
       </svg>
+      </div>
     </div>
   );
 };

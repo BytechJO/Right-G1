@@ -6,62 +6,76 @@ import Unit2_Page7_Q1 from "./Unit2_Page7_Q1";
 import Unit2_Page7_Q3 from "./Unit2_Page7_Q3";
 import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 
-
 const Unit2_Page7 = ({ openPopup }) => {
   const [activePopup, setActivePopup] = useState(null);
   return (
     <div className="unit2-page-background">
       <img src={page_7} />
 
-      <svg
-          width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page7_Q1 />
-            </>,
-            false
-          )
-        }
+      <div
         className="click-icon-unit2-page7-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-      <svg
-          width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page7_Q2 />
-            </>,
-            false
-          )
-        }
-        className="click-icon-unit2-page7-2 hover:scale-110 transition"
-      >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page7_Q1 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
 
-      <svg
-          width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page7_Q3 />
-            </>,
-            false
-          )
-        }
-        className="click-icon-unit2-page7-3 hover:scale-110 transition"
+      <div
+        className="click-icon-unit2-page7-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page7_Q2 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+      <div
+        className="click-icon-unit2-page7-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page7_Q3 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
     </div>
   );
 };

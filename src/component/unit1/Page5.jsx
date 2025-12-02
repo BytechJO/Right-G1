@@ -11,7 +11,7 @@ import repeat2 from "../../assets/unit1/imgs/P1 listen and repeat 03.svg";
 import longsound from "../../assets/unit1/sounds/pg5-instruction2-adult-lady_B2grO9RW.mp3";
 import longsound2 from "../../assets/unit1/sounds/cd3pg5-instruction1-adult-lady_6kd2jrIk.mp3";
 import read from "../../assets/unit1/imgs/P1 listen and repeat 01.svg";
-import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../AudioWithCaption";
 import FourImagesWithAudio from "../FourImagesWithAudio";
@@ -51,66 +51,87 @@ const Page5 = ({ openPopup }) => {
     <div className="page_5-background">
       <img src={page_5} />
 
-      <svg
-         width="32"
-          height="32"
+      <div id="CD-1-page5"
+        className="headset-icon-CD-page5 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        id="CD-1-page5"
-        onClick={() =>
-          openPopup(
-            <AudioWithCaption src={page5_CD2} captions={captionsExample} />,
-            true
-          )
-        }
-        className="headset-icon-CD-page5 hover:scale-110 transition"
-      >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+          
+          onClick={() =>
+            openPopup(
+              <AudioWithCaption src={page5_CD2} captions={captionsExample} />,
+              true
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
 
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        id="CD-2-page5"
-        onClick={() =>
-          openPopup(
-            <FourImagesWithAudio
-              images={[read, repeat1, repeat2]}
-              audioSrc={longsound2}
-              checkpoints={[0, 4, 5.9]}
-              popupOpen={true}
-              titleQ={`Listen, read, and repeat.`}
-              audioArr={imageSounds2}
-            />,
-            false
-          )
-        }
+      <div  id="CD-2-page5"
         className="headset-icon-CD-page5 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="60" height="60" />
-      </svg>
-
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <FourImagesWithAudio
-              images={[Rabbit, img1, img2, img3, img4]}
-              audioSrc={longsound}
-              checkpoints={[0, 3.4, 4, 4.9, 6]}
-              popupOpen={true}
-              titleQ={"Listen and read along."}
-              audioArr={imageSounds}
-            />,
-            false
-          )
-        }
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+         
+          onClick={() =>
+            openPopup(
+              <FourImagesWithAudio
+                images={[read, repeat1, repeat2]}
+                audioSrc={longsound2}
+                checkpoints={[0, 4, 5.9]}
+                popupOpen={true}
+                titleQ={`Listen, read, and repeat.`}
+                audioArr={imageSounds2}
+              />,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+      <div
         className="click-icon-page5 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="60" height="60" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <FourImagesWithAudio
+                images={[Rabbit, img1, img2, img3, img4]}
+                audioSrc={longsound}
+                checkpoints={[0, 3.4, 4, 4.9, 6]}
+                popupOpen={true}
+                titleQ={"Listen and read along."}
+                audioArr={imageSounds}
+              />,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
     </div>
   );
 };

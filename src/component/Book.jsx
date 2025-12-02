@@ -141,10 +141,7 @@ export default function Book() {
   // ==== PANNING ====
   const [isPanning, setIsPanning] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const menuItems = [
-    { id: 1, label: "Home", icon: "🏠" },
-    { id: 2, label: "Units", icon: "📘" },
-  ];
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1100);
@@ -171,6 +168,17 @@ export default function Book() {
       setPageIndex(unitStartIndex);
     }
   };
+
+  const units = [
+    { id: 1, label: "Unit 1", start: 3 },
+    { id: 2, label: "Unit 2", start: 10 },
+    { id: 3, label: "Unit 3", start: 21 },
+    { id: 4, label: "Unit 4", start: 30 },
+    { id: 5, label: "Unit 5", start: 40 },
+    { id: 6, label: "Unit 6", start: 50 },
+    // ... أكمل حسب فهرس صفحاتك
+  ];
+
   const [globalPopupOpen, setGlobalPopupOpen] = useState(false);
   const [globalPopupContent, setGlobalPopupContent] = useState(null);
   const [globalPopupAudio, setGlobalPopupAudio] = useState(false);
@@ -334,7 +342,7 @@ export default function Book() {
             <img
               src={logo}
               alt="J1 Logo"
-              style={{ height: "40px", width: "100px"}}
+              style={{ height: "40px", width: "100px" }}
             />
 
             {/* TABS */}
@@ -646,41 +654,38 @@ export default function Book() {
 
           {/* Bottom-Left Sidebar */}
           <div
-            className={`
-    fixed left-0 bottom-0 
-    w-64 h-[100%] 
-    bg-white shadow-2xl z-[99999] 
-    rounded-tr-2xl
-    transform transition-transform duration-300
-    ${isSidebarOpen ? "translate-y-0" : "translate-y-full"}
-  `}
+            className={`fixed left-0 bottom-0 w-64 h-[100%] bg-white shadow-2xl z-[99999] rounded-tr-2xl transform transition-transform duration-300 ${
+              isSidebarOpen ? "translate-y-0" : "translate-y-full"
+            } `}
           >
             {/* Header */}
             <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="text-xl text-[#2c5287] font-semibold">Menu</h2>
+              <h2 className="text-xl text-[#6B40C8]  font-semibold">Menu</h2>
               <button
                 onClick={() => setIsSidebarOpen(false)}
-                className="text-yellow-500 text-xl"
+                className="text-[#6B40C8] text-xl"
               >
                 ✕
               </button>
             </div>
 
             {/* MENU LIST */}
+
+            <h3 className="text-lg font-semibold text-[#6B40C8]  mt-6 mb-2 px-3">
+              Units 📘
+            </h3>
+
             <ul className="p-3 space-y-2">
-              {menuItems.map((item) => (
+              {units.map((unit) => (
                 <li
-                  key={item.id}
-                  onClick={() => handleMenuClick(item.id)}
-                  className="
-          flex items-center gap-3 text-[#2c5287]
-          p-3 rounded-lg cursor-pointer
-          bg-gray-100 hover:bg-[#2c5287] hover:text-white 
-          transition
-        "
+                  key={unit.id}
+                  onClick={() => {
+                    goToUnit(unit.start);
+                    setIsSidebarOpen(false); // يغلق الـ sidebar بعد الضغط
+                  }}
+                  className="flex items-center gap-3 text-[#6B40C8] p-3 rounded-lg cursor-pointer bg-purple-100 hover:bg-[#6B40C8] hover:text-white transition"
                 >
-                  <span className="text-xl">{item.icon}</span>
-                  <span className="text-base font-medium">{item.label}</span>
+                  <span className="text-base font-medium">{unit.label}</span>
                 </li>
               ))}
             </ul>

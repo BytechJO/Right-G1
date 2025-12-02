@@ -13,69 +13,85 @@ const Unit2_Page6 = ({ openPopup }) => {
     { start: 0, end: 1, text: "Is it my birthday?" },
     { start: 1, end: 2.2, text: "Yes, it is!" },
     { start: 2.22, end: 4.05, text: "It’s my birthday!" },
-    { start: 4.08, end:7.04, text: "Yes, it is! Happy I am." },
-    { start: 7.08, end:9.25, text: "Because it’s my birthday." },
+    { start: 4.08, end: 7.04, text: "Yes, it is! Happy I am." },
+    { start: 7.08, end: 9.25, text: "Because it’s my birthday." },
   ];
 
   return (
     <div className="unit2-page-background">
       <img src={page_6} />
-      <svg
-          width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page6_Q1 />
-            </>,
-            false
-          )
-        }
+
+      <div
         className="click-icon-unit2-page6-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-         width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption src={song} captions={captionsExample} />
-            </div>,
-            true
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page6_Q1 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+
+      <div
         className="headset-icon-CD-unit2-page6-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-          width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page6_Q2 />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <AudioWithCaption src={song} captions={captionsExample} />
+              </div>,
+              true
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+
+      <div
         className="click-icon-unit2-page6-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page6_Q2 />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
     </div>
   );
 };

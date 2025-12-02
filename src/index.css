@@ -298,7 +298,7 @@ img {
 
 #CD-2-page5 {
   bottom: 30.5%;
-  right: 10%;
+  right: 9.2%;
 }
 
 #num-2-page5 {
@@ -379,7 +379,7 @@ img {
   position: absolute;
   padding: 5px;
   top: 3.5%;
-  left: 40%;
+  left: 40.2%;
   cursor: pointer;
 }
 /*=========page7===========*/
@@ -390,7 +390,7 @@ img {
   border: rgb(255, 255, 255) solid 2px; */
   padding: 5px;
   top: 3.5%;
-  right: 58%;
+  right: 58.2%;
   cursor: pointer;
 }
 
@@ -419,8 +419,8 @@ img {
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-  top: 8%;
-  right: 4%;
+  top: 7.3%;
+    right: 3%;
   cursor: pointer;
 }
 .click-icon-page8-2 {
@@ -638,6 +638,53 @@ img {
   transform: scaleX(-1);
   
 } */
+ .action-buttons-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  width: calc(100% - 40px);
+  justify-content: center;
+}
+
+.check-button2,
+.try-again-button {
+  flex-grow: 1;
+  max-width: 250px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.check-button2 {
+  background-color: #28a745;
+}
+
+.check-button2:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
+
+.try-again-button {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.try-again-button:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 193, 7, 0.3);
+}
+
 .check-button2 {
   background-color: #28a745;
 }

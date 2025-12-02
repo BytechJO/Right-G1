@@ -16,9 +16,13 @@ const Unit2_Page9 = ({ openPopup }) => {
   return (
     <div className="unit2-page-background">
       <img src={page_9} />
-      <svg
-          width="32"
-          height="32"
+       <div
+          className="click-icon-unit2-page9-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
@@ -28,14 +32,18 @@ const Unit2_Page9 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit2-page9-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
         <image href={arrowBtn} x="0" y="0" width="90" height="90" />
       </svg>
-
-      <svg
-          width="32"
-          height="32"
+ </div>
+       <div
+          className="click-icon-unit2-page9-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
@@ -45,14 +53,18 @@ const Unit2_Page9 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit2-page9-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
         <image href={arrowBtn} x="0" y="0" width="90" height="90" />
       </svg>
-
-      <svg
-         width="32"
-          height="32"
+</div>
+        <div
+          className="click-icon-unit2-page9-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
@@ -62,10 +74,11 @@ const Unit2_Page9 = ({ openPopup }) => {
             false
           )
         }
-        className="click-icon-unit2-page9-3 hover:scale-110 transition"
+       style={{ overflow: "visible" }}
       >
         <image href={arrowBtn} x="0" y="0" width="90" height="90" />
       </svg>
+      </div>
     </div>
   );
 };

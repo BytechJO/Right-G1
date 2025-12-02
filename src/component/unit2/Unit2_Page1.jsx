@@ -5,20 +5,20 @@ import Unit2_Page1_find from "./Unit2_Page1_find";
 import Unit2_Page1_Vocab from "./Unit2_Page1_Vocab";
 import Unit2_Page1_Read from "./Unit2_Pag1_Read";
 import AudioWithCaption from "../AudioWithCaption";
-import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
 import allUnit2 from "../../assets/unit1/sounds/P10-11.mp3";
 const Unit2_Page1 = ({ openPopup }) => {
   const captionsExample = [
-    { start: 0, end: 4.00, text: " Page 10, Unit 2, Stella's Birthday. " },
+    { start: 0, end: 4.0, text: " Page 10, Unit 2, Stella's Birthday. " },
     { start: 4.05, end: 7.09, text: "Page 10, Unit 2, Vocabulary." },
     { start: 7.12, end: 9.19, text: " 1. Party Hat. " },
     { start: 9.22, end: 11.16, text: "2. Jello." },
-    { start: 11.20, end: 14.0, text: "3. Cake. " },
+    { start: 11.2, end: 14.0, text: "3. Cake. " },
     { start: 14.04, end: 16.23, text: "4. Happy Birthday." },
     { start: 16.26, end: 19.1, text: " 5. Balloons." },
     { start: 19.14, end: 21.17, text: " 6. Present. " },
-    { start: 21.20, end: 24.04, text: "7.card" },
+    { start: 21.2, end: 24.04, text: "7.card" },
     { start: 24.08, end: 26.29, text: "Page 10. Listen and read along. " },
     { start: 26.33, end: 30.12, text: "B, bird, ball, boy " },
     { start: 30.16, end: 32.28, text: "Page 11. Birthday is fun" },
@@ -27,13 +27,13 @@ const Unit2_Page1 = ({ openPopup }) => {
       end: 40.09,
       text: "Hi, everyone. Today is my birthday. I'm seven years old. My friends are here. It's fun. ",
     },
-    { start:  40.12, end: 43.18, text: "Page 11. Listen, read & repeat. " },
+    { start: 40.12, end: 43.18, text: "Page 11. Listen, read & repeat. " },
     {
       start: 43.22,
       end: 46.26,
       text: "What's your name? My name is Lolo. ",
     },
-    { start: 46.30, end: 50.14, text: "Page 11. Listen and read along. " },
+    { start: 46.3, end: 50.14, text: "Page 11. Listen and read along. " },
     { start: 50.18, end: 53.25, text: "P, pencil, pink, pizza. " },
   ];
 
@@ -41,76 +41,97 @@ const Unit2_Page1 = ({ openPopup }) => {
     <div className="unit2-page-background">
       <img src={page_1} />
 
-      <svg
-         width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption src={allUnit2} captions={captionsExample} />
-            </div>,
-            true
-          )
-        }
+      <div
         className="headset-icon-CD-unit2-page1-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-      <svg
-         width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page1_find />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <AudioWithCaption src={allUnit2} captions={captionsExample} />
+              </div>,
+              true
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+
+      <div
         className="click-icon-unit2-page1-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-      <svg
-          width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page1_Vocab />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page1_find />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+      <div
         className="headset-icon-CD-unit2-page1-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-      <svg
-        width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit2_Page1_Read />
-            </>,
-            false
-          )
-        }
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page1_Vocab />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+      <div
         className="click-icon-unit2-page1-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <>
+                <Unit2_Page1_Read />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
     </div>
   );
 };

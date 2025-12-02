@@ -12,16 +12,16 @@ import Pg7_4_2_ModifiedJack from "../../assets/unit1/sounds/Pg7_4.2_Modified Jac
 import Pg7_5_1_Dad from "../../assets/unit1/sounds/Pg7_5.1_Dad.mp3";
 import Pg7_5_2_Mom from "../../assets/unit1/sounds/Pg7_5.2_Mom.mp3";
 import Pg7_6_1_Mom from "../../assets/unit1/sounds/Pg7_6.1_Mom and Dad.mp3";
-import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../assets/unit1/imgs/Page 01/Arrow.svg";
-import video2 from "../../assets/unit1/sounds/p7 1920.mp4"
+import video2 from "../../assets/unit1/sounds/p7 1920.mp4";
 import AudioWithCaption from "../AudioWithCaption";
 import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
 const Page7 = ({ openPopup }) => {
   const audioRef = useRef(null);
-   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -35,10 +35,10 @@ const Page7 = ({ openPopup }) => {
     { start: 0, end: 4.05, text: "Page 7, exercise 2. Right grammar. " },
     { start: 4.09, end: 4.45, text: "Good morning." },
     { start: 4.47, end: 6.16, text: "Good afternoon." },
-    { start: 6.20, end:7.27, text: "Good evening. " },
-    { start: 7.30, end: 9.01, text: "Goodbye. " },
+    { start: 6.2, end: 7.27, text: "Good evening. " },
+    { start: 7.3, end: 9.01, text: "Goodbye. " },
     { start: 9.05, end: 10.16, text: "Good morning, Mom. " },
-     { start: 10.20, end: 12.05, text: "Good morning, Stella. " },
+    { start: 10.2, end: 12.05, text: "Good morning, Stella. " },
     { start: 12.09, end: 13.12, text: "Good afternoon. " },
     { start: 13.16, end: 15.01, text: "Good afternoon." },
     { start: 15.05, end: 16.13, text: "Good evening" },
@@ -102,76 +102,93 @@ const Page7 = ({ openPopup }) => {
             width: `${area.x2 - area.x1}%`,
             height: `${area.y2 - area.y1}%`,
           }}
-         onClick={() => {
+          onClick={() => {
             setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
             playSound(area.sound);
           }}
-       onMouseEnter={() => {
-  if (!isPlaying) setHoveredAreaIndex(index);
-}}
-onMouseLeave={() => {
-  if (!isPlaying) setHoveredAreaIndex(null);
-}}
+          onMouseEnter={() => {
+            if (!isPlaying) setHoveredAreaIndex(index);
+          }}
+          onMouseLeave={() => {
+            if (!isPlaying) setHoveredAreaIndex(null);
+          }}
         ></div>
       ))}
-
-      <svg
-          width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption
-                src={CD5_Pg7_Grammar2_AdultLady}
-                captions={captionsExample}
-              />
-            </div>,
-            true
-          )
-        }
+      <div
         className="headset-icon-CD-page7 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-       <svg
-                width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-              onClick={() =>
-                openPopup(
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignContent: "center",
-                      height: "100%",
-                      width: "100%",
-                    }}
-                  >
-                    <video
-                      style={{
-                        height: "auto",
-                        width: "85%",
-                        borderRadius:"5%"
-                      }}
-                      controls
-                    >
-                      <source src={video2} type="video/mp4" />
-                    </video>
-                  </div>
-                )
-              }
-              className="pauseBtn-icon-CD-page7 hover:scale-110 transition"
-            >
-              <image href={pauseBtn} x="0" y="0" width="90" height="90" />
-            </svg>
+          onClick={() =>
+            openPopup(
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <AudioWithCaption
+                  src={CD5_Pg7_Grammar2_AdultLady}
+                  captions={captionsExample}
+                />
+              </div>,
+              true
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+
+      <div
+        className="pauseBtn-icon-CD-page7 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                <video
+                  style={{
+                    height: "auto",
+                    width: "85%",
+                    borderRadius: "5%",
+                  }}
+                  controls
+                >
+                  <source src={video2} type="video/mp4" />
+                </video>
+              </div>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={pauseBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

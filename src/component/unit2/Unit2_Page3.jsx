@@ -119,64 +119,73 @@ const Unit2_Page3 = ({ openPopup }) => {
         ></div>
       ))}
 
-      <svg
-         width="32"
-          height="32"
-          viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption
-                src={CD11_Pg12_Grammar1_AdultLady}
-                captions={captionsExample}
-              />
-            </div>,
-            true
-          )
-        }
+      <div
         className="headset-icon-CD-unit2-page3-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
-
-      <svg
-         width="32"
-          height="32"
+        <svg
+          width="22"
+          height="22"
           viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-                height: "100%",
-                width: "100%",
-              }}
-            >
-              <video
+          onClick={() =>
+            openPopup(
+              <div
                 style={{
-                  height: "auto",
-                  width: "85%",
-                  borderRadius: "5%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
                 }}
-                controls
               >
-                <source src={video} type="video/mp4" />
-              </video>
-            </div>
-          )
-        }
+                <AudioWithCaption
+                  src={CD11_Pg12_Grammar1_AdultLady}
+                  captions={captionsExample}
+                />
+              </div>,
+              true
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
+      <div
         className="pauseBtn-icon-CD-unit2-page3-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={pauseBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                <video
+                  style={{
+                    height: "auto",
+                    width: "85%",
+                    borderRadius: "5%",
+                  }}
+                  controls
+                >
+                  <source src={video} type="video/mp4" />
+                </video>
+              </div>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image href={pauseBtn} x="0" y="0" width="90" height="90" />
+        </svg>
+      </div>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
