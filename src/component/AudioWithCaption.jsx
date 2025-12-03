@@ -101,7 +101,7 @@ setIsPlaying(false)
               updateCaption(Number(e.target.value));
             }}
             style={{
-              background: `linear-gradient(to right, #8247ffff ${
+              background: `linear-gradient(to right, #430f68 ${
                 (current / duration) * 100
               }%, #d9d9d9ff ${(current / duration) * 100}%)`,
             }}

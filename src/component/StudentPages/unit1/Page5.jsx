@@ -39,6 +39,17 @@ const Page5 = ({ openPopup }) => {
     { start: 8.25, end: 11.25, text: "She is one year old. She likes people." },
   ];
 
+  const captions = [
+    { start: 0, end: 3.26, text: " Page 5. Listen, read, and repeat. " },
+    { start: 3.28, end: 5.15, text: "Hello. How are you? " },
+    { start: 5.17, end: 7.13, text: "Fine, thank you. " },
+  ];
+  
+  const captions2 = [
+   
+   { start:0, end: 3.19, text: " Page 5. Listen and read along. " },
+    { start: 3.21, end: 7.22, text: "T. Table. Taxi. Tiger." },
+  ];
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -52,11 +63,24 @@ const Page5 = ({ openPopup }) => {
     new Audio(Pg5_1_1_Bebo),
     new Audio(Pg5_1_2_Lolo),
   ];
-  const clickableAreas = [
-    { x1: 7.01, y1: 45.3, x2: 11.4, y2: 48.8, sound1: sound2 },
-    { x1: 33.8, y1: 43.1, x2: 37.7, y2: 27.2, sound1: sound3 },
-  ];
 
+  const areas = [
+    // الصوت الأول – المنطقة الأساسية
+    { x1: 7.01, y1: 45.3, x2: 11.4, y2: 48.8, sound: 1, isPrimary: true },
+
+    // الصوت الأول – منطقة إضافية
+    { x1: 4.6, y1: 34.1, x2: 15.2, y2: 67.8, sound: 1, isPrimary: false },
+
+    // الصوت الثاني – الأساسية
+    { x1: 33.8, y1: 43.1, x2: 37.7, y2: 46.1, sound: 2, isPrimary: true },
+
+    // الصوت الثاني – الإضافية
+    { x1: 26.9, y1: 32.8, x2: 35.8, y2: 68.9, sound: 2, isPrimary: false },
+  ];
+  const sounds = {
+    1: sound2,
+    2: sound3,
+  };
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -85,14 +109,12 @@ const Page5 = ({ openPopup }) => {
         onClick={handleImageClick}
         style={{ display: "block" }}
       />
-      {/* رسم المستطيلات التفاعلية */}
-      {clickableAreas.map((area, index) => (
+
+      {areas.map((area, index) => (
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
-              ? "highlight"
-              : ""
+            area.isPrimary && activeAreaIndex === area.sound ? "highlight" : ""
           }`}
           style={{
             position: "absolute",
@@ -102,17 +124,12 @@ const Page5 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound1);
-          }}
-          onMouseEnter={() => {
-            if (!isPlaying) setHoveredAreaIndex(index);
-          }}
-          onMouseLeave={() => {
-            if (!isPlaying) setHoveredAreaIndex(null);
+            setActiveAreaIndex(area.sound);
+            playSound(sounds[area.sound]);
           }}
         ></div>
       ))}
+
       <div
         id="CD-1-page5"
         className="headset-icon-CD-page5 hover:scale-110 transition"
@@ -159,6 +176,7 @@ const Page5 = ({ openPopup }) => {
                 popupOpen={true}
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}
+                captions={captions}
               />,
               false
             )
@@ -185,6 +203,7 @@ const Page5 = ({ openPopup }) => {
                 popupOpen={true}
                 titleQ={"Listen and read along."}
                 audioArr={imageSounds}
+                captions={captions2}
               />,
               false
             )

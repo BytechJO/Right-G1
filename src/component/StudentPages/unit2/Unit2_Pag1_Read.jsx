@@ -18,12 +18,12 @@ const Unit2_Page1_Read = () => {
     new Audio(ball),
     new Audio(boy),
   ];
-  const captionsExample = [
-    { start: 0, end: 1, text: "Hello!" },
-    { start: 1, end: 2.2, text: "My name is Tom." },
-    { start: 2.2, end: 4, text: "I like apples." },
-  ];
 
+const captions = [
+   { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
+    { start: 3.07, end: 6.14, text: "B, bird, ball, boy " },
+    
+  ];
   return (
     <>
       <FourImagesWithAudio
@@ -33,6 +33,7 @@ const Unit2_Page1_Read = () => {
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
+        captions={captions}
       />
     </>
   );

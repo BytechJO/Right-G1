@@ -20,6 +20,7 @@ const Unit2_Page1_Vocab = () => {
 
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex2, setActiveIndex2] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
   const stopAtSecond = 3.0;
   const [clickedIndex, setClickedIndex] = useState(null);
@@ -35,18 +36,52 @@ const Unit2_Page1_Vocab = () => {
 
   const [showCaption, setShowCaption] = useState(false);
 
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+     { start: 0, end: 3.10, text: "Page 10, Unit 2, Vocabulary." },
+    { start: 3.12, end: 5.15, text: " 1. Party Hat. " },
+    { start: 5.17, end: 7.16, text: "2. Jello." },
+    { start: 7.18, end: 9.27, text: "3. Cake. " },
+    { start: 9.29, end: 12.20, text: "4. Happy Birthday." },
+    { start: 12.22, end: 15.07, text: " 5. Balloons." },
+    { start: 15.09, end: 17.13, text: " 6. Present. " },
+    { start: 17.15, end: 19.26, text: "7.card" },
+  ];
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
     { start: 3.2, end: 5.0 }, // party hat
     { start: 5.1, end: 7.2 }, // jellow
-    { start: 7.3, end: 9.9}, // cake
+    { start: 7.3, end: 9.9 }, // cake
     { start: 9.92, end: 12.7 }, // Hello
     { start: 12.8, end: 15.2 }, // Good morning
     { start: 15.3, end: 17.0 },
     { start: 17.1, end: 19.3 },
   ];
 
-  // 🟦 تشغيل الأوديو الرئيسي + إيقافه عند ثانية معينة
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
+  };
+
+  // ================================
+  // ✔ Update Word highlight
+  // ================================
+  const updateWord = (time) => {
+    const wordIndex = wordTimings.findIndex(
+      (w) => time >= w.start && time <= w.end
+    );
+    setActiveIndex2(wordIndex);
+  };
+  // ================================
+  // ✔ INITIAL PLAY & STOP AT SECOND
+  // ================================
   useEffect(() => {
     const audio = mainAudioRef.current;
     if (!audio) return;
@@ -68,6 +103,7 @@ const Unit2_Page1_Vocab = () => {
     const handleEnded = () => {
       audio.currentTime = 0;
       setActiveIndex(null);
+      setActiveIndex2(null);
       setPaused(true);
       setShowContinue(true);
       setIsPlaying(false);
@@ -104,41 +140,33 @@ const Unit2_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
+  // ================================
+  // ✔ Play single word only
+  // ================================
   const playSingleWord = (index) => {
     const audio = mainAudioRef.current;
     if (!audio) return;
 
     const { start, end } = wordTimings[index];
 
-    // ✨ انتقال لبداية الكلمة
     audio.currentTime = start;
     audio.play();
-
     setIsPlaying(true);
-    setPaused(false);
 
-    // ✨ وقف الصوت عند نهاية الكلمة
     const stopInterval = setInterval(() => {
       if (audio.currentTime >= end) {
         audio.pause();
         clearInterval(stopInterval);
       }
-    }, 50);
+    }, 40);
   };
   const nums = [num1, num2, num3, num4, num5, num6, num7];
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          margin: "0px 20px",
-          position: "relative",
-          alignItems: "center",
-        }}
-      >
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <div style={{ width: "40%" }}>
         <div className="audio-popup-vocab">
           <div className="audio-inner player-ui">
             <audio
@@ -147,17 +175,13 @@ const Unit2_Page1_Vocab = () => {
               onTimeUpdate={(e) => {
                 const time = e.target.currentTime;
                 setCurrent(time);
-
-                // تشغيل لون الكلمات
-                const idx = wordTimings.findIndex(
-                  (t) => time >= t.start && time <= t.end
-                );
-                setActiveIndex(idx !== -1 ? idx : null);
+                updateCaption(time);
+                updateWord(time); // 🔥 أهم خطوة
               }}
               onLoadedMetadata={(e) => setDuration(e.target.duration)}
             ></audio>
-            {/* Play / Pause */}
-            {/* الوقت - السلايدر - الوقت */}
+
+            {/* Time + Slider */}
             <div className="top-row">
               <span className="audio-time">
                 {new Date(current * 1000).toISOString().substring(14, 19)}
@@ -165,16 +189,16 @@ const Unit2_Page1_Vocab = () => {
 
               <input
                 type="range"
-                className="audio-slider"
                 min="0"
                 max={duration}
                 value={current}
+                className="audio-slider"
                 onChange={(e) => {
                   mainAudioRef.current.currentTime = e.target.value;
                   updateCaption(Number(e.target.value));
                 }}
                 style={{
-                  background: `linear-gradient(to right, #8247ffff ${
+                  background: `linear-gradient(to right, #430f68 ${
                     (current / duration) * 100
                   }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                 }}
@@ -184,20 +208,21 @@ const Unit2_Page1_Vocab = () => {
                 {new Date(duration * 1000).toISOString().substring(14, 19)}
               </span>
             </div>
-            {/* الأزرار 3 أزرار بنفس السطر */}
+
+            {/* Buttons */}
             <div className="bottom-row">
-              {/* فقاعة */}
-              <div className={`round-btn ${showCaption ? "active" : ""}`}>
+              <div
+                className={`round-btn ${showCaption ? "active" : ""}`}
+                onClick={() => setShowCaption(!showCaption)}
+              >
                 <TbMessageCircle size={36} />
               </div>
 
-              {/* Play */}
               <button className="play-btn2" onClick={togglePlay}>
                 {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
               </button>
 
-              {/* Settings */}
-              <div className="settings-wrapper" ref={settingsRef}>
+              <div>
                 <button
                   className={`round-btn ${showSettings ? "active" : ""}`}
                   onClick={() => setShowSettings(!showSettings)}
@@ -216,28 +241,39 @@ const Unit2_Page1_Vocab = () => {
                       value={volume}
                       onChange={(e) => {
                         setVolume(e.target.value);
-                        audioRef.current.volume = e.target.value;
+                        mainAudioRef.current.volume = e.target.value;
                       }}
                     />
                   </div>
                 )}
               </div>
-            </div>{" "}
+            </div>
           </div>
         </div>
       </div>
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ position: "relative", display: "inline-block" }}>
+     
+        <div
+          style={{
+            position: "relative",
+            marginTop: "5px",
+            width: "fit-content",
+          }}
+        >
+          <div className={`caption-inPopup ${showCaption ? "show" : ""}`}>
+            {captions.map((cap, i) => (
+              <p
+                key={i}
+                id={`caption-${i}`}
+                className={`caption-inPopup-line2 ${
+                  activeIndex === i ? "active" : ""
+                }`}
+              >
+                {cap.text}
+              </p>
+            ))}
+          </div>
           {/* كلمة + صورة صغيرة */}
-          <div style={{ bottom: "2%", right: "0%" }}>
+     
             <img
               src={page2_2}
               style={{
@@ -267,7 +303,9 @@ const Unit2_Page1_Vocab = () => {
                 <h6
                   key={i}
                   className={
-                    activeIndex === i || clickedIndex === i ? "active" : ""
+                    (activeIndex2 === i && current >= 3.2) || clickedIndex === i
+                      ? "active"
+                      : ""
                   }
                   onClick={() => {
                     setClickedIndex(i);
@@ -281,7 +319,7 @@ const Unit2_Page1_Vocab = () => {
                 </h6>
               ))}
             </div>
-          </div>
+         
 
           {/* الأرقام */}
           {nums.map((num, i) => (
@@ -290,7 +328,9 @@ const Unit2_Page1_Vocab = () => {
               src={num}
               id={`num-${i + 1}`}
               className={`num-img ${
-                activeIndex === i || clickedIndex === i ? "active" : ""
+                (activeIndex2 === i && current >= 3.2) || clickedIndex === i
+                  ? "active"
+                  : ""
               }`}
               style={{
                 height: "20px",
@@ -304,11 +344,11 @@ const Unit2_Page1_Vocab = () => {
           <img
             src={backgroundImage}
             alt="interactive"
-            style={{ height: "85vh" }}
+            style={{ height: "75vh" }}
           />
         </div>
       </div>
-    </>
+   
   );
 };
 

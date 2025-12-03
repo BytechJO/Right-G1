@@ -22,10 +22,10 @@ import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
 import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
 
 const Page4 = ({ openPopup }) => {
-    const audioRef = useRef(null);
-    const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  const audioRef = useRef(null);
+  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -57,12 +57,35 @@ const Page4 = ({ openPopup }) => {
     { start: 46.33, end: 51.03, text: "T. Table. Taxi. Tiger." },
   ];
 
-  const clickableAreas = [
-    { x1: 45, y1: 44.2, x2: 49, y2: 47.8, sound1: sound1 },
-    { x1: 86.4, y1: 24, x2: 90.4, y2: 27.2, sound1: sound4 },
-    { x1: 75, y1: 27, x2: 79.5, y2: 30.5, sound1: sound5 },
-  ];
+  const areas = [
+    // الصوت الأول – المنطقة الأساسية
+    { x1: 45, y1: 44.2, x2: 49, y2: 47.8, sound: 1, isPrimary: true },
 
+    // الصوت الأول – منطقة إضافية
+    { x1: 49.2, y1: 37.3, x2: 74.4, y2: 79.8, sound: 1, isPrimary: false },
+
+    // الصوت الثاني – الأساسية
+    { x1: 86.4, y1: 24, x2: 90.4, y2: 27.2, sound: 2, isPrimary: true },
+
+    // الصوت الثاني – الإضافية
+    { x1: 83.7, y1: 28.4, x2: 97.4, y2: 48.9, sound: 2, isPrimary: false },
+
+    // الصوت الثالث – الأساسية
+    { x1: 75, y1: 27, x2: 79.5, y2: 30.5, sound: 3, isPrimary: true },
+
+    // الصوت الثالث – الإضافية
+    { x1: 77.9, y1: 21.8, x2: 81.7, y2: 43.8, sound: 3, isPrimary: false },
+  ];
+  const sounds = {
+    1: sound1,
+    2: sound4,
+    3: sound5,
+  };
+ const captions = [
+   { start: 0, end: 3.0, text: "Page 4. Listen and read along." },
+    { start: 3.02, end: 6.10, text: " D. Dear. Dish. Duck. " },
+    
+  ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -87,18 +110,18 @@ const Page4 = ({ openPopup }) => {
     <>
       <div className="page_4-background" style={{ position: "relative" }}>
         <audio ref={audioRef} style={{ display: "none" }} />
+
         <img
           src={page4}
           onClick={handleImageClick}
           style={{ display: "block" }}
         />
 
-        {/* رسم المستطيلات التفاعلية */}
-        {clickableAreas.map((area, index) => (
+        {areas.map((area, index) => (
           <div
             key={index}
             className={`clickable-area ${
-              hoveredAreaIndex === index || activeAreaIndex === index
+              area.isPrimary && activeAreaIndex === area.sound
                 ? "highlight"
                 : ""
             }`}
@@ -110,17 +133,12 @@ const Page4 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-              playSound(area.sound1);
-            }}
-            onMouseEnter={() => {
-              if (!isPlaying) setHoveredAreaIndex(index);
-            }}
-            onMouseLeave={() => {
-              if (!isPlaying) setHoveredAreaIndex(null);
+              setActiveAreaIndex(area.sound);
+              playSound(sounds[area.sound]);
             }}
           ></div>
         ))}
+
         <div
           className="headset-icon-CD-page4-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
@@ -143,7 +161,8 @@ const Page4 = ({ openPopup }) => {
                     captions={captionsExample}
                   />
                 </div>,
-                true
+                true,
+                false
               )
             }
             style={{ overflow: "visible" }}
@@ -233,6 +252,7 @@ const Page4 = ({ openPopup }) => {
                   popupOpen={true}
                   titleQ={"Listen and read along."}
                   audioArr={imageSounds}
+                  captions={captions}
                 />,
                 false
               )

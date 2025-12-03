@@ -74,9 +74,7 @@ const Page2 = ({ goToUnit }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          onClick={() => {
-            console.log(area.startIndex);
-            
+          onClick={() => {  
             goToUnit(area.startIndex);
           }}
           className="absolute cursor-pointer hover:scale-105 transition-all duration-150"

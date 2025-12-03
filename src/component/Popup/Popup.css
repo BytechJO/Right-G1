@@ -17,11 +17,20 @@
 /* الشكل العام */
 .popup-content {
   position: relative;
+    display: inline-block;   /* مهم جداً */
   background: #fff;
   border-radius: 12px;
   padding: 20px;
   animation: fadeIn 0.2s ease;
+  overflow: visible;
 }
+
+.popup-content video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 
 /* إذا داخلها Audio → حجم طبيعي */
 .audio-size {
@@ -41,14 +50,13 @@
   overflow-x: hidden;
 }
 
-
-.video-size{
-    position: relative;
+.video-size {
+  position: relative;
   background: transparent;
   border-radius: 12px;
   padding: 20px;
   animation: fadeIn 0.2s ease;
-  width: 100vw;
+  width: auto;
   height: calc(100vh - 45px); /* يغطي باقي الشاشة */
   border-radius: 0;
 }
@@ -77,10 +85,21 @@
 
 .popup-close-btn.audio {
   position: absolute;
-     top: 12%;
-    right: 4%;
+  top: 12%;
+  right: 4%;
   background: none;
   border: none;
   font-size: 16px;
   cursor: pointer;
+}
+
+.popup-close-btn.video {
+   position: absolute;
+      top: 12%;
+    right: 2.5%;
+  font-size: 24px;
+
+  border-radius: 50%;
+  padding: 6px;
+  z-index: 99999;
 }

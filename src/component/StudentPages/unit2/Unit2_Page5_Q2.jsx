@@ -29,13 +29,34 @@ const Unit2_Page5_Q2 = () => {
   const [duration, setDuration] = useState(0);
   const [showCaption, setShowCaption] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [activeIndex, setActiveIndex] = useState(null);
   const items = [
     { img: bat, correct: "b" },
     { img: box, correct: "p" },
     { img: bucket, correct: "b" },
     { img: boat, correct: "b" },
   ];
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
+    { start: 1.21, end: 3.0, text: "Vocabulary." },
+    { start: 3.02, end: 5.1, text: "1. Goodbye." },
+    { start: 5.13, end: 7.0, text: "2. How are you?" },
+    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
+    { start: 10.52, end: 12.1, text: "4. Hello." },
+    { start: 12.12, end: 15.0, text: "5. Good morning." },
+  ];
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
+  };
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -74,9 +95,15 @@ const Unit2_Page5_Q2 = () => {
     const timer = setInterval(() => {
       setForceRender((prev) => prev + 1);
     }, 1000); // كل ثانية
+    if (activeIndex === -1 || activeIndex === null) return;
 
+    const el = document.getElementById(`caption-${activeIndex}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
     return () => clearInterval(timer);
-  }, []);
+  }, [activeIndex]);
+
   const handleSelect = (index, value) => {
     if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
 
@@ -87,7 +114,7 @@ const Unit2_Page5_Q2 = () => {
   };
 
   const checkAnswers = () => {
-     if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
+    if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
       return;
@@ -173,6 +200,7 @@ const Unit2_Page5_Q2 = () => {
           style={{
             display: "flex",
             justifyContent: "center",
+            margin: "5px 0px",
             width: "100%",
           }}
         >
@@ -189,11 +217,7 @@ const Unit2_Page5_Q2 = () => {
                 onTimeUpdate={(e) => {
                   const time = e.target.currentTime;
                   setCurrent(time);
-
-                  const idx = checkpoints.findIndex(
-                    (cp) => time >= cp && time < cp + 0.8
-                  );
-                  setActiveIndex(idx !== -1 ? idx : null);
+                  updateCaption(time);
                 }}
                 onLoadedMetadata={(e) => setDuration(e.target.duration)}
               ></audio>
@@ -216,7 +240,7 @@ const Unit2_Page5_Q2 = () => {
                     updateCaption(Number(e.target.value));
                   }}
                   style={{
-                    background: `linear-gradient(to right, #8247ffff ${
+                    background: `linear-gradient(to right, #430f68 ${
                       (current / duration) * 100
                     }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                   }}
@@ -229,8 +253,28 @@ const Unit2_Page5_Q2 = () => {
               {/* الأزرار 3 أزرار بنفس السطر */}
               <div className="bottom-row">
                 {/* فقاعة */}
-                <div className={`round-btn ${showCaption ? "active" : ""}`}>
+                <div
+                  className={`round-btn ${showCaption ? "active" : ""}`}
+                  style={{ position: "relative" }}
+                  onClick={() => setShowCaption(!showCaption)}
+                >
                   <TbMessageCircle size={36} />
+                  <div
+                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                    style={{ top: "100%", left: "10%" }}
+                  >
+                    {captions.map((cap, i) => (
+                      <p
+                        key={i}
+                        id={`caption-${i}`}
+                        className={`caption-inPopup-line2 ${
+                          activeIndex === i ? "active" : ""
+                        }`}
+                      >
+                        {cap.text}
+                      </p>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Play */}

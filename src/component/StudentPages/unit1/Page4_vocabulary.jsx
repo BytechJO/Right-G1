@@ -18,6 +18,7 @@ const Page4_vocabulary = () => {
   const [clickedIndex, setClickedIndex] = useState(null);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex2, setActiveIndex2] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
 
   const stopAtSecond = 2.5;
@@ -35,13 +36,16 @@ const Page4_vocabulary = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 4.25, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 4.3, end: 6.0, text: "Vocabulary." },
-    { start: 6.01, end: 8.16, text: "1. Goodbye." },
-    { start: 8.2, end: 10.26, text: "2. How are you?" },
-    { start: 10.3, end: 13.28, text: "3. Fine, thank you." },
-    { start: 13.33, end: 16.08, text: "4. Hello." },
-    { start: 16.12, end: 18.25, text: "5. Good morning." },
+    {
+      start: 0,
+      end: 3.0,
+      text: "Page 4, Unit 1. Good morning, world.Vocabulary.",
+    },
+    { start: 3.02, end: 5.1, text: "1. Goodbye." },
+    { start: 5.13, end: 7.0, text: "2. How are you?" },
+    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
+    { start: 10.52, end: 12.1, text: "4. Hello." },
+    { start: 12.12, end: 15.0, text: "5. Good morning." },
   ];
 
   // ================================
@@ -63,6 +67,16 @@ const Page4_vocabulary = () => {
       (cap) => time >= cap.start && time <= cap.end
     );
     setActiveIndex(index);
+  };
+
+  // ================================
+  // ✔ Update Word highlight
+  // ================================
+  const updateWord = (time) => {
+    const wordIndex = wordTimings.findIndex(
+      (w) => time >= w.start && time <= w.end
+    );
+    setActiveIndex2(wordIndex);
   };
 
   // ================================
@@ -91,6 +105,7 @@ const Page4_vocabulary = () => {
       setPaused(true);
       setShowContinue(true);
       setActiveIndex(null);
+      setActiveIndex2(null);
     };
 
     audio.addEventListener("ended", handleEnded);
@@ -102,23 +117,11 @@ const Page4_vocabulary = () => {
   }, []);
 
   // ================================
-  // ✔ Scroll captions smoothly
-  // ================================
-  useEffect(() => {
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [activeIndex]);
-
-  // ================================
   // ✔ Play/Pause toggle
   // ================================
   const togglePlay = () => {
     const audio = mainAudioRef.current;
-
+    if (!audio) return;
     if (audio.paused) {
       audio.play();
       setPaused(false);
@@ -167,8 +170,11 @@ const Page4_vocabulary = () => {
               ref={mainAudioRef}
               src={vocabulary}
               onTimeUpdate={(e) => {
-                setCurrent(e.target.currentTime);
-                updateCaption(e.target.currentTime);
+                const t = e.target.currentTime;
+
+                setCurrent(t);
+                updateCaption(t);
+                updateWord(t); // 🔥 أهم خطوة
               }}
               onLoadedMetadata={(e) => setDuration(e.target.duration)}
             ></audio>
@@ -188,6 +194,11 @@ const Page4_vocabulary = () => {
                 onChange={(e) => {
                   mainAudioRef.current.currentTime = e.target.value;
                   updateCaption(Number(e.target.value));
+                }}
+                style={{
+                  background: `linear-gradient(to right, #430f68 ${
+                    (current / duration) * 100
+                  }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                 }}
               />
 
@@ -245,24 +256,19 @@ const Page4_vocabulary = () => {
       <div
         style={{ position: "relative", marginTop: "5px", width: "fit-content" }}
       >
-       {showCaption && (
-  <div
-    className="caption-box2"
- 
-  >
-    {captions.map((cap, i) => (
-      <p
-        key={i}
-        id={`caption-${i}`}
-        className={`caption-line2 ${activeIndex === i ? "active" : ""}`}
-      >
-        {cap.text}
-      </p>
-    ))}
-  </div>
-)}
-
-
+        <div className={`caption-inPopup ${showCaption ? "show" : ""}`}>
+          {captions.map((cap, i) => (
+            <p
+              key={i}
+              id={`caption-${i}`}
+              className={`caption-inPopup-line2 ${
+                activeIndex === i ? "active" : ""
+              }`}
+            >
+              {cap.text}
+            </p>
+          ))}
+        </div>
         {/* Image + Words */}
         <img
           src={page2_2}
@@ -286,7 +292,9 @@ const Page4_vocabulary = () => {
             <h6
               key={i}
               className={
-                activeIndex === i || clickedIndex === i ? "active" : ""
+                (activeIndex2 === i && current >= 2.8) || clickedIndex === i
+                  ? "active"
+                  : ""
               }
               onClick={() => {
                 setClickedIndex(i);
@@ -305,7 +313,9 @@ const Page4_vocabulary = () => {
             key={i}
             src={num}
             className={`num-img ${
-              activeIndex === i || clickedIndex === i ? "active" : ""
+              (activeIndex2 === i && current >= 2.8) || clickedIndex === i
+                ? "active"
+                : ""
             }`}
             style={{
               height: "20px",

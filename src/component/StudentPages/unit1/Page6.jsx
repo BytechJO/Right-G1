@@ -159,6 +159,7 @@ const Page6 = ({ openPopup }) => {
                   alignItems: "center",
                   height: "100%",
                   width: "100%",
+                 
                 }}
               >
                 <video
@@ -169,6 +170,7 @@ const Page6 = ({ openPopup }) => {
                     height: "80%",
                     objectFit: "fill",
                     borderRadius: "20px",
+                     display: "block"
                   }}
                 >
                   <source src={video} type="video/mp4" />

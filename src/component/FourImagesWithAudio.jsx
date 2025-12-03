@@ -10,6 +10,7 @@ const FourImagesWithAudio = ({
   popupOpen,
   titleQ,
   audioArr,
+  captions,
 }) => {
   const audioRef = useRef(null);
   const [clickedIndex, setClickedIndex] = useState(null);
@@ -20,7 +21,6 @@ const FourImagesWithAudio = ({
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [activeSpeed, setActiveSpeed] = useState(1);
   const settingsRef = useRef(null);
   const [forceRender, setForceRender] = useState(0);
   // زر الكابشن
@@ -28,9 +28,18 @@ const FourImagesWithAudio = ({
   const [isPlaying, setIsPlaying] = useState(true);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
-
+  const [activeIndex2, setActiveIndex2] = useState(null);
   const [showCaption, setShowCaption] = useState(false);
- 
+
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex2(index);
+  };
 
   const playImageSound = (index) => {
     const sound = audioArr[index];
@@ -68,6 +77,7 @@ const FourImagesWithAudio = ({
       const audio = audioRef.current;
       audio.currentTime = 0; // ← يرجع للبداية
       setActiveIndex(null);
+      setActiveIndex2(null);
       setPaused(true);
       setIsPlaying(false);
       setShowContinue(true);
@@ -145,6 +155,7 @@ const FourImagesWithAudio = ({
                   (cp) => time >= cp && time < cp + 0.8
                 );
                 setActiveIndex(idx !== -1 ? idx : null);
+                updateCaption(time);
               }}
               onLoadedMetadata={(e) => setDuration(e.target.duration)}
             ></audio>
@@ -166,7 +177,7 @@ const FourImagesWithAudio = ({
                   updateCaption(Number(e.target.value));
                 }}
                 style={{
-                  background: `linear-gradient(to right, #8247ffff ${
+                  background: `linear-gradient(to right, #430f68 ${
                     (current / duration) * 100
                   }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                 }}
@@ -181,9 +192,24 @@ const FourImagesWithAudio = ({
               {/* فقاعة */}
               <div
                 className={`round-btn ${showCaption ? "active" : ""}`}
-              
+                style={{ position: "relative" }}
+                onClick={() => setShowCaption(!showCaption)}
               >
                 <TbMessageCircle size={36} />
+                <div className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                     style={{ top: "100%", left: "10%" }}>
+                  {captions.map((cap, i) => (
+                    <p
+                      key={i}
+                      id={`caption-${i}`}
+                      className={`caption-inPopup-line2 ${
+                        activeIndex2 === i ? "active" : ""
+                      }`}
+                    >
+                      {cap.text}
+                    </p>
+                  ))}
+                </div>
               </div>
 
               {/* Play */}
@@ -257,7 +283,7 @@ const FourImagesWithAudio = ({
                   <div
                     key={i}
                     className={`small-box2 ${
-                      activeIndex === globalIndex  ||
+                      activeIndex === globalIndex ||
                       clickedIndex === globalIndex
                         ? "active"
                         : ""

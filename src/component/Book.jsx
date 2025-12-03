@@ -52,14 +52,17 @@ export default function Book() {
   const [globalPopupContent, setGlobalPopupContent] = useState(null);
   const [globalPopupAudio, setGlobalPopupAudio] = useState(false);
  const [globalPopupVideo, setGlobalPopupVideo] = useState(false);
+ const [globalPopupClose ,setGlobalPopupClose]=useState(true)
   const openPopup = (content, isAudio = false,isVideo=false) => {
     setGlobalPopupContent(content);
     setGlobalPopupAudio(isAudio);
     setGlobalPopupOpen(true);
+    setGlobalPopupClose(false)
     setGlobalPopupVideo(isVideo)
   };
 
   const closePopup = () => {
+    setGlobalPopupClose(true)
     setGlobalPopupOpen(false);
     setGlobalPopupContent(null);
   };

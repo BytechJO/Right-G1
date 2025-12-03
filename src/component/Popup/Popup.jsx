@@ -12,20 +12,21 @@ const Popup = ({
   isVideo = false,
 }) => {
   if (!isOpen) return null;
+  
 
   return ReactDOM.createPortal(
     <div className="popup-overlay">
       <div
-        className={`popup-content ?${
-          isAudio ? "audio-size" : "fullscreen-size"
-        } : ${
-          isVideo ? "video-size" : "fullscreen-size"
+        className={`popup-content ${
+          isAudio ? "audio-size" : isVideo ? "video-size" : "fullscreen-size"
         }`}
       >
         <button
-          className={`popup-close-btn ${isAudio ? "audio" : ""}`}
+          className={`popup-close-btn ${
+          isAudio ? "audio" : isVideo ? "video" : ""
+        }`}
           onClick={onClose}
-          style={{ zIndex: "99999999999" }}
+
         >
           <FontAwesomeIcon icon={faTimes} />
         </button>
