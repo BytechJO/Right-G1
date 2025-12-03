@@ -43,14 +43,15 @@ const Unit2_Page8_Q3 = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 0, end: 7.17, text: "Page 17, exercise F. Does it begin with a D or T? Listen and match." },
+    { start: 7.19, end: 9.16, text: "1-doll. " },
+    { start: 9.18, end: 11.11, text: "2-dog. " },
+    { start: 11.13, end: 13.09, text: "3-tail." },
+    { start: 13.11, end:15.16, text: "4-tall." },
+    { start: 15.18, end: 17.22, text: "5-dates." },
+   
   ];
+
   // ================================
   // ✔ Update caption highlight
   // ================================

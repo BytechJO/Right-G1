@@ -70,19 +70,24 @@ const Page8_Q1 = () => {
   const [showCaption, setShowCaption] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
 
-
   // ================================
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+   
+    { start: 0, end: 4.23, text: "Page 8. Right Activities. Exercise A, number 1. " },
+    {
+      start: 4.25,
+      end: 8.28,
+      text: "Listen and write the missing letters. Number the pictures.  ",
+    },
+    { start: 8.30, end: 11.05, text: "1-tiger." },
+    { start: 11.07, end: 13.12, text: "2-taxi." },
+    { start: 13.14, end: 15.14, text: "3-duck." },
+    { start: 15.16, end: 17.13, text: "4-deer." },
   ];
+
+  
   // ================================
   // ✔ Update caption highlight
   // ================================
@@ -115,7 +120,7 @@ const Page8_Q1 = () => {
       audio.currentTime = 0; // ← يرجع للبداية
       setIsPlaying(false);
       setPaused(false);
-       setActiveIndex(null);
+      setActiveIndex(null);
       setShowContinue(true);
     };
 
@@ -138,7 +143,6 @@ const Page8_Q1 = () => {
     }
     return () => clearInterval(timer);
   }, [activeIndex]);
-
 
   const updateAnswer = (index, field, value) => {
     setAnswers((prev) =>
@@ -223,8 +227,8 @@ const Page8_Q1 = () => {
     <div className="page8-wrapper">
       <div className="page8-content">
         <header className="header-title-page8">
-          <span className="ex-A">A</span> <span className="number-of-q">1</span> Listen and write the missing
-          letters. Number the pictures.
+          <span className="ex-A">A</span> <span className="number-of-q">1</span>{" "}
+          Listen and write the missing letters. Number the pictures.
         </header>
         <div
           style={{

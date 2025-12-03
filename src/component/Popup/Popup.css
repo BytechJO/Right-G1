@@ -57,7 +57,7 @@
   padding: 20px;
   animation: fadeIn 0.2s ease;
   width: auto;
-  height: calc(100vh - 45px); /* يغطي باقي الشاشة */
+  height: calc(100vh - 50px); /* يغطي باقي الشاشة */
   border-radius: 0;
 }
 /* إذا مش Audio → fullscreen */
@@ -68,7 +68,7 @@
   padding: 20px;
   animation: fadeIn 0.2s ease;
   width: 100vw;
-  height: calc(100vh - 45px); /* يغطي باقي الشاشة */
+  height: calc(100vh - 50px); /* يغطي باقي الشاشة */
   border-radius: 0;
 }
 

@@ -27,6 +27,7 @@ export default function Book() {
   // ZOOM + VIEW MODE
   const [zoom, setZoom] = useState(1);
   const [viewMode, setViewMode] = useState("spread"); // spread | single
+  const [mobileTabsOpen, setMobileTabsOpen] = useState(false);
 
   // ==== PANNING ====
   const [isPanning, setIsPanning] = useState(false);
@@ -51,18 +52,18 @@ export default function Book() {
   const [globalPopupOpen, setGlobalPopupOpen] = useState(false);
   const [globalPopupContent, setGlobalPopupContent] = useState(null);
   const [globalPopupAudio, setGlobalPopupAudio] = useState(false);
- const [globalPopupVideo, setGlobalPopupVideo] = useState(false);
- const [globalPopupClose ,setGlobalPopupClose]=useState(true)
-  const openPopup = (content, isAudio = false,isVideo=false) => {
+  const [globalPopupVideo, setGlobalPopupVideo] = useState(false);
+  const [globalPopupClose, setGlobalPopupClose] = useState(true);
+  const openPopup = (content, isAudio = false, isVideo = false) => {
     setGlobalPopupContent(content);
     setGlobalPopupAudio(isAudio);
     setGlobalPopupOpen(true);
-    setGlobalPopupClose(false)
-    setGlobalPopupVideo(isVideo)
+    setGlobalPopupClose(false);
+    setGlobalPopupVideo(isVideo);
   };
 
   const closePopup = () => {
-    setGlobalPopupClose(true)
+    setGlobalPopupClose(true);
     setGlobalPopupOpen(false);
     setGlobalPopupContent(null);
   };
@@ -92,50 +93,49 @@ export default function Book() {
     flash: flashPages(openPopup, goToUnit),
     poster: posterPages(openPopup, goToUnit),
   }[activeTab];
- const goToPage = (pageNumber) => {
-  // حوّل القيمة لرقم
-  const num = Number(pageNumber);
+  const goToPage = (pageNumber) => {
+    // حوّل القيمة لرقم
+    const num = Number(pageNumber);
 
-  // ===========================
-  // ❌ التحقق من إدخال غير صحيح
-  // ===========================
-  if (isNaN(num) || num < 1 || num > pages.length) {
-    // رجّعه للفهرس (الصفحة الثانية لأن الأولى سينجل)
-    setPageIndex(1);
-    return;
-  }
+    // ===========================
+    // ❌ التحقق من إدخال غير صحيح
+    // ===========================
+    if (isNaN(num) || num < 1 || num > pages.length) {
+      // رجّعه للفهرس (الصفحة الثانية لأن الأولى سينجل)
+      setPageIndex(1);
+      return;
+    }
 
-  const index = num - 1;
+    const index = num - 1;
 
-  // ===========================
-  // 📱 Mobile OR single mode
-  // ===========================
-  if (isMobile || viewMode === "single") {
+    // ===========================
+    // 📱 Mobile OR single mode
+    // ===========================
+    if (isMobile || viewMode === "single") {
+      setPageIndex(index);
+      return;
+    }
+
+    // ===========================
+    // 📘 Spread Mode (صفحتين)
+    // ===========================
+
+    // الصفحة الأولى دائماً سينجل
+    if (num === 1) {
+      setPageIndex(0);
+      return;
+    }
+
+    // لو كانت الصفحة فردية → اعرض السابقة معها
+    if (num % 2 === 1) {
+      // مثال: 3 → (2–3)
+      setPageIndex(index - 1);
+      return;
+    }
+
+    // لو كانت زوجية → اعرضها مع التالية
     setPageIndex(index);
-    return;
-  }
-
-  // ===========================
-  // 📘 Spread Mode (صفحتين)
-  // ===========================
-
-  // الصفحة الأولى دائماً سينجل
-  if (num === 1) {
-    setPageIndex(0);
-    return;
-  }
-
-  // لو كانت الصفحة فردية → اعرض السابقة معها
-  if (num % 2 === 1) {
-    // مثال: 3 → (2–3)
-    setPageIndex(index - 1);
-    return;
-  }
-
-  // لو كانت زوجية → اعرضها مع التالية
-  setPageIndex(index);
-};
-
+  };
 
   const totalPages = pages.length;
   const leftPage = pageIndex + 1;
@@ -213,8 +213,8 @@ export default function Book() {
               style={{ height: "40px", width: "100px" }}
             />
 
-            {/* TABS */}
-            <div className="flex items-center gap-3">
+            {/* DESKTOP TABS */}
+            <div className="hidden lg:flex items-center gap-3">
               {[
                 { id: "student", label: "Student’s Book" },
                 { id: "work", label: "Workbook" },
@@ -242,11 +242,49 @@ export default function Book() {
 
           {/* RIGHT SECTION */}
           <div className="flex items-center gap-4">
-            <span className="cursor-pointer text-[#430f68] hover:opacity-75">
+            <span className="cursor-pointer text-[#430f68] hover:opacity-75 hidden lg:block">
               Student Edition
             </span>
+
+            {/* MOBILE MENU BUTTON */}
+            <button
+              className="lg:hidden border px-3 py-1 rounded-lg text-[#430f68]"
+              onClick={() => setMobileTabsOpen(!mobileTabsOpen)}
+            >
+              Menu
+            </button>
           </div>
         </nav>
+
+        {/* MOBILE TABS DROPDOWN */}
+        {mobileTabsOpen && (
+          <div className="lg:hidden bg-white shadow-md border-b px-4 py-3 absolute w-full z-[9999]">
+            {[
+              { id: "student", label: "Student’s Book" },
+              { id: "work", label: "Workbook" },
+              { id: "teacher", label: "Teacher’s Book" },
+              { id: "flash", label: "Flashcards" },
+              { id: "poster", label: "Posters" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setMobileTabsOpen(false);
+                }}
+                className={`block w-full text-left px-3 py-2 rounded-lg mb-1
+          ${
+            activeTab === tab.id
+              ? "bg-[#f6f0ff] text-[#430f68]"
+              : "text-[#430f68] hover:bg-purple-50"
+          }
+        `}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* MAIN CONTENT */}
         <div className="content-wrapper overflow-auto lg:overflow-hidden">

@@ -62,14 +62,14 @@ const Unit2_Page6_Q1 = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 0, end: 4.27, text: "Page 15, Exercise D. Listen and choose." },
+    { start: 4.29, end: 6.24, text: "1-January " },
+    { start: 6.26, end: 8.28, text: "2-November " },
+    { start: 8.30, end: 10.12, text: "3-May" },
+    { start: 10.14, end: 12.07, text: "4-August" },
+
   ];
+
   // ================================
   // ✔ Update caption highlight
   // ================================

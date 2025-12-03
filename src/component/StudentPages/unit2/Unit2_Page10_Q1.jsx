@@ -72,14 +72,16 @@ const Unit2_Page10_Q1 = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 0, end: 4.26, text: " Page 19, exercise D. Listen and circle. " },
+    { start: 4.28, end: 7.02, text: "1-pencil." },
+    { start: 7.04, end: 9.01, text: "2-boy." },
+    { start: 9.03, end: 10.21, text: "3-bird." },
+    { start: 10.23, end: 13.10, text: "4-pizza. " },
+    { start: 13.12, end: 14.29, text: "5-pink." },
+    { start: 14.31, end: 17.06, text: "6-ball." },
   ];
+
+ 
   // ================================
   // ✔ Update caption highlight
   // ================================

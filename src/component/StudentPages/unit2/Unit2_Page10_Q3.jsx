@@ -34,14 +34,11 @@ const Unit2_Page10_Q3 = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 0, end: 4.19, text: "Page 19, Exercise f. Listen and circle." },
+    { start: 4.21, end: 9.01, text: "1-ball, baby, bag. " },
+    { start: 9.03, end: 14.03, text: "2-pants, paper, panda- " },
   ];
+
   // ================================
   // ✔ Update caption highlight
   // ================================
@@ -207,16 +204,16 @@ const Unit2_Page10_Q3 = () => {
           <div
             style={{
               display: "flex",
-            justifyContent: "center",
-            margin: "5px 0px",
-            width: "100%",
+              justifyContent: "center",
+              margin: "5px 0px",
+              width: "100%",
             }}
           >
             <div
               className="audio-popup-read"
               style={{
                 width: "50%",
-            marginTop:"0px"
+                marginTop: "0px",
               }}
             >
               <div className="audio-inner player-ui">
