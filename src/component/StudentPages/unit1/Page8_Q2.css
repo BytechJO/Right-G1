@@ -171,7 +171,7 @@ ease;
 /* --- قسم الأزرار --- */
 
 /* Tablet Screens (481px - 768px) */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .exercise-container2 {
     padding: 15px;
     padding-bottom: 90px;
@@ -195,10 +195,11 @@ ease;
 
   .image-section-horizontal {
     gap: 20px;
+    flex-wrap: wrap !important;
   }
 
   .image-container {
-    width: 130px;
+    width: 180px;
     gap: 12px;
   }
 
@@ -245,6 +246,12 @@ ease;
   }
 }
 
+@media (max-width: 540px) {
+    .image-container {
+        width: 100px;
+        gap: 12px;
+    }
+}
 /* Mobile Screens (max-width: 480px) */
 @media (max-width: 480px) {
   .exercise-container2 {
@@ -319,7 +326,7 @@ ease;
   .action-buttons-container {
     position: static;
     transform: none;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     width: 100%;
     margin-top: 20px;

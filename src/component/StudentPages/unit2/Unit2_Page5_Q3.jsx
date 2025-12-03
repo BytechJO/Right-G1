@@ -56,8 +56,8 @@ const Unit2_Page5_Q3 = () => {
           alignItems: "center",
         }}
       >
-        <div
-          className="unit2-q3-wrapper"
+        <div 
+          className="div-forall"
           style={{
             display: "flex",
             flexDirection: "column",

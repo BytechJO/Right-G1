@@ -65,9 +65,8 @@ const Unit2_Page6_Q1 = () => {
     { start: 0, end: 4.27, text: "Page 15, Exercise D. Listen and choose." },
     { start: 4.29, end: 6.24, text: "1-January " },
     { start: 6.26, end: 8.28, text: "2-November " },
-    { start: 8.30, end: 10.12, text: "3-May" },
+    { start: 8.3, end: 10.12, text: "3-May" },
     { start: 10.14, end: 12.07, text: "4-August" },
-
   ];
 
   // ================================
@@ -235,6 +234,7 @@ const Unit2_Page6_Q1 = () => {
         }}
       >
         <div
+          className="div-forall"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -436,25 +436,23 @@ const Unit2_Page6_Q1 = () => {
                           (p) => !Object.values(droppedLetters).includes(p.id)
                         )
                         .map((pair, index) => (
-                          <Draggable
-                            key={pair.id}
-                            draggableId={pair.id}
-                            index={index}
-                          >
-                            {(providedDraggable) => (
-                              <div
-                                ref={providedDraggable.innerRef}
-                                {...providedDraggable.draggableProps}
-                                {...providedDraggable.dragHandleProps}
-                                className="option-box"
-                              >
-                                <span className="number-tag">
+                          <div className="option-box">
+                            <Draggable draggableId={pair.id} index={index}>
+                              {(providedDraggable) => (
+                                <span
+                                  ref={providedDraggable.innerRef}
+                                  {...providedDraggable.draggableProps}
+                                  {...providedDraggable.dragHandleProps}
+                                  className="number-tag draggable-number"
+                                >
                                   {pair.letter}
-                                </span>{" "}
-                                {pair.content}
-                              </div>
-                            )}
-                          </Draggable>
+                                </span>
+                              )}
+                            </Draggable>
+
+                            {/* النص ثابت ولا يتحرك */}
+                            <span className="month-label">{pair.content}</span>
+                          </div>
                         ))}
                       {provided.placeholder}
                     </div>

@@ -32,27 +32,22 @@ input:focus {
   transition: background-color 0.2s ease, border 0.1s ease;
 }
 
-
-
 .highlight {
- background-color: rgba(255, 0, 0, 0.078); /* لون أصفر فاتح */
+  background-color: rgba(255, 0, 0, 0.078); /* لون أصفر فاتح */
   border: 2px solid rgba(255, 0, 0, 0.8);
-   border-radius: 8px; /* ممكن تخليها 0 لو بدك زوايا حادة */
+  border-radius: 8px; /* ممكن تخليها 0 لو بدك زوايا حادة */
   cursor: pointer;
-} 
-svg{
+}
+svg {
   cursor: pointer;
 }
 .navbar-fixed {
   position: relative;
   z-index: 99999999;
 }
-.selected{
+.selected {
   cursor: pointer;
 }
-
-
-
 
 .page_1-background,
 .page_2-background,
@@ -65,7 +60,7 @@ svg{
 .page_9-background,
 .unit2-page-background {
   background-color: #ffffff;
-   /* background-color: #bc90ff; */
+  /* background-color: #bc90ff; */
   /* overflow: hidden; */
   position: relative;
   display: flex;
@@ -420,7 +415,7 @@ img {
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
   top: 7.3%;
-    right: 4.5%;
+  right: 4.5%;
   cursor: pointer;
 }
 .click-icon-page8-2 {
@@ -638,7 +633,7 @@ img {
   transform: scaleX(-1);
   
 } */
- .action-buttons-container {
+.action-buttons-container {
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -712,11 +707,10 @@ img {
   box-shadow: 0 6px 12px rgba(255, 193, 7, 0.3);
 }
 
-
 .caption-inPopup {
   position: absolute;
-      top: -4px;
-        left: 18%;
+  top: -4px;
+  left: 18%;
   width: 230px;
   max-height: 300px;
   background: rgba(255, 255, 255, 0.75);
@@ -726,7 +720,7 @@ img {
   overflow-y: auto;
   font-weight: 500;
   backdrop-filter: blur(6px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 999999;
   opacity: 0;
   transform: translateY(-10px);
@@ -816,22 +810,86 @@ img {
   background: rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 768px) {
-  .page_1-background,
-  .page_2-background,
-  .page_3-background,
-  .page_4-background,
-  .page_5-background,
-  .page_6-background,
-  .page_7-background,
-  .page_8-background,
-  .page_9-background,
-  .unit2-page-background {
-    height: 90vh; /* تصغير بسيط حتى ما تتقص على الموبايل */
-  }
-
+@media (max-width:820px) {
   .page-image {
     width: 100%;
     height: auto; /* خلي الارتفاع تلقائي بالموبايل */
   }
+  .headset-icon-CD-page4-1 {
+    top: 6.5%;
+    right: 10.2%;
+  }
+  .click-icon-page4 {
+    bottom: 12.5%;
+    right: 41%;
+  }
+  #CD-2-page5 {
+    bottom: 31.5%;
+    right: 11.2%;
+  }
+  .click-icon-page5 {
+    bottom: 14.5%;
+    left: 52.5%;
+  }
+  .headset-icon-CD-page6 {
+    top: 4.5%;
+  }
+  .pauseBtn-icon-CD-page6 {
+    top: 4.5%;
+    left: 39.2%;
+  }
+  .headset-icon-CD-page7 {
+    top: 4.5%;
+    right: 60.2%;
+  }
+  .pauseBtn-icon-CD-page7 {
+    top: 4.5%;
+    right: 56%;
+  }
+  .click-icon-page8-1 {
+    top: 8.3%;
+  }
+  .click-icon-page8-2 {
+    top: 26.5%;
+  }
+  .click-icon-page8-3 {
+    top: 47.5%;
+  }
+  .click-icon-page8-4 {
+    bottom: 23.8%;
+  }
+  .click-icon-page9-2 {
+    top: 26.5%;
+  }
+  .headset-icon-CD-page9 {
+    bottom: 31%;
+  }
+
+  .exercise-image-div{
+      
+    flex-wrap: wrap !important;
+    gap: 20px;
+  }
+  .audio-popup-vocab-container{
+    width: 60% !important;
+  }
+  .audio-popup-read-container{
+    width: 60% !important;
+  }
+}
+
+@media (max-width:600px) {
+      .action-buttons-container {
+        flex-direction: row !important;
+        gap: 10px;
+    }
+    .show-answer-btn {
+      font-size: 14px;
+    }
+}
+
+
+@media (max-width: 540px) {
+  .exercise-image {
+    height: 80px;}
 }

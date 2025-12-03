@@ -46,15 +46,15 @@
 .click-icon-unit2-page5-1 {
   position: absolute;
   padding: 5px;
-    top: 7.5%;
-    right: 19.5%;
+  top: 7.5%;
+  right: 19.5%;
   cursor: pointer;
 }
 .click-icon-unit2-page5-2 {
   position: absolute;
   padding: 5px;
-     top: 24.8%;
-    right: 24%;
+  top: 24.8%;
+  right: 24%;
   cursor: pointer;
 }
 .click-icon-unit2-page5-3 {
@@ -144,8 +144,6 @@
 .bp-option:hover {
   transform: scale(1.2);
 }
-
-
 
 .unit2-q3-wrapper {
   width: 100%;
@@ -260,6 +258,37 @@
 /*      RESPONSIVE DESIGN        */
 /* ============================= */
 
+@media (max-width: 1024px) {
+  .unit2-q3-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    /* margin-bottom: 25px; */
+    flex-direction: column;
+  }
+  .q3-options {
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+  .click-icon-unit2-page5-1 {
+    top: 8.5%;
+    right: 20.5%;
+  }
+  .click-icon-unit2-page5-2 {
+    top: 25.8%;
+    right: 25%;
+  }
+
+  .click-icon-unit2-page5-3 {
+    top: 45.5%;
+    left: 32.5%;
+  }
+  .click-icon-unit2-page5-4 {
+    bottom: 26%;
+    left: 50.5%;
+  }
+}
 /* --------- Tablets (992px↓) ---------- */
 @media (max-width: 992px) {
   .unit2-q3-content {
@@ -272,7 +301,7 @@
     justify-items: center;
   }
 
-    .q3-title {
+  .q3-title {
     font-size: 1.4rem;
     text-align: center;
   }
@@ -316,6 +345,7 @@
   .q3-options {
     grid-template-columns: 1fr 1fr;
     justify-items: center;
+    width: 100%;
   }
 
   .q3-option-item {

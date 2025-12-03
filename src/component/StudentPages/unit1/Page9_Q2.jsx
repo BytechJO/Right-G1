@@ -177,7 +177,7 @@ export default function Page9_Q2() {
         justifyContent: "center",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

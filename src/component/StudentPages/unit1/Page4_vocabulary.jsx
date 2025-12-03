@@ -163,7 +163,7 @@ const Page4_vocabulary = () => {
       {/* ============================
            AUDIO PLAYER
       ============================= */}
-      <div
+      <div className="audio-popup-vocab-container"
         style={{
           width: "30%",
           display: "flex",

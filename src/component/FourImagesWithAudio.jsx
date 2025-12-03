@@ -132,7 +132,7 @@ const FourImagesWithAudio = ({
           {titleQ}
         </h5>
       </div>
-      <div
+      <div className="audio-popup-read-container"
         style={{
           display: "flex",
           flexDirection: "column",

@@ -434,16 +434,58 @@ const Page8_Q1 = () => {
           }}
         >
           {data.map((item, index) => (
+            <div style={{display:"flex",gap:"20px",flexDirection:"column"}}>
             <img
               key={index}
               src={item.src}
               className="exercise-image"
               onClick={() => playSound(item.sound)}
             />
-          ))}
-        </div>
+              <div
+              key={index}
+              className="exercise-item"
+              style={{ position: "relative" }}
+            >
+              <input
+                type="text"
+                maxLength="1"
+                className="missing-input"
+                value={answers[index].number}
+                onChange={(e) =>
+                  !showAnswer && updateAnswer(index, "number", e.target.value)
+                }
+                disabled={showAnswer}
+                style={{
+                  color: isAutoAnswer ? "red" : "black", // ← نفس الشي هون
+                }}
+              />
 
-        {/* ✅ مربعات الأرقام + علامة الخطأ */}
+              {wrongNumbers[index] && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "-17px",
+                    top: "5%",
+                    transform: "translateY(-50%)",
+                    width: "25px",
+                    height: "25px",
+                    background: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    border: "2px solid white",
+                  }}
+                >
+                  X
+                </div>
+              )}
+            </div> </div>
+          ))}
+          {/* ✅ مربعات الأرقام + علامة الخطأ
         <div className="exercise-container">
           {data.map((item, index) => (
             <div
@@ -490,7 +532,10 @@ const Page8_Q1 = () => {
               )}
             </div>
           ))}
+        </div> */}
         </div>
+
+       
       </div>
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">

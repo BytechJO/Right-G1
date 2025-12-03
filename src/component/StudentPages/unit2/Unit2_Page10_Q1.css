@@ -111,6 +111,13 @@
 
 }
 
+
+@media (max-width: 1024px) {
+    .sentence-container2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
 /* موبايل */
 @media (max-width: 600px) {
   .content-container10 {
@@ -119,7 +126,7 @@
   }
 
   .sentence-container2 {
-     grid-template-columns: repeat(3, 1fr);
+     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
 

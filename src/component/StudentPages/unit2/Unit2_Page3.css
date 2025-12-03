@@ -8,13 +8,18 @@
   left: 39%;
 }
 
-
-.pauseBtn-icon-CD-unit2-page3-1{
-   position: absolute;
+.pauseBtn-icon-CD-unit2-page3-1 {
+  position: absolute;
   transform: translate(-50%, -50%);
   cursor: pointer;
   position: absolute;
   padding: 5px;
   top: 6%;
   left: 44.2%;
+}
+
+@media (max-width: 820px) {
+  .pauseBtn-icon-CD-unit2-page3-1 {
+    left: 43.2%;
+  }
 }

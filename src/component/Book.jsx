@@ -251,7 +251,14 @@ export default function Book() {
               className="lg:hidden border px-3 py-1 rounded-lg text-[#430f68]"
               onClick={() => setMobileTabsOpen(!mobileTabsOpen)}
             >
-              Menu
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 90 90"
+               
+              >
+                <image href={menu} x="0" y="0" width="90" height="90" />
+              </svg>
             </button>
           </div>
         </nav>

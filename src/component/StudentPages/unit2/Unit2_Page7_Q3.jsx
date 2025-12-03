@@ -95,12 +95,12 @@ const Unit2_Page7_Q3 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="content-container1">
-          <div className="header-container">
+        {/* <div className="content-container1"> */}
+         
             <h5 className="header-title-page8">
               C Read and circle the mistakes.
             </h5>
-          </div>
+      
           <div className="sentence-container">
             {sentences.map((sentence, sIndex) => (
               <div
@@ -140,7 +140,7 @@ const Unit2_Page7_Q3 = () => {
               </div>
             ))}
           </div>
-        </div>
+        {/* </div> */}
       </div>
       <div className="action-buttons-container">
         <button

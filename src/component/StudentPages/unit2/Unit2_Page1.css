@@ -66,3 +66,20 @@
   bottom: 40.5%;
   right: 25%;
 }
+
+
+@media (max-width: 820px) {
+
+  .headset-icon-CD-unit2-page1-1 {
+    top: 6.5%;
+    right: 16%;
+}
+.headset-icon-CD-unit2-page1-2 {
+    bottom: 35.9%;
+    left: 26%;
+}
+.click-icon-unit2-page1-2 {
+    bottom: 13%;
+    right: 41%;
+}
+}

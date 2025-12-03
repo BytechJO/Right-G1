@@ -28,3 +28,16 @@
   right: 27%;
   cursor: pointer;
 }
+
+@media (max-width: 820px) {
+  .click-icon-unit2-page8-1 {
+    top: 3.5%;
+  }
+  .click-icon-unit2-page8-2 {
+    top: 38.5%;
+  }
+  .click-icon-unit2-page8-3 {
+    bottom: 34%;
+    right: 28%;
+  }
+}

@@ -180,7 +180,7 @@ const Unit2_Page5_Q2 = () => {
         alignItems: "center",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

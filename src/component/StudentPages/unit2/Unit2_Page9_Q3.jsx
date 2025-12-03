@@ -90,7 +90,7 @@ const Unit2_Page9_Q3 = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <div style={{ width: "60%" }}>
+      <div style={{ width: "60%" }}  className="div-forall">
         <h5 className="header-title-page8">C Look and answer.</h5>
 
         <div className="content-container-P9-Q3">

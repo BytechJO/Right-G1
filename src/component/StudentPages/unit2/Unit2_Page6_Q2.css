@@ -128,7 +128,7 @@
 
   .right-side2 {
     width: 100%;
-    align-items: center;
+            align-items: flex-start;
   }
 
   .option-box2 {

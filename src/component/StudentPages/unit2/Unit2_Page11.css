@@ -14,3 +14,9 @@
   top: 5%;
   left: 27%;
 }
+
+@media (max-width: 820px) {
+  .pauseBtn-icon-CD-page21 {
+    left: 26%;
+  }
+}

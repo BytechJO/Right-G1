@@ -82,11 +82,17 @@ width: 100px;
 .row-content10-1 {
   width: 100%;
 }
-
+@media (max-width: 1024px) {
+  .row-content10-1 {
+    
+    gap: 92px;
+   
+}}
 /* في الشاشات الصغيرة يصير كل صف بعمود واحد */
 @media (max-width: 900px) {
   .row-content10-1 {
     grid-template-columns: 1fr;
+            justify-items: center;
     gap: 20px;
   }
 
