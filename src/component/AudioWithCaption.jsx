@@ -11,12 +11,9 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
-
   const [showCaption, setShowCaption] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-
   const [volume, setVolume] = useState(1);
-
   const [showSettings, setShowSettings] = useState(false);
 
   // تحديث الهايلايت حسب الوقت
@@ -80,7 +77,7 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
           onLoadedMetadata={(e) => setDuration(e.target.duration)}
           onEnded={() => {
             audioRef.current.currentTime = 0;
-setIsPlaying(false)
+            setIsPlaying(false);
             setActiveIndex(-1); // يرجّع الهايلايت لأول سطر
           }}
         />

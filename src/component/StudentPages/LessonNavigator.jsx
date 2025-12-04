@@ -119,8 +119,10 @@ export default function LessonNavigator({ startIndex = 0 }) {
         style={{
           display: "flex",
           width: "100%",
-          marginBottom:"30px",
-          justifyContent: "space-evenly",
+          marginBottom: "30px",
+          gap: "20px",
+          justifyContent: "flex-start",
+          backgroundColor: "#430f68",
         }}
       >
         {index ? (
@@ -129,41 +131,59 @@ export default function LessonNavigator({ startIndex = 0 }) {
             style={{
               display: "flex",
               alignItems: "center",
-              color: "#430f68",
+              color: "white",
               fontSize: "20px",
-              fontWeight: "600",
+              fontWeight: "500",
             }}
           >
             <svg
               width="25"
               height="25"
               viewBox="0 0 90 90"
-              className="nav-btn w-10 h-10 rounded-full flex items-center justify-center transition"
+              className="nav-btn w-10 h-10 rounded-full transition"
             >
               <image href={back} x="0" y="0" width="90" height="90" />
             </svg>{" "}
             Previous Exercise
           </button>
         ) : (
-          " "
+          <button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              color: "white",
+              fontSize: "20px",
+              fontWeight: "500",
+            }}
+          >
+            <svg
+              width="25"
+              height="25"
+              viewBox="0 0 90 90"
+              className="nav-btn w-10 h-10 rounded-full transition"
+            >
+              <image href={back} x="0" y="0" width="90" height="90" />
+            </svg>{" "}
+            Previous Exercise
+          </button>
         )}
 
         <button
           onClick={handleNext}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              color: "#430f68",
-              fontSize: "20px",
-              fontWeight: "600",
-            }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            color: "white",
+            fontSize: "20px",
+            fontWeight: "500",
+          }}
         >
           Next Exercise
           <svg
             width="25"
             height="25"
             viewBox="0 0 90 90"
-            className="nav-btn w-10 h-10 rounded-full flex items-center justify-center transition"
+            className="nav-btn w-10 h-10 rounded-full transition"
           >
             <image href={next} x="0" y="0" width="90" height="90" />
           </svg>

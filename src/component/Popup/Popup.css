@@ -20,7 +20,7 @@
   display: inline-block; /* مهم جداً */
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
+  /* padding: 20px; */
   animation: fadeIn 0.2s ease;
   overflow: visible;
 }
@@ -52,14 +52,13 @@
   padding: 20px;
   animation: fadeIn 0.2s ease;
   width: 520px;
-  /* height: 280px; */
-  max-width: 100%;
-  max-height: 100%;
+  height: 300px;
   display: flex;
   overflow-y: auto;
   flex-direction: column;
-  justify-content: center;
-  overflow-x: hidden;
+
+    justify-content: flex-start;
+    overflow: hidden;
 }
 
 .video-size {
@@ -85,7 +84,7 @@
 .exercise-size {
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
+  /* padding: 20px; */
   animation: fadeIn 0.2s ease;
   width: 100vw;
   height: 100vh; /* يغطي باقي الشاشة */
@@ -94,17 +93,19 @@
 /* زر الإغلاق */
 .popup-close-btn {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
+background: none;
   border: none;
   font-size: 26px;
   cursor: pointer;
 }
-
+.popup-close-btn.type-exercise {
+  color: white;
+  top: 0px;
+  right: 0px;
+}
 .popup-close-btn.type-audio {
-  position: absolute;
-  top: 12%;
+  position: absolute !important;
+     top: 7%;
   right: 4%;
   background: none;
   border: none;

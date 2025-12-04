@@ -224,7 +224,8 @@ export default function Book() {
       btn: "Previous Button",
       icon: back,
       onClick: () => console.log("Info clicked"),
-    },{
+    },
+    {
       key: "Next",
       btn: "Next Button",
       icon: next,
@@ -309,13 +310,12 @@ export default function Book() {
                   setActiveTab(tab.id);
                   setMobileTabsOpen(false);
                 }}
-                className={`block w-full text-left px-3 py-2 rounded-lg mb-1
-          ${
-            activeTab === tab.id
-              ? "bg-[#f6f0ff] text-[#430f68]"
-              : "text-[#430f68] hover:bg-purple-50"
-          }
-        `}
+                className={`block w-full text-left px-3 py-2 rounded-lg mb-1 
+         ${
+           activeTab === tab.id
+             ? "bg-[#f6f0ff] text-[#430f68]"
+             : "text-[#430f68] hover:bg-purple-50"
+         }`}
               >
                 {tab.label}
               </button>
@@ -712,7 +712,7 @@ export default function Book() {
                 {/* Header */}
                 <div className="p-4 border-b flex justify-between items-center">
                   <h2 className="text-xl text-[#430f68] font-semibold">
-                    Options
+                    Icons Key Button
                   </h2>
                   <button
                     onClick={() => setIsRightSidebarOpen(false)}
@@ -750,22 +750,23 @@ export default function Book() {
         onClose={closePopup}
         type={globalPopupContent?.type}
       >
-    {globalPopupOpen && globalPopupContent && (
-    {
-      exercise: (
-        <LessonNavigator
-          startIndex={globalPopupContent.data.startIndex}
-        />
-      ),
+        {globalPopupOpen &&
+          globalPopupContent &&
+          {
+            exercise: (
+              <LessonNavigator
+                startIndex={globalPopupContent.data.startIndex}
+              />
+            ),
 
-      audio: globalPopupContent.data,
-      video: globalPopupContent.data,
-      image: globalPopupContent.data,
-      html: globalPopupContent.data,
+            audio: globalPopupContent.data,
+            video: globalPopupContent.data,
+            image: globalPopupContent.data,
+            html: globalPopupContent.data,
 
-      default: null,
-    }[globalPopupContent.type]
-  )} </Popup>
+            default: null,
+          }[globalPopupContent.type]}{" "}
+      </Popup>
     </>
   );
 }
