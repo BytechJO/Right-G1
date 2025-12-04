@@ -9,11 +9,11 @@ import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import allUnit2 from "../../../assets/unit1/sounds/P10-11.mp3";
-import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
-import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
-import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
+import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
+import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
+import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
+import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
 
 const Unit2_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);

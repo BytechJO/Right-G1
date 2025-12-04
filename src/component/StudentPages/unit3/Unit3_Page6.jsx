@@ -32,12 +32,7 @@ const Unit3_Page6 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() =>
-          openPopup(
-            <>
-              <Unit3_Page6_Q2 />
-            </>,
-            false
-          )
+          openPopup("exercise", { startIndex: 29 })
         }
         className="click-icon-unit3-page6-2 hover:scale-110 transition"
       >
@@ -49,12 +44,7 @@ const Unit3_Page6 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() =>
-          openPopup(
-            <>
-              <Unit3_Page6_Q3 />
-            </>,
-            false
-          )
+         openPopup("exercise", { startIndex: 30 })
         }
         className="click-icon-unit3-page6-3  hover:scale-110 transition"
       >
@@ -66,7 +56,7 @@ const Unit3_Page6 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <div
+           "audio", <div
               style={{
                 display: "flex",
                 justifyContent: "center",

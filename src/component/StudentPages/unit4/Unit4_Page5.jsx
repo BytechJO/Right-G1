@@ -16,12 +16,7 @@ const Unit4_Page5 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() =>
-          openPopup(
-            <>
-              <Unit4_Page5_Q1 />
-            </>,
-            false
-          )
+           openPopup("exercise", { startIndex: 31 })
         }
         className="click-icon-unit4-page5-1 hover:scale-110 transition"
       >
@@ -32,12 +27,7 @@ const Unit4_Page5 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() =>
-          openPopup(
-            <>
-              <Unit4_Page5_Q2 />
-            </>,
-            false
-          )
+          openPopup("exercise", { startIndex: 32 })
         }
         className="click-icon-unit4-page5-2  hover:scale-110 transition"
       >
@@ -48,12 +38,7 @@ const Unit4_Page5 = ({ openPopup }) => {
         height="30"
         viewBox="0 0 60 60"
         onClick={() =>
-          openPopup(
-            <>
-              <Unit4_Page5_Q3 />
-            </>,
-            false
-          )
+           openPopup("exercise", { startIndex: 33 })
         }
         className="click-icon-unit4-page5-3 hover:scale-110 transition"
       >
@@ -64,9 +49,7 @@ const Unit4_Page5 = ({ openPopup }) => {
         width="30"
         height="30"
         viewBox="0 0 60 60"
-        onClick={() => openPopup(<>
-        <Unit4_Page5_Q4/>
-        </>, false)}
+        onClick={() => openPopup("exercise", { startIndex: 34 })}
         className="click-icon-unit4-page5-4 hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />

@@ -200,13 +200,14 @@ const Unit3_Page5_Q2 = () => {
       }}
     >
       <div
-        className="div-forall"
+     className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
           justifyContent: "flex-start",
+          alignItems: "flex-start",
+          position: "relative",
+          width: "60%",
         }}
       >
         <div className="unit3-q1-wrapper">
@@ -216,9 +217,10 @@ const Unit3_Page5_Q2 = () => {
             circle.
           </h5>
           <div
-            style={{
+             style={{
               display: "flex",
               justifyContent: "center",
+              margin: "30px 0px",
               width: "100%",
             }}
           >

@@ -17,6 +17,11 @@ const Unit3_Page1_Read = () => {
     new Audio(Pg22_1_3_AdultLady),
     new Audio(Pg22_1_4_AdultLady),
   ];
+  const captions = [
+   { start: 0, end: 3.05, text: "Page 22. Listen and read along." },
+    { start: 3.07, end: 6.14, text: "Short A. Ant, pan, rat." },
+    
+  ];
   return (
     <>
 
@@ -27,6 +32,7 @@ const Unit3_Page1_Read = () => {
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
+        captions={captions}
       />
     </>
   );

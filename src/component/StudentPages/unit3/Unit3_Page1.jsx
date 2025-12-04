@@ -45,7 +45,7 @@ const Unit3_Page1 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <div
+           "audio", <div
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -56,8 +56,7 @@ const Unit3_Page1 = ({ openPopup }) => {
                 src={Pg22_U3_Intro_AdultLady}
                 captions={captionsExample}
               />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit3-page1-1 hover:scale-110 transition"
@@ -71,10 +70,9 @@ const Unit3_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+           "html", <>
               <Unit3_Page1_find />
-            </>,
-            false
+            </>
           )
         }
         className="click-icon-unit3-page1-1  hover:scale-110 transition"
@@ -87,10 +85,9 @@ const Unit3_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+           "html", <>
               <Unit3_Page1_Vocab />
-            </>,
-            false
+            </>
           )
         }
         className="headset-icon-CD-unit3-page1-2 hover:scale-110 transition"
@@ -103,10 +100,9 @@ const Unit3_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+           "html", <>
               <Unit3_Page1_Read />
-            </>,
-            false
+            </>
           )
         }
         className="click-icon-unit3-page1-2 hover:scale-110 transition"

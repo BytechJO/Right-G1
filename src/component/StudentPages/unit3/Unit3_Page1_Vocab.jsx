@@ -21,6 +21,7 @@ const Unit3_Page1_Vocab = () => {
   const [showContinue, setShowContinue] = useState(false);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex2, setActiveIndex2] = useState(null);
   const stopAtSecond = 3.5;
 
   // إعدادات الصوت
@@ -33,6 +34,20 @@ const Unit3_Page1_Vocab = () => {
   const [duration, setDuration] = useState(0);
   const [clickedIndex, setClickedIndex] = useState(null);
   const [showCaption, setShowCaption] = useState(false);
+
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    { start: 0, end: 3.1, text: "Page 10, Unit 2, Vocabulary." },
+    { start: 3.12, end: 5.15, text: " 1. Party Hat. " },
+    { start: 5.17, end: 7.16, text: "2. Jello." },
+    { start: 7.18, end: 9.27, text: "3. Cake. " },
+    { start: 9.29, end: 12.2, text: "4. Happy Birthday." },
+    { start: 12.22, end: 15.07, text: " 5. Balloons." },
+    { start: 15.09, end: 17.13, text: " 6. Present. " },
+    { start: 17.15, end: 19.26, text: "7.card" },
+  ];
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
     { start: 3.9, end: 6.2 }, // party hat
@@ -43,6 +58,29 @@ const Unit3_Page1_Vocab = () => {
     { start: 17.3, end: 19.8 },
     { start: 19.9, end: 23.6 },
   ];
+
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
+  };
+
+  // ================================
+  // ✔ Update Word highlight
+  // ================================
+  const updateWord = (time) => {
+    const wordIndex = wordTimings.findIndex(
+      (w) => time >= w.start && time <= w.end
+    );
+    setActiveIndex2(wordIndex);
+  };
+  // ================================
+  // ✔ INITIAL PLAY & STOP AT SECOND
+  // ================================
   useEffect(() => {
     const audio = mainAudioRef.current;
     if (!audio) return;
@@ -100,193 +138,227 @@ const Unit3_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
+  // ================================
+  // ✔ Play single word only
+  // ================================
+  const playSingleWord = (index) => {
+    const audio = mainAudioRef.current;
+    if (!audio) return;
 
+    const { start, end } = wordTimings[index];
+
+    audio.currentTime = start;
+    audio.play();
+    setIsPlaying(true);
+
+    const stopInterval = setInterval(() => {
+      if (audio.currentTime >= end) {
+        audio.pause();
+        clearInterval(stopInterval);
+      }
+    }, 40);
+  };
   const nums = [num1, num2, num3, num4, num5, num6, num7];
 
   return (
-    <>
-      <div
-        style={{
-           display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          margin: "0px 20px",
-          position: "relative",
-          alignItems: "center",
-      
-        }}
-      >
-        <div className="audio-popup-vocab">
-          <div className="audio-inner player-ui">
-            <audio
-              ref={mainAudioRef}
-              src={vocabulary}
-              onTimeUpdate={(e) => {
-                const time = e.target.currentTime;
-                setCurrent(time);
-
-                // تشغيل لون الكلمات
-                const idx = wordTimings.findIndex(
-                  (t) => time >= t.start && time <= t.end
-                );
-                setActiveIndex(idx !== -1 ? idx : null);
-              }}
-              onLoadedMetadata={(e) => setDuration(e.target.duration)}
-            ></audio>
-            {/* Play / Pause */}
-            {/* الوقت - السلايدر - الوقت */}
-            <div className="top-row">
-              <span className="audio-time">
-                {new Date(current * 1000).toISOString().substring(14, 19)}
-              </span>
-
-              <input
-                type="range"
-                className="audio-slider"
-                min="0"
-                max={duration}
-                value={current}
-                onChange={(e) => {
-                  mainAudioRef.current.currentTime = e.target.value;
-                  updateCaption(Number(e.target.value));
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+     
+        <div
+          className="audio-popup-vocab-container"
+          style={{
+            width: "30%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            margin: "0px 20px",
+            position: "relative",
+            alignItems: "center",
+          }}
+        >
+          <div className="audio-popup-vocab">
+            <div className="audio-inner player-ui">
+              <audio
+                ref={mainAudioRef}
+                src={vocabulary}
+                onTimeUpdate={(e) => {
+                  const time = e.target.currentTime;
+                  setCurrent(time);
+                  updateCaption(time);
+                  updateWord(time); // 🔥 أهم خطوة
                 }}
-                style={{
-                  background: `linear-gradient(to right, #8247ffff ${
-                    (current / duration) * 100
-                  }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                }}
-              />
+                onLoadedMetadata={(e) => setDuration(e.target.duration)}
+              ></audio>
+              {/* Play / Pause */}
+              {/* الوقت - السلايدر - الوقت */}
+              <div className="top-row">
+                <span className="audio-time">
+                  {new Date(current * 1000).toISOString().substring(14, 19)}
+                </span>
 
-              <span className="audio-time">
-                {new Date(duration * 1000).toISOString().substring(14, 19)}
-              </span>
-            </div>
-            {/* الأزرار 3 أزرار بنفس السطر */}
-            <div className="bottom-row">
-              {/* فقاعة */}
-              <div
-                className={`round-btn ${showCaption ? "active" : ""}`}
-                onClick={() => setShowCaption(!showCaption)}
-              >
-                <TbMessageCircle size={36} />
+                <input
+                  type="range"
+                  className="audio-slider"
+                  min="0"
+                  max={duration}
+                  value={current}
+                  onChange={(e) => {
+                    mainAudioRef.current.currentTime = e.target.value;
+                    updateCaption(Number(e.target.value));
+                  }}
+                  style={{
+                    background: `linear-gradient(to right, #430f68 ${
+                      (current / duration) * 100
+                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                  }}
+                />
+
+                <span className="audio-time">
+                  {new Date(duration * 1000).toISOString().substring(14, 19)}
+                </span>
               </div>
-
-              {/* Play */}
-              <button className="play-btn2" onClick={togglePlay}>
-                {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-              </button>
-
-              {/* Settings */}
-              <div className="settings-wrapper" ref={settingsRef}>
-                <button
-                  className={`round-btn ${showSettings ? "active" : ""}`}
-                  onClick={() => setShowSettings(!showSettings)}
+              {/* الأزرار 3 أزرار بنفس السطر */}
+              <div className="bottom-row">
+                {/* فقاعة */}
+                <div
+                  className={`round-btn ${showCaption ? "active" : ""}`}
+                  onClick={() => setShowCaption(!showCaption)}
                 >
-                  <IoMdSettings size={36} />
+                  <TbMessageCircle size={36} />
+                </div>
+
+                {/* Play */}
+                <button className="play-btn2" onClick={togglePlay}>
+                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                 </button>
 
-                {showSettings && (
-                  <div className="settings-popup">
-                    <label>Volume</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.05"
-                      value={volume}
-                      onChange={(e) => {
-                        setVolume(e.target.value);
-                        audioRef.current.volume = e.target.value;
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>{" "}
-          </div>
-        </div>
-      </div>
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ position: "relative", display: "inline-block" }}>
-          {/* كلمة + صورة صغيرة */}
-          <div style={{ bottom: "0%", right: "0%" }}>
-            <img
-              src={page2_2}
-              style={{
-                height: "210px",
-                width: "auto",
-                position: "absolute",
-                bottom: "0%",
-                right: "0%",
-                borderRadius: "8%",
-              }}
-            />
+                {/* Settings */}
+                <div className="settings-wrapper" ref={settingsRef}>
+                  <button
+                    className={`round-btn ${showSettings ? "active" : ""}`}
+                    onClick={() => setShowSettings(!showSettings)}
+                  >
+                    <IoMdSettings size={36} />
+                  </button>
 
-            {/* النصوص */}
-            <div
-              className="vocab_container"
-              style={{ bottom: "2%", right: "0.5%" }}
-            >
-              {[
-                "numbers",
-                "Close your book.",
-                "Open your book",
-                "Make a line.",
-                "Listen! ",
-                "Quiet! ",
-                "Take out your pencil.",
-              ].map((text, i) => (
-                <h6
-                  key={i}
-                  className={
-                    activeIndex === i || clickedIndex === i ? "active" : ""
-                  }
-                  onClick={() => {
-                    setClickedIndex(i);
-
-                    // يرجع يشيل الانيميشن بعد 500ms (حسب زمن أنيميشنك)
-                    setTimeout(() => setClickedIndex(null), 500);
-                  }}
-                >
-                  {i + 1} {text}
-                </h6>
-              ))}
+                  {showSettings && (
+                    <div className="settings-popup">
+                      <label>Volume</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={volume}
+                        onChange={(e) => {
+                          setVolume(e.target.value);
+                          audioRef.current.volume = e.target.value;
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>{" "}
             </div>
           </div>
-
-          {/* الأرقام */}
-          {nums.map((num, i) => (
-            <img
-              key={i}
-              src={num}
-              id={`num-${i + 1}-unit3`}
-              className={`num-img ${
-                activeIndex === i || clickedIndex === i ? "active" : ""
-              }`}
-              style={{
-                height: "20px",
-                width: "auto",
-                position: "absolute",
-              }}
-            />
-          ))}
-          {/* الصورة الرئيسية */}
-          <img
-            src={backgroundImage}
-            alt="interactive"
-            style={{ height: "85vh" }}
-          />
         </div>
+    
+
+      <div
+        style={{
+          position: "relative",
+          marginTop: "5px",
+          width: "fit-content",
+        }}
+      >
+        <div className={`caption-inPopup ${showCaption ? "show" : ""}`}>
+          {captions.map((cap, i) => (
+            <p
+              key={i}
+              id={`caption-${i}`}
+              className={`caption-inPopup-line2 ${
+                activeIndex === i ? "active" : ""
+              }`}
+            >
+              {cap.text}
+            </p>
+          ))}
+        </div>{" "}
+        {/* كلمة + صورة صغيرة */}
+        <div style={{ bottom: "0%", right: "0%" }}>
+          <img
+            src={page2_2}
+            style={{
+              height: "210px",
+              width: "auto",
+              position: "absolute",
+              bottom: "0%",
+              right: "0%",
+              borderRadius: "8%",
+            }}
+          />
+
+          {/* النصوص */}
+          <div
+            className="vocab_container"
+            style={{ bottom: "2%", right: "0.5%" }}
+          >
+            {[
+              "numbers",
+              "Close your book.",
+              "Open your book",
+              "Make a line.",
+              "Listen! ",
+              "Quiet! ",
+              "Take out your pencil.",
+            ].map((text, i) => (
+              <h6
+                key={i}
+                className={
+                  (activeIndex2 === i && current >= 3.2) || clickedIndex === i
+                    ? "active"
+                    : ""
+                }
+                onClick={() => {
+                  setClickedIndex(i);
+
+                  playSingleWord(i); // 🔥 تشغيل كلمة واحدة فقط
+
+                  setTimeout(() => setClickedIndex(null), 500);
+                }}
+              >
+                {i + 1} {text}
+              </h6>
+            ))}
+          </div>
+        </div>
+        {/* الأرقام */}
+        {nums.map((num, i) => (
+          <img
+            key={i}
+            src={num}
+            id={`num-${i + 1}-unit3`}
+            className={`num-img ${
+              (activeIndex2 === i && current >= 3.2) || clickedIndex === i
+                ? "active"
+                : ""
+            }`}
+            style={{
+              height: "20px",
+              width: "auto",
+              position: "absolute",
+            }}
+          />
+        ))}
+        {/* الصورة الرئيسية */}
+        <img
+          src={backgroundImage}
+          alt="interactive"
+          style={{ height: "75vh" }}
+        />
       </div>
-    </>
+    </div>
   );
 };
 

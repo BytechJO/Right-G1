@@ -22,7 +22,7 @@ const Unit4_Page1_Vocab = () => {
   const [showContinue, setShowContinue] = useState(false);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
-
+  const [activeIndex2, setActiveIndex2] = useState(null);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -34,6 +34,21 @@ const Unit4_Page1_Vocab = () => {
   const [clickedIndex, setClickedIndex] = useState(null);
   const [showCaption, setShowCaption] = useState(false);
 
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    { start: 4.35, end: 8.29, text: "Page 28, unit 4 vocabulary. " },
+    { start: 8.33, end: 11.05, text: "1.	brown. " },
+    { start: 11.09, end: 13.05, text: "2.	blue. " },
+    { start: 13.09, end: 15.24, text: "3.	yellow. " },
+    { start: 15.27, end: 18.13, text: "4.	square. " },
+    { start: 18.17, end: 21.0, text: "5.	rectangle." },
+    { start: 21.04, end: 23.11, text: "6.	triangle. " },
+    { start: 23.14, end: 25.27, text: "7.	red. " },
+    { start: 25.3, end: 26.29, text: "8.	circle. " },
+  ];
+
   const wordTimings = [
     { start: 3.9, end: 5.9 }, // party hat
     { start: 6.1, end: 8.1 }, // jellow
@@ -44,7 +59,29 @@ const Unit4_Page1_Vocab = () => {
     { start: 18.3, end: 20.3 },
     { start: 20.4, end: 22.5 },
   ];
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
+  };
 
+  // ================================
+  // ✔ Update Word highlight
+  // ================================
+  const updateWord = (time) => {
+    const wordIndex = wordTimings.findIndex(
+      (w) => time >= w.start && time <= w.end
+    );
+    setActiveIndex2(wordIndex);
+  };
+
+  // ================================
+  // ✔ INITIAL PLAY & STOP AT SECOND
+  // ================================
   useEffect(() => {
     const audio = mainAudioRef.current;
     if (!audio) return;
@@ -102,15 +139,42 @@ const Unit4_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
+  // ================================
+  // ✔ Play single word only
+  // ================================
+  const playSingleWord = (index) => {
+    const audio = mainAudioRef.current;
+    if (!audio) return;
+
+    const { start, end } = wordTimings[index];
+
+    audio.currentTime = start;
+    audio.play();
+    setIsPlaying(true);
+
+    const stopInterval = setInterval(() => {
+      if (audio.currentTime >= end) {
+        audio.pause();
+        clearInterval(stopInterval);
+      }
+    }, 40);
+  };
 
   const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
   return (
-    <>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      {/* ============================
+           AUDIO PLAYER
+      ============================= */}
       <div
+        className="audio-popup-vocab-container"
         style={{
-          textAlign: "center",
+          width: "30%",
           display: "flex",
-          justifyContent: "flex-start",
+          flexDirection: "column",
+          justifyContent: "center",
           margin: "0px 20px",
           position: "relative",
           alignItems: "center",
@@ -124,12 +188,8 @@ const Unit4_Page1_Vocab = () => {
               onTimeUpdate={(e) => {
                 const time = e.target.currentTime;
                 setCurrent(time);
-
-                // تشغيل لون الكلمات
-                const idx = wordTimings.findIndex(
-                  (t) => time >= t.start && time <= t.end
-                );
-                setActiveIndex(idx !== -1 ? idx : null);
+                updateCaption(time);
+                updateWord(time); // 🔥 أهم خطوة
               }}
               onLoadedMetadata={(e) => setDuration(e.target.duration)}
             ></audio>
@@ -151,7 +211,7 @@ const Unit4_Page1_Vocab = () => {
                   updateCaption(Number(e.target.value));
                 }}
                 style={{
-                  background: `linear-gradient(to right, #8247ffff ${
+                  background: `linear-gradient(to right,  #430f68 ${
                     (current / duration) * 100
                   }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                 }}
@@ -206,89 +266,101 @@ const Unit4_Page1_Vocab = () => {
           </div>
         </div>
       </div>
+
+      {/* ============================
+           IMAGE + WORDS
+      ============================= */}
       <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        style={{ position: "relative", marginTop: "5px", width: "fit-content" }}
       >
-        <div style={{ position: "relative", display: "inline-block" }}>
-          {/* كلمة + صورة صغيرة */}
-          <div style={{ bottom: "0%", right: "0%" }}>
-            <img
-              src={page2_2}
-              style={{
-                height: "230px",
-                width: "auto",
-                position: "absolute",
-                bottom: "0%",
-                right: "0%",
-                borderRadius: "8%",
-              }}
-            />
-
-            {/* النصوص */}
-            <div
-              className="vocab_container"
-              style={{ bottom: "2%", right: "7.5%" }}
+        <div className={`caption-inPopup ${showCaption ? "show" : ""}`}>
+          {captions.map((cap, i) => (
+            <p
+              key={i}
+              id={`caption-${i}`}
+              className={`caption-inPopup-line2 ${
+                activeIndex === i ? "active" : ""
+              }`}
             >
-              {[
-                "brown",
-                "blue",
-                "yellow",
-                "square",
-                "rectangle",
-                "triangle",
-                "red",
-                "circle",
-              ].map((text, i) => (
-                <h6
-                  key={i}
-                  className={
-                    activeIndex === i || clickedIndex === i ? "active" : ""
-                  }
-                  onClick={() => {
-                    setClickedIndex(i);
-
-                    // يرجع يشيل الانيميشن بعد 500ms (حسب زمن أنيميشنك)
-                    setTimeout(() => setClickedIndex(null), 500);
-                  }}
-                >
-                  {i + 1} {text}
-                </h6>
-              ))}
-            </div>
-
-            {/* الأرقام */}
-            {nums.map((num, i) => (
-              <img
-                key={i}
-                src={num}
-                id={`num-${i + 1}-unit4`}
-                className={`num-img ${
-                  activeIndex === i || clickedIndex === i ? "active" : ""
-                }`}
-                style={{
-                  height: "20px",
-                  width: "auto",
-                  position: "absolute",
-                }}
-              />
-            ))}
-            {/* الصورة الرئيسية */}
-            <img
-              src={backgroundImage}
-              alt="interactive"
-              style={{ height: "85vh" }}
-            />
-          </div>
+              {cap.text}
+            </p>
+          ))}
         </div>
-      </div>{" "}
-     
-    </>
+        {/* كلمة + صورة صغيرة */}
+
+        <img
+          src={page2_2}
+          style={{
+            height: "230px",
+            width: "auto",
+            position: "absolute",
+            bottom: "0%",
+            right: "0%",
+            borderRadius: "8%",
+          }}
+        />
+
+        {/* النصوص */}
+        <div
+          className="vocab_container"
+          style={{ bottom: "2%", right: "7.5%" }}
+        >
+          {[
+            "brown",
+            "blue",
+            "yellow",
+            "square",
+            "rectangle",
+            "triangle",
+            "red",
+            "circle",
+          ].map((text, i) => (
+            <h6
+              key={i}
+              className={
+                (activeIndex2 === i && current >= 2.8) || clickedIndex === i
+                  ? "active"
+                  : ""
+              }
+              onClick={() => {
+                setClickedIndex(i);
+                playSingleWord(i);
+                // يرجع يشيل الانيميشن بعد 500ms (حسب زمن أنيميشنك)
+                setTimeout(() => setClickedIndex(null), 500);
+              }}
+            >
+              {i + 1} {text}
+            </h6>
+          ))}
+        </div>
+
+        {/* الأرقام */}
+        {nums.map((num, i) => (
+          <img
+            key={i}
+            src={num}
+            id={`num-${i + 1}-unit4`}
+            className={`num-img ${
+              (activeIndex2 === i && current >= 2.8) || clickedIndex === i
+                ? "active"
+                : ""
+            }`}
+            style={{
+              height: "20px",
+              position: "absolute",
+              top: ["43%", "43%", "42%", "22%", "25%"][i],
+              left: ["14%", "54%", "71%", "40%", "32%"][i],
+            }}
+          />
+        ))}
+        {/* الصورة الرئيسية */}
+        <img
+          src={backgroundImage}
+          alt="interactive"
+          style={{ height: "75vh" }}
+        />
+      </div>
+    </div>
   );
 };
 

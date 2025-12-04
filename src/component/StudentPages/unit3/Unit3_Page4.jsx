@@ -98,6 +98,7 @@ const Unit3_Page4 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
+            "audio",
             <div
               style={{
                 display: "flex",
@@ -109,8 +110,7 @@ const Unit3_Page4 = ({ openPopup }) => {
                 src={CD23_pg25_Grammar2_AdultLady}
                 captions={captionsExample}
               />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit3-page4-1 hover:scale-110 transition"
@@ -123,22 +123,27 @@ const Unit3_Page4 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
+            "video",
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignContent: "center",
+                alignItems: "center",
                 height: "100%",
                 width: "100%",
               }}
             >
               <video
-                style={{
-                  height: "auto",
-                  width: "85%",
-                  borderRadius: "5%",
-                }}
+                autoPlay
                 controls
+                style={{
+                  width: "auto",
+                  height: "80%",
+                  objectFit: "fill",
+                  borderRadius: "20px",
+                  display: "block",
+                }}
               >
                 <source src={video} type="video/mp4" />
               </video>

@@ -1,7 +1,7 @@
 import page_6 from "../../../assets/unit4/imgs/Right 1 Unit 04 Wonderful Shapes and Colors6.jpg";
 import "./Unit4_Page6.css";
 import song from "../../../assets/unit4/sounds/U4P33Song.mp3";
-import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg"
+import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import Unit4_Page6_Q2 from "./Unit4_Page6_Q2";
@@ -25,7 +25,6 @@ const Unit4_Page6 = ({ openPopup }) => {
     },
   ];
 
-
   return (
     <div className="unit4-page-background" style={{ position: "relative" }}>
       <img src={page_6} />
@@ -33,14 +32,7 @@ const Unit4_Page6 = ({ openPopup }) => {
         width="30"
         height="30"
         viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit4_Page6_Q2 />
-            </>,
-            false
-          )
-        }
+        onClick={() => openPopup("exercise", { startIndex: 35 })}
         className="click-icon-unit4-page6-3  hover:scale-110 transition"
       >
         <image href={arrowBtn} x="0" y="0" width="60" height="60" />
@@ -52,6 +44,7 @@ const Unit4_Page6 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
+            "audio",
             <div
               style={{
                 display: "flex",
@@ -60,8 +53,7 @@ const Unit4_Page6 = ({ openPopup }) => {
               }}
             >
               <AudioWithCaption src={song} captions={captionsExample} />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit4-page6-1 hover:scale-110 transition"

@@ -21,8 +21,8 @@ import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
-import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
+import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
 
 import "./Unit2_Page2.css";
 const Unit2_Page2 = ({ openPopup }) => {

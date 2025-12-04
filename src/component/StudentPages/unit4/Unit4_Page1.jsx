@@ -55,7 +55,7 @@ const Unit4_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <div
+           "audio", <div
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -66,8 +66,7 @@ const Unit4_Page1 = ({ openPopup }) => {
                 src={CD2_Pg38_Reading1_AdultLady}
                 captions={captionsExample}
               />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit4-page1-1 hover:scale-110 transition"
@@ -81,7 +80,7 @@ const Unit4_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+           "html", <>
               <Unit4_Page1_find />
             </>,
             false
@@ -98,10 +97,9 @@ const Unit4_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+          "html",  <>
               <Unit4_Page1_Vocab />
-            </>,
-            false
+            </>
           )
         }
         className="headset-icon-CD-unit4-page1-2 hover:scale-110 transition"
@@ -115,10 +113,9 @@ const Unit4_Page1 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <>
+           "html", <>
               <Unit4_Page1_Read />
-            </>,
-            false
+            </>
           )
         }
         className="click-icon-unit4-page1-2 hover:scale-110 transition"

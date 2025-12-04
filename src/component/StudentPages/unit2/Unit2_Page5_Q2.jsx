@@ -15,7 +15,7 @@ const Unit2_Page5_Q2 = () => {
   const [answers, setAnswers] = useState([null, null, null, null]);
   const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
-  const stopAtSecond = 4;
+  const stopAtSecond = 11.18;
   // إعدادات الصوت
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
@@ -40,14 +40,22 @@ const Unit2_Page5_Q2 = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 1.2, text: "Page 4, Unit 1. Good morning, world." },
-    { start: 1.21, end: 3.0, text: "Vocabulary." },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    {
+      start: 0,
+      end: 5.16,
+      text: "Page 14, Right activities. Exercise A, number two. ",
+    },
+    {
+      start: 5.18,
+      end: 11.18,
+      text: "Does it begin with a B or P? Listen and circle. ",
+    },
+    { start: 11.20, end: 12.28, text: "Bat." },
+    { start: 12.30, end: 13.22, text: "Pail." },
+    { start: 13.24, end: 14.19, text: "Box. " },
+    { start: 14.21, end: 15.13, text: "Boat." },
   ];
+
   // ================================
   // ✔ Update caption highlight
   // ================================
@@ -180,7 +188,8 @@ const Unit2_Page5_Q2 = () => {
         alignItems: "center",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

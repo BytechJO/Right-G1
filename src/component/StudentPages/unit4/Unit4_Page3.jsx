@@ -102,7 +102,7 @@ const Unit4_Page3 = ({ openPopup }) => {
             width: `${area.x2 - area.x1}%`,
             height: `${area.y2 - area.y1}%`,
           }}
-            onClick={() => {
+          onClick={() => {
             setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
             playSound(area.sound);
           }}
@@ -121,6 +121,7 @@ const Unit4_Page3 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
+            "audio",
             <div
               style={{
                 display: "flex",
@@ -132,8 +133,7 @@ const Unit4_Page3 = ({ openPopup }) => {
                 src={CD29_Pg30_Grammar1_AdultLady}
                 captions={captionsExample}
               />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit4-page3-1 hover:scale-110 transition"
@@ -146,21 +146,26 @@ const Unit4_Page3 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
+            "video",
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
                 alignContent: "center",
+                alignItems: "center",
                 height: "100%",
                 width: "100%",
               }}
             >
               <video
                 style={{
-                  height: "auto",
-                  width: "85%",
-                  borderRadius: "5%",
+                  width: "auto",
+                  height: "80%",
+                  objectFit: "fill",
+                  borderRadius: "20px",
+                  display: "block",
                 }}
+                autoPlay
                 controls
               >
                 <source src={video} type="video/mp4" />

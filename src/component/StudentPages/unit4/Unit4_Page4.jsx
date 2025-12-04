@@ -17,7 +17,7 @@ import video from "../../../assets/unit4/sounds/p31.mp4";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg"
 import pauseBtn from "../../../assets/unit1/imgs/Page 01/Right Video Button.svg";
-const Unit2_Page4 = ({ openPopup }) => {
+const Unit4_Page4 = ({ openPopup }) => {
   const audioRef = useRef(null);
     const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
       const [isPlaying, setIsPlaying] = useState(false);
@@ -110,7 +110,7 @@ const Unit2_Page4 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <div
+           "audio", <div
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -121,8 +121,7 @@ const Unit2_Page4 = ({ openPopup }) => {
                 src={CD30_Pg31_Grammar2_AdultLady}
                 captions={captionsExample}
               />
-            </div>,
-            true
+            </div>
           )
         }
         className="headset-icon-CD-unit4-page4-1 hover:scale-110 transition"
@@ -135,22 +134,26 @@ const Unit2_Page4 = ({ openPopup }) => {
         viewBox="0 0 60 60"
         onClick={() =>
           openPopup(
-            <div
+           "video", <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-                height: "100%",
-                width: "100%",
+               display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  width: "100%",
               }}
             >
               <video
-                style={{
-                  height: "auto",
-                  width: "85%",
-                  borderRadius: "5%",
-                }}
-                controls
+                 autoPlay
+                  controls
+                  style={{
+                    width: "auto",
+                    height: "80%",
+                    objectFit: "fill",
+                    borderRadius: "20px",
+                     display: "block"
+                  }}
               >
                 <source src={video} type="video/mp4" />
               </video>
@@ -166,4 +169,4 @@ const Unit2_Page4 = ({ openPopup }) => {
   );
 };
 
-export default Unit2_Page4;
+export default Unit4_Page4;

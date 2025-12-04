@@ -73,7 +73,16 @@ const Unit4_Page2 = ({ openPopup }) => {
     { start: 15.15, end: 19.15, text: " It is green, blue, brown and yellow." },
     { start: 19.18, end: 21.17, text: "I like my picture. " },
   ];
+ const captions = [
+    { start: 0, end: 3.26, text: " Page 5. Listen, read, and repeat. " },
+    { start: 3.28, end: 5.15, text: "Hello. How are you? " },
+    { start: 5.17, end: 7.13, text: "Fine, thank you. " },
+  ];
 
+  const captions2 = [
+    { start: 0, end: 3.19, text: " Page 5. Listen and read along. " },
+    { start: 3.21, end: 7.22, text: "T. Table. Taxi. Tiger." },
+  ];
   return (
     <div className="unit4-page-background" style={{ position: "relative" }}>
       <img src={page_2} />
@@ -83,11 +92,10 @@ const Unit4_Page2 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <AudioWithCaption
+          "audio",  <AudioWithCaption
               src={soundMyPicture}
               captions={captionsExample}
-            />,
-            true
+            />
           )
         }
         className="headset-icon-CD-unit4-page2-1 hover:scale-110 transition"
@@ -100,15 +108,15 @@ const Unit4_Page2 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <FourImagesWithAudio
+           "html", <FourImagesWithAudio
               images={[read, repeat1, repeat2]}
               audioSrc={soundListen}
               checkpoints={[0, 4.6, 6.21]}
               popupOpen={true}
               titleQ={`Listen, read, and repeat.`}
               audioArr={imageSounds2}
-            />,
-            false
+              captions={captions}
+            />
           )
         }
         className="headset-icon-CD-unit4-page2-2 hover:scale-110 transition"
@@ -122,15 +130,15 @@ const Unit4_Page2 = ({ openPopup }) => {
         viewBox="0 0 90 90"
         onClick={() =>
           openPopup(
-            <FourImagesWithAudio
+           "html",  <FourImagesWithAudio
               images={[Rabbit, img1, img2, img3, img4]}
               audioSrc={CD28Pg29_Instruction1_AdultLady}
               checkpoints={[0, 4.05, 5.1, 6.13, 7.03]}
               popupOpen={true}
               titleQ={"Listen and read along."}
               audioArr={imageSounds}
-            />,
-            false
+              captions={captions2}
+            />
           )
         }
         className="click-icon-unit4-page2-1 hover:scale-110 transition"

@@ -181,7 +181,6 @@ const Page4_vocabulary = () => {
               src={vocabulary}
               onTimeUpdate={(e) => {
                 const t = e.target.currentTime;
-
                 setCurrent(t);
                 updateCaption(t);
                 updateWord(t); // 🔥 أهم خطوة

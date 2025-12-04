@@ -93,6 +93,8 @@
 /* زر الإغلاق */
 .popup-close-btn {
   position: absolute;
+   top: 0px; /* ارتفاع النافبار */
+  right: 0px;
 background: none;
   border: none;
   font-size: 26px;
