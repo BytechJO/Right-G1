@@ -37,13 +37,16 @@ import {
   flashPages,
   posterPages,
 } from "./BookData";
+import WorkBookNavigator from "./WorkBookPages/WorkBookNavigator";
 
 export default function Book() {
   // ===========================================================
   //                 📌 STATE
   // ===========================================================
   const [pageIndex, setPageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("student");
+  const [activeTab, setActiveTab] = useState(() => {
+    return localStorage.getItem("activeTab") || "student";
+  });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
 
   const [zoom, setZoom] = useState(1);
@@ -76,7 +79,7 @@ export default function Book() {
   //                 📌 POPUP HANDLERS
   // ===========================================================
   function openPopup(type, data) {
-    setPopupContent({ type, data });
+    setPopupContent({ type, data, tab: activeTab });
     setPopupOpen(true);
   }
   function closePopup() {
@@ -103,7 +106,7 @@ export default function Book() {
     setPageIndex(0);
     setOffset({ x: 0, y: 0 });
     setZoom(1);
-
+    localStorage.setItem("activeTab", activeTab);
     if (activeTab === "poster") {
       setViewMode("single"); // بوستر = صفحة واحدة دائمًا
     } else {
@@ -119,12 +122,36 @@ export default function Book() {
   //                 📌 PAGE NAVIGATION
   // ===========================================================
   function goToUnit(index) {
-    setPageIndex(index);
+    setPageIndex(index - 1);
+    // ===========================
+    // ❌ التحقق من إدخال غير صحيح
+    // ===========================
+    if (isNaN(index) || index < 1 || index > pages.length) {
+      // رجّعه للفهرس (الصفحة الثانية لأن الأولى سينجل)
+      setPageIndex(1);
+      return;
+    }
   }
 
   const goToPage = (pageNumber) => {
     // حوّل القيمة لرقم
     const num = Number(pageNumber);
+    // 📘 Special Logic for WORKBOOK Spread (reverse pages)
+    if (activeTab === "work" && !isMobile && viewMode === "spread") {
+      if (num === 1) {
+        setPageIndex(0);
+        return;
+      }
+
+      // always make LEFT page = the exact number written
+      let targetIndex = num - 1;
+
+      // but RIGHT page = previous index, so ensure targetIndex >= 1
+      if (targetIndex < 1) targetIndex = 1;
+
+      setPageIndex(targetIndex);
+      return;
+    }
 
     // ===========================
     // ❌ التحقق من إدخال غير صحيح
@@ -167,18 +194,48 @@ export default function Book() {
   };
 
   const nextPage = () => {
-    // Posters → always one page
+    // =============== Posters → always single ===============
     if (activeTab === "poster") {
-      if (pageIndex < pages.length - 1) setPageIndex(pageIndex + 1);
+      if (pageIndex < pages.length - 1) {
+        setPageIndex(pageIndex + 1);
+      }
       return;
     }
 
-    // Normal logic
+    // =============== WORKBOOK LOGIC ===============
+    if (activeTab === "work" && !isMobile && viewMode === "spread") {
+      // الصفحة 1 → single
+      if (pageIndex === 0) {
+        setPageIndex(1);
+        return;
+      }
+
+      // الصفحة 2 → single
+      if (pageIndex === 1) {
+        setPageIndex(2); // الآن start spread (show page 3–4)
+        return;
+      }
+
+      // من الآن spread → زيادة 2
+      if (pageIndex + 2 < pages.length) {
+        setPageIndex(pageIndex + 2);
+        return;
+      }
+
+      return;
+    }
+
+    // =============== DEFAULT LOGIC FOR OTHER TABS ===============
     if (isMobile || viewMode === "single") {
-      if (pageIndex < pages.length - 1) setPageIndex(pageIndex + 1);
+      if (pageIndex < pages.length - 1) {
+        setPageIndex(pageIndex + 1);
+      }
     } else {
-      if (pageIndex === 0) setPageIndex(1);
-      else if (pageIndex < pages.length - 2) setPageIndex(pageIndex + 2);
+      if (pageIndex === 0) {
+        setPageIndex(1);
+      } else if (pageIndex < pages.length - 2) {
+        setPageIndex(pageIndex + 2);
+      }
     }
   };
 
@@ -329,7 +386,8 @@ export default function Book() {
         {isMobile ||
         activeTab === "poster" ||
         viewMode === "single" ||
-        pageIndex === 0 ? (
+        pageIndex === 0 ||
+        (activeTab === "work" && pageIndex <= 1) ? (
           <div
             className="bg-white rounded-2xl shadow-2xl border flex items-center justify-center overflow-hidden"
             style={{
@@ -341,6 +399,7 @@ export default function Book() {
           </div>
         ) : (
           // Spread Mode
+
           <div
             className="bg-white rounded-2xl shadow-2xl border grid grid-cols-2 overflow-hidden"
             style={{
@@ -348,12 +407,27 @@ export default function Book() {
               cursor: zoom === 1 ? "default" : isDragging ? "grabbing" : "grab",
             }}
           >
-            <div className="flex items-center justify-center border-r">
-              {renderPage(pages[pageIndex])}
-            </div>
-            <div className="flex items-center justify-center border-l">
-              {renderPage(pages[pageIndex + 1])}
-            </div>
+            {/* WORKBOOK → منقلب (الزوجي على اليمين، الفردي على اليسار) */}
+            {activeTab === "work" ? (
+              <>
+                <div className="flex items-center justify-center border-r">
+                  {renderPage(pages[pageIndex])} {/* RIGHT PAGE */}
+                </div>
+                <div className="flex items-center justify-center border-l">
+                  {renderPage(pages[pageIndex + 1])} {/* LEFT PAGE */}
+                </div>
+              </>
+            ) : (
+              /* باقي التابات → طبيعي */
+              <>
+                <div className="flex items-center justify-center border-r">
+                  {renderPage(pages[pageIndex])}
+                </div>
+                <div className="flex items-center justify-center border-l">
+                  {renderPage(pages[pageIndex + 1])}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
@@ -370,6 +444,7 @@ export default function Book() {
         goToPage={goToPage}
         isMobile={isMobile}
         viewMode={viewMode}
+        activeTab={activeTab}
         setViewMode={setViewMode}
         icons={{
           menu,
@@ -428,10 +503,24 @@ export default function Book() {
       )}
       {/* ===================== POPUP ===================== */}
       <Popup isOpen={popupOpen} onClose={closePopup} type={popupContent?.type}>
-        {popupContent?.type === "exercise" && (
+        {/* لو المستخدم داخل Workbook */}
+        {popupContent?.tab === "work" && popupContent?.type === "exercise" && (
+          <>
+            {/* محتوى خاص للورك بوك */}
+
+            <WorkBookNavigator
+              startIndex={popupContent.data.startIndex}
+              mode="workbook"
+            />
+          </>
+        )}
+
+        {/* لو كان تبويب غير Workbook */}
+        {popupContent?.tab !== "work" && popupContent?.type === "exercise" && (
           <LessonNavigator startIndex={popupContent.data.startIndex} />
         )}
 
+        {/* باقي الأنواع */}
         {popupContent?.type !== "exercise" && popupContent?.data}
       </Popup>
     </>

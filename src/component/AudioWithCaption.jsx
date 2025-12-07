@@ -18,7 +18,7 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
 
   // تحديث الهايلايت حسب الوقت
   const updateCaption = (time) => {
-    if (!captions) return;
+    if (!captions || captions.length === 0) return;
 
     const index = captions.findIndex(
       (cap) => time >= cap.start && time <= cap.end
@@ -111,12 +111,16 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
         {/* الأزرار 3 أزرار بنفس السطر */}
         <div className="bottom-row">
           {/* فقاعة */}
-          <div
-            className={`round-btn ${showCaption ? "active" : ""}`}
-            onClick={() => setShowCaption(!showCaption)}
-          >
-            <TbMessageCircle size={40} />
-          </div>
+          {captions && captions.length > 0 ? (
+            <div
+              className={`round-btn ${showCaption ? "active" : ""}`}
+              onClick={() => setShowCaption(!showCaption)}
+            >
+              <TbMessageCircle size={40} />
+            </div>
+          ) : (
+            <div></div>
+          )}
 
           {/* Play */}
           <button className="play-btn2" onClick={togglePlay}>
@@ -151,13 +155,13 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
           </div>
         </div>{" "}
         {/* الكابشن تحت الأزرار */}
-        {showCaption && (
+        {captions && captions.length > 0 && showCaption && (
           <>
             <h3 style={{ fontSize: "20px", fontWeight: "500" }}>
               Audio Transcript:
             </h3>
             <div className="caption-box" ref={captionRef}>
-              {captions?.map((cap, i) => (
+              {captions.map((cap, i) => (
                 <p
                   key={i}
                   id={`caption-${i}`}

@@ -1,0 +1,49 @@
+.question-box-wb-u1-p5-q1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.container-wb-u1-p5-q1 {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+}
+
+.option-word-unit7-p5-q1 {
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 15px; /* نفس حجم selected */
+  border-radius: 25px;
+  border: 2px solid transparent; /* مهم جداً */
+  transition: 0.2s;
+  position: relative;
+  user-select: none;
+}
+
+.option-word-unit7-p5-q1.selected3 {
+  border-color: #2c5287; /* فقط نغيّر اللون */
+}
+
+.wrong-x-wb-u1-p5-q1 {
+  width: 25px;
+  height: 25px;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  position: absolute;
+  left: 91%;
+  top: -36%;
+  z-index: 99;
+}

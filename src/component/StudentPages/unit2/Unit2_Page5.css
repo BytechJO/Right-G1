@@ -135,12 +135,20 @@
 .bp-option {
   font-size: 28px;
   cursor: pointer;
-  padding: 4px 10px;
+height: 50px;
+width: 50px;
+display: flex;
+justify-content: center;
+  padding: 4px 4px;
   border-radius: 6px;
   transition: 0.2s;
+  align-items: center;
   border: 2px solid transparent;
 }
-
+.bp-option.selected{
+   border-color: darkblue;
+  border-radius: 50%;
+}
 .bp-option:hover {
   transform: scale(1.2);
 }
