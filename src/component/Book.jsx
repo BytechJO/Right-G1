@@ -358,7 +358,7 @@ export default function Book() {
 
       {/* ===================== MAIN PAGE VIEW ===================== */}
       <div
-        className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[88vh] flex items-center justify-center relative"
+        className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[86vh] flex items-center justify-center relative"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -397,7 +397,7 @@ export default function Book() {
         pageIndex === 0 ||
         (activeTab === "work" && pageIndex <= 1) ? (
           <div
-            className="bg-white rounded-2xl shadow-2xl border flex items-center justify-center overflow-hidden"
+            className="bg-white rounded-2xl shadow-2xl border flex items-center justify-center overflow-hidden self-end"
             style={{
               transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
               cursor: zoom === 1 ? "default" : isDragging ? "grabbing" : "grab",
@@ -409,7 +409,7 @@ export default function Book() {
           // Spread Mode
 
           <div
-            className="bg-white rounded-2xl shadow-2xl border grid grid-cols-2 overflow-hidden"
+            className="bg-white rounded-2xl shadow-2xl border grid grid-cols-2 overflow-hidden self-end"
             style={{
               transform: `translate(${offset.x}px, ${offset.y}px) scale(${zoom})`,
               cursor: zoom === 1 ? "default" : isDragging ? "grabbing" : "grab",

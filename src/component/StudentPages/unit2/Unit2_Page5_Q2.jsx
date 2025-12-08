@@ -336,6 +336,7 @@ const Unit2_Page5_Q2 = () => {
                 <div className="bp-options">
                   {/* B OPTION */}
                   <span
+                  style={{position:"relative"}}
                     className={`bp-option 
                     ${answers[index] === "b" ? "selected" : ""}
                     ${
@@ -351,12 +352,13 @@ const Unit2_Page5_Q2 = () => {
                     {showResult &&
                       answers[index] === "b" &&
                       answers[index] !== item.correct && (
-                        <span className="wrong-x">✕</span>
+                        <span className="wrong-x-u2-p5-q2">✕</span>
                       )}
                   </span>
 
                   {/* P OPTION */}
                   <span
+                   style={{position:"relative"}}
                     className={`bp-option 
                     ${answers[index] === "p" ? "selected" : ""}
                     ${
@@ -372,7 +374,7 @@ const Unit2_Page5_Q2 = () => {
                     {showResult &&
                       answers[index] === "p" &&
                       answers[index] !== item.correct && (
-                        <span className="wrong-x">✕</span>
+                        <span className="wrong-x-u2-p5-q2">✕</span>
                       )}
                   </span>
                 </div>
