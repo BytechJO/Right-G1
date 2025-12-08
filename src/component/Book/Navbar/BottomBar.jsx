@@ -17,7 +17,7 @@ export default function BottomBar({
     <footer
       className="w-full bg-white border-t shadow 
   flex items-center justify-center gap-2 
-  py-1 fixed bottom-0 left-0 z-[9999] h-[42px]"
+  py-1 fixed bottom-0 left-0 z-[9999] h-[40px]"
     >
       {/* MENU */}
       <button onClick={icons.openSidebar} className="absolute left-3">

@@ -9,7 +9,7 @@ export default function TopNavbar({
   isMobile,
 }) {
   return (
-    <nav className="w-full bg-white border-b shadow px-2 py-2 flex items-center justify-between">
+    <nav className="w-full bg-white border-b shadow px-2 py-1 flex items-center justify-between">
       {/* LEFT */}
       <div className="flex items-center gap-10">
         <img src={logo} alt="logo" style={{ height: 40, width: 100 }} />
