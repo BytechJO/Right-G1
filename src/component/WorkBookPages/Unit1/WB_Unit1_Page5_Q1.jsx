@@ -31,7 +31,6 @@ const WB_Unit1_Page5_Q1 = () => {
   ];
   const [answers, setAnswers] = useState(() => {
     const arr = Array(items.length).fill(null);
-    arr[0] = items[0].correctIndex; // 👈 أول إجابة مختارة تلقائياً
     return arr;
   });
   const [showResult, setShowResult] = useState(false);
@@ -49,27 +48,29 @@ const WB_Unit1_Page5_Q1 = () => {
   const checkAnswers = () => {
     if (showAnswer) return;
 
+    // تجاهل السؤال الأول عند التحقق من اكتمال الإجابات
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
+    // حساب الإجابات الصحيحة "باستثناء السؤال الأول"
     let correctCount = answers.filter(
       (ans, i) => ans === items[i].correctIndex
     ).length;
 
-    const total = items.length;
+    const total = items.length; // عدد الأسئلة التي تُحسب فقط
 
     let color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${correctCount} / ${total}
-        </span>
-      </div>
-    `;
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color};font-weight:bold">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
 
     if (correctCount === total) ValidationAlert.success(msg);
     else if (correctCount === 0) ValidationAlert.error(msg);
@@ -77,6 +78,7 @@ const WB_Unit1_Page5_Q1 = () => {
 
     setShowResult(true);
   };
+
   const showCorrectAnswers = () => {
     const correct = items.map((item) => item.correctIndex);
     setAnswers(correct);
@@ -85,7 +87,10 @@ const WB_Unit1_Page5_Q1 = () => {
   };
 
   const reset = () => {
-    setAnswers(Array(items.length).fill(null));
+    setAnswers(() => {
+      const arr = Array(items.length).fill(null);
+      return arr;
+    });
     setShowAnswer(false);
     setShowResult(false);
   };
@@ -156,7 +161,7 @@ const WB_Unit1_Page5_Q1 = () => {
                         key={optIndex}
                         className={`
                     option-word-unit7-p5-q1
-                    ${isSelected ? "selected3" : ""}
+                    ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
                     ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                     ${showResult && isCorrect ? "correct" : ""}
                   `}

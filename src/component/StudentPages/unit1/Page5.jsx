@@ -65,13 +65,13 @@ const Page5 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 7.01, y1: 45.3, x2: 11.4, y2: 48.8, sound: 1, isPrimary: true },
+    { x1: 7.25, y1: 45.8, x2: 11.4, y2: 48.8, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 4.6, y1: 34.1, x2: 15.2, y2: 67.8, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 33.8, y1: 43.1, x2: 37.7, y2: 46.1, sound: 2, isPrimary: true },
+    { x1: 33.9, y1: 43.1, x2: 37.7, y2: 46.1, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 26.9, y1: 32.8, x2: 35.8, y2: 68.9, sound: 2, isPrimary: false },
@@ -109,25 +109,51 @@ const Page5 = ({ openPopup }) => {
         style={{ display: "block" }}
       />
 
-      {areas.map((area, index) => (
-        <div
-          key={index}
-          className={`clickable-area ${
-            area.isPrimary && activeAreaIndex === area.sound ? "highlight" : ""
-          }`}
-          style={{
-            position: "absolute",
-            left: `${area.x1}%`,
-            top: `${area.y1}%`,
-            width: `${area.x2 - area.x1}%`,
-            height: `${area.y2 - area.y1}%`,
-          }}
-          onClick={() => {
-            setActiveAreaIndex(area.sound);
-            playSound(sounds[area.sound]);
-          }}
-        ></div>
-      ))}
+      {areas.map((area, index) => {
+        const isActive = activeAreaIndex === area.sound;
+
+        // ============================
+        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
+        // ============================
+        if (area.isPrimary) {
+          return (
+            <div
+              key={index}
+              className={`circle-area ${isActive ? "active" : ""}`}
+              style={{
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+              }}
+              onClick={() => {
+                setActiveAreaIndex(area.sound);
+                playSound(sounds[area.sound]);
+              }}
+            ></div>
+          );
+        }
+
+        // ============================
+        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
+        //    عند الضغط عليها → تفعّل الدائرة الأساسية
+        // ============================
+        return (
+          <div
+            key={index}
+            className="clickable-area"
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
+              playSound(sounds[area.sound]);
+            }}
+          ></div>
+        );
+      })}
 
       <div
         id="CD-1-page5"
@@ -140,8 +166,8 @@ const Page5 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-              <AudioWithCaption src={page5_CD2} captions={captionsExample} />,
-              true
+              "audio",
+              <AudioWithCaption src={page5_CD2} captions={captionsExample} />
             )
           }
           style={{ overflow: "visible" }}

@@ -14,12 +14,12 @@ export default function WB_Unit1_Page6_Q1() {
     { img: img4, answer: "Goodbye!" },
   ];
 
-  const [inputs, setInputs] = useState(["Good morning!", "", "", ""]);
+  const [inputs, setInputs] = useState(["", "", "", ""]);
   const [wrong, setWrong] = useState([false, false, false, false]);
   const [showAnswer, setShowAnswer] = useState(false);
 
   const updateInput = (index, value) => {
-    if (index === 0 || showAnswer) return;
+    if (showAnswer) return;
     setInputs((prev) => prev.map((v, i) => (i === index ? value : v)));
     setWrong([false, false, false, false]);
   };
@@ -27,7 +27,7 @@ export default function WB_Unit1_Page6_Q1() {
   const checkAnswers = () => {
     if (showAnswer) return;
 
-    if (inputs.slice(1).some((v) => v.trim() === "")) {
+    if (inputs.some((v) => v.trim() === "")) {
       ValidationAlert.info(
         "Oops!",
         "Please complete all answers before checking."
@@ -37,7 +37,6 @@ export default function WB_Unit1_Page6_Q1() {
 
     let correct = 0;
     const wrongStatus = inputs.map((v, i) => {
-      if (i === 0) return false;
       const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
       if (ok) correct++;
       return !ok;
@@ -45,7 +44,7 @@ export default function WB_Unit1_Page6_Q1() {
 
     setWrong(wrongStatus);
 
-    let total = data.length - 1;
+    let total = data.length;
     let color = correct === total ? "green" : correct === 0 ? "red" : "orange";
 
     const msg = `
@@ -62,7 +61,7 @@ export default function WB_Unit1_Page6_Q1() {
   };
 
   const reset = () => {
-    setInputs(["Good morning!", "", "", ""]);
+    setInputs(["", "", "", ""]);
     setWrong([false, false, false, false]);
     setShowAnswer(false);
   };
@@ -120,15 +119,9 @@ export default function WB_Unit1_Page6_Q1() {
                       fontSize: "20px",
                       fontWeight: "600",
                     }}
-                    value={
-                      showAnswer
-                        ? item.answer
-                        : i === 0
-                        ? "Good morning!"
-                        : inputs[i]
-                    }
+                    value={showAnswer ? item.answer : inputs[i]}
                     onChange={(e) => updateInput(i, e.target.value)}
-                    disabled={i === 0 || showAnswer}
+                    disabled={ showAnswer}
                   />
 
                   {wrong[i] && (

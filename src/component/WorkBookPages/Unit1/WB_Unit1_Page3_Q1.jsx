@@ -24,7 +24,7 @@ const WB_Unit1_Page3_Q1 = () => {
     if (showAnswer) return;
 
     // تجاهل أول إنبوت (index === 0) عند التحقق من المدخلات الفارغة
-    if (inputs.slice(1).some((v) => v.trim() === "")) {
+    if (inputs.some((v) => v.trim() === "")) {
       ValidationAlert.info(
         "Oops!",
         "Please complete all answers before checking."
@@ -35,9 +35,6 @@ const WB_Unit1_Page3_Q1 = () => {
     let correct = 0;
 
     const wrongStatus = inputs.map((v, i) => {
-      // السؤال الأول دائماً صحيح ولا يدخل في التقييم
-      if (i === 0) return false;
-
       const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
       if (ok) correct++;
       return !ok;
@@ -45,7 +42,7 @@ const WB_Unit1_Page3_Q1 = () => {
 
     setWrong(wrongStatus);
 
-    const total = data.length - 1; // لأننا حذفنا السؤال الأول من السكور
+    const total = data.length; // لأننا حذفنا السؤال الأول من السكور
 
     let color = correct === total ? "green" : correct === 0 ? "red" : "orange";
 
@@ -121,11 +118,8 @@ const WB_Unit1_Page3_Q1 = () => {
                   fontSize: "20px",
                   borderBottom: "2px solid black",
                 }}
-                value={
-                  showAnswer ? item.answer : i === 0 ? item.answer : inputs[i]
-                }
+                value={showAnswer ? item.answer : inputs[i]}
                 onChange={(e) => updateInput(i, e.target.value)}
-                disabled={i === 0}
               />
 
               {wrong[i] && <div className="wrong-icon-wb-unit1-p3-q1">✕</div>}

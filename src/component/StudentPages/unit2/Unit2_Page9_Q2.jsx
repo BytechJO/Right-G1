@@ -9,6 +9,8 @@ export default function Unit2_Page9_Q2() {
   const startPointRef = useRef(null);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false);
   const correctMatches = [
     { word1: "Happy", word2: "birthday!" },
     { word1: "I’m seven", word2: "years old." },
@@ -20,7 +22,15 @@ export default function Unit2_Page9_Q2() {
   // ⭐ Click to Connect Logic
   // ==========================
   const handleStartDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
+
     const rect = containerRef.current.getBoundingClientRect();
+       const word = e.target.dataset.letter;
+
+    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return;
+    // -----------------------------------------------------
 
     setFirstDot({
       word: e.target.dataset.letter,
@@ -30,6 +40,7 @@ export default function Unit2_Page9_Q2() {
   };
 
   const handleEndDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐ NEW
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -49,7 +60,7 @@ export default function Unit2_Page9_Q2() {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن إعادة التحقق
     // 1️⃣ إذا في خطوط ناقصة
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
@@ -72,7 +83,9 @@ export default function Unit2_Page9_Q2() {
     });
 
     setWrongWords(wrong); // ⭐ تم التعديل هون
+    setLocked(true); // ⭐⭐⭐ NEW: أقفل الرسم بعد الضغط على Check Answer
     // 3️⃣ تحديد اللون حسب النتيجة
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
@@ -97,7 +110,6 @@ export default function Unit2_Page9_Q2() {
   // ⭐ Show Correct Answers
   const showCorrectAnswers = () => {
     const rect = containerRef.current.getBoundingClientRect();
-
     // 1️⃣ تجهيز خطوط الإجابة الصحيحة
     const correctLines = correctMatches.map((pair) => {
       const startEl = document.querySelector(
@@ -120,6 +132,7 @@ export default function Unit2_Page9_Q2() {
     // 2️⃣ وضع الخطوط
     setLines(correctLines);
     setShowAnswer(true);
+    setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
     // 3️⃣ إخفاء علامات الإكس
     setWrongWords([]);
   };
@@ -164,7 +177,7 @@ export default function Unit2_Page9_Q2() {
                   onClick={handleStartDotClick}
                 ></div>
                 {wrongWords.includes(word) && (
-                  <span className="error-mark4">✕</span>
+                  <span className="error-mark4-u2-p18-q2">✕</span>
                 )}
               </div>
             ))}
@@ -179,8 +192,13 @@ export default function Unit2_Page9_Q2() {
                   id={`dot-${word}`}
                   onClick={handleEndDotClick}
                 ></div>
-                <span className="word-text3"   onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer" }}>{word}</span>
+                <span
+                  className="word-text3"
+                  onClick={() => document.getElementById(`dot-${word}`).click()}
+                  style={{ cursor: "pointer" }}
+                >
+                  {word}
+                </span>
               </div>
             ))}
           </div>
@@ -206,6 +224,7 @@ export default function Unit2_Page9_Q2() {
             setLines([]);
             setWrongWords([]);
             setShowAnswer(false);
+            setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
           }}
           className="try-again-button"
         >

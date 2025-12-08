@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Page8_Q2.css";
-import img1 from "../../../assets/unit1/imgs/Table (1).svg";
-import img2 from "../../../assets/unit1/imgs/Taxi (1).svg";
-import img3 from "../../../assets/unit1/imgs/deer23.svg";
-import img4 from "../../../assets/unit1/imgs/dish23.svg";
+import img1 from "../../../assets/unit1/imgs/U1P8EXEA2-01.svg";
+import img2 from "../../../assets/unit1/imgs/U1P8EXEA2-02.svg";
+import img3 from "../../../assets/unit1/imgs/U1P8EXEA2-03.svg";
+import img4 from "../../../assets/unit1/imgs/U1P8EXEA2-04.svg";
 
 const exerciseData = {
   pairs: [
@@ -72,6 +72,7 @@ const Page8_Q2 = () => {
   };
 
   const checkAnswers = () => {
+      if (showAnswer) return; // ← تجاهل السحب بالكامل
     const allFilled = Object.values(droppedLetters).every((v) => v !== null);
 
     if (!allFilled) {
@@ -177,7 +178,10 @@ const Page8_Q2 = () => {
                 >
                   {(provided, snapshot) => (
                     <div className="image-container">
-                      <img src={imageSrc} alt={`Visual hint ${index + 1}`} />
+                      <div style={{display:"flex",gap:"10px"}}>
+                        <span style={{color:"#1c3d7e",fontSize:"20px",fontWeight:"600"}}>{index + 1}</span>
+                        <img src={imageSrc} alt={`Visual hint ${index + 1}`} />
+                      </div>
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
@@ -238,7 +242,7 @@ const Page8_Q2 = () => {
           }}
           className="show-answer-btn swal-continue"
         >
-          Show Answer 
+          Show Answer
         </button>
 
         <button onClick={checkAnswers} className="check-button2">

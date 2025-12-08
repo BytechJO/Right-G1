@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import "./WorkBookNavigator.css";
-import next from "../../assets/unit1/imgs/Page 01/next btn.svg";
-import back from "../../assets/unit1/imgs/Page 01/back btn.svg";
+import next from "../../assets/unit1/imgs/next btn white.svg";
+import back from "../../assets/unit1/imgs/back btn white.svg";
 import { workBookData } from "./WorkBookData";
 
 export default function WorkBookNavigator({ startIndex = 0 }) {
@@ -132,14 +132,18 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
               display: "flex",
               alignItems: "center",
               color: "white",
-              fontSize: "20px",
+              fontSize: "16px",
               fontWeight: "500",
+              cursor: "pointer",
             }}
           >
             <svg
               width="25"
               height="25"
               viewBox="0 0 90 90"
+              style={{
+                padding: "10px",
+              }}
               className="nav-btn w-10 h-10 rounded-full transition"
             >
               <image href={back} x="0" y="0" width="90" height="90" />
@@ -152,14 +156,18 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
               display: "flex",
               alignItems: "center",
               color: "white",
-              fontSize: "20px",
+              fontSize: "16px",
               fontWeight: "500",
+              cursor: "pointer",
             }}
           >
             <svg
               width="25"
               height="25"
               viewBox="0 0 90 90"
+              style={{
+                padding: "10px",
+              }}
               className="nav-btn w-10 h-10 rounded-full transition"
             >
               <image href={back} x="0" y="0" width="90" height="90" />
@@ -174,8 +182,9 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
             display: "flex",
             alignItems: "center",
             color: "white",
-            fontSize: "20px",
+            fontSize: "16px",
             fontWeight: "500",
+            cursor: "pointer",
           }}
         >
           Next Exercise
@@ -183,6 +192,9 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
             width="25"
             height="25"
             viewBox="0 0 90 90"
+            style={{
+              padding: "10px",
+            }}
             className="nav-btn w-10 h-10 rounded-full transition"
           >
             <image href={next} x="0" y="0" width="90" height="90" />

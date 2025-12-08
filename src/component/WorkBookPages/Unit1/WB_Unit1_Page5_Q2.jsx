@@ -21,9 +21,7 @@ const WB_Unit1_Page5_Q2 = () => {
     3: [0, 15],
     4: [7],
   };
-  const [circledWords, setCircledWords] = useState({
-    0: [...correct[0]], // 👈 إجابة الجملة الأولى ظاهرة من البداية
-  });
+  const [circledWords, setCircledWords] = useState({});
   const checkAnswers = (circledWords, correctAnswers) => {
     if (showAnswer) return;
     if (Object.keys(circledWords).length === 0) {
@@ -156,7 +154,7 @@ const WB_Unit1_Page5_Q2 = () => {
         <button
           onClick={() => {
             setCircledWords({
-              0: [...correct[0]], // 👈 إجابة الجملة الأولى ظاهرة من البداية
+             
             });
             setChecked(false);
             setShowAnswer(false);

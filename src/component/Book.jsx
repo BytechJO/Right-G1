@@ -102,12 +102,14 @@ export default function Book() {
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
+
   useEffect(() => {
     setPageIndex(0);
     setOffset({ x: 0, y: 0 });
     setZoom(1);
     localStorage.setItem("activeTab", activeTab);
-    if (activeTab === "poster") {
+    localStorage.setItem("pageIndex", pageIndex);
+    if (activeTab === "poster" || activeTab === "flash") {
       setViewMode("single"); // بوستر = صفحة واحدة دائمًا
     } else {
       if (!isMobile) {
@@ -134,68 +136,73 @@ export default function Book() {
   }
 
   const goToPage = (pageNumber) => {
-    // حوّل القيمة لرقم
     const num = Number(pageNumber);
+
+    // ===========================
+    // ❌ التحقق من إدخال غير صحيح
+    // ===========================
+    if (isNaN(num) || num < 1 || num > pages.length) {
+      setPageIndex(1); // رجّعه للصفحة الثانية دائماً
+      return;
+    }
+
+    // ===========================
     // 📘 Special Logic for WORKBOOK Spread (reverse pages)
+    // ===========================
     if (activeTab === "work" && !isMobile && viewMode === "spread") {
+      // الصفحة 1 تكون سينجل دائماً
       if (num === 1) {
         setPageIndex(0);
         return;
       }
 
-      // always make LEFT page = the exact number written
-      let targetIndex = num - 1;
+      // الصفحة 2 تكون سينجل دائماً
+      if (num === 2) {
+        setPageIndex(1);
+        return;
+      }
 
-      // but RIGHT page = previous index, so ensure targetIndex >= 1
-      if (targetIndex < 1) targetIndex = 1;
+      // بعد الصفحة الثانية: left page يجب أن تكون فردية دائماً
+      let leftPage = num % 2 === 0 ? num - 1 : num;
+      let targetIndex = leftPage - 1;
+
+      // لا تسمح أن يقل عن الصفحة الثالثة
+      if (targetIndex < 2) targetIndex = 2;
 
       setPageIndex(targetIndex);
       return;
     }
 
     // ===========================
-    // ❌ التحقق من إدخال غير صحيح
-    // ===========================
-    if (isNaN(num) || num < 1 || num > pages.length) {
-      // رجّعه للفهرس (الصفحة الثانية لأن الأولى سينجل)
-      setPageIndex(1);
-      return;
-    }
-
-    const index = num - 1;
-
-    // ===========================
     // 📱 Mobile OR single mode
     // ===========================
     if (isMobile || viewMode === "single") {
-      setPageIndex(index);
+      setPageIndex(num - 1);
       return;
     }
 
     // ===========================
-    // 📘 Spread Mode (صفحتين)
+    // 📘 Spread Mode (لجميع التابات الأخرى)
     // ===========================
-
-    // الصفحة الأولى دائماً سينجل
     if (num === 1) {
       setPageIndex(0);
       return;
     }
 
-    // لو كانت الصفحة فردية → اعرض السابقة معها
+    // لو فردية → اعرض السابقة
     if (num % 2 === 1) {
-      // مثال: 3 → (2–3)
-      setPageIndex(index - 1);
+      setPageIndex(num - 2);
       return;
     }
 
-    // لو كانت زوجية → اعرضها مع التالية
-    setPageIndex(index);
+    // لو زوجية → اعرضها مع التالية
+    setPageIndex(num - 1);
   };
 
   const nextPage = () => {
+ 
     // =============== Posters → always single ===============
-    if (activeTab === "poster") {
+    if (activeTab === "poster" || activeTab === "flash") {
       if (pageIndex < pages.length - 1) {
         setPageIndex(pageIndex + 1);
       }
@@ -240,12 +247,12 @@ export default function Book() {
   };
 
   const prevPage = () => {
+    
     // Posters → always one page
-    if (activeTab === "poster") {
+    if (activeTab === "poster" || activeTab === "flash") {
       if (pageIndex > 0) setPageIndex(pageIndex - 1);
       return;
     }
-
     // Normal logic
     if (isMobile || viewMode === "single") {
       if (pageIndex > 0) setPageIndex(pageIndex - 1);
@@ -385,6 +392,7 @@ export default function Book() {
         {/* POSTERS ALWAYS SINGLE PAGE */}
         {isMobile ||
         activeTab === "poster" ||
+        activeTab === "flash" ||
         viewMode === "single" ||
         pageIndex === 0 ||
         (activeTab === "work" && pageIndex <= 1) ? (

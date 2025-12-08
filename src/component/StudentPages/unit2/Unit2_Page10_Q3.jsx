@@ -347,7 +347,7 @@ const Unit2_Page10_Q3 = () => {
                       <span
                         key={opt}
                         className={`option-letter  ${
-                          isSelected ? "selected" : ""
+                          isSelected ? "selected3" : ""
                         } ${isCorrectShow ? "correct-answer" : ""}`}
                         onClick={() => !showAnswer && handleSelect(q.id, opt)}
                       >

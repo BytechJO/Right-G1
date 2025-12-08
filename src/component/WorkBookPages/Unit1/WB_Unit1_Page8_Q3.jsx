@@ -13,7 +13,7 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 
 const WB_Unit1_Page8_Q3 = () => {
-  const [answers, setAnswers] = useState(["d", null, null, null]);
+  const [answers, setAnswers] = useState([null, null, null, null]);
   const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
   const stopAtSecond = 5.1;
@@ -164,7 +164,7 @@ const WB_Unit1_Page8_Q3 = () => {
   };
 
   const resetAnswers = () => {
-    setAnswers(["d", null, null, null]);
+    setAnswers([null, null, null, null]);
     setShowResult(false);
     setShowAnswer(false); // يمنع أي تعديل بعد هيك
   };

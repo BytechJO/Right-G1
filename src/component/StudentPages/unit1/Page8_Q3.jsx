@@ -11,6 +11,8 @@ export default function Page8_Q3() {
   const [firstDot, setFirstDot] = useState(null);
   const containerRef = useRef(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   const correctMatches = [
     { word: "Hello! I’m John.", image: "img1" },
@@ -20,25 +22,31 @@ export default function Page8_Q3() {
   // ============================
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
-  const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+const handleStartDotClick = (e) => {
+  if (showAnswer || locked) return;
 
-    const rect = containerRef.current.getBoundingClientRect();
+  const word = e.target.dataset.letter;
 
-    setFirstDot({
-      word: e.target.dataset.letter,
-      x: e.target.getBoundingClientRect().left - rect.left + 8,
-      y: e.target.getBoundingClientRect().top - rect.top + 8,
-    });
-  };
+  // ❌ منع خروج خط جديد من كلمة لها خط سابق
+  const alreadyUsed = lines.some((line) => line.word === word);
+  if (alreadyUsed) return;
+
+  const rect = containerRef.current.getBoundingClientRect();
+
+  setFirstDot({
+    word,
+    x: e.target.getBoundingClientRect().left - rect.left + 8,
+    y: e.target.getBoundingClientRect().top - rect.top + 8,
+  });
+};
+
 
   // ============================
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return;
     if (!firstDot) return;
-
     const rect = containerRef.current.getBoundingClientRect();
 
     const newLine = {
@@ -58,7 +66,8 @@ export default function Page8_Q3() {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return;
+
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -86,15 +95,16 @@ export default function Page8_Q3() {
 
     const scoreMessage = `
       <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-           Score: ${correctCount} / ${total}
-        </span>
+      <span style="color:${color}; font-weight:bold;">
+      Score: ${correctCount} / ${total}
+      </span>
       </div>
     `;
 
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
+    setLocked(true);
   };
 
   return (
@@ -104,7 +114,7 @@ export default function Page8_Q3() {
           <span className="ex-A">B</span>Read and match.
         </h5>
 
-        <div className="container1" ref={containerRef}>
+        <div key={resetKey} className="container1" ref={containerRef}>
           {/* Row 1 */}
           <div className="matching-row">
             <div className="word-with-dot">
@@ -114,7 +124,7 @@ export default function Page8_Q3() {
               <span
                 className="word-text"
                 onClick={() => document.getElementById("dot-hello").click()}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", width: "190px" }}
               >
                 Hello! I’m John.
                 {wrongWords.includes("Hello! I’m John.") && (
@@ -161,7 +171,7 @@ export default function Page8_Q3() {
               <span
                 className="word-text"
                 onClick={() => document.getElementById("dot-goodbye").click()}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", width: "190px" }}
               >
                 Goodbye!
                 {wrongWords.includes("Goodbye!") && (
@@ -218,12 +228,16 @@ export default function Page8_Q3() {
 
       <div className="action-buttons-container">
         <button
-          onClick={() => {
-            setLines([]);
-            setWrongWords([]);
-            setFirstDot(null);
-            setShowAnswer(false);
-          }}
+            onClick={() => {
+    setLines([]);
+    setWrongWords([]);
+    setFirstDot(null);
+    setShowAnswer(false);
+    setLocked(false);
+
+    // إعادة الرندر بالكامل
+    setResetKey(k => k + 1);
+  }}
           className="try-again-button"
         >
           Start Again ↻
@@ -266,6 +280,10 @@ export default function Page8_Q3() {
             setLines(finalLines);
             setWrongWords([]);
             setShowAnswer(true);
+            setLocked(false);
+
+            // 🔥 أجبر React يرندر كل شيء من البداية
+            setResetKey((k) => k + 1);
           }}
           className="show-answer-btn swal-continue"
         >

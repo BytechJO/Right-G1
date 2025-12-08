@@ -47,7 +47,6 @@ svg {
 }
 .selected {
   cursor: pointer;
- 
 }
 
 .page_1-background,
@@ -159,6 +158,24 @@ img {
   cursor: pointer;
 } */
 
+.circle-area {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 179, 0, 0.493);
+  border: 2px solid red;
+  cursor: pointer;
+  opacity: 0; /* 🚫 مخفية دائماً */
+  transition: 0.25s;
+}
+
+.circle-area.active {
+  opacity: 1;
+  background-color: rgba(255, 0, 0, 0.103); /* لون أصفر فاتح */
+  border: 2px solid rgba(255, 0, 0, 0.8); /* 👌 تظهر فقط عند التفعيل */
+  transform: scale(1.05);
+}
 .headset-icon-CD-page4-2 {
   position: absolute;
   top: 60.5%;

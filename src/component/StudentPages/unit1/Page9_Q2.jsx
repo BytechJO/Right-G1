@@ -8,6 +8,8 @@ export default function Page9_Q2() {
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [locked, setLocked] = useState(false);
+
   // 🎨 ألوان الكلمات
   const colors = ["red", "blue", "green", "orange", "purple", "yellow"];
   const [selectedWordIndex, setSelectedWordIndex] = useState(null);
@@ -40,6 +42,12 @@ export default function Page9_Q2() {
   // ⭐ Click to Connect Logic
   // ==========================
   const handleStartDotClick = (e) => {
+    if (locked || showAnswer) return;
+    const word = e.target.dataset.letter;
+
+    // ❌ منع رسم أكثر من خط من نفس الكلمة
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return;
     const rect = containerRef.current.getBoundingClientRect();
 
     setFirstDot({
@@ -50,6 +58,7 @@ export default function Page9_Q2() {
   };
 
   const handleEndDotClick = (e) => {
+    if (locked || showAnswer) return;
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -64,10 +73,9 @@ export default function Page9_Q2() {
     };
 
     setLines((prev) => [...prev, newLine]);
-
     setFirstDot(null);
   };
- 
+
   useEffect(() => {
     const hidePalette = (e) => {
       // إذا الكبس كان على دائرة اللون أو على الكلمة المختارة → لا تخفيه
@@ -135,6 +143,7 @@ export default function Page9_Q2() {
     } else {
       ValidationAlert.warning(scoreMessage);
     }
+    setLocked(true);
   };
   // ⭐ Show Correct Answers
   const showCorrectAnswers = () => {
@@ -189,9 +198,11 @@ export default function Page9_Q2() {
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">E</span>Match and color. 
+          <span className="ex-A">E</span>Match and color.
         </h4>
-        <span style={{fontSize:"14px",color:"gray"}}>Hint: Double Click to Color Word</span>
+        <span style={{ fontSize: "14px", color: "gray" }}>
+          Hint: Double Click to Color Word
+        </span>
         {selectedWordIndex !== null && (
           <div className="color-palette">
             {colors.map((c) => (
@@ -234,7 +245,7 @@ export default function Page9_Q2() {
                   }}
                   onClick={() => document.getElementById(`dot-${word}`).click()} // رسم الخط
                   onDoubleClick={() => handleWordClick(i)} // فتح الباليت
-                   onTouchEnd={() => handleWordClick(i)}         
+                  onTouchEnd={() => handleWordClick(i)}
                 >
                   {word}
                 </h5>{" "}
@@ -310,6 +321,7 @@ export default function Page9_Q2() {
         <button
           onClick={() => {
             setLines([]);
+            setWrongWords([]);
             setWordColors([
               "transparent",
               "transparent",
@@ -318,8 +330,9 @@ export default function Page9_Q2() {
               "transparent",
               "transparent",
             ]);
-            setWrongWords([]);
             setShowAnswer(false);
+            setLocked(false); // 🔓 مسموح الرسم مرة أخرى
+            setFirstDot(null);
           }}
           className="try-again-button"
         >

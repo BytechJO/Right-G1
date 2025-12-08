@@ -9,7 +9,7 @@ export default function WB_Unit1_Page4_Q2() {
   const startPointRef = useRef(null);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [locked, setLocked] = useState(false);
   const correctMatches = [
     { word1: "Stella I’m. Hello!", word2: "Hello! I’m Stella." },
     { word1: "thank Fine, you.", word2: "Fine, thank you." },
@@ -21,6 +21,12 @@ export default function WB_Unit1_Page4_Q2() {
   // ⭐ Click to Connect Logic
   // ==========================
   const handleStartDotClick = (e) => {
+    if (locked || showAnswer) return;
+    const word = e.target.dataset.letter;
+
+    // ❌ منع رسم أكثر من خط من نفس الكلمة
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return;
     const rect = containerRef.current.getBoundingClientRect();
 
     setFirstDot({
@@ -31,6 +37,7 @@ export default function WB_Unit1_Page4_Q2() {
   };
 
   const handleEndDotClick = (e) => {
+   if (locked || showAnswer) return;
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -73,6 +80,7 @@ export default function WB_Unit1_Page4_Q2() {
     });
 
     setWrongWords(wrong); // ⭐ تم التعديل هون
+      setLocked(true);
     // 3️⃣ تحديد اللون حسب النتيجة
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -121,6 +129,7 @@ export default function WB_Unit1_Page4_Q2() {
     // 2️⃣ وضع الخطوط
     setLines(correctLines);
     setShowAnswer(true);
+      setLocked(true);
     // 3️⃣ إخفاء علامات الإكس
     setWrongWords([]);
   };
@@ -173,7 +182,7 @@ export default function WB_Unit1_Page4_Q2() {
                   onClick={handleStartDotClick}
                 ></div>
                 {wrongWords.includes(word) && (
-                  <span className="error-mark4">✕</span>
+                  <span className="error-mark4-wb-u1-p4-q2">✕</span>
                 )}
               </div>
             ))}
@@ -225,6 +234,7 @@ export default function WB_Unit1_Page4_Q2() {
             setLines([]);
             setWrongWords([]);
             setShowAnswer(false);
+               setLocked(false); // 🔓 مسموح الرسم مرة أخرى
           }}
           className="try-again-button"
         >

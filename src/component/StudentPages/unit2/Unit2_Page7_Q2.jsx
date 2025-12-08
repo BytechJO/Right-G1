@@ -12,6 +12,9 @@ const Unit2_Page7_Q2 = () => {
   const [wrongImages, setWrongImages] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
 
+  // ⭐⭐ NEW: قفل الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false); //  ← إضافة جديدة
+
   const correctMatches = [
     { word: "Hello! I’m Hansel.", image: "img2" },
     { word: "Good morning!", image: "img1" },
@@ -22,12 +25,16 @@ const Unit2_Page7_Q2 = () => {
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
   const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
 
     const rect = containerRef.current.getBoundingClientRect();
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
+
+    // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
+    const alreadyUsed = lines.some((line) => line.image === image);
+    if (alreadyUsed) return; // ← إضافة جديدة
 
     setFirstDot({
       word,
@@ -41,7 +48,7 @@ const Unit2_Page7_Q2 = () => {
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -55,8 +62,8 @@ const Unit2_Page7_Q2 = () => {
       x2: e.target.getBoundingClientRect().left - rect.left + 8,
       y2: e.target.getBoundingClientRect().top - rect.top + 8,
 
-      word: firstDot.word || endWord, // نأخذ الكلمة من البداية أو النهاية حسب المتوفر
-      image: firstDot.image || endImage, // نفس الشي للصورة
+      word: firstDot.word || endWord,
+      image: firstDot.image || endImage,
     };
 
     setLines((prev) => [...prev, newLine]);
@@ -67,7 +74,7 @@ const Unit2_Page7_Q2 = () => {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers2 = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل بعد القفل
 
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
@@ -106,6 +113,8 @@ const Unit2_Page7_Q2 = () => {
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
+
+    setLocked(true); // ⭐⭐ NEW: إغلاق الرسم بعد Check Answer
   };
 
   return (
@@ -199,7 +208,7 @@ const Unit2_Page7_Q2 = () => {
               <div className="word-box2">
                 <h5
                   onClick={() => document.getElementById("dot-hello").click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" ,fontSize:"20px"}}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     1{" "}
@@ -217,7 +226,7 @@ const Unit2_Page7_Q2 = () => {
               <div className="word-box2">
                 <h5
                   onClick={() => document.getElementById("dot-good").click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",fontSize:"20px" }}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     2{" "}
@@ -234,8 +243,10 @@ const Unit2_Page7_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  onClick={() => document.getElementById("dot-goodbye").click()}
-                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    document.getElementById("dot-goodbye").click()
+                  }
+                  style={{ cursor: "pointer",fontSize:"20px" }}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     3{" "}
@@ -277,6 +288,7 @@ const Unit2_Page7_Q2 = () => {
             setWrongImages([]);
             setFirstDot(null);
             setShowAnswer(false);
+            setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
           }}
           className="try-again-button"
         >
@@ -309,6 +321,7 @@ const Unit2_Page7_Q2 = () => {
             setLines(finalLines);
             setWrongImages([]);
             setShowAnswer(true);
+            setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
           }}
           className="show-answer-btn swal-continue"
         >

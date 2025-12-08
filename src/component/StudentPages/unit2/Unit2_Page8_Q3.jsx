@@ -17,7 +17,8 @@ const Unit2_Page8_Q3 = () => {
   const [wrongImages, setWrongImages] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false);
   const audioRef = useRef(null);
   // إعدادات الصوت
   const stopAtSecond = 7.3;
@@ -115,12 +116,18 @@ const Unit2_Page8_Q3 = () => {
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
   const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
 
     const rect = containerRef.current.getBoundingClientRect();
+    const imgId = e.target.dataset.image;
+
+    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
+    const alreadyUsed = lines.some((line) => line.image === imgId);
+    if (alreadyUsed) return;
+    // -----------------------------------------------------
 
     setFirstDot({
-      image: e.target.dataset.image, // ⬅ صح
+      image: imgId,
       x: e.target.getBoundingClientRect().left - rect.left + 8,
       y: e.target.getBoundingClientRect().top - rect.top + 8,
     });
@@ -130,7 +137,7 @@ const Unit2_Page8_Q3 = () => {
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -138,10 +145,12 @@ const Unit2_Page8_Q3 = () => {
     const newLine = {
       x1: firstDot.x,
       y1: firstDot.y,
+
       x2: e.target.getBoundingClientRect().left - rect.left + 8,
       y2: e.target.getBoundingClientRect().top - rect.top + 8,
-      word: e.target.dataset.word, // ⬅ صح
-      image: firstDot.image, // ⬅ صح
+
+      word: e.target.dataset.word, // حرف d أو t
+      image: firstDot.image, // الصورة المختارة
     };
 
     setLines((prev) => [...prev, newLine]);
@@ -152,8 +161,14 @@ const Unit2_Page8_Q3 = () => {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers = () => {
-    if (showAnswer) return;
-    if (lines.length < correctMatches.length) {
+    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن إعادة التحقق
+
+    const total = correctMatches.reduce(
+      (acc, pair) => acc + pair.image.length,
+      0
+    );
+
+    if (lines.length < total) {
       ValidationAlert.info(
         "Oops!",
         "Please connect all the pairs before checking."
@@ -175,10 +190,7 @@ const Unit2_Page8_Q3 = () => {
 
     setWrongImages(wrong);
 
-    const total = correctMatches.reduce(
-      (acc, pair) => acc + pair.image.length,
-      0
-    );
+    setLocked(true); // ⭐⭐⭐ NEW: أقفل الرسم بعد الضغط على Check Answer
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -214,6 +226,7 @@ const Unit2_Page8_Q3 = () => {
   const handleShowAnswer = () => {
     // امنعي التعديل
     setShowAnswer(true);
+    setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
 
     // امسحي الخطوط القديمة + الغلط
     setLines([]);
@@ -411,8 +424,12 @@ const Unit2_Page8_Q3 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img2} alt="img"  onClick={() => document.getElementById("img2-dot").click()}
-                style={{ cursor: "pointer" }}/>
+                <img
+                  src={img2}
+                  alt="img"
+                  onClick={() => document.getElementById("img2-dot").click()}
+                  style={{ cursor: "pointer" }}
+                />
                 {wrongImages.includes("img2") && (
                   <span className="error-mark-img">✕</span>
                 )}
@@ -425,8 +442,12 @@ const Unit2_Page8_Q3 = () => {
               </div>
 
               <div className="img-box2">
-                <img src={img3} alt=""  onClick={() => document.getElementById("img3-dot").click()}
-                style={{ cursor: "pointer" }}/>{" "}
+                <img
+                  src={img3}
+                  alt=""
+                  onClick={() => document.getElementById("img3-dot").click()}
+                  style={{ cursor: "pointer" }}
+                />{" "}
                 {wrongImages.includes("img3") && (
                   <span className="error-mark-img">✕</span>
                 )}
@@ -438,8 +459,12 @@ const Unit2_Page8_Q3 = () => {
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img4} alt=""  onClick={() => document.getElementById("img4-dot").click()}
-                style={{ cursor: "pointer" }}/>{" "}
+                <img
+                  src={img4}
+                  alt=""
+                  onClick={() => document.getElementById("img4-dot").click()}
+                  style={{ cursor: "pointer" }}
+                />{" "}
                 {wrongImages.includes("img4") && (
                   <span className="error-mark-img">✕</span>
                 )}
@@ -451,8 +476,12 @@ const Unit2_Page8_Q3 = () => {
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img5} alt=""  onClick={() => document.getElementById("img5-dot").click()}
-                style={{ cursor: "pointer" }}/>{" "}
+                <img
+                  src={img5}
+                  alt=""
+                  onClick={() => document.getElementById("img5-dot").click()}
+                  style={{ cursor: "pointer" }}
+                />{" "}
                 {wrongImages.includes("img5") && (
                   <span className="error-mark-img">✕</span>
                 )}
@@ -468,8 +497,8 @@ const Unit2_Page8_Q3 = () => {
             {/* الجمل */}
             <div className="match-words-row2">
               <div className="word-box2">
-                <h5 onClick={() => document.getElementById("d-dot").click()}
-              
+                <h5
+                  onClick={() => document.getElementById("d-dot").click()}
                   id="d-char"
                   style={{
                     border: "2px solid #2effeaff",
@@ -481,7 +510,7 @@ const Unit2_Page8_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                     alignItems: "center",
-                    cursor: "pointer" 
+                    cursor: "pointer",
                   }}
                 >
                   d
@@ -495,7 +524,8 @@ const Unit2_Page8_Q3 = () => {
               </div>
 
               <div className="word-box2">
-                <h5 onClick={() => document.getElementById("t-dot").click()}
+                <h5
+                  onClick={() => document.getElementById("t-dot").click()}
                   id="t-char"
                   style={{
                     border: "2px solid green",
@@ -506,10 +536,9 @@ const Unit2_Page8_Q3 = () => {
                     display: "flex",
                     justifyContent: "center",
                     marginTop: "10px",
-                    cursor: "pointer" ,
+                    cursor: "pointer",
                     alignItems: "center",
                   }}
-                
                 >
                   t
                 </h5>
@@ -544,6 +573,7 @@ const Unit2_Page8_Q3 = () => {
               setLines([]);
               setWrongImages([]);
               setShowAnswer(false); // ← رجع التعديل
+              setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
             }}
             className="try-again-button"
           >

@@ -56,8 +56,11 @@
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  gap: 25px;
+  gap: 40px;
+  border: 2px solid #5acbf4;
+  border-radius: 8px;
   width: 100%;
+  padding: 20px;
 }
 
 .image-container {
@@ -132,25 +135,23 @@
 }
 
 .letter-box {
-width: 140px;
-    height: 40px;
-    flex-shrink: 0;
-    background: linear-gradient(145deg, #e3eeff, #ffffff);
-    border: 1px solid #d1e0ff;
-    font-size: 1.4rem;
-    border-radius: 10px;
-    font-weight: bold;
-    color: #4a90e2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s 
-ease;
-    cursor: grab;
-    /* user-select: none; */
-    padding: 0px 46px;
-
+  width: 140px;
+  height: 40px;
+  flex-shrink: 0;
+  background: linear-gradient(145deg, #e3eeff, #ffffff);
+  border: 1px solid #d1e0ff;
+  font-size: 1.4rem;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #4a90e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  cursor: grab;
+  /* user-select: none; */
+  padding: 0px 46px;
 }
 
 .letter-box.dragging {
@@ -247,10 +248,10 @@ ease;
 }
 
 @media (max-width: 540px) {
-    .image-container {
-        width: 100px;
-        gap: 12px;
-    }
+  .image-container {
+    width: 100px;
+    gap: 12px;
+  }
 }
 /* Mobile Screens (max-width: 480px) */
 @media (max-width: 480px) {
@@ -391,7 +392,6 @@ ease;
   }
 }
 
-
 .wrong-drop {
   position: relative;
 }
@@ -401,8 +401,8 @@ ease;
   position: absolute;
   top: -8px;
   right: -8px;
-     width: 25px;
-    height: 25px;
+  width: 25px;
+  height: 25px;
   background: red;
   color: white;
   border-radius: 50%;
@@ -412,5 +412,5 @@ ease;
   font-size: 14px;
   font-weight: bold;
   pointer-events: none;
-  border :2px solid white
+  border: 2px solid white;
 }

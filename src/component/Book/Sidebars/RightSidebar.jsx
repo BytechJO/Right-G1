@@ -5,7 +5,7 @@ export default function RightSidebar({ isOpen, close, menu }) {
 
       <div
         className={`fixed right-0 bottom-0 w-64 h-full bg-white shadow-xl rounded-tl-2xl 
-        transition-transform duration-300 z-[99999]
+        transition-transform duration-300 z-[9999999999999]
         ${isOpen ? "translate-y-0" : "translate-y-full"}`}
       >
         <div className="p-4 border-b flex justify-between">

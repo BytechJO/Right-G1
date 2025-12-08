@@ -34,6 +34,7 @@ const words = [
       [1, 6],
       [2, 6],
       [3, 6],
+      [4, 6]
     ],
   },
   {
@@ -92,7 +93,7 @@ export default function WB_Unit1_Page6_Q2() {
   const checkAnswers = () => {
     if (showAnswer) return;
     let foundList = [];
-    if (allSelections.length === 0) {
+    if (selected.length === 0) {
       return ValidationAlert.info("");
     }
     words.forEach((word) => {

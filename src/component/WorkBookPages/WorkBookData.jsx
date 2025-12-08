@@ -23,5 +23,5 @@ export const workBookData = [
   { component: WB_Unit1_Page7_Q1, unit: 1 }, //8
   { component: WB_Unit1_Page8_Q1, unit: 1 }, //9
   { component: WB_Unit1_Page8_Q2, unit: 1 }, //9
-  { component: WB_Unit1_Page8_Q3, unit: 1 }, //9
+  { component: WB_Unit1_Page8_Q3, unit: 1, lastOfUnit: true }, //9
 ];

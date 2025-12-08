@@ -4,6 +4,10 @@ import "./FlashCardViewer.css";
 import AudioWithCaption from "../AudioWithCaption";
 export default function FlashCardViewer({ card, openPopup }) {
   const audioRef = useRef(null);
+if (!card || !card.img) {
+  console.warn("FlashCardViewer received invalid card:", card);
+  return null;
+}
 
   return (
  <div className="flashcard-wrapper">

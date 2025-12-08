@@ -10,7 +10,6 @@ import { TbMessageCircle } from "react-icons/tb";
 const Unit2_Page10_Q1 = () => {
   const audioRef = useRef(null);
   const [isShowMode, setIsShowMode] = useState(false);
-
   const stopAtSecond = 4.5;
   // إعدادات الصوت
   const [paused, setPaused] = useState(false);

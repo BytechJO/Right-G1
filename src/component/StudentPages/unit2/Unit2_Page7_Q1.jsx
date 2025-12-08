@@ -45,7 +45,7 @@ const Unit2_Page7_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [error, setError] = useState("");
   const [wrongInputs, setWrongInputs] = useState({});
-  
+
   const handleChange = (key, index, value) => {
     setUserAnswers((prev) => {
       const updated = { ...prev };
@@ -64,7 +64,7 @@ const Unit2_Page7_Q1 = () => {
     const sentenceEntries = Object.entries(sentences);
 
     // ✅ نتجاهل الجملة الأولى (sentenceEntries[0])
-    for (let s = 1; s < sentenceEntries.length; s++) {
+    for (let s = 0; s < sentenceEntries.length; s++) {
       const [key, correctNums] = sentenceEntries[s];
 
       totalInputs += correctNums.length;
@@ -95,7 +95,7 @@ const Unit2_Page7_Q1 = () => {
     let newWrongInputs = {};
 
     // ✅ التصحيح بدون الجملة الأولى
-    for (let s = 1; s < sentenceEntries.length; s++) {
+    for (let s = 0; s < sentenceEntries.length; s++) {
       const [key, correctNums] = sentenceEntries[s];
       newWrongInputs[key] = [];
 
@@ -213,17 +213,13 @@ const Unit2_Page7_Q1 = () => {
                                      : ""
                                  } 
                                  ${showAnswer ? "show-red" : ""}`}
-                              value={
-                                sentenceIndex === 0
-                                  ? correctWord // ✅ الجملة الأولى تظهر الكلمات الصحيحة
-                                  : userAnswers[key]?.[index] || ""
-                              }
+                              value={userAnswers[key]?.[index] || ""}
                               onChange={(e) =>
-                                sentenceIndex === 0 || showAnswer
+                               showAnswer
                                   ? null
                                   : handleChange(key, index, e.target.value)
                               }
-                              readOnly={sentenceIndex === 0 || showAnswer}
+                              readOnly={showAnswer}
                             />
 
                             {checked && wrongInputs[key]?.[index] && (

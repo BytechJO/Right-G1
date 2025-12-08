@@ -47,12 +47,12 @@ const WB_Unit1_Page3_Q2 = () => {
     1: data[0].imgs.findIndex((img) => img.answer === true),
   };
 
-  const [selected, setSelected] = useState(initialSelected);
+  const [selected, setSelected] = useState({});
 
   const [showResult, setShowResult] = useState(false);
   const [showAnswerState, setShowAnswerState] = useState(false);
   const handleSelect = (qId, index) => {
-    if (qId === 1) return; // منع التعديل على المثال الأول
+   
     if (showAnswerState) return;
 
     setSelected((prev) => ({ ...prev, [qId]: index }));
@@ -74,7 +74,7 @@ const WB_Unit1_Page3_Q2 = () => {
 
   const checkAnswers = () => {
     if (showAnswerState) return;
-    const totalQuestions = data.length - 1; // لأن أول سؤال لا يُحسب
+    const totalQuestions = data.length ; // لأن أول سؤال لا يُحسب
 
     let correct = 0;
 
@@ -88,8 +88,6 @@ const WB_Unit1_Page3_Q2 = () => {
 
     // حساب عدد الإجابات الصحيحة
     data.forEach((q) => {
-      if (q.id === 1) return; // تجاهل السؤال الأول
-
       const chosenIndex = selected[q.id];
       if (q.imgs[chosenIndex].answer === true) {
         correct++;
@@ -178,7 +176,7 @@ const WB_Unit1_Page3_Q2 = () => {
                         !showAnswerState &&
                         selected[question.id] === index &&
                         img.answer === false && (
-                          <span className="wrong-x-circle-review6-p2-q1">
+                          <span className="wrong-x-circle-wb-u1-p3-q2">
                             ✕
                           </span>
                         )}
@@ -203,7 +201,7 @@ const WB_Unit1_Page3_Q2 = () => {
         <button
           className="try-again-button"
           onClick={() => {
-            setSelected(initialSelected);
+            setSelected({});
             setShowResult(false);
             setShowAnswerState(false);
           }}

@@ -4,6 +4,7 @@ import fotball from "../../../assets/img_unit2/imgs/Football.jpg";
 import bird from "../../../assets/img_unit2/imgs/bird.jpg";
 import pizza2 from "../../../assets/img_unit2/imgs/Pizza (2).jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import "./Unit2_Page10_Q2.css"
 // import { faFootball } from "@fortawesome/free-solid-svg-icons";
 const Unit2_Page10_Q2 = () => {
   const [lines, setLines] = useState([]);
@@ -12,7 +13,8 @@ const Unit2_Page10_Q2 = () => {
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false);
   const correctMatches = [
     { word: "bird", image: "img1" },
     { word: "boy", image: "img2" },
@@ -24,16 +26,18 @@ const Unit2_Page10_Q2 = () => {
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
   const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
 
     const rect = containerRef.current.getBoundingClientRect();
+    const imgId = e.target.dataset.image;
 
-    const word = e.target.dataset.word || null;
-    const image = e.target.dataset.image || null;
+    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
+    const alreadyUsed = lines.some((line) => line.image === imgId);
+    if (alreadyUsed) return;
+    // -----------------------------------------------------
 
     setFirstDot({
-      word,
-      image,
+      image: imgId,
       x: e.target.getBoundingClientRect().left - rect.left + 8,
       y: e.target.getBoundingClientRect().top - rect.top + 8,
     });
@@ -43,7 +47,7 @@ const Unit2_Page10_Q2 = () => {
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -66,7 +70,7 @@ const Unit2_Page10_Q2 = () => {
   };
 
   const checkAnswers2 = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن إعادة التحقق
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -74,7 +78,7 @@ const Unit2_Page10_Q2 = () => {
       );
       return;
     }
-    if (showAnswer) return;
+
     let wrong = [];
     let correctCount = 0;
 
@@ -88,6 +92,8 @@ const Unit2_Page10_Q2 = () => {
     });
 
     setWrongWords(wrong);
+    setLocked(true); // ⭐⭐⭐ NEW: أقفل الرسم بعد الضغط على Check Answer
+
     const total = correctMatches.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -140,7 +146,7 @@ const Unit2_Page10_Q2 = () => {
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 {wrongWords.includes("bird") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+                  <span className="error-mark8-u2-p19-q2">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -183,7 +189,7 @@ const Unit2_Page10_Q2 = () => {
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 {wrongWords.includes("boy") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+                  <span className="error-mark8-u2-p19-q2">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -225,7 +231,7 @@ const Unit2_Page10_Q2 = () => {
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 {wrongWords.includes("pizza") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+                  <span className="error-mark8-u2-p19-q2">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -268,7 +274,7 @@ const Unit2_Page10_Q2 = () => {
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 {wrongWords.includes("ball") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+                  <span className="error-mark8-u2-p19-q2">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -314,6 +320,7 @@ const Unit2_Page10_Q2 = () => {
             setWrongWords([]);
             setFirstDot(null);
             setShowAnswer(false);
+            setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
           }}
           className="try-again-button"
         >
@@ -345,6 +352,7 @@ const Unit2_Page10_Q2 = () => {
             setLines(finalLines);
             setWrongWords([]);
             setShowAnswer(true);
+            setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
           }}
           className="show-answer-btn swal-continue"
         >

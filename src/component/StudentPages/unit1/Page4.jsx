@@ -59,19 +59,19 @@ const Page4 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 45, y1: 44.2, x2: 49, y2: 47.8, sound: 1, isPrimary: true },
+    { x1: 45, y1: 44.3, x2: 49, y2: 47.8, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 49.2, y1: 37.3, x2: 74.4, y2: 79.8, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 86.4, y1: 24, x2: 90.4, y2: 27.2, sound: 2, isPrimary: true },
+    { x1: 86.6, y1: 24.2, x2: 90.4, y2: 27.2, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 83.7, y1: 28.4, x2: 97.4, y2: 48.9, sound: 2, isPrimary: false },
 
     // الصوت الثالث – الأساسية
-    { x1: 75, y1: 27, x2: 79.5, y2: 30.5, sound: 3, isPrimary: true },
+    { x1: 75, y1: 27.3, x2: 79.5, y2: 30.5, sound: 3, isPrimary: true },
 
     // الصوت الثالث – الإضافية
     { x1: 77.9, y1: 21.8, x2: 81.7, y2: 43.8, sound: 3, isPrimary: false },
@@ -116,27 +116,51 @@ const Page4 = ({ openPopup }) => {
           style={{ display: "block" }}
         />
 
-        {areas.map((area, index) => (
-          <div
-            key={index}
-            className={`clickable-area ${
-              area.isPrimary && activeAreaIndex === area.sound
-                ? "highlight"
-                : ""
-            }`}
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              setActiveAreaIndex(area.sound);
-              playSound(sounds[area.sound]);
-            }}
-          ></div>
-        ))}
+        {areas.map((area, index) => {
+          const isActive = activeAreaIndex === area.sound;
+
+          // ============================
+          // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
+          // ============================
+          if (area.isPrimary) {
+            return (
+              <div
+                key={index}
+                className={`circle-area ${isActive ? "active" : ""}`}
+                style={{
+                  left: `${area.x1}%`,
+                  top: `${area.y1}%`,
+                }}
+                onClick={() => {
+                  setActiveAreaIndex(area.sound);
+                  playSound(sounds[area.sound]);
+                }}
+              ></div>
+            );
+          }
+
+          // ============================
+          // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
+          //    عند الضغط عليها → تفعّل الدائرة الأساسية
+          // ============================
+          return (
+            <div
+              key={index}
+              className="clickable-area"
+              style={{
+                position: "absolute",
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+                width: `${area.x2 - area.x1}%`,
+                height: `${area.y2 - area.y1}%`,
+              }}
+              onClick={() => {
+                setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
+                playSound(sounds[area.sound]);
+              }}
+            ></div>
+          );
+        })}
 
         <div
           className="headset-icon-CD-page4-1 hover:scale-110 transition"
@@ -184,10 +208,7 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
-            onClick={() =>
-            
-              openPopup("html", <Page4_Interactive1 />)
-            }
+            onClick={() => openPopup("html", <Page4_Interactive1 />)}
             style={{ overflow: "visible" }}
           >
             <image
@@ -209,10 +230,7 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
-            onClick={() =>
-            
-              openPopup("html", <Page4_vocabulary />)
-            }
+            onClick={() => openPopup("html", <Page4_vocabulary />)}
             style={{ overflow: "visible" }}
           >
             <image
@@ -235,7 +253,8 @@ const Page4 = ({ openPopup }) => {
             viewBox="0 0 90 90"
             onClick={() =>
               openPopup(
-              "html",  <FourImagesWithAudio
+                "html",
+                <FourImagesWithAudio
                   images={[Rabbit, img1, img2, img3, img4]}
                   audioSrc={longAudio}
                   checkpoints={[0, 2.9, 3.4, 4.2, 5.1]}
@@ -245,7 +264,6 @@ const Page4 = ({ openPopup }) => {
                   captions={captions}
                 />
               )
-
             }
             style={{ overflow: "visible" }}
           >

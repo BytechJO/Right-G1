@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import find_img from "../../../assets/img_unit2/imgs/02-03 New copy.jpg";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import MySVG from "../../../assets/img_unit2/imgs/U2P10 highlight.svg";
+
 const Unit2_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
@@ -31,7 +33,7 @@ const Unit2_Page1_find = () => {
   };
 
   const handleCheck = () => {
-      if (showAnswer) return;
+    if (showAnswer) return;
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
@@ -110,19 +112,18 @@ const Unit2_Page1_find = () => {
           )}
 
           {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {(checkResult === "success"||showAnswer) && (
-            <div
+          {(checkResult === "success" || showAnswer) && (
+            <img
+              src={MySVG}
+              alt="answer highlight"
               style={{
                 position: "absolute",
-                top: `${targetArea.y1}%`,
-                left: `${targetArea.x1}%`,
-                width: `${targetArea.x2 - targetArea.x1}%`,
-                height: `${targetArea.y2 - targetArea.y1}%`,
-                backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
-                borderRadius: "8px",
+                top: `67%`,
+                left: `18.5%`,
+                height: `7%`,
                 pointerEvents: "none",
               }}
-            ></div>
+            /> 
           )}
         </div>
       </div>

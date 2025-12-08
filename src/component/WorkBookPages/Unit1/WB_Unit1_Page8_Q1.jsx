@@ -34,7 +34,7 @@ const WB_Unit1_Page8_Q1 = () => {
     },
   ];
 
-  const stopAtSecond = 5.8;
+  const stopAtSecond = 5.5;
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -123,7 +123,7 @@ const WB_Unit1_Page8_Q1 = () => {
 
   const [answers, setAnswers] = useState(() => {
     const arr = Array(questions.length).fill(null);
-    arr[0] = questions[0].correctIndex; // 👈 أول جملة محلولة تلقائياً
+
     return arr;
   });
 
@@ -144,11 +144,11 @@ const WB_Unit1_Page8_Q1 = () => {
       return ValidationAlert.info("Oops!", "Please circle all the words!");
     }
 
-    const total = questions.length - 1;
+    const total = questions.length ;
     let correct = 0;
 
     answers.forEach((ans, i) => {
-      if (i === 0) return; // ← تجاهل السؤال الأول تماماً
+    
       if (ans === questions[i].correctIndex) correct++;
     });
 
@@ -171,7 +171,7 @@ const WB_Unit1_Page8_Q1 = () => {
   const reset = () => {
     setAnswers(() => {
       const arr = Array(questions.length).fill(null);
-      arr[0] = questions[0].correctIndex; // 👈 أول جملة محلولة تلقائياً
+     
       return arr;
     });
     setShowResult(false);
@@ -383,10 +383,11 @@ const WB_Unit1_Page8_Q1 = () => {
                             fontSize: "20px",
                           }}
                           className={`option-word-unit7-p5-q1 
-                ${isSelected ? "selected3" : ""}
+                ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
                 ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                 ${showResult && isCorrect ? "correct" : ""}
             `}
+            onClick={() => selectOption(i, optIndex)}   // ← ← الحل هنا
                         >
                           {word}
                           {optIndex === 0 ? "/" : ""}
@@ -435,7 +436,7 @@ const WB_Unit1_Page8_Q1 = () => {
                             fontSize: "20px",
                           }}
                           className={`option-word-unit7-p5-q1 
-                ${isSelected ? "selected3" : ""}
+                ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
                 ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                 ${showResult && isCorrect ? "correct" : ""}
             `}

@@ -5,7 +5,7 @@ import "./WB_Unit1_Page8_Q2.css";
 export default function WB_Unit1_Page8_Q2() {
   const correctWords = ["table", "dish", "duck", "tiger", "taxi", "deer"];
 
-  const [columnD, setColumnD] = useState(["dish", "", ""]);
+  const [columnD, setColumnD] = useState(["", "", ""]);
   const [columnT, setColumnT] = useState(["", "", ""]);
   const [wrong, setWrong] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -33,7 +33,7 @@ export default function WB_Unit1_Page8_Q2() {
     if (showAnswer) return;
 
     // 1️⃣ تأكد من عدم وجود خانات فارغة (عدا index 0)
-    const allInputs = [...columnD.slice(1), ...columnT];
+    const allInputs = [...columnD, ...columnT];
     const hasEmpty = allInputs.some((w) => w.trim() === "");
 
     if (hasEmpty) {
@@ -47,7 +47,7 @@ export default function WB_Unit1_Page8_Q2() {
     let wrongWords = [];
 
     // عمود D (لكن بدون أول خانة)
-    columnD.slice(1).forEach((w) => {
+    columnD.forEach((w) => {
       if (!correctWords.includes(w) || !w.startsWith("d")) wrongWords.push(w);
     });
 
@@ -58,7 +58,7 @@ export default function WB_Unit1_Page8_Q2() {
 
     setWrong(wrongWords);
 
-    const total = correctWords.length - 1; // حذف أول كلمة من السكور
+    const total = correctWords.length; // حذف أول كلمة من السكور
     const correctCount = total - wrongWords.length;
 
     const color =
@@ -89,7 +89,7 @@ export default function WB_Unit1_Page8_Q2() {
   };
 
   const reset = () => {
-    setColumnD(["dish", "", ""]);
+    setColumnD(["", "", ""]);
     setColumnT(["", "", ""]);
     setWrong([]);
     setShowAnswer(false);
@@ -127,10 +127,10 @@ export default function WB_Unit1_Page8_Q2() {
                       className="input-cell-wb-u1-p8-q2"
                       value={columnD[i]}
                       onChange={(e) => handleInputChange("d", i, e.target.value)}
-                      disabled={i === 0 || showAnswer}
+                      disabled={showAnswer}
                     />
 
-                    {i !== 0 &&
+                    {
                       wrong.includes(columnD[i]) &&
                       columnD[i].trim() !== "" && (
                         <span className="wrong-x-circle-wb-u1-p8-q2">✕</span>

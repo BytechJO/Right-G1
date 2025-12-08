@@ -5,12 +5,17 @@ import dish from "../../../assets/unit1/imgs/dish3.jpg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 const Unit2_Page8_Q1 = () => {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
-  const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
+  const [wrongWords, setWrongWords] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+
+  // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false); 
+  // -------------------------------------------
 
   const correctMatches = [
     { word: "duck", image: "img3" },
@@ -23,12 +28,17 @@ const Unit2_Page8_Q1 = () => {
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
   const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: منع الرسم بعد Check Answer
 
     const rect = containerRef.current.getBoundingClientRect();
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
+
+    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الكلمة
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return;
+    // ----------------------------------------------------------
 
     setFirstDot({
       word,
@@ -42,7 +52,7 @@ const Unit2_Page8_Q1 = () => {
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: منع الرسم بعد Check Answer
     if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
@@ -55,9 +65,8 @@ const Unit2_Page8_Q1 = () => {
       y1: firstDot.y,
       x2: e.target.getBoundingClientRect().left - rect.left + 8,
       y2: e.target.getBoundingClientRect().top - rect.top + 8,
-
-      word: firstDot.word || endWord, // نأخذ الكلمة من البداية أو النهاية حسب المتوفر
-      image: firstDot.image || endImage, // نفس الشي للصورة
+      word: firstDot.word || endWord,
+      image: firstDot.image || endImage,
     };
 
     setLines((prev) => [...prev, newLine]);
@@ -68,7 +77,7 @@ const Unit2_Page8_Q1 = () => {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers2 = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن الضغط أكثر من مرة
 
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
@@ -91,6 +100,7 @@ const Unit2_Page8_Q1 = () => {
     });
 
     setWrongWords(wrong);
+
     const total = correctMatches.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -106,6 +116,8 @@ const Unit2_Page8_Q1 = () => {
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
+
+    setLocked(true); // ⭐⭐⭐ NEW: قفل الرسم هنا
   };
 
   return (
@@ -131,6 +143,7 @@ const Unit2_Page8_Q1 = () => {
           <h5 className="header-title-page8">D Read, look, and match.</h5>
 
           <div className="container12" ref={containerRef}>
+            
             {/* الصف الأول */}
             <div className="matching-row2">
               <div className="word-with-dot2">
@@ -142,9 +155,11 @@ const Unit2_Page8_Q1 = () => {
                 >
                   duck
                 </span>
-                {wrongWords.includes("duck") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+
+                {wrongWords.includes("duck") && (
+                  <span className="error-mark8-u2-p19-q1">✕</span>
                 )}
+
                 <div className="dot-wrapper2">
                   <div
                     className="dot2 start-dot2"
@@ -164,12 +179,13 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
+
                 <img
                   src={table}
                   className="matched-img2"
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ height: "100px", width: "auto", cursor: "pointer" }}
+                  style={{ cursor: "pointer", height: "100px" }}
                 />
               </div>
             </div>
@@ -185,14 +201,16 @@ const Unit2_Page8_Q1 = () => {
                 >
                   tiger
                 </span>
-                {wrongWords.includes("tiger") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+
+                {wrongWords.includes("tiger") && (
+                  <span className="error-mark8-u2-p19-q1">✕</span>
                 )}
+
                 <div className="dot-wrapper2">
                   <div
                     className="dot2 start-dot2"
-                    data-word="tiger"
                     id="dot-tiger"
+                    data-word="tiger"
                     onClick={handleStartDotClick}
                   ></div>
                 </div>
@@ -207,12 +225,13 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
+
                 <img
                   src={dish}
                   className="matched-img2"
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
-                  style={{ height: "110px", width: "auto", cursor: "pointer" }}
+                  style={{ cursor: "pointer", height: "110px" }}
                 />
               </div>
             </div>
@@ -228,14 +247,16 @@ const Unit2_Page8_Q1 = () => {
                 >
                   dish
                 </span>
-                {wrongWords.includes("dish") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+
+                {wrongWords.includes("dish") && (
+                  <span className="error-mark8-u2-p19-q1">✕</span>
                 )}
+
                 <div className="dot-wrapper2">
                   <div
                     className="dot2 start-dot2"
-                    data-word="dish"
                     id="dot-dish"
+                    data-word="dish"
                     onClick={handleStartDotClick}
                   ></div>
                 </div>
@@ -250,12 +271,13 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
+
                 <img
                   src={duck}
                   className="matched-img2"
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ height: "100px", width: "auto", cursor: "pointer" }}
+                  style={{ cursor: "pointer", height: "100px" }}
                 />
               </div>
             </div>
@@ -271,14 +293,16 @@ const Unit2_Page8_Q1 = () => {
                 >
                   table
                 </span>
-                {wrongWords.includes("table") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8">✕</span>
+
+                {wrongWords.includes("table") && (
+                  <span className="error-mark8-u2-p19-q1">✕</span>
                 )}
+
                 <div className="dot-wrapper2">
                   <div
                     className="dot2 start-dot2"
-                    data-word="table"
                     id="dot-table"
+                    data-word="table"
                     onClick={handleStartDotClick}
                   ></div>
                 </div>
@@ -293,12 +317,13 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
+
                 <img
                   src={tiger}
                   className="matched-img2"
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
-                  style={{ height: "100px", width: "auto", cursor: "pointer" }}
+                  style={{ cursor: "pointer", height: "100px" }}
                 />
               </div>
             </div>
@@ -310,6 +335,8 @@ const Unit2_Page8_Q1 = () => {
             </svg>
           </div>
         </div>
+
+        {/* الأزرار */}
         <div className="action-buttons-container">
           <button
             onClick={() => {
@@ -317,11 +344,13 @@ const Unit2_Page8_Q1 = () => {
               setShowAnswer(false);
               setWrongWords([]);
               setFirstDot(null);
+              setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
             }}
             className="try-again-button"
           >
             Start Again ↻
           </button>
+
           {/* Show Answer */}
           <button
             onClick={() => {
@@ -344,14 +373,17 @@ const Unit2_Page8_Q1 = () => {
                 x2: getDotPosition(`[data-image="${line.image}"]`).x,
                 y2: getDotPosition(`[data-image="${line.image}"]`).y,
               }));
+
               setShowAnswer(true);
               setLines(finalLines);
-              setWrongImages([]);
+              setWrongWords([]);
+              setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
             }}
             className="show-answer-btn swal-continue"
           >
             Show Answer
           </button>
+
           <button onClick={checkAnswers2} className="check-button2">
             Check Answer ✓
           </button>
