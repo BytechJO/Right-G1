@@ -30,15 +30,18 @@ export default function BottomBar({
 
       {/* HOME */}
       {/* HOME */}
-      {pageIndex > 1 && activeTab !== "flash" && activeTab !== "poster" && (
-        <button onClick={goToIndex} className="absolute left-12">
-          <img
-            src={icons.home}
-            className="h-1 w-1"
-            style={{ height: "25px", width: "25px" }}
-          />
-        </button>
-      )}
+      {pageIndex > 1 &&
+        activeTab !== "flash" &&
+        activeTab !== "poster" &&
+        activeTab !== "posterVocab" && (
+          <button onClick={goToIndex} className="absolute left-12">
+            <img
+              src={icons.home}
+              className="h-1 w-1"
+              style={{ height: "25px", width: "25px" }}
+            />
+          </button>
+        )}
 
       {/* ZOOM IN */}
       <button onClick={zoomIn}>
@@ -98,33 +101,36 @@ export default function BottomBar({
       </div>
 
       {/* VIEW MODES */}
-      {!isMobile && activeTab !== "poster" && activeTab !== "flash" && (
-        <>
-          <button onClick={() => setViewMode("single")}>
-            <img
-              style={{ height: "25px", width: "25px" }}
-              src={icons.onePage}
-              className={`h-1 w-1 ${
-                viewMode === "single" ? "opacity-100" : "opacity-40"
-              }`}
-            />
-          </button>
+      {!isMobile &&
+        activeTab !== "poster" &&
+        activeTab !== "flash" &&
+        activeTab !== "posterVocab" && (
+          <>
+            <button onClick={() => setViewMode("single")}>
+              <img
+                style={{ height: "25px", width: "25px" }}
+                src={icons.onePage}
+                className={`h-1 w-1 ${
+                  viewMode === "single" ? "opacity-100" : "opacity-40"
+                }`}
+              />
+            </button>
 
-          <button onClick={() => setViewMode("spread")}>
-            <img
-              style={{ height: "25px", width: "25px" }}
-              src={icons.openBook}
-              className={`h-1 w-1 ${
-                viewMode === "spread" ? "opacity-100" : "opacity-40"
-              }`}
-            />
-          </button>
-        </>
-      )}
+            <button onClick={() => setViewMode("spread")}>
+              <img
+                style={{ height: "25px", width: "25px" }}
+                src={icons.openBook}
+                className={`h-1 w-1 ${
+                  viewMode === "spread" ? "opacity-100" : "opacity-40"
+                }`}
+              />
+            </button>
+          </>
+        )}
 
       {/* RIGHT SIDEBAR */}
-      <button className="absolute right-3" onClick={icons.openRightSidebar}>
-        <icons.keyIcon size={24} color="#430f68" />
+      <button className="absolute right-3" onClick={icons.openRightSidebar} style={{color:'#430f68',display:"flex",gap:"5px"}}>
+       <span>Icon Key</span>  <icons.keyIcon size={24} color="#430f68" />
       </button>
     </footer>
   );

@@ -213,7 +213,7 @@ export default function Book() {
 
   const nextPage = () => {
     // =============== Posters → always single ===============
-    if (activeTab === "poster" || activeTab === "flash") {
+    if (activeTab === "poster"|| activeTab === "posterVocab" || activeTab === "flash") {
       if (pageIndex < pages.length - 1) {
         setPageIndex(pageIndex + 1);
       }
@@ -259,7 +259,7 @@ export default function Book() {
 
   const prevPage = () => {
     // Posters → always one page
-    if (activeTab === "poster" || activeTab === "flash") {
+    if (activeTab === "poster" || activeTab === "posterVocab"|| activeTab === "flash") {
       if (pageIndex > 0) setPageIndex(pageIndex - 1);
       return;
     }

@@ -114,7 +114,7 @@ const Unit1_PosterMain = ({ openPopup }) => {
       >
         <div
           className="vocab_container"
-          style={{ bottom: "11%", right: "79.5%" }}
+          style={{ bottom: "10%", right: "79.5%" }}
         >
           {[
             "Goodbye!",
@@ -150,8 +150,8 @@ const Unit1_PosterMain = ({ openPopup }) => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
+              top: ["46%", "44%", "42%", "25.5%", "27.5%"][i],
+              left: ["20%", "52%", "66%", "41%", "34%"][i],
             }}
           />
         ))}
