@@ -84,15 +84,15 @@ const Unit5_Page2 = ({ openPopup }) => {
     { x1: 8.7, y1: 50.6, x2: 23.3, y2: 58, sound: 1, isPrimary: false },
 
     // // الصوت الثاني – الأساسية
-    // { x1: 19.0, y1: 27.9, sound: 2, isPrimary: true },
+    { x1: 11.7, y1: 29.5, sound: 2, isPrimary: true },
 
     // // الصوت الثاني – الإضافية
-    // { x1: 7.4, y1: 26.7, x2: 21.2, y2: 38.8, sound: 2, isPrimary: false },
+    { x1: 11.29, y1: 24.4, x2: 18.4, y2: 33.55, sound: 2, isPrimary: false },
     // // الصوت الثاني – الأساسية
-    // { x1: 20.0, y1: 41.1, sound: 3, isPrimary: true },
+    { x1: 14.7, y1: 38.8, sound: 3, isPrimary: true },
 
     // // الصوت الثاني – الإضافية
-    // { x1: 21.4, y1: 35.07, x2: 38.3, y2: 45.7, sound: 3, isPrimary: false },
+    { x1: 13.44, y1: 37.10, x2: 18.3, y2: 43.37, sound: 3, isPrimary: false },
   ];
   const sounds = {
     1: sound2_3,

@@ -15,6 +15,14 @@ import { TbMessageCircle } from "react-icons/tb";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
+import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
+import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
+import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
 
 const Unit5_Page1_Vocab = () => {
   const audioRef = useRef(null);
@@ -26,7 +34,7 @@ const Unit5_Page1_Vocab = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
   const stopAtSecond = 3.5;
-const [clickedIndex, setClickedIndex] = useState(null);
+  const [clickedIndex, setClickedIndex] = useState(null);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -141,29 +149,45 @@ const [clickedIndex, setClickedIndex] = useState(null);
     }
   };
 
-  // ================================
-  // ✔ Play single word only
-  // ================================
-  const playSingleWord = (index) => {
-    const audio = mainAudioRef.current;
+  const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
+  const wordAudios = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+  ];
+  const playWordAudio = (index) => {
+    // أوقفي الأوديو الرئيسي
+    mainAudioRef.current.pause();
+
+    // أوقفي أي كلمة شغالة
+    wordRefs.current.forEach((ref) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    });
+
+    const audio = wordRefs.current[index].current;
     if (!audio) return;
 
-    const { start, end } = wordTimings[index];
-
-    audio.currentTime = start;
+    // تشغيل الصوت من البداية
+    audio.currentTime = 0;
     audio.play();
-    setIsPlaying(true);
 
-    const stopInterval = setInterval(() => {
-      if (audio.currentTime >= end) {
-        audio.pause();
-        clearInterval(stopInterval);
-      }
-    }, 40);
+    // 🔥 فعل الأنيميشن على طول فترة التشغيل
+    setClickedIndex(index);
+
+    // 🔥 عند انتهاء الصوت -> أطفئ الأنيميشن
+    audio.onended = () => {
+      setClickedIndex(null);
+    };
   };
-
-  const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
-
+  const wordRefs = useRef(wordAudios.map(() => React.createRef()));
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -323,11 +347,7 @@ const [clickedIndex, setClickedIndex] = useState(null);
                     ? "active"
                     : ""
                 }
-                onClick={() => {
-                  setClickedIndex(i);
-                  playSingleWord(i);
-                  setTimeout(() => setClickedIndex(null), 500);
-                }}
+                onClick={() => playWordAudio(i)}
               >
                 {i + 1} {text}
               </h6>
@@ -361,6 +381,9 @@ const [clickedIndex, setClickedIndex] = useState(null);
           style={{ height: "76vh" }}
         />
       </div>
+      {wordAudios.map((src, i) => (
+        <audio key={i} ref={wordRefs.current[i]} src={src} />
+      ))}
     </div>
   );
 };

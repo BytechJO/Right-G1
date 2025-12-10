@@ -10,10 +10,18 @@ import num5 from "../../../assets/unit4/imgs/Num5.svg";
 import num6 from "../../../assets/unit4/imgs/Num6.svg";
 import num7 from "../../../assets/unit4/imgs/Num7.svg";
 import num8 from "../../../assets/unit4/imgs/Num8.svg";
-import "./Unit4_Page1.css";
+import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
+import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
+import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
+import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
+import "./Unit4_Page1.css";
 const Unit4_Page1_Vocab = () => {
   const audioRef = useRef(null);
   const stopAtSecond = 3;
@@ -139,28 +147,46 @@ const Unit4_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
-  // ================================
-  // ✔ Play single word only
-  // ================================
-  const playSingleWord = (index) => {
-    const audio = mainAudioRef.current;
-    if (!audio) return;
-
-    const { start, end } = wordTimings[index];
-
-    audio.currentTime = start;
-    audio.play();
-    setIsPlaying(true);
-
-    const stopInterval = setInterval(() => {
-      if (audio.currentTime >= end) {
-        audio.pause();
-        clearInterval(stopInterval);
-      }
-    }, 40);
-  };
 
   const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
+  const wordAudios = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+  ];
+  const playWordAudio = (index) => {
+    // أوقفي الأوديو الرئيسي
+    mainAudioRef.current.pause();
+
+    // أوقفي أي كلمة شغالة
+    wordRefs.current.forEach((ref) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    });
+
+    const audio = wordRefs.current[index].current;
+    if (!audio) return;
+
+    // تشغيل الصوت من البداية
+    audio.currentTime = 0;
+    audio.play();
+
+    // 🔥 فعل الأنيميشن على طول فترة التشغيل
+    setClickedIndex(index);
+
+    // 🔥 عند انتهاء الصوت -> أطفئ الأنيميشن
+    audio.onended = () => {
+      setClickedIndex(null);
+    };
+  };
+  const wordRefs = useRef(wordAudios.map(() => React.createRef()));
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -322,12 +348,7 @@ const Unit4_Page1_Vocab = () => {
                   ? "active"
                   : ""
               }
-              onClick={() => {
-                setClickedIndex(i);
-                playSingleWord(i);
-                // يرجع يشيل الانيميشن بعد 500ms (حسب زمن أنيميشنك)
-                setTimeout(() => setClickedIndex(null), 500);
-              }}
+              onClick={() => playWordAudio(i)}
             >
               {i + 1} {text}
             </h6>
@@ -360,6 +381,9 @@ const Unit4_Page1_Vocab = () => {
           style={{ height: "75vh" }}
         />
       </div>
+      {wordAudios.map((src, i) => (
+        <audio key={i} ref={wordRefs.current[i]} src={src} />
+      ))}
     </div>
   );
 };

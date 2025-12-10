@@ -10,6 +10,14 @@ import num4 from "../../../assets/unit3/imgs3/Num4.svg";
 import num5 from "../../../assets/unit3/imgs3/Num5.svg";
 import num6 from "../../../assets/unit3/imgs3/Num6.svg";
 import num7 from "../../../assets/unit3/imgs3/Num7.svg";
+import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
+import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
+import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
+import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
+import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
@@ -48,7 +56,6 @@ const Unit3_Page1_Vocab = () => {
     { start: 15.09, end: 17.13, text: " 6. Quiet!" },
     { start: 17.15, end: 19.26, text: "7.Take out your pencil." },
   ];
-
 
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
@@ -140,132 +147,140 @@ const Unit3_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
-  // ================================
-  // ✔ Play single word only
-  // ================================
-  const playSingleWord = (index) => {
-    const audio = mainAudioRef.current;
+
+  const nums = [num1, num2, num3, num4, num5, num6, num7];
+  const wordAudios = [sound1, sound2, sound3, sound4, sound5, sound6, sound7];
+  const playWordAudio = (index) => {
+    // أوقفي الأوديو الرئيسي
+    mainAudioRef.current.pause();
+
+    // أوقفي أي كلمة شغالة
+    wordRefs.current.forEach((ref) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    });
+
+    const audio = wordRefs.current[index].current;
     if (!audio) return;
 
-    const { start, end } = wordTimings[index];
-
-    audio.currentTime = start;
+    // تشغيل الصوت من البداية
+    audio.currentTime = 0;
     audio.play();
-    setIsPlaying(true);
 
-    const stopInterval = setInterval(() => {
-      if (audio.currentTime >= end) {
-        audio.pause();
-        clearInterval(stopInterval);
-      }
-    }, 40);
+    // 🔥 فعل الأنيميشن على طول فترة التشغيل
+    setClickedIndex(index);
+
+    // 🔥 عند انتهاء الصوت -> أطفئ الأنيميشن
+    audio.onended = () => {
+      setClickedIndex(null);
+    };
   };
-  const nums = [num1, num2, num3, num4, num5, num6, num7];
 
+  const wordRefs = useRef(wordAudios.map(() => React.createRef()));
   return (
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-     
-        <div
-          className="audio-popup-vocab-container"
-          style={{
-            width: "30%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            margin: "0px 20px",
-            position: "relative",
-            alignItems: "center",
-          }}
-        >
-          <div className="audio-popup-vocab">
-            <div className="audio-inner player-ui">
-              <audio
-                ref={mainAudioRef}
-                src={vocabulary}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                  updateWord(time); // 🔥 أهم خطوة
+      <div
+        className="audio-popup-vocab-container"
+        style={{
+          width: "30%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          margin: "0px 20px",
+          position: "relative",
+          alignItems: "center",
+        }}
+      >
+        <div className="audio-popup-vocab">
+          <div className="audio-inner player-ui">
+            <audio
+              ref={mainAudioRef}
+              src={vocabulary}
+              onTimeUpdate={(e) => {
+                const time = e.target.currentTime;
+                setCurrent(time);
+                updateCaption(time);
+                updateWord(time); // 🔥 أهم خطوة
+              }}
+              onLoadedMetadata={(e) => setDuration(e.target.duration)}
+            ></audio>
+            {/* Play / Pause */}
+            {/* الوقت - السلايدر - الوقت */}
+            <div className="top-row">
+              <span className="audio-time">
+                {new Date(current * 1000).toISOString().substring(14, 19)}
+              </span>
+
+              <input
+                type="range"
+                className="audio-slider"
+                min="0"
+                max={duration}
+                value={current}
+                onChange={(e) => {
+                  mainAudioRef.current.currentTime = e.target.value;
+                  updateCaption(Number(e.target.value));
                 }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
+                style={{
+                  background: `linear-gradient(to right, #430f68 ${
+                    (current / duration) * 100
+                  }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                }}
+              />
 
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    mainAudioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
-                  }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
-
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
+              <span className="audio-time">
+                {new Date(duration * 1000).toISOString().substring(14, 19)}
+              </span>
+            </div>
+            {/* الأزرار 3 أزرار بنفس السطر */}
+            <div className="bottom-row">
+              {/* فقاعة */}
+              <div
+                className={`round-btn ${showCaption ? "active" : ""}`}
+                onClick={() => setShowCaption(!showCaption)}
+              >
+                <TbMessageCircle size={36} />
               </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                </div>
 
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+              {/* Play */}
+              <button className="play-btn2" onClick={togglePlay}>
+                {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+              </button>
+
+              {/* Settings */}
+              <div className="settings-wrapper" ref={settingsRef}>
+                <button
+                  className={`round-btn ${showSettings ? "active" : ""}`}
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <IoMdSettings size={36} />
                 </button>
 
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <IoMdSettings size={36} />
-                  </button>
-
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>{" "}
-            </div>
+                {showSettings && (
+                  <div className="settings-popup">
+                    <label>Volume</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.05"
+                      value={volume}
+                      onChange={(e) => {
+                        setVolume(e.target.value);
+                        audioRef.current.volume = e.target.value;
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>{" "}
           </div>
         </div>
-    
+      </div>
 
       <div
         style={{
@@ -322,13 +337,7 @@ const Unit3_Page1_Vocab = () => {
                     ? "active"
                     : ""
                 }
-                onClick={() => {
-                  setClickedIndex(i);
-
-                  playSingleWord(i); // 🔥 تشغيل كلمة واحدة فقط
-
-                  setTimeout(() => setClickedIndex(null), 500);
-                }}
+                onClick={() => playWordAudio(i)}
               >
                 {i + 1} {text}
               </h6>
@@ -360,6 +369,9 @@ const Unit3_Page1_Vocab = () => {
           style={{ height: "75vh" }}
         />
       </div>
+      {wordAudios.map((src, i) => (
+        <audio key={i} ref={wordRefs.current[i]} src={src} />
+      ))}
     </div>
   );
 };

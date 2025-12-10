@@ -10,11 +10,13 @@ export default function LeftSidebar({ isOpen, close, units, goToPage, book }) {
 
   return (
     <>
-      <div
-        className={`fixed left-0 bottom-0 w-70 h-full bg-white shadow-xl 
-        rounded-tr-2xl transition-transform duration-300 z-[99999]
-        ${isOpen ? "translate-y-0" : "translate-y-full"}`}
-      >
+     <div
+  className={`fixed left-0 bottom-0 w-70 h-full bg-white shadow-xl 
+  rounded-tr-2xl transition-transform duration-300 z-[99999]
+  flex flex-col
+  ${isOpen ? "translate-y-0" : "translate-y-full"}`}
+>
+
         {/* HEADER */}
         <div className="p-4 border-b flex justify-between items-center">
           <h2 className="text-xl text-[#430f68] font-semibold">
