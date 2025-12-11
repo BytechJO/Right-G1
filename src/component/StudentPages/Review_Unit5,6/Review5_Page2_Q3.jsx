@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./Review5_Page2_Q3.css";
-import ValidationAlert from "../Popup/ValidationAlert";
-import img1 from "../../assets/unit6/imgs/U6P53EXEF-01.svg";
-import img2 from "../../assets/unit6/imgs/U6P53EXEF-02.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/unit6/imgs/U6P53EXEF-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P53EXEF-02.svg";
 const Review5_Page2_Q3 = () => {
   // ===============================
   // 🔵 1) الأسئلة (كلها داخل نفس الكومبونينت)
@@ -42,10 +42,13 @@ const Review5_Page2_Q3 = () => {
     questions.map((q) => q.parts.map((p) => (p.type === "blank" ? null : null)))
   );
   const [showResult, setShowResult] = useState(false);
+  const [locked, setLocked] = useState(false);
+
   // ===============================
   // 🔵 3) الضغط على خيار
   // ===============================
   const handleSelect = (qIndex, blankIndex, option) => {
+    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -56,6 +59,7 @@ const Review5_Page2_Q3 = () => {
   // 🔵 4) فحص الإجابات
   // ===============================
   const checkAnswers = () => {
+    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     // تحقق إذا الطالب ما اختار ولا شيء
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {
@@ -92,6 +96,14 @@ const Review5_Page2_Q3 = () => {
 
     setShowResult(true);
   };
+  const showAnswers = () => {
+    // اجابة كل سؤال = correct array
+    const correctFilled = questions.map((q) => [...q.correct]);
+
+    setAnswers(correctFilled);
+    setShowResult(true);
+    setLocked(true); // 🔒 قفل الإجابات
+  };
 
   // ===============================
   // 🔵 JSX
@@ -103,6 +115,7 @@ const Review5_Page2_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -174,7 +187,7 @@ const Review5_Page2_Q3 = () => {
                                 {opt}
                               </span>
 
-                              {isWrongSelected && (
+                              {isWrongSelected && !locked && (
                                 <div className="wrong-mark">✕</div>
                               )}
                             </div>
@@ -201,9 +214,13 @@ const Review5_Page2_Q3 = () => {
               )
             );
             setShowResult(false);
+            setLocked(false);
           }}
         >
           Start Again ↻
+        </button>
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓

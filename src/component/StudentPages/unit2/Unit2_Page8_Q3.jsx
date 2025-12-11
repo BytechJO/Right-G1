@@ -449,7 +449,7 @@ const Unit2_Page8_Q3 = () => {
                   onClick={() => document.getElementById("img3-dot").click()}
                   style={{ cursor: "pointer" }}
                 />{" "}
-                {wrongImages.includes("img3") && (
+                {!locked &&  wrongImages.includes("img3") && (
                   <span className="error-mark-img">✕</span>
                 )}
                 <div

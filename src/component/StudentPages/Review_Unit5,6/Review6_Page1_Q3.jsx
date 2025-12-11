@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import deer from "../../assets/unit6/imgs/U6P54EXEC-01.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
-import "./Review6_Page1_Q3.css"
+import deer from "../../../assets/unit6/imgs/U6P54EXEC-01.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import "./Review6_Page1_Q3.css";
 
 const data = [
   {
@@ -16,21 +16,33 @@ const data = [
     question: "",
     correct: "He can’t fly a kite",
   },
-
 ];
 
 const Review6_Page1_Q3 = () => {
   const [answers, setAnswers] = useState(Array(data.length).fill(""));
   const [score, setScore] = useState(null);
   const [wrongInputs, setWrongInputs] = useState([]);
+  const [locked, setLocked] = useState(false);
+
   const handleChange = (value, index) => {
+    if (locked) return; // 🔒 منع التعديل بعد إظهار الإجابات
+
     const newAnswers = [...answers];
     newAnswers[index] = value;
     setAnswers(newAnswers);
-    setWrongInputs([])
+    setWrongInputs([]);
+  };
+  const showAnswers = () => {
+    const correctOnly = data.map((d) => d.correct); // يجيب كل الإجابات الصحيحة
+
+    setAnswers(correctOnly); // نعرضهم
+    setWrongInputs([]); // نخفي كل الأخطاء
+    setLocked(true); // 🔒 منع أي تعديل
   };
 
   const checkAnswers = () => {
+    if (locked) return; // 🔒 منع التعديل بعد إظهار الإجابات
+
     if (answers.some((a) => a.trim() === "")) {
       ValidationAlert.info("Please fill in all blanks before checking!");
       return;
@@ -75,7 +87,8 @@ const Review6_Page1_Q3 = () => {
 
   const reset = () => {
     setAnswers(Array(data.length).fill(""));
-  setWrongInputs([])
+    setWrongInputs([]);
+    setLocked(false)
   };
 
   return (
@@ -85,6 +98,7 @@ const Review6_Page1_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -98,9 +112,7 @@ const Review6_Page1_Q3 = () => {
         }}
       >
         <div className="component-wrapper">
-          <h3 className="header-title-page8">
-        C Look and write.
-          </h3>
+          <h3 className="header-title-page8">C Look and write.</h3>
           <div className="content-unit5-p5-q3">
             <img
               src={deer}
@@ -122,7 +134,11 @@ const Review6_Page1_Q3 = () => {
                 >
                   <span
                     className="q-number"
-                    style={{ color: "#0d47a1", fontWeight: "700",fontSize:"20px" }}
+                    style={{
+                      color: "#0d47a1",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
                   >
                     {index + 1}.
                   </span>
@@ -139,10 +155,11 @@ const Review6_Page1_Q3 = () => {
                       type="text"
                       className="q-input"
                       value={answers[index]}
+                      disabled={locked}
                       onChange={(e) => handleChange(e.target.value, index)}
                     />
                     {/* ❌ علامة الخطأ */}
-                    {wrongInputs.includes(index) && (
+                    {!locked && wrongInputs.includes(index) && (
                       <span className="wrong-icon-review6-p1-q3">✕</span>
                     )}
                   </div>
@@ -155,6 +172,9 @@ const Review6_Page1_Q3 = () => {
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
+        </button>
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
         </button>
         <button className="check-button2" onClick={checkAnswers}>
           Check Answers ✓

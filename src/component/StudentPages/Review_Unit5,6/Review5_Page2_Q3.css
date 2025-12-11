@@ -19,10 +19,11 @@
 .sentence-review5-p2-q3 {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  width: 70%;
+  /* gap: 8px; */
+  width: 65%;
   align-items: center;
     font-size: 22px;
+    justify-content: space-evenly;
 }
 
 .blank-options-review5-p2-q3 {

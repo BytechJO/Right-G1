@@ -26,7 +26,11 @@ export default function LeftSidebar({ isOpen, close, units, goToPage, book }) {
           </button>
         </div>
         {book && (
-          <div className="bookInfo-div text-center mb-4">
+          <div
+            className={`bookInfo-div  ${
+              book.title === "Right 1 Grammar Poster" ? "grammar-info" : ""
+            } text-center mb-4`}
+          >
             {book.cover && (
               <img
                 src={book.cover}
@@ -36,7 +40,7 @@ export default function LeftSidebar({ isOpen, close, units, goToPage, book }) {
             )}
 
             <div className="mt-2 text-center">
-              <h3 className="text-lg font-semibold text-[#430f68] break-all text-center">
+              <h3 className="text-lg font-semibold text-[#430f68] text-center">
                 {book.title}
               </h3>
               <p className="text-sm text-gray-500">{book.pages} pages</p>

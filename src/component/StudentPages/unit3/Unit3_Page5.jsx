@@ -24,6 +24,7 @@ const Unit3_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 25 })}
+            style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>
@@ -38,6 +39,7 @@ const Unit3_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 26 })}
+            style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>
@@ -52,6 +54,7 @@ const Unit3_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 27 })}
+            style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>
@@ -66,7 +69,7 @@ const Unit3_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 28 })}
-          className="click-icon-unit3-page5-4 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>

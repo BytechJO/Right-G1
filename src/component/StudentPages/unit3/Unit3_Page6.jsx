@@ -67,7 +67,7 @@ const Unit3_Page6 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 90 90"
+          viewBox="0 0 60 60"
           onClick={() =>
             openPopup(
               "audio",
@@ -82,12 +82,12 @@ const Unit3_Page6 = ({ openPopup }) => {
                   src={CD25_Pg27_Song_AdultLady}
                   captions={captionsExample}
                 />
-              </div>,
-              true
+              </div>
             )
           }
+          style={{ overflow: "visible" }}
         >
-          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image href={audioBtn} x="0" y="0" width="60" height="60" />
         </svg>
       </div>
     </div>

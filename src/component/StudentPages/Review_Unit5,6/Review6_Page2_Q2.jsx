@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../assets/unit6/imgs/U6P55EXEE-01.svg";
-import img2 from "../../assets/unit6/imgs/U6P55EXEE-02.svg";
-import img3 from "../../assets/unit6/imgs/U6P55EXEE-03.svg";
-import img4 from "../../assets/unit6/imgs/U6P55EXEE-04.svg";
-import img5 from "../../assets/unit6/imgs/U6P55EXEE-05.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
+import img1 from "../../../assets/unit6/imgs/U6P55EXEE-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P55EXEE-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P55EXEE-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P55EXEE-04.svg";
+import img5 from "../../../assets/unit6/imgs/U6P55EXEE-05.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review6_Page2_Q2.css";
 
 const Review6_Page2_Q2 = () => {
@@ -12,70 +12,68 @@ const Review6_Page2_Q2 = () => {
   const containerRef = useRef(null);
   let startPoint = null;
   const [wrongImages, setWrongImages] = useState([]);
-
+  // ⭐⭐ NEW: قفل الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false); //  ← إضافة جديدة
+  const [firstDot, setFirstDot] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
   const correctMatches = [
     { word: "sit", image: "img2" },
     { word: "pin", image: "img4" },
     { word: "wig", image: "img1" },
-    { word: "dig", image: "img3" },
+    { word: "big", image: "img3" },
     { word: "hill", image: "img5" },
   ];
 
-  const handleDotDown2 = (e) => {
-    startPoint = e.target;
+  // ============================
+  // 1️⃣ الضغط على النقطة الأولى (start-dot)
+  // ============================
+  const handleStartDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
 
     const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
 
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
+    const word = e.target.dataset.word || null;
+    const image = e.target.dataset.image || null;
 
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+    // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return; // ← إضافة جديدة
+
+    setFirstDot({
+      word,
+      x: e.target.getBoundingClientRect().left - rect.left + 8,
+      y: e.target.getBoundingClientRect().top - rect.top + 8,
+    });
   };
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
-
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
-      },
-    ]);
-  };
-
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
-
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
-
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot22-unit6-q2")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
+  // ============================
+  // 2️⃣ الضغط على النقطة الثانية (end-dot)
+  // ============================
+  const handleEndDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
+    if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
+
+    const endWord = e.target.dataset.word || null;
+    const endImage = e.target.dataset.image || null;
 
     const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
+      x1: firstDot.x,
+      y1: firstDot.y,
+      x2: e.target.getBoundingClientRect().left - rect.left + 8,
+      y2: e.target.getBoundingClientRect().top - rect.top + 8,
 
-      // ✅ تصحيح تخزين البيانات
-      word: startPoint.dataset.word,
-      image: endDot.dataset.image,
+      word: firstDot.word || endWord,
+      image: firstDot.image || endImage,
     };
 
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
+    setLines((prev) => [...prev, newLine]);
+    setFirstDot(null);
   };
   const checkAnswers2 = () => {
+    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل بعد القفل
+
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -100,6 +98,7 @@ const Review6_Page2_Q2 = () => {
     });
 
     setWrongImages(wrong); // ✅ حفظ الصور الغلط
+    setLocked(true); // ⭐⭐ NEW: إغلاق الرسم بعد Check Answer
 
     const total = correctMatches.length;
     const color =
@@ -124,6 +123,7 @@ const Review6_Page2_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -153,7 +153,10 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <div>
-                  <h5 className="h5-review6-p2-q2">
+                  <h5
+                    className="h5-review6-p2-q2"
+                    onClick={() => document.getElementById("sit-dot").click()}
+                  >
                     sit
                     {wrongImages.includes("sit") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -162,7 +165,8 @@ const Review6_Page2_Q2 = () => {
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="sit"
-                    onMouseDown={handleDotDown2}
+                    id="sit-dot"
+                    onClick={handleStartDotClick}
                   ></div>
                 </div>
               </div>
@@ -179,7 +183,10 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <div>
-                  <h5 className="h5-review6-p2-q2">
+                  <h5
+                    className="h5-review6-p2-q2"
+                    onClick={() => document.getElementById("pin-dot").click()}
+                  >
                     pin
                     {wrongImages.includes("pin") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -188,7 +195,8 @@ const Review6_Page2_Q2 = () => {
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="pin"
-                    onMouseDown={handleDotDown2}
+                    id="pin-dot"
+                    onClick={handleStartDotClick}
                   ></div>
                 </div>
               </div>
@@ -205,7 +213,10 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <div>
-                  <h5 className="h5-review6-p2-q2">
+                  <h5
+                    className="h5-review6-p2-q2"
+                    onClick={() => document.getElementById("wig-dot").click()}
+                  >
                     wig
                     {wrongImages.includes("wig") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -214,7 +225,8 @@ const Review6_Page2_Q2 = () => {
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="wig"
-                    onMouseDown={handleDotDown2}
+                    id="wig-dot"
+                    onClick={handleStartDotClick}
                   ></div>
                 </div>
               </div>
@@ -229,7 +241,10 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <div>
-                  <h5 className="h5-review6-p2-q2">
+                  <h5
+                    className="h5-review6-p2-q2"
+                    onClick={() => document.getElementById("big-dot").click()}
+                  >
                     big
                     {wrongImages.includes("big") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -238,7 +253,8 @@ const Review6_Page2_Q2 = () => {
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="big"
-                    onMouseDown={handleDotDown2}
+                    id="big-dot"
+                    onClick={handleStartDotClick}
                   ></div>
                 </div>
               </div>
@@ -253,7 +269,10 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>5 </span>
                 <div>
-                  <h5 className="h5-review6-p2-q2">
+                  <h5
+                    className="h5-review6-p2-q2"
+                    onClick={() => document.getElementById("hill-dot").click()}
+                  >
                     hill
                     {wrongImages.includes("hill") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
@@ -262,7 +281,8 @@ const Review6_Page2_Q2 = () => {
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="hill"
-                    onMouseDown={handleDotDown2}
+                    id="hill-dot"
+                    onClick={handleStartDotClick}
                   ></div>
                 </div>
               </div>
@@ -270,41 +290,71 @@ const Review6_Page2_Q2 = () => {
             {/* الصور */}
             <div className="match-images-row2">
               <div className="img-box2">
-                <img src={img1} alt="" />
+                <img
+                  src={img1}
+                  alt=""
+                  onClick={() => document.getElementById("img1-dot").click()}
+                />
 
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img1"
+                  id="img1-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
 
               <div className="img-box2">
-                <img src={img2} alt="" />{" "}
+                <img
+                  src={img2}
+                  alt=""
+                  onClick={() => document.getElementById("img2-dot").click()}
+                />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img2"
+                  id="img2-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
 
               <div className="img-box2">
-                <img src={img3} alt="" />{" "}
+                <img
+                  src={img3}
+                  alt=""
+                  onClick={() => document.getElementById("img3-dot").click()}
+                />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img3"
+                  id="img3-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img4} alt="" />{" "}
+                <img
+                  src={img4}
+                  alt=""
+                  onClick={() => document.getElementById("img4-dot").click()}
+                />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img4"
+                  id="img4-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
               <div className="img-box2">
-                <img src={img5} alt="" />{" "}
+                <img
+                  src={img5}
+                  alt=""
+                  onClick={() => document.getElementById("img5-dot").click()}
+                />{" "}
                 <div
                   className="dot22-unit6-q2 end-dot22-unit6-q2"
                   data-image="img5"
+                  id="img5-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
             </div>
@@ -330,10 +380,43 @@ const Review6_Page2_Q2 = () => {
           onClick={() => {
             setLines([]);
             setWrongImages([]);
+            setShowAnswer(false);
+            setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
           }}
           className="try-again-button"
         >
           Start Again ↻
+        </button>
+        <button
+          onClick={() => {
+            const rect = containerRef.current.getBoundingClientRect();
+
+            const getDotPosition = (selector) => {
+              const el = document.querySelector(selector);
+              if (!el) return { x: 0, y: 0 };
+              const r = el.getBoundingClientRect();
+              return {
+                x: r.left - rect.left + 8,
+                y: r.top - rect.top + 8,
+              };
+            };
+
+            const finalLines = correctMatches.map((line) => ({
+              ...line,
+              x1: getDotPosition(`[data-word="${line.word}"]`).x,
+              y1: getDotPosition(`[data-word="${line.word}"]`).y,
+              x2: getDotPosition(`[data-image="${line.image}"]`).x,
+              y2: getDotPosition(`[data-image="${line.image}"]`).y,
+            }));
+
+            setLines(finalLines);
+            setWrongImages([]);
+            setShowAnswer(true);
+            setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
+          }}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
         </button>
         <button onClick={checkAnswers2} className="check-button2">
           Check Answer ✓

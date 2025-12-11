@@ -24,6 +24,10 @@ button {
   display: flex;
   flex-direction: row;
   margin: 20px;
+  /* flex-wrap: wrap; */
+  gap: 20px;
+}
+.grammar-info{
   flex-wrap: wrap;
 }
 /* من 1024px وفوق → ديسكتوب */

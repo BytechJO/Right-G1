@@ -1,76 +1,72 @@
 import React, { useState, useRef, useEffect } from "react";
-import img1 from "../../assets/unit6/imgs/U6P52EXEC-01.svg";
-import img2 from "../../assets/unit6/imgs/U6P52EXEC-02.svg";
-import img3 from "../../assets/unit6/imgs/U6P52EXEC-03.svg";
-import img4 from "../../assets/unit6/imgs/U6P52EXEC-04.svg";
-import sound1 from "../../assets/unit1/sounds/P17QF.mp3";
-import ValidationAlert from "../Popup/ValidationAlert";
+import img1 from "../../../assets/unit6/imgs/U6P52EXEC-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P52EXEC-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P52EXEC-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P52EXEC-04.svg";
+import sound1 from "../../../assets/unit1/sounds/P17QF.mp3";
+import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review5_Page1_Q3.css";
 const Review5_Page1_Q3 = () => {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
   let startPoint = null;
   const [wrongImages, setWrongImages] = useState([]);
+  const [firstDot, setFirstDot] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
+  const [locked, setLocked] = useState(false);
   const audioRef = useRef(null);
   const correctMatches = [
     { word: "Yes, it is.", image: [""] },
     { word: "No, it isn’t.", image: ["img1", "img2", "img3", "img4"] },
   ];
-  const handleDotDown2 = (e) => {
-    startPoint = e.target;
+
+  // ============================
+  // 1️⃣ الضغط على النقطة الأولى (start-dot)
+  // ============================
+  const handleStartDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
 
     const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
+    const imgId = e.target.dataset.image;
 
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
+    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
+    const alreadyUsed = lines.some((line) => line.image === imgId);
+    if (alreadyUsed) return;
+    // -----------------------------------------------------
 
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+    setFirstDot({
+      image: imgId,
+      x: e.target.getBoundingClientRect().left - rect.left + 8,
+      y: e.target.getBoundingClientRect().top - rect.top + 8,
+    });
   };
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
-
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
-      },
-    ]);
-  };
-
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
-
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
-
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot2-unit2")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
+  // ============================
+  // 2️⃣ الضغط على النقطة الثانية (end-dot)
+  // ============================
+  const handleEndDotClick = (e) => {
+    if (showAnswer || locked) return; // ⭐ NEW
+    if (!firstDot) return;
 
     const rect = containerRef.current.getBoundingClientRect();
 
     const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
+      x1: firstDot.x,
+      y1: firstDot.y,
 
-      // ✅ تصحيح تخزين البيانات
-      image: startPoint.dataset.image,
-      word: endDot.dataset.word,
+      x2: e.target.getBoundingClientRect().left - rect.left + 8,
+      y2: e.target.getBoundingClientRect().top - rect.top + 8,
+
+      word: e.target.dataset.word, // حرف d أو t
+      image: firstDot.image, // الصورة المختارة
     };
 
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
+    setLines((prev) => [...prev, newLine]);
+    setFirstDot(null);
   };
   const checkAnswers2 = () => {
+    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن إعادة التحقق
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
@@ -95,6 +91,7 @@ const Review5_Page1_Q3 = () => {
     });
 
     setWrongImages(wrong); // ✅ حفظ الصور الغلط
+    setLocked(true); // ⭐⭐⭐ NEW: أقفل الرسم بعد الضغط على Check Answer
 
     const total = 4;
     const color =
@@ -111,7 +108,41 @@ const Review5_Page1_Q3 = () => {
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
+  const handleShowAnswer = () => {
+    // امنعي التعديل
+    setShowAnswer(true);
+    setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
 
+    // امسحي الخطوط القديمة + الغلط
+    setLines([]);
+    setWrongImages([]);
+
+    const rect = containerRef.current.getBoundingClientRect();
+
+    // ارسم الخطوط الصحيحة
+    let answerLines = [];
+
+    correctMatches.forEach((pair) => {
+      pair.image.forEach((imgId) => {
+        // جيبي نقط البداية
+        const startDot = document.querySelector(`[data-image="${imgId}"]`);
+        const endDot = document.querySelector(`[data-word="${pair.word}"]`);
+
+        if (startDot && endDot) {
+          answerLines.push({
+            x1: startDot.getBoundingClientRect().left - rect.left + 8,
+            y1: startDot.getBoundingClientRect().top - rect.top + 8,
+            x2: endDot.getBoundingClientRect().left - rect.left + 8,
+            y2: endDot.getBoundingClientRect().top - rect.top + 8,
+            word: pair.word,
+            image: imgId,
+          });
+        }
+      });
+    });
+
+    setLines(answerLines);
+  };
   return (
     <div
       style={{
@@ -119,6 +150,7 @@ const Review5_Page1_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -138,7 +170,7 @@ const Review5_Page1_Q3 = () => {
             {/* الصور */}
             <div className="match-images-row2">
               <div className="img-box2">
-                <div style={{display:"flex",gap:"10px"}}>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <span
                     style={{
                       color: "#2c5287",
@@ -148,7 +180,11 @@ const Review5_Page1_Q3 = () => {
                   >
                     1
                   </span>
-                  <img src={img1} alt="" />
+                  <img
+                    src={img1}
+                    alt=""
+                    onClick={() => document.getElementById("img1-dot").click()}
+                  />
                 </div>
                 <h5
                   style={{
@@ -161,6 +197,7 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("img1-dot").click()}
                 >
                   Is this a pen?
                 </h5>
@@ -171,12 +208,13 @@ const Review5_Page1_Q3 = () => {
                 <div
                   className="dot2-unit2 start-dot2-unit2"
                   data-image="img1"
-                  onMouseDown={handleDotDown2}
+                  id="img1-dot"
+                  onClick={handleStartDotClick}
                 ></div>
               </div>
 
               <div className="img-box2">
-                <div style={{display:"flex",gap:"10px"}}>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <span
                     style={{
                       color: "#2c5287",
@@ -186,7 +224,11 @@ const Review5_Page1_Q3 = () => {
                   >
                     2
                   </span>
-                  <img src={img2} alt="img" />
+                  <img
+                    src={img2}
+                    alt="img"
+                    onClick={() => document.getElementById("img2-dot").click()}
+                  />
                 </div>
                 <h5
                   style={{
@@ -199,21 +241,23 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("img2-dot").click()}
                 >
                   Is this an eraser?
                 </h5>
-                {wrongImages.includes("img2") && (
+                { wrongImages.includes("img2") && (
                   <span className="error-mark-img">✕</span>
                 )}
                 <div
                   className="dot2-unit2 start-dot2-unit2"
                   data-image="img2"
-                  onMouseDown={handleDotDown2}
+                  id="img2-dot"
+                  onClick={handleStartDotClick}
                 ></div>
               </div>
 
               <div className="img-box2">
-                <div style={{display:"flex",gap:"10px"}}>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <span
                     style={{
                       color: "#2c5287",
@@ -223,7 +267,11 @@ const Review5_Page1_Q3 = () => {
                   >
                     3
                   </span>
-                  <img src={img3} alt="" />
+                  <img
+                    src={img3}
+                    alt=""
+                    onClick={() => document.getElementById("img3-dot").click()}
+                  />
                 </div>
                 <h5
                   style={{
@@ -236,20 +284,22 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("img3-dot").click()}
                 >
                   Is this a chair?
                 </h5>
-                {wrongImages.includes("img3") && (
+                { wrongImages.includes("img3") && (
                   <span className="error-mark-img">✕</span>
                 )}
                 <div
                   className="dot2-unit2 start-dot2-unit2"
                   data-image="img3"
-                  onMouseDown={handleDotDown2}
+                  id="img3-dot"
+                  onClick={handleStartDotClick}
                 ></div>
               </div>
               <div className="img-box2">
-                <div style={{display:"flex",gap:"10px"}}>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <span
                     style={{
                       color: "#2c5287",
@@ -259,7 +309,11 @@ const Review5_Page1_Q3 = () => {
                   >
                     4
                   </span>
-                  <img src={img4} alt="" />
+                  <img
+                    src={img4}
+                    alt=""
+                    onClick={() => document.getElementById("img4-dot").click()}
+                  />
                 </div>
                 <h5
                   style={{
@@ -272,6 +326,7 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("img4-dot").click()}
                 >
                   Is this a desk?
                 </h5>
@@ -281,7 +336,8 @@ const Review5_Page1_Q3 = () => {
                 <div
                   className="dot2-unit2 start-dot2-unit2"
                   data-image="img4"
-                  onMouseDown={handleDotDown2}
+                  id="img4-dot"
+                  onClick={handleStartDotClick}
                 ></div>
               </div>
             </div>
@@ -300,12 +356,15 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("Yes-dot").click()}
                 >
                   Yes, it is.
                 </h5>
                 <div
                   className="dot2-unit2 end-dot2-unit2"
                   data-word="Yes, it is."
+                  id="Yes-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
 
@@ -321,12 +380,15 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  onClick={() => document.getElementById("No-dot").click()}
                 >
                   No, it isn’t.
                 </h5>
                 <div
                   className="dot2-unit2 end-dot2-unit2"
                   data-word="No, it isn’t."
+                  id="No-dot"
+                  onClick={handleEndDotClick}
                 ></div>
               </div>
             </div>
@@ -352,10 +414,15 @@ const Review5_Page1_Q3 = () => {
             onClick={() => {
               setLines([]);
               setWrongImages([]);
+              setShowAnswer(false); // ← رجع التعديل
+              setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
             }}
             className="try-again-button"
           >
             Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
           </button>
           <button onClick={checkAnswers2} className="check-button2">
             Check Answer ✓

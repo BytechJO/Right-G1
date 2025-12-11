@@ -34,12 +34,12 @@ const Unit6_Page5_Q2 = () => {
     const image = e.target.dataset.image || null;
 
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
-    const alreadyUsed = lines.some((line) => line.image === image);
+    const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return; // ← إضافة جديدة
 
     setFirstDot({
       word,
-      image,
+
       x: e.target.getBoundingClientRect().left - rect.left + 8,
       y: e.target.getBoundingClientRect().top - rect.top + 8,
     });

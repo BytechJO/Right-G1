@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./Review6_Page2_Q3.css";
-import ValidationAlert from "../Popup/ValidationAlert";
+import ValidationAlert from "../../Popup/ValidationAlert";
+
 const Review6_Page2_Q3 = () => {
   const sentences = [
     { word1: "pit", word2: "chip", word3: "top", num: 1 },
@@ -23,11 +24,15 @@ const Review6_Page2_Q3 = () => {
   const [circledWords, setCircledWords] = useState({});
   const [checked, setChecked] = useState(false);
 
+  // ⭐ NEW — Show Answer Mode
+  const [showAnswerMode, setShowAnswerMode] = useState(false);
+
   const handleWordClick = (sIndex, wIndex) => {
+    if (showAnswerMode) return; // ⛔ منع النقر أثناء الشو أنسر
+
     setCircledWords((prev) => {
       const existing = prev[sIndex] || [];
 
-      // إذا الطالب اخترها قبل → احذفها
       if (existing.includes(wIndex)) {
         return {
           ...prev,
@@ -35,38 +40,32 @@ const Review6_Page2_Q3 = () => {
         };
       }
 
-      // 🚫 ممنوع يختار أكثر من خيارين
       if (existing.length >= 2) {
         return {
           ...prev,
           [sIndex]: existing.filter((i) => i !== wIndex),
-        }; // لا تضيف أي شيء
+        };
       }
 
-      // إذا لسا ما اختارها → أضفها (ومسموح <=2)
       return {
         ...prev,
         [sIndex]: [...existing, wIndex],
       };
     });
-    setChecked(false)
+    setChecked(false);
   };
 
   const checkAnswers = () => {
-    if (Object.keys(circledWords).length < sentences.length) {
-      ValidationAlert.info("Oops!", "Please circle at least one mistake.");
-      return;
-    }
+        if (showAnswerMode) return; // ⛔ منع النقر أثناء الشو أنسر
+
     if (
       Object.keys(circledWords).length < sentences.length ||
       Object.values(circledWords).some((arr) => arr.length < 2)
     ) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please circle two words in each sentence!"
-      );
+      ValidationAlert.info("Oops!", "Please circle two words in each sentence!");
       return;
     }
+
     let totalCorrect = 0;
     let studentCorrect = 0;
 
@@ -86,6 +85,19 @@ const Review6_Page2_Q3 = () => {
     else ValidationAlert.warning(scoreMessage);
   };
 
+  // ⭐⭐⭐ NEW — Show Answer Function
+  const showAnswers = () => {
+    const final = {};
+
+    Object.keys(correct).forEach((index) => {
+      final[index] = correct[index]; // ضع الإجابات الصحيحة كما هي
+    });
+
+    setCircledWords(final);
+    setChecked(true);
+    setShowAnswerMode(true);
+  };
+
   return (
     <div
       style={{
@@ -93,6 +105,7 @@ const Review6_Page2_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -113,12 +126,18 @@ const Review6_Page2_Q3 = () => {
           <div className="review3-p2-q2-sentence-container2">
             {sentences.map((sentence, sIndex) => (
               <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num" style={{ color: "#2c5287", fontWeight: "700" }}>{sIndex + 1}</span>
+                <span
+                  className="review3-p2-q2-num"
+                  style={{ color: "#2c5287", fontWeight: "700" }}
+                >
+                  {sIndex + 1}
+                </span>
 
                 <div className="review3-p2-q2-word-box">
                   {[sentence.word1, sentence.word2, sentence.word3].map(
                     (word, wIndex) => {
                       const isCircled = circledWords[sIndex]?.includes(wIndex);
+
                       const isWrong =
                         checked &&
                         isCircled &&
@@ -133,7 +152,8 @@ const Review6_Page2_Q3 = () => {
                           onClick={() => handleWordClick(sIndex, wIndex)}
                         >
                           {word}
-                          {isWrong && (
+
+                          {isWrong && !showAnswerMode && (
                             <span className="review3-p2-q2-wrong-x">✕</span>
                           )}
                         </span>
@@ -151,11 +171,20 @@ const Review6_Page2_Q3 = () => {
             onClick={() => {
               setCircledWords({});
               setChecked(false);
+              setShowAnswerMode(false);
             }}
             className="try-again-button"
           >
             Start Again ↻
           </button>
+
+          <button
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>

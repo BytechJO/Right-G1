@@ -213,7 +213,11 @@ export default function Book() {
 
   const nextPage = () => {
     // =============== Posters → always single ===============
-    if (activeTab === "poster"|| activeTab === "posterVocab" || activeTab === "flash") {
+    if (
+      activeTab === "poster" ||
+      activeTab === "posterVocab" ||
+      activeTab === "flash"
+    ) {
       if (pageIndex < pages.length - 1) {
         setPageIndex(pageIndex + 1);
       }
@@ -259,7 +263,11 @@ export default function Book() {
 
   const prevPage = () => {
     // Posters → always one page
-    if (activeTab === "poster" || activeTab === "posterVocab"|| activeTab === "flash") {
+    if (
+      activeTab === "poster" ||
+      activeTab === "posterVocab" ||
+      activeTab === "flash"
+    ) {
       if (pageIndex > 0) setPageIndex(pageIndex - 1);
       return;
     }
@@ -321,11 +329,12 @@ export default function Book() {
     { id: 1, label: "Unit 1", start: 4, pages: 6 },
     { id: 2, label: "Unit 2", start: 10, pages: 6 },
     { id: 3, label: "Review 1 and 2", start: 16, pages: 6 },
-    // { id: 4, label: "Student Unit 3", start: 22, pages: 6 },
-    // { id: 5, label: "Student Unit 4", start: 28, pages: 6 },
-    // { id: 6, label: "Review 3 and 4", start: 34, pages: 6 },
-    // { id: 7, label: "Student Unit 5", start: 40, pages: 6 },
-    // { id: 8, label: "Student Unit 6", start: 46, pages: 10 },
+    { id: 4, label: "Unit 3", start: 22, pages: 6 },
+    { id: 5, label: "Unit 4", start: 28, pages: 6 },
+    { id: 6, label: "Review 3 and 4", start: 34, pages: 6 },
+    { id: 7, label: "Unit 5", start: 40, pages: 6 },
+    { id: 8, label: "Unit 6", start: 46, pages: 6 },
+    { id: 9, label: "Review 5 and 6", start: 52, pages: 6 },
   ];
 
   const workbookUnits = [

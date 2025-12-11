@@ -32,12 +32,12 @@ const Unit6_Page6_Q3 = () => {
     const image = e.target.dataset.image || null;
 
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
-    const alreadyUsed = lines.some((line) => line.image === image);
+    const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return; // ← إضافة جديدة
 
     setFirstDot({
       word,
-      image,
+    
       x: e.target.getBoundingClientRect().left - rect.left + 8,
       y: e.target.getBoundingClientRect().top - rect.top + 8,
     });
@@ -49,6 +49,7 @@ const Unit6_Page6_Q3 = () => {
   const handleEndDotClick = (e) => {
     if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
     if (!firstDot) return;
+   
 
     const rect = containerRef.current.getBoundingClientRect();
 

@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 // import "./Unit5_Page6_Q1.css";
-import img1 from "../../assets/unit6/imgs/U6P52EXEA-01.svg";
-import img2 from "../../assets/unit6/imgs/U6P52EXEA-02.svg";
-import img3 from "../../assets/unit6/imgs/U6P52EXEA-03.svg";
-import img4 from "../../assets/unit6/imgs/U6P52EXEA-04.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
+import img1 from "../../../assets/unit6/imgs/U6P52EXEA-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P52EXEA-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P52EXEA-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P52EXEA-04.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 const Review5_Page1_Q1 = () => {
   const [answers, setAnswers] = useState([]);
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
+  const [locked, setLocked] = useState(false);
+
   const correctMatches = [
     { input: "pen", num: "input1" },
     { input: "What’s this", num: "input2" },
@@ -17,9 +19,8 @@ const Review5_Page1_Q1 = () => {
   ];
 
   const handleChange = (e) => {
+    if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
     const { id, value } = e.target;
-    console.log(id, value);
-
     setAnswers((prev) => {
       const updated = [...prev];
       const existingIndex = updated.findIndex((ans) => ans.num === id);
@@ -32,10 +33,22 @@ const Review5_Page1_Q1 = () => {
 
       return updated;
     });
-    setWrongWords([])
+    setWrongWords([]);
+  };
+  const showAnswers = () => {
+    const filled = correctMatches.map((item) => ({
+      input: item.input,
+      num: item.num,
+    }));
+
+    setAnswers(filled);
+    setWrongWords([]);
+    setLocked(true); // 🔒 قفل التعديل
   };
 
   const checkAnswers = () => {
+        if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
+
     // تأكد إنو الطالب وصل كل الأزواج
 
     let correctCount = 0;
@@ -94,6 +107,7 @@ const Review5_Page1_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -111,7 +125,16 @@ const Review5_Page1_Q1 = () => {
 
           <div className="content-container-unit5-p6-q1">
             <div className="section-one-unit5-p6-q1">
-              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>1</span> <img src={img1} className="img-unit5-p6-q1" />
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                1
+              </span>{" "}
+              <img src={img1} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <input
                   type="text"
@@ -142,7 +165,16 @@ const Review5_Page1_Q1 = () => {
             </div>
 
             <div className="section-two-unit5-p6-q1">
-              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>2</span> <img src={img2} className="img-unit5-p6-q1" />
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                2
+              </span>{" "}
+              <img src={img2} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
@@ -165,7 +197,7 @@ const Review5_Page1_Q1 = () => {
                     style={{
                       pointerEvents: "none",
                       borderBottom: "2px solid black",
-                      width: "60px",
+                      width: "90px",
                       fontSize: "22px",
                     }}
                   />
@@ -187,9 +219,10 @@ const Review5_Page1_Q1 = () => {
                         fontSize: "22px",
                       }}
                       onChange={handleChange}
+                        disabled={locked}
                     />
                     .
-                    {wrongWords.includes(answers[0]?.num) && (
+                    {!locked && wrongWords.includes(answers[0]?.num) && (
                       <span className="error-mark-input1">✕</span>
                     )}
                   </div>
@@ -198,7 +231,16 @@ const Review5_Page1_Q1 = () => {
             </div>
 
             <div className="section-three-unit5-p6-q1">
-              <span style={{ color: "#2c5287", fontWeight: "700",fontSize:"20px" }}>3</span> <img src={img3} className="img-unit5-p6-q1" />
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                3
+              </span>{" "}
+              <img src={img3} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative" }}>
                   <input
@@ -210,8 +252,9 @@ const Review5_Page1_Q1 = () => {
                       fontSize: "22px",
                     }}
                     onChange={handleChange}
+                      disabled={locked}
                   />
-                  {wrongWords.includes(answers[1]?.num) && (
+                  {!locked && wrongWords.includes(answers[1]?.num) && (
                     <span className="error-mark-input1">✕</span>
                   )}
                   ?
@@ -233,9 +276,10 @@ const Review5_Page1_Q1 = () => {
                       }}
                       id="input3"
                       onChange={handleChange}
+                        disabled={locked}
                     />
                     .
-                    {wrongWords.includes(answers[2]?.num) && (
+                    {!locked&& wrongWords.includes(answers[2]?.num) && (
                       <span className="error-mark-input1">✕</span>
                     )}
                   </div>
@@ -243,7 +287,16 @@ const Review5_Page1_Q1 = () => {
               </div>
             </div>
             <div className="section-four-unit5-p6-q1">
-              <span style={{ color: "#2c5287", fontWeight: "700" ,fontSize:"20px"}}>4</span> <img src={img4} className="img-unit5-p6-q1" />
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                4
+              </span>{" "}
+              <img src={img4} className="img-unit5-p6-q1" />
               <div className="content-input-unit5-p6-q1">
                 <div
                   style={{
@@ -261,9 +314,10 @@ const Review5_Page1_Q1 = () => {
                     style={{
                       fontSize: "22px",
                     }}
+                      disabled={locked}
                   />
                   ?
-                  {wrongWords.includes(answers[3]?.num) && (
+                  {!locked && wrongWords.includes(answers[3]?.num) && (
                     <span className="error-mark-input1">✕</span>
                   )}
                 </div>
@@ -283,9 +337,10 @@ const Review5_Page1_Q1 = () => {
                     style={{
                       fontSize: "22px",
                     }}
+                      disabled={locked}
                   />
                   .
-                  {wrongWords.includes(answers[4]?.num) && (
+                  {!locked && wrongWords.includes(answers[4]?.num) && (
                     <span className="error-mark-input1">✕</span>
                   )}
                 </div>
@@ -298,11 +353,16 @@ const Review5_Page1_Q1 = () => {
             onClick={() => {
               setAnswers([]);
               setWrongWords([]);
+               setLocked(false);   // ⬅ رجّع التعديل
             }}
             className="try-again-button"
           >
             Start Again ↻
           </button>
+            {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button className="show-answer-btn swal-continue" onClick={showAnswers}>
+          Show Answer
+        </button>
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>

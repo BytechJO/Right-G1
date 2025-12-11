@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import bat from "../../assets/unit6/imgs/U6P53EXED-01.svg";
-import cap from "../../assets/unit6/imgs/U6P53EXED-02.svg";
-import ant from "../../assets/unit6/imgs/U6P53EXED-03.svg";
-import dad from "../../assets/unit6/imgs/U6P53EXED-04.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
+import bat from "../../../assets/unit6/imgs/U6P53EXED-01.svg";
+import cap from "../../../assets/unit6/imgs/U6P53EXED-02.svg";
+import ant from "../../../assets/unit6/imgs/U6P53EXED-03.svg";
+import dad from "../../../assets/unit6/imgs/U6P53EXED-04.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review5_Page2_Q1.css";
 const Review5_Page2_Q1 = () => {
   const items = [
@@ -15,10 +15,11 @@ const Review5_Page2_Q1 = () => {
 
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [selected, setSelected] = useState(["", "", "", ""]);
-
+  const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const handleSelect = (value, index) => {
+    if (locked) return; // 🔒 منع التعديل بعد Show Answer
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
@@ -26,6 +27,7 @@ const Review5_Page2_Q1 = () => {
   };
 
   const handleInput = (value, index) => {
+    if (locked) return; // 🔒 منع التعديل بعد Show Answer
     const newAns = [...answers];
     newAns[index] = value;
     setAnswers(newAns);
@@ -37,9 +39,25 @@ const Review5_Page2_Q1 = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
     setShowResult(false);
+      setLocked(false);    // ← مهم جدًا
+  };
+  const showAnswers = () => {
+    const correctSelected = items.map((item) => item.correct);
+    const correctLetters = items.map((item) =>
+      item.correctInput[0].toLowerCase()
+    );
+
+    setSelected(correctSelected);
+    setAnswers(correctLetters);
+
+    setWrongInputs([]);
+    setShowResult(false);
+
+    setLocked(true); // 🔒 قفل التعديل
   };
 
   const checkAnswers = () => {
+        if (locked) return; // 🔒 منع التعديل بعد Show Answer
     // 1) التشييك إذا في دائرة مش مختارة
     if (selected.some((s) => s === "")) {
       ValidationAlert.info("Please choose a circle (f or v) for all items!");
@@ -99,6 +117,7 @@ const Review5_Page2_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -119,7 +138,7 @@ const Review5_Page2_Q1 = () => {
         <div className="question-grid-unit4-page5-q1">
           {items.map((item, i) => (
             <div className="question-box-unit4-page5-q1" key={i}>
-              <div style={{display:"flex"}}>
+              <div style={{ display: "flex" }}>
                 <span
                   style={{
                     color: "#2c5287",
@@ -144,7 +163,7 @@ const Review5_Page2_Q1 = () => {
                   </div>
 
                   {/* X فوق دائرة f إذا كانت غلط */}
-                  {showResult &&
+                  {!locked &&showResult &&
                     selected[i] === "g" &&
                     selected[i] !== item.correct && (
                       <div className="wrong-mark">✕</div>
@@ -162,7 +181,7 @@ const Review5_Page2_Q1 = () => {
                   </div>
 
                   {/* X فوق دائرة v إذا كانت غلط */}
-                  {showResult &&
+                  {!locked &&showResult &&
                     selected[i] === "k" &&
                     selected[i] !== item.correct && (
                       <div className="wrong-mark">✕</div>
@@ -178,8 +197,9 @@ const Review5_Page2_Q1 = () => {
                   value={answers[i]}
                   onChange={(e) => handleInput(e.target.value, i)}
                   className="first-letter-input-review5-p2-q1"
+                  readOnly={locked}                 // 🔒 قفل الكتابة
                 />
-                {showResult && (
+                {!locked && showResult && (
                   <div className="wrong-mark-review5-p2-q1">✕</div>
                 )}
                 <span className="rest-word">{item.correctInput.slice(1)}</span>
@@ -192,6 +212,9 @@ const Review5_Page2_Q1 = () => {
         <button onClick={resetAll} className="try-again-button">
           Start Again ↻
         </button>
+        <button onClick={showAnswers} className="show-answer-btn">
+            Show Answer
+          </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>

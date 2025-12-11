@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
-import ValidationAlert from "../Popup/ValidationAlert";
+import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review6_Page1_Q1.css";
-import img1 from "../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../assets/unit6/imgs/U6P54EXEA-04.svg";
+import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
 const Review6_Page1_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
   const [showResult, setShowResult] = useState(false);
+  const [locked, setLocked] = useState(false);
 
   // 🔥 الداتا المطابقة للصورة
   const items = [
@@ -39,13 +40,15 @@ const Review6_Page1_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
+    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
-    setShowResult(false)
+    setShowResult(false);
   };
 
   const checkAnswers = () => {
+    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
@@ -78,6 +81,15 @@ const Review6_Page1_Q1 = () => {
   const reset = () => {
     setAnswers(Array(items.length).fill(null));
     setShowResult(false);
+    setLocked(false);
+  };
+  const showAnswers = () => {
+    // كل سؤال → نضع correctIndex بدل null
+    const filled = items.map((item) => item.correctIndex);
+
+    setAnswers(filled);
+    setShowResult(true);
+    setLocked(true); // 🔒 قفل الإجابات
   };
 
   return (
@@ -87,6 +99,7 @@ const Review6_Page1_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -108,12 +121,30 @@ const Review6_Page1_Q1 = () => {
               className="question-box-review6-p1-q1"
               style={{ width: "100%" }}
             >
-              <div style={{display:"flex",gap:"10px" ,flexDirection:"row",alignItems:"center",width:"80%"}}> 
-                <span style={{color:"#2c5287" ,fontSize:"20px",fontWeight:"700"}}>{i+1}</span>
-                  <h6 style={{fontSize:"20px",fontWeight:"600"}}>{q.text}</h6>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "80%",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
+                  {q.text}
+                </h6>
               </div>
-            
-              <div style={{display:"flex",gap:"10px"}}>
+
+              <div style={{ display: "flex", gap: "10px" }}>
                 <div className="img-div-review6-p1-q1">
                   <img
                     src={q.img}
@@ -145,7 +176,7 @@ const Review6_Page1_Q1 = () => {
                         }}
                       >
                         {word}
-                        {showResult && isSelected && !isCorrect && (
+                        {showResult && isSelected && !isCorrect && !locked && (
                           <span className="wrong-x-review4-p2-q3">✕</span>
                         )}
                       </p>
@@ -161,7 +192,9 @@ const Review6_Page1_Q1 = () => {
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
+        </button>
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>

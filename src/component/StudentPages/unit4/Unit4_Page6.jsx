@@ -42,6 +42,7 @@ const Unit4_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 35 })}
+          style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>
@@ -54,7 +55,7 @@ const Unit4_Page6 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 90 90"
+          viewBox="0 0 60 60"
           onClick={() =>
             openPopup(
               "audio",
@@ -69,8 +70,9 @@ const Unit4_Page6 = ({ openPopup }) => {
               </div>
             )
           }
+          style={{ overflow: "visible" }}
         >
-          <image href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image href={audioBtn} x="0" y="0" width="60" height="60" />
         </svg>
       </div>
     </div>

@@ -1,57 +1,66 @@
 import React, { useState } from "react";
-import deer from "../../assets/unit6/imgs/U6P52EXEB-01.svg";
-import duck from "../../assets/unit6/imgs/U6P52EXEB-02.svg";
-import taxi from "../../assets/unit6/imgs/U6P52EXEB-03.svg";
-import tiger from "../../assets/unit6/imgs/U6P52EXEB-04.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
+import deer from "../../../assets/unit6/imgs/U6P52EXEB-01.svg";
+import duck from "../../../assets/unit6/imgs/U6P52EXEB-02.svg";
+import taxi from "../../../assets/unit6/imgs/U6P52EXEB-03.svg";
+import tiger from "../../../assets/unit6/imgs/U6P52EXEB-04.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review5_Page1_Q2.css";
-const Review5_Page1_Q2 = () => {
-  const data = [
-    {
-      word: "This is your chair.",
-      src: deer,
-      num: "3",
-    },
-    {
-      word: "This is my book.",
-      src: duck,
-      num: "1",
-    },
-    {
-      word: "This is my pen.",
-      src: taxi,
-      num: "2",
-    },
-    {
-      word: "This is your ruler.",
-      src: tiger,
-      num: "4",
-    },
-  ];
+const data = [
+  {
+    word: "This is your chair.",
+    src: deer,
+    num: "3",
+  },
+  {
+    word: "This is my book.",
+    src: duck,
+    num: "1",
+  },
+  {
+    word: "This is my pen.",
+    src: taxi,
+    num: "2",
+  },
+  {
+    word: "This is your ruler.",
+    src: tiger,
+    num: "4",
+  },
+];
 
-  const [answers, setAnswers] = useState(
-    data.map((item, index) =>
-      index === 0 ? { number: item.num } : { number: "" }
-    )
-  );
+const Review5_Page1_Q2 = () => {
+  const [locked, setLocked] = useState(false);
+  const [answers, setAnswers] = useState(data.map(() => ({ number: "" })));
 
   const [wrongNumbers, setWrongNumbers] = useState(data.map(() => false));
 
   const updateAnswer = (index, field, value) => {
+    if (locked) return; // 🔒 منع التعديل بعد Show Answer
     setAnswers((prev) =>
       prev.map((a, i) =>
         i === index ? { ...a, [field]: value.toLowerCase() } : a
       )
     );
-     setWrongNumbers(data.map(() => false));
+    setWrongNumbers(data.map(() => false));
+  };
+  const showAnswers = () => {
+    const correctFilled = data.map((item) => ({ number: item.num }));
+
+    setAnswers(correctFilled);
+    setWrongNumbers(data.map(() => false));
+    setLocked(true); // 🔒 يمنع التعديل
+
   };
 
   const reset = () => {
     setAnswers(data.map(() => ({ number: "" })));
     setWrongNumbers(data.map(() => false));
+    setLocked(false); // ← فتح التعديل من جديد
   };
 
   const checkAnswers = () => {
+        if (locked) return; // 🔒 منع التعديل بعد Show Answer
+
     if (answers.some((a) => a.number === "")) {
       ValidationAlert.info(
         "Oops!",
@@ -64,9 +73,9 @@ const Review5_Page1_Q2 = () => {
     let correctNumbers = 0;
 
     answers.forEach((a, i) => {
-  if (i === 0) return; // تجاهل أول إجابة تمامًا
-  if (a.number === data[i].num) correctNumbers++;
-});
+      if (i === 0) return; // تجاهل أول إجابة تمامًا
+      if (a.number === data[i].num) correctNumbers++;
+    });
     let totalPoints = data.length - 1;
     let score = correctNumbers;
 
@@ -95,6 +104,7 @@ const Review5_Page1_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -120,12 +130,20 @@ const Review5_Page1_Q2 = () => {
               flexDirection: "row",
               marginBottom: "20px",
               marginTop: "40px",
-              justifyContent:"space-between"
+              justifyContent: "space-between",
             }}
           >
             {data.map((item, index) => (
               <>
-              <span style={{color:"#2c5287" ,fontSize:"22px",fontWeight:"700"}}>{index+1}</span>
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "22px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {index + 1}
+                </span>
                 <img
                   key={index}
                   src={item.src}
@@ -171,13 +189,12 @@ const Review5_Page1_Q2 = () => {
                       className="missing-input-review5-p1-q2"
                       value={answers[index].number}
                       onChange={(e) =>
-                        index !== 0 &&
                         updateAnswer(index, "number", e.target.value)
                       }
-                      readOnly={index === 0}
+                      readOnly={locked}
                     />
 
-              {index !== 0 && wrongNumbers[index] && (
+                    {!locked && wrongNumbers[index] && (
                       <div
                         style={{
                           position: "absolute",
@@ -210,6 +227,10 @@ const Review5_Page1_Q2 = () => {
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻
+        </button>
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button className="show-answer-btn swal-continue" onClick={showAnswers}>
+          Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓

@@ -64,12 +64,12 @@ import Unit6_Page5 from "../StudentPages/unit6/Unit6_Page5";
 import Unit6_Page6 from "../StudentPages/unit6/Unit6_Page6";
 
 // ==================Review5,6
-// import Review5_Page1 from "../StudentPages/Review_Unit5,6/Review5_Page1";
-// import Review5_Page2 from "../StudentPages/Review_Unit5,6/Review5_Page2 ";
-// import Review6_Page1 from "../StudentPages/Review_Unit5,6/Review6_Page1";
-// import Review6_Page2 from "../StudentPages/Review_Unit5,6/Review6_Page2";
-// import Unit6_Reading_P1 from "../StudentPages/unit6/Unit6_Reading_P1";
-// import Unit6_Reading_P2 from "../StudentPages/unit6/Unit6_Reading_P2";
+import Review5_Page1 from "../StudentPages/Review_Unit5,6/Review5_Page1";
+import Review5_Page2 from "../StudentPages/Review_Unit5,6/Review5_Page2 ";
+import Review6_Page1 from "../StudentPages/Review_Unit5,6/Review6_Page1";
+import Review6_Page2 from "../StudentPages/Review_Unit5,6/Review6_Page2";
+import Unit6_Reading_P1 from "../StudentPages/unit6/Unit6_Reading_P1";
+import Unit6_Reading_P2 from "../StudentPages/unit6/Unit6_Reading_P2";
 
 //================ Unit7
 // import Unit7_Page1 from "../StudentPages/unit7/Unit7_Page1";
@@ -160,12 +160,12 @@ export const studentPages = (openPopup, goToUnit) => [
   <Unit6_Page4 openPopup={openPopup} />,
   <Unit6_Page5 openPopup={openPopup} />,
   <Unit6_Page6 openPopup={openPopup} />,
-  // <Review5_Page1 openPopup={openPopup} />,
-  // <Review5_Page2 openPopup={openPopup} />,
-  // <Review6_Page1 openPopup={openPopup} />,
-  // <Review6_Page2 openPopup={openPopup} />,
-  // <Unit6_Reading_P1 openPopup={openPopup} />,
-  // <Unit6_Reading_P2 openPopup={openPopup} />,
+  <Review5_Page1 openPopup={openPopup} />,
+  <Review5_Page2 openPopup={openPopup} />,
+  <Review6_Page1 openPopup={openPopup} />,
+  <Review6_Page2 openPopup={openPopup} />,
+  <Unit6_Reading_P1 openPopup={openPopup} />,
+  <Unit6_Reading_P2 openPopup={openPopup} />,
   // <Unit7_Page1 openPopup={openPopup} />,
   // <Unit7_Page2 openPopup={openPopup} />,
   // <Unit7_Page3 openPopup={openPopup} />,
