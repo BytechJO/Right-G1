@@ -92,21 +92,23 @@ import Review7_Page1 from "../StudentPages/Review_Unit7,8/Review7_Page1";
 import Review7_Page2 from "../StudentPages/Review_Unit7,8/Review7_Page2";
 import Review8_Page1 from "../StudentPages/Review_Unit7,8/Review8_Page1";
 import Review8_Page2 from "../StudentPages/Review_Unit7,8/Review8_Page2";
+import Unit8_Reading_P1 from "../StudentPages/unit8/Unit8_Reading_P1";
+import Unit8_Reading_P2 from "../StudentPages/unit8/Unit8_Reading_P2";
 //================== Unit 9
-// import Unit9_Page1 from "../StudentPages/unit9/Unit9_Page1";
-// import Unit9_Page2 from "../StudentPages/unit9/Unit9_Page2";
-// import Unit9_Page3 from "../StudentPages/unit9/Unit9_Page3";
-// import Unit9_Page4 from "../StudentPages/unit9/Unit9_Page4";
-// import Unit9_Page5 from "../StudentPages/unit9/Unit9_Page5";
-// import Unit9_Page6 from "../StudentPages/unit9/Unit9_Page6";
+import Unit9_Page1 from "../StudentPages/unit9/Unit9_Page1";
+import Unit9_Page2 from "../StudentPages/unit9/Unit9_Page2";
+import Unit9_Page3 from "../StudentPages/unit9/Unit9_Page3";
+import Unit9_Page4 from "../StudentPages/unit9/Unit9_Page4";
+import Unit9_Page5 from "../StudentPages/unit9/Unit9_Page5";
+import Unit9_Page6 from "../StudentPages/unit9/Unit9_Page6";
 
 //================= Unit10
-// import Unit10_Page1 from "../StudentPages/unit10/Unit10_Page1";
-// import Unit10_Page2 from "../StudentPages/unit10/Unit10_Page2";
-// import Unit10_Page3 from "../StudentPages/unit10/Unit10_Page3";
-// import Unit10_Page4 from "../StudentPages/unit10/Unit10_Page4";
-// import Unit10_Page5 from "../StudentPages/unit10/Unit10_Page5";
-// import Unit10_Page6 from "../StudentPages/unit10/Unit10_Page6";
+import Unit10_Page1 from "../StudentPages/unit10/Unit10_Page1";
+import Unit10_Page2 from "../StudentPages/unit10/Unit10_Page2";
+import Unit10_Page3 from "../StudentPages/unit10/Unit10_Page3";
+import Unit10_Page4 from "../StudentPages/unit10/Unit10_Page4";
+import Unit10_Page5 from "../StudentPages/unit10/Unit10_Page5";
+import Unit10_Page6 from "../StudentPages/unit10/Unit10_Page6";
 
 export const studentPages = (openPopup, goToUnit) => [
   <Page1 />,
@@ -183,18 +185,18 @@ export const studentPages = (openPopup, goToUnit) => [
   <Review7_Page2 openPopup={openPopup} />,
   <Review8_Page1 openPopup={openPopup} />,
   <Review8_Page2 openPopup={openPopup} />,
-  // <Unit6_Reading_P1 openPopup={openPopup} />,
-  // <Unit6_Reading_P2 openPopup={openPopup} />,
-  // <Unit9_Page1 openPopup={openPopup} />,
-  // <Unit9_Page2 openPopup={openPopup} />,
-  // <Unit9_Page3 openPopup={openPopup} />,
-  // <Unit9_Page4 openPopup={openPopup} />,
-  // <Unit9_Page5 openPopup={openPopup} />,
-  // <Unit9_Page6 openPopup={openPopup} />,
-  //    <Unit10_Page1 openPopup={openPopup} />,
-  // <Unit10_Page2 openPopup={openPopup} />,
-  // <Unit10_Page3 openPopup={openPopup} />,
-  // <Unit10_Page4 openPopup={openPopup} />,
-  // <Unit10_Page5 openPopup={openPopup} />,
-  // <Unit10_Page6 openPopup={openPopup} />,
+  <Unit8_Reading_P1 openPopup={openPopup} />,
+  <Unit8_Reading_P2 openPopup={openPopup} />,
+  <Unit9_Page1 openPopup={openPopup} />,
+  <Unit9_Page2 openPopup={openPopup} />,
+  <Unit9_Page3 openPopup={openPopup} />,
+  <Unit9_Page4 openPopup={openPopup} />,
+  <Unit9_Page5 openPopup={openPopup} />,
+  <Unit9_Page6 openPopup={openPopup} />,
+     <Unit10_Page1 openPopup={openPopup} />,
+  <Unit10_Page2 openPopup={openPopup} />,
+  <Unit10_Page3 openPopup={openPopup} />,
+  <Unit10_Page4 openPopup={openPopup} />,
+  <Unit10_Page5 openPopup={openPopup} />,
+  <Unit10_Page6 openPopup={openPopup} />,
 ];

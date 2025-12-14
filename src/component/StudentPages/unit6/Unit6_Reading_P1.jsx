@@ -2,10 +2,10 @@ import page24 from "../../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the 
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
 import sound1 from "../../../assets/unit4/sounds/U4ReadingP38-39.mp3";
-import sound2 from "../../../assets/unit4/sounds/Pg38_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/unit4/sounds/Pg38_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/unit4/sounds/Pg38_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/unit4/sounds/Pg38_1.4_Adult Lady.mp3";
+import sound2 from "../../../assets/unit6/sounds/Pg56_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/unit6/sounds/Pg56_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/unit6/sounds/Pg56_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/unit6/sounds/Pg56_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";

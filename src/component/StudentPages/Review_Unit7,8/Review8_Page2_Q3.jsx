@@ -1,102 +1,88 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./Review6_Page2_Q3.css";
+import React, { useState } from "react";
+import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
+import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
+import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-const Review6_Page2_Q3 = () => {
-  const sentences = [
-    { word1: "pit", word2: "chip", word3: "top", num: 1 },
-    { word1: "bit", word2: "sun", word3: "fix", num: 2 },
-    { word1: "cup", word2: "pick", word3: "fit", num: 3 },
-    { word1: "box", word2: "mix", word3: "tip", num: 4 },
-    { word1: "kick", word2: "desk", word3: "rip", num: 5 },
-    { word1: "sip", word2: "cap", word3: "pin", num: 6 },
-  ];
+import "./Review8_Page2_Q3.css";
 
-  const correct = {
-    0: [0, 1],
-    1: [0, 2],
-    2: [1, 2],
-    3: [1, 2],
-    4: [0, 2],
-    5: [0, 2],
-  };
+const Review8_Page2_Q3 = () => {
+  const correctAnswers = ["sun", "sock", "zebra", "zipper"];
 
-  const [circledWords, setCircledWords] = useState({});
-  const [checked, setChecked] = useState(false);
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
-  const handleWordClick = (sIndex, wIndex) => {
-    setCircledWords((prev) => {
-      const existing = prev[sIndex] || [];
+  const handleChange = (value, index) => {
+    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
 
-      // إذا الطالب اخترها قبل → احذفها
-      if (existing.includes(wIndex)) {
-        return {
-          ...prev,
-          [sIndex]: existing.filter((i) => i !== wIndex),
-        };
-      }
-
-      // 🚫 ممنوع يختار أكثر من خيارين
-      if (existing.length >= 2) {
-        return {
-          ...prev,
-          [sIndex]: existing.filter((i) => i !== wIndex),
-        }; // لا تضيف أي شيء
-      }
-
-      // إذا لسا ما اختارها → أضفها (ومسموح <=2)
-      return {
-        ...prev,
-        [sIndex]: [...existing, wIndex],
-      };
-    });
-    setChecked(false)
+    const newAnswers = [...answers];
+    newAnswers[index] = value.toLowerCase();
+    setAnswers(newAnswers);
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (Object.keys(circledWords).length < sentences.length) {
-      ValidationAlert.info("Oops!", "Please circle at least one mistake.");
+    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
+
+    if (answers.some((ans) => ans.trim() === "")) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
-    if (
-      Object.keys(circledWords).length < sentences.length ||
-      Object.values(circledWords).some((arr) => arr.length < 2)
-    ) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please circle two words in each sentence!"
-      );
-      return;
-    }
-    let totalCorrect = 0;
-    let studentCorrect = 0;
 
-    for (let sIndex in correct) totalCorrect += correct[sIndex].length;
+    let correctCount = 0;
+    let wrong = [];
 
-    for (let sIndex in circledWords) {
-      circledWords[sIndex].forEach((wIndex) => {
-        if (correct[sIndex]?.includes(wIndex)) studentCorrect++;
-      });
-    }
+    answers.forEach((ans, i) => {
+      if (ans === correctAnswers[i]) {
+        correctCount++;
+      } else {
+        wrong.push(i);
+      }
+    });
 
-    setChecked(true);
+    setWrongInputs(wrong);
 
-    const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
-    if (studentCorrect === totalCorrect) ValidationAlert.success(scoreMessage);
-    else if (studentCorrect === 0) ValidationAlert.error(scoreMessage);
+    const total = correctAnswers.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const scoreMessage = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) ValidationAlert.success(scoreMessage);
+    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
+  };
+
+  const reset = () => {
+    setAnswers(["", "", "", ""]);
+    setWrongInputs([]);
+    setShowAnswer(false); // ⭐ NEW → يرجع الحالة لطبيعية
+  };
+
+  const handleShowAnswer = () => {
+    setAnswers([...correctAnswers]); // ⭐ عرض الإجابات الصحيحة
+    setWrongInputs([]);
+    setShowAnswer(true); // ⭐ منع التعديل
   };
 
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
-        className="review3-p2-q2-div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -105,64 +91,140 @@ const Review6_Page2_Q3 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="review3-p2-q2-content-container">
-          <h5 className="header-title-page8">
-            F Circle <span style={{ color: "red" }}>the short i</span> words.
-          </h5>
+        <h5 className="header-title-page8">F Look and write.</h5>
 
-          <div className="review3-p2-q2-sentence-container2">
-            {sentences.map((sentence, sIndex) => (
-              <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num" style={{ color: "#2c5287", fontWeight: "700" }}>{sIndex + 1}</span>
+        <div
+          className="row-content10-unit3-page6-q1"
+          style={{ alignItems: "center", justifyContent: "space-between" }}
+        >
+          {/* 🔵 1 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              1
+            </span>
+            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+        
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 0)}
+                value={answers[0]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(0) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
+          </div>
 
-                <div className="review3-p2-q2-word-box">
-                  {[sentence.word1, sentence.word2, sentence.word3].map(
-                    (word, wIndex) => {
-                      const isCircled = circledWords[sIndex]?.includes(wIndex);
-                      const isWrong =
-                        checked &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(wIndex);
+          {/* 🔵 2 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              2
+            </span>
+            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
+            
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 1)}
+                value={answers[1]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(1) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
+          </div>
 
-                      return (
-                        <span
-                          key={wIndex}
-                          className={`review3-p2-q2-word ${
-                            isCircled ? "circled" : ""
-                          }`}
-                          onClick={() => handleWordClick(sIndex, wIndex)}
-                        >
-                          {word}
-                          {isWrong && (
-                            <span className="review3-p2-q2-wrong-x">✕</span>
-                          )}
-                        </span>
-                      );
-                    }
-                  )}
-                </div>
-              </div>
-            ))}
+          {/* 🔵 3 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              3
+            </span>
+            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+         
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 2)}
+                value={answers[2]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(2) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
+          </div>
+          {/* 🔵 4 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              4
+            </span>
+            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+           
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 3)}
+                value={answers[3]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(3) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="action-buttons-container">
-          <button
-            onClick={() => {
-              setCircledWords({});
-              setChecked(false);
-            }}
-            className="try-again-button"
-          >
-            Start Again ↻
-          </button>
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
+      {/* ⭐ BUTTONS */}
+      <div className="action-buttons-container">
+        <button onClick={reset} className="try-again-button">
+          Start Again ↻
+        </button>
+
+        <button
+          onClick={handleShowAnswer}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
+        </button>
+
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default Review6_Page2_Q3;
+export default Review8_Page2_Q3;

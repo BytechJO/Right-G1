@@ -1,86 +1,100 @@
 import React, { useState, useRef } from "react";
-import page_3 from "../../assets/unit10/imgs/Right G1- Class Book_00084.jpg";
+import page_3 from "../../../assets/unit10/imgs/Right G1- Class Book_00084.jpg";
 import "./Unit10_Page3.css";
-import CD22_pg24_Grammar1_AdultLady from "../../assets/unit3/sound3/U3P24RG1.mp3";
-import sound1 from "../../assets/unit10/sound/Pg84_1.1_Adult Lady.mp3";
-import sound2 from "../../assets/unit10/sound/Pg84_1.2_Adult Lady.mp3";
-import sound3 from "../../assets/unit10/sound/Pg84_2.1_Jack .mp3";
-import sound4 from "../../assets/unit10/sound/Pg84_2.2_Modified Harley.mp3";
-import sound5 from "../../assets/unit10/sound/Pg84_3.1_Stella.mp3";
-import sound6 from "../../assets/unit10/sound/Pg84_3.2_Helen.mp3";
-import sound7 from "../../assets/unit10/sound/Pg84_4.1_Mom.mp3";
-import sound8 from "../../assets/unit10/sound/Pg84_4.2_Sarah.mp3";
-import AudioWithCaption from "../AudioWithCaption";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import pauseBtn from "../../assets/unit1/imgs/Right Video Button.svg";
-import video from "../../assets/unit3/sound3/p24.mp4";
+import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit5/sounds/U5P42Grammar.mp3";
+import sound1 from "../../../assets/unit10/sound/Pg84_1.1_Adult Lady.mp3";
+import sound2 from "../../../assets/unit10/sound/Pg84_1.2_Adult Lady.mp3";
+import sound3 from "../../../assets/unit10/sound/Pg84_2.1_Jack .mp3";
+import sound4 from "../../../assets/unit10/sound/Pg84_2.2_Modified Harley.mp3";
+import sound5 from "../../../assets/unit10/sound/Pg84_3.1_Stella.mp3";
+import sound6 from "../../../assets/unit10/sound/Pg84_3.2_Helen.mp3";
+import sound7 from "../../../assets/unit10/sound/Pg84_4.1_Mom.mp3";
+import sound8 from "../../../assets/unit10/sound/Pg84_4.2_Sarah.mp3";
+// import sound9 from "../../../assets/unit9/sound/Pg78_4.1_Tom.mp3";
+// import sound10 from "../../../assets/unit9/sound/Pg78_4.2_Helen.mp3";
+import AudioWithCaption from "../../AudioWithCaption";
+import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
+import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
+import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
+import video from "../../../assets/unit5/sounds/p42.mp4";
 const Unit10_Page3 = ({ openPopup }) => {
   const audioRef = useRef(null);
+  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 4.1, text: "Page 24, Exercise 1. Right Grammar." },
-    { start: 4.13, end: 5.01, text: " Listen," },
+    { start: 0, end: 4.12, text: "Page 42. Exercise one. Right Grammar. " },
+    { start: 4.15, end: 5.28, text: "What's this? " },
     {
-      start: 5.03,
-      end: 6.02,
-      text: "quiet,",
-    },
-    {
-      start: 6.05,
+      start: 5.31,
       end: 7.22,
-      text: "make a line.",
+      text: "This is my book. ",
     },
-    { start: 7.25, end: 9.02, text: "Listen," },
-    { start: 9.06, end: 10.04, text: "quiet, " },
-    { start: 10.07, end: 11.26, text: "make a line." },
+    {
+      start: 7.25,
+      end: 9.19,
+      text: "This is your book. ",
+    },
+    { start: 9.22, end: 11.05, text: "What's this? " },
+    { start: 11.08, end: 12.29, text: "This is a desk." },
+    { start: 12.32, end: 14.13, text: "What's this? " },
+    { start: 14.18, end: 16.09, text: "This is a chair." },
+    { start: 16.12, end: 18.01, text: "This is my book. " },
+    { start: 18.04, end: 19.21, text: "This is your book." },
+  ];
+
+  const clickableAreas = [
+    { x1: 10.7, y1: 12.99, x2: 26.3, y2: 16.5, sound: sound1 },
+    { x1: 67.23, y1: 11.47, x2: 86.5, y2: 14.7, sound: sound2 },
+    { x1: 67.23, y1: 15.2, x2: 86.7, y2: 18.4, sound: sound3 },
+    { x1: 6.8, y1: 29.9, x2: 23.5, y2: 33.07, sound: sound4 },
+    { x1: 30.43, y1: 33.8, x2: 47.7, y2: 37.19, sound: sound5 },
+    { x1: 53.38, y1: 30.08, x2: 70.7, y2: 33.72, sound: sound6 },
+    { x1: 76.33, y1: 31.1, x2: 93.86, y2: 34.62, sound: sound7 },
+    { x1: 8.86, y1: 64.81, x2: 27.8, y2: 68.29, sound: sound8 },
+    // { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound9 },
+    // { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound10 },
   ];
 
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
-
-    checkAreaAndPlaySound(xPercent, yPercent);
-  };
-  const clickableAreas = [
-    { x1: 13.0, y1: 9.8, x2: 24.0, y2: 13.9, sound: sound1 },
-    { x1: 13.0, y1: 15.2, x2: 24.0, y2: 19.0, sound: sound2 },
-    { x1: 71.2, y1: 12.5, x2: 85.22, y2: 16.7, sound: sound3 },
-    { x1: 16.9, y1: 22.6, x2: 26.7, y2: 25.5, sound: sound4 },
-    { x1: 58.0, y1: 22.8, x2: 68.5, y2: 26.0, sound: sound5 },
-    { x1: 27.9, y1: 59.0, x2: 42.9, y2: 63.4, sound: sound6 },
-        { x1: 58.0, y1: 22.8, x2: 68.5, y2: 26.0, sound: sound7 },
-    { x1: 27.9, y1: 59.0, x2: 42.9, y2: 63.4, sound: sound8 },
-  ];
-
-  const checkAreaAndPlaySound = (x, y) => {
-    const area = clickableAreas.find(
-      (a) => x >= a.x1 && x <= a.x2 && y >= a.y1 && y <= a.y2
-    );
-
-    console.log("Matched Area:", area);
-
-    if (area) playSound(area.sound);
   };
   const playSound = (soundPath) => {
-    console.log(soundPath);
     if (audioRef.current) {
       audioRef.current.src = soundPath;
       audioRef.current.play();
+      setIsPlaying(true);
+      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setHoveredAreaIndex(null);
+        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+      };
     }
   };
   return (
-    <div className="unit6-page-background" style={{ position: "relative" }}>
-      <img
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_3})` }}
+    >
+      {/* <img
         src={page_3}
         style={{ display: "block" }}
         onClick={handleImageClick}
-      />
+      /> */}
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          className="clickable-area"
+          className={`clickable-area ${
+            hoveredAreaIndex === index || activeAreaIndex === index
+              ? "highlight"
+              : ""
+          }`}
           style={{
             position: "absolute",
             left: `${area.x1}%`,
@@ -88,68 +102,106 @@ const Unit10_Page3 = ({ openPopup }) => {
             width: `${area.x2 - area.x1}%`,
             height: `${area.y2 - area.y1}%`,
           }}
-          onClick={() => playSound(area.sound)}
-          onMouseEnter={(e) => (e.target.style.cursor = "pointer")}
+          onClick={() => {
+            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
+            playSound(area.sound);
+          }}
+          onMouseEnter={() => {
+            if (!isPlaying) setHoveredAreaIndex(index);
+          }}
+          onMouseLeave={() => {
+            if (!isPlaying) setHoveredAreaIndex(null);
+          }}
         ></div>
       ))}
 
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption
-                src={CD22_pg24_Grammar1_AdultLady}
-                captions={captionsExample}
-              />
-            </div>,
-            true
-          )
-        }
+      <div
         className="headset-icon-CD-unit10-page3-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={audioBtn} x="0" y="0" width="60" height="60" />
-      </svg>
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-                height: "100%",
-                width: "100%",
-              }}
-            >
-              <video
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "audio",
+              <div
                 style={{
-                  height: "auto",
-                  width: "85%",
-                  borderRadius: "5%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
                 }}
-                controls
               >
-                <source src={video} type="video/mp4" />
-              </video>
-            </div>
-          )
-        }
+                <AudioWithCaption
+                  src={CD22_pg24_Grammar1_AdultLady}
+                  captions={captionsExample}
+                />
+              </div>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+
+      <div
         className="pauseBtn-icon-CD-unit10-page3-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={pauseBtn} x="0" y="0" width="60" height="60" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "video",
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                <video
+                  autoPlay
+                  controls
+                  style={{
+                    width: "auto",
+                    height: "80%",
+                    objectFit: "fill",
+                    borderRadius: "20px",
+                    display: "block",
+                  }}
+                >
+                  <source src={video} type="video/mp4" />
+                </video>
+              </div>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            href={pauseBtn}
+            className="svg-img"
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

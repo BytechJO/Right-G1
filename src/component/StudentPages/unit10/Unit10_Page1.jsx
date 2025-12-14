@@ -1,118 +1,292 @@
-import page_1 from "../../assets/unit10/imgs/Right G1- Class Book_00082.jpg";
+import page_1 from "../../../assets/unit10/imgs/Right G1- Class Book_00082.jpg";
 import "./Unit10_Page1.css";
-import Pg22_U3_Intro_AdultLady from "../../assets/unit6/sounds/CD3.Pg56_Reading1_Adult Lady.mp3";
-import AudioWithCaption from "../AudioWithCaption";
+import { useState, useRef } from "react";
+import Pg22_U3_Intro_AdultLady from "../../../assets/unit5/sounds/U5P40-41.mp3";
+import AudioWithCaption from "../../AudioWithCaption";
 import Unit10_Page1_find from "./Unit10_Page1_find";
 import Unit10_Page1_Vocab from "./Unit10_Page1_Vocab";
 import Unit10_Page1_Read from "./Unit10_Pag1_Read";
-import audioBtn from "../../assets/unit1/imgs/Right Audio Button 2.svg";
-import arrowBtn from "../../assets/unit1/imgs/Right Arrow Button ....-01.svg";
+import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
+import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
+import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
+import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
+import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
+import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
 const Unit10_Page1 = ({ openPopup }) => {
+  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 4.02, text: "Page 22, unit 3. Let's go to school. " },
-    { start: 4.05, end: 7.11, text: "Page 22, unit 3 vocabulary. " },
-    { start: 7.14, end: 9.24, text: "1.	numbers." },
-    { start: 9.27, end: 12.16, text: "2.	close your book." },
-    { start: 12.2, end: 15.12, text: "3.	open your book. " },
-    { start: 15.15, end: 18.12, text: "4.	make a line. " },
-    { start: 18.15, end: 21.06, text: "5.	listen. " },
-    { start: 21.1, end: 23.25, text: "6.	quiet." },
-    { start: 23.29, end: 27.16, text: "7.	take out your pencil. " },
-    { start: 27.2, end: 31.15, text: "Page 22. Listen and read along." },
-    { start: 31.19, end: 35.18, text: "Short A. Ant, pan, rat. " },
-    { start: 35.21, end: 38.11, text: "Page 23, come and sing. " },
+    { start: 0, end: 4.09, text: "Page 40, Unit 5: Welcome to My Class." },
+    { start: 4.12, end: 7.26, text: "Page 40, Unit 5 Vocabulary: " },
+    { start: 7.29, end: 10.13, text: "1.	Board." },
+    { start: 10.17, end: 12.11, text: "2.	Map." },
+    { start: 12.14, end: 14.21, text: "3.	Book." },
+    { start: 14.24, end: 17.22, text: "4.	Globe. " },
+    { start: 17.25, end: 20.02, text: "5.	Poster." },
+    { start: 20.05, end: 22.17, text: "6.	trash bin." },
+    { start: 22.2, end: 24.24, text: "7.	Desk." },
+    { start: 24.27, end: 27.07, text: "8.	Chair." },
+    { start: 27.1, end: 30.09, text: "Page 40. Listen and read along" },
+    { start: 30.12, end: 34.24, text: "G, girl, green, garden. " },
     {
-      start: 38.15,
+      start: 34.27,
       end: 49.8,
-      text: "I love school. We open our books. We make a line. We do many things. My teacher plays songs. We listen. ",
+      text: "Page 41. The things on my desk. ",
     },
-    { start: 49.82, end: 53.01, text: "Page 23. Listen, read, and repeat. " },
     {
-      start: 53.05,
-      end: 56.26,
-      text: "My favorite subject is science. ",
+      start: 49.83,
+      end: 51.05,
+      text: "Welcome to my class. This is my desk, this is my book, my eraser, and my pencil. My teacher's desk is there. There's a globe on it. I love my class. ",
     },
-    { start: 56.3, end: 59.18, text: "My favorite subject is art. " },
-    { start: 59.21, end: 63.21, text: "Page 23. Listen and read along." },
-    { start: 63.24, end: 67.26, text: "Short A. Bat, cap, dad." },
+    {
+      start: 51.08,
+      end: 56.06,
+      text: "Page 41. Listen, read, and repeat. ",
+    },
+    { start: 56.09, end: 57.29, text: "Do you like your class? " },
+    { start: 57.32, end: 60.06, text: "I like my class. " },
+    { start: 60.09, end: 64.16, text: "Page 41. Listen and read along. " },
+    { start: 64.19, end: 68.18, text: "K, key, kite, kitchen..." },
   ];
-  return (
-    <div className="unit2-page-background">
-      <img src={page_1} />
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 90 90"
-        onClick={() =>
-          openPopup(
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <AudioWithCaption
-                src={Pg22_U3_Intro_AdultLady}
-                captions={captionsExample}
-              />
-            </div>,
-            true
-          )
-        }
-        className="headset-icon-CD-unit10-page1-1 hover:scale-110 transition"
-      >
-        <image href={audioBtn} x="0" y="0" width="90" height="90" />
-      </svg>
+  const areas = [
+    // الصوت الأول – المنطقة الأساسية
+    { x1: 50.94, y1: 20.52, sound: 1, isPrimary: true },
 
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit10_Page1_find />
-            </>,
-            false
-          )
+    // الصوت الأول – منطقة إضافية
+    { x1: 22.00, y1: 16.23, x2: 71.9, y2: 32.4, sound: 1, isPrimary: false },
+
+// الصوت الثاني – الأساسية
+    { x1: 88.0, y1: 22.89, sound: 2, isPrimary: true },
+
+    // // // // الصوت الثاني – الإضافية
+    { x1: 87.5, y1: 13.07, x2: 99.35, y2: 28.47, sound: 2, isPrimary: false },
+
+    // // // // الصوت الثالث – الأساسية
+    { x1: 79.3, y1: 32.20, sound: 3, isPrimary: true },
+
+    // // // // الصوت الثالث – الإضافية
+    { x1: 76.9, y1: 28.3, x2: 83.4, y2: 37.9, sound: 3, isPrimary: false },
+    // // // // الصوت الرابع – الأساسية
+    { x1: 80.5, y1: 47.4, sound: 4, isPrimary: true },
+
+    // // // الصوت الرابع – الإضافية
+    { x1: 73, y1: 49.2, x2: 99.4, y2: 56.03, sound: 4, isPrimary: false },
+
+    // // // // الصوت الخامس – الأساسية
+    { x1: 45.4, y1: 34.57, sound: 5, isPrimary: true },
+
+    // // // الصوت الخامس – الإضافية
+    { x1: 42.9, y1: 34.57, x2: 52.6, y2: 45.23, sound: 5, isPrimary: false },
+  ];
+  const sounds = {
+    1: sound1,
+    2: sound2,
+    3: sound4,
+    4: sound7,
+    5: sound8,
+  };
+
+  const handleImageClick = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
+    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+    console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
+  };
+  const playSound = (path) => {
+    if (audioRef.current) {
+      audioRef.current.src = path;
+      audioRef.current.play();
+      setIsPlaying(true);
+      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+
+      audioRef.current.onended = () => {
+        setIsPlaying(false);
+        setHoveredAreaIndex(null);
+        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
+      };
+    }
+  };
+  return (
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_1})` }}
+    >
+      {/* <img src={page_1} /> */}
+
+      <audio ref={audioRef} style={{ display: "none" }} />
+      {areas.map((area, index) => {
+        const isActive = activeAreaIndex === area.sound;
+
+        // ============================
+        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
+        // ============================
+        if (area.isPrimary) {
+          return (
+            <div
+              key={index}
+              className={`circle-area ${isActive ? "active" : ""}`}
+              style={{
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+              }}
+              onClick={() => {
+                setActiveAreaIndex(area.sound);
+                playSound(sounds[area.sound]);
+              }}
+            ></div>
+          );
         }
+
+        // ============================
+        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
+        //    عند الضغط عليها → تفعّل الدائرة الأساسية
+        // ============================
+        return (
+          <div
+            key={index}
+            className="clickable-area"
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
+              playSound(sounds[area.sound]);
+            }}
+          ></div>
+        );
+      })}
+
+      <div
+        className="headset-icon-CD-unit10-page1-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "audio",
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <AudioWithCaption
+                  src={Pg22_U3_Intro_AdultLady}
+                  captions={captionsExample}
+                />
+              </div>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+
+      <div
         className="click-icon-unit10-page1-1  hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="60" height="60" />
-      </svg>
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit10_Page1_Vocab />
-            </>,
-            false
-          )
-        }
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "html",
+              <>
+                <Unit10_Page1_find />
+              </>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+      <div
         className="headset-icon-CD-unit10-page1-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="60" height="60" />
-      </svg>
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 60 60"
-        onClick={() =>
-          openPopup(
-            <>
-              <Unit10_Page1_Read />
-            </>,
-            false
-          )
-        }
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "html",
+              <>
+                <Unit10_Page1_Vocab />
+              </>,
+              false
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+      <div
         className="click-icon-unit10-page1-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
       >
-        <image href={arrowBtn} x="0" y="0" width="60" height="60" />
-      </svg>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() =>
+            openPopup(
+              "html",
+              <>
+                <Unit10_Page1_Read />
+              </>
+            )
+          }
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
     </div>
   );
 };

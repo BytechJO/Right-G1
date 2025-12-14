@@ -55,7 +55,7 @@ const Unit3_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 60 60"
           onClick={() => openPopup("exercise", { startIndex: 30 })}
-        >
+        style={{ overflow: "visible" }}>
           <image href={arrowBtn} x="0" y="0" width="60" height="60" />
         </svg>
       </div>

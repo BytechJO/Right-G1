@@ -1,24 +1,44 @@
+.images-row-unit10-page6-q3 {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+.sentence-wrapper-unit10-page6-q3 {
+  font-size: 20px;
+}
 
-.dot22-unit6-q7 {
-  width: 14px;
-  height: 14px;
-  background: red;
-  border-radius: 50%;
+.sentence-wrapper-unit10-page6-q3 input {
+  border-bottom: 2px solid black;
+  width: 80%;
+  margin-left: 15px;
+}
+
+.image-box-unit10-page6-q3 {
+  padding: 10px;
+  border: 3px solid transparent;
+  border-radius: 16px;
   cursor: pointer;
-  pointer-events: auto !important;
+  transition: 0.2s;
 }
 
-.end-dot22-unit6-q7 {
-
-  transform: translateX(-50%);
-
-  position: absolute !important;
-  top: -30px; /* عدّلي الرقم حسب مكان الجمل */
+.image-box-unit10-page6-q3.selected-unit10-page6-q3 {
+  border-color: #2c5287; /* أزرق مثل الكتاب */
 }
 
-.start-dot22-unit6-q7 {
-  position: absolute !important;
-  top: 70px; /* عدّلي الرقم حسب موقعك */
-  left: 50%;
-  transform: translateX(-50%);
+.wrong-mark-unit10-p6-q3 {
+  position: absolute;
+  top: -10px;
+  right: 67px;
+  background: red;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #ffffff !important;
+  justify-content: center;
+  z-index: 10;
 }

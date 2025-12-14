@@ -1,117 +1,199 @@
-import React, { useState, useRef } from "react";
-import img1 from "../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../assets/img_unit2/imgs/bey.jpg";
-import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page5_Q2.css";
+import React, { useState, useRef, useEffect } from "react";
+import "./Unit10_Page5_Q2.css";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
+import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
+import { TbMessageCircle } from "react-icons/tb";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { IoMdSettings } from "react-icons/io";
+const Unit10_Page5_Q2 = () => {
+  const audioRef = useRef(null);
+  const [showContinue, setShowContinue] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const stopAtSecond = 3.5;
+  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
-const Unit6_Page5_Q2 = () => {
-  const [lines, setLines] = useState([]);
-  const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
+  // إعدادات الصوت
+  const [showSettings, setShowSettings] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const settingsRef = useRef(null);
+  const [forceRender, setForceRender] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showCaption, setShowCaption] = useState(false);
 
-  const correctMatches = [
-    { word: "hill", image: "img4" },
-    { word: "pin", image: "img3" },
-    { word: "mitt", image: "img1" },
-    { word: "wig", image: "img2" },
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    {
+      start: 0,
+      end: 4.23,
+      text: "Page 8. Right Activities. Exercise A, number 1. ",
+    },
+    {
+      start: 4.25,
+      end: 8.28,
+      text: "Listen and write the missing letters. Number the pictures.  ",
+    },
+    { start: 8.3, end: 11.05, text: "1-tiger." },
+    { start: 11.07, end: 13.12, text: "2-taxi." },
+    { start: 13.14, end: 15.14, text: "3-duck." },
+    { start: 15.16, end: 17.13, text: "4-deer." },
   ];
 
-  const handleDotDown2 = (e) => {
-    startPoint = e.target;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
-
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
-
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
   };
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
+    audio.currentTime = 0;
+    audio.play();
 
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
-      },
-    ]);
-  };
+    const interval = setInterval(() => {
+      if (audio.currentTime >= stopAtSecond) {
+        audio.pause();
+        setPaused(true);
+        setIsPlaying(false);
+        setShowContinue(true);
+        clearInterval(interval);
+      }
+    }, 100);
 
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
-
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
-
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot22-unit6-q2")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
-
-      // ✅ تصحيح تخزين البيانات
-      word: startPoint.dataset.word,
-      image: endDot.dataset.image,
+    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
+    const handleEnded = () => {
+      const audio = audioRef.current;
+      audio.currentTime = 0; // ← يرجع للبداية
+      setIsPlaying(false);
+      setPaused(false);
+      setActiveIndex(null);
+      setShowContinue(true);
     };
 
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      clearInterval(interval);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setForceRender((prev) => prev + 1);
+    }, 1000); // كل ثانية
+    if (activeIndex === -1 || activeIndex === null) return;
+
+    const el = document.getElementById(`caption-${activeIndex}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    return () => clearInterval(timer);
+  }, [activeIndex]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    if (audio.paused) {
+      audio.play();
+      setPaused(false);
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setPaused(true);
+      setIsPlaying(false);
+    }
   };
-  const checkAnswers2 = () => {
-    if (lines.length < correctMatches.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please connect all the pairs before checking."
-      );
+  const questions = [
+    {
+      id: 1,
+      image: img1,
+      correct: "✗",
+    },
+    { id: 2, image: img2, correct: "✗" },
+    {
+      id: 3,
+      image: img3,
+      correct: "✓",
+    },
+  ];
+
+  const [answers, setAnswers] = useState({});
+  const [showResult, setShowResult] = useState([]);
+
+  const selectAnswer = (id, value) => {
+    if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
+    setAnswers({ ...answers, [id]: value });
+    setShowResult(false);
+  };
+  const showAnswers = () => {
+    const corrects = {};
+    questions.forEach((q) => {
+      corrects[q.id] = q.correct; // ✓ أو ✗
+    });
+
+    setAnswers(corrects);
+    setShowResult([]); // إخفاء كل X
+    setLocked(true); // 🔒 قفل التعديل
+  };
+
+  const checkAnswers = () => {
+    if (locked) return;
+    // 1) فحص الخانات الفارغة
+    const isEmpty = questions.some((q) => !answers[q.id]);
+    if (isEmpty) {
+      ValidationAlert.info("Please choose ✓ or ✗ for all questions!");
       return;
     }
 
-    let correctCount = 0;
-    let wrong = [];
+    // 2) مقارنة الإجابات
+    const results = questions.map((q) =>
+      answers[q.id] === q.correct ? "correct" : "wrong"
+    );
 
-    lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
-      );
+    setShowResult(results);
 
-      if (isCorrect) {
-        correctCount++;
-      } else {
-        wrong.push(line.word); // ✅ خزّني اسم صورة الخطأ فقط
-      }
-    });
+    // 3) حساب السكور
+    const correctCount = results.filter((r) => r === "correct").length;
+    const total = questions.length;
+    const scoreMsg = `${correctCount} / ${total}`;
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
-
-    const total = correctMatches.length;
-    const color =
+    let color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    const resultHTML = `
+      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${scoreMsg}
+        </span>
+      </div>
+    `;
+
+    if (correctCount === total) ValidationAlert.success(resultHTML);
+    else if (correctCount === 0) ValidationAlert.error(resultHTML);
+    else ValidationAlert.warning(resultHTML);
+  };
+
+  const resetAnswers = () => {
+    setAnswers({});
+    setShowResult([]);
+    setLocked(false); // ← مهم جداً
   };
 
   return (
@@ -121,6 +203,7 @@ const Unit6_Page5_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -128,185 +211,211 @@ const Unit6_Page5_Q2 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "20px",
           width: "60%",
           justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">B Read, look, and match.</h5>
-
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الجمل */}
-            <div className="match-words-row2">
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
+        <h5 className="header-title-page8">
+          <span style={{ color: "purple" }}> 2 </span> Do they both have
+          <span style={{ color: "red" }}> short e </span>? Listen and write{" "}
+          <span style={{ color: "red" }}> ✓ </span> or
+          <span style={{ color: "red" }}> ✗</span>.
+        </h5>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "30px 0px",
+            width: "100%",
+          }}
+        >
+          <div
+            className="audio-popup-read"
+            style={{
+              width: "50%",
+            }}
+          >
+            <div className="audio-inner player-ui">
+              <audio
+                ref={audioRef}
+                src={sound1}
+                onTimeUpdate={(e) => {
+                  const time = e.target.currentTime;
+                  setCurrent(time);
+                  updateCaption(time);
                 }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
-                <div>
-                  <h5 className="h5-unit6-p5-q2">
-                    hill
-                    {wrongImages.includes("hill") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="hill"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
+                onLoadedMetadata={(e) => setDuration(e.target.duration)}
+              ></audio>
+              {/* Play / Pause */}
+              {/* Play / Pause */}
+              {/* الوقت - السلايدر - الوقت */}
+              <div className="top-row">
+                <span className="audio-time">
+                  {new Date(current * 1000).toISOString().substring(14, 19)}
+                </span>
 
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                {" "}
-                <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
-                <div>
-                  <h5 className="h5-unit6-p5-q2">
-                    pin
-                    {wrongImages.includes("pin") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="pin"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
-
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                {" "}
-                <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
-                <div>
-                  <h5 className="h5-unit6-p5-q2">
-                    mitt
-                    {wrongImages.includes("mitt") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="mitt"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
-                <div>
-                  <h5 className="h5-unit6-p5-q2">
-                    wig
-                    {wrongImages.includes("wig") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="wig"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
-            </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img src={img1} alt="" />
-
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img1"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img2} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img2"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img3} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img3"
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img src={img3} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img4"
-                ></div>
-              </div>
-            </div>
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
+                <input
+                  type="range"
+                  className="audio-slider"
+                  min="0"
+                  max={duration}
+                  value={current}
+                  onChange={(e) => {
+                    audioRef.current.currentTime = e.target.value;
+                    updateCaption(Number(e.target.value));
+                  }}
+                  style={{
+                    background: `linear-gradient(to right, #430f68 ${
+                      (current / duration) * 100
+                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                  }}
                 />
-              ))}
-            </svg>
+
+                <span className="audio-time">
+                  {new Date(duration * 1000).toISOString().substring(14, 19)}
+                </span>
+              </div>
+              {/* الأزرار 3 أزرار بنفس السطر */}
+              <div className="bottom-row">
+                {/* فقاعة */}
+                <div
+                  className={`round-btn ${showCaption ? "active" : ""}`}
+                  style={{ position: "relative" }}
+                  onClick={() => setShowCaption(!showCaption)}
+                >
+                  <TbMessageCircle size={36} />
+                  <div
+                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                    style={{ top: "100%", left: "10%" }}
+                  >
+                    {captions.map((cap, i) => (
+                      <p
+                        key={i}
+                        id={`caption-${i}`}
+                        className={`caption-inPopup-line2 ${
+                          activeIndex === i ? "active" : ""
+                        }`}
+                      >
+                        {cap.text}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Play */}
+                <button className="play-btn2" onClick={togglePlay}>
+                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+                </button>
+
+                {/* Settings */}
+                <div className="settings-wrapper" ref={settingsRef}>
+                  <button
+                    className={`round-btn ${showSettings ? "active" : ""}`}
+                    onClick={() => setShowSettings(!showSettings)}
+                  >
+                    <IoMdSettings size={36} />
+                  </button>
+
+                  {showSettings && (
+                    <div className="settings-popup">
+                      <label>Volume</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={volume}
+                        onChange={(e) => {
+                          setVolume(e.target.value);
+                          audioRef.current.volume = e.target.value;
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>{" "}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLines([]);
-            setWrongImages([]);
-          }}
-          className="try-again-button"
-        >
-          Start Again ↻
-        </button>
-        <button onClick={checkAnswers2} className="check-button2">
-          Check Answer ✓
-        </button>
+        <div className="unit10-p1-q2-container">
+          {questions.map((q, index) => (
+            <div key={q.id} className="unit10-p1-q2-question-box">
+              <p
+                className="unit6-p1-q1-question-text"
+                style={{ fontSize: "20px" }}
+              >
+                <span style={{ color: "darkblue", fontWeight: "700" }}>
+                  {q.id}.
+                </span>
+              </p>
+
+              <div className="unit10-p1-q2-flex">
+                <img
+                  src={q.image}
+                  alt=""
+                  className="unit6-p1-q1-question-img"
+                />
+
+                <div className="unit10-p1-q2-options-box">
+                  {/* خيار الصح */}
+                  <div className="option-wrapper">
+                    <div
+                      className={`option-btn ${
+                        answers[q.id] === "✓" ? "selected" : ""
+                      }`}
+                      onClick={() => selectAnswer(q.id, "✓")}
+                    >
+                      ✓
+                    </div>
+
+                    {!locked &&
+                      showResult[index] === "wrong" &&
+                      answers[q.id] === "✓" && (
+                        <div className="unit6-p1-q1-wrong-icon">✕</div>
+                      )}
+                  </div>
+
+                  {/* خيار الخطأ */}
+                  <div className="option-wrapper">
+                    <div
+                      className={`option-btn ${
+                        answers[q.id] === "✗" ? "selected" : ""
+                      }`}
+                      onClick={() => selectAnswer(q.id, "✗")}
+                    >
+                      ✗
+                    </div>
+
+                    {!locked &&
+                      showResult[index] === "wrong" &&
+                      answers[q.id] === "✗" && (
+                        <div className="unit6-p1-q1-wrong-icon">✕</div>
+                      )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="action-buttons-container">
+          <button onClick={resetAnswers} className="try-again-button">
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Unit6_Page5_Q2;
+export default Unit10_Page5_Q2;

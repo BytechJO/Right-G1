@@ -13,7 +13,7 @@ const Unit4_Page5_Q2 = () => {
   const correctAnswers = ["f", "v", "f", "v"];
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
-  const stopAtSecond = 11;
+  const stopAtSecond = 11.13;
 
   const audioRef = useRef(null);
 
@@ -30,7 +30,32 @@ const Unit4_Page5_Q2 = () => {
   const [duration, setDuration] = useState(0);
   const [showCaption, setShowCaption] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    {
+      start: 0,
+      end: 11.13,
+      text: "page 32 Right activities exercise A number 2 does it begin with f or v listen and write ",
+    },
 
+    { start: 11.15, end: 13.17, text: "1.	frog " },
+    { start: 13.19, end: 15.14, text: "2.	violin" },
+    { start: 15.16, end: 17.29, text: "3.	vase " },
+    { start: 17.31, end: 20.06, text: "4.	father" },
+  ];
+
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
+  };
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -53,8 +78,8 @@ const Unit4_Page5_Q2 = () => {
       const audio = audioRef.current;
       audio.currentTime = 0; // ← يرجع للبداية
       setIsPlaying(false);
-      setActiveIndex(null);
       setPaused(false);
+      setActiveIndex(null);
       setShowContinue(true);
     };
 
@@ -69,9 +94,15 @@ const Unit4_Page5_Q2 = () => {
     const timer = setInterval(() => {
       setForceRender((prev) => prev + 1);
     }, 1000); // كل ثانية
+    if (activeIndex === -1 || activeIndex === null) return;
 
+    const el = document.getElementById(`caption-${activeIndex}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
     return () => clearInterval(timer);
-  }, []);
+  }, [activeIndex]);
+
   const handleChange = (value, index) => {
     if (showAnswer) return;
     const newAnswers = [...answers];
@@ -127,7 +158,7 @@ const Unit4_Page5_Q2 = () => {
   const reset = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
-    setShowAnswer(false)
+    setShowAnswer(false);
   };
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -151,7 +182,8 @@ const Unit4_Page5_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -172,6 +204,7 @@ const Unit4_Page5_Q2 = () => {
           style={{
             display: "flex",
             justifyContent: "center",
+            margin: "30px 0px",
             width: "100%",
           }}
         >
@@ -188,10 +221,10 @@ const Unit4_Page5_Q2 = () => {
                 onTimeUpdate={(e) => {
                   const time = e.target.currentTime;
                   setCurrent(time);
+                  updateCaption(time);
                 }}
                 onLoadedMetadata={(e) => setDuration(e.target.duration)}
               ></audio>
-              {/* Play / Pause */}
               {/* Play / Pause */}
               {/* الوقت - السلايدر - الوقت */}
               <div className="top-row">
@@ -210,7 +243,7 @@ const Unit4_Page5_Q2 = () => {
                     updateCaption(Number(e.target.value));
                   }}
                   style={{
-                    background: `linear-gradient(to right, #8247ffff ${
+                    background: `linear-gradient(to right, #430f68 ${
                       (current / duration) * 100
                     }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                   }}
@@ -223,8 +256,28 @@ const Unit4_Page5_Q2 = () => {
               {/* الأزرار 3 أزرار بنفس السطر */}
               <div className="bottom-row">
                 {/* فقاعة */}
-                <div className={`round-btn ${showCaption ? "active" : ""}`}>
+                <div
+                  className={`round-btn ${showCaption ? "active" : ""}`}
+                  style={{ position: "relative" }}
+                  onClick={() => setShowCaption(!showCaption)}
+                >
                   <TbMessageCircle size={36} />
+                  <div
+                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                    style={{ top: "100%", left: "10%" }}
+                  >
+                    {captions.map((cap, i) => (
+                      <p
+                        key={i}
+                        id={`caption-${i}`}
+                        className={`caption-inPopup-line2 ${
+                          activeIndex === i ? "active" : ""
+                        }`}
+                      >
+                        {cap.text}
+                      </p>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Play */}

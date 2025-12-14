@@ -1,128 +1,88 @@
-import React, { useState, useRef, useEffect } from "react";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEB-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEB-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEB-03.svg";
-import img4 from "../../../assets/img_unit2/imgs/36.jpg";
-import sound1 from "../../../assets/unit1/sounds/P17QF.mp3";
+import React, { useState } from "react";
+import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
+import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
+import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review6_Page1_Q2.css";
-const Review6_Page1_Q2 = () => {
-  const [lines, setLines] = useState([]);
-  const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
-  const audioRef = useRef(null);
-  const correctMatches = [
-    { word: "Yes, I can.", image: ["img2"] },
-    { word: "No, I can’t.", image: ["img1", "img3"] },
-  ];
-  const handleDotDown2 = (e) => {
-    startPoint = e.target;
+import "./Review8_Page1_Q2.css";
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
+const Review8_Page1_Q2 = () => {
+  const correctAnswers = ["hand", "nose", "eye", "head"];
 
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+  const handleChange = (value, index) => {
+    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
+
+    const newAnswers = [...answers];
+    newAnswers[index] = value.toLowerCase();
+    setAnswers(newAnswers);
+    setWrongInputs([]);
   };
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
+  const checkAnswers = () => {
+    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
 
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
-      },
-    ]);
-  };
-
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
-
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
-
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot2-unit2")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
-
-      // ✅ تصحيح تخزين البيانات
-      image: startPoint.dataset.image,
-      word: endDot.dataset.word,
-    };
-
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
-  };
-  const checkAnswers2 = () => {
-    if (lines.length < correctMatches.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please connect all the pairs before checking."
-      );
+    if (answers.some((ans) => ans.trim() === "")) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
     let correctCount = 0;
     let wrong = [];
 
-    lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image.includes(line.image)
-      );
-
-      if (isCorrect) {
+    answers.forEach((ans, i) => {
+      if (ans === correctAnswers[i]) {
         correctCount++;
       } else {
-        wrong.push(line.image); // ✅ خزّني اسم صورة الخطأ فقط
+        wrong.push(i);
       }
     });
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
+    setWrongInputs(wrong);
 
-    const total = 3;
+    const total = correctAnswers.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
 
+  const reset = () => {
+    setAnswers(["", "", "", ""]);
+    setWrongInputs([]);
+    setShowAnswer(false); // ⭐ NEW → يرجع الحالة لطبيعية
+  };
+
+  const handleShowAnswer = () => {
+    setAnswers([...correctAnswers]); // ⭐ عرض الإجابات الصحيحة
+    setWrongInputs([]);
+    setShowAnswer(true); // ⭐ منع التعديل
+  };
+
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -131,171 +91,172 @@ const Review6_Page1_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">C Look, read, and match.</h5>
+        <h5 className="header-title-page8">B Look, read, and write.</h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <h5
-                  style={{
-                    padding: "0px 5px",
-                    display: "flex",
-                    gap: "5px",
-
-                    fontSize: "18px",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                  }}
-                >
-                  <span style={{ color: "#2c5287",fontSize:"20px",fontWeight:"700" }}>1</span> Can you fly a
-                  kite?
-                </h5>
-                <img src={img1} alt="" />
-
-                {wrongImages.includes("img1") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img1"
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <h5
-                  style={{
-                    display: "flex",
-                    gap: "5px",
-                    padding: "0px 5px",
-                    fontSize: "18px",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                  }}
-                >
-                  <span style={{ color: "#2c5287" ,fontSize:"20px",fontWeight:"700"}}>2</span> Can you play the
-                  violin?
-                </h5>
-                <img src={img2} alt="img" />
-
-                {wrongImages.includes("img2") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img2"
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <h5
-                  style={{
-                    padding: "0px 5px",
-                    gap: "5px",
-                    display: "flex",
-                    fontSize: "18px",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                  }}
-                >
-                  <span style={{ color: "#2c5287",fontSize:"20px",fontWeight:"700" }}>3</span> Can you ride a
-                  bike?
-                </h5>
-                <img src={img3} alt="" />
-
-                {wrongImages.includes("img3") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img3"
-                  onMouseDown={handleDotDown2}
-                ></div>
-              </div>
+        <div
+          className="row-content10-unit3-page6-q1"
+          style={{ alignItems: "center", justifyContent: "space-between" }}
+        >
+          {/* 🔵 1 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              1
+            </span>
+            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+            <span
+              style={{
+                textAlign: "center",
+                fontSize: "20px",
+                alignSelf: "center",
+              }}
+            >
+              Raise your
+            </span>
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 0)}
+                value={answers[0]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(0) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
             </div>
+          </div>
 
-            {/* الجمل */}
-            <div className="match-words-row2">
-              <div className="word-box2-review6-p1-q3">
-                <h5
-                  style={{
-                    border: "2px solid #2effeaff",
-                    borderRadius: "8px",
-                    background: "#b7fff8ff",
-                    fontSize: "18px",
-                    display: "flex",
-                    padding: "0px 5px",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                  }}
-                >
-                  Yes, I can.
-                </h5>
-                <div
-                  className="dot2-unit2 end-dot2-unit2"
-                  data-word="Yes, I can."
-                ></div>
-              </div>
-
-              <div className="word-box2-review6-p1-q3">
-                <h5
-                  style={{
-                    border: "2px solid #2effeaff",
-                    borderRadius: "8px",
-                    background: "#b7fff8ff",
-                    fontSize: "18px",
-                    display: "flex",
-                    padding: "0px 5px",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                  }}
-                >
-                  No, I can’t.
-                </h5>
-                <div
-                  className="dot2-unit2 end-dot2-unit2"
-                  data-word="No, I can’t."
-                ></div>
-              </div>
+          {/* 🔵 2 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              2
+            </span>
+            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
+            <span
+              style={{
+                textAlign: "center",
+                fontSize: "20px",
+                alignSelf: "center",
+              }}
+            >
+              Touch your
+            </span>
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 1)}
+                value={answers[1]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(1) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
             </div>
+          </div>
 
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+          {/* 🔵 3 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              3
+            </span>
+            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+            <span
+              style={{
+                textAlign: "center",
+                fontSize: "20px",
+                alignSelf: "center",
+              }}
+            >
+              Close your
+            </span>
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 2)}
+                value={answers[2]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(2) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
+          </div>
+          {/* 🔵 4 */}
+          <div className="row2-review8-p1-q2">
+            <span
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              4
+            </span>
+            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+            <span
+              style={{
+                textAlign: "center",
+                fontSize: "20px",
+                alignSelf: "center",
+              }}
+            >
+              Touch your
+            </span>
+            <div className="input-wrapper-review8-p1-q2">
+              <input
+                type="text"
+                className="q-input-unit3-page6-q1"
+                onChange={(e) => handleChange(e.target.value, 3)}
+                value={answers[3]}
+                disabled={showAnswer}
+              />
+              {wrongInputs.includes(3) && !showAnswer && (
+                <span className="error-mark-input-review8-p1-q2">✕</span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="action-buttons-container">
-          <button
-            onClick={() => {
-              setLines([]);
-              setWrongImages([]);
-            }}
-            className="try-again-button"
-          >
-            Start Again ↻
-          </button>
-          <button onClick={checkAnswers2} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
+      </div>
+
+      {/* ⭐ BUTTONS */}
+      <div className="action-buttons-container">
+        <button onClick={reset} className="try-again-button">
+          Start Again ↻
+        </button>
+
+        <button
+          onClick={handleShowAnswer}
+          className="show-answer-btn swal-continue"
+        >
+          Show Answer
+        </button>
+
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default Review6_Page1_Q2;
+export default Review8_Page1_Q2;

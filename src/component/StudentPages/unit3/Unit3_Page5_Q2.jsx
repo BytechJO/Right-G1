@@ -3,7 +3,7 @@ import "./Unit3_Page5_Q2.css";
 import React, { useState, useEffect, useRef } from "react";
 import CD24_Pg26_Instructions1_AdultLady from "../../../assets/unit3/sound3/CD24.Pg26_Instructions1_Adult Lady.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import sound1 from "../../../assets/unit1/sounds/P19QD.mp3";
+import sound1 from "../../../assets/unit3/sound3/U3P26EXEA2.mp3";
 import img1 from "../../../assets/unit3/imgs3/P26exeA2-01.svg";
 import img2 from "../../../assets/unit3/imgs3/P26exeA2-02.svg";
 import img3 from "../../../assets/unit3/imgs3/P26exeA2-03.svg";
@@ -18,7 +18,7 @@ const Unit3_Page5_Q2 = () => {
   const audioRef = useRef(null);
   const [answers, setAnswers] = useState([null, null, null, null]);
   const [showResult, setShowResult] = useState([]);
-  const stopAtSecond = 4.5;
+  const stopAtSecond = 10.90;
   const [checked, setChecked] = useState(false);
   // إعدادات الصوت
   const [paused, setPaused] = useState(false);
@@ -35,7 +35,7 @@ const Unit3_Page5_Q2 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   // ✅ نسمح فقط باختيار إجابة واحدة
-  const [selected, setSelected] = useState([]);  
+  const [selected, setSelected] = useState([]);
   const correctData = ["1", "2", "4"];
   const options = [
     { img: img1, num: "1" },
@@ -46,25 +46,25 @@ const Unit3_Page5_Q2 = () => {
     { img: img6, num: "6" },
   ];
 
-
   // ================================
   // ✔ Captions Array
   // ================================
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 11.08,
+      text: "Page 26, Right Activities, Exercise A, Number 2. Does it have a short A sound? Listen and circle. ",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 11.1,
+      end: 13.08,
+      text: "1. Mat.",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 13.1, end: 15.12, text: "2. Can. " },
+    { start: 15.14, end: 17.07, text: "3. Boat. " },
+    { start: 17.09, end: 19.11, text: "4. Fan. " },
+    { start: 19.13, end: 21.27, text: "5. Grapes." },
+    { start: 21.29, end: 24.01, text: "6. Shoes." },
   ];
 
   // ================================
@@ -232,7 +232,8 @@ const Unit3_Page5_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -273,10 +274,10 @@ const Unit3_Page5_Q2 = () => {
                   onTimeUpdate={(e) => {
                     const time = e.target.currentTime;
                     setCurrent(time);
+                    updateCaption(time);
                   }}
                   onLoadedMetadata={(e) => setDuration(e.target.duration)}
                 ></audio>
-                {/* Play / Pause */}
                 {/* Play / Pause */}
                 {/* الوقت - السلايدر - الوقت */}
                 <div className="top-row">
@@ -295,7 +296,7 @@ const Unit3_Page5_Q2 = () => {
                       updateCaption(Number(e.target.value));
                     }}
                     style={{
-                      background: `linear-gradient(to right, #8247ffff ${
+                      background: `linear-gradient(to right, #430f68 ${
                         (current / duration) * 100
                       }%, #d9d9d9ff ${(current / duration) * 100}%)`,
                     }}
@@ -308,11 +309,13 @@ const Unit3_Page5_Q2 = () => {
                 {/* الأزرار 3 أزرار بنفس السطر */}
                 <div className="bottom-row">
                   {/* فقاعة */}
-                  <div  className={`round-btn ${showCaption ? "active" : ""}`}
+                  <div
+                    className={`round-btn ${showCaption ? "active" : ""}`}
                     style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}>
+                    onClick={() => setShowCaption(!showCaption)}
+                  >
                     <TbMessageCircle size={36} />
-                       <div
+                    <div
                       className={`caption-inPopup ${showCaption ? "show" : ""}`}
                       style={{ top: "100%", left: "10%" }}
                     >

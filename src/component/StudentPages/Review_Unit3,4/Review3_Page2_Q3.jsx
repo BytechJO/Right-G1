@@ -20,7 +20,7 @@ const Review3_Page2_Q3 = () => {
   const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false); // ⭐ NEW — يمنع التعديل بعد Show Answer
-  const stopAtSecond = 6.5;
+  const stopAtSecond = 6.26;
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -72,18 +72,18 @@ const Review3_Page2_Q3 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 6.26,
+      text: "Page 35, Exercise F. Which word has a short A? Listen and circle.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 6.28,
+      end: 10.03,
+      text: "1. Dates. Bag. ",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 10.05, end: 12.19, text: "2. Lake. Hat." },
+    { start: 12.21, end: 15.24, text: "3. Flag. Shape." },
+    { start: 15.26, end: 19.09, text: "4. Cape. Fan." },
+
   ];
 
   // ================================

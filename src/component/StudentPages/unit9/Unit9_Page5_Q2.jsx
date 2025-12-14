@@ -1,122 +1,157 @@
-import React, { useState } from "react";
-import "./Unit5_Page5_Q2.css";
-import ValidationAlert from "../Popup/ValidationAlert";
-import img1 from "../../assets/unit5/imgs/U5P44EXEA2-01.svg";
-import img2 from "../../assets/unit5/imgs/U5P44EXEA2-02.svg";
-import img3 from "../../assets/unit5/imgs/U5P44EXEA2-03.svg";
-import img4 from "../../assets/unit5/imgs/U5P44EXEA2-04.svg";
-import img5 from "../../assets/unit5/imgs/U5P44EXEA2-05.svg";
-import img6 from "../../assets/unit5/imgs/U5P44EXEA2-06.svg";
-const data = [
-  {
-    id: 1,
-    images: [
-      { id: 1, src: img1, value: "kite" },
-      { id: 2, src: img2, value: "girl" },
-      { id: 3, src: img3, value: "key" },
-    ],
-    correct: ["kite", "key"],
-  },
-  {
-    id: 2,
-    images: [
-      { id: 1, src: img4, value: "grass" },
-      { id: 2, src: img5, value: "kitchen" },
-      { id: 3, src: img6, value: "garden" },
-    ],
-    correct: ["grass", "garden"],
-  },
-];
+import React, { useState, useRef, useEffect } from "react";
+import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
+import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
+import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
+import dad from "../../../assets/unit4/imgs/U4P32ExeA2-04.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import "./Unit9_Page5_Q2.css";
+import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
+import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { IoMdSettings } from "react-icons/io";
+import { TbMessageCircle } from "react-icons/tb";
+const Unit9_Page5_Q2 = () => {
+  const correctAnswers = ["m", "n", "n", "m"];
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const stopAtSecond = 11;
 
-export default function Unit5_Page5_Q2() {
-  const [answers, setAnswers] = useState({});
-  const [score, setScore] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
+  const audioRef = useRef(null);
 
-  const handleSelect = (qId, value) => {
-    setAnswers((prev) => {
-      const current = prev[qId] || [];
+  // إعدادات الصوت
+  const [paused, setPaused] = useState(false);
+  // إعدادات الصوت
+  const [showSettings, setShowSettings] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const settingsRef = useRef(null);
+  const [forceRender, setForceRender] = useState(0);
+  const [showContinue, setShowContinue] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showCaption, setShowCaption] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
 
-      // 1️⃣ إذا كانت الصورة مختارة → نشيلها (Toggle)
-      if (current.includes(value)) {
-        return { ...prev, [qId]: current.filter((v) => v !== value) };
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    const interval = setInterval(() => {
+      if (audio.currentTime >= stopAtSecond) {
+        audio.pause();
+        setPaused(true);
+        setIsPlaying(false);
+        setShowContinue(true);
+        clearInterval(interval);
       }
+    }, 100);
 
-      // 2️⃣ إذا حاول يختار أكثر من 2 → نمنعه
-      if (current.length >= 2) {
-        return prev;
-      }
+    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
+    const handleEnded = () => {
+      const audio = audioRef.current;
+      audio.currentTime = 0; // ← يرجع للبداية
+      setIsPlaying(false);
+      setActiveIndex(null);
+      setPaused(false);
+      setShowContinue(true);
+    };
 
-      // 3️⃣ إضافة اختيار جديد
-      return { ...prev, [qId]: [...current, value] };
-    });
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      clearInterval(interval);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setForceRender((prev) => prev + 1);
+    }, 1000); // كل ثانية
+
+    return () => clearInterval(timer);
+  }, []);
+  const handleChange = (value, index) => {
+    if (showAnswer) return;
+    const newAnswers = [...answers];
+    newAnswers[index] = value.toLowerCase();
+    setAnswers(newAnswers);
+    setWrongInputs([]);
+  };
+  const handleShowAnswer = () => {
+    setAnswers([...correctAnswers]); // املي الأجوبة الصحيحة
+    setWrongInputs([]); // ما في غلط عند عرض الحل
+    setShowAnswer(true); // حتى نغير لون النص
   };
 
-  const handleCheck = () => {
-    // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
-    if (!answers[data[0].id] || answers[data[0].id].length === 0) {
-      ValidationAlert.info("Please select at least one picture in question 1.");
+  const checkAnswers = () => {
+    if (showAnswer) return;
+    if (answers.some((ans) => ans.trim() === "")) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    // فحص إذا الطالب مختار على الأقل إجابة من السؤال الثاني
-    if (!answers[data[1].id] || answers[data[1].id].length === 0) {
-      ValidationAlert.info("Please select at least one picture in question 2.");
-      return;
-    }
-
-    let correctCount = 0;
-
-    // نحسب total = مجموع كل الإجابات الصحيحة
-    const total = data.reduce((sum, q) => sum + q.correct.length, 0);
-
-    // حساب عدد الصح
-    data.forEach((q) => {
-      const studentAnswers = answers[q.id] || [];
-
-      q.correct.forEach((correctValue) => {
-        if (studentAnswers.includes(correctValue)) {
-          correctCount++;
-        }
-      });
+    let tempScore = 0;
+    let wrong = [];
+    answers.forEach((ans, i) => {
+      if (ans === correctAnswers[i]) {
+        tempScore++;
+      } else {
+        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
+      }
     });
+    setWrongInputs(wrong);
 
-    // اختيار اللون حسب النتيجة
+    const total = correctAnswers.length;
     const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
 
     const scoreMessage = `
-    <div style="font-size: 20px; text-align:center; margin-top: 8px;">
+    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
       <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
+        Score: ${tempScore} / ${total}
       </span>
     </div>
   `;
 
-    // إظهار نوع النتيجة
-    if (correctCount === total) {
+    if (tempScore === total) {
       ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
+    } else if (tempScore === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-    setSubmitted(true);
   };
 
-  const handleReset = () => {
-    setAnswers({});
-    setSubmitted(false);
-    setScore(null);
+  const reset = () => {
+    setAnswers(["", "", "", ""]);
+    setWrongInputs([]);
+    setShowAnswer(false)
   };
+  const togglePlay = () => {
+    const audio = audioRef.current;
 
+    if (!audio) return;
+
+    if (audio.paused) {
+      audio.play();
+      setPaused(false);
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setPaused(true);
+      setIsPlaying(false);
+    }
+  };
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "center",padding:"30px"
       }}
     >
       <div
@@ -128,61 +163,208 @@ export default function Unit5_Page5_Q2() {
           justifyContent: "flex-start",
         }}
       >
-        <div className="circle-wrapper-Unit5_Page5_Q2">
-          <h5 className="header-title-page8">
-            <span style={{ color: "purple" }}>2</span> Which pictures begin with
-            the same sound? Circle.
-          </h5>
-
-          {data.map((q) => (
-            <div key={q.id} className="question-row-Unit5_Page5_Q2">
-              <span
-                className="q-number"
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
+        <h5 className="header-title-page8">
+          <span style={{ color: "purple" }}>2</span>Does it begin with{" "}
+          <span style={{ color: "red" }}>m</span> or{" "}
+          <span style={{ color: "red" }}>n</span>? Listen and write.
+        </h5>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <div
+            className="audio-popup-read"
+            style={{
+              width: "50%",
+            }}
+          >
+            <div className="audio-inner player-ui">
+              <audio
+                ref={audioRef}
+                src={sound}
+                onTimeUpdate={(e) => {
+                  const time = e.target.currentTime;
+                  setCurrent(time);
                 }}
-              >
-                {q.id}.
-              </span>
+                onLoadedMetadata={(e) => setDuration(e.target.duration)}
+              ></audio>
+              {/* Play / Pause */}
+              {/* Play / Pause */}
+              {/* الوقت - السلايدر - الوقت */}
+              <div className="top-row">
+                <span className="audio-time">
+                  {new Date(current * 1000).toISOString().substring(14, 19)}
+                </span>
 
-              <div className="images-row-Unit5_Page5_Q2">
-                {q.images.map((img) => {
-                  const isSelected = answers[q.id]?.includes(img.value);
-                  const isWrong =
-                    submitted && isSelected && !q.correct.includes(img.value);
+                <input
+                  type="range"
+                  className="audio-slider"
+                  min="0"
+                  max={duration}
+                  value={current}
+                  onChange={(e) => {
+                    audioRef.current.currentTime = e.target.value;
+                    updateCaption(Number(e.target.value));
+                  }}
+                  style={{
+                    background: `linear-gradient(to right, #430f68 ${
+                      (current / duration) * 100
+                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                  }}
+                />
 
-                  return (
-                    <div
-                      key={img.id}
-                      className={`img-box-Unit5_Page5_Q2 
-                    ${isSelected ? "selected-Unit5_Page5_Q2" : ""} 
-                
-                    ${isWrong ? "wrong" : ""}`}
-                      onClick={() => handleSelect(q.id, img.value)}
-                    >
-                      <img src={img.src} alt="" />
-                      {/* علامة X تظهر فقط عند الغلط */}
-                      {isWrong && (
-                        <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
-                      )}
-                    </div>
-                  );
-                })}
+                <span className="audio-time">
+                  {new Date(duration * 1000).toISOString().substring(14, 19)}
+                </span>
               </div>
+              {/* الأزرار 3 أزرار بنفس السطر */}
+              <div className="bottom-row">
+                {/* فقاعة */}
+                <div className={`round-btn ${showCaption ? "active" : ""}`}>
+                  <TbMessageCircle size={36} />
+                </div>
+
+                {/* Play */}
+                <button className="play-btn2" onClick={togglePlay}>
+                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+                </button>
+
+                {/* Settings */}
+                <div className="settings-wrapper" ref={settingsRef}>
+                  <button
+                    className={`round-btn ${showSettings ? "active" : ""}`}
+                    onClick={() => setShowSettings(!showSettings)}
+                  >
+                    <IoMdSettings size={36} />
+                  </button>
+
+                  {showSettings && (
+                    <div className="settings-popup">
+                      <label>Volume</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={volume}
+                        onChange={(e) => {
+                          setVolume(e.target.value);
+                          audioRef.current.volume = e.target.value;
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>{" "}
             </div>
-          ))}
+          </div>
+        </div>
+        <div className="row-content10-unit3-page6-q1">
+          <div className="row2-unit3-page6-q1">
+            <div style={{ display: "flex", gap: "15px" }}>
+              <span className="num-span">1</span>{" "}
+              <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+            </div>
+            <span style={{ position: "relative", display: "flex" }}>
+              <div className="input-wrapper-unit3-page6-q1">
+                <input
+                  type="text"
+                  className={`q-input-unit3-page6-q1 ${
+                    showAnswer ? "red-text" : ""
+                  }`}
+                  onChange={(e) => handleChange(e.target.value, 0)}
+                  value={answers[0]}
+                />
+                {wrongInputs.includes(0) && (
+                  <span className="error-mark-input">✕</span>
+                )}
+              </div>
+            </span>
+          </div>
+
+          <div className="row2-unit3-page6-q1">
+            <div style={{ display: "flex", gap: "15px" }}>
+              <span className="num-span">2</span>{" "}
+              <img src={cap} alt="" className="q-img-unit3-page6-q1" />
+            </div>
+            <span style={{ position: "relative", display: "flex" }}>
+              <div className="input-wrapper-unit3-page6-q1">
+                <input
+                  type="text"
+                  className={`q-input-unit3-page6-q1 ${
+                    showAnswer ? "red-text" : ""
+                  }`}
+                  onChange={(e) => handleChange(e.target.value, 1)}
+                  value={answers[1]}
+                />{" "}
+                {wrongInputs.includes(1) && (
+                  <span className="error-mark-input">✕</span>
+                )}
+              </div>
+            </span>
+          </div>
+
+          <div className="row2-unit3-page6-q1">
+            <div style={{ display: "flex", gap: "15px" }}>
+              <span className="num-span">3</span>{" "}
+              <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+            </div>
+            <span style={{ position: "relative", display: "flex" }}>
+              <div className="input-wrapper-unit3-page6-q1">
+                <input
+                  type="text"
+                  className={`q-input-unit3-page6-q1 ${
+                    showAnswer ? "red-text" : ""
+                  }`}
+                  onChange={(e) => handleChange(e.target.value, 2)}
+                  value={answers[2]}
+                />{" "}
+                {wrongInputs.includes(2) && (
+                  <span className="error-mark-input">✕</span>
+                )}
+              </div>
+            </span>
+          </div>
+
+          <div className="row2-unit3-page6-q1">
+            <div style={{ display: "flex", gap: "15px" }}>
+              <span className="num-span">4</span>{" "}
+              <img src={dad} alt="" className="q-img-unit3-page6-q1" />
+            </div>
+            <span style={{ position: "relative", display: "flex" }}>
+              <div className="input-wrapper-unit3-page6-q1">
+                <input
+                  type="text"
+                  className={`q-input-unit3-page6-q1 ${
+                    showAnswer ? "red-text" : ""
+                  }`}
+                  onChange={(e) => handleChange(e.target.value, 3)}
+                  value={answers[3]}
+                />{" "}
+                {wrongInputs.includes(3) && (
+                  <span className="error-mark-input">✕</span>
+                )}
+              </div>
+            </span>
+          </div>
         </div>
       </div>
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleReset}>
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-        <button onClick={handleCheck} className="check-button2">
+        <button onClick={handleShowAnswer} className="show-answer-btn">
+          Show Answer
+        </button>
+        <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default Unit9_Page5_Q2;

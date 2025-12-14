@@ -2,10 +2,10 @@ import React, { useRef,useState } from "react";
 import page25 from "../../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park12.jpg";
 // import "./Unit2_Page11.css";/
 import { FaHeadphones } from "react-icons/fa";
-import sound1 from "../../../assets/unit4/sounds/Pg39_1.5_Adult Lady.mp3";
-import sound2 from "../../../assets/unit4/sounds/Pg39_1.6_Adult Lady.mp3";
-import sound3 from "../../../assets/unit4/sounds/Pg39_1.7_Adult Lady.mp3";
-import sound4 from "../../../assets/unit4/sounds/Pg39_1.8_Adult Lady.mp3";
+import sound1 from "../../../assets/unit6/sounds/Pg57_1.5_Adult Lady.mp3";
+import sound2 from "../../../assets/unit6/sounds/Pg57_1.6_Adult Lady.mp3";
+import sound3 from "../../../assets/unit6/sounds/Pg57_1.7_Adult Lady.mp3";
+import sound4 from "../../../assets/unit6/sounds/Pg57_1.8_Adult Lady.mp3";
 const Unit6_Reading_P2 = () => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);

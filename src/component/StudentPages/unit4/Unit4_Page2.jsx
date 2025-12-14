@@ -23,7 +23,7 @@ import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import sound2_8 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound2_8 from "../../../assets/unit4/sounds/U4P28VOC-08.mp3";
 
 import "./Unit4_Page2.css";
 const Unit4_Page2 = ({ openPopup }) => {

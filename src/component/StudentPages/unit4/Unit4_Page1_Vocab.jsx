@@ -10,14 +10,14 @@ import num5 from "../../../assets/unit4/imgs/Num5.svg";
 import num6 from "../../../assets/unit4/imgs/Num6.svg";
 import num7 from "../../../assets/unit4/imgs/Num7.svg";
 import num8 from "../../../assets/unit4/imgs/Num8.svg";
-import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
-import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
-import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
-import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound1 from "../../../assets/unit4/sounds/U4P28VOC-01.mp3";
+import sound2 from "../../../assets/unit4/sounds/U4P28VOC-02.mp3";
+import sound3 from "../../../assets/unit4/sounds/U4P28VOC-03.mp3";
+import sound4 from "../../../assets/unit4/sounds/U4P28VOC-04.mp3";
+import sound5 from "../../../assets/unit4/sounds/U4P28VOC-05.mp3";
+import sound6 from "../../../assets/unit4/sounds/U4P28VOC-06.mp3";
+import sound7 from "../../../assets/unit4/sounds/U4P28VOC-07.mp3";
+import sound8 from "../../../assets/unit4/sounds/U4P28VOC-08.mp3";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
@@ -369,8 +369,7 @@ const Unit4_Page1_Vocab = () => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
+          
             }}
           />
         ))}

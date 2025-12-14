@@ -75,7 +75,7 @@ const Review4_Page2_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
-  const stopAtSecond = 9;
+  const stopAtSecond = 5.23;
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -95,20 +95,19 @@ const Review4_Page2_Q1 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 5.23,
+      text: "Page 37, Exercise E. Listen and write the missing letters.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 5.25,
+      end: 9.05,
+      text: "1. The fork is on the vet. ",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
-  ];
+    { start: 9.07, end: 12.20, text: "2. The fish is in the van. " },
+    { start: 12.22, end: 16.16, text: "3. The vest is on my feet." },
 
+  ];
+  
   // ================================
   // ✔ Update caption highlight
   // ================================

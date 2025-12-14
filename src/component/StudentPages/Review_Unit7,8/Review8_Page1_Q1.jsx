@@ -1,51 +1,36 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./Review6_Page1_Q1.css";
+import "./Review8_Page1_Q1.css";
 import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
 import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
 import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
-const Review6_Page1_Q1 = () => {
+
+const Review8_Page1_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
   const [showResult, setShowResult] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
-  // 🔥 الداتا المطابقة للصورة
   const items = [
-    {
-      img: img1,
-      text: "She can",
-      options: ["a fly a kite.", "b ride a bike."],
-      correctIndex: 0,
-    },
-    {
-      img: img2,
-      text: "He can’t",
-      options: ["a climb a tree.", "b paint a picture."],
-      correctIndex: 1,
-    },
-    {
-      img: img3,
-      text: "It can",
-      options: ["a ride a bike.", "b climb a tree."],
-      correctIndex: 1,
-    },
-    {
-      img: img4,
-      text: "She can",
-      options: ["a sail a boat.", "b swim."],
-      correctIndex: 1,
-    },
+    { img: img1, text: "", options: ["leg", "arm", "head"], correctIndex: 1 },
+    { img: img2, text: "", options: ["eye", "leg", "nose"], correctIndex: 1 },
+    { img: img3, text: "", options: ["head", "nose", "leg"], correctIndex: 0 },
+    { img: img4, text: "", options: ["arm", "eye", "head"], correctIndex: 1 },
+    { img: img4, text: "", options: ["nose", "arm", "eye"], correctIndex: 0 },
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
+    if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
+
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
-    setShowResult(false)
+    setShowResult(false);
   };
 
   const checkAnswers = () => {
+    if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
+
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
@@ -56,8 +41,7 @@ const Review6_Page1_Q1 = () => {
     ).length;
 
     const total = items.length;
-
-    let color =
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
@@ -78,6 +62,17 @@ const Review6_Page1_Q1 = () => {
   const reset = () => {
     setAnswers(Array(items.length).fill(null));
     setShowResult(false);
+    setShowAnswer(false); // ⭐ Reset disables Show Answer mode
+  };
+
+  // =====================================================
+  // ⭐⭐   SHOW ANSWER FUNCTION
+  // =====================================================
+  const handleShowAnswer = () => {
+    const correct = items.map((q) => q.correctIndex);
+    setAnswers(correct);
+    setShowAnswer(true);
+    setShowResult(true);
   };
 
   return (
@@ -87,6 +82,7 @@ const Review6_Page1_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -98,31 +94,50 @@ const Review6_Page1_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div>
-          <h5 className="header-title-page8">A Look, read, and choose.</h5>
-        </div>
-        <div className="container-review6-p1-q1">
-          {items.map((q, i) => (
-            <div
-              key={i}
-              className="question-box-review6-p1-q1"
-              style={{ width: "100%" }}
-            >
-              <div style={{display:"flex",gap:"10px" ,flexDirection:"row",alignItems:"center",width:"80%"}}> 
-                <span style={{color:"#2c5287" ,fontSize:"20px",fontWeight:"700"}}>{i+1}</span>
-                  <h6 style={{fontSize:"20px",fontWeight:"600"}}>{q.text}</h6>
-              </div>
-            
-              <div style={{display:"flex",gap:"10px"}}>
-                <div className="img-div-review6-p1-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-review6-p1-q1"
-                    style={{ height: "150px", width: "auto" }}
-                  />
-                </div>
+        <h5 className="header-title-page8">
+         A Look, read, and circle.
+        </h5>
 
-                <div className="options-row-review6-p1-q1">
+        <div className="container-review8-p1-q1">
+          {items.map((q, i) => (
+            <div key={i} className="question-box-review8-p1-q1">
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: "80%",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {i + 1}
+                </span>
+                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
+                  {q.text}
+                </h6>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "column",
+                }}
+              >
+                <img
+                  src={q.img}
+                  className="q3-image-review8-p1-q1"
+                  style={{ height: "130px", width: "auto" }}
+                />
+
+                <div className="options-row-review8-p1-q1">
                   {q.options.map((word, optIndex) => {
                     const isSelected = answers[i] === optIndex;
                     const isCorrect = optIndex === q.correctIndex;
@@ -131,22 +146,22 @@ const Review6_Page1_Q1 = () => {
                       <p
                         key={optIndex}
                         className={`
-                    option-word-review6-p1-q1
-                    ${isSelected ? "selected3" : ""}
-                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
-                    ${showResult && isCorrect ? "correct" : ""}
-                  `}
+                          option-word-review8-p1-q1
+                          ${isSelected ? "selected3" : ""}
+                          ${
+                            showResult && isSelected && !isCorrect
+                              ? "wrong"
+                              : ""
+                          }
+                          ${showResult && isCorrect ? "correct" : ""}
+                        `}
+                        id={`option-word-${optIndex}`}
                         onClick={() => handleSelect(i, optIndex)}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
                       >
                         {word}
+
                         {showResult && isSelected && !isCorrect && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
+                          <span className="wrong-x-review8-p1-q1">✕</span>
                         )}
                       </p>
                     );
@@ -157,9 +172,18 @@ const Review6_Page1_Q1 = () => {
           ))}
         </div>
       </div>
+
+      {/* BUTTONS */}
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
+        </button>
+
+        <button
+          className="show-answer-btn swal-continue"
+          onClick={handleShowAnswer}
+        >
+          Show Answer
         </button>
 
         <button className="check-button2" onClick={checkAnswers}>
@@ -170,4 +194,4 @@ const Review6_Page1_Q1 = () => {
   );
 };
 
-export default Review6_Page1_Q1;
+export default Review8_Page1_Q1;

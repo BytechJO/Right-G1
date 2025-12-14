@@ -1,96 +1,189 @@
 import React, { useState } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA1-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA1-02.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page6_Q2.css";
-const Unit6_Page6_Q2 = () => {
+import bat from "../../../assets/unit4/imgs/U4P32ExeA1-01.svg";
+import cap from "../../../assets/unit4/imgs/U4P32ExeA1-02.svg";
+import ant from "../../../assets/unit4/imgs/U4P32ExeA1-03.svg";
+import dad from "../../../assets/unit4/imgs/U4P32ExeA1-04.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import "./Unit10_Page6_Q2.css";
+
+const Unit10_Page6_Q2 = () => {
   const items = [
-    { img: bat, correct: "can", correctInput: "can swim.", input: "She" },
     {
-      img: cap,
-      correct: "can't",
-      correctInput: "He can’t fly a kite.",
-      input: "",
+      question: "What do you want?",
+      images: [
+        { img: bat, value: "chicken" },
+        { img: cap, value: "apple" },
+      ],
+      correct: "chicken",
+      correctInput: "I want",
+      afterAnswer: "chicken.",
+      inputsCount: 1,
+    },
+    {
+      question: "",
+      images: [
+        { img: ant, value: "cake" },
+        { img: dad, value: "orange" },
+      ],
+      correct: "orange",
+      correctInput: "I want an",
+      correctQuestion: "What do you want",
+      afterAnswer: "orange.",
+      inputsCount: 2,
     },
   ];
 
   const [selected, setSelected] = useState(["", ""]);
-  const [answers, setAnswers] = useState(["", ""]);
+  const [answers, setAnswers] = useState([[""], ["", ""]]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
+  const [showCorrect, setShowCorrect] = useState(false);
+
   const handleSelect = (value, index) => {
+    if (showCorrect) return;
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
     setShowResult(false);
   };
 
-  const handleInput = (value, index) => {
+  const handleInput = (value, qIndex, inputIndex = 0) => {
+    if (showCorrect) return;
     const newAns = [...answers];
-    newAns[index] = value;
+    newAns[qIndex][inputIndex] = value;
     setAnswers(newAns);
     setShowResult(false);
   };
 
+ const showAnswers = () => {
+  // اختيار الصور الصحيحة
+  setSelected(items.map((item) => item.correct));
+
+  // تعبئة الـ inputs حسب نوع السؤال
+  const filledAnswers = items.map((item) => {
+    let arr = [];
+
+    if (item.correctQuestion) {
+      // 🔹 السؤال الثاني
+      arr.push(item.correctQuestion); // input السؤال
+
+      for (let i = 1; i < item.inputsCount; i++) {
+        arr.push(item.correctInput); // inputs الجواب
+      }
+    } else {
+      // 🔹 السؤال الأول
+      for (let i = 0; i < item.inputsCount; i++) {
+        arr.push(item.correctInput);
+      }
+    }
+
+    return arr;
+  });
+
+  setAnswers(filledAnswers);
+  setWrongInputs([]);
+  setShowResult(true);
+  setShowCorrect(true);
+};
+
   const resetAll = () => {
     setSelected(["", ""]);
-    setAnswers(["", ""]);
+    setAnswers([[""], ["", ""]]);
     setWrongInputs([]);
     setShowResult(false);
+    setShowCorrect(false);
   };
 
   const checkAnswers = () => {
-    // 1) التشييك إذا في دائرة مش مختارة
-    if (selected.some((s) => s === "")) {
-      ValidationAlert.info("Please choose a circle (f or v) for all items!");
-      return;
-    }
+  if (showCorrect) return;
 
-    // 2) التشييك إذا في input فاضي
-    if (answers.some((a) => a.trim() === "")) {
-      ValidationAlert.info("Please fill in all the writing boxes!");
-      return;
-    }
+  // 1️⃣ لازم يكون في اختيار صورة لكل سؤال
+  if (selected.some((s) => s === "")) {
+    ValidationAlert.info("Please circle one picture in each question!");
+    return;
+  }
 
-    let wrong = [];
-    let score = 0;
-
-    items.forEach((item, i) => {
-      const circleCorrect = selected[i] === item.correct;
-      const inputCorrect =
-        answers[i].trim().toLowerCase() === item.correctInput.toLowerCase();
-
-      // نقطة للدائرة + نقطة للكتابة
-      if (circleCorrect) score++;
-      if (inputCorrect) score++;
-
-      if (!circleCorrect || !inputCorrect) {
-        wrong.push(i);
+  // 2️⃣ لازم كل الـ inputs المطلوبة تكون معبّاية
+  for (let i = 0; i < items.length; i++) {
+    for (let j = 0; j < items[i].inputsCount; j++) {
+      if (!answers[i][j] || answers[i][j].trim() === "") {
+        ValidationAlert.info("Please write all answers!");
+        return;
       }
-    });
+    }
+  }
 
-    setWrongInputs(wrong);
-    setShowResult(true);
+  let wrong = [];
+  let score = 0;
 
-    const total = items.length * 2; // 8 نقاط
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+  items.forEach((item, i) => {
+    // 🔹 تشييك الصورة
+    if (selected[i] === item.correct) {
+      score++;
+    } else {
+      wrong.push({ qIndex: i, type: "image" });
+    }
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
+    // 🔹 تشييك الـ inputs
+    if (item.correctQuestion) {
+      // input السؤال
+      if (
+        answers[i][0].trim().toLowerCase() ===
+        item.correctQuestion.trim().toLowerCase()
+      ) {
+        score++;
+      } else {
+        wrong.push({ qIndex: i, inputIndex: 0 });
+      }
+
+      // inputs الجواب
+      for (let j = 1; j < item.inputsCount; j++) {
+        if (
+          answers[i][j].trim().toLowerCase() ===
+          item.correctInput.trim().toLowerCase()
+        ) {
+          score++;
+        } else {
+          wrong.push({ qIndex: i, inputIndex: j });
+        }
+      }
+    } else {
+      // السؤال الأول
+      for (let j = 0; j < item.inputsCount; j++) {
+        if (
+          answers[i][j].trim().toLowerCase() ===
+          item.correctInput.trim().toLowerCase()
+        ) {
+          score++;
+        } else {
+          wrong.push({ qIndex: i, inputIndex: j });
+        }
+      }
+    }
+  });
+
+  setWrongInputs(wrong);
+  setShowResult(true);
+
+  const total =
+    items.reduce((sum, item) => sum + item.inputsCount + 1, 0);
+
+  const color =
+    score === total ? "green" : score === 0 ? "red" : "orange";
+
+  const msg = `
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color};font-weight:bold">
         Score: ${score} / ${total}
       </span>
     </div>
   `;
 
-    if (score === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (score === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
-  };
+  if (score === total) ValidationAlert.success(msg);
+  else if (score === 0) ValidationAlert.error(msg);
+  else ValidationAlert.warning(msg);
+};
+
 
   return (
     <div
@@ -99,6 +192,7 @@ const Unit6_Page6_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -108,85 +202,108 @@ const Unit6_Page6_Q2 = () => {
           flexDirection: "column",
           gap: "30px",
           width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="letter-of-Q">E</span> Look, circle, and write.
+          <span className="ex-A">E</span> Look, read, circle, and write.
         </h5>
 
-        <div className="question-grid-unit6-page6-q2">
+        <div className="question-grid-unit10-page6-q2">
           {items.map((item, i) => (
             <div className="question-box-unit4-page5-q1" key={i}>
-              <span style={{fontSize:"22px" ,fontWeight:"600" ,color:"#1d4f7b"}}>{i+1}</span>
-              <div className="img-option-unit6-p6-q2">
-                <img src={item.img} className="q-img-unit4-page5-q1" />
+              <div className="choices-unit4-page5-q1">
+                {item.images.map((imgObj, idx) => (
+                  <div
+                    key={idx}
+                    className={`circle-wrapper-unit10-page6-q2 ${
+                      selected[i] === imgObj.value ? "active" : ""
+                    }`}
+                    onClick={() => handleSelect(imgObj.value, i)}
+                  >
+                    <img
+                      src={imgObj.img}
+                      className="q-img-unit10-page6-q2"
+                      alt=""
+                    />
 
-                {/* f / v choices */}
-                <div className="choices-unit6-page6-q2 ">
-                  <div className="circle-wrapper">
-                    <div
-                      className={`circle-choice-unit6-page6-q2  ${
-                        selected[i] === "can" ? "active" : ""
-                      }`}
-                      onClick={() => handleSelect("can", i)}
-                    >
-                      can
-                    </div>
-
-                    {/* X فوق دائرة f إذا كانت غلط */}
                     {showResult &&
-                      selected[i] === "can" &&
-                      selected[i] !== item.correct && (
+                      selected[i] === imgObj.value &&
+                      imgObj.value !== item.correct && (
                         <div className="wrong-mark">✕</div>
                       )}
                   </div>
-               
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-unit6-page6-q2 ${
-                      selected[i] === "can't" ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect("can't", i)}
-                  >
-                    can't
-                  </div>
-
-                  {/* X فوق دائرة v إذا كانت غلط */}
-                  {showResult &&
-                    selected[i] === "can't" &&
-                    selected[i] !== item.correct && (
-                      <div className="wrong-mark">✕</div>
-                    )}
-                </div>
+                ))}
               </div>
- </div>
-              {/* writing input */}
-              <div className="input-wrapper-unit6-p6-q2">
-                {item.input}
-                <input
-                  type="text"
-                  className="write-input-unit4-page5-q1"
-                  value={answers[i]}
-                  onChange={(e) => handleInput(e.target.value, i)}
-                />
 
-                {/* X فوق الإنبت إذا كانت الكلمة غلط */}
-                {showResult &&
-                  answers[i].trim() !== "" &&
-                  answers[i].trim().toLowerCase() !==
-                    item.correctInput.toLowerCase() &&
-                  wrongInputs.includes(i) && (
-                    <div className="wrong-mark">✕</div>
-                  )}
+              {item.question.length ? (
+                <p className="question-text">{item.question}</p>
+              ) : null}
+
+              <div className="input-wrapper-unit10-page6-q2">
+                {/* 🔹 input السؤال (بسطر لحاله) */}
+                {item.correctQuestion && (
+                  <div style={{ width: "100%", position: "relative" }}>
+                    <input
+                      type="text"
+                      className={`write-input-unit4-page5-q1 question-input-unit10-p6-q2 ${
+                        showCorrect ? "correct-color" : ""
+                      }`}
+                      value={answers[i][0]}
+                      onChange={(e) => handleInput(e.target.value, i, 0)}
+                    />
+                    {showResult && wrongInputs.includes(i) && (
+                      <div className="wrong-mark-unit10-p6-q2">✕</div>
+                    )}
+                  </div>
+                )}
+
+                {/* 🔹 input/inputs الإجابة */}
+                {Array.from({
+                  length: item.correctQuestion
+                    ? item.inputsCount - 1
+                    : item.inputsCount,
+                }).map((_, idx) => {
+                  const inputIndex = item.correctQuestion ? idx + 1 : idx;
+
+                  return (
+                    <div
+                      key={inputIndex}
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        className={`write-input-unit4-page5-q1 ${
+                          showCorrect ? "correct-color" : ""
+                        }`}
+                        value={answers[i][inputIndex]}
+                        onChange={(e) =>
+                          handleInput(e.target.value, i, inputIndex)
+                        }
+                      />
+
+                      {showResult && wrongInputs.includes(i) && (
+                        <div className="wrong-mark-unit10-p6-q2">✕</div>
+                      )}
+                      <span>{item.afterAnswer}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
-      </div>{" "}
+      </div>
+
       <div className="action-buttons-container">
         <button onClick={resetAll} className="try-again-button">
           Start Again ↻
+        </button>
+        <button onClick={showAnswers} className="show-answer-btn">
+          Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
@@ -196,4 +313,4 @@ const Unit6_Page6_Q2 = () => {
   );
 };
 
-export default Unit6_Page6_Q2;
+export default Unit10_Page6_Q2;

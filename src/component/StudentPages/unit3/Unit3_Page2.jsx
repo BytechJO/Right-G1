@@ -21,9 +21,9 @@ import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import sound2_4 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2_5 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound2_6 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound2_4 from "../../../assets/unit3/sound3/U3P22VOC-04.mp3";
+import sound2_5 from "../../../assets/unit3/sound3/U3P22VOC-05.mp3";
+import sound2_6 from "../../../assets/unit3/sound3/U3P22VOC-06.mp3";
 
 import "./Unit3_Page2.css";
 const Unit3_Page2 = ({ openPopup }) => {
@@ -67,15 +67,16 @@ const Unit3_Page2 = ({ openPopup }) => {
     { start: 0, end: 3.18, text: "Page 23. Listen and read along." },
     { start: 3.2, end: 7.01, text: "Short A. Bat, cap, dad." },
   ];
+
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 22.9, y1: 18.15, sound: 1, isPrimary: true },
+    { x1: 23.2, y1: 18.5, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 8.4, y1: 5.6, x2: 32.8, y2:17.47, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 19.0, y1: 27.9, sound: 2, isPrimary: true },
+    { x1: 19.4, y1: 27.9, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 7.4, y1: 26.7, x2: 21.2, y2: 38.8, sound: 2, isPrimary: false },

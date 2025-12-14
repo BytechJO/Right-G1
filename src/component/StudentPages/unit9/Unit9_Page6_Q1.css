@@ -1,41 +1,21 @@
-.unit5-wrapper {
-  width: 90%;
-  margin: auto;
-  font-family: "Poppins", sans-serif;
-}
-.answer-input-unit5-p6-q1 {
-  border-bottom: 2px solid black;
-  width: 160px;
-}
-.img-unit5-p6-q1 {
-  height: 150px;
-  width: auto;
-}
+.q-input-unit9-page6-q1 {
+    border-bottom: 2px solid #000000;
+    padding: 5px 8px;
+    /* border-radius: 6px; */
+    font-size: 18px;
+    width: 122px;
+    /* text-align: center;
+    vertical-align: middle;
+    line-height: normal; */
+    display: flex;
+    align-items: center;
+  }
 
-.section-one-unit5-p6-q1 {
-  display: flex;
-  align-items: center;
-}
-.section-two-unit5-p6-q1 {
-  display: flex;
-  align-items: center;
-}
-.section-three-unit5-p6-q1 {
-  display: flex;
-  align-items: center;
-}
-.section-four-unit5-p6-q1 {
-  display: flex;
-  align-items: center;
-}
-
-.content-input-unit5-p6-q1 {
-  display: flex;
-  flex-direction: column;
-}
-
-.content-container-unit5-p6-q1 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 43px;
+  .row-content10-unit9-page6-q1 {
+    display: grid;
+    /* margin-bottom: 55px; */
+    gap: 22px;
+    /* margin-top: 20px; */
+    grid-template-columns: repeat(2,1fr);
+    justify-items: center;
 }

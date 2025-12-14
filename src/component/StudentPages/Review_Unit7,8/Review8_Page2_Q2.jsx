@@ -1,120 +1,204 @@
-import React, { useState, useRef } from "react";
-import img1 from "../../../assets/unit6/imgs/U6P55EXEE-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P55EXEE-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P55EXEE-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P55EXEE-04.svg";
-import img5 from "../../../assets/unit6/imgs/U6P55EXEE-05.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
-import "./Review6_Page2_Q2.css";
+import React, { useState, useEffect, useRef } from "react";
+import "./Review8_Page2_Q2.css";
+import ValidationAlert from "../../Popup/ValidationAlert";
 
-const Review6_Page2_Q2 = () => {
-  const [lines, setLines] = useState([]);
-  const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
+import img1 from "../../../assets/unit4/imgs/U4P36EXEC-01.svg";
+import img2 from "../../../assets/unit4/imgs/U4P36EXEC-02.svg";
+import img3 from "../../../assets/unit4/imgs/U4P36EXEC-03.svg";
+import img4 from "../../../assets/unit4/imgs/U4P36EXEC-04.svg";
+import sound1 from "../../../assets/unit5/sounds/U5P44EXEA1.mp3";
 
-  const correctMatches = [
-    { word: "sit", image: "img2" },
-    { word: "pin", image: "img4" },
-    { word: "wig", image: "img1" },
-    { word: "dig", image: "img3" },
-    { word: "hill", image: "img5" },
+import { TbMessageCircle } from "react-icons/tb";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { IoMdSettings } from "react-icons/io";
+// الصور + الحرف الصحيح
+const shapesData = [
+  { id: 1, img: img1, correct: "S" },
+  { id: 2, img: img2, correct: "S" },
+  { id: 3, img: img3, correct: "Z" },
+  { id: 4, img: img4, correct: "S" },
+  { id: 5, img: img3, correct: "Z" },
+  { id: 6, img: img4, correct: "Z" },
+];
+
+// الصفوف (الحروف)
+const options = ["S", "Z"];
+
+const Review8_Page2_Q2 = () => {
+  const [answers, setAnswers] = useState({});
+  const [checked, setChecked] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const audioRef = useRef(null);
+
+  const stopAtSecond = 10.8;
+  const [paused, setPaused] = useState(false);
+  // إعدادات الصوت
+  const [showSettings, setShowSettings] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const settingsRef = useRef(null);
+  const [forceRender, setForceRender] = useState(0);
+  const [showContinue, setShowContinue] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [current, setCurrent] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showCaption, setShowCaption] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  // ================================
+  // ✔ Captions Array
+  // ================================
+  const captions = [
+    {
+      start: 0,
+      end: 4.23,
+      text: "Page 8. Right Activities. Exercise A, number 1. ",
+    },
+    {
+      start: 4.25,
+      end: 8.28,
+      text: "Listen and write the missing letters. Number the pictures.  ",
+    },
+    { start: 8.3, end: 11.05, text: "1-tiger." },
+    { start: 11.07, end: 13.12, text: "2-taxi." },
+    { start: 13.14, end: 15.14, text: "3-duck." },
+    { start: 15.16, end: 17.13, text: "4-deer." },
   ];
 
-  const handleDotDown2 = (e) => {
-    startPoint = e.target;
-
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = startPoint.getBoundingClientRect().left - rect.left + 8;
-    const y = startPoint.getBoundingClientRect().top - rect.top + 8;
-
-    setLines((prev) => [...prev, { x1: x, y1: y, x2: x, y2: y }]);
-
-    window.addEventListener("mousemove", followMouse2);
-    window.addEventListener("mouseup", stopDrawingLine2);
+  // ================================
+  // ✔ Update caption highlight
+  // ================================
+  const updateCaption = (time) => {
+    const index = captions.findIndex(
+      (cap) => time >= cap.start && time <= cap.end
+    );
+    setActiveIndex(index);
   };
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const followMouse2 = (e) => {
-    const rect = containerRef.current.getBoundingClientRect();
+    audio.currentTime = 0;
+    audio.play();
 
-    setLines((prev) => [
-      ...prev.slice(0, -1),
-      {
-        x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-        y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-        x2: e.clientX - rect.left,
-        y2: e.clientY - rect.top,
-      },
-    ]);
-  };
+    const interval = setInterval(() => {
+      if (audio.currentTime >= stopAtSecond) {
+        audio.pause();
+        setPaused(true);
+        setIsPlaying(false);
+        setShowContinue(true);
+        clearInterval(interval);
+      }
+    }, 100);
 
-  const stopDrawingLine2 = (e) => {
-    window.removeEventListener("mousemove", followMouse2);
-    window.removeEventListener("mouseup", stopDrawingLine2);
-
-    const endDot = document.elementFromPoint(e.clientX, e.clientY);
-
-    // ✅ تصحيح اسم الكلاس
-    if (!endDot || !endDot.classList.contains("end-dot22-unit6-q2")) {
-      setLines((prev) => prev.slice(0, -1));
-      return;
-    }
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const newLine = {
-      x1: startPoint.getBoundingClientRect().left - rect.left + 8,
-      y1: startPoint.getBoundingClientRect().top - rect.top + 8,
-      x2: endDot.getBoundingClientRect().left - rect.left + 8,
-      y2: endDot.getBoundingClientRect().top - rect.top + 8,
-
-      // ✅ تصحيح تخزين البيانات
-      word: startPoint.dataset.word,
-      image: endDot.dataset.image,
+    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
+    const handleEnded = () => {
+      const audio = audioRef.current;
+      audio.currentTime = 0; // ← يرجع للبداية
+      setIsPlaying(false);
+      setPaused(false);
+      setActiveIndex(null);
+      setShowContinue(true);
     };
 
-    setLines((prev) => [...prev.slice(0, -1), newLine]);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      clearInterval(interval);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setForceRender((prev) => prev + 1);
+    }, 1000); // كل ثانية
+    if (activeIndex === -1 || activeIndex === null) return;
+
+    const el = document.getElementById(`caption-${activeIndex}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    return () => clearInterval(timer);
+  }, [activeIndex]);
+  const togglePlay = () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    if (audio.paused) {
+      audio.play();
+      setPaused(false);
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setPaused(true);
+      setIsPlaying(false);
+    }
   };
-  const checkAnswers2 = () => {
-    if (lines.length < correctMatches.length) {
+  // اختيار خانة
+  const handleSelect = (imgId, letter) => {
+    if (locked) return;
+
+    setAnswers((prev) => ({
+      ...prev,
+      [imgId]: letter,
+    }));
+    setChecked(false);
+  };
+
+  // Check Answer
+  const checkAnswers = () => {
+    if (locked) return;
+
+    if (Object.keys(answers).length < shapesData.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please choose an answer for each picture."
       );
       return;
     }
 
-    let correctCount = 0;
-    let wrong = [];
-
-    lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
-      );
-
-      if (isCorrect) {
-        correctCount++;
-      } else {
-        wrong.push(line.word); // ✅ خزّني اسم صورة الخطأ فقط
-      }
+    let score = 0;
+    shapesData.forEach((item) => {
+      if (answers[item.id] === item.correct) score++;
     });
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
+    setChecked(true);
+    setLocked(true);
 
-    const total = correctMatches.length;
-    const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+    const total = shapesData.length;
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold">
+          Score: ${score} / ${total}
+        </span>
+      </div>
+    `;
+
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+  };
+
+  // Show Answer
+  const showAnswer = () => {
+    const correctSelections = {};
+    shapesData.forEach((item) => {
+      correctSelections[item.id] = item.correct;
+    });
+
+    setAnswers(correctSelections);
+    setChecked(true);
+    setLocked(true);
+  };
+
+  // Reset
+  const reset = () => {
+    setAnswers({});
+    setChecked(false);
+    setLocked(false);
   };
 
   return (
@@ -124,6 +208,7 @@ const Review6_Page2_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -136,206 +221,196 @@ const Review6_Page2_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">E Read, look, and match.</h5>
+        <div className="table-wrapper-review4-p1-q3">
+          <h4 className="header-title-page8">
+            E What letter does it begin with? Listen and write{" "}
+            <span style={{ color: "red" }}>✓</span>.
+          </h4>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "30px 0px",
+              width: "100%",
+            }}
+          >
+            <div
+              className="audio-popup-read"
+              style={{
+                width: "50%",
+              }}
+            >
+              <div className="audio-inner player-ui">
+                <audio
+                  ref={audioRef}
+                  src={sound1}
+                  onTimeUpdate={(e) => {
+                    const time = e.target.currentTime;
+                    setCurrent(time);
+                    updateCaption(time);
+                  }}
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                ></audio>
+                {/* Play / Pause */}
+                {/* Play / Pause */}
+                {/* الوقت - السلايدر - الوقت */}
+                <div className="top-row">
+                  <span className="audio-time">
+                    {new Date(current * 1000).toISOString().substring(14, 19)}
+                  </span>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الجمل */}
-            <div className="match-words-row2">
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
-                <div>
-                  <h5 className="h5-review6-p2-q2">
-                    sit
-                    {wrongImages.includes("sit") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="sit"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
+                  <input
+                    type="range"
+                    className="audio-slider"
+                    min="0"
+                    max={duration}
+                    value={current}
+                    onChange={(e) => {
+                      audioRef.current.currentTime = e.target.value;
+                      updateCaption(Number(e.target.value));
+                    }}
+                    style={{
+                      background: `linear-gradient(to right, #430f68 ${
+                        (current / duration) * 100
+                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                    }}
+                  />
 
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                {" "}
-                <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
-                <div>
-                  <h5 className="h5-review6-p2-q2">
-                    pin
-                    {wrongImages.includes("pin") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="pin"
-                    onMouseDown={handleDotDown2}
-                  ></div>
+                  <span className="audio-time">
+                    {new Date(duration * 1000).toISOString().substring(14, 19)}
+                  </span>
                 </div>
-              </div>
+                {/* الأزرار 3 أزرار بنفس السطر */}
+                <div className="bottom-row">
+                  {/* فقاعة */}
+                  <div
+                    className={`round-btn ${showCaption ? "active" : ""}`}
+                    style={{ position: "relative" }}
+                    onClick={() => setShowCaption(!showCaption)}
+                  >
+                    <TbMessageCircle size={36} />
+                    <div
+                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                      style={{ top: "100%", left: "10%" }}
+                    >
+                      {captions.map((cap, i) => (
+                        <p
+                          key={i}
+                          id={`caption-${i}`}
+                          className={`caption-inPopup-line2 ${
+                            activeIndex === i ? "active" : ""
+                          }`}
+                        >
+                          {cap.text}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
 
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                {" "}
-                <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
-                <div>
-                  <h5 className="h5-review6-p2-q2">
-                    wig
-                    {wrongImages.includes("wig") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
+                  {/* Play */}
+                  <button className="play-btn2" onClick={togglePlay}>
+                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+                  </button>
+
+                  {/* Settings */}
+                  <div className="settings-wrapper" ref={settingsRef}>
+                    <button
+                      className={`round-btn ${showSettings ? "active" : ""}`}
+                      onClick={() => setShowSettings(!showSettings)}
+                    >
+                      <IoMdSettings size={36} />
+                    </button>
+
+                    {showSettings && (
+                      <div className="settings-popup">
+                        <label>Volume</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => {
+                            setVolume(e.target.value);
+                            audioRef.current.volume = e.target.value;
+                          }}
+                        />
+                      </div>
                     )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="wig"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
-                <div>
-                  <h5 className="h5-review6-p2-q2">
-                    big
-                    {wrongImages.includes("big") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="big"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
-              </div>
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>5 </span>
-                <div>
-                  <h5 className="h5-review6-p2-q2">
-                    hill
-                    {wrongImages.includes("hill") && (
-                      <span className="error-mark-img-unit6-p5-q2">✕</span>
-                    )}
-                  </h5>
-                  <div
-                    className="dot22-unit6-q2 start-dot22-unit6-q2"
-                    data-word="hill"
-                    onMouseDown={handleDotDown2}
-                  ></div>
-                </div>
+                  </div>
+                </div>{" "}
               </div>
             </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img src={img1} alt="" />
-
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img1"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img2} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img2"
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img src={img3} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img3"
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img src={img4} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img4"
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img src={img5} alt="" />{" "}
-                <div
-                  className="dot22-unit6-q2 end-dot22-unit6-q2"
-                  data-image="img5"
-                ></div>
-              </div>
-            </div>
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
           </div>
+          <table className="shapes-table-wrapper-review8-p2-q2">
+            <thead>
+              <tr>
+                <th
+                  className="transparent-border"
+                  style={{ backgroundColor: "white" }}
+                ></th>
+                {shapesData.map((item) => (
+                  <th key={item.id}>
+                    <img
+                      src={item.img}
+                      alt=""
+                      className="shape-img-wrapper-review4-p1-q3"
+                      style={{ height: "50px", width: "auto" }}
+                    />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {options.map((letter) => (
+                <tr key={letter}>
+                  <td className="img-cell-wrapper-review8-p2-q2">
+                    <strong>{letter}</strong>
+                  </td>
+
+                  {shapesData.map((item) => {
+                    const selected = answers[item.id] === letter;
+                    const isCorrect =
+                      checked && selected && item.correct === letter;
+                    const isWrong =
+                      checked && selected && item.correct !== letter;
+
+                    return (
+                      <td
+                        key={item.id}
+                        className={`cell-wrapper-review4-p1-q3 ${
+                          selected ? "selected-review8-p2-q2" : ""
+                        }`}
+                        onClick={() => handleSelect(item.id, letter)}
+                      >
+                        {selected && (
+                          <span className="correct-mark-review8-p2-q2">✓</span>
+                        )}
+
+                        {isWrong && (
+                          <div className="wrong-badge-review8-p2-q2 ">✕</div>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
       <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLines([]);
-            setWrongImages([]);
-          }}
-          className="try-again-button"
-        >
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button onClick={checkAnswers2} className="check-button2">
+
+        <button onClick={showAnswer} className="show-answer-btn swal-continue">
+          Show Answer
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>
@@ -343,4 +418,4 @@ const Review6_Page2_Q2 = () => {
   );
 };
 
-export default Review6_Page2_Q2;
+export default Review8_Page2_Q2;

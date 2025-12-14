@@ -1,76 +1,94 @@
-import React, { useState, useRef, useEffect } from "react";
-import bat from "../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../assets/unit4/imgs/U4P32ExeA2-03.svg";
-import dad from "../../assets/unit4/imgs/U4P32ExeA2-04.svg";
-import ValidationAlert from "../Popup/ValidationAlert";
-import "./Unit6_Page5_Q3.css";
-const Unit6_Page5_Q3 = () => {
-  const correctAnswers = ["fly a kite", "fish", "ride a bike", "climb a tree"];
-  const [answers, setAnswers] = useState(["", "", "", ""]);
+import React, { useState } from "react";
+import deer from "../../../assets/unit6/imgs/U6P54EXEC-01.svg";
+import ValidationAlert from "../../Popup/ValidationAlert";
+
+const data = [
+  { question: "", correct: "bread" },
+  { question: "", correct: "chicken" },
+  { question: "", correct: "fruit" },
+];
+
+const Unit10_Page5_Q3 = () => {
+  const [answers, setAnswers] = useState(Array(data.length).fill(""));
   const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
   const handleChange = (value, index) => {
+    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+
     const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
+    newAnswers[index] = value;
     setAnswers(newAnswers);
-    setWrongInputs([])
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (answers.some((ans) => ans.trim() === "")) {
-      ValidationAlert.info("Please fill in all the blanks before checking!");
+    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+
+    if (answers.some((a) => a.trim() === "")) {
+      ValidationAlert.info("Please fill in all blanks before checking!");
       return;
     }
 
-    let tempScore = 0;
+    let correctCount = 0;
     let wrong = [];
+
     answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        tempScore++;
+      if (ans.trim().toLowerCase() === data[i].correct.toLowerCase()) {
+        correctCount++;
       } else {
-        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
+        wrong.push(i);
       }
     });
+
     setWrongInputs(wrong);
 
-    const total = correctAnswers.length;
-    const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
+    let color =
+      correctCount === data.length
+        ? "green"
+        : correctCount === 0
+        ? "red"
+        : "orange";
 
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:20px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${data.length}
+        </span>
+      </div>
+    `;
 
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    if (correctCount === data.length) ValidationAlert.success(scoreMessage);
+    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
+    else ValidationAlert.warning(scoreMessage);
   };
 
   const reset = () => {
-    setAnswers(["", "", "", ""]);
+    setAnswers(Array(data.length).fill(""));
     setWrongInputs([]);
+    setShowAnswer(false); // ⭐ إعادة التفعيل الطبيعي
+  };
+
+  // ⭐⭐⭐ SHOW ANSWER FUNCTION
+  const showCorrectAnswers = () => {
+    const correctList = data.map((item) => item.correct);
+    setAnswers(correctList);
+    setWrongInputs([]);
+    setShowAnswer(true);
   };
 
   return (
     <div
-      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -79,103 +97,77 @@ const Unit6_Page5_Q3 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="letter-of-Q">B</span>Read, look, and write.
-        </h5>
-        <div className="row-content10-unit3-page6-q1">
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">1</span>
-              <h6>climb a tree</h6>
-            </div>
-            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 0)}
-                  value={answers[0]}
-                />
-                {wrongInputs.includes(0) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+        <div className="component-wrapper">
+          <h3 className="header-title-page8">
+            <span className="ex-A">B</span> Look and write.
+          </h3>
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">2</span> <h6>fly a kite</h6>
-            </div>
-            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 1)}
-                  value={answers[1]}
-                />{" "}
-                {wrongInputs.includes(1) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+          <div className="content-unit5-p5-q3">
+            <div className="group-input-unit5-p5-q3">
+              {data.map((item, index) => (
+                <div
+                  key={index}
+                  className="question-row"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    margin: "10px",
+                  }}
+                >
+                  <span
+                    className="q-number"
+                    style={{
+                      color: "#0d47a1",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    {index + 1}.
+                  </span>
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">3</span> <h6>fish</h6>
-            </div>
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 2)}
-                  value={answers[2]}
-                />{" "}
-                {wrongInputs.includes(2) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+                  <div className="question-text" style={{ position: "relative" }}>
+                    <input
+                      type="text"
+                      className="q-input"
+                      value={answers[index]}
+                      onChange={(e) => handleChange(e.target.value, index)}
+                    />
 
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">4</span>
-             <h6>ride a bike</h6> 
+                    {wrongInputs.includes(index) && (
+                      <span className="wrong-icon-review6-p1-q3">✕</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-            <img src={dad} alt="" className="q-img-unit3-page6-q1" />
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className="q-input-unit3-page6-q1"
-                  onChange={(e) => handleChange(e.target.value, 3)}
-                  value={answers[3]}
-                />{" "}
-                {wrongInputs.includes(3) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
+
+            <img
+              src={deer}
+              className="shape-img-unit5-p5-q3"
+              alt=""
+              style={{ height: "200px", width: "auto" }}
+            />
           </div>
         </div>
       </div>
+
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
+
+        {/* ⭐ زر الشو أنسر */}
+        <button className="show-answer-btn swal-continue" onClick={showCorrectAnswers}>
+          Show Answer 
+        </button>
+
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answers ✓
         </button>
       </div>
     </div>
   );
 };
 
-export default Unit6_Page5_Q3;
+export default Unit10_Page5_Q3;

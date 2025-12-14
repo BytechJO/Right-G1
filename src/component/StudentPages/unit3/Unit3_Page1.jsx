@@ -8,10 +8,10 @@ import Unit3_Page1_Vocab from "./Unit3_Page1_Vocab";
 import Unit3_Page1_Read from "./Unit3_Pag1_Read";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
+import sound1 from "../../../assets/unit3/sound3/U3P22VOC-01.mp3";
+import sound2 from "../../../assets/unit3/sound3/U3P22VOC-02.mp3";
+import sound3 from "../../../assets/unit3/sound3/U3P22VOC-03.mp3";
+import sound7 from "../../../assets/unit3/sound3/U3P22VOC-07.mp3";
 
 const Unit3_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -54,7 +54,7 @@ const Unit3_Page1 = ({ openPopup }) => {
     { x1: 23.5, y1: 12.23, x2: 70.9, y2: 33.4, sound: 1, isPrimary: false },
 
     // // // الصوت الثاني – الأساسية
-    { x1: 45.14, y1: 52.67, sound: 2, isPrimary: true },
+    { x1: 45.6, y1: 52.8, sound: 2, isPrimary: true },
 
     // // // الصوت الثاني – الإضافية
     { x1: 50.23, y1: 42.8, x2: 71.8, y2: 57.9, sound: 2, isPrimary: false },

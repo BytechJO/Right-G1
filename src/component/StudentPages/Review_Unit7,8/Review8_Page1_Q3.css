@@ -14,3 +14,10 @@
   font-weight: bold;
   border: 2px solid white;
 }
+
+.start-dot22-review8-p1-q3 {
+  position: absolute !important;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+}

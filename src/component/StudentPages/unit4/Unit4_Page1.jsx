@@ -7,13 +7,13 @@ import Unit4_Page1_find from "./Unit4_Page1_find";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
+import sound1 from "../../../assets/unit4/sounds/U4P28VOC-01.mp3";
+import sound2 from "../../../assets/unit4/sounds/U4P28VOC-02.mp3";
+import sound3 from "../../../assets/unit4/sounds/U4P28VOC-03.mp3";
+import sound4 from "../../../assets/unit4/sounds/U4P28VOC-04.mp3";
+import sound5 from "../../../assets/unit4/sounds/U4P28VOC-05.mp3";
+import sound6 from "../../../assets/unit4/sounds/U4P28VOC-06.mp3";
+import sound7 from "../../../assets/unit4/sounds/U4P28VOC-07.mp3";
 
 import Unit4_Page1_Read from "./Unit4_Pag1_Read";
 const Unit4_Page1 = ({ openPopup }) => {
@@ -60,7 +60,7 @@ const Unit4_Page1 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 25.7, y1: 28.66, sound: 1, isPrimary: true },
+    { x1: 25.9, y1: 28.9, sound: 1, isPrimary: true },
     // // // // الصوت الأول – منطقة إضافية
     { x1: 25.2, y1: 20.18, x2: 36.2, y2: 28.9, sound: 1, isPrimary: false },
 
@@ -70,17 +70,17 @@ const Unit4_Page1 = ({ openPopup }) => {
     { x1: 70, y1: 45.4, x2: 75.4, y2: 57.9, sound: 2, isPrimary: false },
 
     // // // // الصوت الثالث – الأساسية
-    { x1: 62.0, y1: 69.09, sound: 3, isPrimary: true },
+    { x1: 62.4, y1: 69.09, sound: 3, isPrimary: true },
     // // // // الصوت الثالث – الإضافية
     { x1: 59.06, y1: 62.8, x2: 68.33, y2: 73.49, sound: 3, isPrimary: false },
 
     // // // // الصوت الرابع – الأساسية
-    { x1: 92.5, y1: 70.6, sound: 4, isPrimary: true },
+    { x1: 92.75, y1: 70.8, sound: 4, isPrimary: true },
     // // // // الصوت الرابع – الإضافية
     { x1: 87.9, y1: 64.3, x2: 99.4, y2: 75.03, sound: 4, isPrimary: false },
 
     // // // // الصوت الخامس – الأساسية
-    { x1: 54.0, y1: 51.49, sound: 5, isPrimary: true },
+    { x1: 54.3, y1: 51.7, sound: 5, isPrimary: true },
     // // // // الصوت الخامس – الإضافية
     { x1: 41.6, y1: 41.5, x2: 59.06, y2: 54.7, sound: 5, isPrimary: false },
 

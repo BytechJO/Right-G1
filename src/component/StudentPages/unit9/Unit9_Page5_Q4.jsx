@@ -1,82 +1,60 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./Unit5_Page5_Q4.css";
-import ValidationAlert from "../Popup/ValidationAlert";
-import img from "../../assets/unit5/imgs/U5P44EXEC.svg"
-const Unit5_Page5_Q4 = () => {
+import React, { useState } from "react";
+import "./Unit9_Page5_Q4.css";
+import ValidationAlert from "../../Popup/ValidationAlert";
+import img from "../../../assets/unit5/imgs/U5P44EXEC.svg";
+const Unit9_Page5_Q4 = () => {
   const data = [
-    { letter: "a", number: 1 },
-    { letter: "b", number: 2 },
-    { letter: "c", number: 3 },
-    { letter: "d", number: 4 },
-    { letter: "e", number: 5 },
-    { letter: "f", number: 6 },
-    { letter: "g", number: 7 },
-    { letter: "h", number: 8 },
-    { letter: "i", number: 9 },
-    { letter: "j", number: 10 },
-    { letter: "k", number: 11 },
-    { letter: "l", number: 12 },
-    { letter: "m", number: 13 },
-    { letter: "n", number: 14 },
-    { letter: "o", number: 15 },
-    { letter: "p", number: 16 },
-    { letter: "q", number: 17 },
-    { letter: "r", number: 18 },
-    { letter: "s", number: 19 },
-    { letter: "t", number: 20 },
-    { letter: "u", number: 21 },
-    { letter: "v", number: 22 },
-    { letter: "w", number: 23 },
-    { letter: "x", number: 24 },
-    { letter: "y", number: 25 },
-    { letter: "z", number: 26 },
+    { letter: "a", number: 1 }, { letter: "b", number: 2 }, { letter: "c", number: 3 },
+    { letter: "d", number: 4 }, { letter: "e", number: 5 }, { letter: "f", number: 6 },
+    { letter: "g", number: 7 }, { letter: "h", number: 8 }, { letter: "i", number: 9 },
+    { letter: "j", number: 10 }, { letter: "k", number: 11 }, { letter: "l", number: 12 },
+    { letter: "m", number: 13 }, { letter: "n", number: 14 }, { letter: "o", number: 15 },
+    { letter: "p", number: 16 }, { letter: "q", number: 17 }, { letter: "r", number: 18 },
+    { letter: "s", number: 19 }, { letter: "t", number: 20 }, { letter: "u", number: 21 },
+    { letter: "v", number: 22 }, { letter: "w", number: 23 }, { letter: "x", number: 24 },
+    { letter: "y", number: 25 }, { letter: "z", number: 26 },
   ];
 
   const questionGroups = [
-    [23, 8, 1, 20, 19], // __what's_____
-    [20, 8, 9, 19], // this
+     [23, 8, 1, 20], // __what's_____
+    [4, 15], // this
+    [25, 15, 21],
+    [12, 9, 11, 5],
   ];
-  const [bigInput, setBigInput] = useState("");
-  const [bigInputWrong, setBigInputWrong] = useState(false);
-  const [wrongInputs, setWrongInputs] = useState([]); // ⭐ تم التعديل هون
+
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
   const [letters, setLetters] = useState(
     questionGroups.map((group) => group.map(() => ""))
   );
-  const handleInputChange = (value, groupIndex, letterIndex) => {
+
+  const handleInputChange = (value, g, l) => {
+    if (showAnswer) return; // ⭐ منع الكتابة في وضع Show Answer
+
     const updated = [...letters];
-    updated[groupIndex][letterIndex] = value.toLowerCase();
+    updated[g][l] = value.toLowerCase();
     setLetters(updated);
+    setWrongInputs([]);
   };
 
   const formedWords = letters.map((group) => group.join(""));
-  const fullSentence = "This is a ruler";
 
   const handleCheckAnswers = () => {
-    // 1️⃣ التحقق من وجود فراغات
+        if (showAnswer) return; // ⭐ منع الكتابة في وضع Show Answer
+
     const hasEmpty = letters.some((group) =>
       group.some((letter) => letter === "")
     );
+
     if (hasEmpty) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please complete all fields before checking."
-      );
+      ValidationAlert.info("Oops!", "Please complete all fields before checking.");
       return;
     }
 
-    // 2️⃣ حساب عدد الصحيحة
     let correctCount = 0;
-    let total = letters.flat().length + 1; // +1 for big input
-    let wrong = []; // ⭐ تم التعديل هون
-    const isBigCorrect =
-      bigInput.trim().toLowerCase() === fullSentence.trim().toLowerCase();
+    let total = letters.flat().length;
+    let wrong = [];
 
-    setBigInputWrong(!isBigCorrect);
-
-    // 🔥 أضيفي هاي
-    if (isBigCorrect) {
-      correctCount++; // add point for the big sentence
-    }
     for (let g = 0; g < letters.length; g++) {
       for (let l = 0; l < letters[g].length; l++) {
         const letter = letters[g][l];
@@ -85,61 +63,55 @@ const Unit5_Page5_Q4 = () => {
         if (correctNum === questionGroups[g][l]) {
           correctCount++;
         } else {
-          wrong.push(`${g}-${l}`); // ⭐ تم التعديل هون
+          wrong.push(`${g}-${l}`);
         }
       }
     }
-    setWrongInputs(wrong); // ⭐ تم التعديل هون
-    // 3️⃣ تحديد اللون حسب السكور
+
+    setWrongInputs(wrong);
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    // 4️⃣ رسالة النتيجة
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    // 🔹 3) التحقق من الجملة الكبيرة
-    const correctSentence = fullSentence.trim().toLowerCase(); // from small inputs
+    if (correctCount === total) ValidationAlert.success(scoreMessage);
+    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
+    else ValidationAlert.warning(scoreMessage);
+  };
 
-    // الآن الشرط رح يكون صحيح
-    if (correctCount === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+  // ⭐⭐⭐ SHOW ANSWER FUNCTION
+  const handleShowAnswer = () => {
+    const filled = questionGroups.map((group) =>
+      group.map((num) => {
+        const match = data.find((d) => d.number === num);
+        return match ? match.letter : "";
+      })
+    );
+
+    setLetters(filled);
+    setWrongInputs([]);
+    setShowAnswer(true);
   };
 
   return (
-    <div
-      className="unit3-q4-container3"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
+    <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div className="div-forall" style={{ width: "60%" }}>
+
         <h5 className="header-title-page8">
-          <span className="letter-of-Q"> C</span>Answer the question..
+          <span className="ex-A"> C</span>Write the sentence.
         </h5>
 
+   
+
+          {/* Alphabet Table */}
+      
         <div className="unit3-q4-alphabet-box">
           <div className="unit3-q4-row">
             {data.map((c, i) => (
@@ -150,87 +122,75 @@ const Unit5_Page5_Q4 = () => {
                   </span>
                 </div>
                 <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell number">
+                  <span key={i} className="unit3-q4-cell number1">
                     {c.number}
                   </span>
                 </div>
               </div>
             ))}
           </div>
+          {/* Inputs */}
+          <div className="words">
+            {questionGroups.map((group, g) => (
+              <div className="word-group" key={g}>
+                {group.map((num, l) => (
+                  <div className="input-h6" key={l}>
+                    <h6 className="unit1-page8-q4-nums"style={{ fontSize: "20px" }}>{num}</h6>
 
-          <div className="unit3-q4-words">
-            {questionGroups.map((group, groupIndex) => (
-              <div className="unit3-q4-word-group" key={groupIndex}>
-                {group.map((num, letterIndex) => (
-                  <div className="unit3-q4-input-h6" key={letterIndex}>
-                    <h6 style={{ fontSize: "20px" }}>{num}</h6>
-                    <div className="unit3-q4-input-wrapper">
-                      {" "}
-                      {/* ⭐ تم التعديل هون */}
+                    <div className="input-wrapper">
                       <input
-                        className="unit3-q4-inputs"
+                        className="inputs"
                         maxLength={1}
-                        value={letters[groupIndex][letterIndex]}
-                        onChange={(e) =>
-                          handleInputChange(
-                            e.target.value,
-                            groupIndex,
-                            letterIndex
-                          )
-                        }
+                        value={letters[g][l]}
+                        onChange={(e) => handleInputChange(e.target.value, g, l)}
                       />
-                      {wrongInputs.includes(`${groupIndex}-${letterIndex}`) && (
-                        <span className="error-mark1-unit4-page5-q4">✕</span> // ⭐ تم التعديل هون
+
+                      {wrongInputs.includes(`${g}-${l}`) && (
+                        <span className="error-mark1">✕</span>
                       )}
                     </div>
+
                   </div>
                 ))}
               </div>
             ))}
-            <img
-              src={img}
-              style={{ height: "100px", width: "130px" }}
-            />
+
           </div>
 
-          <div className="unit3-q4-sentence">
-            <div
-              className="big-answer-wrapper"
-              style={{ position: "relative", marginTop: "30px" }}
-            >
-              <input
-                type="text"
-                className="big-answer-input"
-                placeholder="Write the answer here..."
-                value={bigInput}
-                onChange={(e) => setBigInput(e.target.value.toLowerCase())}
-              />
-
-              {bigInputWrong && (
-                <span className="error-mark1-unit4-page5-q4">✕</span>
-              )}
-            </div>
+          {/* Sentence */}
+          <div className="sentence">
+            {formedWords.map((word, i) => (
+              <span key={i} className="sentence-word">{word}</span>
+            ))}
           </div>
         </div>
+
       </div>
+
+      {/* Buttons */}
       <div className="action-buttons-container">
         <button
           onClick={() => {
-            setLetters(questionGroups.map((group) => group.map(() => "")));
+            setLetters(questionGroups.map((g) => g.map(() => "")));
             setWrongInputs([]);
-            setBigInputWrong(false);
-            setBigInput("");
+            setShowAnswer(false);
           }}
           className="try-again-button"
         >
           Start Again ↻
         </button>
+
+        <button onClick={handleShowAnswer} className="show-answer-btn swal-continue">
+          Show Answer
+        </button>
+
         <button onClick={handleCheckAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>
+
     </div>
   );
 };
 
-export default Unit5_Page5_Q4;
+export default Unit9_Page5_Q4;

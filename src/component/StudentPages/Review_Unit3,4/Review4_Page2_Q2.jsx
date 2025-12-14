@@ -21,7 +21,7 @@ const Review4_Page2_Q2 = () => {
     { img: box, correct: "f" },
     { img: bucket, correct: "v" },
   ];
-  const stopAtSecond = 6;
+  const stopAtSecond = 9.02;
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -41,18 +41,16 @@ const Review4_Page2_Q2 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 9.02,
+      text: "Page 37, Exercise F. What is the beginning sound or the word? Listen and circle. ",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 9.04,
+      end: 10.14,
+      text: "Farm.",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 10.16, end: 11.08, text: "Fever." },
+    { start: 11.1, end: 12.19, text: "Valley." },
   ];
 
   // ================================
@@ -123,7 +121,7 @@ const Review4_Page2_Q2 = () => {
   };
 
   const checkAnswers = () => {
-     if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
+    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
       return;
@@ -187,7 +185,8 @@ const Review4_Page2_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
