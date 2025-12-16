@@ -21,42 +21,42 @@ const Unit8_Reading_P1 = ({ openPopup }) => {
     {
       start: 5.07,
       end: 16.03,
-      text: "Harley has a pencil and wants to draw a picture. Tom finds an eraser. He asks if the eraser is Harley's. It's not, it's Kevin's. ",
+      text: "It is a good morning. Jack is at the park.He sees Hansel and Tilly.",
     },
     {
       start: 16.07,
       end: 22.17,
-      text: "Harley likes to draw nice pictures. Tom watches. What is Harley going to draw? ",
+      text: "Hansel shows Jack the bunny. Jack likes Tilly. She is soft and friendly.",
     },
     {
       start: 22.2,
       end: 27.11,
-      text: "Harley starts to draw. Kevin watches. What is the picture? ",
+      text: "It is a sunny day! Jack tells Hansel that he likes the park. Hansel tells Jack about Tilly.",
     },
     {
       start: 27.14,
       end: 38.11,
-      text: "Harley shows the picture to Kevin. Kevin doesn't know what it is. Harley tells him it is a red mountain, and it's in the shape of a triangle. ",
+      text: "Tilly is cute. Jack asks to play with her. Tilly can play games. She is a fun bunny.",
     },
     {
       start: 38.14,
       end: 45.17,
-      text: "Now Tom finds a book. Is it Kevin's book? No, it's not Kevin's book. ",
+      text: "Jack and Tilly play a game. What can Tilly do? Jack can touch his nose. Tilly can’t touch her nose.",
     },
     {
       start: 45.2,
       end: 48.26,
-      text: "Whose book is it? Is it the teacher's book? ",
+      text: "Jack can touch his head. Tilly can touch her head. Tilly is good at games.",
     },
     {
       start: 48.29,
       end: 58.07,
-      text: "Helen comes into the classroom. She asks the boys about her red book. Tom gives Helen her red book. She is so happy. ",
+      text: "Tilly is bored. Can she do other things? Jack wants to play more games.",
     },
     {
       start: 58.1,
       end: 65.11,
-      text: "Now Tom wants to draw. Where's his pen? Oh no! Lolo has it.",
+      text: "Tilly wants to play in the park. She likes to hop on Jack’s feet! Ouch! Tilly hops fast!",
     },
   ];
   const clickableAreas = [

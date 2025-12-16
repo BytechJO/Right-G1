@@ -5,7 +5,7 @@ import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
 import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
 import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6P50EXEA1.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";

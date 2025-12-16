@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import find_img from "../../../assets/img_unit2/imgs/02-03 New copy.jpg";
+import find_img from "../../../assets/unit7/img/U7P58-59.jpg";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import MySVG from "../../../assets/img_unit2/imgs/U2P10 highlight.svg";
+import MySVG from "../../../assets/unit7/img/U7P58 highlight.svg";
 
 const Unit7_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
@@ -10,9 +10,9 @@ const Unit7_Page1_find = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 18,
-    y1: 69,
-    x2: 24,
+    x1: 20,
+    y1: 64,
+    x2: 28,
     y2: 74,
   };
 
@@ -20,6 +20,7 @@ const Unit7_Page1_find = () => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+console.log(xPercent,yPercent);
 
     setClickedPoint({
       x: xPercent,
@@ -78,7 +79,8 @@ const Unit7_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the boat in the picture?
+            I need your help. Can you help me find the thirsty cat in the
+            picture?
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -118,12 +120,12 @@ const Unit7_Page1_find = () => {
               alt="answer highlight"
               style={{
                 position: "absolute",
-                top: `67%`,
-                left: `18.5%`,
-                height: `7%`,
+                top: `54%`,
+                left: `16.5%`,
+                height: `24%`,
                 pointerEvents: "none",
               }}
-            /> 
+            />
           )}
         </div>
       </div>

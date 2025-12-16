@@ -379,7 +379,7 @@ export default function Book() {
     { id: 9, label: "Review 5 and 6", start: 52, pages: 6 },
     { id: 10, label: "Unit 7", start: 58, pages: 6 },
     { id: 11, label: "Unit 8", start: 64, pages: 6 },
-    { id: 12, label: "Review 5 and 6", start: 70, pages: 6 },
+    { id: 12, label: "Review 7 and 8", start: 70, pages: 6 },
     { id: 13, label: "Unit 9", start: 76, pages: 6 },
     { id: 14, label: "Unit 10", start: 82, pages: 6 },
   

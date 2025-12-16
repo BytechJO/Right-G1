@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Unit7_Page5_Q4.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img from "../../../assets/unit5/imgs/U5P44EXEC.svg";
+import img from "../../../assets/unit7/img/U7P63EXEC.svg";
 const Unit7_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },

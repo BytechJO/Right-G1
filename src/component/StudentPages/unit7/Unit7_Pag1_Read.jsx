@@ -3,10 +3,10 @@ import ball from "../../../assets/unit7/sound/Pg58_1.3_Adult Lady.mp3";
 import boy from "../../../assets/unit7/sound/Pg58_1.4_Adult Lady.mp3";
 import bSound from "../../../assets/unit7/sound/Pg58_1.1_Adult Lady.mp3";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
-import img1 from "../../../assets/img_unit2/imgs/b.svg";
-import img2 from "../../../assets/img_unit2/imgs/bird.svg";
-import img3 from "../../../assets/img_unit2/imgs/ball.svg";
-import img4 from "../../../assets/img_unit2/imgs/boy.svg";
+import img1 from "../../../assets/unit7/img/h.svg";
+import img2 from "../../../assets/unit7/img/hand.svg";
+import img3 from "../../../assets/unit7/img/hat.svg";
+import img4 from "../../../assets/unit7/img/house.svg";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import longAudio from "../../../assets/img_unit2/sounds-unit2/pg10-instruction1-adult-lady_869fcbJa.mp3";
 

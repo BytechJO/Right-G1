@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park3.jpg";
 import "./Unit6_Page3.css";
-import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit3/sound3/U3P24RG1.mp3";
+import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit6/sounds/U6P48RG.mp3";
 import sound1 from "../../../assets/unit6/sounds/Pg48_1.1_Adult Lady.mp3";
 import sound2 from "../../../assets/unit6/sounds/Pg48_1.2_Adult Lady.mp3";
 import sound3 from "../../../assets/unit6/sounds/Pg48_1.3_Adult Lady.mp3";
@@ -13,29 +13,32 @@ import sound8 from "../../../assets/unit6/sounds/Pg48_5.1_Jack.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import video from "../../../assets/unit3/sound3/p24.mp4";
+import video from "../../../assets/unit6/sounds/p48.mp4";
 const Unit6_Page3 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 4.1, text: "Page 24, Exercise 1. Right Grammar." },
-    { start: 4.13, end: 5.01, text: " Listen," },
+    { start: 0, end: 4.18, text: "Page 48 exercise one, Right Grammar," },
+    { start: 4.20, end: 6.09, text: "I can swim. " },
     {
-      start: 5.03,
-      end: 6.02,
-      text: "quiet,",
+      start: 6.11,
+      end: 8.23,
+      text: "They can't fly a kite",
     },
     {
-      start: 6.05,
-      end: 7.22,
-      text: "make a line.",
+      start: 8.25,
+      end: 10.22,
+      text: "He can ride a bike. ",
     },
-    { start: 7.25, end: 9.02, text: "Listen," },
-    { start: 9.06, end: 10.04, text: "quiet, " },
-    { start: 10.07, end: 11.26, text: "make a line." },
+    { start: 10.25, end: 13.10, text: "It can't climb a tree, " },
+    { start: 13.13, end: 16.02, text: "it can't climb a tree. " },
+    { start: 16.05, end: 18.08, text: "He can ride a bike," },
+    { start: 18.10, end: 20.16, text: "they can't fly a kite." },
+    { start: 20.18, end: 22.10, text: "I can swim." },
   ];
+
   const clickableAreas = [
     { x1: 8.0, y1: 11.0, x2: 24.0, y2: 14.3, sound: sound1 },
     { x1: 8.0, y1: 15.7, x2: 29.4, y2: 19.4, sound: sound2 },

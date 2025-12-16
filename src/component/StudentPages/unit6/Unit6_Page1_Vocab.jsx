@@ -13,14 +13,15 @@ import num7 from "../../../assets/unit3/imgs3/Num7.svg";
 import num8 from "../../../assets/unit5/imgs/Num8.svg";
 import num9 from "../../../assets/unit6/imgs/Num9.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
-import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
-import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
-import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6P46VOC-01.mp3";
+import sound2 from "../../../assets/unit6/sounds/U6P46VOC-02.mp3";
+import sound3 from "../../../assets/unit6/sounds/U6P46VOC-03.mp3";
+import sound4 from "../../../assets/unit6/sounds/U6P46VOC-04.mp3";
+import sound5 from "../../../assets/unit6/sounds/U6P46VOC-05.mp3";
+import sound6 from "../../../assets/unit6/sounds/U6P46VOC-06.mp3";
+import sound7 from "../../../assets/unit6/sounds/U6P46VOC-07.mp3";
+import sound8 from "../../../assets/unit6/sounds/U6P46VOC-08.mp3";
+import sound9 from "../../../assets/unit6/sounds/U6P46VOC-09.mp3"
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
@@ -149,7 +150,7 @@ const Unit6_Page1_Vocab = () => {
     }
   };
 
-  const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
+  const nums = [num1, num2, num3, num4, num5, num6, num7, num8,num9];
   const wordAudios = [
     sound1,
     sound2,
@@ -159,6 +160,7 @@ const Unit6_Page1_Vocab = () => {
     sound6,
     sound7,
     sound8,
+    sound9
   ];
   const playWordAudio = (index) => {
     // أوقفي الأوديو الرئيسي
@@ -362,7 +364,7 @@ const Unit6_Page1_Vocab = () => {
           <img
             key={i}
             src={num}
-            id={`num-${i + 1}-unit4`}
+            id={`num-${i + 1}-unit6`}
             className={`num-img ${
               (activeIndex2 === i && current >= 2.8) || clickedIndex === i
                 ? "active"
@@ -371,8 +373,7 @@ const Unit6_Page1_Vocab = () => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
+      
             }}
           />
         ))}

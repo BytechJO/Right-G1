@@ -22,9 +22,9 @@ import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import "./Unit5_Page2.css";
-import sound2_3 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2_5 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound2_6 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound2_3 from "../../../assets/unit5/sounds/U5P40-03.mp3";
+import sound2_5 from "../../../assets/unit5/sounds/U5P40-05.mp3";
+import sound2_6 from "../../../assets/unit5/sounds/U5P40-06.mp3";
 
 const Unit5_Page2 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -60,36 +60,37 @@ const Unit5_Page2 = ({ openPopup }) => {
     },
   ];
   const captions = [
-    { start: 0, end: 3.17, text: "Page 23. Listen, read, and repeat." },
+    { start: 0, end: 4.14, text: "Page 41. Listen, read, and repeat. " },
     {
-      start: 3.19,
-      end: 4.29,
-      text: "My favorite subject is science. ",
+      start:4.16,
+      end: 6.11,
+      text: "Do you like your class? " ,
     },
     {
-      start: 4.31,
-      end: 7.03,
-      text: "My favorite subject is art.",
+      start: 6.13,
+      end: 7.8,
+      text:  "I like my class. ",
     },
   ];
+
   const captions2 = [
-    { start: 0, end: 3.18, text: "Page 23. Listen and read along." },
-    { start: 3.2, end: 7.01, text: "Short A. Bat, cap, dad." },
+    { start: 0, end: 4, text: "Page 41. Listen and read along." },
+    { start: 4.2, end: 8.0, text: "K, key, kite, kitchen." },
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 12.15, y1: 53.86, sound: 1, isPrimary: true },
+    { x1: 12.5, y1: 54.1, sound: 1, isPrimary: true },
 
     // // الصوت الأول – منطقة إضافية
     { x1: 8.7, y1: 50.6, x2: 23.3, y2: 58, sound: 1, isPrimary: false },
 
     // // الصوت الثاني – الأساسية
-    { x1: 11.7, y1: 29.5, sound: 2, isPrimary: true },
+    { x1: 11.7, y1: 29.8, sound: 2, isPrimary: true },
 
     // // الصوت الثاني – الإضافية
     { x1: 11.29, y1: 24.4, x2: 18.4, y2: 33.55, sound: 2, isPrimary: false },
     // // الصوت الثاني – الأساسية
-    { x1: 14.7, y1: 38.8, sound: 3, isPrimary: true },
+    { x1: 14.8, y1: 38.9, sound: 3, isPrimary: true },
 
     // // الصوت الثاني – الإضافية
     { x1: 13.44, y1: 37.10, x2: 18.3, y2: 43.37, sound: 3, isPrimary: false },
@@ -214,7 +215,7 @@ const Unit5_Page2 = ({ openPopup }) => {
               <FourImagesWithAudio
                 images={[read, repeat1, repeat2]}
                 audioSrc={CD21_Pg23_Instruction1_AdultLady}
-                checkpoints={[0, 4.6, 7.14]}
+                checkpoints={[0, 4.6, 7.03]}
                 popupOpen={true}
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}

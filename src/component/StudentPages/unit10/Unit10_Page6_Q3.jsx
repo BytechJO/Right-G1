@@ -19,10 +19,18 @@ const Unit10_Page6_Q3 = () => {
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
 
   const normalize = (str) => str.toLowerCase().replace(/[-_]/g, " ").trim();
 
   const checkAnswer = () => {
+    // 1️⃣ لازم يداير على صورة
+    if (!selectedImage) {
+      ValidationAlert.info("Please circle one picture first!");
+      return;
+    }
+
+    // 2️⃣ لازم يكتب
     if (answer.trim() === "") {
       ValidationAlert.info("Please write an answer!");
       return;
@@ -30,30 +38,36 @@ const Unit10_Page6_Q3 = () => {
 
     const normalizedAnswer = normalize(answer);
     const validAnswers = items.map((item) => normalize(item.value));
+    const normalizedSelected = normalize(selectedImage);
+
+    // 3️⃣ لازم الكلمة تكون من الخيارات فقط
+    if (!validAnswers.includes(normalizedAnswer)) {
+      ValidationAlert.error(
+        "Your answer must be one of these words:<br/>milk, bread, apple, ice cream, chicken"
+      );
+      return;
+    }
 
     setChecked(true);
 
     let score = 0;
 
-    if (validAnswers.includes(normalizedAnswer)) {
+    // 4️⃣ لازم المكتوب يطابق الصورة المتداير عليها
+    if (normalizedAnswer === normalizedSelected) {
       score = 1;
     }
-
+    setIsCorrect(score === 1);
     const color = score === 1 ? "green" : "red";
 
     const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${score} / 1
-        </span>
-      </div>
-    `;
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color};font-weight:bold">
+        Score: ${score} / 1
+      </span>
+    </div>
+  `;
 
-    if (score === 1) {
-      ValidationAlert.success(msg);
-    } else {
-      ValidationAlert.error(msg);
-    }
+    score === 1 ? ValidationAlert.success(msg) : ValidationAlert.error(msg);
   };
 
   const reset = () => {
@@ -121,7 +135,9 @@ const Unit10_Page6_Q3 = () => {
             disabled={checked}
           />
 
-          {checked && <div className="wrong-mark-unit10-p6-q3">✕</div>}
+          {checked && isCorrect === false && (
+            <div className="wrong-mark-unit10-p6-q3">✕</div>
+          )}
           <span>.</span>
         </div>
       </div>

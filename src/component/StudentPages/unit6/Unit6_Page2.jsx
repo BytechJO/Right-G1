@@ -21,9 +21,9 @@ import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import sound2_2 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2_6 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound2_9 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound2_2 from "../../../assets/unit6/sounds/U6P46VOC-02.mp3";
+import sound2_6 from "../../../assets/unit6/sounds/U6P46VOC-06.mp3";
+import sound2_9 from "../../../assets/unit6/sounds/U6P46VOC-09.mp3"
 
 import "./Unit6_Page2.css";
 const Unit6_Page2 = ({ openPopup }) => {

@@ -1,6 +1,6 @@
 import page_1 from "../../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park.jpg";
 import "./Unit6_Page1.css";
-import Pg22_U3_Intro_AdultLady from "../../../assets/unit6/sounds/CD3.Pg56_Reading1_Adult Lady.mp3";
+import Pg22_U3_Intro_AdultLady from "../../../assets/unit6/sounds/U6P46VOC.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import Unit6_Page1_find from "./Unit6_Page1_find";
 import Unit6_Page1_Vocab from "./Unit6_Page1_Vocab";
@@ -8,45 +8,51 @@ import Unit6_Page1_Read from "./Unit6_Pag1_Read";
 import { useState, useRef } from "react";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6P46VOC-01.mp3";
+
+import sound3 from "../../../assets/unit6/sounds/U6P46VOC-03.mp3";
+import sound4 from "../../../assets/unit6/sounds/U6P46VOC-04.mp3";
+import sound5 from "../../../assets/unit6/sounds/U6P46VOC-05.mp3";
+
+import sound7 from "../../../assets/unit6/sounds/U6P46VOC-07.mp3";
+import sound8 from "../../../assets/unit6/sounds/U6P46VOC-08.mp3";
+
 const Unit6_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 4.02, text: "Page 22, unit 3. Let's go to school. " },
-    { start: 4.05, end: 7.11, text: "Page 22, unit 3 vocabulary. " },
-    { start: 7.14, end: 9.24, text: "1.	numbers." },
-    { start: 9.27, end: 12.16, text: "2.	close your book." },
-    { start: 12.2, end: 15.12, text: "3.	open your book. " },
-    { start: 15.15, end: 18.12, text: "4.	make a line. " },
-    { start: 18.15, end: 21.06, text: "5.	listen. " },
-    { start: 21.1, end: 23.25, text: "6.	quiet." },
-    { start: 23.29, end: 27.16, text: "7.	take out your pencil. " },
-    { start: 27.2, end: 31.15, text: "Page 22. Listen and read along." },
-    { start: 31.19, end: 35.18, text: "Short A. Ant, pan, rat. " },
-    { start: 35.21, end: 38.11, text: "Page 23, come and sing. " },
+    { start: 0, end: 5.02, text: "Page 46, Unit 6. Can we go to the park? " },
+    { start: 5.05, end: 8.13, text: "Page 46, Unit 6, Vocabulary" },
+    { start: 8.15, end: 11.08, text: "1. Fly a kite." },
+    { start: 11.10, end: 13.23, text: "2. Play the violin." },
+    { start: 13.25, end: 16.23, text: "3. Ride a bike." },
+    { start: 16.25, end: 19.25, text: "4. Ride a scooter. " },
+    { start: 19.27, end: 22.29, text: "5. Feed the birds." },
+    { start: 22.31, end: 26.02, text: "6. Climb a tree. " },
+    { start: 26.05, end: 28.17, text: "7. Fish. " },
+    { start: 28.19, end: 31.05, text: "8. Paint a picture." },
+    { start: 31.08, end: 33.21, text: "9. Swim. " },
+    { start: 33.25, end: 37.22, text: "Page 46, Listen and read along. " },
     {
-      start: 38.15,
-      end: 49.8,
-      text: "I love school. We open our books. We make a line. We do many things. My teacher plays songs. We listen. ",
+      start: 37.25,
+      end: 42.20,
+      text: "Short I. Sit.Hill. Pin. ",
     },
-    { start: 49.82, end: 53.01, text: "Page 23. Listen, read, and repeat. " },
+    { start: 42.23, end: 45.25, text: "Page 47, Look at my kite." },
     {
-      start: 53.05,
-      end: 56.26,
-      text: "My favorite subject is science. ",
+      start: 45.28,
+      end: 56.00,
+      text: "I can fly a kite. My kite is in the sky. It is colorful.Tilly likes to watch. She can't fly a kite. She can jump. ",
     },
-    { start: 56.3, end: 59.18, text: "My favorite subject is art. " },
-    { start: 59.21, end: 63.21, text: "Page 23. Listen and read along." },
-    { start: 63.24, end: 67.26, text: "Short A. Bat, cap, dad." },
+    { start: 56.03, end: 59.16, text: "Page 47, Listen and read along." },
+    { start: 59.20, end: 62.22, text: " Can you climb a tree? Yes, I can. " },
+    { start: 62.26, end: 66.21, text: "Page 47, Listen and read along." },
+    { start: 66.24, end: 71.05, text: "Short I. Wig. Mitt. Dig." },
   ];
+
+
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 58.84, y1: 24.1, sound: 1, isPrimary: true },
@@ -56,7 +62,7 @@ const Unit6_Page1 = ({ openPopup }) => {
     // // الصوت الثاني – الأساسية
     { x1: 45.6, y1: 49.1, sound: 2, isPrimary: true },
     // // // // // الصوت الثاني – الإضافية
-    { x1: 47.00, y1: 42.71, x2: 60.5, y2: 59.6, sound: 2, isPrimary: false },
+    { x1: 47.0, y1: 42.71, x2: 60.5, y2: 59.6, sound: 2, isPrimary: false },
 
     // // // // // الصوت الثالث – الأساسية
     { x1: 76.3, y1: 37.8, sound: 3, isPrimary: true },

@@ -82,9 +82,25 @@ const Review3_Page1_Q1 = () => {
   };
 
   return (
-    <div className="page8-wrapper">
-      <div className="page8-content">
-        <header className="header-title-page8">A Look and number.</header>
+  <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",padding:"30px"
+      }}
+    >
+      <div
+        className="div-forall"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
+        }}
+      >
+        <h5 className="header-title-page8">A Look and number.</h5>
 
         {/* الصور */}
         <div

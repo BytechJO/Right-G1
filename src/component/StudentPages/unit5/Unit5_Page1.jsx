@@ -8,11 +8,11 @@ import Unit5_Page1_Vocab from "./Unit5_Page1_Vocab";
 import Unit5_Page1_Read from "./Unit5_Pag1_Read";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound1 from "../../../assets/unit5/sounds/U5P40-01.mp3";
+import sound2 from "../../../assets/unit5/sounds/U5P40-02.mp3";
+import sound4 from "../../../assets/unit5/sounds/U5P40-04.mp3";
+import sound7 from "../../../assets/unit5/sounds/U5P40-07.mp3";
+import sound8 from "../../../assets/unit5/sounds/U5P40-08.mp3";
 const Unit5_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
@@ -53,30 +53,30 @@ const Unit5_Page1 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 50.94, y1: 20.52, sound: 1, isPrimary: true },
+    { x1: 51.3, y1: 20.6, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 22.00, y1: 16.23, x2: 71.9, y2: 32.4, sound: 1, isPrimary: false },
 
 // الصوت الثاني – الأساسية
-    { x1: 88.0, y1: 22.89, sound: 2, isPrimary: true },
+    { x1: 88.2, y1: 22.89, sound: 2, isPrimary: true },
 
     // // // // الصوت الثاني – الإضافية
     { x1: 87.5, y1: 13.07, x2: 99.35, y2: 28.47, sound: 2, isPrimary: false },
 
     // // // // الصوت الثالث – الأساسية
-    { x1: 79.3, y1: 32.20, sound: 3, isPrimary: true },
+    { x1: 79.3, y1: 32.7, sound: 3, isPrimary: true },
 
     // // // // الصوت الثالث – الإضافية
     { x1: 76.9, y1: 28.3, x2: 83.4, y2: 37.9, sound: 3, isPrimary: false },
     // // // // الصوت الرابع – الأساسية
-    { x1: 80.5, y1: 47.4, sound: 4, isPrimary: true },
+    { x1: 80.65, y1: 47.6, sound: 4, isPrimary: true },
 
     // // // الصوت الرابع – الإضافية
     { x1: 73, y1: 49.2, x2: 99.4, y2: 56.03, sound: 4, isPrimary: false },
 
     // // // // الصوت الخامس – الأساسية
-    { x1: 45.4, y1: 34.57, sound: 5, isPrimary: true },
+    { x1: 45.65, y1: 34.7, sound: 5, isPrimary: true },
 
     // // // الصوت الخامس – الإضافية
     { x1: 42.9, y1: 34.57, x2: 52.6, y2: 45.23, sound: 5, isPrimary: false },

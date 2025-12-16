@@ -43,18 +43,18 @@ const Unit5_Page5_Q1 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end:5.13,
+      text: "Page 44, Right Activities, Exercise A, Number 1.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 5.15,
+      end: 10.25,
+      text: " Does it begin with G or K? Listen and circle.",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 10.27, end: 13.04, text: "1. Goat" },
+    { start: 13.07, end: 15.10, text: "2. Kangaroo " },
+    { start: 15.12, end: 17.18, text: "3. Kite " },
+    { start: 17.20, end: 20.04, text: "4. Grapes" },
   ];
 
   // ================================
@@ -341,7 +341,7 @@ const Unit5_Page5_Q1 = () => {
                       fontWeight: "700",
                     }}
                   >
-                {index + 1}
+                    {index + 1}
                   </span>
                   <img src={item.img} className="gk-image" />
                 </div>

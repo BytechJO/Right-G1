@@ -18,21 +18,19 @@ const Unit5_Page1_Read = () => {
     new Audio(Pg22_1_4_AdultLady),
   ];
   const captions = [
-   { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
-    { start: 3.07, end: 6.14, text: "B, bird, ball, boy " },
-    
+    { start: 0, end: 3.05, text: "Page 40. Listen and read along" },
+    { start: 3.07, end:7, text: "G, girl, green, garden. " },
   ];
   return (
     <>
-
-         <FourImagesWithAudio
+      <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 3.23, 4.11,5.11,6.20]}
+        checkpoints={[0, 3.23, 4.11, 5.11, 6.2]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
-         captions={captions}
+        captions={captions}
       />
     </>
   );

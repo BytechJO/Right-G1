@@ -33,7 +33,7 @@ const Page9_Q1 = () => {
     <div
       style={{
         display: "flex",
-        marginTop: "30px",
+        // marginTop: "30px",
         justifyContent: "center",
         padding:"30px"
       }}

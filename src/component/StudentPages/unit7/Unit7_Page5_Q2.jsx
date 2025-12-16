@@ -2,13 +2,16 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Unit7_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/unit5/imgs/U5P44EXEA2-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P44EXEA2-02.svg";
-import img3 from "../../../assets/unit5/imgs/U5P44EXEA2-03.svg";
-import img4 from "../../../assets/unit5/imgs/U5P44EXEA2-04.svg";
-import img5 from "../../../assets/unit5/imgs/U5P44EXEA2-05.svg";
-import img6 from "../../../assets/unit5/imgs/U5P44EXEA2-06.svg";
-
+import img1 from "../../../assets/unit7/img/U7P62EXEA2-01.svg";
+import img2 from "../../../assets/unit7/img/U7P62EXEA2-02.svg";
+import img3 from "../../../assets/unit7/img/U7P62EXEA2-03.svg";
+import img4 from "../../../assets/unit7/img/U7P62EXEA2-04.svg";
+import img5 from "../../../assets/unit7/img/U7P62EXEA2-05.svg";
+import img6 from "../../../assets/unit7/img/U7P62EXEA2-06.svg";
+import img7 from "../../../assets/unit7/img/U7P62EXEA2-07.svg";
+import img8 from "../../../assets/unit7/img/U7P62EXEA2-08.svg";
+import img9 from "../../../assets/unit7/img/U7P62EXEA2-09.svg";
+import img10 from "../../../assets/unit7/img/U7P62EXEA2-10.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -21,8 +24,8 @@ const data = [
       { id: 1, src: img1, value: 1 },
       { id: 2, src: img2, value: 2 },
       { id: 3, src: img3, value: 3 },
-      { id: 4, src: img2, value: 4 },
-      { id: 5, src: img3, value: 5 },
+      { id: 4, src: img4, value: 4 },
+      { id: 5, src: img5, value: 5 },
     ],
     correct: [1, 3, 4],
   },
@@ -30,11 +33,11 @@ const data = [
     id: 2,
     letter: "h",
     images: [
-      { id: 1, src: img4, value: 1 },
-      { id: 2, src: img5, value: 2 },
-      { id: 3, src: img6, value: 3 },
-      { id: 4, src: img5, value: 4 },
-      { id: 5, src: img6, value: 5 },
+      { id: 1, src: img6, value: 1 },
+      { id: 2, src: img7, value: 2 },
+      { id: 3, src: img8, value: 3 },
+      { id: 4, src: img9, value: 4 },
+      { id: 5, src: img10, value: 5 },
     ],
     correct: [2, 3, 4],
   },

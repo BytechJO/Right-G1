@@ -149,7 +149,7 @@ const Unit9_Page6_Q1 = () => {
             </span>
             <img src={cap} alt="" className="q-img-unit3-page6-q1" />
 
-            <div className="input-wrapper-review8-p1-q2">
+            <div className="input-wrapper-unit9-page6-q1">
               <span
                 style={{
                   textAlign: "center",

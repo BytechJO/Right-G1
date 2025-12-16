@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../../assets/img_unit2/imgs/bey.jpg";
+import img1 from "../../../assets/unit7/img/U7P63EXEE-01.svg";
+import img2 from "../../../assets/unit7/img/U7P63EXEE-02.svg";
+import img3 from "../../../assets/unit7/img/U7P63EXEE-03.svg";
+import img4 from "../../../assets/unit7/img/U7P63EXEE-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit7_Page6_Q2.css";
 
@@ -236,7 +237,7 @@ const Unit7_Page6_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <img
-                  src={img3}
+                  src={img4}
                   alt=""
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}

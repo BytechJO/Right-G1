@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import backgroundImage from "../../../assets/unit5/imgs/P40-41.jpg";
 import page2_2 from "../../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
-import vocabulary from "../../../assets/unit3/sound3/Pg22_Vocabulary_Adult Lady.mp3";
+import vocabulary from "../../../assets/unit5/sounds/Pg40_Vocabulary_Adult Lady.mp3";
 import { CgPlayPauseO } from "react-icons/cg";
 import num1 from "../../../assets/unit3/imgs3/Num1.svg";
 import num2 from "../../../assets/unit3/imgs3/Num2.svg";
@@ -15,14 +15,14 @@ import { TbMessageCircle } from "react-icons/tb";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
-import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
-import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
-import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
-import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound1 from "../../../assets/unit5/sounds/U5P40-01.mp3";
+import sound2 from "../../../assets/unit5/sounds/U5P40-02.mp3";
+import sound3 from "../../../assets/unit5/sounds/U5P40-03.mp3";
+import sound4 from "../../../assets/unit5/sounds/U5P40-04.mp3";
+import sound5 from "../../../assets/unit5/sounds/U5P40-05.mp3";
+import sound6 from "../../../assets/unit5/sounds/U5P40-06.mp3";
+import sound7 from "../../../assets/unit5/sounds/U5P40-07.mp3";
+import sound8 from "../../../assets/unit5/sounds/U5P40-08.mp3";
 
 const Unit5_Page1_Vocab = () => {
   const audioRef = useRef(null);
@@ -49,16 +49,15 @@ const Unit5_Page1_Vocab = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    {
-      start: 0,
-      end: 3.0,
-      text: "Page 4, Unit 1. Good morning, world.Vocabulary.",
-    },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 0, end: 3.16, text: "Page 40, Unit 5 Vocabulary: " },
+    { start: 3.18, end: 5.26, text: "1.	Board." },
+    { start: 5.28, end: 8.03, text: "2.	Map." },
+    { start: 8.05, end: 10.15, text: "3.	Book." },
+    { start: 10.17, end: 13.12, text: "4.	Globe. " },
+    { start: 13.15, end: 15.22, text: "5.	Poster." },
+    { start: 15.24, end: 18.07, text: "6.	trash bin." },
+    { start: 18.09, end: 20.18, text: "7.	Desk." },
+    { start: 20.2, end: 22.21, text: "8.	Chair." },
   ];
 
   // ================================
@@ -66,14 +65,14 @@ const Unit5_Page1_Vocab = () => {
   // ================================
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
-    { start: 3.9, end: 6.2 }, // party hat
-    { start: 6.3, end: 8.5 }, // jellow
-    { start: 8.6, end: 11.5 }, // cake
-    { start: 11.6, end: 14.6 }, // Hello
-    { start: 14.7, end: 17.2 }, // Good morning
-    { start: 17.3, end: 19.8 },
-    { start: 19.9, end: 23.6 },
-    { start: 23.7, end: 25.6 },
+    { start: 3.18, end: 5.26 },
+    { start: 5.28, end: 8.03 },
+    { start: 8.05, end: 10.15 },
+    { start: 10.17, end: 13.12 },
+    { start: 13.15, end: 15.22 },
+    { start: 15.24, end: 18.07 },
+    { start: 18.09, end: 20.18 },
+    { start: 20.2, end: 22.21 },
   ];
   // ================================
   // ✔ Update caption highlight
@@ -369,8 +368,6 @@ const Unit5_Page1_Vocab = () => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
             }}
           />
         ))}

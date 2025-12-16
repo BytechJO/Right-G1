@@ -1,0 +1,6 @@
+.content-review10-p1-q2 {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    flex-direction: row-reverse;
+}

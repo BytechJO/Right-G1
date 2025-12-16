@@ -1,0 +1,7 @@
+.row-missing {
+    display: flex;
+    /* margin-bottom: 20px; */
+    align-items: baseline;
+    gap: 20px;
+        width: 100%;
+}

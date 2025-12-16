@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
+import bat from "../../../assets/unit7/img/U7P62EXEB-01.svg";
+import cap from "../../../assets/unit7/img/U7P62EXEB-02.svg";
+import ant from "../../../assets/unit7/img/U7P62EXEB-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit7_Page5_Q3.css";
 

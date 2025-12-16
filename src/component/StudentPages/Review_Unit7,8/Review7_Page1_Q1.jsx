@@ -191,6 +191,7 @@ export default function Review7_Page1_Q1() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        padding: "30px",
       }}
     >
       <div

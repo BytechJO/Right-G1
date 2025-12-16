@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit7_Page5_Q1.css";
-import img1 from "../../../assets/unit4/imgs/U4P37EXEG-01.svg";
-import img2 from "../../../assets/unit4/imgs/U4P37EXEG-02.svg";
-import img3 from "../../../assets/unit4/imgs/U4P37EXEG-03.svg";
-import img4 from "../../../assets/unit4/imgs/U4P37EXEG-04.svg";
+import img1 from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
+import img2 from "../../../assets/unit7/img/U7P62EXEA1-02.svg";
+import img3 from "../../../assets/unit7/img/U7P62EXEA1-03.svg";
+import img4 from "../../../assets/unit7/img/U7P62EXEA1-04.svg";
 
 const Unit7_Page5_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
