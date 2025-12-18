@@ -383,7 +383,6 @@ export default function Book() {
     { id: 13, label: "Unit 9", start: 76, pages: 6 },
     { id: 14, label: "Unit 10", start: 82, pages: 6 },
     { id: 15, label: "Review 9 and 10", start: 88, pages: 6 },
-  
   ];
 
   const workbookUnits = [
@@ -392,7 +391,12 @@ export default function Book() {
   ];
 
   const teacherUnits = [
-    { id: 1, label: "Teacher Unit 1", start: 4, pages: teacherPages.length-3 },
+    {
+      id: 1,
+      label: "Teacher Unit 1",
+      start: 4,
+      pages: teacherPages.length - 3,
+    },
   ];
 
   const flashUnits = [
@@ -587,6 +591,7 @@ export default function Book() {
 
       {/* ===================== BOTTOM BAR ===================== */}
       <BottomBar
+        key={pageIndex}
         pageIndex={pageIndex}
         totalPages={pages.length}
         goToIndex={goHome}

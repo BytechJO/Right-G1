@@ -39,6 +39,8 @@ import WB_Unit3_Page6_Q1 from "./Unit3/WB_Unit3_Page6_Q1";
 import WB_Unit3_Page6_Q2 from "./Unit3/WB_Unit3_Page6_Q2";
 import WB_Unit3_Page6_Q3 from "./Unit3/WB_Unit3_Page6_Q3";
 import WB_Unit4_Page1_Q1 from "./Unit4/WB_Unit4_Page1_Q1";
+import WB_Unit4_Page1_Q2 from "./Unit4/WB_Unit4_Page1_Q2";
+import WB_Unit4_Page2_Q1 from "./Unit4/WB_Unit4_Page2_Q1";
 
 
 export const workBookData = [
@@ -82,5 +84,7 @@ export const workBookData = [
 
 
   { component: WB_Unit4_Page1_Q1, unit: 4}, //35
+  { component: WB_Unit4_Page1_Q2, unit: 4}, //35
+  { component: WB_Unit4_Page2_Q1, unit: 4}, //35
 
 ];

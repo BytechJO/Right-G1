@@ -12,7 +12,17 @@
   left: 35%;
 }
 
-
+.color-pallet-wb-unit4-p2-q1 {
+  gap: 10px;
+  border: 2px solid black;
+  margin: 20px;
+  padding: 8px;
+  border-radius: 8px;
+  width: 26%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 @media (max-width: 1024px) {
   .wb-unit4-p2-q1 {
@@ -28,8 +38,7 @@
 
 @media (max-width: 820px) {
   .wb-unit4-p2-q1 {
-           top: 14.5%;
-    
+    top: 14.5%;
   }
 
   .wb-unit4-p2-q2 {

@@ -1,3 +1,5 @@
+import { useState,useEffect } from "react";
+
 export default function BottomBar({
   pageIndex,
   totalPages,
@@ -13,6 +15,12 @@ export default function BottomBar({
   icons,
   activeTab,
 }) {
+
+    const [pageInput, setPageInput] = useState("");
+
+  useEffect(() => {
+    setPageInput("");
+  }, [pageIndex]);
   return (
     <footer
       className="w-full bg-white border-t shadow 
@@ -77,9 +85,13 @@ export default function BottomBar({
             {" "}
             <input
               type="text"
-              onKeyDown={(e) =>
-                e.key === "Enter" && goToPage(Number(e.target.value))
-              }
+              value={pageInput}
+      onChange={(e) => setPageInput(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          goToPage(pageInput);
+        }
+      }}
               className="w-10 text-center outline-none text-[#430f68] text-sm"
               placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
             />
@@ -89,9 +101,13 @@ export default function BottomBar({
           <>
             <input
               type="text"
-              onKeyDown={(e) =>
-                e.key === "Enter" && goToPage(Number(e.target.value))
-              }
+           value={pageInput}
+      onChange={(e) => setPageInput(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          goToPage(pageInput);
+        }
+      }}
               className="w-10 text-center outline-none text-[#430f68] text-sm"
               placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
             />

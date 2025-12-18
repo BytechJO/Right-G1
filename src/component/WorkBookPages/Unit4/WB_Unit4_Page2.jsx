@@ -18,7 +18,7 @@ const WB_Unit4_Page2= ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 24 })}
+          onClick={() => openPopup("exercise", { startIndex: 37 })}
           // className="click-icon-page8-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >
