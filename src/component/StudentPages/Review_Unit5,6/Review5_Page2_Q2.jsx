@@ -1,34 +1,34 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Review5_Page2_Q2.css";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6P53EXEE.mp3";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // Example images imports. Replace with your actual paths.
-import img1a from "../../../assets/unit6/imgs/U6P53EXEE-01.svg";
-// import img1b from "../../../assets/unit4/imgs/gate.png";
-// import img1c from "../../../assets/unit4/imgs/kiwi.png";
+import img1a from "../../../assets/unit6/imgs/U6P53EXEE01-01.svg";
+import img1b from "../../../assets/unit6/imgs/U6P53EXEE01-02.svg";
+import img1c from "../../../assets/unit6/imgs/U6P53EXEE01-03.svg";
 
-// import img2a from "../../../assets/unit4/imgs/soccer.png";
-// import img2b from "../../../assets/unit4/imgs/boy.png";
-// import img2c from "../../../assets/unit4/imgs/goat.png";
+import img2a from "../../../assets/unit6/imgs/U6P53EXEE02-01.svg";
+import img2b from "../../../assets/unit6/imgs/U6P53EXEE02-02.svg";
+import img2c from "../../../assets/unit6/imgs/U6P53EXEE02-03.svg";
 
-// import img3a from "../../../assets/unit4/imgs/king.png";
-// import img3b from "../../../assets/unit4/imgs/key.png";
-// import img3c from "../../../assets/unit4/imgs/kite.png";
+import img3a from "../../../assets/unit6/imgs/U6P53EXEE03-01.svg";
+import img3b from "../../../assets/unit6/imgs/U6P53EXEE03-02.svg";
+import img3c from "../../../assets/unit6/imgs/U6P53EXEE03-03.svg";
 
-// import img4a from "../../../assets/unit4/imgs/kangaroo.png";
-// import img4b from "../../../assets/unit4/imgs/keylock.png";
-// import img4c from "../../../assets/unit4/imgs/grapes.png";
+import img4a from "../../../assets/unit6/imgs/U6P53EXEE04-01.svg";
+import img4b from "../../../assets/unit6/imgs/U6P53EXEE04-02.svg";
+import img4c from "../../../assets/unit6/imgs/U6P53EXEE04-03.svg";
 
 const Review5_Page2_Q2 = () => {
   const groups = [
-    { images: [img1a, "./img1b", "./img1c"], different: 2 },
-    { images: ["./img2a", "./img2b", "./img2c"], different: 1 },
-    { images: ["./img3a", "./img3b", "./img3c"], different: 0 },
-    { images: ["./img4a", "./img4b", "./img4c"], different: 2 },
+    { images: [img1a, img1b, img1c], different: 2 },
+    { images: [img2a, img2b, img2c], different: 1 },
+    { images: [img3a, img3b, img3c], different: 0 },
+    { images: [img4a, img4b, img4c], different: 2 },
   ];
   const [showResult2, setShowResult2] = useState(false);
   const [selected, setSelected] = useState(Array(groups.length).fill(null));
@@ -38,7 +38,7 @@ const Review5_Page2_Q2 = () => {
   const audioRef = useRef(null);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
-  const stopAtSecond = 3.5;
+  const stopAtSecond = 9;
 
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -56,14 +56,13 @@ const Review5_Page2_Q2 = () => {
   const captions = [
     {
       start: 0,
-      end: 7.17,
-      text: "Page 17, exercise F. Does it begin with a D or T? Listen and match.",
+      end: 9.04,
+      text: "Page 53, exercise E. Which picture begins with a different sound? Listen and write X.",
     },
-    { start: 7.19, end: 9.16, text: "1-doll. " },
-    { start: 9.18, end: 11.11, text: "2-dog. " },
-    { start: 11.13, end: 13.09, text: "3-tail." },
-    { start: 13.11, end: 15.16, text: "4-tall." },
-    { start: 15.18, end: 17.22, text: "5-dates." },
+    { start: 9.06, end: 13.14, text: "1. goose, gate, kiwi," },
+    { start: 13.16, end: 17.17, text: "2. kick, goat, kite," },
+    { start: 17.19, end: 22.06, text: "3. king, garlic, game,  " },
+    { start: 22.08, end: 27.09, text: "4. kangaroo, key, grapes. " },
   ];
 
   // ================================
@@ -98,7 +97,6 @@ const Review5_Page2_Q2 = () => {
       setActiveIndex(null);
       setPaused(false);
       setIsPlaying(false);
-   
     };
 
     audio.addEventListener("ended", handleEnded);
@@ -344,6 +342,9 @@ const Review5_Page2_Q2 = () => {
         <div className="exercise-row-review5-p2-q2">
           {groups.map((group, gIndex) => (
             <div className="ds-group-box-review5-p2-q2 " key={gIndex}>
+              <span style={{ color: "darkblue", fontWeight: "700" }}>
+                {gIndex + 1}
+              </span>
               {group.images.map((img, iIndex) => {
                 const isSelected = selected[gIndex] === iIndex;
                 const isCorrect = group.different === iIndex;

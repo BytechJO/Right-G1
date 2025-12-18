@@ -1,7 +1,7 @@
 import page24 from "../../../assets/unit6/imgs/Right 1 Unit 06 Can We Go to the Park11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
-import sound1 from "../../../assets/unit4/sounds/U4ReadingP38-39.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6ReadingP56-57.mp3";
 import sound2 from "../../../assets/unit6/sounds/Pg56_1.1_Adult Lady.mp3";
 import sound3 from "../../../assets/unit6/sounds/Pg56_1.2_Adult Lady.mp3";
 import sound4 from "../../../assets/unit6/sounds/Pg56_1.3_Adult Lady.mp3";
@@ -9,7 +9,7 @@ import sound5 from "../../../assets/unit6/sounds/Pg56_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import video3 from "../../../assets/unit4/sounds/STORY ( 2 ).mp4";
+import video3 from "../../../assets/unit6/sounds/STORY (3).mp4";
 const Unit6_Reading_P1 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
@@ -17,46 +17,50 @@ const Unit6_Reading_P1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
 
   const captionsExample = [
-    { start: 0, end: 5.04, text: "Page 38 Reading. Hey, that's my pen! " },
     {
-      start: 5.07,
-      end: 16.03,
-      text: "Harley has a pencil and wants to draw a picture. Tom finds an eraser. He asks if the eraser is Harley's. It's not, it's Kevin's. ",
+      start: 0,
+      end: 5.12,
+      text: "Page 56 reading. Tilly at the park. It is a good morning.",
     },
     {
-      start: 16.07,
-      end: 22.17,
-      text: "Harley likes to draw nice pictures. Tom watches. What is Harley going to draw? ",
+      start: 5.15,
+      end: 10.26,
+      text: "Jack is at the park. He sees Hansel and Tilly. Hansel shows Jack the bunny. ",
     },
     {
-      start: 22.2,
-      end: 27.11,
-      text: "Harley starts to draw. Kevin watches. What is the picture? ",
+      start: 10.28,
+      end: 16.13,
+      text: "Jack likes Tilly. She is soft and friendly. It is a sunny day. ",
     },
     {
-      start: 27.14,
-      end: 38.11,
-      text: "Harley shows the picture to Kevin. Kevin doesn't know what it is. Harley tells him it is a red mountain, and it's in the shape of a triangle. ",
+      start: 16.15,
+      end: 22.29,
+      text: "Jack tells Hansel that he likes the park. Hansel tells Jack about Tilly. Tilly is cute. ",
     },
     {
-      start: 38.14,
-      end: 45.17,
-      text: "Now Tom finds a book. Is it Kevin's book? No, it's not Kevin's book. ",
+      start: 22.31,
+      end: 28.22,
+      text: "Jack asks to play with her. Tilly can play games. She is a fun bunny.  ",
     },
     {
-      start: 45.2,
-      end: 48.26,
-      text: "Whose book is it? Is it the teacher's book? ",
+      start: 28.24,
+      end: 36.29,
+      text: "Jack and Tilly play a game. What can Tilly do? Jack can touch his nose. Tilly can't touch her nose.  ",
     },
     {
-      start: 48.29,
-      end: 58.07,
-      text: "Helen comes into the classroom. She asks the boys about her red book. Tom gives Helen her red book. She is so happy. ",
+      start: 36.31,
+      end: 44.07,
+      text: "Jack can touch his head. Tilly can touch her head. Tilly is good at games. ",
     },
     {
-      start: 58.1,
-      end: 65.11,
-      text: "Now Tom wants to draw. Where's his pen? Oh no! Lolo has it.",
+      start: 44.09,
+      end: 52.25,
+      text: "Tilly is bored. Can she do other things? Jack wants to play more games. Tilly wants to play in the park. ",
+    },
+    {
+      start: 52.27,
+      end: 57.27,
+      text: "She likes to hop on Jack's feet. Ouch! Tilly hops fast.",
     },
   ];
   const clickableAreas = [

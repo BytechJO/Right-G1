@@ -12,7 +12,7 @@ import img7 from "../../../assets/unit7/img/U7P62EXEA2-07.svg";
 import img8 from "../../../assets/unit7/img/U7P62EXEA2-08.svg";
 import img9 from "../../../assets/unit7/img/U7P62EXEA2-09.svg";
 import img10 from "../../../assets/unit7/img/U7P62EXEA2-10.svg";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit7/sound/U7P62EXEA2.mp3";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
@@ -149,20 +149,33 @@ export default function Unit7_Page5_Q2() {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 5.44,
+      text: "Page 62, Right activities. Exercise A, number two.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 5.55,
+      end: 10.82,
+      text: " Which pictures begin with the same sound? Listen and circle. ",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    {
+      start: 10.9,
+      end: 20.32,
+      text: "One, W. Watermelon, burger, whale, wagon, hand.",
+    },
+    {
+      start: 20.4,
+      end: 29.58,
+      text: "  Two, H. Watch, house, hat, hammer, web.",
+    },
   ];
 
+  /**
+   * 
+   *  Two, H. 
+
+Watch, house, hat, hammer, web.
+
+   */
   // ================================
   // ✔ Update caption highlight
   // ================================

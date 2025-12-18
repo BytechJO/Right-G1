@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import page_4 from "../../../assets/unit8/imgs/Right G1- Class Book_00067.jpg";
+import page_4 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match4.jpg";
 import "./Unit8_Page4.css";
 import CD12_Pg13_Grammar2_AdultLady from "../../../assets/img_unit2/sounds-unit2/U2 Right Grammar P13.mp3";
 import Pg13_2_1_AdultLady from "../../../assets/unit8/sound/Pg67_2.1_Adult Lady.mp3";
@@ -34,10 +34,10 @@ const Unit8_Page4 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 6.53, y1: 10.4, x2: 23.43, y2: 14.2, sound: Pg13_2_1_AdultLady },
-    { x1: 54.19, y1: 10.4, x2: 71.5, y2: 14.5, sound: Pg13_2_2_AdultLady },
-    { x1: 6.53, y1: 15.27, x2: 30.7, y2: 19.4, sound: Pg13_2_3_AdultLady },
-    { x1: 54.2, y1: 15.27, x2: 78.3, y2: 19.5, sound: Pg13_2_4_AdultLady },
+    { x1: 6.53, y1: 10.4, x2: 26.7, y2: 14.8, sound: Pg13_2_1_AdultLady },
+    { x1: 6.53, y1: 16, x2: 26.7, y2: 20.2, sound: Pg13_2_2_AdultLady },
+    { x1: 28.68, y1: 23.97, x2: 47.5, y2: 27.4, sound: Pg13_2_3_AdultLady },
+    { x1: 36.05, y1: 60.98, x2: 54.79, y2: 64.3, sound: Pg13_2_4_AdultLady },
 
   ];
 

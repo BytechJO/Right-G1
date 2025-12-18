@@ -72,7 +72,7 @@ export default function BottomBar({
 
       {/* PAGE INPUT */}
       <div className="flex items-center gap-1 px-2 py-0.5 border-2 border-[#430f68] rounded text-sm">
-        {activeTab === "work" ? (
+        {activeTab === "work" || viewMode==="single" ? (
           <>
             {" "}
             <input
@@ -81,7 +81,7 @@ export default function BottomBar({
                 e.key === "Enter" && goToPage(Number(e.target.value))
               }
               className="w-10 text-center outline-none text-[#430f68] text-sm"
-              placeholder={pageIndex + 1}
+              placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
             />
             <span className="text-[#430f68] text-sm">| {totalPages}</span>
           </>
@@ -93,7 +93,7 @@ export default function BottomBar({
                 e.key === "Enter" && goToPage(Number(e.target.value))
               }
               className="w-10 text-center outline-none text-[#430f68] text-sm"
-              placeholder={pageIndex + 1}
+              placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
             />
             <span className="text-[#430f68] text-sm">| {totalPages}</span>
           </>

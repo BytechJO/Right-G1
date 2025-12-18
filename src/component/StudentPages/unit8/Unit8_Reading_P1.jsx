@@ -1,4 +1,4 @@
-import page24 from "../../../assets/unit8/imgs/Right G1- Class Book_00074.jpg";
+import page24 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
 import sound1 from "../../../assets/unit4/sounds/U4ReadingP38-39.mp3";

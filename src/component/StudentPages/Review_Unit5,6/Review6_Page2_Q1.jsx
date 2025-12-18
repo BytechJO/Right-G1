@@ -1,38 +1,45 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Review6_Page2_Q1.css";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit6/sounds/U6P55EXED.mp3";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import img1 from "../../../assets/unit6/imgs/U6P55EXED-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P55EXED-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P55EXED-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P55EXED-04.svg";
 const data = [
   {
     id: 1,
-    imgs: [
-      { src: "/fish.png", answer: true }, // short i
-      { src: "/kite.png", answer: false },
+    src: img1,
+    options: [
+      { label: "Fish", answer: true },
+      { label: "Kite", answer: false },
     ],
   },
   {
     id: 2,
-    imgs: [
-      { src: "/crib.png", answer: true }, // short i
-      { src: "/city.png", answer: false },
+    src: img2,
+    options: [
+      { label: "Crib", answer: true },
+      { label: "Knight", answer: false },
     ],
   },
   {
     id: 3,
-    imgs: [
-      { src: "/five.png", answer: false },
-      { src: "/lips.png", answer: true }, // short i
+    src: img3,
+    options: [
+      { label: "Five", answer: false },
+      { label: "Lips", answer: true },
     ],
   },
   {
     id: 4,
-    imgs: [
-      { src: "/milk.png", answer: false }, // short i
-      { src: "/fig.png", answer: true },
+    src: img4,
+    options: [
+      { label: "Ice", answer: false },
+      { label: "Figs", answer: true },
     ],
   },
 ];
@@ -44,7 +51,7 @@ const Review6_Page2_Q1 = () => {
   const audioRef = useRef(null);
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
-  const stopAtSecond = 3.5;
+  const stopAtSecond = 7.9;
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -61,14 +68,13 @@ const Review6_Page2_Q1 = () => {
   const captions = [
     {
       start: 0,
-      end: 7.17,
-      text: "Page 17, exercise F. Does it begin with a D or T? Listen and match.",
+      end: 8.1,
+      text: "Page 55, exercise D, which picture has the short I sound? Listen and write check. ",
     },
-    { start: 7.19, end: 9.16, text: "1-doll. " },
-    { start: 9.18, end: 11.11, text: "2-dog. " },
-    { start: 11.13, end: 13.09, text: "3-tail." },
-    { start: 13.11, end: 15.16, text: "4-tall." },
-    { start: 15.18, end: 17.22, text: "5-dates." },
+    { start: 8.12, end: 11.17, text: " 1. Fish, kite.  " },
+    { start: 11.19, end: 14.23, text: "2. Crib, knight. " },
+    { start: 14.25, end: 18.03, text: "3. Five, lips. " },
+    { start: 18.05, end: 21.2, text: "4. Ice, figs." },
   ];
 
   // ================================
@@ -158,7 +164,7 @@ const Review6_Page2_Q1 = () => {
     // حساب عدد الإجابات الصحيحة
     data.forEach((q) => {
       const chosenIndex = selected[q.id];
-      if (q.imgs[chosenIndex].answer === true) {
+      if (q.options[chosenIndex].answer === true) {
         correct++;
       }
     });
@@ -191,13 +197,13 @@ const Review6_Page2_Q1 = () => {
     const correctSelection = {};
 
     data.forEach((q) => {
-      const correctIndex = q.imgs.findIndex((img) => img.answer === true);
+      const correctIndex = q.options.findIndex((opt) => opt.answer === true);
       correctSelection[q.id] = correctIndex;
     });
 
-    setSelected(correctSelection); // عرض جميع الإجابات الصحيحة
-    setShowResult(false); // إخفاء X لأنها ليست إجابات خاطئة
-    setLocked(true); // 🔒 إيقاف التعديل
+    setSelected(correctSelection);
+    setShowResult(false);
+    setLocked(true);
   };
 
   return (
@@ -353,28 +359,47 @@ const Review6_Page2_Q1 = () => {
               >
                 {question.id}
               </span>
-              {question.imgs.map((img, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`img-box-review6-p2-q1  ${
-                      selected[question.id] === index ? "selected-review6-p2-q1" : ""
-                    }`}
-                    onClick={() => handleSelect(question.id, index)}
-                  >
-                    {showResult &&
-                      !locked && // 🔒 لا تظهر X عند تفعيل Show Answer
-                      selected[question.id] === index &&
-                      img.answer === false && (
-                        <span className="wrong-x-circle-review6-p2-q1">✕</span>
-                      )}
-                    <img src={img.src} alt="" />
-                    <div className="check-box-review6-p2-q1 ">
-                      {selected[question.id] === index ? "✓" : ""}
+
+              <div key={question.id} className="question-box2-review6-p2-q1">
+                <span className="question-number">{question.id}</span>
+
+                {/* الصورة الواحدة */}
+                <img
+                  src={question.src}
+                  className="main-img-review6-p2-q1"
+                  alt=""
+                  style={{ height: "150px" }}
+                />
+
+                {/* الخيارات */}
+                <div className="options-review6-p2-q1">
+                  {question.options.map((opt, index) => (
+                    <div
+                      key={index}
+                      className={`option-review6-p2-q1 ${
+                        selected[question.id] === index
+                          ? "selected-review6-p2-q1"
+                          : ""
+                      }`}
+                      onClick={() => handleSelect(question.id, index)}
+                    >
+                      {/* X عند الغلط */}
+                      {showResult &&
+                        !locked &&
+                        selected[question.id] === index &&
+                        opt.answer === false && (
+                          <span className="wrong-x-circle-review6-p2-q1">
+                            ✕
+                          </span>
+                        )}
+
+                      <span className="check-box-review6-p2-q1">
+                        {selected[question.id] === index ? "✓" : ""}
+                      </span>
                     </div>
-                  </div>
-                );
-              })}
+                  ))}
+                </div>
+              </div>
             </div>
           ))}
         </div>

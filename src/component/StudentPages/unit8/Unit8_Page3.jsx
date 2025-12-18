@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import page_3 from "../../../assets/unit8/imgs/Right G1- Class Book_00066.jpg";
+import page_3 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match3.jpg";
 import "./Unit8_Page3.css";
 import CD11_Pg12_Grammar1_AdultLady from "../../../assets/img_unit2/sounds-unit2/U2 Right Grammar P12.mp3";
 import Pg12_1_1_AdultLady from "../../../assets/unit8/sound/Pg66_1.1_Adult Lady.mp3";
@@ -44,12 +44,12 @@ const Unit8_Page3 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 6.5, y1: 10.7, x2: 30.0, y2: 15.0, sound: Pg12_1_1_AdultLady },
-    { x1: 54.2, y1: 9.5, x2: 78.3, y2: 13.0, sound: Pg12_1_2_AdultLady },
-    { x1: 6.5, y1: 15.8, x2: 35.6, y2: 20.0, sound: Pg12_1_3_AdultLady },
-    { x1: 54.2, y1: 13.5, x2: 83.5, y2: 16.7, sound: Pg12_1_4_AdultLady },
-    { x1: 54.2, y1: 17.0, x2: 74.1, y2: 20.4, sound: Pg12_1_5_AdultLady },
-    { x1: 14.08, y1: 27.0, x2: 29.6, y2: 31.7, sound: Pg12_2_1_Harley },
+    { x1: 6.5, y1: 10.0, x2: 30.0, y2: 13.6, sound: Pg12_1_1_AdultLady },
+    { x1: 6.5, y1: 13.6, x2: 30.0, y2: 17.2, sound: Pg12_1_2_AdultLady },
+    { x1: 6.5, y1: 17.2, x2:  30.0, y2: 20.8, sound: Pg12_1_3_AdultLady },
+    { x1: 5.50, y1: 24.12, x2: 26.25, y2: 27.63, sound: Pg12_1_4_AdultLady },
+    { x1: 54.75, y1: 24.73, x2: 76.86, y2: 27.93, sound: Pg12_1_5_AdultLady },
+    { x1: 33.42, y1: 62.35, x2: 53.60, y2: 65.86, sound: Pg12_2_1_Harley },
    
   ];
   const handleImageClick = (e) => {

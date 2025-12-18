@@ -144,7 +144,9 @@ setLocked(true); // 🔒 قفل الإجابات
           justifyContent: "flex-start",
         }}
       >
-        <h3 className="header-title-page8">G Read, look, and circle.</h3>
+       <h5 className="header-title-page8">
+            <span className="ex-A">H</span>Look, read, and circle.
+          </h5>
         <div className="content-container-wb-unit3-p4-q2">
           {questions.map((q, qIndex) => (
             <div className="question-row-review8-p2-q4" key={q.id}>

@@ -46,31 +46,31 @@
 .click-icon-unit7-page5-1 {
   position: absolute;
   padding: 5px;
-  top: 8%;
-  left: 33%;
+ top: 8%;
+    left: 42%;
   cursor: pointer;
 }
 .click-icon-unit7-page5-2 {
   position: absolute;
   padding: 5px;
-  top: 27%;
-  left: 39%;
+      top: 31.5%;
+    left: 21%;
   cursor: pointer;
 }
 .click-icon-unit7-page5-3 {
   position: absolute;
   padding: 5px;
-  top: 42%;
-  left: 28%;
+top: 51.5%;
+    left: 30%;
   cursor: pointer;
 }
 
 .click-icon-unit7-page5-4 {
-  position: absolute;
-  padding: 5px;
-  bottom: 24.5%;
-  left: 25.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 22.5%;
+    left: 49.5%;
+    cursor: pointer;
 }
 
 .letter {

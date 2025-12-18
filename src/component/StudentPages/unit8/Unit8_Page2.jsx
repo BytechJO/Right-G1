@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import page_2 from "../../../assets/unit8/imgs/Right G1- Class Book_00065.jpg";
+import page_2 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match2.jpg";
 import img1 from "../../../assets/img_unit2/imgs/p.svg";
 import img2 from "../../../assets/img_unit2/imgs/pencil.svg";
 import img3 from "../../../assets/img_unit2/imgs/pink.svg";
@@ -70,20 +70,26 @@ const Unit8_Page2 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 35.24, y1: 54.6, x2: 39.0, y2: 58.0, sound: 1, isPrimary: true },
+    { x1: 13.5, y1: 44.1, sound: 1, isPrimary: true },
 
-    // // // الصوت الأول – منطقة إضافية
-    { x1: 31.3, y1: 45.4, x2: 40.12, y2: 53.4, sound: 1, isPrimary: false },
+    // // // // الصوت الأول – منطقة إضافية
+    { x1: 21.19, y1: 48.04, x2: 25.9, y2: 50.78, sound: 1, isPrimary: false },
 
-    // // // الصوت الثاني – الأساسية
-    { x1: 43.6, y1: 54.1, x2: 47.7, y2: 57.1, sound: 2, isPrimary: true },
+    // // // // الصوت الثاني – الأساسية
+    { x1: 35.2, y1: 45.5, sound: 2, isPrimary: true },
 
-    // // // الصوت الثاني – الإضافية
-    { x1: 41.6, y1: 47.31, x2: 48.3, y2: 53.7, sound: 2, isPrimary: false },
+    // // // // الصوت الثاني – الإضافية
+    { x1: 32.94, y1: 47.58, x2: 48.3, y2: 50.7, sound: 2, isPrimary: false },
+    //     // // // الصوت الثاني – الأساسية
+    { x1: 11.5, y1: 54.5, sound: 3, isPrimary: true },
+
+    // // // // الصوت الثاني – الإضافية
+    { x1:9.48, y1: 57.63, x2: 48.3, y2: 59.7, sound: 3, isPrimary: false },
   ];
   const sounds = {
     1: sound1,
     2: sound2,
+    3: sound2,
   };
 
   const handleImageClick = (e) => {
@@ -183,7 +189,14 @@ const Unit8_Page2 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -210,7 +223,14 @@ const Unit8_Page2 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -237,7 +257,14 @@ const Unit8_Page2 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
     </div>

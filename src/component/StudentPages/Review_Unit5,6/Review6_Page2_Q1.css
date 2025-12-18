@@ -14,8 +14,8 @@
 }
 
 .img-box-review6-p2-q1 {
-      width: 120px;
-    height: 120px;
+  width: 120px;
+  height: 120px;
   /* border: 2px solid #ccc; */
   /* padding: 10px; */
   border-radius: 10px;
@@ -33,26 +33,23 @@
   height: 100%;
   object-fit: contain;
 }
-
 .check-box-review6-p2-q1 {
-     position: absolute;
-    bottom: 1px;
-    right: 1px;
-    width: 40px;
-    height: 40px;
-    color: red;
-    font-weight: 700;
-    border: 2px solid #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    border-radius: 8px;
+  position: absolute;
+  bottom: -12px;
+  right: -9px;
+  width: 40px;
+  height: 40px;
+  color: red;
+  font-weight: 700;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  border-radius: 8px;
 }
-
-
-.wrong-x-circle-review6-p2-q1{
-   color: white;
+.wrong-x-circle-review6-p2-q1 {
+  color: white;
   background: red;
   width: 25px;
   height: 25px;
@@ -66,4 +63,35 @@
   align-items: center;
   font-weight: bold;
   border: 2px solid white;
+}
+
+.options-review6-p2-q1 {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  justify-content: space-around;
+}
+
+.option-review6-p2-q1 {
+  padding: 10px 16px;
+  /* border: 2px solid #ccc; */
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.option-review6-p2-q1.selected-review6-p2-q1 {
+  border-color: #2c5287;
+  /* background: #e6f0ff; */
+}
+
+.option-label {
+  margin-right: 10px;
+}
+
+.question-box2-review6-p2-q1 {
+  display: flex;
+  flex-direction: column;
 }

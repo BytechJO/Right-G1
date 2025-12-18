@@ -52,8 +52,7 @@ const WB_Unit1_Page3_Q2 = () => {
   const [showResult, setShowResult] = useState(false);
   const [showAnswerState, setShowAnswerState] = useState(false);
   const handleSelect = (qId, index) => {
-   
-    if (showAnswerState) return;
+    if (showAnswerState || showResult) return;
 
     setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
@@ -74,7 +73,7 @@ const WB_Unit1_Page3_Q2 = () => {
 
   const checkAnswers = () => {
     if (showAnswerState) return;
-    const totalQuestions = data.length ; // لأن أول سؤال لا يُحسب
+    const totalQuestions = data.length; // لأن أول سؤال لا يُحسب
 
     let correct = 0;
 
@@ -121,7 +120,8 @@ const WB_Unit1_Page3_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -168,7 +168,9 @@ const WB_Unit1_Page3_Q2 = () => {
                     <div
                       key={index}
                       className={`img-box-wb-u1-q2  ${
-                        selected[question.id] === index ? "selected" : ""
+                        selected[question.id] === index
+                          ? "selected-wb-u1-q2"
+                          : ""
                       }`}
                       onClick={() => handleSelect(question.id, index)}
                     >
@@ -176,16 +178,10 @@ const WB_Unit1_Page3_Q2 = () => {
                         !showAnswerState &&
                         selected[question.id] === index &&
                         img.answer === false && (
-                          <span className="wrong-x-circle-wb-u1-p3-q2">
-                            ✕
-                          </span>
+                          <span className="wrong-x-circle-wb-u1-p3-q2">✕</span>
                         )}
 
-                      <img
-                        src={img.src}
-                        alt="TEST"
-                       
-                      />
+                      <img src={img.src} alt="TEST" />
                       <div className="check-box-wb-u1-q2 ">
                         {selected[question.id] === index ? "✓" : ""}
                       </div>

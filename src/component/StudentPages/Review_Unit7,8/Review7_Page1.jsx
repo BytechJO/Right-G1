@@ -1,4 +1,4 @@
-import page_1 from "../../../assets/unit8/imgs/Right G1- Class Book_00070.jpg";
+import page_1 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match7.jpg";
 import "./Review7_Page1.css";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";

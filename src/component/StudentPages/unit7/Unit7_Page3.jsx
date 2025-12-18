@@ -1,19 +1,16 @@
 import React, { useState, useRef } from "react";
-import page_3 from "../../../assets/unit7/img/Right G1- Class Book_00060.jpg";
+import page_3 from "../../../assets/unit7/img/Right 1 Unit 07 What are Matter3.jpg";
 import "./Unit7_Page3.css";
-import CD11_Pg12_Grammar1_AdultLady from "../../../assets/img_unit2/sounds-unit2/U2 Right Grammar P12.mp3";
-import Pg12_1_1_AdultLady from "../../../assets/img_unit2/sounds-unit2/Pg12_1.1_Adult Lady.mp3";
-import Pg12_1_2_AdultLady from "../../../assets/img_unit2/sounds-unit2/Pg12_1.2_Adult Lady.mp3";
-import Pg12_1_3_AdultLady from "../../../assets/img_unit2/sounds-unit2/Pg12_1.3_Adult Lady.mp3";
-import Pg12_1_4_AdultLady from "../../../assets/img_unit2/sounds-unit2/Pg12_1.4_Adult Lady.mp3";
-import Pg12_1_5_AdultLady from "../../../assets/img_unit2/sounds-unit2/Pg12_1.5_Adult Lady.mp3";
-import Pg12_2_1_Harley from "../../../assets/img_unit2/sounds-unit2/Pg12_2.1_Harley.mp3";
-import Pg12_2_2_Sarah from "../../../assets/img_unit2/sounds-unit2/Pg12_2.2_Sarah.mp3";
-import Pg12_3_1_Helen_Take from "../../../assets/img_unit2/sounds-unit2/Pg12_3.1_Helen_Take 2.mp3";
-import Pg12_3_2_Stella from "../../../assets/img_unit2/sounds-unit2/Pg12_3.2_Stella.mp3";
-import Pg12_4_1_Hansel from "../../../assets/img_unit2/sounds-unit2/Pg12_4.1_Hansel.mp3";
-import Pg12_4_2_Stella from "../../../assets/img_unit2/sounds-unit2/Pg12_4.2_Stella.mp3";
-import Pg12_4_3_Hansel from "../../../assets/img_unit2/sounds-unit2/Pg12_4.3_Hansel.mp3";
+import CD11_Pg12_Grammar1_AdultLady from "../../../assets/unit7/sound/U7P60RG.mp3";
+import Pg12_1_1_AdultLady from "../../../assets/unit7/sound/Pg60_1.1_Adult Lady.mp3";
+import Pg12_1_2_AdultLady from "../../../assets/unit7/sound/Pg60_1.2_Adult Lady.mp3";
+import Pg12_1_3_AdultLady from "../../../assets/unit7/sound/Pg60_2.1_John.mp3";
+import Pg12_1_4_AdultLady from "../../../assets/unit7/sound/Pg60_2.2_Harley.mp3";
+import Pg12_1_5_AdultLady from "../../../assets/unit7/sound/Pg60_3.1_Stella.mp3";
+import Pg12_2_1_Harley from "../../../assets/unit7/sound/Pg60_3.2_Helen.mp3";
+import Pg12_2_2_Sarah from "../../../assets/unit7/sound/Pg60_4.1_Dad.mp3";
+import Pg12_3_1_Helen_Take from "../../../assets/unit7/sound/Pg60_4.2_Jack.mp3";
+
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
@@ -24,44 +21,36 @@ const Unit7_Page3 = ({ openPopup }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 3.22, text: "Page 12, Exercise 1. Right Grammar." },
-    { start: 3.25, end: 7.11, text: " How old are you? I'm seven years old." },
     {
-      start: 7.15,
-      end: 11.02,
-      text: " When is your birthday? My birthday is in August.",
+      start: 0,
+      end: 6.84,
+      text: "Page 60, exercise 1. Right  Grammar. What's the matter? I'm cold. ",
+    },
+    { start: 6.9, end:8.62, text: "What's the matter? " },
+    {
+      start: 8.7,
+      end: 10.34,
+      text: "I'm cold. ",
     },
     {
-      start: 11.06,
-      end: 13.11,
-      text: "It is on Tuesday. ",
+      start: 10.4,
+      end: 12.14,
+      text: "What's the matter? ",
     },
-    { start: 13.15, end: 14.22, text: "How old are you, Sara? " },
-    { start: 14.26, end: 16.05, text: "I'm three years old. " },
-    { start: 16.09, end: 17.24, text: "When is your birthday party, Stella? " },
-    { start: 17.27, end: 19.16, text: "It is on Tuesday. " },
-    {
-      start: 19.2,
-      end: 22.1,
-      text: "Happy birthday! This is for you, Stella. ",
-    },
-    { start: 22.14, end: 23.1, text: "Thank you.  " },
-    { start: 23.14, end: 25.05, text: "You're welcome. Open it." },
+    { start: 12.2, end: 13.68, text: "I'm hungry. " },
+    { start: 13.7, end: 15.54, text: "What's the matter? " },
+    { start: 15.6, end: 17.24, text: "I'm scared. " },
   ];
 
   const clickableAreas = [
-    { x1: 6.5, y1: 10.7, x2: 30.0, y2: 15.0, sound: Pg12_1_1_AdultLady },
-    { x1: 54.2, y1: 9.5, x2: 78.3, y2: 13.0, sound: Pg12_1_2_AdultLady },
-    { x1: 6.5, y1: 15.8, x2: 35.6, y2: 20.0, sound: Pg12_1_3_AdultLady },
-    { x1: 54.2, y1: 13.5, x2: 83.5, y2: 16.7, sound: Pg12_1_4_AdultLady },
-    { x1: 54.2, y1: 17.0, x2: 74.1, y2: 20.4, sound: Pg12_1_5_AdultLady },
-    { x1: 14.08, y1: 27.0, x2: 29.6, y2: 31.7, sound: Pg12_2_1_Harley },
-    { x1: 7.0, y1: 47.5, x2: 29.2, y2: 50.4, sound: Pg12_2_2_Sarah },
-    { x1: 49.6, y1: 26.17, x2: 88.9, y2: 29.8, sound: Pg12_3_1_Helen_Take },
-    { x1: 84.18, y1: 37.6, x2: 95.1, y2: 43.4, sound: Pg12_3_2_Stella },
-    { x1: 6.76, y1: 54.4, x2: 48.3, y2: 57.9, sound: Pg12_4_1_Hansel },
-    { x1: 44.0, y1: 61.6, x2: 58.3, y2: 65.1, sound: Pg12_4_2_Stella },
-    { x1: 7.16, y1: 74.6, x2: 26.3, y2: 80.4, sound: Pg12_4_3_Hansel },
+    { x1: 6.5, y1: 13, x2: 30.0, y2: 17.5, sound: Pg12_1_1_AdultLady },
+    { x1: 69.68, y1: 13.46, x2: 80.45, y2: 17.81, sound: Pg12_1_2_AdultLady },
+    { x1: 21.98, y1: 30.06, x2: 44.86, y2: 33.7, sound: Pg12_1_3_AdultLady },
+    { x1: 9.77, y1: 53.82, x2: 20.82, y2: 57.12, sound: Pg12_1_4_AdultLady },
+    { x1: 68.33, y1: 26.26, x2: 91.6, y2: 29.6, sound: Pg12_1_5_AdultLady },
+    { x1: 53.98, y1: 48.34, x2: 67.9, y2: 51.84, sound: Pg12_2_1_Harley },
+    { x1: 6.66, y1: 64.18, x2: 29.74, y2: 67.38, sound: Pg12_2_2_Sarah },
+    { x1: 33.62, y1: 74.54, x2: 47.58, y2: 78.19, sound: Pg12_3_1_Helen_Take },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -85,9 +74,11 @@ const Unit7_Page3 = ({ openPopup }) => {
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page_3})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_3})` }}
+    >
       {/* <img
         src={page_3}
         style={{ display: "block" }}
@@ -131,7 +122,8 @@ const Unit7_Page3 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "audio", <div
+              "audio",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -147,7 +139,14 @@ const Unit7_Page3 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -160,9 +159,10 @@ const Unit7_Page3 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "video", <div
+              "video",
+              <div
                 style={{
-                   display: "flex",
+                  display: "flex",
                   justifyContent: "center",
                   alignContent: "center",
                   alignItems: "center",
@@ -187,7 +187,14 @@ const Unit7_Page3 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={pauseBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={pauseBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <audio ref={audioRef} style={{ display: "none" }} />

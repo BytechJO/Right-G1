@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import page_4 from "../../../assets/unit7/img/Right G1- Class Book_00061.jpg";
+import page_4 from "../../../assets/unit7/img/Right 1 Unit 07 What are Matter4.jpg";
 import "./Unit7_Page4.css";
-import CD12_Pg13_Grammar2_AdultLady from "../../../assets/img_unit2/sounds-unit2/U2 Right Grammar P13.mp3";
+import CD12_Pg13_Grammar2_AdultLady from "../../../assets/unit7/sound/U7P61RG.mp3";
 import Pg13_2_1_AdultLady from "../../../assets/unit7/sound/Pg61_2.1_Adult Lady.mp3";
 import Pg13_2_2_AdultLady from "../../../assets/unit7/sound/Pg61_2.2_Adult Lady.mp3";
 import Pg13_2_3_AdultLady from "../../../assets/unit7/sound/Pg61_2.3_Adult Lady.mp3";
@@ -24,33 +24,28 @@ const Unit7_Page4 = ({ openPopup }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 4.07, text: " Page 13, exercise 2. Right Grammar. " },
-    { start: 4.1, end: 5.12, text: " What is it? " },
-    { start: 5.15, end: 6.15, text: "It’s a cake." },
-    { start: 6.19, end: 7.21, text: "What are these?" },
-    { start: 7.25, end: 9.04, text: "These are presents. " },
-    { start: 9.07, end: 11.29, text: "What is it? It's a birthday cake. " },
-    { start: 11.32, end: 15.04, text: "What are these? These are presents." },
-    { start: 15.07, end: 18.22, text: "Is it a train? Yes, it is. " },
+    { start: 0, end: 3.93, text: "Page 61, exercise 2. Right grammar. " },
+    { start: 4.0, end: 8.24, text: " Are you happy? Yes, I am. Are you sad? " },
+    { start:8.3, end: 12.64, text: "No, I'm not. I'm bored. Are you happy? " },
+    { start: 12.7, end: 16.16, text: "Yes, I am. Are you sad?" },
     {
-      start: 18.26,
-      end: 21.24,
-      text: "Is it a cake? No, it isn't.",
+      start: 16.2,
+      end: 24.12,
+      text: "No, I'm not. I'm bored. Are you sad? Yes, I am.",
     },
   ];
-
+ 
   const clickableAreas = [
-    { x1: 6.53, y1: 10.4, x2: 23.43, y2: 14.2, sound: Pg13_2_1_AdultLady },
-    { x1: 54.19, y1: 10.4, x2: 71.5, y2: 14.5, sound: Pg13_2_2_AdultLady },
-    { x1: 6.53, y1: 15.27, x2: 30.7, y2: 19.4, sound: Pg13_2_3_AdultLady },
-    { x1: 54.2, y1: 15.27, x2: 78.3, y2: 19.5, sound: Pg13_2_4_AdultLady },
-    { x1: 6.7, y1: 32.3, x2: 21.8, y2: 36.2, sound: Pg13_3_1_Hansel },
-    { x1: 23.3, y1: 25.5, x2: 39.8, y2: 30.7, sound: Pg13_3_2_Harley },
-    { x1: 55.0, y1: 30.7, x2: 74.1, y2: 33.9, sound: Pg13_4_1_Hansel },
-    { x1: 81.6, y1: 26.7, x2: 93.3, y2: 31.6, sound: Pg13_4_2_Harley },
-    { x1: 9.2, y1: 59.18, x2: 23.7, y2: 62.8, sound: Pg13_5_1_Tom },
-    { x1: 33.3, y1: 60.2, x2: 44.6, y2: 63.5, sound: Pg13_5_2_Sarah },
-
+    { x1: 8.53, y1: 10.4, x2: 27.13, y2: 15, sound: Pg13_2_1_AdultLady },
+    { x1: 68.2, y1: 10.4, x2: 79.68, y2: 15, sound: Pg13_2_2_AdultLady },
+    { x1: 8.53, y1: 15.5, x2: 27.13, y2: 20, sound: Pg13_2_3_AdultLady },
+    { x1: 68.2, y1: 16.2, x2: 91.8, y2: 19.9, sound: Pg13_2_4_AdultLady },
+    { x1: 5.6, y1: 24.28, x2: 24.8, y2: 27.63, sound: Pg13_3_1_Hansel },
+    { x1: 35.08, y1: 38.29, x2: 47.29, y2: 41.55, sound: Pg13_3_2_Harley },
+    { x1: 57.76, y1: 27.02, x2: 74.25, y2: 30.5, sound: Pg13_4_1_Hansel },
+    { x1: 67.46, y1: 53.52, x2: 93.8, y2: 56.87, sound: Pg13_4_2_Harley },
+    { x1: 13.36, y1: 65.4, x2: 30.47, y2: 62.8, sound: Pg13_5_1_Tom },
+    { x1: 51.56, y1: 66.92, x2: 63.97, y2: 70.27, sound: Pg13_5_2_Sarah },
   ];
 
   const handleImageClick = (e) => {
@@ -75,9 +70,11 @@ const Unit7_Page4 = ({ openPopup }) => {
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page_4})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_4})` }}
+    >
       {/* <img
         src={page_4}
         style={{ display: "block" }}
@@ -120,7 +117,8 @@ const Unit7_Page4 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "audio", <div
+              "audio",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -136,7 +134,14 @@ const Unit7_Page4 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -149,7 +154,8 @@ const Unit7_Page4 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "video", <div
+              "video",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -157,7 +163,6 @@ const Unit7_Page4 = ({ openPopup }) => {
                   alignItems: "center",
                   height: "100%",
                   width: "100%",
-                
                 }}
               >
                 <video
@@ -177,7 +182,14 @@ const Unit7_Page4 = ({ openPopup }) => {
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={pauseBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={pauseBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <audio ref={audioRef} style={{ display: "none" }} />

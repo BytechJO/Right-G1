@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import page_1 from "../../../assets/unit8/imgs/Right G1- Class Book_00064.jpg";
+import page_1 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match.jpg";
 import "./Unit8_Page1.css";
 import unit2_page1_CD8 from "../../../assets/img_unit2/sounds-unit2/CD8.Pg10_U2.Intro_Adult Lady.mp3";
 import Unit8_Page1_find from "./Unit8_Page1_find";
@@ -14,6 +14,7 @@ import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
 import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
 import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
 import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
+import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
 
 const Unit8_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -50,33 +51,39 @@ const Unit8_Page1 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 72.8, y1: 26.6, x2: 77.0, y2: 30.0, sound: 1, isPrimary: true },
+    { x1: 43.25, y1: 32.8,sound: 1, isPrimary: true },
 
-    // // الصوت الأول – منطقة إضافية
-    { x1: 69.5, y1: 25.8, x2: 75.9, y2: 33.4, sound: 1, isPrimary: false },
+    // // // الصوت الأول – منطقة إضافية
+    { x1: 51.8, y1: 34.79, x2: 53.4, y2: 35.09, sound: 1, isPrimary: false },
 
-    // // الصوت الثاني – الأساسية
-    { x1: 63.2, y1: 56.35, x2: 67.2, y2: 59.3, sound: 2, isPrimary: true },
+    // // // الصوت الثاني – الأساسية
+    { x1: 44.80, y1: 36.10, sound: 2, isPrimary: true },
 
-    // // الصوت الثاني – الإضافية
-    { x1: 62.9, y1: 53.5, x2: 74.8, y2: 59.9, sound: 2, isPrimary: false },
+    // // // الصوت الثاني – الإضافية
+    { x1: 53.98, y1: 36.16, x2: 55.72, y2: 37.0, sound: 2, isPrimary: false },
 
-    // // الصوت الثالث – الأساسية
-    { x1: 60.8, y1: 47.9, x2: 64.9, y2: 50.9, sound: 3, isPrimary: true },
+    // // // الصوت الثالث – الأساسية
+    { x1: 47.95, y1: 38.8, sound: 3, isPrimary: true },
 
-    // // الصوت الثالث – الإضافية
-    { x1: 56.4, y1: 43.5, x2: 72.8, y2: 51.1, sound: 3, isPrimary: false },
-    // // الصوت الرابع – الأساسية
-    { x1: 88.2, y1: 11.45, x2: 92.1, y2: 14.4, sound: 4, isPrimary: true },
+    // // // الصوت الثالث – الإضافية
+    { x1: 54.37, y1: 37.68, x2: 58.24, y2: 38, sound: 3, isPrimary: false },
+    // // // الصوت الرابع – الأساسية
+    { x1: 61.2, y1: 26.45, sound: 4, isPrimary: true },
 
-    // // الصوت الرابع – الإضافية
-    { x1: 23.17, y1: 11.5, x2: 99.4, y2: 20.5, sound: 4, isPrimary: false },
+    // // // الصوت الرابع – الإضافية
+    {  x1: 49.13, y1: 30.83, x2: 61.73, y2: 30.06, sound: 4, isPrimary: false },
 
-    // // الصوت الخامس – الأساسية
-    { x1: 13.4, y1: 23.7, x2: 17.3, y2: 26.7, sound: 5, isPrimary: true },
+    // // // الصوت الخامس – الأساسية
+    { x1: 51.0, y1: 48.2,  sound: 5, isPrimary: true },
 
-    // // الصوت الخامس – الإضافية
-    { x1: 1.0, y1: 11.06, x2: 16.9, y2: 28.5, sound: 5, isPrimary: false },
+    // // // الصوت الخامس – الإضافية
+    { x1: 50.49, y1: 47.27, x2: 54.17, y2: 47.12, sound: 5, isPrimary: false },
+       // // // الصوت الخامس – الأساسية
+    { x1: 45.7, y1: 50.2,  sound: 5, isPrimary: true },
+
+    // // // الصوت الخامس – الإضافية
+    { x1: 44.28, y1: 49.41, x2: 50.29, y2: 52.15, sound: 6, isPrimary: false },
+  
   ];
   const sounds = {
     1: sound1,
@@ -84,6 +91,7 @@ const Unit8_Page1 = ({ openPopup }) => {
     3: sound3,
     4: sound4,
     5: sound5,
+    6:sound6
   };
 
   const handleImageClick = (e) => {

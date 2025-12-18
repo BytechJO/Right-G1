@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import backgroundImage from "../../../assets/unit7/img/U7P58-59.jpg";
 import page2_2 from "../../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
-import vocabulary from "../../../assets/img_unit2/sounds-unit2/Pg10_Vocabulary_Adult Lady.mp3";
+import vocabulary from "../../../assets/unit7/sound/Pg58_Vocabulary_Adult Lady.mp3";
 import "./Unit7_Page1.css";
-import { CgPlayPauseO } from "react-icons/cg";
 import num1 from "../../../assets/img_unit2/imgs/Num1.svg";
 import num2 from "../../../assets/img_unit2/imgs/Num2.svg";
 import num3 from "../../../assets/img_unit2/imgs/Num3.svg";
@@ -14,16 +13,16 @@ import num7 from "../../../assets/img_unit2/imgs/Num7.svg";
 import num8 from "../../../assets/unit4/imgs/Num8.svg";
 import num9 from "../../../assets/unit7/img/Num9.svg";
 import num10 from "../../../assets/unit7/img/Num10.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
-import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
-import sound9 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound10 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound1 from "../../../assets/unit7/sound/U7VOC-01.mp3";
+import sound2 from "../../../assets/unit7/sound/U7VOC-02.mp3";
+import sound3 from "../../../assets/unit7/sound/U7VOC-03.mp3";
+import sound4 from "../../../assets/unit7/sound/U7VOC-04.mp3";
+import sound5 from "../../../assets/unit7/sound/U7VOC-05.mp3";
+import sound6 from "../../../assets/unit7/sound/U7VOC-06.mp3";
+import sound7 from "../../../assets/unit7/sound/U7VOC-07.mp3";
+import sound8 from "../../../assets/unit7/sound/U7VOC-08.mp3";
+import sound9 from "../../../assets/unit7/sound/U7VOC-09.mp3";
+import sound10 from "../../../assets/unit7/sound/U7VOC-10.mp3";
 import { TbMessageCircle } from "react-icons/tb";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -35,7 +34,7 @@ const Unit7_Page1_Vocab = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
-  const stopAtSecond = 3.0;
+  const stopAtSecond = 3.8;
   const [clickedIndex, setClickedIndex] = useState(null);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -53,31 +52,31 @@ const Unit7_Page1_Vocab = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 3.1, text: "Page 10, Unit 2, Vocabulary." },
-    { start: 3.12, end: 5.15, text: " 1. cold " },
-    { start: 5.17, end: 7.16, text: "2. shiver" },
-    { start: 7.18, end: 9.27, text: "3. hungry" },
-    { start: 9.29, end: 12.2, text: "4. bored" },
-    { start: 12.22, end: 15.07, text: " 5. scared" },
-    { start: 15.09, end: 17.13, text: " 6. crawl" },
-    { start: 17.15, end: 19.26, text: "7.listen" },
-    { start: 12.22, end: 15.07, text: " 8. sad" },
-    { start: 15.09, end: 17.13, text: "9. broken" },
-    { start: 17.15, end: 19.26, text: "10. happy" },
+    { start: 0, end: 3.88, text: "Page 10, Unit 2, Vocabulary." },
+    { start: 4.0, end: 7.34, text: " 1. cold " },
+    { start: 7.4, end: 10.08, text: "2. shiver" },
+    { start: 10.1, end: 12.63, text: "3. hungry" },
+    { start: 12.7, end: 15.02, text: "4. bored" },
+    { start: 15.1, end: 17.74, text: " 5. scared" },
+    { start: 17.8, end: 20.31, text: " 6. crawl" },
+    { start: 20.4, end: 22.68, text: "7.listen" },
+    { start: 22.7, end: 25.16, text: " 8. sad" },
+    { start: 25.2, end: 27.86, text: "9. broken" },
+    { start: 27.9, end: 30.0, text: "10. happy" },
   ];
 
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
-    { start: 3.2, end: 5.15 }, // party hat
-    { start: 5.22, end: 7.2 }, // jellow
-    { start: 7.23, end: 9.43 }, // cake
-    { start: 9.43, end: 12.25 }, // Hello
-    { start: 12.27, end: 15.05 }, // Good morning
-    { start: 15.04, end: 17.13 },
-    { start: 17.15, end: 19.26 },
-    { start: 12.27, end: 15.05 }, // Good morning
-    { start: 15.04, end: 17.13 },
-    { start: 17.15, end: 19.26 },
+    { start: 3.88, end: 7.34 },
+    { start: 5.17, end: 10.08 },
+    { start: 7.18, end: 12.63 },
+    { start: 9.29, end: 15.02 },
+    { start: 12.22, end: 17.74 },
+    { start: 15.09, end: 20.31 },
+    { start: 17.15, end: 22.68 },
+    { start: 12.22, end: 25.16 },
+    { start: 15.09, end: 27.86 },
+    { start: 17.15, end: 30.0 },
   ];
 
   // ================================

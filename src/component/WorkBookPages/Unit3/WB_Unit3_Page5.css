@@ -45,6 +45,20 @@
     z-index: 99;
 }
 
+
+.word-text2-wb-unit3-p5-q2 {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    background: #ffffff;
+    border-radius: 9px;
+    font-size: 18px;
+    /* min-width: 100px; */
+    text-align: start;
+    /* border: 2px solid #000000; */
+    width: 200px;
+    padding: 0px 10px;
+}
 @media (max-width: 1024px) {
   .wb-unit3-p5-q1 {
     top: 14.5%;
