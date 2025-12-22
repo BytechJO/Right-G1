@@ -1,98 +1,119 @@
-import React, { useState } from "react";
-// import "./Unit3_Page6_Q2.css";
+import React, { useState, useRef, useEffect } from "react";
+import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
+import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
+import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P27exeE-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P27exeE-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
-import img4 from "../../../assets/unit3/imgs3/P27exeE-04.svg";
-const WB_Unit5_Page3_Q2 = () => {
+import "./WB_Unit6_Page3_Q2.css"
+const WB_Unit6_Page3_Q2 = () => {
   const questions = [
     {
-      id: 1,
-      text: "Is this a book? Yes, it is. ",
-      image: img1,
-      correct: "✓",
-    },
-    { id: 2, text: "Is this a pen? No, it isn’t.", image: img2, correct: "✓" },
-    {
-      id: 3,
-      text: "Is this a chair? No, it isn’t.",
-      image: img3,
-      correct: "✗",
+      img: bat,
+      parts: [
+        { type: "text", value: "He" },
+        { type: "input", answer: "can play the violin" },
+        { type: "text", value: "." },
+      ],
     },
     {
-      id: 4,
-      text: "Is this an eraser? Yes, it is.",
-      image: img4,
-      correct: "✗",
+      img: cap,
+      parts: [
+        { type: "text", value: "She" },
+        { type: "input", answer: "can fly a kite" },
+        { type: "text", value: "." },
+      ],
     },
+    {
+      img: ant,
+      parts: [
+         { type: "text", value: "He" },
+        { type: "input", answer: "can't ride a bike" },
+        { type: "text", value: "." },
+      ],
+    },
+ 
   ];
 
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState([]);
-  const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
+  const [answers, setAnswers] = useState(
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+  );
 
-  const selectAnswer = (id, value) => {
-    if (showCorrectAnswers) return;
-    setAnswers({ ...answers, [id]: value });
-    setShowResult([]);
-  };
-  const showAnswersFunc = () => {
-    const correctMap = {};
-    questions.forEach((q) => {
-      correctMap[q.id] = q.correct;
-    });
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-    setAnswers(correctMap);
-    setShowResult(questions.map(() => "correct"));
-    setShowCorrectAnswers(true);
+  const handleChange = (value, qIndex, pIndex) => {
+    if (locked) return;
+
+    const copy = [...answers];
+    copy[qIndex][pIndex] = value.toLowerCase();
+    setAnswers(copy);
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (showCorrectAnswers) return;
-    // 1) فحص الخانات الفارغة
-    const isEmpty = questions.some((q) => !answers[q.id]);
-    if (isEmpty) {
-      ValidationAlert.info("Please choose ✓ or ✗ for all questions!");
-      return;
+    if (locked) return;
+
+    // 🔴 1) فحص الانبوتات الفاضية
+    for (let qIndex = 0; qIndex < questions.length; qIndex++) {
+      for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
+        const part = questions[qIndex].parts[pIndex];
+
+        if (part.type === "input") {
+          const value = answers[qIndex][pIndex];
+
+          if (!value || value.trim() === "") {
+            ValidationAlert.info(`Please complete question ${qIndex + 1}.`);
+            return; // ⛔ وقف التشييك
+          }
+        }
+      }
     }
 
-    // 2) مقارنة الإجابات
-    const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong"
+    let wrong = [];
+    let score = 0;
+    let total = 0;
+
+    questions.forEach((q, qIndex) => {
+      q.parts.forEach((p, pIndex) => {
+        if (p.type === "input") {
+          total++;
+          if (answers[qIndex][pIndex]?.trim() === p.answer) {
+            score++;
+          } else {
+            wrong.push(`${qIndex}-${pIndex}`);
+          }
+        }
+      });
+    });
+
+    setWrongInputs(wrong);
+    setLocked(true);
+    const msg = `Score: ${score} / ${total}`;
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+  };
+  const showAnswers = () => {
+    const filled = questions.map((q) =>
+      q.parts.map((p) => (p.type === "input" ? p.answer : null))
     );
 
-    setShowResult(results);
-
-    // 3) حساب السكور
-    const correctCount = results.filter((r) => r === "correct").length;
-    const total = questions.length;
-    const scoreMsg = `${correctCount} / ${total}`;
-
-    let color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
-    const resultHTML = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${scoreMsg}
-        </span>
-      </div>
-    `;
-
-    if (correctCount === total) ValidationAlert.success(resultHTML);
-    else if (correctCount === 0) ValidationAlert.error(resultHTML);
-    else ValidationAlert.warning(resultHTML);
+    setAnswers(filled);
+    setWrongInputs([]);
+    setLocked(true); // 🔒 قفل التعديل
   };
 
-  const resetAnswers = () => {
-    setAnswers({});
-    setShowResult([]);
-    setShowCorrectAnswers(false);
+  const reset = () => {
+    setAnswers(
+      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    );
+    setWrongInputs([]);
+    setLocked(false);
   };
 
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -102,7 +123,6 @@ const WB_Unit5_Page3_Q2 = () => {
       }}
     >
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -112,83 +132,66 @@ const WB_Unit5_Page3_Q2 = () => {
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span>Look, read, and write
-          <span style={{ color: "red" }}> ✓ </span> or
-          <span style={{ color: "red" }}> ✗</span>.
+          <span className="ex-A">F</span>Look and write.
         </h5>
+        <div className="content-container-wb-unit6-p3-q2">
+          {questions.map((q, qIndex) => (
+            <div key={qIndex} className="row2-wb-unit6-p3-q2">
+              <div style={{ display: "flex", gap: "10px" ,alignItems:"center"}}>
+                <span className="num-span">{qIndex + 1}</span>
+                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+              </div>
 
-        <div className="unit3-q5-container"style={{
-                  gap: "70px",
-                }}>
-          {questions.map((q, index) => (
-            <div key={q.id} className="unit3-q5-question-box">
-              <p
-                className="unit3-q5-question-text"
-                style={{
-                  fontSize: "20px",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>
-                  {q.id}.
-                </span>
-                {q.text}
-              </p>
+              <div className="sentence-wrapper-wb-unit4-p1-q2">
+                {q.parts.map((part, pIndex) => {
+                  if (part.type === "text") {
+                    return (
+                      <span key={pIndex} className="sentence-text">
+                        {part.value}
+                      </span>
+                    );
+                  }
 
-              <div className="unit3-q5-flex">
-                <img src={q.image} alt="" className="unit3-q5-question-img" />
+                  return (
+                    <span key={pIndex} style={{ position: "relative" ,width:"90%"}}>
+                      <input
+                        type="text"
+                          style={{width:"100%"}}
+                        className="inline-input-wb-unit4-p1-q2"
+                        value={answers[qIndex][pIndex] || ""}
+                        onChange={(e) =>
+                          handleChange(e.target.value, qIndex, pIndex)
+                        }
+                        disabled={locked}
+                      />
 
-                <div className="unit3-q5-options-box">
-                  {/* خيار الصح */}
-                  <div className="option-wrapper">
-                    <div
-                      className={`option-btn ${
-                        answers[q.id] === "✓" ? "selected" : ""
-                      }`}
-                      onClick={() => selectAnswer(q.id, "✓")}
-                    >
-                      ✓
-                    </div>
-
-                    {showResult[index] === "wrong" && answers[q.id] === "✓" && (
-                      <div className="unit3-q5-wrong-icon">✕</div>
-                    )}
-                  </div>
-
-                  {/* خيار الخطأ */}
-                  <div className="option-wrapper">
-                    <div
-                      className={`option-btn ${
-                        answers[q.id] === "✗" ? "selected" : ""
-                      }`}
-                      onClick={() => selectAnswer(q.id, "✗")}
-                    >
-                      ✗
-                    </div>
-
-                    {showResult[index] === "wrong" && answers[q.id] === "✗" && (
-                      <div className="unit3-q5-wrong-icon">✕</div>
-                    )}
-                  </div>
-                </div>
+                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                        <span className="error-mark-input-wb-unit2-page3-q2">
+                          ✕
+                        </span>
+                      )}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
-        <div className="action-buttons-container">
-          <button onClick={resetAnswers} className="try-again-button">
-            Start Again ↻
-          </button>
-          <button onClick={showAnswersFunc} className="show-answer-btn">
-            Show Answer
-          </button>
-
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
+      </div>
+      <div className="action-buttons-container">
+        <button onClick={reset} className="try-again-button">
+          Start Again ↻
+        </button>
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button onClick={showAnswers} className="show-answer-btn swal-continue">
+          Show Answer
+        </button>
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
+        </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit5_Page3_Q2;
+export default WB_Unit6_Page3_Q2;

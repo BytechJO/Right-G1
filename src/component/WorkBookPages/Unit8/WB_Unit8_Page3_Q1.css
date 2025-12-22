@@ -1,0 +1,46 @@
+.word-text2-wb-unit8-p3-q1 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  /* height: 50px; */
+  width: 70px;
+  border: 2px solid #000000;
+  border-radius: 9px;
+  background-color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  position: relative;
+  /* width: fit-content; */
+  margin-bottom: 25px;
+}
+
+
+.container12-wb-unit8-p3-q1 {
+    margin: auto;
+    position: relative;
+    user-select: none;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.error-mark8-wb-unit8-p3-q1 {
+    width: 25px;
+    height: 25px;
+    border: 2px solid white;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    vertical-align: middle;
+    position: absolute;
+    left: 6%;
+    top: -13%;
+    z-index: 99;
+}

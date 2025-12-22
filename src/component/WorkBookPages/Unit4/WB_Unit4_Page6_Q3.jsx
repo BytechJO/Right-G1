@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 // import "./Review10_Page2_Q3.css";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
-import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
 import img1 from "../../../assets/unit4/imgs/U4P37EEXEE-01-01.svg";
 import img2 from "../../../assets/unit4/imgs/U4P37EEXEE-01-02.svg";
 import img3 from "../../../assets/unit4/imgs/U4P37EEXEE-02-01.svg";
 import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
-import img5 from "../../../assets/unit4/imgs/U4P37EEXEE-03-01.svg";
-import img6 from "../../../assets/unit4/imgs/U4P37EEXEE-03-02.svg";
-import { TbMessageCircle } from "react-icons/tb";
 
 const data = [
   {

@@ -1,0 +1,28 @@
+.content-container-wb-unit8-p1-q2 {
+  display: flex;
+  justify-items: center;
+  /* gap: 30px; */
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.q-img-wb-unit8-p1-q2 {
+  width: auto;
+  height: 120px;
+}
+
+.sentence-wrapper-wb-unit8-p1-q2 {
+  display: flex;
+  gap: 6px;
+  font-size: 18px;
+  width: 100%;
+  flex-direction: row;
+}
+
+.inline-input-wb-unit8-p1-q2 {
+    
+    border: none;
+    border-bottom: 2px solid #333;
+    text-align: center;
+    font-size: 22px;
+  }

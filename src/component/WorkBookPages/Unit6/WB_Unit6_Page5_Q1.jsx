@@ -1,223 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import find_img from "../../../assets/U1 WB/U5/Untitled design.jpg";
+import "./WB_Unit6_Page5_Q1.css";
 
-/* ================= DATA ================= */
-
-const items = [
-  {
-    key: "pen",
-    label: "pen",
-    area: { x1: 23.96, y1: 48.13, x2: 32.96, y2: 57.13 },
-  },
-  {
-    key: "book",
-    label: "book",
-    area: { x1: 16.5, y1: 30, x2: 25.5, y2: 40 },
-  },
-  {
-    key: "eraser",
-    label: "eraser",
-    area: {
-      x1: 55,
-      y1: 49.5,
-      x2: 64,
-      y2: 59.5,
-    },
-  },
-  {
-    key: "chair",
-    label: "chair",
-    area: {
-      x1: 27,
-      y1: 68.5,
-      x2: 36,
-      y2: 78.5,
-    },
-  },
-  {
-    key: "ruler",
-    label: "ruler",
-    area: { x1: 67.5, y1: 44.5, x2: 76.5, y2: 54.5 },
-  },
-];
-
-/* ================= COMPONENT ================= */
-
-const WB_Unit5_Page5_Q1 = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [circles, setCircles] = useState({});
+const WB_Unit6_Page5_Q1 = () => {
+  const [answers, setAnswers] = useState(["", "", ""]);
   const [checked, setChecked] = useState(false);
 
-  /* ================= IMAGE CLICK ================= */
+  const canvasRefs = useRef([]);
 
-  const handleImageClick = (e) => {
-    if (!selectedItem || checked) return;
+  /* ================= CANVAS SETUP ================= */
 
-    const rect = e.target.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+  useEffect(() => {
+    canvasRefs.current.forEach((canvas) => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
 
-    setCircles((prev) => ({
-      ...prev,
-      [selectedItem]: { x, y },
-    }));
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
+      const ctx = canvas.getContext("2d");
+      ctx.scale(dpr, dpr);
+    });
+  }, []);
+
+  const getPos = (e, canvas) => {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    };
   };
 
-  /* ================= CHECK ANSWER ================= */
+  const startDrawing = (e, index) => {
+    e.preventDefault();
+    const canvas = canvasRefs.current[index];
+    const ctx = canvas.getContext("2d");
+    const { x, y } = getPos(e, canvas);
 
-  const handleCheck = () => {
-    if (checked) return;
-    if (Object.keys(circles).length < items.length) {
-      ValidationAlert.info("Pay attention!", "Please circle all the words.");
+    ctx.isDrawing = true;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "purple";
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const draw = (e, index) => {
+    e.preventDefault();
+    const canvas = canvasRefs.current[index];
+    const ctx = canvas.getContext("2d");
+    if (!ctx.isDrawing) return;
+
+    const { x, y } = getPos(e, canvas);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  const stopDrawing = (index) => {
+    const ctx = canvasRefs.current[index].getContext("2d");
+    ctx.isDrawing = false;
+    ctx.closePath();
+  };
+
+  const resetCanvas = () => {
+    canvasRefs.current.forEach((canvas) => {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  };
+
+  /* ================= CHECK ================= */
+
+  const checkAnswer = () => {
+    if (answers.some((a) => a.trim() === "")) {
+      ValidationAlert.info("Please complete all sentences!");
       return;
     }
 
-    let score = 0;
-
-    items.forEach((item) => {
-      const p = circles[item.key];
-      if (!p) return;
-
-      if (
-        p.x >= item.area.x1 &&
-        p.x <= item.area.x2 &&
-        p.y >= item.area.y1 &&
-        p.y <= item.area.y2
-      ) {
-        score++;
-      }
-    });
-
     setChecked(true);
 
-  const color =
-      score === items.length ? "green" : score === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${score} / ${items.length}
-      </span>
-    </div>
-  `;
-    if (score === items.length) ValidationAlert.success(scoreMessage);
-    else if (score === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    ValidationAlert.success(`
+      <div style="font-size:20px;text-align:center;">
+        <b style="color:green">Score: 3 / 3</b>
+      </div>
+    `);
   };
 
-  /* ================= SHOW ANSWER ================= */
-
-  const handleShowAnswer = () => {
-    const correct = {};
-    items.forEach((item) => {
-      correct[item.key] = {
-        x: (item.area.x1 + item.area.x2) / 2,
-        y: (item.area.y1 + item.area.y2) / 2,
-      };
-    });
-
-    setCircles(correct);
-    setChecked(true);
-  };
-
-  /* ================= RESET ================= */
-
-  const handleStartAgain = () => {
-    setSelectedItem(null);
-    setCircles({});
+  const reset = () => {
+    setAnswers(["", "", ""]);
     setChecked(false);
+    resetCanvas();
   };
 
-  /* ================= RENDER ================= */
+  /* ================= JSX ================= */
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div
-        style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        }}
-      >
-        <h5 className="header-title-page8">
-          <span className="ex-A">I</span> Read, look, and circle.
-        </h5>
+    <div className="wb-unit6-p5-q1-wrapper">
+      <h4 className="header-title-page8">
+        <span className="ex-A">I</span> What can you do? Write and draw.
+      </h4>
 
-        {/* WORD BUTTONS */}
-        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
-          {items.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setSelectedItem(item.key)}
-              style={{
-                padding: "6px 16px",
-                borderRadius: "12px",
-                background: "white",
-                border:
-                  selectedItem === item.key
-                    ? "2px solid #007bff"
-                    : "1px solid #999",
-                cursor: "pointer",
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <div className="exercise-container-wb-unit6-p5-q1">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="row-container-wb-unit6-p5-q1">
+            {/* LEFT */}
+            <div className="sentence-area-wb-unit6-p5-q1">
+              <span className="number-wb-unit6-p5-q1">{i + 1}</span>
+              <span className="text">I can</span>
+              <input
+                type="text"
+                value={answers[i]}
+                disabled={checked}
+                onChange={(e) => {
+                  const updated = [...answers];
+                  updated[i] = e.target.value;
+                  setAnswers(updated);
+                }}
+              />
+            </div>
 
-      {/* IMAGE */}
-      <div style={{ position: "relative", marginTop: "20px" }}>
-        <img
-          src={find_img}
-          alt="classroom"
-          style={{
-            height: "50vh",
-            width: "auto",
-            cursor: selectedItem ? "crosshair" : "default",
-            display: "block",
-          }}
-          onClick={handleImageClick}
-        />
-
-        {/* DRAW CIRCLES */}
-        {Object.entries(circles).map(([key, point]) => (
-          <div
-            key={key}
-            style={{
-              position: "absolute",
-              top: `${point.y}%`,
-              left: `${point.x}%`,
-              width: "9%",
-              height: "10%",
-              border: "3px solid red",
-              borderRadius: "50%",
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
-            }}
-          />
+            {/* RIGHT */}
+            <canvas
+              ref={(el) => (canvasRefs.current[i] = el)}
+              className="draw-box-wb-unit6-p5-q1"
+              onMouseDown={(e) => startDrawing(e, i)}
+              onMouseMove={(e) => draw(e, i)}
+              onMouseUp={() => stopDrawing(i)}
+              onMouseLeave={() => stopDrawing(i)}
+              onTouchStart={(e) => startDrawing(e, i)}
+              onTouchMove={(e) => draw(e, i)}
+              onTouchEnd={() => stopDrawing(i)}
+            />
+          </div>
         ))}
       </div>
 
-      {/* ACTION BUTTONS */}
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={handleStartAgain}>
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-
-        <button className="show-answer-btn" onClick={handleShowAnswer}>
-          Show Answer
-        </button>
-
-        <button className="check-button2" onClick={handleCheck}>
+        <button className="check-button2" onClick={checkAnswer}>
           Check Answer ✓
         </button>
       </div>
@@ -225,4 +152,4 @@ const WB_Unit5_Page5_Q1 = () => {
   );
 };
 
-export default WB_Unit5_Page5_Q1;
+export default WB_Unit6_Page5_Q1;

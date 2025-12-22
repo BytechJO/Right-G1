@@ -1,6 +1,6 @@
 /* ===== WRAPPER ===== */
 .wb-unit6-p2-q2-wrapper {
-  width:60%;
+  width: 60%;
   margin: 0 auto;
   padding: 30px;
   display: flex;
@@ -61,7 +61,7 @@
 /* ===== NUMBER STYLE (blue) ===== */
 .left-col-wb-unit6-p2-q2 .num-wb-unit6-p2-q2 {
   width: 22px;
-  color: #1e40af;
+  color: #3054c7;
   font-weight: 800;
   display: inline-block;
 }
@@ -125,21 +125,42 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 
-
-
 /* ===== WRONG MARK near left text (red circle with white x) ===== */
 .wrong-mark-wb-unit6-p2-q2 {
   position: absolute;
   left: -28px;
   top: 50%;
   transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background: red;
   color: #fff;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 900;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-wrapper-wb-unit6-p2-q2 {
+  position: relative;
+  display: inline-block;
+}
+
+.wrong-input-mark-wb-unit6-p2-q2 {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 25px;
+  background: red;
+  color: white !important;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +186,7 @@
 .write-line-wb-unit6-p2-q2 span {
   color: #1e40af;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 /* long underline input */
@@ -173,8 +194,9 @@
   border: none;
   border-bottom: 2px solid #000;
   padding: 8px 6px;
-  font-size: 16px;
+  font-size: 18px;
   outline: none;
+  width: 100%;
   background: transparent;
 }
 

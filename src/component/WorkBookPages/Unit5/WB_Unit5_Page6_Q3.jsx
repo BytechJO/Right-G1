@@ -7,7 +7,7 @@ import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
 import "./WB_Unit5_Page6_Q3.css"
 const WB_Unit5_Page6_Q3 = () => {
-  const [answers, setAnswers] = useState(Array(4).fill(null));
+  const [answers, setAnswers] = useState(Array(3).fill(null));
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
 

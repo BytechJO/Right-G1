@@ -391,6 +391,8 @@ export default function Book() {
     { id: 3, label: "Unit 3", start: 15, pages: 6 },
     { id: 4, label: "Unit 4", start: 21, pages: 6 },
     { id: 5, label: "Unit 5", start: 27, pages: 6 },
+    { id: 6, label: "Unit 6", start: 33, pages: 6 },
+    { id: 7, label: "Unit 7", start: 39, pages: 6 },
   ];
 
   const teacherUnits = [
@@ -435,7 +437,7 @@ export default function Book() {
     { id: "work", label: "Workbook" },
     { id: "teacher", label: "Teacher’s Book" },
     { id: "flash", label: "Flashcards" },
-    { id: "poster", label: "Grammar Poster" },
+    // { id: "poster", label: "Grammar Poster" },
     { id: "posterVocab", label: "Posters" },
   ];
   const sidebarUnits = {

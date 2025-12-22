@@ -1,116 +1,105 @@
-import React, { useState, useRef } from "react";
-import img1 from "../../../assets/unit6/imgs/U6P51EXEF-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P51EXEF-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P51EXEF-03.svg";
+import React, { useState, useEffect, useRef } from "react";
+// import "./Unit5_Page6_Q1.css";
+import img1 from "../../../assets/unit6/imgs/U6P52EXEA-01.svg";
+import img2 from "../../../assets/unit6/imgs/U6P52EXEA-02.svg";
+import img3 from "../../../assets/unit6/imgs/U6P52EXEA-03.svg";
+import img4 from "../../../assets/unit6/imgs/U6P52EXEA-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-// import "./WB_Unit3_Page3_Q2.css";
+const WB_Unit6_Page4_Q2 = () => {
+  const [answers, setAnswers] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
+  const [locked, setLocked] = useState(false);
 
-const WB_Unit5_Page4_Q2 = () => {
-  const [lines, setLines] = useState([]);
-  const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
-  // ⭐⭐ NEW: قفل الرسم بعد Check Answer
-  const [locked, setLocked] = useState(false); //  ← إضافة جديدة
-  const [firstDot, setFirstDot] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
   const correctMatches = [
-    { word: "This is a poster.", image: "img2" },
-    { word: "This is a book.", image: "img4" },
-    { word: "This is a pen.", image: "img1" },
-    { word: "This is a globe.", image: "img3" },
-    
+    { input: "can't", num: "input1" },
+    { input: "she fly a kite", num: "input2" },
+    { input: "she can", num: "input3" },
+    { input: "Can he sail a boat", num: "input4" },
+    { input: "No, he can't", num: "input5" },
+    { input: "Can he ride a bike", num: "input6" },
+    { input: "No, he can't", num: "input7" },
   ];
 
-  // ============================
-  // 1️⃣ الضغط على النقطة الأولى (start-dot)
-  // ============================
-  const handleStartDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
+  const handleChange = (e) => {
+    if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
+    const { id, value } = e.target;
+    setAnswers((prev) => {
+      const updated = [...prev];
+      const existingIndex = updated.findIndex((ans) => ans.num === id);
 
-    const rect = containerRef.current.getBoundingClientRect();
+      if (existingIndex !== -1) {
+        updated[existingIndex] = { input: value, num: id };
+      } else {
+        updated.push({ input: value, num: id });
+      }
 
-    const word = e.target.dataset.word || null;
-    const image = e.target.dataset.image || null;
-
-    // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
-    const alreadyUsed = lines.some((line) => line.word === word);
-    if (alreadyUsed) return; // ← إضافة جديدة
-
-    setFirstDot({
-      word,
-
-      x: e.target.getBoundingClientRect().left - rect.left + 8,
-      y: e.target.getBoundingClientRect().top - rect.top + 8,
+      return updated;
     });
+    setWrongWords([]);
+  };
+  const showAnswers = () => {
+    const filled = correctMatches.map((item) => ({
+      input: item.input,
+      num: item.num,
+    }));
+
+    setAnswers(filled);
+    setWrongWords([]);
+    setLocked(true); // 🔒 قفل التعديل
   };
 
-  // ============================
-  // 2️⃣ الضغط على النقطة الثانية (end-dot)
-  // ============================
-  const handleEndDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
-    if (!firstDot) return;
+  const checkAnswers = () => {
+    if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
 
-    const rect = containerRef.current.getBoundingClientRect();
+    // تأكد إنو الطالب وصل كل الأزواج
 
-    const endWord = e.target.dataset.word || null;
-    const endImage = e.target.dataset.image || null;
+    let correctCount = 0;
 
-    const newLine = {
-      x1: firstDot.x,
-      y1: firstDot.y,
-      x2: e.target.getBoundingClientRect().left - rect.left + 8,
-      y2: e.target.getBoundingClientRect().top - rect.top + 8,
+    let wrong = []; // ⭐ تم التعديل هون
+    // احسب كم وصلة صحيحة
 
-      word: firstDot.word || endWord,
-      image: firstDot.image || endImage,
-    };
-
-    setLines((prev) => [...prev, newLine]);
-    setFirstDot(null);
-  };
-  const checkAnswers2 = () => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل بعد القفل
-    if (lines.length < correctMatches.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please connect all the pairs before checking."
-      );
+    if (answers.length === 0) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    let correctCount = 0;
-    let wrong = [];
-
-    lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
-      );
-
-      if (isCorrect) {
+    correctMatches.forEach((ans, i) => {
+      if (
+        ans.input.toLocaleLowerCase() === answers[i].input.toLocaleLowerCase()
+      ) {
         correctCount++;
       } else {
-        wrong.push(line.word); // ✅ خزّني اسم صورة الخطأ فقط
+        wrong.push(ans.num);
       }
     });
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
-    setLocked(true); // ⭐⭐ NEW: إغلاق الرسم بعد Check Answer
+    setWrongWords(wrong);
+    setLocked(true);
+    console.log(correctCount);
+    console.log(wrongWords);
     const total = correctMatches.length;
+    // تحديد اللون حسب النتيجة
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    // رسالة النتيجة منسقة بالألوان
+    const scoreMessage = `
+        <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+          <span style="color:${color}; font-weight:bold;">
+            Score: ${correctCount} / ${total}
+          </span>
+        </div>
+      `;
+
+    // الحالات الثلاث
+
+    if (total === correctCount) {
+      ValidationAlert.success(scoreMessage);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
 
   return (
@@ -133,216 +122,318 @@ const WB_Unit5_Page4_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">
-            <span className="ex-A">H</span>Read, look, and match. Color.
-          </h5>
-
-          <div className="match-wrapper2" ref={containerRef}>
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <h5
-                  className="h5-wb-unit3-p3-q2"
-                  onClick={() => document.getElementById("climb-dot").click()}
+        <div className="unit2-page9-q1-container">
+          <h4 className="header-title-page8">
+            <span className="ex-A"> H</span> Look and write.
+          </h4>
+          <div className="content-container-unit5-p6-q1">
+            <div className="section-one-wb-unit6-p4-q2">
+              <div className="img-container-wb-unit6-p4-q2">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
                 >
-                  This is a poster.
-                  {wrongImages.includes("This is a poster.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a poster."
-                  id="climb-dot"
-                  onClick={handleStartDotClick}
-                ></div>
+                  1
+                </span>{" "}
+                <img src={img1} className="img-unit5-p6-q1" />
               </div>
-
-              <div className="word-box2">
-                <h5
-                  className="h5-wb-unit3-p3-q2"
-                  onClick={() => document.getElementById("fly-dot").click()}
-                >
-                  This is a book.
-                  {wrongImages.includes("This is a book.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a book."
-                  id="fly-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  className="h5-wb-unit3-p3-q2"
-                  onClick={() => document.getElementById("ride-dot").click()}
-                >
-                  This is a pen.
-                  {wrongImages.includes("This is a pen.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a pen."
-                  id="ride-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="word-box2">
-                <h5
-                  className="h5-wb-unit3-p3-q2"
-                  onClick={() => document.getElementById("forks-dot").click()}
-                >
-                  This is a globe.
-                  {wrongImages.includes("This is a globe.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a globe."
-                  id="forks-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-          
-            </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img
-                  src={img1}
-                  alt=""
-                  className="img-box2-unit6-p6-q3"
-                  onClick={() => document.getElementById("img1-dot").click()}
+              <div className="content-input-unit5-p6-q1">
+                <input
+                  type="text"
+                  value={"Can it swim ?"}
+                  readOnly
+                  style={{
+                    pointerEvents: "none",
+                    borderBottom: "2px solid black",
+                    width: "75%",
+                    fontSize: "22px",
+                  }}
                 />
 
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleEndDotClick}
-                ></div>
+                <div style={{ position: "relative",display:"flex" }}>
+                  <input
+                    type="text"
+                    value={"No, it"}
+                    readOnly
+                    style={{
+                      pointerEvents: "none",
+                      borderBottom: "2px solid black",
+                      width: "20%",
+                      fontSize: "22px",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      className="answer-input-wb-unit6-p4-q2"
+                      value={
+                        answers.find((a) => a.num === "input1")?.input || ""
+                      }
+                      id="input1"
+                      style={{
+                        fontSize: "22px",
+                      }}
+                      onChange={handleChange}
+                      disabled={locked}
+                    />
+                    .
+                    {wrongWords.includes(answers[0]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="img-box2">
-                <img
-                  src={img2}
-                  alt=""
-                  className="img-box2-unit6-p6-q3"
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img3}
-                  alt=""
-                  className="img-box2-unit6-p6-q3"
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img3}
-                  alt=""
-                  className="img-box2-unit6-p6-q3"
-                  onClick={() => document.getElementById("img4-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>{" "}
             </div>
 
-            {/* الجمل */}
+            <div className="section-two-wb-unit6-p4-q2">
+              <div className="img-container-wb-unit6-p4-q2">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  2
+                </span>{" "}
+                <img src={img2} className="img-unit5-p6-q1" />
+              </div>
+              <div className="content-input-unit5-p6-q1">
+                <div style={{ position: "relative", display: "flex" }}>
+                  <input
+                    type="text"
+                    value={"Can"}
+                    readOnly
+                    style={{
+                      pointerEvents: "none",
+                      borderBottom: "2px solid black",
+                      width: "25%",
+                      fontSize: "22px",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      className="answer-input-wb-unit6-p4-q2"
+                      value={
+                        answers.find((a) => a.num === "input2")?.input || ""
+                      }
+                      id="input2"
+                      style={{
+                        fontSize: "22px",
+                      }}
+                      onChange={handleChange}
+                      disabled={locked}
+                    />
+                    .
+                    {wrongWords.includes(answers[1]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
+                </div>
+                <div style={{ position: "relative", display: "flex" }}>
+                  <input
+                    type="text"
+                    value={"Yes,"}
+                    readOnly
+                    style={{
+                      pointerEvents: "none",
+                      borderBottom: "2px solid black",
+                      width: "20%",
+                      fontSize: "22px",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      className="answer-input-wb-unit6-p4-q2"
+                      value={
+                        answers.find((a) => a.num === "input3")?.input || ""
+                      }
+                      id="input3"
+                      style={{
+                        fontSize: "22px",
+                      }}
+                      onChange={handleChange}
+                      disabled={locked}
+                    />
+                    .
+                    {wrongWords.includes(answers[2]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+            <div className="section-three-wb-unit6-p4-q2">
+              <div className="img-container-wb-unit6-p4-q2">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  3
+                </span>{" "}
+                <img src={img3} className="img-unit5-p6-q1" />
+              </div>
+              <div className="content-input-unit5-p6-q1">
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="text"
+                    className="answer-input-wb-unit6-p4-q2"
+                    value={answers.find((a) => a.num === "input4")?.input || ""}
+                    id="input4"
+                    style={{
+                      fontSize: "22px",
+                    }}
+                    onChange={handleChange}
+                    disabled={locked}
+                  />
+                  {wrongWords.includes(answers[3]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                  ?
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <input
+                      type="text"
+                      className="answer-input-wb-unit6-p4-q2"
+                      value={
+                        answers.find((a) => a.num === "input5")?.input || ""
+                      }
+                      style={{
+                        fontSize: "22px",
+                      }}
+                      id="input5"
+                      onChange={handleChange}
+                      disabled={locked}
+                    />
+                    .
+                    {wrongWords.includes(answers[4]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="section-four-wb-unit6-p4-q2">
+              <div className="img-container-wb-unit6-p4-q2">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  4
+                </span>{" "}
+                <img src={img4} className="img-unit5-p6-q1" />
+              </div>
+              <div className="content-input-unit5-p6-q1">
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="answer-input-wb-unit6-p4-q2"
+                    value={answers.find((a) => a.num === "input6")?.input || ""}
+                    id="input6"
+                    onChange={handleChange}
+                    style={{
+                      fontSize: "22px",
+                    }}
+                    disabled={locked}
+                  />
+                  ?
+                  {wrongWords.includes(answers[5]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                </div>
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="answer-input-wb-unit6-p4-q2"
+                    value={answers.find((a) => a.num === "input7")?.input || ""}
+                    id="input7"
+                    onChange={handleChange}
+                    style={{
+                      fontSize: "22px",
+                    }}
+                    disabled={locked}
+                  />
+                  .
+                  {wrongWords.includes(answers[6]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLines([]);
-            setWrongImages([]);
-            setFirstDot(null);
-            setShowAnswer(false);
-            setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
-          }}
-          className="try-again-button"
-        >
-          Start Again ↻
-        </button>
-        {/* Show Answer */}
-        <button
-          onClick={() => {
-            const rect = containerRef.current.getBoundingClientRect();
-
-            const getDotPosition = (selector) => {
-              const el = document.querySelector(selector);
-              if (!el) return { x: 0, y: 0 };
-              const r = el.getBoundingClientRect();
-              return {
-                x: r.left - rect.left + 8,
-                y: r.top - rect.top + 8,
-              };
-            };
-
-            const finalLines = correctMatches.map((line) => ({
-              ...line,
-              x1: getDotPosition(`[data-word="${line.word}"]`).x,
-              y1: getDotPosition(`[data-word="${line.word}"]`).y,
-              x2: getDotPosition(`[data-image="${line.image}"]`).x,
-              y2: getDotPosition(`[data-image="${line.image}"]`).y,
-            }));
-
-            setLines(finalLines);
-            setWrongImages([]);
-            setShowAnswer(true);
-            setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
-          }}
-          className="show-answer-btn swal-continue"
-        >
-          Show Answer
-        </button>
-        <button onClick={checkAnswers2} className="check-button2">
-          Check Answer ✓
-        </button>
+        <div className="action-buttons-container">
+          <button
+            onClick={() => {
+              setAnswers([]);
+              setWrongWords([]);
+              setLocked(false); // ⬅ رجّع التعديل
+            }}
+            className="try-again-button"
+          >
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={showAnswers}
+          >
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default WB_Unit5_Page4_Q2;
+export default WB_Unit6_Page4_Q2;

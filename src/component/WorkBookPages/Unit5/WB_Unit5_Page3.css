@@ -25,7 +25,7 @@
   height: 300px;   /* كبير متل ما بدك */
   border: 2px solid #ccc;
   touch-action: none;
-  cursor: pointer;
+  cursor: crosshair;
 }
 
 .check-box-wb-u2-p3-q1  {

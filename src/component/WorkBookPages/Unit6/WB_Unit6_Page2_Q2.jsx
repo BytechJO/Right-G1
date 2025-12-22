@@ -32,10 +32,10 @@ const rightParts = [
 ];
 
 const correctMatches = [
-  { left: "He can’t", right: "ride a bike.", image: "img3" },
-  { left: "He can’t", right: "sail a boat.", image: "img4" },
-  { left: "It can’t", right: "climb a tree.", image: "img2" },
-  { left: "I can", right: "swim.", image: "img1" },
+  { leftId: 1, right: "ride a bike.", image: "img3" },
+  { leftId: 2, right: "sail a boat.", image: "img4" },
+  { leftId: 3, right: "climb a tree.", image: "img2" },
+  { leftId: 4, right: "swim.", image: "img1" },
 ];
 
 const correctSentences = {
@@ -56,9 +56,21 @@ const WB_Unit6_Page2_Q2 = () => {
   const [written, setWritten] = useState({});
   const [locked, setLocked] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [wrongInputs, setWrongInputs] = useState([]);
 
   /* ================= HELPERS ================= */
 
+  const getDotCenter = (parent, selector) => {
+    const rect = containerRef.current.getBoundingClientRect();
+    const dot = parent.querySelector(selector);
+    if (!dot) return null;
+
+    const r = dot.getBoundingClientRect();
+    return {
+      x: r.left - rect.left + r.width / 2,
+      y: r.top - rect.top + r.height / 2,
+    };
+  };
   const getCenter = (el) => {
     const rect = containerRef.current.getBoundingClientRect();
     const r = el.getBoundingClientRect();
@@ -67,64 +79,104 @@ const WB_Unit6_Page2_Q2 = () => {
       y: r.top - rect.top + r.height / 2,
     };
   };
-const getDotCenterFromParent = (parent) => {
-  const dot = parent.querySelector(".dot-wb-unit6-p2-q2");
-  if (!dot) return null;
-  return getCenter(dot);
-};
-
-  /* ================= CLICK HANDLERS ================= */
-
- const handleStart = (e) => {
-  if (locked) return;
-
-  const data = e.currentTarget.dataset;
-  const pos = getDotCenterFromParent(e.currentTarget);
-  if (!pos) return;
-
-  setFirstPoint({
-    left: data.left || null,
-    image: data.image || null,
-    x: pos.x,
-    y: pos.y,
-  });
-};
-
- const handleEnd = (e) => {
-  if (!firstPoint || locked) return;
-
-  const data = e.currentTarget.dataset;
-  const pos = getDotCenterFromParent(e.currentTarget);
-  if (!pos) return;
-
-  const newLine = {
-    x1: firstPoint.x,
-    y1: firstPoint.y,
-    x2: pos.x,
-    y2: pos.y,
-    left: firstPoint.left,
-    image: firstPoint.image || data.image,
-    right: data.right || null,
+  const getDotCenterFromParent = (parent, dotSelector) => {
+    const dot = parent.querySelector(dotSelector);
+    if (!dot) return null;
+    return getCenter(dot);
   };
 
-  setLines((prev) => [...prev, newLine]);
+  /* ================= CLICK HANDLERS ================= */
+  const handleStart = (e) => {
+    if (locked) return;
 
-  // 👇 لو وصلنا left → image نكمّل image → right
-  if (firstPoint.left && data.image) {
+    const data = e.currentTarget.dataset;
+
+    let type = null;
+    if (data.leftId) type = "left";
+    else if (data.image) type = "image";
+    else if (data.right) type = "right";
+
+    let pos = null;
+
+    if (type === "left") {
+      pos = getDotCenterFromParent(e.currentTarget, ".start-dot");
+    } else if (type === "image") {
+      pos = getDotCenterFromParent(e.currentTarget, ".start-dot");
+    } else {
+      return;
+    }
+
+    if (!pos) return;
+
     setFirstPoint({
-      image: data.image,
+      type,
+      leftId: data.leftId ? Number(data.leftId) : null,
+      image: data.image || null,
       x: pos.x,
       y: pos.y,
     });
-  } else {
-    setFirstPoint(null);
-  }
-};
+  };
 
+  const handleEnd = (e) => {
+    if (!firstPoint || locked) return;
+
+    const data = e.currentTarget.dataset;
+
+    let endType = null;
+    if (data.leftId) endType = "left";
+    else if (data.image) endType = "image";
+    else if (data.right) endType = "right";
+
+    if (firstPoint.type === "left" && endType !== "image") {
+      setFirstPoint(null);
+      return;
+    }
+
+    if (firstPoint.type === "image" && endType !== "right") {
+      setFirstPoint(null);
+      return;
+    }
+
+    let pos = null;
+    if (endType === "image" || endType === "right") {
+      pos = getDotCenterFromParent(e.currentTarget, ".end-dot");
+    }
+
+    if (!pos) return;
+
+    const newLine = {
+      x1: firstPoint.x,
+      y1: firstPoint.y,
+      x2: pos.x,
+      y2: pos.y,
+      leftId: firstPoint.leftId,
+      image: firstPoint.image || data.image,
+      right: data.right || null,
+    };
+
+    setLines((prev) => [...prev, newLine]);
+
+    if (firstPoint.type === "left" && endType === "image") {
+      const startFromImagePos = getDotCenterFromParent(
+        e.currentTarget,
+        ".start-dot"
+      );
+
+      setFirstPoint({
+        type: "image",
+        image: data.image,
+        x: startFromImagePos?.x ?? pos.x,
+        y: startFromImagePos?.y ?? pos.y,
+      });
+    } else {
+      setFirstPoint(null);
+    }
+  };
 
   /* ================= CHECK ================= */
 
   const checkAnswers = () => {
+    if (checked || locked) return;
     if (lines.length < correctMatches.length * 2) {
       ValidationAlert.info(
         "Pay attention!",
@@ -135,17 +187,31 @@ const getDotCenterFromParent = (parent) => {
 
     let score = 0;
     let wrong = [];
+    let wrongInputsArr = [];
+
+    Object.entries(correctSentences).forEach(([id, text]) => {
+      const userVal = written[id]?.trim().toLowerCase() || "";
+      if (userVal && userVal !== text.toLowerCase()) {
+        wrongInputsArr.push(id);
+      }
+    });
+
+    setWrongInputs(wrongInputsArr);
 
     correctMatches.forEach((c) => {
-      const hasLeftToImage = lines.some(
-        (l) => l.left === c.left && l.image === c.image
+      const leftToImg = lines.find(
+        (l) => l.leftId === c.leftId && l.image === c.image
       );
-      const hasImageToRight = lines.some(
+
+      const imgToRight = lines.find(
         (l) => l.image === c.image && l.right === c.right
       );
 
-      if (hasLeftToImage && hasImageToRight) score++;
-      else wrong.push(c.left);
+      if (leftToImg && imgToRight) {
+        score++;
+      } else {
+        wrong.push(c.leftId);
+      }
     });
 
     Object.entries(correctSentences).forEach(([id, text]) => {
@@ -159,8 +225,7 @@ const getDotCenterFromParent = (parent) => {
     setLocked(true);
 
     const total = correctMatches.length + Object.keys(correctSentences).length;
-    const color =
-      score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
     ValidationAlert[
       score === total ? "success" : score === 0 ? "error" : "warning"
@@ -177,29 +242,38 @@ const getDotCenterFromParent = (parent) => {
     const finalLines = [];
 
     correctMatches.forEach((c) => {
-      const leftEl = document.querySelector(`[data-left="${c.left}"]`);
+      // العناصر
+      const leftEl = document.querySelector(`[data-left-id="${c.leftId}"]`);
       const imgEl = document.querySelector(`[data-image="${c.image}"]`);
       const rightEl = document.querySelector(`[data-right="${c.right}"]`);
 
       if (!leftEl || !imgEl || !rightEl) return;
 
-      const leftPos = getCenter(leftEl);
-      const imgPos = getCenter(imgEl);
-      const rightPos = getCenter(rightEl);
+      // 🔹 Left → Image
+      const leftDot = getDotCenter(leftEl, ".start-dot");
+      const imageLeftDot = getDotCenter(imgEl, ".end-dot");
 
-      finalLines.push({
-        x1: leftPos.x,
-        y1: leftPos.y,
-        x2: imgPos.x,
-        y2: imgPos.y,
-      });
+      if (leftDot && imageLeftDot) {
+        finalLines.push({
+          x1: leftDot.x,
+          y1: leftDot.y,
+          x2: imageLeftDot.x,
+          y2: imageLeftDot.y,
+        });
+      }
 
-      finalLines.push({
-        x1: imgPos.x,
-        y1: imgPos.y,
-        x2: rightPos.x,
-        y2: rightPos.y,
-      });
+      // 🔹 Image → Right
+      const imageRightDot = getDotCenter(imgEl, ".start-dot");
+      const rightDot = getDotCenter(rightEl, ".end-dot");
+
+      if (imageRightDot && rightDot) {
+        finalLines.push({
+          x1: imageRightDot.x,
+          y1: imageRightDot.y,
+          x2: rightDot.x,
+          y2: rightDot.y,
+        });
+      }
     });
 
     setLines(finalLines);
@@ -234,13 +308,13 @@ const getDotCenterFromParent = (parent) => {
             <div
               key={i}
               className="item-wb-unit6-p2-q2 clickable"
-              data-left={l.text}
+              data-left-id={l.id}
               onClick={handleStart}
             >
               <span className="num-wb-unit6-p2-q2">{i + 1}</span>
               <span>{l.text}</span>
               <div className="dot-wb-unit6-p2-q2 start-dot" />
-              {wrongLeft.includes(l.text) && checked && (
+              {wrongLeft.includes(l.id) && checked && (
                 <span className="wrong-mark-wb-unit6-p2-q2">✕</span>
               )}
             </div>
@@ -254,13 +328,11 @@ const getDotCenterFromParent = (parent) => {
               key={img.id}
               className="item-wb-unit6-p2-q2 clickable"
               data-image={img.id}
-              onClick={(e) =>
-                firstPoint ? handleEnd(e) : handleStart(e)
-              }
+              onClick={(e) => (firstPoint ? handleEnd(e) : handleStart(e))}
             >
               <div className="dot-wb-unit6-p2-q2 end-dot" />
               <img src={img.src} alt="" />
-              
+
               <div className="dot-wb-unit6-p2-q2 start-dot" />
             </div>
           ))}
@@ -292,15 +364,22 @@ const getDotCenterFromParent = (parent) => {
       {/* WRITE SECTION */}
       <div className="write-section-wb-unit6-p2-q2">
         {Object.keys(correctSentences).map((id) => (
-          <div key={id} className="write-line-wb-unit6-p2-q2">
+          <div className="write-line-wb-unit6-p2-q2">
             <span>{id}</span>
-            <input
-              value={written[id] || ""}
-              disabled={locked}
-              onChange={(e) =>
-                setWritten({ ...written, [id]: e.target.value })
-              }
-            />
+
+            <div className="input-wrapper-wb-unit6-p2-q2">
+              <input
+                value={written[id] || ""}
+                disabled={locked}
+                onChange={(e) =>
+                  setWritten({ ...written, [id]: e.target.value })
+                }
+              />
+
+              {checked && wrongInputs.includes(id) && (
+                <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>
+              )}
+            </div>
           </div>
         ))}
       </div>

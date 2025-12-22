@@ -1,7 +1,15 @@
-.row-content10-wb-unit5-p6-q2 {
-  display: grid;
-  /* margin-bottom: 55px; */
-  gap: 22px;
-  /* margin-top: 20px; */
-  grid-template-columns: repeat(3, 1fr);
+.container-wb-unit6-p6-q2 {
+    /* display: flex; */
+    width: 100%;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.question-box-wb-unit6-p6-q2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* gap: 15px; */
+    justify-content: space-around;
 }

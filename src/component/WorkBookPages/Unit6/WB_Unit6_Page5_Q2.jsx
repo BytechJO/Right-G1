@@ -1,77 +1,144 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
+import "./WB_Unit6_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+const questions = [
+  {
+    id: 1,
+    img: "./img1",
+    sentence: "She can fly a kite.",
+    words: ["she", "can", "fly", "a", "kite"],
+    letters: "typolshehguecanvqxzflyiklppatyeikitebcm",
+  },
+  {
+    id: 2,
+    img: "./img2",
+    sentence: "It can't swim.",
+    words: ["it", "cant", "swim"],
+    letters: "kloiuitponbcantrwqaswimmhgfd",
+  },
+  {
+    id: 3,
+    img: "./img3",
+    sentence: "It can't climb a tree.",
+    words: ["it", "cant", "climb", "a", "tree"],
+    letters: "ascxitwqtycantlnmclimbpxczajhiyktreewqer",
+  },
+  {
+    id: 4,
+    img: "./img4",
+    sentence: "He can't sail a boat.",
+    words: ["he", "cant", "sail", "a", "boat"],
+    letters: "kuyjhebzwsacantlzassailtruhavkooboatkhtg",
+  },
+];
 
-const WB_Unit5_Page5_Q2 = () => {
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+const WB_Unit6_Page5_Q2 = () => {
+  const [foundWords, setFoundWords] = useState({});
+  const [currentWord, setCurrentWord] = useState("");
+  const [selectedIndexes, setSelectedIndexes] = useState({});
+  const [currentWordIndex, setCurrentWordIndex] = useState({});
+  const [locked, setLocked] = useState(false);
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+  const handleLetterClick = (qId, letter, index) => {
+    if (locked) return;
 
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-  }, []);
+    const next = currentWord + letter;
+    setCurrentWord(next);
 
-  const canvasRef = useRef(null);
-  const getPos = (e, canvas) => {
-    const rect = canvas.getBoundingClientRect();
+    const question = questions.find((q) => q.id === qId);
+    const expectedIndex = currentWordIndex[qId] || 0;
+    const expectedWord = question.words[expectedIndex];
 
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    // ❌ لو الكلمة اللي عم تتكوّن مش بداية الكلمة المتوقعة
+    if (!expectedWord.startsWith(next.toLowerCase())) {
+      setCurrentWord("");
+      return;
+    }
 
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    // ✅ لما تكتمل الكلمة الصح
+    if (next.toLowerCase() === expectedWord.toLowerCase()) {
+      const startIndex = index - expectedWord.length + 1;
+      const indexes = Array.from(
+        { length: expectedWord.length },
+        (_, i) => startIndex + i
+      );
 
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY,
-    };
+      setFoundWords((prev) => ({
+        ...prev,
+        [qId]: [...(prev[qId] || []), expectedWord],
+      }));
+
+      setSelectedIndexes((prev) => ({
+        ...prev,
+        [qId]: [...(prev[qId] || []), ...indexes],
+      }));
+
+      // ⏭️ انتقل للكلمة اللي بعدها
+      setCurrentWordIndex((prev) => ({
+        ...prev,
+        [qId]: expectedIndex + 1,
+      }));
+
+      setCurrentWord("");
+    }
   };
 
-  // 🖌️ Start Drawing
-  const startDrawing = (e) => {
-    e.preventDefault();
+  const checkAnswers = () => {
+    if (locked) return;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    // 🔒 تأكّد إنو كل سؤال فيه كلمة واحدة على الأقل
+    const hasEmptyQuestion = questions.some((q) => {
+      const foundCount = foundWords[q.id]?.length || 0;
+      return foundCount === 0;
+    });
 
-    const { x, y } = getPos(e, canvas);
+    if (hasEmptyQuestion) {
+      ValidationAlert.info("Please choose at least one word in each question.");
+      return;
+    }
 
-    ctx.isDrawing = true;
-    ctx.lineWidth = 3;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+    // ✅ حساب السكور (نفسه بدون تغيير)
+    let correctCount = 0;
+    let totalCount = 0;
 
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+    questions.forEach((q) => {
+      q.words.forEach((word) => {
+        totalCount++;
+        if (foundWords[q.id]?.includes(word)) {
+          correctCount++;
+        }
+      });
+    });
+    setLocked(true);
+
+    const color =
+      correctCount === totalCount
+        ? "green"
+        : correctCount === 0
+        ? "red"
+        : "orange";
+
+    const type =
+      correctCount === totalCount
+        ? "success"
+        : correctCount === 0
+        ? "error"
+        : "warning";
+
+    ValidationAlert[type](`
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color};font-weight:bold;">
+        Score: ${correctCount} / ${totalCount}
+      </span>
+    </div>
+  `);
   };
-
-  // ✏️ Drawing
-  const draw = (e) => {
-    e.preventDefault();
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx.isDrawing) return;
-
-    const { x, y } = getPos(e, canvas);
-
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  };
-
-  const stopDrawing = () => {
-    const ctx = canvasRef.current.getContext("2d");
-    ctx.isDrawing = false;
-    ctx.closePath();
-  };
-
-  const resetCanvas = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const reset = () => {
+    setFoundWords({});
+    setSelectedIndexes({});
+    setCurrentWord("");
+    setCurrentWordIndex({});
+    setLocked(false);
   };
 
   return (
@@ -85,41 +152,65 @@ const WB_Unit5_Page5_Q2 = () => {
       }}
     >
       <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "15px",
           width: "60%",
           justifyContent: "flex-start",
         }}
       >
-        <div>
-          <h5 className="header-title-page8">
-            <span className="ex-A">J</span> Look and draw your classroom.
-            and draw.
-          </h5>
-        </div>
+        <h4 className="header-title-page8">
+          <span className="ex-A"> H</span>Find the words.
+        </h4>
+        {questions.map((q) => (
+          <div className="content-container-wb-unit6-p5-q2">
+            <div key={q.id} className="wb-unit6-p5-q2-question">
+              <p className="wb-unit6-p5-q2-sentence">
+                <b>{q.id}</b> {q.sentence}
+              </p>
 
-        <canvas
-          ref={canvasRef}
-          className="draw-canvas"
-          onMouseDown={startDrawing}
-          onMouseMove={draw}
-          onMouseUp={stopDrawing}
-          onMouseLeave={stopDrawing}
-          onTouchStart={startDrawing}
-          onTouchMove={draw}
-          onTouchEnd={stopDrawing}
-        />
+              <div className="wb-unit6-p5-q2-letters">
+                {q.letters.split("").map((l, i) => {
+                  const isSelected = selectedIndexes[q.id]?.includes(i);
+
+                  return (
+                    <span
+                      key={i}
+                      className={`wb-unit6-p5-q2-letter ${
+                        isSelected ? "wb-unit6-p5-q2-letter-selected" : ""
+                      }`}
+                      onClick={() => handleLetterClick(q.id, l, i)}
+                    >
+                      {l}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div className="wb-unit6-p5-q2-found">
+                {foundWords[q.id]?.map((w, i) => (
+                  <span key={i} className="wb-unit6-p5-q2-found-word">
+                    {w}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <img src={q.img} style={{height:"100px",width:"auto"}}/>
+          </div>
+        ))}
       </div>
-
       <div className="action-buttons-container">
-        <button onClick={resetCanvas} className="try-again-button">
-          Clear Drawings ↻
+        <button className="try-again-button" onClick={reset}>
+          Start Again ↻
+        </button>
+        <button className="check-button2" onClick={checkAnswers}>
+          Check Answer ✓
         </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit5_Page5_Q2;
+export default WB_Unit6_Page5_Q2;

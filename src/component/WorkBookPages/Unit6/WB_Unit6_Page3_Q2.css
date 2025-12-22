@@ -1,0 +1,15 @@
+.content-container-wb-unit6-p3-q2 {
+    display: flex;
+    justify-items: center;
+    gap: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.row2-wb-unit6-p3-q2{
+   display: flex;
+    gap: 40px;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
