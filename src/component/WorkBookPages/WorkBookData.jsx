@@ -98,6 +98,10 @@ import WB_Unit8_Page2_Q1 from "./Unit8/WB_Unit8_Page2_Q1";
 import WB_Unit8_Page2_Q2 from "./Unit8/WB_Unit8_Page2_Q2";
 import WB_Unit8_Page3_Q1 from "./Unit8/WB_Unit8_Page3_Q1";
 import WB_Unit8_Page3_Q2 from "./Unit8/WB_Unit8_Page3_Q2";
+import WB_Unit8_Page4_Q1 from "./Unit8/WB_Unit8_Page4_Q1";
+import WB_Unit8_Page4_Q2 from "./Unit8/WB_Unit8_Page4_Q2";
+import WB_Unit8_Page5_Q1 from "./Unit8/WB_Unit8_Page5_Q1";
+import WB_Unit8_Page5_Q2 from "./Unit8/WB_Unit8_Page5_Q2";
 
 export const workBookData = [
   { component: WB_Unit1_Page3_Q1, unit: 1 }, //0
@@ -199,5 +203,9 @@ export const workBookData = [
   { component: WB_Unit8_Page2_Q2, unit: 8 }, //89
   { component: WB_Unit8_Page3_Q1, unit: 8 }, //90
   { component: WB_Unit8_Page3_Q2, unit: 8 }, //91
+  { component: WB_Unit8_Page4_Q1, unit: 8 }, //92
+  { component: WB_Unit8_Page4_Q2, unit: 8 }, //93
+  { component: WB_Unit8_Page5_Q1, unit: 8 }, //94
+  { component: WB_Unit8_Page5_Q2, unit: 8 }, //95
 
 ];

@@ -1,95 +1,145 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import React, { useState } from "react";
+import "./WB_Unit8_Page4_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
-// import "./WB_Unit7_Page4_Q2.css"
-const WB_Unit7_Page4_Q2 = () => {
-  const [answers, setAnswers] = useState(Array(4).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+import img1 from "../../../assets/unit5/imgs/U5P44EXEA2-01.svg";
+import img2 from "../../../assets/unit5/imgs/U5P44EXEA2-02.svg";
+import img3 from "../../../assets/unit5/imgs/U5P44EXEA2-03.svg";
+import img4 from "../../../assets/unit5/imgs/U5P44EXEA2-04.svg";
+import img5 from "../../../assets/unit5/imgs/U5P44EXEA2-05.svg";
+import img6 from "../../../assets/unit5/imgs/U5P44EXEA2-06.svg";
+const data = [
+  {
+    id: 1,
+    text: "Touch your nose.",
+    images: [
+      { id: 1, src: img1, value: "nose" },
+      { id: 2, src: img2, value: "eye" },
+    ],
+    correct: ["nose"],
+  },
+  {
+    id: 2,
+    text: "Touch your eye.",
+    images: [
+      { id: 1, src: img1, value: "nose" },
+      { id: 2, src: img2, value: "eye" },
+    ],
+    correct: ["eye"],
+  },
+  {
+    id: 3,
+    text: "Touch your leg.",
+    images: [
+      { id: 1, src: img1, value: "arm" },
+      { id: 2, src: img2, value: "leg" },
+    ],
+    correct: ["leg"],
+  },
+  {
+    id: 4,
+    text: "Touch your arm.",
+    images: [
+      { id: 1, src: img1, value: "arm" },
+      { id: 2, src: img2, value: "feet" },
+    ],
+    correct: ["arm"],
+  },
+];
 
-  // 🔥 الداتا المطابقة للصورة
-  const items = [
-    {
-      img: img1,
-      text: "",
-      options: ["listen", "hungry"],
-      correctIndex: 0,
-    },
-    {
-      img: img2,
-      text: "",
-      options: ["broken", "shiver"],
-      correctIndex: 1,
-    },
-    {
-      img: img3,
-      text: "",
-      options: ["crawl", "cold"],
-      correctIndex: 1,
-    },
-    {
-      img: img3,
-      text: "",
-      options: ["bored", "broken"],
-      correctIndex: 0,
-    },
-  ];
+export default function WB_Unit8_Page4_Q2() {
+  const [answers, setAnswers] = useState({});
+  const [score, setScore] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
 
-  const handleSelect = (qIndex, optionIndex) => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    const newAns = [...answers];
-    newAns[qIndex] = optionIndex;
-    setAnswers(newAns);
-    setShowResult(false);
+  const handleSelect = (qId, value) => {
+    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    setAnswers((prev) => {
+      const current = prev[qId] || [];
+
+      // 1️⃣ إذا كانت الصورة مختارة → نشيلها (Toggle)
+      if (current.includes(value)) {
+        return { ...prev, [qId]: current.filter((v) => v !== value) };
+      }
+
+      // 2️⃣ إذا حاول يختار أكثر من 2 → نمنعه
+      if (current.length >= 1) {
+        return prev;
+      }
+
+      // 3️⃣ إضافة اختيار جديد
+      return { ...prev, [qId]: [...current, value] };
+    });
   };
 
-  const checkAnswers = () => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please circle all words first.");
+  const handleCheck = () => {
+    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
+    if (!answers[data[0].id] || answers[data[0].id].length === 0) {
+      ValidationAlert.info("Please select at least one picture in question 1.");
       return;
     }
 
-    let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
-    ).length;
+    // فحص إذا الطالب مختار على الأقل إجابة من السؤال الثاني
+    if (!answers[data[1].id] || answers[data[1].id].length === 0) {
+      ValidationAlert.info("Please select at least one picture in question 2.");
+      return;
+    }
 
-    const total = items.length;
+    let correctCount = 0;
 
-    let color =
+    // نحسب total = مجموع كل الإجابات الصحيحة
+    const total = data.reduce((sum, q) => sum + q.correct.length, 0);
+
+    // حساب عدد الصح
+    data.forEach((q) => {
+      const studentAnswers = answers[q.id] || [];
+
+      q.correct.forEach((correctValue) => {
+        if (studentAnswers.includes(correctValue)) {
+          correctCount++;
+        }
+      });
+    });
+
+    // اختيار اللون حسب النتيجة
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${correctCount} / ${total}
-        </span>
-      </div>
-    `;
+    const scoreMessage = `
+    <div style="font-size: 20px; text-align:center; margin-top: 8px;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${correctCount} / ${total}
+      </span>
+    </div>
+  `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    // إظهار نوع النتيجة
+    if (correctCount === total) {
+      ValidationAlert.success(scoreMessage);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
+    setSubmitted(true);
+  };
+  const handleShowAnswer = () => {
+    const correctAnswersObj = {};
 
-    setShowResult(true);
+    data.forEach((q) => {
+      correctAnswersObj[q.id] = [...q.correct]; // نضع كل الإجابات الصحيحة
+    });
+
+    setAnswers(correctAnswersObj);
+    setShowAnswer(true);
   };
 
-  const reset = () => {
-    setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setLocked(false);
-  };
-  const showAnswers = () => {
-    // كل سؤال → نضع correctIndex بدل null
-    const filled = items.map((item) => item.correctIndex);
-
-    setAnswers(filled);
-    setShowResult(true);
-    setLocked(true); // 🔒 قفل الإجابات
+  const handleReset = () => {
+    setAnswers({});
+    setSubmitted(false);
+    setScore(null);
+    setShowAnswer(false); // 🔥 إلغاء وضع Show Answer
   };
 
   return (
@@ -111,92 +161,70 @@ const WB_Unit7_Page4_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div>
+        <div className="circle-wrapper-Unit5_Page5_Q2">
           <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">H</span>Look, read, and circle.
+            <span className="ex-A">H</span> Look, read, and circle.
           </h5>
-        </div>
-        <div className="container-wb-unit6-p6-q2">
-          {items.map((q, i) => (
-            <div
-              key={i}
-              className="question-box-wb-unit6-p6-q2 "
-              style={{ width: "100%" }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  gap: "50px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {i + 1}
-                </span>
-                <img
-                  src={q.img}
-                  className="q3-image-review6-p1-q1"
-                  style={{ height: "120px", width: "auto" }}
-                />
-              </div>
-
-              <div style={{ display: "flex", gap: "10px" }}>
-                <div className="options-row-wb-unit5-p6-q3">
-                  {q.options.map((word, optIndex) => {
-                    const isSelected = answers[i] === optIndex;
-                    const isCorrect = optIndex === q.correctIndex;
+          <div className="content-container-wb-unit8-p4-q1">
+            {data.map((q) => (
+              <div key={q.id} className="question-row-wb-unit8-p4-q2">
+                <div className="img-container-wb-unit8-p4-q2">
+                  <span
+                    className="q-number"
+                    style={{
+                      color: "#2c5287",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {q.id}.
+                  </span>
+                  <p>{q.text}</p>
+                </div>
+                <div className="images-row-Unit5_Page5_Q2">
+                  {q.images.map((img) => {
+                    const isSelected = answers[q.id]?.includes(img.value);
+                    const isWrong =
+                      submitted && isSelected && !q.correct.includes(img.value);
 
                     return (
-                      <p
-                        key={optIndex}
-                        className={`
-                    option-word-review6-p1-q1
-                    ${isSelected ? "selected3" : ""}
-                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
-                    ${showResult && isCorrect ? "correct" : ""}
-                  `}
-                        onClick={() => handleSelect(i, optIndex)}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
+                      <div
+                        key={img.id}
+                        className={`img-box-Unit5_Page5_Q2 
+                    ${isSelected ? "selected-Unit5_Page5_Q2" : ""} 
+                
+                    ${isWrong ? "wrong" : ""}`}
+                        onClick={() => handleSelect(q.id, img.value)}
                       >
-                        {word}
-                        {showResult && isSelected && !isCorrect && !locked && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
+                        <img src={img.src} alt="" />
+                        {/* علامة X تظهر فقط عند الغلط */}
+                        {!showAnswer && isWrong && (
+                          <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
                         )}
-                      </p>
+                      </div>
                     );
                   })}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button className="try-again-button" onClick={handleReset}>
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button
+          onClick={handleShowAnswer}
+          className="show-answer-btn swal-continue"
+        >
           Show Answer
         </button>
-        <button className="check-button2" onClick={checkAnswers}>
+        <button onClick={handleCheck} className="check-button2">
           Check Answer ✓
         </button>
       </div>
     </div>
   );
-};
-
-export default WB_Unit7_Page4_Q2;
+}

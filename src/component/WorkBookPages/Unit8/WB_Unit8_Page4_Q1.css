@@ -1,23 +1,13 @@
-.wb-unit6-p4-q1-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* gap: 10px; */
-    width: 100%;
-    /* justify-content: space-around; */
+.content-container-wb-unit8-p4-q1 {
+  display: grid;
+  justify-items: center;
+  gap: 30px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-
-.wb-unit6-p4-q1-grid {
-    display: grid;
-    width: 100%;
-   gap: 20px;
-   grid-template-columns: repeat(2,1fr);
-}
-
-.wb-unit6-p4-q1-img {
-    width: 100px;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 12px;
+.sentence-wrapper-wb-unit8-p4-q1 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
 }

@@ -1,85 +1,74 @@
 import React, { useState } from "react";
-import "./WB_Unit7_Page5_Q2.css"
+import "./WB_Unit8_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const grid = [
-  ["s", "c", "a", "r", "e", "d", "a"],
-  ["e", "s", "p", "d", "s", "a", "d"],
-  ["h", "c", "o", "l", "d", "c", "h"],
-  ["h", "a", "p", "p", "y", "a", "y"],
-  ["h", "u", "n", "g", "r", "y", "s"],
-  ["b", "o", "r", "e", "d", "d", "a"],
-  ["b", "d", "u", "c", "p", "d", "c"],
+  ["h", "g", "h", "e", "a", "d"],
+  ["m", "t", "o", "u", "c", "h"],
+  ["o", "e", "y", "e", "n", "g"],
+  ["u", "a", "r", "m", "o", "g"],
+  ["t", "o", "d", "y", "s", "h"],
+  ["h", "e", "e", "a", "e", "c"],
 ];
 
 const words = [
   {
-    text: "sad",
+    text: "touch",
     coords: [
-      [1,4 ],
-      [1,5 ],
-      [1,6 ],
-    
+      [1, 1],
+      [1, 2],
+      [1, 3],
+      [1, 4],
+      [1, 5],
     ],
   },
   {
-    text: "bored",
+    text: "eye",
     coords: [
-      [5, 0],
-      [5, 1],
-      [5, 2],
-      [5, 3],
-      [5, 4],
-    ],
-  },
-  {
-    text: "happy",
-    coords: [
-      [3, 0],
-      [3, 1],
-      [3, 2],
-      [3, 3],
-      [3, 4],
-    
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-    {
-    text: "hungry",
-    coords: [
-      [4, 0],
-      [4, 1],
-      [4, 2],
-      [4, 3],
-      [4, 4],
-      [4, 5],
- 
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-   {
-    text: "cold",
-    coords: [
-      [2 ,1],
+      [2, 1],
       [2, 2],
       [2, 3],
+    ],
+  },
+  {
+    text: "nose",
+    coords: [
       [2, 4],
-   
+      [3, 4],
+      [4, 4],
+      [5, 4],
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
-   {
-    text: "scared",
+  {
+    text: "mouth",
     coords: [
-      [0, 0],
-      [0, 1],
+      [1, 0],
+      [2, 0],
+      [3, 0],
+      [4, 0],
+      [5, 0],
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+  {
+    text: "head",
+    coords: [
       [0, 2],
       [0, 3],
       [0, 4],
       [0, 5],
-    
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+  {
+    text: "arm",
+    coords: [
+      [3, 1],
+      [3, 2],
+      [3, 3],
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
 ];
 
-export default function WB_Unit7_Page5_Q2() {
+export default function WB_Unit8_Page5_Q2() {
   const [selected, setSelected] = useState([]);
   const [foundWords, setFoundWords] = useState([]);
   const [wrongTry, setWrongTry] = useState(false);

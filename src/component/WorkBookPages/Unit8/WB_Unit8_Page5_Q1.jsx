@@ -1,11 +1,11 @@
-import "./WB_Unit7_Page5_Q1.css";
+import "./WB_Unit8_Page5_Q1.css";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/unit3/imgs3/P26exeB-01.svg";
 import img2 from "../../../assets/unit3/imgs3/P26exeB-02.svg";
 import img3 from "../../../assets/unit3/imgs3/P26exeB-03.svg";
 import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
-const WB_Unit7_Page5_Q1 = () => {
+const WB_Unit8_Page5_Q1 = () => {
   // الإجابات المدخلة من الطالب
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
 
@@ -14,7 +14,7 @@ const WB_Unit7_Page5_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   // الإجابات الصحيحة
-  const correctData = ["2", "5", "3", "4", "1"];
+  const correctData = ["4", "5", "1", "3", "2"];
 
   // البيانات
   const options = [
@@ -101,29 +101,12 @@ const WB_Unit7_Page5_Q1 = () => {
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">I</span>Read and number the pictures.
+          <span className="ex-A">I</span>Look and number.
         </h5>
-        <div className="word-container-wb-unit7-p5-q1">
-          {[
-            "Are you happy? Yes, I am.",
-            "What’s the matter? I’m bored.",
-            "Are you sad? No, I’m not. I’m hungry.",
-            "What’s the matter? I’m cold",
-            "Are you scared? Yes, I am.",
-          ].map((item, index) => {
-            return (
-              <div className="sentence-container-wb-unit7-p5-q1">
-              <span className="number-wb-unit7-p5-q1">{index + 1}</span>  {" "}
-                <p className="sentence-wb-unit7-p5-q1">{item}</p>
-                
-              </div>
-            );
-          })}
-        </div>
         {/* الصور */}
         <div className="wb-unit7-p5-q1-grid">
           {options.map((item, index) => (
-            <div key={index} className="wb-unit7-p5-q1-box">
+            <div key={index} className="wb-unit8-p5-q1-box">
               <img src={item.img} className="unit3-q3-image" alt="" />
 
               {/* إدخال الإجابة */}
@@ -145,6 +128,22 @@ const WB_Unit7_Page5_Q1 = () => {
             </div>
           ))}
         </div>
+        <div className="word-container-wb-unit8-p5-q1">
+          {[
+            "This is my leg.",
+            "This is my arm.",
+            "This is my head.",
+            "This is my eye.",
+            "This is my nose.",
+          ].map((item, index) => {
+            return (
+              <div className="sentence-container-wb-unit8-p5-q1">
+                <span className="number-wb-unit7-p5-q1">{index + 1}</span>{" "}
+                <p className="sentence-wb-unit7-p5-q1">{item}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="action-buttons-container">
         <button onClick={resetAnswers} className="try-again-button">
@@ -162,4 +161,4 @@ const WB_Unit7_Page5_Q1 = () => {
   );
 };
 
-export default WB_Unit7_Page5_Q1;
+export default WB_Unit8_Page5_Q1;

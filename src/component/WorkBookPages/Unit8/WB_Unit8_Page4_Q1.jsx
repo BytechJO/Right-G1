@@ -1,130 +1,125 @@
-import React, { useState } from "react";
-import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
+import React, { useState, useRef, useEffect } from "react";
+import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
+import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
+import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit6_Page4_Q1.css";
-
-const WB_Unit6_Page4_Q1 = () => {
+import "./WB_Unit8_Page4_Q1.css"
+const WB_Unit8_Page4_Q1 = () => {
   const questions = [
     {
-      id: 1,
-      image: img1,
-      text: "Can he fly a kite?",
-      items: [
-        { text: "Yes, it is.", correct: "x" },
-        { text: "No, it isn’t.", correct: "✓" },
+      img: bat,
+      parts: [
+        { type: "text", value: "This is my arm" },
+        { type: "text", value: "." },
       ],
     },
     {
-      id: 2,
-      image: img2,
-      text: "Can he fish?",
-      items: [
-        { text: "Yes, it is.", correct: "✓" },
-        { text: "No, it isn’t.", correct: "x" },
+      img: cap,
+      parts: [
+        { type: "text", value: "This" },
+        { type: "input", answer: "is my head" },
+        { type: "text", value: "." },
       ],
     },
     {
-      id: 3,
-      image: img2,
-      text: "Can it climb a tree?",
-      items: [
-        { text: "Yes, it is.", correct: "x" },
-        { text: "No, it isn’t.", correct: "✓" },
+      img: ant,
+      parts: [
+         { type: "text", value: "This" },
+        { type: "input", answer: "is my leg" },
+        { type: "text", value: "." },
       ],
     },
-    {
-      id: 4,
-      image: img2,
-      text: "Can he swim?",
-      items: [
-        { text: "Yes, it is.", correct: "✓" },
-        { text: "No, it isn’t.", correct: "x" },
+     {
+      img: ant,
+      parts: [
+        { type: "input", answer: "This is my nose" },
+        { type: "text", value: "." },
       ],
     },
+ 
   ];
 
-  const [answers, setAnswers] = useState({});
-  const [results, setResults] = useState({});
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [answers, setAnswers] = useState(
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+  );
 
-  // -------------------------
-  // اختيار جواب واحد فقط لكل سؤال
-  // -------------------------
-  const handleSelect = (qId, idx) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-    setAnswers({
-      ...answers,
-      [qId]: idx, // نخزن رقم الخيار المختار
-    });
-    setResults({});
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [locked, setLocked] = useState(false);
+
+  const handleChange = (value, qIndex, pIndex) => {
+    if (locked) return;
+
+    const copy = [...answers];
+    copy[qIndex][pIndex] = value.toLowerCase();
+    setAnswers(copy);
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-    const temp = {};
-    let correctCount = 0;
-    let total = questions.length;
+    if (locked) return;
 
-    questions.forEach((q) => {
-      const chosenIndex = answers[q.id];
+    // 🔴 1) فحص الانبوتات الفاضية
+    for (let qIndex = 0; qIndex < questions.length; qIndex++) {
+      for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
+        const part = questions[qIndex].parts[pIndex];
 
-      if (chosenIndex === undefined) {
-        temp[q.id] = "empty";
-        return;
+        if (part.type === "input") {
+          const value = answers[qIndex][pIndex];
+
+          if (!value || value.trim() === "") {
+            ValidationAlert.info(`Please complete question ${qIndex + 1}.`);
+            return; // ⛔ وقف التشييك
+          }
+        }
       }
-
-      const isCorrect = q.items[chosenIndex].correct.toLowerCase() === "✓";
-
-      temp[q.id] = isCorrect ? "correct" : "wrong";
-
-      if (isCorrect) correctCount++;
-    });
-
-    setResults(temp);
-setShowAnswer(true)
-    if (Object.values(temp).includes("empty")) {
-      ValidationAlert.info("Please answer all questions!");
-      return;
     }
 
-    let color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    let wrong = [];
+    let score = 0;
+    let total = 0;
 
-    const scoreMessage = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-  };
-  const reset = () => {
-    setAnswers({});
-    setResults({});
-    setShowAnswer(false); // ← مهم جداً
-  };
-  const handleShowAnswer = () => {
-    const correctAnswers = {};
-
-    questions.forEach((q) => {
-      const correctIndex = q.items.findIndex(
-        (item) => item.correct.toLowerCase() === "✓"
-      );
-      correctAnswers[q.id] = correctIndex;
+    questions.forEach((q, qIndex) => {
+      q.parts.forEach((p, pIndex) => {
+        if (p.type === "input") {
+          total++;
+          if (answers[qIndex][pIndex]?.trim() === p.answer) {
+            score++;
+          } else {
+            wrong.push(`${qIndex}-${pIndex}`);
+          }
+        }
+      });
     });
 
-    setAnswers(correctAnswers);
-    setResults({});
-    setShowAnswer(true);
+    setWrongInputs(wrong);
+    setLocked(true);
+    const msg = `Score: ${score} / ${total}`;
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+  };
+  const showAnswers = () => {
+    const filled = questions.map((q) =>
+      q.parts.map((p) => (p.type === "input" ? p.answer : null))
+    );
+
+    setAnswers(filled);
+    setWrongInputs([]);
+    setLocked(true); // 🔒 قفل التعديل
+  };
+
+  const reset = () => {
+    setAnswers(
+      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    );
+    setWrongInputs([]);
+    setLocked(false);
   };
 
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -134,7 +129,6 @@ setShowAnswer(true)
       }}
     >
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -143,85 +137,59 @@ setShowAnswer(true)
           justifyContent: "flex-start",
         }}
       >
-        <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            <span className="ex-A"> F</span> Look, read, and write
-            <span style={{ color: "red" }}>✓</span>.{" "}
-          </h4>
-
-          <div className="wb-unit6-p4-q1-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="wb-unit6-p4-q1-box">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <span
-                      className="Unit5-P6-Q3-text"
-                      style={{ color: "#3054c7",fontSize:"25px",fontWeight:"700" }}
-                    >
-                      {q.id}
-                    </span>
-                    <span className="Unit5-P6-Q3-text">{q.text}</span>
-                  </div>
-                  <img src={q.image} alt="" className="wb-unit6-p4-q1-img" />
-                </div>
-                <div>
-                  {q.items.map((item, idx) => {
-                    const isSelected = answers[q.id] === idx;
-                    const isWrong = results[q.id] === "wrong" && isSelected;
-
-                    return (
-                      <div key={idx} className="review3-p1-q3-row">
-                        <span className="Unit5-P6-Q3-text">{item.text}</span>
-
-                        <div className="review3-p1-q3-input-box">
-                          <input
-                            type="text"
-                            readOnly
-                            value={isSelected ? "✓" : ""}
-                            onFocus={() => handleSelect(q.id, idx)}
-                            className={`review3-p1-q3-input`}
-                            disabled={showAnswer}
-                            style={{
-                              cursor: showAnswer ? "not-allowed" : "pointer",
-                            }}
-                          />
-
-                          { isWrong && (
-                            <span className="review3-p1-q3-x">✕</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+        <h5 className="header-title-page8">
+          <span className="ex-A">G</span>Trace and write.
+        </h5>
+        <div className="content-container-wb-unit8-p4-q1">
+          {questions.map((q, qIndex) => (
+            <div key={qIndex} className="row2-wb-unit6-p3-q2">
+              <div style={{ display: "flex", gap: "10px" ,alignItems:"flex-start"}}>
+                <span className="num-span">{qIndex + 1}</span>
+                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
               </div>
-            ))}
-          </div>
+
+              <div className="sentence-wrapper-wb-unit8-p4-q1">
+                {q.parts.map((part, pIndex) => {
+                  if (part.type === "text") {
+                    return (
+                      <span key={pIndex} className="sentence-text">
+                        {part.value}
+                      </span>
+                    );
+                  }
+
+                  return (
+                    <span key={pIndex} style={{ position: "relative" ,width:"90%"}}>
+                      <input
+                        type="text"
+                          style={{width:"100%"}}
+                        className="inline-input-wb-unit4-p1-q2"
+                        value={answers[qIndex][pIndex] || ""}
+                        onChange={(e) =>
+                          handleChange(e.target.value, qIndex, pIndex)
+                        }
+                        disabled={locked}
+                      />
+
+                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                        <span className="error-mark-input-wb-unit2-page3-q2">
+                          ✕
+                        </span>
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
         {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button
-          onClick={handleShowAnswer}
-          className="show-answer-btn swal-continue"
-        >
+        <button onClick={showAnswers} className="show-answer-btn swal-continue">
           Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
@@ -232,4 +200,4 @@ setShowAnswer(true)
   );
 };
 
-export default WB_Unit6_Page4_Q1;
+export default WB_Unit8_Page4_Q1;
