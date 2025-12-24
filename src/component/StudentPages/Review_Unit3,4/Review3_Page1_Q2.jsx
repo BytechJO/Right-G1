@@ -153,7 +153,8 @@ const Review3_Page1_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -179,7 +180,9 @@ const Review3_Page1_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2">1</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-open").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -222,7 +225,9 @@ const Review3_Page1_Q2 = () => {
 
                 <img
                   src={table}
-                  className="matched-img2"
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ cursor: "pointer", height: "100px", width: "auto" }}
@@ -236,7 +241,9 @@ const Review3_Page1_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2">2</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-line").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -281,7 +288,9 @@ const Review3_Page1_Q2 = () => {
 
                 <img
                   src={dish}
-                  className="matched-img2"
+                    className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ cursor: "pointer", height: "100px", width: "auto" }}
@@ -295,7 +304,9 @@ const Review3_Page1_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2">3</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-close").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -341,7 +352,9 @@ const Review3_Page1_Q2 = () => {
 
                 <img
                   src={duck}
-                  className="matched-img2"
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
                   style={{ cursor: "pointer", height: "100px", width: "auto" }}
@@ -355,7 +368,9 @@ const Review3_Page1_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2">4</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("dot-pencil").click()
                     }
@@ -403,7 +418,9 @@ const Review3_Page1_Q2 = () => {
 
                 <img
                   src={tiger}
-                  className="matched-img2"
+                    className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
                   style={{ cursor: "pointer", height: "100px", width: "auto" }}

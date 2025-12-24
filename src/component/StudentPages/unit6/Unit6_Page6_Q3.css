@@ -30,3 +30,23 @@
     border-radius: 10px;
     position: relative;
 }
+
+/* =====================
+   IMAGES HOVER
+===================== */
+.img-box2-unit6-p6-q3 {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.img-box2-unit6-p6-q3:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.img-box2-unit6-p6-q3:active {
+  transform: scale(0.96);
+}

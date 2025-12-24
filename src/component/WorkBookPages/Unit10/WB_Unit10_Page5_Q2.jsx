@@ -1,205 +1,262 @@
 import React, { useState } from "react";
+import "./WB_Unit10_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import CatSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
-import HorseSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
-import DogSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
+const grid = [
+  ["m", "e", "l", "h", "m", "e", "d", "s", "k"],
+  ["a", "p", "p", "l", "e", "i", "b", "p", "i"],
+  ["e", "k", "a", "h", "s", "m", "i", "l", "k"],
+  ["i", "c", "e", "c", "r", "e", "a", "m", "k"],
+  ["c", "l", "s", "b", "r", "e", "a", "d", "f"],
+  ["e", "i", "p", "a", "r", "b", "m", "h", "r"],
+  ["c", "h", "i", "c", "k", "e", "n", "h", "u"],
+  ["i", "p", "c", "c", "c", "d", "a", "c", "i"],
+  ["h", "a", "a", "h", "e", "l", "a", "d", "t"],
+];
 
-import "./WB_Unit9_Page5_Q2.css";
+const words = [
+  {
+    text: "milk",
+    coords: [
+      [2, 5],
+      [2, 6],
+      [2, 7],
+      [2, 8],
+    ],
+  },
+  {
+    text: "apple",
+    coords: [
+      [1, 0],
+      [1, 1],
+      [1, 2],
+      [1, 3],
+      [1, 4],
+    ],
+  },
+  {
+    text: "chicken",
+    coords: [
+      [6, 0],
+      [6, 1],
+      [6, 2],
+      [6, 3],
+      [6, 4],
+      [6, 5],
+      [6, 6],
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+  {
+    text: "bread",
+    coords: [
+      [4, 3],
+      [4, 4],
+      [4, 5],
+      [4, 6],
+      [4, 7],
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+  {
+    text: "fruit",
+    coords: [
+      [4, 8],
+      [5, 8],
+      [6, 8],
+      [7, 8],
+      [8, 8],
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+  {
+    text: "ice cream",
+    coords: [
+      [3, 0],
+      [3, 1],
+      [3, 2],
+      [3, 3],
+      [3, 4],
+      [3, 5],
+      [3, 6],
+      [3, 7],
+    ], // لو بدك بحطلك الإحداثيات لاحقاً
+  },
+];
 
-const WB_Unit9_Page5_Q2 = () => {
-  const items = [
-    {
-      Svg: CatSvg,
-      options: ["cat", "cow"],
-      correct: "cat",
-      position: "top-left",
-    },
-    {
-      Svg: HorseSvg,
-      options: ["horse", "chicken"],
-      correct: "horse",
-      position: "right",
-    },
-    {
-      Svg: DogSvg,
-      options: ["goat", "dog"],
-      correct: "dog",
-      position: "bottom-left",
-    },
-  ];
+export default function WB_Unit10_Page5_Q2() {
+  const [selected, setSelected] = useState([]);
+  const [foundWords, setFoundWords] = useState([]);
+  const [wrongTry, setWrongTry] = useState(false);
+  const [allSelections, setAllSelections] = useState([]);
+  const [wrongWords, setWrongWords] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const handleCellClick = (r, c) => {
+    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
+    if (isFoundCell(r, c)) return;
+    if (showAnswer) return;
+    setSelected((prev) => {
+      // منع اختيار الخلية مرتين
+      const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
+      if (exists) return prev;
 
-  const [selected, setSelected] = useState(Array(items.length).fill(""));
-  const [colors, setColors] = useState(items.map(() => "white"));
-  const [locked, setLocked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const [wrongChoices, setWrongChoices] = useState([]);
-
-  /* ================= COLOR ================= */
-
-  const toggleColor = (index) => {
-    if (locked) return;
-
-    const newColors = [...colors];
-    newColors[index] = newColors[index] === "white" ? "#FFD54F" : "white";
-
-    setColors(newColors);
+      return [...prev, [r, c]];
+    });
   };
 
-  /* ================= CIRCLE ================= */
-
-  const handleSelect = (value, index) => {
-    if (locked || showResult) return;
-    const newSel = [...selected];
-    newSel[index] = value;
-    setSelected(newSel);
-    setShowResult(false);
+  const isHighlighted = (r, c) => {
+    return (
+      selected.some((coord) => coord[0] === r && coord[1] === c) ||
+      allSelections.some((sel) =>
+        sel.some((coord) => coord[0] === r && coord[1] === c)
+      )
+    );
   };
 
-  /* ================= CHECK ================= */
+  const isFoundCell = (r, c) => {
+    return words.some(
+      (w) =>
+        foundWords.includes(w.text) &&
+        w.coords.some((coord) => coord[0] === r && coord[1] === c)
+    );
+  };
 
   const checkAnswers = () => {
-    if (locked || showResult) return;
-
-    if (selected.some((s) => s === "")) {
-      ValidationAlert.info("Please circle the correct word!");
-      return;
+    if (showAnswer) return;
+    let foundList = [];
+    if (selected.length === 0) {
+      return ValidationAlert.info("");
     }
+    words.forEach((word) => {
+      const isCorrect =
+        word.coords.length > 0 &&
+        word.coords.every(([r, c]) =>
+          selected.some((sel) => sel[0] === r && sel[1] === c)
+        );
 
-    let score = 0;
-    let wrongs = [];
-
-    items.forEach((item, i) => {
-      if (selected[i] === item.correct) {
-        score++;
-      } else {
-        wrongs.push(i); // ❌ هذا الاختيار غلط
-      }
+      if (isCorrect) foundList.push(word.text);
     });
 
-    setWrongChoices(wrongs);
-    setShowResult(true);
+    setFoundWords(foundList);
 
-    const total = items.length;
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    // الكلمات الخاطئة = التي لم يجدها الطالب
+    const wrong = words
+      .map((w) => w.text)
+      .filter((txt) => !foundList.includes(txt));
 
-    const scoreMessage = `
-    <div style="font-size:20px;text-align:center;">
-      <b style="color:${color}">Score: ${score} / ${total}</b>
-    </div>
-  `;
+    setWrongWords(wrong);
+    let total = words.length;
+    let color =
+      foundList.length === total
+        ? "green"
+        : foundList.length === 0
+        ? "red"
+        : "orange";
 
-    if (score === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (score === 0) {
-      ValidationAlert.error(scoreMessage);
+    const msg = `
+      <div style="font-size:20px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${foundList.length} / ${total}
+        </span>
+      </div>
+    `;
+    // النتيجة
+    if (foundList.length === total) {
+      ValidationAlert.success(msg);
+    } else if (foundList.length === 0) {
+      ValidationAlert.error(msg);
     } else {
-      ValidationAlert.warning(scoreMessage);
+      ValidationAlert.warning(msg);
     }
   };
 
-  /* ================= SHOW ANSWER ================= */
-
   const showAnswers = () => {
-    setSelected(items.map((item) => item.correct));
-    setColors(items.map(() => "#FFD54F"));
-    setWrongChoices([]);
-    setShowResult(false);
-    setLocked(true);
+    setShowAnswer(true);
+    // 1) جميع الكلمات تعتبر صحيحة
+    setFoundWords(words.map((w) => w.text));
+
+    // 2) ضع كل الإحداثيات داخل allSelections لتسليط الضوء عليها
+    const allCoords = words.map((w) => w.coords);
+    setAllSelections(allCoords);
+
+    // 3) إزالة أي اختيار يدوي
+    setSelected([]);
+
+    // 4) إزالة الأخطاء
+    setWrongWords([]);
   };
 
-  /* ================= RESET ================= */
-
-  const resetAll = () => {
-    setSelected(Array(items.length).fill(""));
-    setColors(items.map(() => "white"));
-    setWrongChoices([]);
-    setShowResult(false);
-    setLocked(false);
+  const reset = () => {
+    setSelected([]);
+    setFoundWords([]);
+    setWrongTry(false);
+    setWrongWords([]);
+    setShowAnswer(false);
+    setAllSelections([]); // ⭐️ هذه كانت ناقصة
   };
-
-  /* ================= JSX ================= */
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-        }}
-      >
-        <h4 className="header-title-page8">
-          <span className="ex-A">K</span> Color and circle.
-        </h4>
-
-        <div className="wb-unit9-qk-layout">
-          {items.map((item, i) => {
-            const SvgComponent = item.Svg;
-
-            return (
-              <div key={i} className={`wb-unit9-qk-item ${item.position}`}>
-                <div
-                  className="wb-unit9-qk-svg-wrapper"
-                  onClick={() => toggleColor(i)}
-                >
-                  {/* <SvgComponent
-                    className="wb-unit9-qk-svg"
-                    style={{ fill: colors[i] }}
-                  /> */}
-                  <img className="wb-unit9-qk-img" src={item.Svg} />
-                </div>
-
-                <div className="wb-unit9-qk-options">
-                  {item.options.map((opt, idx) => (
+    <div className="wordsearch-wrapper" >
+      <div className="page8-wrapper" >
+        <div className="div-forall" style={{ width: "60%" }}>
+          <h3 className="header-title-page8">
+            <span className="ex-A">J</span>Look and find the words.
+          </h3>
+          <div className="container-word-grid-wb-unit10-p5-q2">
+            <div className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}>
+              {grid.map((row, rIdx) => (
+                <div key={rIdx} className="row-wb-u1-p6-q2">
+                  {row.map((cell, cIdx) => (
                     <div
-                      key={idx}
-                      className={`wb-unit9-qk-option ${
-                        selected[i] === opt ? "active" : ""
-                      }`}
-                      onClick={() => handleSelect(opt, i)}
-                      style={{ position: "relative" }}
+                      key={cIdx}
+                      className={`cell-wb-unit10-p5-q2
+                    ${isHighlighted(rIdx, cIdx) ? "highlight" : ""} 
+                    ${isFoundCell(rIdx, cIdx) ? "found" : ""}
+                `}
+                      onClick={() => handleCellClick(rIdx, cIdx)}
                     >
-                      {opt}
-
-                      {showResult &&
-                        wrongChoices.includes(i) &&
-                        selected[i] === opt && (
-                          <div className="wb-unit9-qk-wrong-mark">✕</div>
-                        )}
+                      {cell}
                     </div>
                   ))}
                 </div>
-              </div>
-            );
-          })}
+              ))}
+            </div>
+
+            <div className="word-btn-wb-unit10-p5-q2">
+              {words.map((w, i) => (
+                <div key={w.text} className="word-label-wrapper-wb-u2-p5-q2">
+                  <div
+                    className={`word-label-wb-u2-p5-q2 ${
+                      foundWords.includes(w.text) ? "done" : ""
+                    }`}
+                  >
+                    <img
+                      src="./ssssssss"
+                      style={{ height: "100px", width: "100px" }}
+                    />
+                    <p>{w.text}</p>
+                  </div>
+
+                  {/* ✖ إكس داخل دائرة للكلمات الخاطئة */}
+                  {wrongWords.includes(w.text) && (
+                    <span className="wrong-x-circle-wb-unit10-p5-q2">✕</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
       <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
 
-        <button onClick={showAnswers} className="show-answer-btn swal-continue">
+        <button className="show-answer-btn swal-continue" onClick={showAnswers}>
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>
       </div>
     </div>
   );
-};
-
-export default WB_Unit9_Page5_Q2;
+}

@@ -1,4 +1,5 @@
 .error-mark-review10-p1-q1 {
+
     width: 25px;
     height: 25px;
     border: 2px solid white;
@@ -13,7 +14,25 @@
     margin-left: 8px;
     vertical-align: middle;
     position: absolute;
-    left: 23%;
-    top: 6%;
+    left: 62%;
+    top: -8%;
     z-index: 99;
+
+}
+
+
+.matching-row-review10-p1-q1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* margin: 20px 0px; */
+    position: relative;
+}
+
+
+.word-with-dot-review10-p1-q1 {
+    display: flex;
+    align-items: center;
+    width: 49%;
+    gap: 10px;
 }

@@ -1,269 +1,222 @@
-import React, { useState } from "react";
-import "./WB_Unit9_Page5_Q1.css";
+import React, { useState, useRef, useEffect } from "react";
+import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
+import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
+import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import "./WB_Unit10_Page5_Q1.css"
+const WB_Unit10_Page5_Q1 = () => {
+  const questions = [
+    {
+      img: bat,
+      text: "Do you want ice cream?",
+      parts: [
+        { type: "text", value: "Yes, " },
+        { type: "input", answer: "I want ice cream" },
+        { type: "text", value: "." },
+      ],
+    },
+    {
+      img: cap,
+      text: "Do you want bread?",
+      parts: [
+        { type: "text", value: "No, " },
+        { type: "input", answer: "I want fruit" },
+        { type: "text", value: "." },
+      ],
+    },
+    {
+      img: ant,
+      text: "Do you want an apple?",
+      parts: [
+        { type: "input", answer: "No, I want milk" },
+        { type: "text", value: "." },
+      ],
+    },
+    {
+      img: dad,
+      text: "Do you want chicken?",
+      parts: [
+        { type: "input", answer: "Yes, I want chicken" },
+        { type: "text", value: "." },
+      ],
+    },
+  ];
 
-const grid = [
-  ["c", "s", "t", "a", "b", "l", "e"],
-  ["h", "e", "k", "g", "i", "h", "c"],
-  ["i", "b", "l", "r", "a", "o", "o"],
-  ["c", "a", "t", "a", "w", "r", "w"],
-  ["k", "r", "a", "s", "a", "s", "c"],
-  ["e", "n", "a", "s", "n", "e", "c"],
-  ["n", "s", "g", "o", "a", "t", "a"],
-];
+  const [answers, setAnswers] = useState(
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+  );
 
-const words = [
-  {
-    text: "horse",
-    coords: [
-      [1, 5],
-      [2, 5],
-      [3, 5],
-      [4, 5],
-      [5, 5],
-    ],
-  },
-  {
-    text: "barn",
-    coords: [
-      [2, 1],
-      [3, 1],
-      [4, 1],
-      [5, 1],
-    ],
-  },
-  {
-    text: "stable",
-    coords: [
-      [0, 1],
-      [0, 2],
-      [0, 3],
-      [0, 4],
-      [0, 5],
-      [0, 6],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-  {
-    text: "cow",
-    coords: [
-      [ 1,6],
-      [ 2,6],
-      [ 3,6],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-  {
-    text: "chicken",
-    coords: [
-      [0, 0],
-      [1, 0],
-      [2, 0],
-      [3, 0],
-      [4, 0],
-      [5, 0],
-      [6, 0],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-  {
-    text: "grass",
-    coords: [
-      [1, 3],
-      [2, 3],
-      [3, 3],
-      [4, 3],
-      [5, 3],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-  {
-    text: "goat",
-    coords: [
-      [6, 2],
-      [6, 3],
-      [6, 4],
-      [6, 5],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-  {
-    text: "cat",
-    coords: [
-      [3, 0],
-      [3, 1],
-      [3, 2],
-    ], // لو بدك بحطلك الإحداثيات لاحقاً
-  },
-];
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [locked, setLocked] = useState(false);
 
-export default function WB_Unit9_Page5_Q1() {
-  const [selected, setSelected] = useState([]);
-  const [foundWords, setFoundWords] = useState([]);
-  const [wrongTry, setWrongTry] = useState(false);
-  const [allSelections, setAllSelections] = useState([]);
-  const [wrongWords, setWrongWords] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const handleCellClick = (r, c) => {
-    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
-    if (isFoundCell(r, c)) return;
-    if (showAnswer) return;
-    setSelected((prev) => {
-      // منع اختيار الخلية مرتين
-      const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
-      if (exists) return prev;
+  const handleChange = (value, qIndex, pIndex) => {
+    if (locked) return;
 
-      return [...prev, [r, c]];
-    });
-  };
-
-  const isHighlighted = (r, c) => {
-    return (
-      selected.some((coord) => coord[0] === r && coord[1] === c) ||
-      allSelections.some((sel) =>
-        sel.some((coord) => coord[0] === r && coord[1] === c)
-      )
-    );
-  };
-
-  const isFoundCell = (r, c) => {
-    return words.some(
-      (w) =>
-        foundWords.includes(w.text) &&
-        w.coords.some((coord) => coord[0] === r && coord[1] === c)
-    );
+    const copy = [...answers];
+    copy[qIndex][pIndex] = value
+    setAnswers(copy);
+    setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
-    let foundList = [];
-    if (selected.length === 0) {
-      return ValidationAlert.info("");
-    }
-    words.forEach((word) => {
-      const isCorrect =
-        word.coords.length > 0 &&
-        word.coords.every(([r, c]) =>
-          selected.some((sel) => sel[0] === r && sel[1] === c)
-        );
+    if (locked) return;
 
-      if (isCorrect) foundList.push(word.text);
+    // 🔴 1) فحص الانبوتات الفاضية
+    for (let qIndex = 0; qIndex < questions.length; qIndex++) {
+      for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
+        const part = questions[qIndex].parts[pIndex];
+
+        if (part.type === "input") {
+          const value = answers[qIndex][pIndex];
+
+          if (!value || value.trim() === "") {
+            ValidationAlert.info(`Please complete question ${qIndex + 1}.`);
+            return; // ⛔ وقف التشييك
+          }
+        }
+      }
+    }
+
+    let wrong = [];
+    let score = 0;
+    let total = 0;
+
+    questions.forEach((q, qIndex) => {
+      q.parts.forEach((p, pIndex) => {
+        if (p.type === "input") {
+          total++;
+          if (answers[qIndex][pIndex]?.trim() === p.answer) {
+            score++;
+          } else {
+            wrong.push(`${qIndex}-${pIndex}`);
+          }
+        }
+      });
     });
 
-    setFoundWords(foundList);
-
-    // الكلمات الخاطئة = التي لم يجدها الطالب
-    const wrong = words
-      .map((w) => w.text)
-      .filter((txt) => !foundList.includes(txt));
-
-    setWrongWords(wrong);
-    let total = words.length;
-    let color =
-      foundList.length === total
-        ? "green"
-        : foundList.length === 0
-        ? "red"
-        : "orange";
-
-    const msg = `
-      <div style="font-size:20px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${foundList.length} / ${total}
-        </span>
-      </div>
-    `;
-    // النتيجة
-    if (foundList.length === total) {
-      ValidationAlert.success(msg);
-    } else if (foundList.length === 0) {
-      ValidationAlert.error(msg);
-    } else {
-      ValidationAlert.warning(msg);
-    }
+    setWrongInputs(wrong);
+    setLocked(true);
+    const msg = `Score: ${score} / ${total}`;
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
   };
-
   const showAnswers = () => {
-    setShowAnswer(true);
-    // 1) جميع الكلمات تعتبر صحيحة
-    setFoundWords(words.map((w) => w.text));
+    const filled = questions.map((q) =>
+      q.parts.map((p) => (p.type === "input" ? p.answer : null))
+    );
 
-    // 2) ضع كل الإحداثيات داخل allSelections لتسليط الضوء عليها
-    const allCoords = words.map((w) => w.coords);
-    setAllSelections(allCoords);
-
-    // 3) إزالة أي اختيار يدوي
-    setSelected([]);
-
-    // 4) إزالة الأخطاء
-    setWrongWords([]);
+    setAnswers(filled);
+    setWrongInputs([]);
+    setLocked(true); // 🔒 قفل التعديل
   };
 
   const reset = () => {
-    setSelected([]);
-    setFoundWords([]);
-    setWrongTry(false);
-    setWrongWords([]);
-    setShowAnswer(false);
-    setAllSelections([]); // ⭐️ هذه كانت ناقصة
+    setAnswers(
+      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    );
+    setWrongInputs([]);
+    setLocked(false);
   };
 
   return (
-    <div className="wordsearch-wrapper">
-      <div className="page8-wrapper">
-        <div className="div-forall" style={{ width: "60%" }}>
-          <h3 className="header-title-page8">
-            <span className="ex-A">J</span>Look and complete the puzzle.
-          </h3>
-          <div className="container-word-grid-wb-u9-p5-q1">
-            <div className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}>
-              {grid.map((row, rIdx) => (
-                <div key={rIdx} className="row-wb-u1-p6-q2">
-                  {row.map((cell, cIdx) => (
-                    <div
-                      key={cIdx}
-                      className={`cell-wb-u9-p5-q1
-                    ${isHighlighted(rIdx, cIdx) ? "highlight" : ""} 
-                    ${isFoundCell(rIdx, cIdx) ? "found" : ""}
-                `}
-                      onClick={() => handleCellClick(rIdx, cIdx)}
-                    >
-                      {cell}
-                    </div>
-                  ))}
+    <div
+      className="question-wrapper-unit3-page6-q1"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
+        }}
+      >
+        <h5 className="header-title-page8">
+          <span className="ex-A">I</span>Read, look, and write..
+        </h5>
+        <div className="content-container-wb-unit4-p1-q2">
+          {questions.map((q, qIndex) => (
+            <div key={qIndex} className="row2-wb-unit10-p5-q1">
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                  }}
+                >
+                  <span className="num-span">{qIndex + 1}</span>
+                  <p style={{ fontSize: "20px", fontWeight: "500" }}>
+                    {q.text}
+                  </p>
                 </div>
-              ))}
-            </div>
+                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+              </div>
 
-            <div className="word-btn-wb-u9-p5-q1">
-              {words.map((w) => (
-                <div key={w.text} className="word-label-wrapper-wb-u1-p6-q2">
-                  <div
-                    className={`word-label-wb-u1-p6-q2 ${
-                      foundWords.includes(w.text) ? "done" : ""
-                    }`}
-                  >
-                    {w.text}
-                  </div>
+              <div className="sentence-wrapper-wb-unit4-p1-q2">
+                {q.parts.map((part, pIndex) => {
+                  if (part.type === "text") {
+                    return (
+                      <span key={pIndex} className="sentence-text-wb-unit10-p5-q1">
+                        {part.value}
+                      </span>
+                    );
+                  }
 
-                  {/* ✖ إكس داخل دائرة للكلمات الخاطئة */}
-                  {wrongWords.includes(w.text) && (
-                    <span className="wrong-x-circle-wb-u1-p6-q2">✕</span>
-                  )}
-                </div>
-              ))}
+                  return (
+                    <span key={pIndex} style={{ position: "relative" }}>
+                      <input
+                        type="text"
+                        style={{ width: "100%" }}
+                        className="inline-input-wb-unit4-p1-q2"
+                        value={answers[qIndex][pIndex] || ""}
+                        onChange={(e) =>
+                          handleChange(e.target.value, qIndex, pIndex)
+                        }
+                        disabled={locked}
+                      />
+
+                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                        <span className="error-mark-input-wb-unit2-page3-q2">
+                          ✕
+                        </span>
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-
-        <button className="show-answer-btn swal-continue" onClick={showAnswers}>
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button onClick={showAnswers} className="show-answer-btn swal-continue">
           Show Answer
         </button>
-
-        <button className="check-button2" onClick={checkAnswers}>
+        <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default WB_Unit10_Page5_Q1;

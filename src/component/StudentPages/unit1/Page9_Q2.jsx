@@ -183,7 +183,7 @@ export default function Page9_Q2() {
       style={{
         display: "flex",
         // marginTop: "30px",
-        padding:"30px",
+        padding: "30px",
         justifyContent: "center",
       }}
     >
@@ -232,11 +232,11 @@ export default function Page9_Q2() {
               >
                 <h5
                   key={i}
-                  className={
+                  className={`H5 ${
                     wordColors[0] === "transparent"
-                      ? "word-outline H5"
-                      : "word-colored H5"
-                  }
+                      ? "word-outline"
+                      : "word-colored"
+                  } ${locked || showAnswer ? "disabled-word" : ""}`}
                   style={{
                     color: wordColors[i],
                     cursor: "pointer",
@@ -283,11 +283,11 @@ export default function Page9_Q2() {
                 ></div>
                 <h5
                   key={i + 3}
-                  className={
+                  className={`H5 ${
                     wordColors[0] === "transparent"
-                      ? "word-outline H5"
-                      : "word-colored H5"
-                  }
+                      ? "word-outline"
+                      : "word-colored"
+                  } ${locked || showAnswer ? "disabled-word" : ""}`}
                   style={{
                     color: wordColors[i + 3],
                     cursor: "pointer",

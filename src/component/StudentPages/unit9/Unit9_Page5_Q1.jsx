@@ -156,7 +156,10 @@ const Unit9_Page5_Q1 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <img
-                  src={img1}
+                  src={img1} 
+                   className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
@@ -184,6 +187,9 @@ const Unit9_Page5_Q1 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <img
                   src={img2}
+                   className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
@@ -210,6 +216,9 @@ const Unit9_Page5_Q1 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <img
+                 className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   src={img3}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
@@ -237,6 +246,9 @@ const Unit9_Page5_Q1 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <img
                   src={img3}
+                   className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}

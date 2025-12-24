@@ -157,6 +157,9 @@ const Review7_Page1_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <img
                   src={img1}
+                   className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
@@ -184,6 +187,9 @@ const Review7_Page1_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <img
                   src={img2}
+                   className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
@@ -211,6 +217,9 @@ const Review7_Page1_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <img
                   src={img3}
+                   className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
@@ -237,6 +246,9 @@ const Review7_Page1_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <img
                   src={img4}
+                   className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}

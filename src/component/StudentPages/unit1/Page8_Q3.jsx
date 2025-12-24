@@ -22,24 +22,23 @@ export default function Page8_Q3() {
   // ============================
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
-const handleStartDotClick = (e) => {
-  if (showAnswer || locked) return;
+  const handleStartDotClick = (e) => {
+    if (showAnswer || locked) return;
 
-  const word = e.target.dataset.letter;
+    const word = e.target.dataset.letter;
 
-  // ❌ منع خروج خط جديد من كلمة لها خط سابق
-  const alreadyUsed = lines.some((line) => line.word === word);
-  if (alreadyUsed) return;
+    // ❌ منع خروج خط جديد من كلمة لها خط سابق
+    const alreadyUsed = lines.some((line) => line.word === word);
+    if (alreadyUsed) return;
 
-  const rect = containerRef.current.getBoundingClientRect();
+    const rect = containerRef.current.getBoundingClientRect();
 
-  setFirstDot({
-    word,
-    x: e.target.getBoundingClientRect().left - rect.left + 8,
-    y: e.target.getBoundingClientRect().top - rect.top + 8,
-  });
-};
-
+    setFirstDot({
+      word,
+      x: e.target.getBoundingClientRect().left - rect.left + 8,
+      y: e.target.getBoundingClientRect().top - rect.top + 8,
+    });
+  };
 
   // ============================
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
@@ -108,7 +107,7 @@ const handleStartDotClick = (e) => {
   };
 
   return (
-    <div className="matching-wrapper" style={{padding:"30px"}}>
+    <div className="matching-wrapper" style={{ padding: "30px" }}>
       <div className="matching-scale">
         <h5 className="header-title-page8">
           <span className="ex-A">B</span>Read and match.
@@ -119,19 +118,21 @@ const handleStartDotClick = (e) => {
           <div className="matching-row">
             <div className="word-with-dot">
               <span className="span-num">1</span>
-
-              {/* الكلمة تشغّل كليك على الدوت */}
-              <span
-                className="word-text"
-                onClick={() => document.getElementById("dot-hello").click()}
-                style={{ cursor: "pointer", width: "190px" }}
-              >
-                Hello! I’m John.
+              <div style={{ position: "relative" }}>
+                {/* الكلمة تشغّل كليك على الدوت */}
+                <span
+                  className={`word-text ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("dot-hello").click()}
+                  style={{ cursor: "pointer", width: "190px" }}
+                >
+                  Hello! I’m John.
+                </span>{" "}
                 {wrongWords.includes("Hello! I’m John.") && (
                   <span className="error-mark">✕</span>
                 )}
-              </span>
-
+              </div>
               <div className="dot-wrapper">
                 <div
                   id="dot-hello"
@@ -155,7 +156,9 @@ const handleStartDotClick = (e) => {
               {/* الصورة تشغّل كليك على الدوت */}
               <img
                 src={img2}
-                className="matched-img"
+                 className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                 alt=""
                 onClick={() => document.getElementById("img2-dot").click()}
                 style={{ cursor: "pointer" }}
@@ -167,18 +170,20 @@ const handleStartDotClick = (e) => {
           <div className="matching-row">
             <div className="word-with-dot">
               <span className="span-num">2</span>
-
-              <span
-                className="word-text"
-                onClick={() => document.getElementById("dot-goodbye").click()}
-                style={{ cursor: "pointer", width: "190px" }}
-              >
-                Goodbye!
+              <div style={{ position: "relative" }}>
+                <span
+                  className={`word-text ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("dot-goodbye").click()}
+                  style={{ cursor: "pointer", width: "190px" }}
+                >
+                  Goodbye!
+                </span>{" "}
                 {wrongWords.includes("Goodbye!") && (
                   <span className="error-mark">✕</span>
                 )}
-              </span>
-
+              </div>
               <div className="dot-wrapper">
                 <div
                   id="dot-goodbye"
@@ -201,7 +206,9 @@ const handleStartDotClick = (e) => {
 
               <img
                 src={img1}
-                className="matched-img"
+                 className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                 alt=""
                 onClick={() => document.getElementById("img1-dot").click()}
                 style={{ cursor: "pointer" }}
@@ -228,16 +235,16 @@ const handleStartDotClick = (e) => {
 
       <div className="action-buttons-container">
         <button
-            onClick={() => {
-    setLines([]);
-    setWrongWords([]);
-    setFirstDot(null);
-    setShowAnswer(false);
-    setLocked(false);
+          onClick={() => {
+            setLines([]);
+            setWrongWords([]);
+            setFirstDot(null);
+            setShowAnswer(false);
+            setLocked(false);
 
-    // إعادة الرندر بالكامل
-    setResetKey(k => k + 1);
-  }}
+            // إعادة الرندر بالكامل
+            setResetKey((k) => k + 1);
+          }}
           className="try-again-button"
         >
           Start Again ↻

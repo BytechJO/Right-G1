@@ -1,9 +1,13 @@
-.container12-wb-unit9-p2-q1 {
-    margin: auto;
-    position: relative;
+.img-box-wb-unit10-p2-q2 img {
+    width: auto;
+    height: 80px;
+    /* position: relative; */
+    /* border-radius: 50%; */
+}
+
+.question-row-wb-unit10-p2-q2 {
     display: flex;
-    gap: 30px;
-    user-select: none;
-    margin-bottom: 30px;
-    flex-direction: column;
+    align-items: center;
+    /* margin-bottom: 25px; */
+    justify-content: space-between;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-// import "./WB_Unit2_Page2_Q1.css";
+import "./WB_Unit2_Page2_Q1.css";
 import table from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
 import dish from "../../../assets/unit4/imgs/U4P34EXEB-02.svg";
 import tiger from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
@@ -15,13 +15,6 @@ const WB_Unit2_Page2_Q1 = () => {
   const [locked, setLocked] = useState(false);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
-  const correctMatches = [
-    { word: "your book open.", image: "img2" },
-    { word: "a line make.", image: "img3" },
-    { word: "close book your.", image: "img4" },
-    { word: "pencil take your out.", image: "img1" },
-  ];
 
   const [userInputs, setUserInputs] = useState({
     1: "",
@@ -106,13 +99,13 @@ const WB_Unit2_Page2_Q1 = () => {
         <div className="page8-q1-container">
           <h5 className="header-title-page8">
             {" "}
-            <span className="ex-A">B</span> Unscramble and write.
+            <span className="ex-A">C</span> Unscramble and write.
           </h5>
 
           <div className="container12" ref={containerRef}>
             {/* الصف الأول */}
             <div className="matching-row2">
-              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-around"}}>
+              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-between"}}>
                 {" "}
                 <div className="img-with-dot2">
                   {" "}
@@ -152,7 +145,7 @@ const WB_Unit2_Page2_Q1 = () => {
             </div>
             {/* الصف الثاني */}
             <div className="matching-row2">
-              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-around"}}>
+              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-between"}}>
                 {" "}
                 <div className="img-with-dot2">
                   {" "}
@@ -192,7 +185,7 @@ const WB_Unit2_Page2_Q1 = () => {
             </div>
             {/* الصف الثالث */}
             <div className="matching-row2">
-              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-around"}}>
+              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-between"}}>
                 <div className="img-with-dot2">
                   <span className="span-num2">3</span>
                   <img
@@ -234,7 +227,7 @@ const WB_Unit2_Page2_Q1 = () => {
             </div>{" "}
             {/* الصف الرابع */}
             <div className="matching-row2">
-              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-around"}}>
+              <div style={{ display: "flex" ,width:"100%",justifyContent:"space-between"}}>
                 {" "}
                 <div className="img-with-dot2">
                   <span className="span-num2">4</span>

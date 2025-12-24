@@ -117,6 +117,10 @@ import Review10_Page1 from "../StudentPages/Review_Unit9,10/Review10_Page1";
 import Review10_Page2 from "../StudentPages/Review_Unit9,10/Review10_Page2";
 import Unit10_Reading_P1 from "../StudentPages/unit10/Unit10_Reading_P1";
 import Unit10_Reading_P2 from "../StudentPages/unit10/Unit10_Reading_P2";
+
+import Writing_Page1 from "../StudentPages/writing/Writing_Page1";
+import Writing_Page2 from "../StudentPages/writing/Writing_Page2";
+import Writing_Page3 from "../StudentPages/writing/Writing_Page3";
 export const studentPages = (openPopup, goToUnit) => [
   <Page1 />,
   <Page2 goToUnit={goToUnit} />,
@@ -211,4 +215,7 @@ export const studentPages = (openPopup, goToUnit) => [
   <Review10_Page2 openPopup={openPopup} />,
   <Unit10_Reading_P1 openPopup={openPopup} />,
   <Unit10_Reading_P2 openPopup={openPopup} />,
+  <Writing_Page1 />,
+  <Writing_Page2 />,
+  <Writing_Page3 />,
 ];

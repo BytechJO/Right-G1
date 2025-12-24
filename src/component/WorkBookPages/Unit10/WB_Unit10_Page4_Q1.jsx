@@ -1,129 +1,128 @@
 import React, { useState } from "react";
-import "./WB_Unit9_Page4_Q1.css";
+import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
+import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
+import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit8/imgs/U8P73EXEG-01.svg";
-import img2 from "../../../assets/unit8/imgs/U8P73EXEG-02.svg";
-const WB_Unit9_Page4_Q1 = () => {
-  // ===============================
-  // 🔵 1) الأسئلة (كلها داخل نفس الكومبونينت)
-  // ===============================
+import "./WB_Unit10_Page4_Q1.css";
+
+const WB_Unit10_Page4_Q1 = () => {
   const questions = [
     {
       id: 1,
-      parts: [
-        { type: "text", value: "He likes" },
-        { type: "blank", options: ["goats", "cows"] },
-        { type: "text", value: "." },
-      ],
-      correct: ["cows"],
       image: img1,
+      text: "Do you want bread?",
+      items: [
+        { text: "Yes, I do.", correct: "x" },
+        { text: "No, I don’t. I want milk", correct: "✓" },
+      ],
     },
-
     {
       id: 2,
-      parts: [
-        { type: "text", value: "She likes" },
-        { type: "blank", options: ["chickens", "horses"] },
-        { type: "text", value: "." },
-      ],
-      correct: ["chickens"],
       image: img2,
+      text: "Do you want an apple?",
+      items: [
+        { text: "Yes, I do.", correct: "✓" },
+        { text: "No, I don’t. I want a steak.", correct: "x" },
+      ],
     },
     {
       id: 3,
-      parts: [
-        { type: "text", value: "He likes" },
-        { type: "blank", options: ["dogs", "cats"] },
-        { type: "text", value: "." },
-      ],
-      correct: ["cats"],
       image: img2,
+      text: "Do you want fruit?",
+      items: [
+        { text: "Yes, I do.", correct: "x" },
+        { text: "No, I don’t. I want chicken.", correct: "✓" },
+      ],
     },
     {
       id: 4,
-      parts: [
-        { type: "text", value: "He likes" },
-        { type: "blank", options: ["horses", "goats"] },
-        { type: "text", value: "." },
-      ],
-      correct: ["horses"],
       image: img2,
+      text: "Do you want milk?",
+      items: [
+        { text: "Yes, I do.", correct: "x" },
+        { text: "No, I don’t. I want ice cream.", correct: "✓" },
+      ],
     },
   ];
 
-  // ===============================
-  // 🔵 2) حفظ اختيارات الطالب
-  // ===============================
-  const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "blank" ? null : null)))
-  );
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+  const [answers, setAnswers] = useState({});
+  const [results, setResults] = useState({});
+  const [showAnswer, setShowAnswer] = useState(false);
 
-  // ===============================
-  // 🔵 3) الضغط على خيار
-  // ===============================
-  const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    const updated = [...answers];
-    updated[qIndex][blankIndex] = option;
-    setAnswers(updated);
-    setShowResult(false);
+  // -------------------------
+  // اختيار جواب واحد فقط لكل سؤال
+  // -------------------------
+  const handleSelect = (qId, idx) => {
+    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
+    setAnswers({
+      ...answers,
+      [qId]: idx, // نخزن رقم الخيار المختار
+    });
+    setResults({});
   };
 
-  // ===============================
-  // 🔵 4) فحص الإجابات
-  // ===============================
   const checkAnswers = () => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    // تحقق إذا الطالب ما اختار ولا شيء
-    const selectedCount = answers.flat().filter((a) => a !== null).length;
-    if (selectedCount === 0) {
-      ValidationAlert.info("");
+    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
+    const temp = {};
+    let correctCount = 0;
+    let total = questions.length;
+
+    questions.forEach((q) => {
+      const chosenIndex = answers[q.id];
+
+      if (chosenIndex === undefined) {
+        temp[q.id] = "empty";
+        return;
+      }
+
+      const isCorrect = q.items[chosenIndex].correct.toLowerCase() === "✓";
+
+      temp[q.id] = isCorrect ? "correct" : "wrong";
+
+      if (isCorrect) correctCount++;
+    });
+
+    setResults(temp);
+    setShowAnswer(true);
+    if (Object.values(temp).includes("empty")) {
+      ValidationAlert.info("Please answer all questions!");
       return;
     }
 
-    let correct = 0;
-    let total = 0;
-
-    questions.forEach((q, qIndex) => {
-      q.correct.forEach((correctAns, blankIndex) => {
-        total++;
-        if (answers[qIndex][blankIndex] === correctAns) {
-          correct++;
-        }
-      });
-    });
-
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
+    let color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+    <div style="font-size:20px; text-align:center;">
       <span style="color:${color}; font-weight:bold;">
-        Score: ${correct} / ${total}
+        Score: ${correctCount} / ${total}
       </span>
     </div>
   `;
-
-    if (correct === total) ValidationAlert.success(scoreMessage);
-    else if (correct === 0) ValidationAlert.error(scoreMessage);
+    if (correctCount === total) ValidationAlert.success(scoreMessage);
+    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
-
-    setShowResult(true);
   };
-  const showAnswers = () => {
-    // اجابة كل سؤال = correct array
-    const correctFilled = questions.map((q) => [...q.correct]);
+  const reset = () => {
+    setAnswers({});
+    setResults({});
+    setShowAnswer(false); // ← مهم جداً
+  };
+  const handleShowAnswer = () => {
+    const correctAnswers = {};
 
-    setAnswers(correctFilled);
-    setShowResult(true);
-    setLocked(true); // 🔒 قفل الإجابات
+    questions.forEach((q) => {
+      const correctIndex = q.items.findIndex(
+        (item) => item.correct.toLowerCase() === "✓"
+      );
+      correctAnswers[q.id] = correctIndex;
+    });
+
+    setAnswers(correctAnswers);
+    setResults({});
+    setShowAnswer(true);
   };
 
-  // ===============================
-  // 🔵 JSX
-  // ===============================
   return (
     <div
       style={{
@@ -144,125 +143,94 @@ const WB_Unit9_Page4_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h3 className="header-title-page8">
-          <span className="ex-A">H</span>Look, read, and circle.
-        </h3>
-        <div
-          className="content-container-wb-unit9-p4-q1 "
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          {questions.map((q, qIndex) => (
-            <div className="question-row-review8-p2-q4" key={q.id}>
-              <div className="sentence-wb-unit9-p4-q1">
+        <div className="review3-p1-q3-wrapper">
+          <h4 className="header-title-page8">
+            <span className="ex-A">G</span> Look, read, and write
+            <span style={{ color: "red" }}>✓</span>.{" "}
+          </h4>
+
+          <div className="wb-unit6-p4-q1-grid">
+            {questions.map((q) => (
+              <div key={q.id} className="wb-unit10-p4-q1-box">
                 <div
                   style={{
                     display: "flex",
-                    width: "100%",
                     justifyContent: "center",
-                    alignItems: "flex-start",
-                    // gap: "30px",
+                    alignItems: "center",
+                    flexDirection: "column",
                   }}
                 >
-                  <span
-                    className="header-title-page8"
+                  <img src={q.image} alt="" className="wb-unit6-p4-q1-img" />
+                  <div
                     style={{
-                      color: "#2c5287",
-                      fontWeight: "700",
-                      fontSize: "20px",
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                      alignItems:"center"
                     }}
                   >
-                    {q.id}
-                  </span>
-                  <img
-                    src={q.image}
-                    className="question-img-review5-p2-q3"
-                    style={{ width: "180px" }}
-                  />
+                    <span
+                      className="wb-unit10-p4-q1-text"
+                      style={{
+                        color: "#1d4f7b",
+                        fontSize: "22px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {q.id}
+                    </span>
+                    <span className="wb-unit10-p4-q1-text"  style={{
+                      
+                        fontSize: "22px",
+                        fontWeight: "500",
+                      }}>{q.text}</span>
+                  </div>
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                  }}
-                >
-                  {q.parts.map((part, pIndex) => {
-                    if (part.type === "text") {
-                      return (
-                        <span
-                          key={pIndex}
-                          className="sentence-text-review5-p2-q3"
-                        >
-                          {part.value}
-                        </span>
-                      );
-                    }
+                <div>
+                  {q.items.map((item, idx) => {
+                    const isSelected = answers[q.id] === idx;
+                    const isWrong = results[q.id] === "wrong" && isSelected;
 
-                    if (part.type === "blank") {
-                      // blank index == ترتيب هذا الفراغ بين باقي الفراغات
-                      const actualBlankIndex = q.parts
-                        .filter((p) => p.type === "blank")
-                        .indexOf(part);
+                    return (
+                      <div key={idx} className="review3-p1-q3-row">
+                        <span className="wb-unit10-p4-q1-text">{item.text}</span>
 
-                      return (
-                        <span
-                          key={pIndex}
-                          className="blank-options-wb-unit9-p4-q1"
-                        >
-                          {part.options.map((opt, optIndex) => {
-                            const isSelected =
-                              answers[qIndex][actualBlankIndex] === opt;
-                            const isWrongSelected =
-                              showResult &&
-                              isSelected &&
-                              opt !== q.correct[actualBlankIndex];
+                        <div className="review3-p1-q3-input-box">
+                          <input
+                            type="text"
+                            readOnly
+                            value={isSelected ? "✓" : ""}
+                            onFocus={() => handleSelect(q.id, idx)}
+                            className={`review3-p1-q3-input`}
+                            disabled={showAnswer}
+                            style={{
+                              cursor: showAnswer ? "not-allowed" : "pointer",
+                            }}
+                          />
 
-                            return (
-                              <div key={optIndex} className="option-wrapper">
-                                <span
-                                  className={`option-word-review5-p2-q3 ${
-                                    isSelected ? "selected2" : ""
-                                  }`}
-                                  onClick={() =>
-                                    handleSelect(qIndex, actualBlankIndex, opt)
-                                  }
-                                >
-                                  {opt}
-                                </span>
-
-                                {isWrongSelected && !locked && (
-                                  <div className="wrong-mark">✕</div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </span>
-                      );
-                    }
+                          {isWrong && (
+                            <span className="review3-p1-q3-x">✕</span>
+                          )}
+                        </div>
+                      </div>
+                    );
                   })}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+
       <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setAnswers(
-              questions.map((q) =>
-                q.parts.map((p) => (p.type === "blank" ? null : null))
-              )
-            );
-            setShowResult(false);
-            setLocked(false);
-          }}
-        >
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button
+          onClick={handleShowAnswer}
+          className="show-answer-btn swal-continue"
+        >
           Show Answer
         </button>
         <button onClick={checkAnswers} className="check-button2">
@@ -273,4 +241,4 @@ const WB_Unit9_Page4_Q1 = () => {
   );
 };
 
-export default WB_Unit9_Page4_Q1;
+export default WB_Unit10_Page4_Q1;

@@ -137,17 +137,22 @@ const Review8_Page1_Q3 = () => {
           <div className="match-wrapper2" ref={containerRef}>
             <div className="match-words-row2">
               <div className="word-box2">
-                <h5
-                  onClick={() => document.getElementById("climb-dot").click()}
-                >
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    1{" "}
-                  </span>
-                  Bend my knee.
+                <div style={{ position: "relative" }}>
+                  <h5
+                    className={`clickable-word-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("climb-dot").click()}
+                  >
+                    <span style={{ color: "darkblue", fontWeight: "700" }}>
+                      1{" "}
+                    </span>
+                    Bend my knee.
+                  </h5>
                   {wrongImages.includes("Bend my knee.") && (
                     <span className="error-mark-img">✕</span>
                   )}
-                </h5>
+                </div>
                 <div
                   className="dot22-unit6-q7 start-dot22-review8-p1-q3"
                   data-word="Bend my knee."
@@ -157,15 +162,22 @@ const Review8_Page1_Q3 = () => {
               </div>
 
               <div className="word-box2">
-                <h5 onClick={() => document.getElementById("fly-dot").click()}>
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    2
-                  </span>
-                  Touch your head.
+                <div style={{ position: "relative" }}>
+                  <h5
+                    className={`clickable-word-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("fly-dot").click()}
+                  >
+                    <span style={{ color: "darkblue", fontWeight: "700" }}>
+                      2
+                    </span>
+                    Touch your head.
+                  </h5>
                   {wrongImages.includes("Touch your head.") && (
                     <span className="error-mark-img">✕</span>
                   )}
-                </h5>
+                </div>
                 <div
                   className="dot22-unit6-q7 start-dot22-review8-p1-q3"
                   data-word="Touch your head."
@@ -175,15 +187,22 @@ const Review8_Page1_Q3 = () => {
               </div>
 
               <div className="word-box2">
-                <h5 onClick={() => document.getElementById("ride-dot").click()}>
-                  <span style={{ color: "darkblue", fontWeight: "700" }}>
-                    3
-                  </span>
-                  Raise your hand.
+                <div style={{ position: "relative" }}>
+                  <h5
+                    className={`clickable-word-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("ride-dot").click()}
+                  >
+                    <span style={{ color: "darkblue", fontWeight: "700" }}>
+                      3
+                    </span>
+                    Raise your hand.
+                  </h5>
                   {wrongImages.includes("Raise your hand.") && (
                     <span className="error-mark-img">✕</span>
                   )}
-                </h5>
+                </div>
                 <div
                   className="dot22-unit6-q7 start-dot22-review8-p1-q3"
                   data-word="Raise your hand."
@@ -198,7 +217,9 @@ const Review8_Page1_Q3 = () => {
                 <img
                   src={img1}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
 
@@ -214,7 +235,9 @@ const Review8_Page1_Q3 = () => {
                 <img
                   src={img2}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
                 <div
@@ -229,7 +252,9 @@ const Review8_Page1_Q3 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
                 <div

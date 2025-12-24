@@ -25,7 +25,7 @@ export default function Unit2_Page9_Q2() {
     if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
 
     const rect = containerRef.current.getBoundingClientRect();
-       const word = e.target.dataset.letter;
+    const word = e.target.dataset.letter;
 
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
     const alreadyUsed = lines.some((line) => line.word === word);
@@ -144,7 +144,7 @@ export default function Unit2_Page9_Q2() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div
@@ -165,7 +165,9 @@ export default function Unit2_Page9_Q2() {
               <div className="word-row2" key={i}>
                 <span className="num2">{i + 1}</span>
                 <span
-                  className="word-text3"
+                  className={`word-text3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById(`dot-${word}`).click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -194,7 +196,9 @@ export default function Unit2_Page9_Q2() {
                   onClick={handleEndDotClick}
                 ></div>
                 <span
-                  className="word-text3"
+                  className={`word-text3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById(`dot-${word}`).click()}
                   style={{ cursor: "pointer" }}
                 >

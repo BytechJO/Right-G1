@@ -19,3 +19,22 @@
     width: 100%;
     justify-content: space-evenly;
 }
+
+.prev-btn {
+  display: flex;
+  align-items: center;
+  /* gap: 8px; */
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* ⭐ الزر الطافي */
+.prev-btn.disabled,
+.prev-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}

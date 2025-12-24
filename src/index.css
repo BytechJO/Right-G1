@@ -29,7 +29,7 @@ button {
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  top: 125%;
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   background-color: #430f68;
@@ -51,7 +51,7 @@ button {
 .tooltip-text::after {
   content: "";
   position: absolute;
-  bottom: 100%;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
   border-width: 6px;

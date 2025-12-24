@@ -153,15 +153,19 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <div>
-                  <h5
-                    className="h5-review6-p2-q2"
-                    onClick={() => document.getElementById("sit-dot").click()}
-                  >
-                    sit
+                  <div style={{ position: "relative" }}>
+                    <h5
+                      className={`h5-review6-p2-q2 ${
+                        locked || showAnswer ? "disabled-hover" : ""
+                      }`}
+                      onClick={() => document.getElementById("sit-dot").click()}
+                    >
+                      sit
+                    </h5>{" "}
                     {wrongImages.includes("sit") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
                     )}
-                  </h5>
+                  </div>
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="sit"
@@ -183,15 +187,19 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <div>
-                  <h5
-                    className="h5-review6-p2-q2"
-                    onClick={() => document.getElementById("pin-dot").click()}
-                  >
-                    pin
+                  <div style={{ position: "relative" }}>
+                    <h5
+                      className={`h5-review6-p2-q2 ${
+                        locked || showAnswer ? "disabled-hover" : ""
+                      }`}
+                      onClick={() => document.getElementById("pin-dot").click()}
+                    >
+                      pin
+                    </h5>
                     {wrongImages.includes("pin") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
                     )}
-                  </h5>
+                  </div>
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="pin"
@@ -213,15 +221,19 @@ const Review6_Page2_Q2 = () => {
                 {" "}
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <div>
-                  <h5
-                    className="h5-review6-p2-q2"
-                    onClick={() => document.getElementById("wig-dot").click()}
-                  >
-                    wig
+                  <div style={{ position: "relative" }}>
+                    <h5
+                      className={`h5-review6-p2-q2 ${
+                        locked || showAnswer ? "disabled-hover" : ""
+                      }`}
+                      onClick={() => document.getElementById("wig-dot").click()}
+                    >
+                      wig
+                    </h5>
                     {wrongImages.includes("wig") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
                     )}
-                  </h5>
+                  </div>
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="wig"
@@ -241,15 +253,19 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <div>
-                  <h5
-                    className="h5-review6-p2-q2"
-                    onClick={() => document.getElementById("big-dot").click()}
-                  >
-                    big
+                  <div style={{ position: "relative" }}>
+                    <h5
+                      className={`h5-review6-p2-q2 ${
+                        locked || showAnswer ? "disabled-hover" : ""
+                      }`}
+                      onClick={() => document.getElementById("big-dot").click()}
+                    >
+                      big
+                    </h5>
                     {wrongImages.includes("big") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
                     )}
-                  </h5>
+                  </div>
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="big"
@@ -269,15 +285,21 @@ const Review6_Page2_Q2 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>5 </span>
                 <div>
-                  <h5
-                    className="h5-review6-p2-q2"
-                    onClick={() => document.getElementById("hill-dot").click()}
-                  >
-                    hill
+                  <div style={{ position: "relative" }}>
+                    <h5
+                      className={`h5-review6-p2-q2 ${
+                        locked || showAnswer ? "disabled-hover" : ""
+                      }`}
+                      onClick={() =>
+                        document.getElementById("hill-dot").click()
+                      }
+                    >
+                      hill
+                    </h5>{" "}
                     {wrongImages.includes("hill") && (
                       <span className="error-mark-img-unit6-p5-q2">✕</span>
                     )}
-                  </h5>
+                  </div>
                   <div
                     className="dot22-unit6-q2 start-dot22-unit6-q2"
                     data-word="hill"
@@ -292,6 +314,9 @@ const Review6_Page2_Q2 = () => {
               <div className="img-box2">
                 <img
                   src={img1}
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
@@ -307,6 +332,9 @@ const Review6_Page2_Q2 = () => {
               <div className="img-box2">
                 <img
                   src={img2}
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
@@ -321,6 +349,9 @@ const Review6_Page2_Q2 = () => {
               <div className="img-box2">
                 <img
                   src={img3}
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
@@ -334,6 +365,9 @@ const Review6_Page2_Q2 = () => {
               <div className="img-box2">
                 <img
                   src={img4}
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
@@ -347,6 +381,9 @@ const Review6_Page2_Q2 = () => {
               <div className="img-box2">
                 <img
                   src={img5}
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img5-dot").click()}
                 />{" "}

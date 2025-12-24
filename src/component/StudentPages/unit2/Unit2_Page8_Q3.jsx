@@ -409,6 +409,9 @@ const Unit2_Page8_Q3 = () => {
                 <img
                   src={img1}
                   alt=""
+                      className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                   style={{ cursor: "pointer" }}
                 />
@@ -428,6 +431,9 @@ const Unit2_Page8_Q3 = () => {
                 <img
                   src={img2}
                   alt="img"
+                      className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                   style={{ cursor: "pointer" }}
                 />
@@ -445,6 +451,9 @@ const Unit2_Page8_Q3 = () => {
               <div className="img-box2">
                 <img
                   src={img3}
+                      className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
                   style={{ cursor: "pointer" }}
@@ -462,6 +471,9 @@ const Unit2_Page8_Q3 = () => {
               <div className="img-box2">
                 <img
                   src={img4}
+                      className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img4-dot").click()}
                   style={{ cursor: "pointer" }}
@@ -480,6 +492,9 @@ const Unit2_Page8_Q3 = () => {
                 <img
                   src={img5}
                   alt=""
+                      className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img5-dot").click()}
                   style={{ cursor: "pointer" }}
                 />{" "}
@@ -513,6 +528,9 @@ const Unit2_Page8_Q3 = () => {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
+                   className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                 >
                   d
                 </h5>
@@ -540,6 +558,9 @@ const Unit2_Page8_Q3 = () => {
                     cursor: "pointer",
                     alignItems: "center",
                   }}
+                   className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                 >
                   t
                 </h5>

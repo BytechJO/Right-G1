@@ -1,8 +1,9 @@
-.images-row-wb-unit9-p3-q2{
-    display: grid;
-    width: 100%;
-    justify-content: space-around;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    justify-items: center;
+.wb-unit10-p3-q2-canvas {
+    border: 3px solid #6ec1ff;
+    background: #ffffff;
+    border-radius: 12px;
+    height: 150px;
+    width: 270px;
+    box-sizing: border-box;
+    cursor: crosshair;
 }

@@ -147,7 +147,7 @@ const WB_Unit2_Page1_Q2 = () => {
               <div className="question-container-unit7-p6-q3">
                 <span className="num2">{index + 1}</span>
 
-                <img src={q.img} className="avatar-img" />
+                <img src={q.img} className="avatar-img-wb-u1-q2" />
                 <p className="question-text-unit7-p2-q3">{q.question}</p>
               </div>
               <div className="sentence-box-unit7-p2-q3">

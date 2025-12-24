@@ -124,7 +124,7 @@ const Unit2_Page7_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div
@@ -148,6 +148,9 @@ const Unit2_Page7_Q2 = () => {
                 <img
                   src={img1}
                   alt=""
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                   style={{ cursor: "pointer" }}
                 />
@@ -168,6 +171,9 @@ const Unit2_Page7_Q2 = () => {
                 <img
                   src={img2}
                   alt=""
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                   style={{ cursor: "pointer" }}
                 />
@@ -188,6 +194,9 @@ const Unit2_Page7_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                   style={{ cursor: "pointer" }}
                 />
@@ -208,8 +217,11 @@ const Unit2_Page7_Q2 = () => {
             <div className="match-words-row2">
               <div className="word-box2">
                 <h5
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-hello").click()}
-                  style={{ cursor: "pointer" ,fontSize:"20px"}}
+                  style={{ cursor: "pointer", fontSize: "20px" }}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     1{" "}
@@ -226,8 +238,11 @@ const Unit2_Page7_Q2 = () => {
 
               <div className="word-box2">
                 <h5
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-good").click()}
-                  style={{ cursor: "pointer",fontSize:"20px" }}
+                  style={{ cursor: "pointer", fontSize: "20px" }}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     2{" "}
@@ -244,10 +259,11 @@ const Unit2_Page7_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  onClick={() =>
-                    document.getElementById("dot-goodbye").click()
-                  }
-                  style={{ cursor: "pointer",fontSize:"20px" }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  onClick={() => document.getElementById("dot-goodbye").click()}
+                  style={{ cursor: "pointer", fontSize: "20px" }}
                 >
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     3{" "}

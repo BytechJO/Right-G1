@@ -1,158 +1,150 @@
-import React, { useState } from "react";
-// import horse from "../../../assets/unit10/imgs/milk.svg";
-// import cat from "../../../assets/unit10/imgs/bread.svg";
-// import goat from "../../../assets/unit10/imgs/apple.svg";
-// import cow from "../../../assets/unit10/imgs/icecream.svg";
-// import chicken from "../../../assets/unit10/imgs/chicken.svg";
-// import dog from "../../../assets/unit10/imgs/chicken.svg";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit9_Page3_Q2.css";
+import React, { useRef, useEffect } from "react";
+import "./WB_Unit10_Page3_Q2.css";
+import bookImg from "../../../assets/unit3/imgs3/pan.svg";
 
-const WB_Unit9_Page3_Q2 = () => {
-  const items = [
-    { img: "./horse", value: "horse" },
-    { img: "./cat", value: "cat" },
-    { img: "./goat", value: "goat" },
-    { img: "./cow", value: "cow" },
-    { img: "./chicken", value: "chicken" },
-    { img: "./dog", value: "dog" },
+const WB_Unit10_Page3_Q2 = () => {
+  const questions = [
+    { id: 1, text: "This is my book.", img: bookImg },
+    { id: 2, text: "This is my pen.", img: bookImg },
+    { id: 3, text: "This is my ruler.", img: bookImg },
+    { id: 4, text: "This is my eraser.", img: bookImg },
   ];
 
-  const [answer, setAnswer] = useState("");
-  const [checked, setChecked] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isCorrect, setIsCorrect] = useState(null);
+  // نخزن Ref لكل Canvas
+  const canvasRefs = useRef({});
+  useEffect(() => {
+    questions.forEach((q) => {
+      const canvas = canvasRefs.current[q.id];
+      if (!canvas) return;
 
-  const normalize = (str) => str.toLowerCase().replace(/[-_]/g, " ").trim();
+      const ctx = canvas.getContext("2d");
 
-  const checkAnswer = () => {
-    // 1️⃣ لازم يداير على صورة
-    if (!selectedImage) {
-      ValidationAlert.info("Please circle one picture first!");
-      return;
-    }
+      const img = new Image();
+      img.src = bookImg; // أو صورة حسب السؤال
 
-    // 2️⃣ لازم يكتب
-    if (answer.trim() === "") {
-      ValidationAlert.info("Please write an answer!");
-      return;
-    }
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const normalizedAnswer = normalize(answer);
-    const validAnswers = items.map((item) => normalize(item.value));
-    const normalizedSelected = normalize(selectedImage);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+    });
+  }, []);
 
-    setChecked(true);
+  // دوال الرسم
+  const startDrawing = (e, id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
 
-    let score = 0;
+    ctx.isDrawing = true;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "purple";
 
-    // 4️⃣ لازم المكتوب يطابق الصورة المتداير عليها
-    if (normalizedAnswer === normalizedSelected) {
-      score = 1;
-    }
-    setIsCorrect(score === 1);
-    const color = score === 1 ? "green" : "red";
-
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / 1
-      </span>
-    </div>
-  `;
-    // 3️⃣ لازم الكلمة تكون من الخيارات فقط
-    if (!validAnswers.includes(normalizedAnswer)) {
-      ValidationAlert.error(msg);
-      return;
-    }
-
-    score === 1 ? ValidationAlert.success(msg) : ValidationAlert.error(msg);
+    const rect = canvas.getBoundingClientRect();
+    ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
+    ctx.lastY = (e.clientY || e.touches[0].clientY) - rect.top;
   };
 
-  const reset = () => {
-    setAnswer("");
-    setChecked(false);
-    setSelectedImage(null);
+  const draw = (e, id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
+    if (!ctx.isDrawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+    ctx.beginPath();
+    ctx.moveTo(ctx.lastX, ctx.lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    ctx.lastX = x;
+    ctx.lastY = y;
+  };
+
+  const stopDrawing = (id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
+    ctx.isDrawing = false;
+  };
+
+  const resetCanvas = () => {
+    questions.forEach((q) => {
+      const canvas = canvasRefs.current[q.id];
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const img = new Image();
+      img.src = q.img || bookImg;
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+    });
   };
 
   return (
     <div
+      className="unit4-q2-p6-container"
       style={{
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
         padding: "30px",
       }}
     >
       <div
-        className="div-forall"
+        className="div-unit4-q2-p6-forall"
         style={{
-          width: "60%",
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span> What do you want? Circle and write.
+          <span className="ex-A">F</span>Read and draw.
         </h5>
 
-        {/* الصور */}
-        <div className="images-row-wb-unit9-p3-q2">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              className={`image-box-unit10-page6-q3 ${
-                selectedImage === item.value ? "selected-unit10-page6-q3" : ""
-              }`}
-              onClick={() => {
-                if (checked) return;
-                setSelectedImage(item.value); // بس circle
-              }}
-            >
-              <img
-                src={item.img}
-                alt={item.value}
-                style={{ height: "100px", width: "auto" }}
+        <div className="wb-unit5-p4-q1-table">
+          {questions.map((q) => (
+            <div key={q.id} className="wb-unit5-p4-q1-row ">
+              <div className="wb-unit5-p4-q1-text">
+                <span style={{ color: "darkblue", fontWeight: "700" }}>
+                  {q.id}
+                </span>{" "}
+                {q.text}
+              </div>
+
+              {/* Canvas Area */}
+              <canvas
+                ref={(el) => (canvasRefs.current[q.id] = el)}
+                width={270}
+                height={150}
+                className="wb-unit10-p3-q2-canvas"
+                onMouseDown={(e) => startDrawing(e, q.id)}
+                onMouseMove={(e) => draw(e, q.id)}
+                onMouseUp={() => stopDrawing(q.id)}
+                onMouseLeave={() => stopDrawing(q.id)}
+                onTouchStart={(e) => startDrawing(e, q.id)}
+                onTouchMove={(e) => draw(e, q.id)}
+                onTouchEnd={() => stopDrawing(q.id)}
               />
             </div>
           ))}
         </div>
-
-        {/* الجملة */}
-        <div
-          className="sentence-wrapper-unit10-page6-q3"
-          style={{ position: "relative" }}
-        >
-          <span>I want</span>
-
-          <input
-            type="text"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            className="write-input-unit10-page6-q3"
-            disabled={checked}
-          />
-
-          {checked && isCorrect === false && (
-            <div className="wrong-mark-unit10-p6-q3">✕</div>
-          )}
-          <span>.</span>
-        </div>
       </div>
-
-      {/* الأزرار */}
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-
-        <button onClick={checkAnswer} className="check-button2">
-          Check Answer ✓
+        <button onClick={resetCanvas} className="try-again-button">
+          Clear Drawings ↻
         </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit9_Page3_Q2;
+export default WB_Unit10_Page3_Q2;

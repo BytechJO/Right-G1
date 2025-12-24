@@ -114,7 +114,7 @@ const Unit1_PosterMain = ({ openPopup }) => {
       >
         <div
           className="vocab_container"
-          style={{ bottom: "10%", right: "79.5%" }}
+          style={{ bottom: "9%", right: "79.5%" }}
         >
           {[
             "Goodbye!",

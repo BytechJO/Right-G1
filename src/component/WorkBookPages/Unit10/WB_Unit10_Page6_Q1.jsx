@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import "./WB_Unit9_Page6_Q1.css";
+import "./WB_Unit10_Page6_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/unit8/imgs/U8P68EXEA1-01.svg";
 import img2 from "../../../assets/unit8/imgs/U8P68EXEA1-02.svg";
 import img3 from "../../../assets/unit8/imgs/U8P68EXEA1-03.svg";
 import img4 from "../../../assets/unit8/imgs/U8P68EXEA1-04.svg";
 const data = [
-  { img: img4, scrambled: "ight", answer: "n", pattern: "ight" },
-  { img: img2, scrambled: "an", answer: "m", pattern: "an" },
+  { img: img4, scrambled: "geg", answer: "egg", pattern: "geg" },
+  { img: img2, scrambled: "ent", answer: "net", pattern: "ent" },
   {
     img: img1,
-    scrambled: "om",
-    answer: "m",
-    pattern: "om",
+    scrambled: "tej",
+    answer: "jet",
+    pattern: "tej",
   },
 
-  { img: img3, scrambled: "urse", answer: "n", pattern: "urse" },
-  { img: img4, scrambled: "ilk", answer: "m", pattern: "ilk" },
-  { img: img3, scrambled: "est", answer: "n", pattern: "est" },
+  { img: img3, scrambled: "ebd", answer: "bed", pattern: "ebd" },
+  { img: img4, scrambled: "neh", answer: "hen", pattern: "neh" },
+  { img: img3, scrambled: "nte", answer: "ten", pattern: "nte" },
 ];
 
-const WB_Unit9_Page6_Q1 = () => {
+const WB_Unit10_Page6_Q1 = () => {
   const [inputs, setInputs] = useState(Array(data.length).fill(""));
   const [wrongInputs, setWrongInputs] = useState(
     Array(data.length).fill(false)
@@ -51,7 +51,7 @@ const WB_Unit9_Page6_Q1 = () => {
     });
 
     setWrongInputs(wrongFlags);
-
+    setShowAnswer(true);
     const total = data.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -113,24 +113,25 @@ const WB_Unit9_Page6_Q1 = () => {
       >
         <div className="unscramble-container">
           <h3 className="header-title-page8">
-            <span className="ex-A">A</span>Write the missing letters. Say the
-            words.
+            <span className="ex-A">A</span>Look, unscramble, and write. words.
           </h3>
 
           <div className="unscramble-row-wb-unit9-p6-q1 ">
             {data.map((item, index) => (
               <div className="unscramble-box-wb-unit9-p6-q1" key={index}>
-                <div className="img-box-wb-unit9-p6-q1">
-                  <img src={item.img} alt=""  style={{height:"150px"}}/>
-                </div>
-                <div className="input-row">
+                <div className="img-box-wb-unit10-p6-q1">
                   <span
                     className="num"
                     style={{ fontSize: "25px", fontWeight: "600" }}
                   >
                     {index + 1}
+                  </span>{" "}
+                  <img src={item.img} alt="" style={{ height: "130px" }} />
+                </div>
+                <div className="input-row">
+                  <span className="pattern" style={{ fontSize: "22px" }}>
+                    {item.pattern}
                   </span>
-
                   <div className="input-wrapper">
                     <input
                       type="text"
@@ -142,14 +143,10 @@ const WB_Unit9_Page6_Q1 = () => {
                     />
 
                     {/* ❌ علامة الخطأ */}
-                    {wrongInputs[index] && !showAnswer && (
+                    {wrongInputs[index] && (
                       <div className="error-icon">✕</div>
                     )}
                   </div>
-
-                  <span className="pattern" style={{ fontSize: "22px" }}>
-                    {item.pattern}
-                  </span>
                 </div>
               </div>
             ))}
@@ -178,4 +175,4 @@ const WB_Unit9_Page6_Q1 = () => {
   );
 };
 
-export default WB_Unit9_Page6_Q1;
+export default WB_Unit10_Page6_Q1;

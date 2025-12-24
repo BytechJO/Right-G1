@@ -180,6 +180,9 @@ const Review6_Page1_Q2 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 >
                   <span
@@ -196,6 +199,9 @@ const Review6_Page1_Q2 = () => {
                 <img
                   src={img1}
                   alt=""
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
 
@@ -213,6 +219,9 @@ const Review6_Page1_Q2 = () => {
 
               <div className="img-box2">
                 <h5
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   style={{
                     display: "flex",
                     gap: "5px",
@@ -237,6 +246,9 @@ const Review6_Page1_Q2 = () => {
                 <img
                   src={img2}
                   alt="img"
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />
 
@@ -261,6 +273,9 @@ const Review6_Page1_Q2 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 >
                   <span
@@ -277,6 +292,9 @@ const Review6_Page1_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
+                  className={`clickable-img-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />
 
@@ -306,6 +324,9 @@ const Review6_Page1_Q2 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("Yes-dot").click()}
                 >
                   Yes, I can.
@@ -330,6 +351,9 @@ const Review6_Page1_Q2 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("No-dot").click()}
                 >
                   No, I can’t.

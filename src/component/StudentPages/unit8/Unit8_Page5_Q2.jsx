@@ -400,6 +400,9 @@ const Unit8_Page5_Q2 = () => {
                 <img
                   src={img1}
                   alt=""
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
                 {wrongImages.includes("img1") && (
@@ -418,6 +421,9 @@ const Unit8_Page5_Q2 = () => {
                 <img
                   src={img2}
                   alt="img"
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />
                 {wrongImages.includes("img2") && (
@@ -435,6 +441,9 @@ const Unit8_Page5_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
                 {wrongImages.includes("img3") && (
@@ -451,6 +460,9 @@ const Unit8_Page5_Q2 = () => {
                 <img
                   src={img4}
                   alt=""
+                   className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
                 {wrongImages.includes("img4") && (
@@ -481,6 +493,9 @@ const Unit8_Page5_Q2 = () => {
                     marginTop: "10px",
                     alignItems: "center",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("s-dot").click()}
                 >
                   s
@@ -507,6 +522,9 @@ const Unit8_Page5_Q2 = () => {
                     marginTop: "10px",
                     alignItems: "center",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("z-dot").click()}
                 >
                   z

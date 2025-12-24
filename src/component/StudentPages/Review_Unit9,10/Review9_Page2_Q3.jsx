@@ -82,7 +82,7 @@ export default function Review9_Page2_Q3() {
   // 3️⃣ Check Answers
   // ============================
   const checkAnswers = () => {
-        if (locked) return;
+    if (locked) return;
     // =========================
     // 1️⃣ فحص الـ inputs (ولا واحد فاضي)
     // =========================
@@ -220,16 +220,22 @@ export default function Review9_Page2_Q3() {
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
       <div className="matching-scale">
-        <h5 className="header-title-page8">
-         F Read, write, and match.
-        </h5>
+        <h5 className="header-title-page8">F Read, write, and match.</h5>
         <div key={resetKey} className="container1" ref={containerRef}>
           {correctMatches.map((item, index) => (
-            <div className="matching-row" key={item.word}>
-              <div className="word-with-dot">
-                <span className="span-num">{index + 1}</span>
+            <div className="matching-row-review9-p2-q3" key={item.word}>
+              <div className={`word-with-dot `}>
+                <div
+                  onClick={() =>
+                    document.getElementById(`${item.word}-dot`).click()
+                  }
+                  className={`word-with-dot-review9-p2-q3  ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  style={{ position: "relative", width: "90px" }}
+                >
+                  <span className="span-num">{index + 1}</span>
 
-                <div style={{ position: "relative" }}>
                   <input
                     type="text"
                     maxLength={1}
@@ -244,29 +250,27 @@ export default function Review9_Page2_Q3() {
                     }
                   />
 
-                  {!showAnswer&& locked && wrongLetters.includes(item.word) && (
-                    <span
-                      className="error-mark-unit8-p6-q3"
-                      style={{ top: "-9px" ,left:"43%"}}
-                    >
-                      ✕
-                    </span>
-                  )}
+                  {!showAnswer &&
+                    locked &&
+                    wrongLetters.includes(item.word) && (
+                      <span
+                        className="error-mark-review9-p2-q3"
+                        style={{ top: "-3px", left: "25%" }}
+                      >
+                        ✕
+                      </span>
+                    )}
+
+                  <span style={{ fontSize: "20px", fontWeight: "500" }}>
+                    {item.word.slice(1)}
+
+                    {!showAnswer &&
+                      locked &&
+                      wrongConnections.includes(item.word) && (
+                        <span className="error-mark-review9-p2-q3" >✕</span>
+                      )}
+                  </span>
                 </div>
-
-                <span
-                  style={{ fontSize: "20px", fontWeight: "500" }}
-                  onClick={() =>
-                    document.getElementById(`${item.word}-dot`).click()
-                  }
-                >
-                  {item.word.slice(1)}
-
-                  {!showAnswer&&locked && wrongConnections.includes(item.word) && (
-                    <span className="error-mark-review9-p2-q3">✕</span>
-                  )}
-                </span>
-
                 <div className="dot-wrapper">
                   <div
                     className="dot start-dot"

@@ -126,7 +126,7 @@ const WB_Unit10_Page1_Q1 = () => {
               }}
             >
               <span className="num2">{index + 1}</span>
-              <img src={q.img} style={{ width: "auto", height: "150px" }} />
+              <img src={q.img} style={{ width: "auto", height: "130px" }} />
               <div className="input-container-wb-unit10-p1-q1">
                 <div style={{ display: "flex" }}>
                   <input

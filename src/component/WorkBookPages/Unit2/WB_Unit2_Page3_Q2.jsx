@@ -14,7 +14,7 @@ const WB_Unit2_Page3_Q2 = () => {
   const handleChange = (value, index) => {
     if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
     const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
+    newAnswers[index] = value;
     setAnswers(newAnswers);
     setWrongInputs([]);
   };

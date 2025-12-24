@@ -111,6 +111,7 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
     // انتقال عادي
     setIndex(index + 1);
   };
+  const isFirst = index === 0;
 
   return (
     <div>
@@ -124,54 +125,31 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
           backgroundColor: "#430f68",
         }}
       >
-        {index ? (
-          <button
-            onClick={() => setIndex(index - 1)}
+        <button
+          onClick={() => setIndex(index - 1)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            color: "white",
+            fontSize: "14px",
+            cursor: "pointer",
+          }}
+          disabled={isFirst}
+            className={`prev-btn ${isFirst ? "disabled" : ""}`}
+        >
+          <svg
+            width="25"
+            height="25"
+            viewBox="0 0 90 90"
             style={{
-              display: "flex",
-              alignItems: "center",
-              color: "white",
-              fontSize: "14px",
-              cursor: "pointer",
+              padding: "10px",
             }}
+            className="nav-btn w-10 h-10 rounded-full transition"
           >
-            <svg
-              width="25"
-              height="25"
-              viewBox="0 0 90 90"
-              style={{
-                padding: "10px",
-              }}
-              className="nav-btn w-10 h-10 rounded-full transition"
-            >
-              <image href={back} x="0" y="0" width="90" height="90" />
-            </svg>{" "}
-            Previous activity
-          </button>
-        ) : (
-          <button
-            style={{
-              display: "flex",
-              alignItems: "center",
-              color: "white",
-              fontSize: "14px",
-              cursor: "pointer",
-            }}
-          >
-            <svg
-              width="25"
-              height="25"
-              viewBox="0 0 90 90"
-              style={{
-                padding: "10px",
-              }}
-              className="nav-btn w-10 h-10 rounded-full transition"
-            >
-              <image href={back} x="0" y="0" width="90" height="90" />
-            </svg>{" "}
-            Previous activity
-          </button>
-        )}
+            <image href={back} x="0" y="0" width="90" height="90" />
+          </svg>{" "}
+          Previous activity
+        </button>
 
         <button
           onClick={handleNext}

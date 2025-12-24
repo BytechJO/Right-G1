@@ -1,5 +1,5 @@
-.error-mark8-u2-p19-q2{
-        width: 25px;
+.error-mark8-u2-p19-q2 {
+    width: 25px;
     height: 25px;
     border: 2px solid white;
     background-color: red;
@@ -13,7 +13,7 @@
     margin-left: 8px;
     vertical-align: middle;
     position: absolute;
-       left: 13%;
+    left: 20%;
     top: 0%;
     z-index: 99;
 }

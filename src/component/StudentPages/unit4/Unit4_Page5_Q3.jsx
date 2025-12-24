@@ -141,7 +141,8 @@ export default function Unit4_Page5_Q3() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -159,47 +160,67 @@ export default function Unit4_Page5_Q3() {
           <span className="ex-A">B</span> Read, look, and match.
         </h5>
 
-        <div className="matching-wrapper2" ref={containerRef}>
-          <img src={img} style={{ height: "150px", width: "auto" }} />
-          <div className="column2 left-column">
-            {["It’s a red", "It’s a blue", "It’s a brown"].map((word, i) => (
-              <div className="word-row2" key={i}>
-                <span className="num2">{i + 1}</span>
-                <span
-                  className="word-text3"
-                  onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ width: "141px", cursor: "pointer" }}
-                >
-                  {word}
-                </span>
-                <div
-                  className="dot5 start-dot5"
-                  data-letter={word}
-                  id={`dot-${word}`}
-                  onClick={handleStartDotClick}
-                ></div>
-                {wrongWords.includes(word) && (
-                  <span className="error-mark4-u2-p18-q2">✕</span>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="matching-wrapper2-unit4-p5-q3" ref={containerRef}>
+          <img src={img} style={{ height: "200px", width: "auto" }} />
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <div className="column2 left-column">
+              {["It’s a red", "It’s a blue", "It’s a brown"].map((word, i) => (
+                <div className="word-row2" key={i}>
+                  <span className="num2">{i + 1}</span>
+                  <span
+                    className={`word-text3 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() =>
+                      document.getElementById(`dot-${word}`).click()
+                    }
+                    style={{ width: "160px", cursor: "pointer" }}
+                  >
+                    {word}
+                  </span>
+                  <div
+                    className="dot5 start-dot5"
+                    data-letter={word}
+                    id={`dot-${word}`}
+                    onClick={handleStartDotClick}
+                  ></div>
+                  {wrongWords.includes(word) && (
+                    <span className="error-mark4-unit4-p5-q3">✕</span>
+                  )}
+                </div>
+              ))}
+            </div>
 
-          <div className="column2 right-column">
-            {["circle.", "square.", "triangle."].map((word, i) => (
-              <div className="word-row2" key={i}>
-                <div
-                  className="dot5 end-dot5"
-                  data-image={word}
-                   id={`dot-${word}`}
-                  onClick={handleEndDotClick}
-                ></div>
-                <span className="word-text3"  onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer" }}>{word}</span>
-              </div>
-            ))}
+            <div className="column2 right-column">
+              {["circle.", "square.", "triangle."].map((word, i) => (
+                <div className="word-row2" key={i}>
+                  <div
+                    className="dot5 end-dot5"
+                    data-image={word}
+                    id={`dot-${word}`}
+                    onClick={handleEndDotClick}
+                  ></div>
+                  <span
+                    className={`word-text3 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() =>
+                      document.getElementById(`dot-${word}`).click()
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    {word}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-
           <svg className="lines-layer5">
             {lines.map((line, i) => (
               <line

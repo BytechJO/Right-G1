@@ -201,25 +201,31 @@ export default function Review10_Page1_Q1() {
         <h5 className="header-title-page8">A Read, look, and match.</h5>
         <div key={resetKey} className="container1" ref={containerRef}>
           {correctMatches.map((item, index) => (
-            <div className="matching-row" key={item.word}>
-              <div className="word-with-dot">
+            <div className="matching-row-review10-p1-q1" key={item.word}>
+              <div className="word-with-dot-review10-p1-q1">
                 <span className="span-num">{index + 1}</span>
-
-                <span
-                  style={{ fontSize: "20px", fontWeight: "500" ,width:"50%"}}
-                  onClick={() =>
-                    document.getElementById(`${item.word}-dot`).click()
-                  }
-                >
-                  {item.word}
-
+                <div style={{ position: "relative" }}>
+                  <span
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: "500",
+                      width: "65%",
+                    }}
+                      className={`clickable-word-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() =>
+                      document.getElementById(`${item.word}-dot`).click()
+                    }
+                  >
+                    {item.word}
+                  </span>
                   {!showAnswer &&
-                    locked &&
+                    locked&&
                     wrongConnections.includes(item.word) && (
                       <span className="error-mark-review10-p1-q1">✕</span>
                     )}
-                </span>
-
+                </div>
                 <div className="dot-wrapper">
                   <div
                     className="dot start-dot"
@@ -241,7 +247,9 @@ export default function Review10_Page1_Q1() {
                 </div>
                 <img
                   src={imagesMap[index]}
-                  className="matched-img"
+                 className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   style={{ height: "100px" }}
                   alt=""
                   onClick={() =>

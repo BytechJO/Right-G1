@@ -62,6 +62,33 @@
   border: 2px solid transparent;
 }
 
+
+
+/* =====================
+   WORDS HOVER
+===================== */
+.word-text3 {
+  display: inline-block;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.word-text3:hover {
+  transform: scale(1.05);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.word-text3:active {
+  transform: scale(0.97);
+}
+
+
 .dot5 {
   width: 14px;
   height: 14px;

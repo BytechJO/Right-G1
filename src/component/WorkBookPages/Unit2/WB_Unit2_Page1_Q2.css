@@ -31,6 +31,11 @@
   position: relative;
 }
 
+.avatar-img-wb-u1-q2 {
+    width: 200px;
+    height: auto;
+}
+
 .img-box-wb-u1-q2 .selected {
   border-color: #37a3ff;
 }

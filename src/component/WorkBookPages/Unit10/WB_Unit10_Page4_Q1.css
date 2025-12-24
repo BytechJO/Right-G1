@@ -1,25 +1,13 @@
-.content-container-wb-unit9-p4-q1{
-      display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.blank-options-wb-unit9-p4-q1 {
+.wb-unit10-p4-q1-box {
     display: flex;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 700;
     flex-direction: column;
-    position: relative;
+    align-items: flex-start;
+    /* gap: 10px; */
+    width: 100%;
+    /* justify-content: space-around; */
 }
 
-.sentence-wb-unit9-p4-q1 {
-    display: flex;
-    /* flex-wrap: wrap; */
-    gap: 10px;
-    width: 100%;
-    align-items: center;
-    font-size: 20px;
-    /* justify-content: space-evenly; */
-    flex-direction: row;
+
+.wb-unit10-p4-q1-text {
+    font-size: 18px;
 }

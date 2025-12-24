@@ -1,76 +1,58 @@
-.wb-unit9-qk-wrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container-word-grid-wb-unit10-p5-q2 {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    /* gap: 70px; */
+    margin-top: 30px;
 }
 
-.wb-unit9-qk-layout {
-  width: 80%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+.word-btn-wb-unit10-p5-q2 {
+    display: grid;
+    flex-direction: column;
+    /* gap: 20px; */
+    grid-template-columns: 1fr 1fr;
 }
 
-.wb-unit9-qk-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.cell-wb-unit10-p5-q2 {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
 }
 
-.wb-unit9-qk-item.right {
-  grid-row: span 2;
-  justify-content: center;
-}
-.wb-unit9-qk-svg-wrapper {
-  cursor: pointer;
+
+.cell-wb-unit10-p5-q2.highlight {
+    background-color: #cdfffa;
+    border: 2px solid rgb(0, 179, 255);
 }
 
-.wb-unit9-qk-svg {
-  width: 220px;
-  height: 100px;
-  transition: fill 0.2s ease;
-}
-.wb-unit9-qk-img{
-    width: 220px;
-  height: 160px;
+
+.cell-wb-unit10-p5-q2.found {
+    background-color: #dcffcd;
+    border: 2px solid green;
+    font-weight: bold;
 }
 
-.wb-unit9-qk-options {
-  margin-top: 12px;
-  padding: 6px 14px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  display: flex;
-  gap: 10px;
-}
 
-.wb-unit9-qk-option {
-  cursor: pointer;
-  padding: 2px 8px;
-  border-radius: 50%;
-  position: relative;
-  border: 2px solid transparent;
-}
-
-.wb-unit9-qk-option.active {
-  border-color: #1d4f7b;
-  font-weight: bold;
-}
-
-.wb-unit9-qk-wrong-mark {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
+.wrong-x-circle-wb-unit10-p5-q2 {
+    position: absolute;
+    right: 22px;
+    top: -1%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid white;
 }

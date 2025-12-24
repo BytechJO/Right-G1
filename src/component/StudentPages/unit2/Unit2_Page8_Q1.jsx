@@ -14,7 +14,7 @@ const Unit2_Page8_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
-  const [locked, setLocked] = useState(false); 
+  const [locked, setLocked] = useState(false);
   // -------------------------------------------
 
   const correctMatches = [
@@ -127,7 +127,7 @@ const Unit2_Page8_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div
@@ -144,13 +144,14 @@ const Unit2_Page8_Q1 = () => {
           <h5 className="header-title-page8">D Read, look, and match.</h5>
 
           <div className="container12" ref={containerRef}>
-            
             {/* الصف الأول */}
             <div className="matching-row2">
               <div className="word-with-dot2">
                 <span className="span-num2">1</span>
                 <span
-                  className="word-text2"
+                  className={`word-text2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-duck").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -180,14 +181,16 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
-
+<div style={{width:"150px"}}>
                 <img
                   src={table}
-                  className="matched-img2"
+                 className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ cursor: "pointer", height: "100px" }}
-                />
+                /></div>
               </div>
             </div>
 
@@ -196,7 +199,9 @@ const Unit2_Page8_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">2</span>
                 <span
-                  className="word-text2"
+                  className={`word-text2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -226,14 +231,16 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
-
+<div style={{width:"150px"}}>
                 <img
                   src={dish}
-                  className="matched-img2"
+                className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ cursor: "pointer", height: "110px" }}
-                />
+                /></div>
               </div>
             </div>
 
@@ -242,7 +249,9 @@ const Unit2_Page8_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">3</span>
                 <span
-                  className="word-text2"
+                  className={`word-text2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-dish").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -272,14 +281,16 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
-
+<div style={{width:"150px"}}>
                 <img
                   src={duck}
-                  className="matched-img2"
+                 className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
                   style={{ cursor: "pointer", height: "100px" }}
-                />
+                /></div>
               </div>
             </div>
 
@@ -288,7 +299,9 @@ const Unit2_Page8_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">4</span>
                 <span
-                  className="word-text2"
+                  className={`word-text2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-table").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -318,14 +331,16 @@ const Unit2_Page8_Q1 = () => {
                     onClick={handleEndDotClick}
                   ></div>
                 </div>
-
+<div style={{width:"150px"}}>
                 <img
                   src={tiger}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
                   style={{ cursor: "pointer", height: "100px" }}
-                />
+                /></div>
               </div>
             </div>
 

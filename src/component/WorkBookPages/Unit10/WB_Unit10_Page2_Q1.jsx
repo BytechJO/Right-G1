@@ -100,96 +100,122 @@ const WB_Unit10_Page2_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h5 className="header-title-page8-wb-unit10-p2-q1">
-          <span className="ex-A-wb-unit10-p2-q1">C</span> Look, read, and write.
-        </h5>
+        <div className="exercise-wrapper-wb-unit10-p2-q1">
+          <h5 className="header-title-page8">
+            <span className="ex-A">C</span> Look, read, and
+            write.
+          </h5>
 
-        {/* QUESTION 1 — EXAMPLE */}
-        <div className="question-row-wb-unit10-p2-q1">
-          <span className="num-wb-unit10-p2-q1">1</span>
-          <img src={q1Img} />
-          <div className="speech-wb-unit10-p2-q1">
-            <p>Do you want chicken?</p>
-            <p>Yes, I do.</p>
+          {/* ========== ROW 1 (EXAMPLE) ========== */}
+          <div className="conversation-row-wb-unit10-p2-q1">
+            <span className="num-wb-unit10-p2-q1">1</span>
+
+            {/* Question bubble */}
+            <div className="bubble question-bubble-wb-unit10-p2-q1">
+              Do you want chicken?
+            </div>
+
+        
+
+            {/* Person */}
+            <img
+              src={q2Img}
+              alt="girl"
+              className="person-img-wb-unit10-p2-q1"
+            />
+
+            {/* Answer bubble */}
+            <div className="bubble answer-bubble-wb-unit10-p2-q1">
+              Yes, I do.
+            </div>
           </div>
-        </div>
 
-        {/* QUESTION 2 */}
-        <div className="question-row-wb-unit10-p2-q1">
-          <span className="num-wb-unit10-p2-q1">2</span>
-          <img src={q2Img} />
-          <div className="speech-wb-unit10-p2-q1">
-            <p>
+          {/* ========== ROW 2 ========== */}
+          <div className="conversation-row-wb-unit10-p2-q1">
+            <span className="num-wb-unit10-p2-q1">2</span>
+
+            <div className="bubble question-bubble-wb-unit10-p2-q1">
               Do{" "}
               <input
+                className="line-input-wb-unit10-p2-q1"
                 value={answers.q2_question}
                 disabled={locked}
                 onChange={(e) =>
                   setAnswers({ ...answers, q2_question: e.target.value })
                 }
-                className="line-input-wb-unit10-p2-q1"
               />
               ?
-            </p>
-            <p>
+            </div>
+
+        
+            <img
+              src={q2Img}
+              alt="girl"
+              className="person-img-wb-unit10-p2-q1"
+            />
+
+            <div className="bubble answer-bubble-wb-unit10-p2-q1">
               Yes,{" "}
               <input
+                className="line-input-wb-unit10-p2-q1 small-wb-unit10-p2-q1"
                 value={answers.q2_answer}
                 disabled={locked}
                 onChange={(e) =>
                   setAnswers({ ...answers, q2_answer: e.target.value })
                 }
-                className="line-input-wb-unit10-p2-q1 small-wb-unit10-p2-q1"
               />
               .
-            </p>
+            </div>
           </div>
-        </div>
 
-        {/* QUESTION 3 */}
-        <div className="question-row-wb-unit10-p2-q1">
-          <span className="num-wb-unit10-p2-q1">3</span>
-          <img src={q2Img} />
-          <div className="speech-wb-unit10-p2-q1">
-            <p>
+          {/* ========== ROW 3 ========== */}
+          <div className="conversation-row-wb-unit10-p2-q1">
+            <span className="num-wb-unit10-p2-q1">3</span>
+
+            <div className="bubble question-bubble-wb-unit10-p2-q1">
               <input
+                className="line-input-wb-unit10-p2-q1"
                 value={answers.q3_question}
                 disabled={locked}
                 onChange={(e) =>
                   setAnswers({ ...answers, q3_question: e.target.value })
                 }
-                className="line-input-wb-unit10-p2-q1"
               />{" "}
               bread?
-            </p>
-            <p>
+            </div>
+
+
+            <img src={q2Img} alt="boy" className="person-img-wb-unit10-p2-q1" />
+
+            <div className="bubble answer-bubble-wb-unit10-p2-q1">
               No,{" "}
               <input
+                className="line-input-wb-unit10-p2-q1 small-wb-unit10-p2-q1"
                 value={answers.q3_answer}
                 disabled={locked}
                 onChange={(e) =>
                   setAnswers({ ...answers, q3_answer: e.target.value })
                 }
-                className="line-input-wb-unit10-p2-q1 small-wb-unit10-p2-q1"
               />
               .
-            </p>
+            </div>
           </div>
         </div>
       </div>
-      <div className="action-buttons-container-wb-unit10-p2-q1">
-        <button onClick={resetAll} className="try-again-button-wb-unit10-p2-q1">
+      {/* ========== ACTION BUTTONS ========== */}
+      <div className="action-buttons-container">
+        <button onClick={resetAll} className="try-again-button">
           Start Again ↻
         </button>
         <button
           onClick={showAnswers}
-          className="show-answer-btn-wb-unit10-p2-q1"
+          className="show-answer-btn"
         >
           Show Answer
         </button>
         <button
           onClick={checkAnswers}
-          className="check-button2-wb-unit10-p2-q1"
+          className="check-button2"
         >
           Check Answer ✓
         </button>

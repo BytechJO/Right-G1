@@ -1,13 +1,13 @@
 .container3 {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    justify-content: space-between;
-    user-select: none;
-    padding-bottom: 85px;
-    margin-top: 20px;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  user-select: none;
+  padding-bottom: 85px;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .word-section1 {
@@ -23,7 +23,7 @@
 
 .H5 {
   font-family: "Baloo 2", sans-serif;
-  font-size: clamp(24px, 6vw, 70px);
+  font-size: clamp(24px, 6vw, 60px);
   font-weight: 600;
   color: transparent;
   display: flex;
@@ -31,6 +31,39 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+/* الأساس */
+.H5 {
+  display: inline-block; /* ضروري للـ transform */
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ✨ Hover animation */
+.H5:hover {
+  transform: scale(1.06);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* 👇 Click feedback */
+.H5:active {
+  transform: scale(0.98);
+}
+.disabled-word {
+  pointer-events: none;
+  /* opacity: 0.6; */
+}
+
+/* منع أي hover effect */
+.disabled-word:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: transparent;
+  cursor: default;
 }
 
 .start-dot1 {

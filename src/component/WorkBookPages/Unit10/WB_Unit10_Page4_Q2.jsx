@@ -1,84 +1,123 @@
-import React, { useState } from "react";
-import deer from "../../../assets/unit6/imgs/U6P54EXEC-01.svg";
+import React, { useState, useRef, useEffect } from "react";
+import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
+import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
+import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit9_Page4_Q2.css"
-const data = [
-  { question: "", correct: "There are three cows" },
-  { question: "", correct: "There are two cats" },
-  { question: "", correct: "There are one dog" },
-];
+import "./WB_Unit10_Page4_Q2.css";
+const WB_Unit10_Page4_Q2 = () => {
+  const questions = [
+    {
+      img: bat,
+      parts: [
+        { type: "text", value: "I want an" },
+        { type: "input", answer: "apple" },
+      
+      ],
+    },
+    {
+      img: cap,
+      parts: [
+        { type: "input", answer: "I want ice cream" },
+        { type: "text", value: "." },
+      ],
+    },
+    {
+      img: ant,
+      parts: [
+        { type: "input", answer: "I want chicken" },
+        { type: "text", value: "." },
+      ],
+    },
+    {
+      img: ant,
+      parts: [
+        { type: "input", answer: "I want milk" },
+        { type: "text", value: "." },
+      ],
+    },
+  ];
 
-const WB_Unit9_Page4_Q2 = () => {
-  const [answers, setAnswers] = useState(Array(data.length).fill(""));
+  const [answers, setAnswers] = useState(
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+  );
+
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+  const [locked, setLocked] = useState(false);
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+  const handleChange = (value, qIndex, pIndex) => {
+    if (locked) return;
 
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
+    const copy = [...answers];
+    copy[qIndex][pIndex] = value.toLowerCase();
+    setAnswers(copy);
     setWrongInputs([]);
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+    if (locked) return;
 
-    if (answers.some((a) => a.trim() === "")) {
-      ValidationAlert.info("Please fill in all blanks before checking!");
-      return;
+    // 🔴 1) فحص الانبوتات الفاضية
+    for (let qIndex = 0; qIndex < questions.length; qIndex++) {
+      for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
+        const part = questions[qIndex].parts[pIndex];
+
+        if (part.type === "input") {
+          const value = answers[qIndex][pIndex];
+
+          if (!value || value.trim() === "") {
+            ValidationAlert.info(`Please complete question ${qIndex + 1}.`);
+            return; // ⛔ وقف التشييك
+          }
+        }
+      }
     }
 
-    let correctCount = 0;
     let wrong = [];
+    let score = 0;
+    let total = 0;
 
-    answers.forEach((ans, i) => {
-      if (ans.trim().toLowerCase() === data[i].correct.toLowerCase()) {
-        correctCount++;
-      } else {
-        wrong.push(i);
-      }
+    questions.forEach((q, qIndex) => {
+      q.parts.forEach((p, pIndex) => {
+        if (p.type === "input") {
+          total++;
+          if (answers[qIndex][pIndex]?.trim() === p.answer) {
+            score++;
+          } else {
+            wrong.push(`${qIndex}-${pIndex}`);
+          }
+        }
+      });
     });
 
     setWrongInputs(wrong);
+    setLocked(true);
+    const msg = `Score: ${score} / ${total}`;
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+  };
+  const showAnswers = () => {
+    const filled = questions.map((q) =>
+      q.parts.map((p) => (p.type === "input" ? p.answer : null))
+    );
 
-    let color =
-      correctCount === data.length
-        ? "green"
-        : correctCount === 0
-        ? "red"
-        : "orange";
-
-    const scoreMessage = `
-      <div style="font-size:20px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${correctCount} / ${data.length}
-        </span>
-      </div>
-    `;
-
-    if (correctCount === data.length) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    setAnswers(filled);
+    setWrongInputs([]);
+    setLocked(true); // 🔒 قفل التعديل
   };
 
   const reset = () => {
-    setAnswers(Array(data.length).fill(""));
+    setAnswers(
+      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    );
     setWrongInputs([]);
-    setShowAnswer(false); // ⭐ إعادة التفعيل الطبيعي
-  };
-
-  // ⭐⭐⭐ SHOW ANSWER FUNCTION
-  const showCorrectAnswers = () => {
-    const correctList = data.map((item) => item.correct);
-    setAnswers(correctList);
-    setWrongInputs([]);
-    setShowAnswer(true);
+    setLocked(false);
   };
 
   return (
     <div
+      className="question-wrapper-unit3-page6-q1"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -88,7 +127,6 @@ const WB_Unit9_Page4_Q2 = () => {
       }}
     >
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -97,78 +135,72 @@ const WB_Unit9_Page4_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="component-wrapper">
-          <h3 className="header-title-page8">
-            <span className="ex-A">I</span>Count and write.
-          </h3>
+        <h5 className="header-title-page8">
+          <span className="ex-A">H</span>Look and write.
+        </h5>
+        <div className="content-container-wb-unit8-p1-q2">
+          {questions.map((q, qIndex) => (
+            <div key={qIndex} className="row2-wb-unit10-p4-q2">
+              <div
+                style={{ display: "flex", gap: "10px", alignItems: "center" ,width:"100%"}}
+              >
+                <span className="num-span">{qIndex + 1}</span>
+                <div className="sentence-wrapper-wb-unit10-p4-q2">
+                  {q.parts.map((part, pIndex) => {
+                    if (part.type === "text") {
+                      return (
+                        <p key={pIndex} className="sentence-text-wb-unit10-p4-q2">
+                          {part.value}
+                        </p>
+                      );
+                    }
 
-          <div className="content-wb-unit9-p4-q2">
-            <div className="group-input-unit5-p5-q3">
-              {data.map((item, index) => (
-                <div
-                  key={index}
-                  className="question-row"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    margin: "10px",
-                    width:"100%"
-                  }}
-                >
-                  <span
-                    className="q-number"
-                    style={{
-                      color: "#0d47a1",
-                      fontWeight: "700",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {index + 1}.
-                  </span>
+                    return (
+                      <span
+                        key={pIndex}
+                        style={{ position: "relative", width: "90%" }}
+                      >
+                        <input
+                          type="text"
+                          style={{ width: "100%" }}
+                          className="inline-input-wb-unit8-p1-q2"
+                          value={answers[qIndex][pIndex] || ""}
+                          onChange={(e) =>
+                            handleChange(e.target.value, qIndex, pIndex)
+                          }
+                          disabled={locked}
+                        />
 
-                  <div className="question-text" style={{ position: "relative" }}>
-                    <input
-                      type="text"
-                      className="q-input-wb-unit9-p4-q2"
-                      value={answers[index]}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                    />
-
-                    {wrongInputs.includes(index) && (
-                      <span className="wrong-icon-review6-p1-q3">✕</span>
-                    )}
-                  </div>
+                        {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                          <span className="error-mark-input-wb-unit2-page3-q2">
+                            ✕
+                          </span>
+                        )}
+                      </span>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <img
-              src={deer}
-              className="shape-img-unit5-p5-q3"
-              alt=""
-              style={{ height: "300px", width: "auto" }}
-            />
-          </div>
+              <img src={q.img} alt="" className="q-img-wb-unit8-p1-q2" />
+            </div>
+          ))}
         </div>
       </div>
-
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-
-        {/* ⭐ زر الشو أنسر */}
-        <button className="show-answer-btn swal-continue" onClick={showCorrectAnswers}>
-          Show Answer 
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        <button onClick={showAnswers} className="show-answer-btn swal-continue">
+          Show Answer
         </button>
-
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
+        <button onClick={checkAnswers} className="check-button2">
+          Check Answer ✓
         </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit9_Page4_Q2;
+export default WB_Unit10_Page4_Q2;

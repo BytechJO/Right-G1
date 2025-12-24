@@ -155,24 +155,6 @@ export default function Book() {
       }
       return;
     }
-
-    // ====== WORKBOOK SPECIAL LOGIC ======
-    if (currentPage === 1) {
-      setPageIndex(0);
-      return;
-    }
-    if (currentPage === 2) {
-      setPageIndex(1);
-      return;
-    }
-
-    if (currentPage % 2 === 1) {
-      // فردية → لازم تظهر يمين في الورك بوك
-      setPageIndex(currentPage - 1);
-    } else {
-      // زوجية → لازم تظهر يسار في الورك بوك
-      setPageIndex(currentPage - 2);
-    }
   }, [viewMode]);
 
   // ===========================================================
@@ -198,33 +180,6 @@ export default function Book() {
     // ===========================
     if (isNaN(num) || num < 1 || num > pages.length) {
       setPageIndex(1); // رجّعه للصفحة الثانية دائماً
-      return;
-    }
-
-    // ===========================
-    // 📘 Special Logic for WORKBOOK Spread (reverse pages)
-    // ===========================
-    if (activeTab === "work" && !isMobile && viewMode === "spread") {
-      // الصفحة 1 تكون سينجل دائماً
-      if (num === 1) {
-        setPageIndex(0);
-        return;
-      }
-
-      // الصفحة 2 تكون سينجل دائماً
-      if (num === 2) {
-        setPageIndex(1);
-        return;
-      }
-
-      // بعد الصفحة الثانية: left page يجب أن تكون فردية دائماً
-      let leftPage = num % 2 === 0 ? num - 1 : num;
-      let targetIndex = leftPage - 1;
-
-      // لا تسمح أن يقل عن الصفحة الثالثة
-      if (targetIndex < 2) targetIndex = 2;
-
-      setPageIndex(targetIndex);
       return;
     }
 
@@ -256,37 +211,10 @@ export default function Book() {
 
   const nextPage = () => {
     // =============== Posters → always single ===============
-    if (
-      activeTab === "poster" ||
-      activeTab === "posterVocab" ||
-      activeTab === "flash"
-    ) {
+    if (activeTab === "posterVocab" || activeTab === "flash") {
       if (pageIndex < pages.length - 1) {
         setPageIndex(pageIndex + 1);
       }
-      return;
-    }
-
-    // =============== WORKBOOK LOGIC ===============
-    if (activeTab === "work" && !isMobile && viewMode === "spread") {
-      // الصفحة 1 → single
-      if (pageIndex === 0) {
-        setPageIndex(1);
-        return;
-      }
-
-      // الصفحة 2 → single
-      if (pageIndex === 1) {
-        setPageIndex(2); // الآن start spread (show page 3–4)
-        return;
-      }
-
-      // من الآن spread → زيادة 2
-      if (pageIndex + 2 < pages.length) {
-        setPageIndex(pageIndex + 2);
-        return;
-      }
-
       return;
     }
 
@@ -306,11 +234,7 @@ export default function Book() {
 
   const prevPage = () => {
     // Posters → always one page
-    if (
-      activeTab === "poster" ||
-      activeTab === "posterVocab" ||
-      activeTab === "flash"
-    ) {
+    if (activeTab === "posterVocab" || activeTab === "flash") {
       if (pageIndex > 0) setPageIndex(pageIndex - 1);
       return;
     }
@@ -494,7 +418,8 @@ export default function Book() {
     poster: posterInfo,
     posterVocab: posterVocabInfo,
   };
-
+  const isLastPage = pageIndex === pages.length - 1;
+  const isLastSpread = viewMode === "spread" && pageIndex === pages.length - 2;
   // ===========================================================
   //                 📌 RENDER
   // ===========================================================
@@ -510,7 +435,6 @@ export default function Book() {
         mobileTabsOpen={mobileTabsOpen}
         setMobileTabsOpen={setMobileTabsOpen}
         isMobile={isMobile}
-        teacherPdf={teacherPdf}   // 👈 جديد
       />
 
       {/* ===================== MAIN PAGE VIEW ===================== */}
@@ -553,7 +477,8 @@ export default function Book() {
         activeTab === "flash" ||
         viewMode === "single" ||
         pageIndex === 0 ||
-        (activeTab === "work" && pageIndex <= 1) ? (
+        isLastPage ||
+        isLastSpread ? (
           <div
             className="bg-white rounded-2xl shadow-2xl border flex items-center justify-center overflow-hidden self-center"
             style={{
@@ -573,27 +498,12 @@ export default function Book() {
               cursor: zoom === 1 ? "default" : isDragging ? "grabbing" : "grab",
             }}
           >
-            {/* WORKBOOK → منقلب (الزوجي على اليمين، الفردي على اليسار) */}
-            {activeTab === "work" ? (
-              <>
-                <div className="flex items-center justify-center border-r">
-                  {renderPage(pages[pageIndex])} {/* RIGHT PAGE */}
-                </div>
-                <div className="flex items-center justify-center border-l">
-                  {renderPage(pages[pageIndex + 1])} {/* LEFT PAGE */}
-                </div>
-              </>
-            ) : (
-              /* باقي التابات → طبيعي */
-              <>
-                <div className="flex items-center justify-center border-r">
-                  {renderPage(pages[pageIndex])}
-                </div>
-                <div className="flex items-center justify-center border-l">
-                  {renderPage(pages[pageIndex + 1])}
-                </div>
-              </>
-            )}
+            <div className="flex items-center justify-center border-r">
+              {renderPage(pages[pageIndex])}
+            </div>
+            <div className="flex items-center justify-center border-l">
+              {renderPage(pages[pageIndex + 1])}
+            </div>
           </div>
         )}
       </div>
@@ -625,6 +535,7 @@ export default function Book() {
           openRightSidebar: () => setRightBarOpen(true),
           keyIcon: FaKey,
         }}
+        teacherPdf={teacherPdf} // 👈 جديد
       />
 
       {/* ===================== LEFT SIDEBAR ===================== */}

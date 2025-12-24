@@ -1,95 +1,113 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
-// import "./WB_Unit7_Page4_Q2.css"
-const WB_Unit9_Page3_Q1 = () => {
-  const [answers, setAnswers] = useState(Array(4).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+import React, { useState, useRef } from "react";
+import img1 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-01.svg";
+import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
+import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
+import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
 
-  // 🔥 الداتا المطابقة للصورة
-  const items = [
+import ValidationAlert from "../../Popup/ValidationAlert";
+import "./WB_Unit10_Page3_Q1.css"
+
+const WB_Unit10_Page3_Q1 = () => {
+  const data = [
     {
-      img: img1,
-      text: "",
-      options: ["one cat", "two cats"],
-      correctIndex: 0,
+      id: 1,
+      word: "I want fruit.",
+      imgs: [
+        { src: img2, answer: false }, // short i
+        { src: img3, answer: true },
+      ],
     },
     {
-      img: img2,
-      text: "",
-      options: ["five horses", "ten horses"],
-      correctIndex: 0,
+      id: 2,
+      word: "I want chicken.",
+      imgs: [
+        { src: img4, answer: false}, // short i
+        { src: img2, answer: true },
+      ],
     },
     {
-      img: img3,
-      text: "",
-      options: ["six cows", "three cows"],
-      correctIndex: 1,
+      id: 3,
+      word: "I want bread.",
+      imgs: [
+        { src: img4, answer: false },
+        { src: img3, answer: true }, // short i
+      ],
     },
     {
-      img: img3,
-      text: "",
-      options: ["six goats", "seven goats"],
-      correctIndex: 1,
+      id: 4,
+      word: "I want ice cream.",
+      imgs: [
+        { src: img1, answer: true }, // short i
+        { src: img4, answer: false },
+      ],
     },
   ];
 
-  const handleSelect = (qIndex, optionIndex) => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    const newAns = [...answers];
-    newAns[qIndex] = optionIndex;
-    setAnswers(newAns);
+  const [selected, setSelected] = useState({});
+
+  const [showResult, setShowResult] = useState(false);
+  const [showAnswerState, setShowAnswerState] = useState(false);
+  const handleSelect = (qId, index) => {
+     if (showAnswerState || showResult) return;
+
+    setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
+  };
+
+  const showCorrectAnswers = () => {
+    let correctSelections = {};
+
+    data.forEach((q) => {
+      const correctIndex = q.imgs.findIndex((img) => img.answer === true);
+      correctSelections[q.id] = correctIndex;
+    });
+
+    setSelected(correctSelections);
+    setShowResult(false);
+    setShowAnswerState(true);
   };
 
   const checkAnswers = () => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please circle all words first.");
-      return;
+    if (showAnswerState) return;
+    const totalQuestions = data.length; // لأن أول سؤال لا يُحسب
+
+    let correct = 0;
+
+    // تأكد إنو جاوب كل الأسئلة
+    for (let q of data) {
+      if (selected[q.id] === undefined) {
+        ValidationAlert.info("");
+        return;
+      }
     }
 
-    let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
-    ).length;
+    // حساب عدد الإجابات الصحيحة
+    data.forEach((q) => {
+      const chosenIndex = selected[q.id];
+      if (q.imgs[chosenIndex].answer === true) {
+        correct++;
+      }
+    });
 
-    const total = items.length;
+    const color =
+      correct === totalQuestions ? "green" : correct === 0 ? "red" : "orange";
+    const scoreMessage = `
+    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+      Score: ${correct} / ${totalQuestions}
+      </span>
+    </div>
+  `;
 
-    let color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
-    const msg = `
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${correctCount} / ${total}
-        </span>
-      </div>
-    `;
-
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-
+    // النتيجة
+    if (correct === totalQuestions) {
+      ValidationAlert.success(scoreMessage);
+    } else if (correct === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
     setShowResult(true);
-  };
-
-  const reset = () => {
-    setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setLocked(false);
-  };
-  const showAnswers = () => {
-    // كل سؤال → نضع correctIndex بدل null
-    const filled = items.map((item) => item.correctIndex);
-
-    setAnswers(filled);
-    setShowResult(true);
-    setLocked(true); // 🔒 قفل الإجابات
   };
 
   return (
@@ -103,6 +121,7 @@ const WB_Unit9_Page3_Q1 = () => {
       }}
     >
       <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -111,84 +130,78 @@ const WB_Unit9_Page3_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div>
-          <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">F</span>Look, read, and circle.
-          </h5>
-        </div>
-        <div className="container-wb-unit6-p6-q2">
-          {items.map((q, i) => (
-            <div
-              key={i}
-              className="question-box-wb-unit6-p6-q2 "
-              style={{ width: "100%" }}
-            >
+        <h5 className="header-title-page8">
+          <span className="ex-A">E</span>Read, look, and write
+          <span style={{ color: "red" }}>✓</span> .
+        </h5>
+
+        <div className="shorti-container-wb-u1-q2">
+          {data.map((question) => (
+            <div key={question.id} className="question-box-wb-unit10-p3-q1">
               <div
                 style={{
                   display: "flex",
                   gap: "20px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
+                  alignItems: "center",
+                  fontWeight: "600",
+                  fontSize: "20px",
                 }}
               >
                 <span
                   style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
+                    color: "darkblue",
                     fontWeight: "700",
+                    fontSize: "20px",
                   }}
                 >
-                  {i + 1}
+                  {question.id}
                 </span>
-                <img
-                  src={q.img}
-                  className="q3-image-review6-p1-q1"
-                  style={{ height: "120px", width: "auto" }}
-                />
+                {question.word}
               </div>
-
-              <div style={{ display: "flex", gap: "10px" }}>
-                <div className="options-row-wb-unit5-p6-q3">
-                  {q.options.map((word, optIndex) => {
-                    const isSelected = answers[i] === optIndex;
-                    const isCorrect = optIndex === q.correctIndex;
-
-                    return (
-                      <p
-                        key={optIndex}
-                        className={`
-                    option-word-review6-p1-q1
-                    ${isSelected ? "selected3" : ""}
-                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
-                    ${showResult && isCorrect ? "correct" : ""}
-                  `}
-                        onClick={() => handleSelect(i, optIndex)}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
-                      >
-                        {word}
-                        {showResult && isSelected && !isCorrect && !locked && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
+              <div className="shorti-container-wb-u1-q2 ">
+                {question.imgs.map((img, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`img-box-wb-unit10-p3-q1  ${
+                        selected[question.id] === index ? "selected-wb-u1-q2" : ""
+                      }`}
+                      onClick={() => handleSelect(question.id, index)}
+                    >
+                      {showResult &&
+                        !showAnswerState &&
+                        selected[question.id] === index &&
+                        img.answer === false && (
+                          <span className="wrong-x-circle-wb-u1-p3-q2">✕</span>
                         )}
-                      </p>
-                    );
-                  })}
-                </div>
+
+                      <img src={img.src} alt="TEST" />
+                      <div className="check-box-wb-unit10-p3-q1 ">
+                        {selected[question.id] === index ? "✓" : ""}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
       </div>
       <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
+        <button
+          className="try-again-button"
+          onClick={() => {
+            setSelected({});
+            setShowResult(false);
+            setShowAnswerState(false);
+          }}
+        >
           Start Again ↻
         </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+        <button
+          className="show-answer-btn swal-continue"
+          onClick={showCorrectAnswers}
+        >
           Show Answer
         </button>
         <button className="check-button2" onClick={checkAnswers}>
@@ -199,4 +212,4 @@ const WB_Unit9_Page3_Q1 = () => {
   );
 };
 
-export default WB_Unit9_Page3_Q1;
+export default WB_Unit10_Page3_Q1;

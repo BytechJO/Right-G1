@@ -1,109 +1,98 @@
-/* ================== WRAPPER ================== */
+/* ========== WRAPPER ========== */
 .exercise-wrapper-wb-unit10-p2-q1 {
   width: 100%;
   max-width: 1100px;
   margin: auto;
   font-family: "Arial", sans-serif;
-  color: #1d4f7b;
+  color: black;
+ 
 }
 
-/* ================== TITLE ================== */
-.header-title-page8-wb-unit10-p2-q1 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
 
-.ex-A-wb-unit10-p2-q1 {
-  background: #6ec1e4;
-  color: white;
-  font-weight: bold;
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ================== QUESTION ROW ================== */
-.question-row-wb-unit10-p2-q1 {
+/* ========== ROW LAYOUT ========== */
+.conversation-row-wb-unit10-p2-q1 {
   display: grid;
-  grid-template-columns: 30px 1fr 3fr 1fr 3fr;
+  grid-template-columns:
+    28px          /* number */
+    280px         /* question bubble */
+    120px         /* food / thought */
+    280px;        /* answer bubble */
   align-items: center;
   gap: 14px;
-  margin-bottom: 26px;
+  margin-bottom: 22px;
 }
 
-/* ================== NUMBER ================== */
+/* ========== NUMBER ========== */
 .num-wb-unit10-p2-q1 {
-  font-size: 18px;
   font-weight: bold;
+  font-size: 18px;
 }
 
-/* ================== IMAGE ================== */
-.question-row-wb-unit10-p2-q1 img {
-  width: 90px;
-  height: 150px;
+/* ========== IMAGES ========== */
+.thought-img-wb-unit10-p2-q1 {
+  width: 95px;
+  height: auto;
 }
 
-/* ================== SPEECH BUBBLE ================== */
-.speech-wb-unit10-p2-q1 {
-  border: 2px solid #333;
-  border-radius: 14px;
-  padding: 10px 14px;
+.person-img-wb-unit10-p2-q1 {
+  width: 170px;
+  height: auto;
+}
+
+/* ========== BUBBLES ========== */
+.bubble {
   position: relative;
+  border: 2px solid #333;
+  border-radius: 16px;
+  padding: 10px 14px;
   font-size: 16px;
   line-height: 1.6;
-  background: white;
+  background: #fff;
 }
 
-/* LEFT bubble tail */
-.question-row-wb-unit10-p2-q1 .speech-wb-unit10-p2-q1::before {
+/* Question bubble tail (left)
+.question-bubble-wb-unit10-p2-q1::before {
   content: "";
   position: absolute;
-  left: -12px;
-  top: 22px;
-  width: 0;
-  height: 0;
+  left: -14px;
+  top: 24px;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 12px solid #333;
+  border-right: 14px solid #333;
 }
 
-/* RIGHT bubble tail */
-.question-row-wb-unit10-p2-q1:nth-child(even)
-  .speech-wb-unit10-p2-q1::before {
-  left: auto;
-  right: -12px;
-  border-right: none;
-  border-left: 12px solid #333;
-}
+/* Answer bubble tail (right) */
+/* .answer-bubble-wb-unit10-p2-q1::before {
+  content: "";
+  position: absolute;
+  right: -14px;
+  top: 24px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 14px solid #333;
+}  */
 
-/* ================== INPUT LINE ================== */
+/* ========== INPUT LINE ========== */
 .line-input-wb-unit10-p2-q1 {
   border: none;
   border-bottom: 2px solid #333;
   outline: none;
-  font-size: 16px;
-  min-width: 180px;
-  padding: 2px 4px;
   background: transparent;
+  font-size: 16px;
+  min-width: 140px;
+  margin: 0 4px;
 }
 
 .line-input-wb-unit10-p2-q1.small-wb-unit10-p2-q1 {
-  min-width: 90px;
+  min-width: 70px;
   text-align: center;
 }
 
 .line-input-wb-unit10-p2-q1:disabled {
-  color: #1d4f7b;
+  color: black;
 }
 
-/* ================== ACTION BUTTONS ================== */
+/* ========== ACTION BUTTONS ========== */
 .action-buttons-container-wb-unit10-p2-q1 {
   margin-top: 35px;
   display: flex;
@@ -123,7 +112,7 @@
 }
 
 .try-again-button-wb-unit10-p2-q1 {
-  background: #f3f3f3;
+  background: #f2f2f2;
   color: #333;
 }
 
@@ -137,14 +126,20 @@
   color: white;
 }
 
-/* ================== RESPONSIVE ================== */
+/* ========== RESPONSIVE (optional) ========== */
 @media (max-width: 900px) {
-  .question-row-wb-unit10-p2-q1 {
-    grid-template-columns: 30px 1fr;
-    gap: 10px;
+  .conversation-row-wb-unit10-p2-q1 {
+    grid-template-columns: 28px 1fr;
+    row-gap: 12px;
   }
 
-  .speech-wb-unit10-p2-q1::before {
+  .thought-img-wb-unit10-p2-q1,
+  .person-img-wb-unit10-p2-q1 {
+    display: none;
+  }
+
+  .answer-bubble-wb-unit10-p2-q1::before,
+  .question-bubble-wb-unit10-p2-q1::before {
     display: none;
   }
 }

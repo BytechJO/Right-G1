@@ -1,4 +1,4 @@
-import downloadIcon from "../../../assets/unit1/imgs/Page 01/Download.svg";
+
 
 export default function TopNavbar({
   activeTab,
@@ -9,7 +9,7 @@ export default function TopNavbar({
   mobileTabsOpen,
   setMobileTabsOpen,
   isMobile,
-  teacherPdf,
+  
 }) {
   return (
     <nav className="w-full bg-white border-b shadow px-2 py-1 flex items-center justify-between relative">
@@ -38,7 +38,7 @@ export default function TopNavbar({
       {/* RIGHT */}
       <div className="flex items-center gap-4">
         {/* ✅ DOWNLOAD PDF — Teacher Only */}
-        {activeTab === "teacher" && (
+        {/* {activeTab === "teacher" && (
           <div className="tooltip-wrapper">
             <svg
               width="35"
@@ -57,7 +57,7 @@ export default function TopNavbar({
 
             <span className="tooltip-text">Download Teacher PDF</span>
           </div>
-        )}
+        )} */}
 
         <span className="hidden lg:block text-[#430f68]">Teacher Edition</span>
 

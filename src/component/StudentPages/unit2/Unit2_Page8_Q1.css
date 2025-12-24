@@ -34,6 +34,52 @@
   border: 2px solid #3baaf7;
 }
 
+
+/* =====================
+   WORDS HOVER
+===================== */
+.word-text2 {
+  display: inline-block;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.word-text2:hover {
+  transform: scale(1.05);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.word-text2:active {
+  transform: scale(0.97);
+}
+
+/* =====================
+   IMAGES HOVER
+===================== */
+.matched-img2 {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.matched-img2:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.matched-img2:active {
+  transform: scale(0.96);
+}
+
+
 .span-num2 {
   font-weight: 800;
   color: purple;
@@ -79,24 +125,22 @@
   height: 100%;
   pointer-events: none;
 }
-
-/* ⭐ تم إضافتها */
 .error-mark8-u2-p19-q1 {
-  width: 25px;
-  height: 25px;
-  border: 2px solid white;
-  background-color: red;
-  border-radius: 50%;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 8px;
-  vertical-align: middle;
-  position: absolute;
-  left: 11%;
-  top: 28%;
-  z-index: 99;
+    width: 25px;
+    height: 25px;
+    border: 2px solid white;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    vertical-align: middle;
+    position: absolute;
+    left: 13%;
+    top: 19%;
+    z-index: 99;
 }

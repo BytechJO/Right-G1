@@ -165,7 +165,7 @@ export default function WB_Unit1_Page6_Q2() {
   };
 
   return (
-    <div className="wordsearch-wrapper" style={{padding:"30px"}}>
+    <div className="wordsearch-wrapper" >
       <div className="page8-wrapper">
         <div className="div-forall" style={{ width: "60%" }}>
           <h3 className="header-title-page8">

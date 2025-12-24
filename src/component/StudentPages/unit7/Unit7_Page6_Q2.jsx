@@ -158,6 +158,9 @@ const Unit7_Page6_Q2 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
                 <img
                   src={img1}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
@@ -186,6 +189,9 @@ const Unit7_Page6_Q2 = () => {
                 <img
                   src={img2}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
                 {wrongImages.includes("img2") && (
@@ -213,6 +219,9 @@ const Unit7_Page6_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
                 {wrongImages.includes("img3") && (
@@ -239,6 +248,9 @@ const Unit7_Page6_Q2 = () => {
                 <img
                   src={img4}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
                 {wrongImages.includes("img4") && (

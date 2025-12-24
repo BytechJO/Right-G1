@@ -183,6 +183,9 @@ const Review5_Page1_Q3 = () => {
                   <img
                     src={img1}
                     alt=""
+                    className={`clickable-img-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("img1-dot").click()}
                   />
                 </div>
@@ -197,6 +200,9 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 >
                   Is this a pen?
@@ -227,6 +233,9 @@ const Review5_Page1_Q3 = () => {
                   <img
                     src={img2}
                     alt="img"
+                    className={`clickable-img-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("img2-dot").click()}
                   />
                 </div>
@@ -241,11 +250,14 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 >
                   Is this an eraser?
                 </h5>
-                { wrongImages.includes("img2") && (
+                {wrongImages.includes("img2") && (
                   <span className="error-mark-img">✕</span>
                 )}
                 <div
@@ -270,6 +282,9 @@ const Review5_Page1_Q3 = () => {
                   <img
                     src={img3}
                     alt=""
+                    className={`clickable-img-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("img3-dot").click()}
                   />
                 </div>
@@ -284,11 +299,14 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 >
                   Is this a chair?
                 </h5>
-                { wrongImages.includes("img3") && (
+                {wrongImages.includes("img3") && (
                   <span className="error-mark-img">✕</span>
                 )}
                 <div
@@ -312,6 +330,9 @@ const Review5_Page1_Q3 = () => {
                   <img
                     src={img4}
                     alt=""
+                    className={`clickable-img-unit2-p7-q2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     onClick={() => document.getElementById("img4-dot").click()}
                   />
                 </div>
@@ -326,6 +347,9 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 >
                   Is this a desk?
@@ -356,6 +380,9 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("Yes-dot").click()}
                 >
                   Yes, it is.
@@ -380,6 +407,9 @@ const Review5_Page1_Q3 = () => {
                     justifyContent: "center",
                     marginTop: "10px",
                   }}
+                  className={`clickable-word-unit2-p7-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("No-dot").click()}
                 >
                   No, it isn’t.

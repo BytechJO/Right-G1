@@ -118,19 +118,21 @@ export default function Unit8_Page6_Q3() {
           <div className="matching-row">
             <div className="word-with-dot">
               <span className="span-num">1</span>
-
-              {/* الكلمة تشغّل كليك على الدوت */}
-              <span
-                className="word-text"
-                onClick={() => document.getElementById("dot-hello").click()}
-                style={{ cursor: "pointer", width: "200px" }}
-              >
-                Touch your arm.
+              <div style={{ position: "relative" }}>
+                {/* الكلمة تشغّل كليك على الدوت */}
+                <span
+                  className={`word-text ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("dot-hello").click()}
+                  style={{ cursor: "pointer", width: "200px" }}
+                >
+                  Touch your arm.
+                </span>{" "}
                 {wrongWords.includes("Touch your arm.") && (
                   <span className="error-mark-unit8-p6-q3">✕</span>
                 )}
-              </span>
-
+              </div>
               <div className="dot-wrapper">
                 <div
                   id="dot-hello"
@@ -154,7 +156,9 @@ export default function Unit8_Page6_Q3() {
               {/* الصورة تشغّل كليك على الدوت */}
               <img
                 src={img2}
-                className="matched-img"
+                className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                 alt=""
                 onClick={() => document.getElementById("img2-dot").click()}
                 style={{ cursor: "pointer" }}
@@ -166,18 +170,20 @@ export default function Unit8_Page6_Q3() {
           <div className="matching-row">
             <div className="word-with-dot">
               <span className="span-num">2</span>
-
-              <span
-                className="word-text"
-                onClick={() => document.getElementById("dot-goodbye").click()}
-                style={{ cursor: "pointer", width: "200px" }}
-              >
-                Open your eye.
+              <div style={{ position: "relative" }}>
+                <span
+                  className={`word-text ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("dot-goodbye").click()}
+                  style={{ cursor: "pointer", width: "200px" }}
+                >
+                  Open your eye.
+                </span>{" "}
                 {wrongWords.includes("Open your eye.") && (
                   <span className="error-mark-unit8-p6-q3">✕</span>
                 )}
-              </span>
-
+              </div>
               <div className="dot-wrapper">
                 <div
                   id="dot-goodbye"
@@ -200,7 +206,9 @@ export default function Unit8_Page6_Q3() {
 
               <img
                 src={img1}
-                className="matched-img"
+                className={`matched-img ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                 alt=""
                 onClick={() => document.getElementById("img1-dot").click()}
                 style={{ cursor: "pointer" }}
