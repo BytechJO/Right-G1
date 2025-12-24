@@ -276,7 +276,9 @@ const Unit7_Page6_Q2 = () => {
               >
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() => document.getElementById("bored-dot").click()}
                   >
                     I’m bored.
@@ -293,7 +295,9 @@ const Unit7_Page6_Q2 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() => document.getElementById("cold-dot").click()}
                   >
                     I’m cold.
@@ -311,7 +315,9 @@ const Unit7_Page6_Q2 = () => {
                 {" "}
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                   className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() =>
                       document.getElementById("scared-dot").click()
                     }
@@ -329,7 +335,9 @@ const Unit7_Page6_Q2 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() =>
                       document.getElementById("hungry-dot").click()
                     }

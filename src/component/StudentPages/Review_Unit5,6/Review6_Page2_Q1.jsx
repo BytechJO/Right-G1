@@ -221,7 +221,7 @@ const Review6_Page2_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          // gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -361,7 +361,7 @@ const Review6_Page2_Q1 = () => {
               </span>
 
               <div key={question.id} className="question-box2-review6-p2-q1">
-                <span className="question-number">{question.id}</span>
+              
 
                 {/* الصورة الواحدة */}
                 <img

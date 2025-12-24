@@ -275,7 +275,9 @@ const Unit9_Page5_Q1 = () => {
               >
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() => document.getElementById("bored-dot").click()}
                   >
                     night
@@ -292,7 +294,9 @@ const Unit9_Page5_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() => document.getElementById("cold-dot").click()}
                   >
                     nurse
@@ -310,7 +314,9 @@ const Unit9_Page5_Q1 = () => {
                 {" "}
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() =>
                       document.getElementById("scared-dot").click()
                     }
@@ -328,7 +334,9 @@ const Unit9_Page5_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-unit6-p5-q2"
+                    className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                     onClick={() =>
                       document.getElementById("hungry-dot").click()
                     }

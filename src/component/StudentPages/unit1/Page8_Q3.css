@@ -45,17 +45,17 @@
   transform: scale(0.98);
 }
 
-.disabled-word {
+.disabled-word ,.disabled-hover {
   pointer-events: none;
   /* opacity: 0.6; */
 }
 
 /* منع أي hover effect */
-.disabled-word:hover {
+.disabled-word:hover ,.disabled-hover:hover{
   transform: none;
   box-shadow: none;
   background-color: transparent;
-  cursor: default;
+  cursor: default !important;
 }
 
 .matching-wrapper {

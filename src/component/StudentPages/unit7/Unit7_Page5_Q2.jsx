@@ -278,7 +278,7 @@ Watch, house, hat, hammer, web.
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "30px 0px",
+            marginTop: "30px",
             width: "100%",
           }}
         >

@@ -38,6 +38,12 @@
   font-size: 18px;
   cursor: pointer;
   position: relative;
+
+  display: inline-block;
+  padding: 5px 8px;
+  height: 50px;
+  width: 50px;
+
   transition: 0.2s;
 }
 
@@ -46,6 +52,9 @@
   padding: 3px 10px;
   border-radius: 10px;
   background: #d0ebff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 🔺 علامة X الحمراء */
@@ -62,8 +71,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-      z-index: 9;
-      border: 2px solid white;
+  z-index: 9;
+  border: 2px solid white;
 }
 
 /* 📱 ريسبونيف */

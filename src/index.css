@@ -564,7 +564,7 @@ img {
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .exercise-container {
