@@ -97,7 +97,7 @@ const WB_Unit9_Page2_Q2 = () => {
     let wrongInputsTemp = [];
 
     Object.keys(correctSentences).forEach((key) => {
-      if (key === "1") return;
+    
 
       const userAnswer = userInputs[key].trim().toLowerCase();
       const correctAnswer = correctSentences[key];
@@ -173,7 +173,9 @@ const WB_Unit9_Page2_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">1</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-open").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -196,11 +198,14 @@ const WB_Unit9_Page2_Q2 = () => {
                   className="unscramble-input"
                   type="text"
                   value={userInputs[1]}
-                  onChange={(e) =>
-                    setUserInputs((prev) => ({ ...prev, 1: e.target.value }))
-                  }
-                  
+                  onChange={(e) => {
+                    setUserInputs((prev) => ({ ...prev,1: e.target.value }));
+                    setWrongInputs([]);
+                  }}
                 />
+                  {wrongInputs.includes("1") && (
+                  <span className="input-error-x">✕</span>
+                )}
               </div>
 
               <div className="img-with-dot2-wb-unit7-p2-q1">
@@ -215,7 +220,9 @@ const WB_Unit9_Page2_Q2 = () => {
 
                 <img
                   src={dish}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ cursor: "pointer", height: "130px", width: "auto" }}
@@ -229,7 +236,9 @@ const WB_Unit9_Page2_Q2 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">2</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-review3-p1-q2 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-line").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -274,7 +283,9 @@ const WB_Unit9_Page2_Q2 = () => {
 
                 <img
                   src={dish}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ cursor: "pointer", height: "130px", width: "auto" }}
@@ -297,7 +308,6 @@ const WB_Unit9_Page2_Q2 = () => {
               setUserInputs({
                 1: "",
                 2: "",
-            
               });
               setWrongWords([]);
               setWrongInputs([]);
@@ -338,7 +348,6 @@ const WB_Unit9_Page2_Q2 = () => {
               setUserInputs({
                 1: correctSentences["1"],
                 2: correctSentences["2"],
-             
               });
 
               // 3️⃣ منع التعديل على كل شيء (قفل inputs + منع الرسم)

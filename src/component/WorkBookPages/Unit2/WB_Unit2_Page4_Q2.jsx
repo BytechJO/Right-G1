@@ -144,7 +144,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 <span className="span-num2">1</span>{" "}
                 <img
                   src={bird}
-                  className="matched-img2"
+                   className={`matched-img2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
@@ -172,7 +174,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit2-p4-q2"
+                 className={`word-text2-wb-unit2-p4-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-ball").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -187,7 +191,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 <span className="span-num2">2</span>{" "}
                 <img
                   src={boy}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
@@ -215,7 +221,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit2-p4-q2"
+                  className={`word-text2-wb-unit2-p4-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-pizza").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -229,7 +237,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 <span className="span-num2">3</span>{" "}
                 <img
                   src={pizza2}
-                  className="matched-img2"
+                   className={`matched-img2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
@@ -257,7 +267,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit2-p4-q2"
+                  className={`word-text2-wb-unit2-p4-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-bird").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -272,7 +284,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 <span className="span-num2">4</span>{" "}
                 <img
                   src={fotball}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
@@ -300,7 +314,9 @@ const WB_Unit2_Page4_Q2 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit2-p4-q2"
+                  className={`word-text2-wb-unit2-p4-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-boy").click()}
                   style={{ cursor: "pointer" }}
                 >

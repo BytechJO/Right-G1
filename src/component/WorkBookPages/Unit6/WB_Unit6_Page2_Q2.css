@@ -8,21 +8,13 @@
   /* gap: 18px; */
 }
 
-/* ===== TITLE (Use your existing header-title-page8 if already styled) ===== */
-.wb-unit6-p2-q2-wrapper .header-title-page8 {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 
 /* ===== MATCHING BOX ===== */
 .matching-area {
   position: relative;
   width: 100%;
-  padding: 10px 0 0 0;
+  /* padding: 10px 0 0 0; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 140px;
@@ -102,11 +94,48 @@
   top: 50%;
   transform: translateY(-50%);
 }
-
-/* RIGHT column dot should be BEFORE text visually like the book */
-.right-col-wb-unit6-p2-q2 .item-wb-unit6-p2-q2 {
-  padding-left: 18px;
+.word-text-wb-unit6-p2-q2 {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
 }
+
+.word-text-wb-unit6-p2-q2  {
+  display: inline-block; /* مهم للـ transform */
+  transition: 
+    transform 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  /* padding: 4px 6px; */
+  border-radius: 6px;
+}
+/* ✨ Hover animation */
+.word-text-wb-unit6-p2-q2:hover {
+  transform: scale(1.06);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.word-text-wb-unit6-p2-q2:active {
+  transform: scale(0.98);
+}
+
+.disabled-word ,.disabled-hover {
+  pointer-events: none;
+  /* opacity: 0.6; */
+}
+
+/* منع أي hover effect */
+.disabled-word:hover ,.disabled-hover:hover{
+  transform: none;
+  box-shadow: none;
+  background-color: transparent;
+  cursor: default !important;
+}
+/* RIGHT column dot should be BEFORE text visually like the book */
+
 .right-col-wb-unit6-p2-q2 .dot.end-dot {
   position: absolute;
   left: -18px;
@@ -154,8 +183,8 @@
   right: -14px;
   top: 50%;
   transform: translateY(-50%);
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   background: red;
   color: white !important;
   border-radius: 50%;
@@ -169,10 +198,10 @@
 /* ===== WRITE SECTION (bottom) ===== */
 .write-section-wb-unit6-p2-q2 {
   width: 100%;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  /* gap: 16px; */
 }
 
 /* each writing line like the book */
@@ -186,14 +215,14 @@
 .write-line-wb-unit6-p2-q2 span {
   color: #1e40af;
   font-weight: 800;
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 /* long underline input */
 .write-line-wb-unit6-p2-q2 input {
   border: none;
   border-bottom: 2px solid #000;
-  padding: 8px 6px;
+  padding: 5px 6px;
   font-size: 18px;
   outline: none;
   width: 100%;

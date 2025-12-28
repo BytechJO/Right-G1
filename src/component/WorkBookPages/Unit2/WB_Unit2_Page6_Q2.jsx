@@ -278,7 +278,7 @@ export default function WB_Unit2_Page6_Q2() {
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "30px 0px",
+            marginTop: "30px",
             width: "100%",
           }}
         >

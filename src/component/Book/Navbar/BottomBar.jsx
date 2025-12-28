@@ -119,19 +119,43 @@ export default function BottomBar({
               </>
             ) : (
               <>
-                <input
-                  type="text"
-                  value={pageInput}
-                  onChange={(e) => setPageInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      goToPage(pageInput);
-                    }
-                  }}
-                  className="w-10 text-center outline-none text-[#430f68] text-sm"
-                  placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
-                />
-                <span className="text-[#430f68] text-sm">| {totalPages}</span>
+                {activeTab === "teacher" ? (
+                  <>
+                    <input
+                      type="text"
+                      value={pageInput}
+                      onChange={(e) => setPageInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          goToPage(pageInput);
+                        }
+                      }}
+                      className="w-14 text-center outline-none text-[#430f68] text-sm"
+                      placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
+                    />
+                    <span className="text-[#430f68] text-sm">
+                      | {totalPages}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="text"
+                      value={pageInput}
+                      onChange={(e) => setPageInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          goToPage(pageInput);
+                        }
+                      }}
+                      className="w-10 text-center outline-none text-[#430f68] text-sm"
+                      placeholder={`${pageIndex + 1}-${pageIndex + 2}`}
+                    />
+                    <span className="text-[#430f68] text-sm">
+                      | {totalPages}
+                    </span>
+                  </>
+                )}
               </>
             )}
           </>
@@ -139,32 +163,29 @@ export default function BottomBar({
       </div>
 
       {/* VIEW MODES */}
-      {!isMobile &&
-        activeTab !== "poster" &&
-        activeTab !== "flash" &&
-        activeTab !== "posterVocab" && (
-          <>
-            <button onClick={() => setViewMode("single")}>
-              <img
-                style={{ height: "25px", width: "25px" }}
-                src={icons.onePage}
-                className={`h-1 w-1 ${
-                  viewMode === "single" ? "opacity-100" : "opacity-40"
-                }`}
-              />
-            </button>
+      {!isMobile && activeTab !== "flash" && activeTab !== "posterVocab" && (
+        <>
+          <button onClick={() => setViewMode("single")}>
+            <img
+              style={{ height: "25px", width: "25px" }}
+              src={icons.onePage}
+              className={`h-1 w-1 ${
+                viewMode === "single" ? "opacity-100" : "opacity-40"
+              }`}
+            />
+          </button>
 
-            <button onClick={() => setViewMode("spread")}>
-              <img
-                style={{ height: "25px", width: "25px" }}
-                src={icons.openBook}
-                className={`h-1 w-1 ${
-                  viewMode === "spread" ? "opacity-100" : "opacity-40"
-                }`}
-              />
-            </button>
-          </>
-        )}
+          <button onClick={() => setViewMode("spread")}>
+            <img
+              style={{ height: "25px", width: "25px" }}
+              src={icons.openBook}
+              className={`h-1 w-1 ${
+                viewMode === "spread" ? "opacity-100" : "opacity-40"
+              }`}
+            />
+          </button>
+        </>
+      )}
       {/* ✅ DOWNLOAD PDF — Teacher Only */}
       {activeTab === "teacher" && (
         <div className="tooltip-wrapper">

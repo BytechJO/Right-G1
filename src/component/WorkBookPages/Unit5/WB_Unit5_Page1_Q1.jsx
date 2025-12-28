@@ -144,7 +144,7 @@ const WB_Unit5_Page1_Q1 = () => {
             {/* الجمل */}
 
             {/* الصور */}
-            <div className="match-images-row2">
+            <div className="match-images-row2" style={{ marginTop: "30px" }}>
               <div
                 className="img-box2"
                 style={{
@@ -159,6 +159,9 @@ const WB_Unit5_Page1_Q1 = () => {
                 <img
                   src={img1}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
                 {wrongImages.includes("img1") && (
@@ -186,6 +189,9 @@ const WB_Unit5_Page1_Q1 = () => {
                 <img
                   src={img2}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
                 {wrongImages.includes("img2") && (
@@ -212,6 +218,9 @@ const WB_Unit5_Page1_Q1 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <img
                   src={img3}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
@@ -239,6 +248,9 @@ const WB_Unit5_Page1_Q1 = () => {
                 <img
                   src={img4}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
                 {wrongImages.includes("img4") && (
@@ -258,13 +270,17 @@ const WB_Unit5_Page1_Q1 = () => {
                 style={{
                   display: "flex",
                   gap: "10px",
+                  marginTop: "30px",
                   flexDirection: "row",
                   alignItems: "flex-start",
+                  position: "relative",
                 }}
               >
                 <div>
                   <h5
-                    className="h5-wb-unit5-p1-q1"
+                    className={`h5-wb-unit5-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("bored-dot").click()}
                   >
                     map
@@ -281,7 +297,9 @@ const WB_Unit5_Page1_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-wb-unit5-p1-q1"
+                    className={`h5-wb-unit5-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("cold-dot").click()}
                   >
                     desk
@@ -299,7 +317,9 @@ const WB_Unit5_Page1_Q1 = () => {
                 {" "}
                 <div>
                   <h5
-                    className="h5-wb-unit5-p1-q1"
+                    className={`h5-wb-unit5-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("scared-dot").click()
                     }
@@ -317,7 +337,9 @@ const WB_Unit5_Page1_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-wb-unit5-p1-q1"
+                    className={`h5-wb-unit5-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("hungry-dot").click()
                     }

@@ -6,17 +6,17 @@ const WB_Unit4_Page3_Q2 = () => {
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(true); // مؤقت حتى ما يكسر التحقق
   const [isCorrect, setIsCorrect] = useState(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+  // useEffect(() => {
+  //   const canvas = canvasRef.current;
+  //   const rect = canvas.getBoundingClientRect();
+  //   const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+  //   canvas.width = rect.width * dpr;
+  //   canvas.height = rect.height * dpr;
 
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-  }, []);
+  //   const ctx = canvas.getContext("2d");
+  //   ctx.scale(dpr, dpr);
+  // }, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -146,6 +146,8 @@ const WB_Unit4_Page3_Q2 = () => {
 
         <canvas
           ref={canvasRef}
+          height={300}
+          width={600}
           className="draw-canvas"
           onMouseDown={startDrawing}
           onMouseMove={draw}

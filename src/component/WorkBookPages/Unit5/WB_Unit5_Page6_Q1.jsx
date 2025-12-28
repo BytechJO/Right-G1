@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit5_Page6_Q1.css"
+import "./WB_Unit5_Page6_Q1.css";
 import img1 from "../../../assets/unit7/img/U7P62EXEA2-01.svg";
 import img2 from "../../../assets/unit7/img/U7P62EXEA2-02.svg";
 import img3 from "../../../assets/unit7/img/U7P62EXEA2-03.svg";
@@ -36,11 +36,11 @@ export default function WB_Unit5_Page6_Q1() {
   const [submitted, setSubmitted] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
-
   // -----------------------------------------------------------------------
 
   const handleSelect = (qId, value) => {
-    if (showAnswer) return; // ❌ ممنوع تعديل الإجابات بعد Show Answer
+    if (showAnswer || submitted) return;
+    // ❌ ممنوع تعديل الإجابات بعد Show Answer
 
     setAnswers((prev) => {
       const current = prev[qId] || [];
@@ -58,7 +58,7 @@ export default function WB_Unit5_Page6_Q1() {
   };
 
   const handleCheck = () => {
-    if (showAnswer) return;
+    if (showAnswer || submitted) return;
     if (!answers[data[0].id] || answers[data[0].id].length === 0) {
       ValidationAlert.info("Please select at least one picture in question 1.");
       return;
@@ -116,7 +116,6 @@ export default function WB_Unit5_Page6_Q1() {
     setSubmitted(true);
   };
 
-
   return (
     <div
       style={{
@@ -136,7 +135,8 @@ export default function WB_Unit5_Page6_Q1() {
         }}
       >
         <h5 className="header-title-page8">
-         <span className="ex-A">A</span> Which pictures begin with the letter? Circle.
+          <span className="ex-A">A</span> Which pictures begin with the letter?
+          Circle.
         </h5>
 
         {data.map((q) => (
@@ -145,8 +145,6 @@ export default function WB_Unit5_Page6_Q1() {
             className="question-row-Unit5_Page5_Q2"
             style={{ marginTop: "15px" }}
           >
-     
-
             <span
               style={{
                 color: "#2c5287",

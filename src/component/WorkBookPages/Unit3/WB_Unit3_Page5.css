@@ -25,6 +25,54 @@
     width: 200px;
         padding: 0px 10px;
 }
+
+.img-box-wb-unit3-p5-q1 {
+    width: 180px;
+    height: 170px;
+    /* border: 2px solid #ccc; */
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.img-box-wb-unit3-p5-q1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.shorti-container-wb-unit3-p5-q1 {
+    flex-direction: column;
+    gap: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+.question-box-wb-unit3-p5-q1 {
+    display: flex;
+    /* justify-content: space-between; */
+    /* gap: 20px; */
+    flex-direction: column;
+}
+.word-text2-wb-unit3-p5-q2  {
+  /* display: inline-block; مهم للـ transform */
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  /* padding: 4px 6px; */
+  border-radius: 6px;
+}
+/* ✨ Hover animation */
+.word-text2-wb-unit3-p5-q2:hover {
+  transform: scale(1.06);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.word-text2-wb-unit3-p5-q2:active {
+  transform: scale(0.98);
+}
 .error-mark8-wb-unit2-p5-q1 {
     width: 25px;
     height: 25px;

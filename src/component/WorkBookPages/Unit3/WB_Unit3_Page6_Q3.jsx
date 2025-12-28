@@ -145,14 +145,7 @@ const WB_Unit3_Page6_Q3 = () => {
         <h3 className="header-title-page8">
          <span className="ex-A">C</span> Listen and write the missing letters.
         </h3>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "30px",
-            width: "100%",
-          }}
-        ></div>
+     
         {data.map((item, qIndex) => (
           <div className="row-missing" key={qIndex}>
          

@@ -21,7 +21,7 @@ const WB_Unit6_Page1_Q1 = () => {
     { word: "I can fly a kite.", image: "img4" },
     { word: "He can’t sail a boat.", image: "img3" },
     { word: "It can’t climb a tree.", image: "img1" },
-      { word: "He can paint a picture.", image: "img2" },
+    { word: "He can paint a picture.", image: "img2" },
   ];
 
   // ============================
@@ -152,7 +152,9 @@ const WB_Unit6_Page1_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">1</span>
                 <span
-                  className="word-text2-wb-unit3-p5-q2"
+                  className={`word-text2-wb-unit3-p5-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-duck").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -185,7 +187,9 @@ const WB_Unit6_Page1_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={table}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img1").click()}
                     style={{ cursor: "pointer", height: "100px" }}
@@ -199,11 +203,13 @@ const WB_Unit6_Page1_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">2</span>
                 <span
-                  className="word-text2-wb-unit3-p5-q2"
+                  className={`word-text2-wb-unit3-p5-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
                   style={{ cursor: "pointer" }}
                 >
-                 He can’t sail a boat.
+                  He can’t sail a boat.
                 </span>
 
                 {wrongWords.includes("He can’t sail a boat.") && (
@@ -232,7 +238,9 @@ const WB_Unit6_Page1_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={dish}
-                    className="matched-img2"
+                     className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img2").click()}
                     style={{ cursor: "pointer", height: "110px" }}
@@ -246,11 +254,13 @@ const WB_Unit6_Page1_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">3</span>
                 <span
-                  className="word-text2-wb-unit3-p5-q2"
+                  className={`word-text2-wb-unit3-p5-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-dish").click()}
                   style={{ cursor: "pointer" }}
                 >
-                 It can’t climb a tree.
+                  It can’t climb a tree.
                 </span>
 
                 {wrongWords.includes("It can’t climb a tree.") && (
@@ -279,7 +289,9 @@ const WB_Unit6_Page1_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={duck}
-                    className="matched-img2"
+                     className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img3").click()}
                     style={{ cursor: "pointer", height: "100px" }}
@@ -287,16 +299,18 @@ const WB_Unit6_Page1_Q1 = () => {
                 </div>
               </div>
             </div>
-    {/* الصف الرابع */}
+            {/* الصف الرابع */}
             <div className="matching-row2">
               <div className="word-with-dot2">
                 <span className="span-num2">4</span>
                 <span
-                  className="word-text2-wb-unit3-p5-q2"
+                  className={`word-text2-wb-unit3-p5-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-paint").click()}
                   style={{ cursor: "pointer" }}
                 >
-                 He can paint a picture.
+                  He can paint a picture.
                 </span>
 
                 {wrongWords.includes("He can paint a picture.") && (
@@ -325,7 +339,9 @@ const WB_Unit6_Page1_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={duck}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img4").click()}
                     style={{ cursor: "pointer", height: "100px" }}
@@ -333,7 +349,6 @@ const WB_Unit6_Page1_Q1 = () => {
                 </div>
               </div>
             </div>
-            
 
             <svg className="lines-layer2">
               {lines.map((line, i) => (

@@ -16,3 +16,37 @@
   font-weight: 700;
   color: #2c5287;
 }
+
+.matched-word-wb-unit7-p2-q1,
+.word-text2-wb-unit7-p2-q1 {
+  /* display: inline-block; مهم للـ transform */
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  /* padding: 4px 6px; */
+  border-radius: 6px;
+}
+/* ✨ Hover animation */
+.matched-word-wb-unit7-p2-q1:hover,
+.word-text2-wb-unit7-p2-q1:hover {
+  transform: scale(1.06);
+  background-color: rgba(67, 15, 104, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.matched-word-wb-unit7-p2-q1:active,
+.word-text2-wb-unit7-p2-q1:active {
+  transform: scale(0.98);
+}
+
+.word-text2-wb-unit7-p2-q1 {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+  /* background: #b7eaff; */
+  border-radius: 20px;
+  font-size: 20px;
+  width: 210px;
+  text-align: start;
+  border: 2px solid transparent;
+}

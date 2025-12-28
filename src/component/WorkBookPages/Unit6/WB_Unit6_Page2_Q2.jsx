@@ -296,94 +296,128 @@ const WB_Unit6_Page2_Q2 = () => {
   /* ================= RENDER ================= */
 
   return (
-    <div className="wb-unit6-p2-q2-wrapper">
-      <h4 className="header-title-page8">
-        <span className="ex-A">D</span> Read, match, and write.
-      </h4>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div
+        style={{
+          width: "60%",
+          display: "flex",
+          flexDirection: "column",
+          // gap: "20px",
+        }}
+      >
+        <h4 className="header-title-page8">
+          <span className="ex-A">D</span> Read, match, and write.
+        </h4>
 
-      <div className="matching-area" ref={containerRef}>
-        {/* LEFT */}
-        <div className="left-col-wb-unit6-p2-q2">
-          {leftParts.map((l, i) => (
-            <div
-              key={i}
-              className="item-wb-unit6-p2-q2 clickable"
-              data-left-id={l.id}
-              onClick={handleStart}
-            >
-              <span className="num-wb-unit6-p2-q2">{i + 1}</span>
-              <span>{l.text}</span>
-              <div className="dot-wb-unit6-p2-q2 start-dot" />
-              {wrongLeft.includes(l.id) && checked && (
-                <span className="wrong-mark-wb-unit6-p2-q2">✕</span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* IMAGES */}
-        <div className="mid-col-wb-unit6-p2-q2">
-          {images.map((img) => (
-            <div
-              key={img.id}
-              className="item-wb-unit6-p2-q2 clickable"
-              data-image={img.id}
-              onClick={(e) => (firstPoint ? handleEnd(e) : handleStart(e))}
-            >
-              <div className="dot-wb-unit6-p2-q2 end-dot" />
-              <img src={img.src} alt="" />
-
-              <div className="dot-wb-unit6-p2-q2 start-dot" />
-            </div>
-          ))}
-        </div>
-
-        {/* RIGHT */}
-        <div className="right-col-wb-unit6-p2-q2">
-          {rightParts.map((r) => (
-            <div
-              key={r.id}
-              className="item-wb-unit6-p2-q2 clickable"
-              data-right={r.text}
-              onClick={handleEnd}
-            >
-              <div className="dot-wb-unit6-p2-q2 end-dot" />
-              <span>{r.text}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* LINES */}
-        <svg className="lines-layer">
-          {lines.map((l, i) => (
-            <line key={i} {...l} stroke="red" strokeWidth="3" />
-          ))}
-        </svg>
-      </div>
-
-      {/* WRITE SECTION */}
-      <div className="write-section-wb-unit6-p2-q2">
-        {Object.keys(correctSentences).map((id) => (
-          <div className="write-line-wb-unit6-p2-q2">
-            <span>{id}</span>
-
-            <div className="input-wrapper-wb-unit6-p2-q2">
-              <input
-                value={written[id] || ""}
-                disabled={locked}
-                onChange={(e) =>
-                  setWritten({ ...written, [id]: e.target.value })
-                }
-              />
-
-              {checked && wrongInputs.includes(id) && (
-                <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>
-              )}
-            </div>
+        <div className="matching-area" ref={containerRef}>
+          {/* LEFT */}
+          <div className="left-col-wb-unit6-p2-q2">
+            {leftParts.map((l, i) => (
+              <div
+                key={i}
+                className="item-wb-unit6-p2-q2 clickable"
+                data-left-id={l.id}
+                onClick={handleStart}
+              >
+                <span className="num-wb-unit6-p2-q2">{i + 1}</span>
+                <span
+                  className={`word-text-wb-unit6-p2-q2 ${
+                    locked || checked ? "disabled-word" : ""
+                  }`}
+                >
+                  {l.text}
+                </span>
+                <div className="dot-wb-unit6-p2-q2 start-dot" />
+                {wrongLeft.includes(l.id) && checked && (
+                  <span className="wrong-mark-wb-unit6-p2-q2">✕</span>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
+          {/* IMAGES */}
+          <div className="mid-col-wb-unit6-p2-q2">
+            {images.map((img) => (
+              <div
+                key={img.id}
+                className="item-wb-unit6-p2-q2 clickable"
+                data-image={img.id}
+                onClick={(e) => (firstPoint ? handleEnd(e) : handleStart(e))}
+              >
+                <div className="dot-wb-unit6-p2-q2 end-dot" />
+                <img
+                  src={img.src}
+                  alt=""
+                  className={`matched-img2 ${
+                    locked || checked ? "disabled-hover" : ""
+                  }`}
+                />
+
+                <div className="dot-wb-unit6-p2-q2 start-dot" />
+              </div>
+            ))}
+          </div>
+
+          {/* RIGHT */}
+          <div className="right-col-wb-unit6-p2-q2">
+            {rightParts.map((r) => (
+              <div
+                key={r.id}
+                className="item-wb-unit6-p2-q2 clickable"
+                data-right={r.text}
+                onClick={handleEnd}
+              >
+                <div className="dot-wb-unit6-p2-q2 end-dot" />
+                <span
+                  className={`word-text-wb-unit6-p2-q2 ${
+                    locked || checked ? "disabled-word" : ""
+                  }`}
+                >
+                  {" "}
+                  {r.text}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* LINES */}
+          <svg className="lines-layer">
+            {lines.map((l, i) => (
+              <line key={i} {...l} stroke="red" strokeWidth="3" />
+            ))}
+          </svg>
+        </div>
+
+        {/* WRITE SECTION */}
+        <div className="write-section-wb-unit6-p2-q2">
+          {Object.keys(correctSentences).map((id) => (
+            <div className="write-line-wb-unit6-p2-q2">
+              <span>{id}</span>
+
+              <div className="input-wrapper-wb-unit6-p2-q2">
+                <input
+                  value={written[id] || ""}
+                  disabled={locked}
+                  onChange={(e) =>
+                    setWritten({ ...written, [id]: e.target.value })
+                  }
+                />
+
+                {!locked && checked && wrongInputs.includes(id) && (
+                  <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       {/* BUTTONS */}
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">

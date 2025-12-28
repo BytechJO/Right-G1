@@ -226,7 +226,7 @@ const WB_Unit8_Page6_Q2 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          // gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -366,7 +366,7 @@ const WB_Unit8_Page6_Q2 = () => {
               </span>
 
               <div key={question.id} className="question-box2-review6-p2-q1">
-                <span className="question-number">{question.id}</span>
+                {/* <span className="question-number">{question.id}</span> */}
 
                 {/* الصورة الواحدة */}
                 <img

@@ -11,36 +11,8 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
 
   const handleNext = () => {
     const lesson = workBookData[index];
-    if (lesson.lastOfUnit && lesson.unit % 2 === 0) {
-      Swal.fire({
-        html: `
-          <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br>Do you want to continue to the review exercises?</h2>
-          </div>
-        `,
-        imageWidth: 200,
-        imageHeight: 200,
-        icon: "question",
-        background: "#dfeaf6",
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-        showCancelButton: true, // ✔️ هذا هو السبب الرئيسي
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        buttonsStyling: false,
-        customClass: {
-          popup: "my-popup",
-          image: "my-image",
-          title: "my-title",
-          content: "my-content",
-          confirmButton: "my-button",
-          cancelButton: "my-button1",
-        },
-      }).then((res) => {
-        if (res.isConfirmed) setIndex(index + 1);
-      });
-      return;
-    }
+
+
     // آخر درس في الوحدة
     if (lesson.lastOfUnit) {
       Swal.fire({

@@ -171,7 +171,7 @@ export default function WB_Unit1_Page4_Q2() {
                 <span
                   className="word-text3"
                   onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer", width: "210px" }}
+                  style={{ cursor: "pointer", width: "230px" }}
                 >
                   {word}
                 </span>
@@ -205,7 +205,7 @@ export default function WB_Unit1_Page4_Q2() {
                 <span
                   className="word-text3"
                   onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer", width: "210px" }}
+                  style={{ cursor: "pointer", width: "230px" }}
                 >
                   {word}
                 </span>

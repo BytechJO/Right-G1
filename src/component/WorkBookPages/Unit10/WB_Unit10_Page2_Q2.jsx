@@ -57,22 +57,16 @@ export default function WB_Unit10_Page2_Q2() {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleSelect = (qId, value) => {
-    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    if (showAnswer || submitted) return;
+
     setAnswers((prev) => {
-      const current = prev[qId] || [];
+      const current = prev[qId]?.[0];
 
-      // 1️⃣ إذا كانت الصورة مختارة → نشيلها (Toggle)
-      if (current.includes(value)) {
-        return { ...prev, [qId]: current.filter((v) => v !== value) };
+      if (current === value) {
+        return { ...prev, [qId]: [] }; // إلغاء الاختيار
       }
 
-      // 2️⃣ إذا حاول يختار أكثر من 2 → نمنعه
-      if (current.length >= 1) {
-        return prev;
-      }
-
-      // 3️⃣ إضافة اختيار جديد
-      return { ...prev, [qId]: [...current, value] };
+      return { ...prev, [qId]: [value] }; // استبدال
     });
   };
 
@@ -165,61 +159,58 @@ export default function WB_Unit10_Page2_Q2() {
           justifyContent: "flex-start",
         }}
       >
-       
-          <h5 className="header-title-page8">
-            <span className="ex-A">D</span> Read, look, and circle.
-         
-          </h5>
-              <img
-                  src="./cccccccccccccccc"
-                  style={{ height: "130px", width: "auto" }}
-                />
-          {data.map((q) => (
-            <div key={q.id} className="question-row-wb-unit10-p2-q2">
-              <div style={{display:"flex"}}>
-                <span
-                  className="q-number"
-                  style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
-                    fontWeight: "700",
-                  }}
-                >
-                  {q.id}.
-                </span>
-                <img
-                  src={q.mainImg}
-                  style={{ height: "80px", width: "auto" }}
-                />
-              </div>
-              <div className="images-row-Unit5_Page5_Q2">
-                {q.images.map((img) => {
-                  const isSelected = answers[q.id]?.includes(img.value);
-                  const isWrong =
-                    submitted && isSelected && !q.correct.includes(img.value);
+        <h5 className="header-title-page8">
+          <span className="ex-A">D</span> Read, look, and circle.
+        </h5>
+        <img
+          src="./cccccccccccccccc"
+          style={{ height: "130px", width: "auto" }}
+        />
+        {data.map((q) => (
+          <div key={q.id} className="question-row-wb-unit10-p2-q2">
+            <div style={{ display: "flex" }}>
+              <span
+                className="q-number"
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                {q.id}.
+              </span>
+              <img src={q.mainImg} style={{ height: "80px", width: "auto" }} />
+            </div>
+            <div className="images-row-Unit5_Page5_Q2">
+              {q.images.map((img) => {
+                const isSelected = answers[q.id]?.includes(img.value);
 
-                  return (
-                    <div
-                      key={img.id}
-                      className={`img-box-wb-unit10-p2-q2 
-                    ${isSelected ? "selected-Unit5_Page5_Q2" : ""} 
+                const isWrong =
+                  isSelected && !q.correct.includes(img.value) && !showAnswer;
+
+                return (
+                  <div
+                    key={img.id}
+                    style={{position:"relative"}}
+                    className={`img-box-wb-unit10-p2-q2 
+                    ${isSelected ? "selected-wb-unit10-p2-q2" : ""} 
                 
                     ${isWrong ? "wrong" : ""}`}
-                      onClick={() => handleSelect(q.id, img.value)}
-                    >
-                      <img src={img.src} alt="" />
-                      {/* علامة X تظهر فقط عند الغلط */}
-                      {!showAnswer && isWrong && (
-                        <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                    onClick={() => handleSelect(q.id, img.value)}
+                  >
+                    <img src={img.src} alt="" />
+                    {/* علامة X تظهر فقط عند الغلط */}
+                    {isWrong&& submitted && (
+                      <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
-  
+          </div>
+        ))}
+      </div>
+
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={handleReset}>
           Start Again ↻

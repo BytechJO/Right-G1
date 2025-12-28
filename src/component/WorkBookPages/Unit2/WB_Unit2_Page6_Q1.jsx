@@ -167,7 +167,7 @@ const WB_Unit2_Page6_Q1 = () => {
           <div className="review3-p1-q3-grid">
             {questions.map((q) => (
               <div key={q.id} className="review3-p1-q3-box">
-                <img src={q.image} alt="" className="review3-p1-q3-img" />
+                <img src={q.image} alt="" className="review3-p1-q3-img" style={{width:"170px"}}/>
 
                 {q.items.map((item, idx) => {
                   const isSelected = answers[q.id] === idx;

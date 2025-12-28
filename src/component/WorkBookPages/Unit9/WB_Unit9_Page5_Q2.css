@@ -6,10 +6,12 @@
 }
 
 .wb-unit9-qk-layout {
-  width: 80%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+       row-gap: 60px;
+    justify-items: end;
+
 }
 
 .wb-unit9-qk-item {

@@ -214,7 +214,7 @@ const WB_Unit9_Page6_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h5 className="header-title-page8">
+        <h5 className="header-title-page8" style={{alignItems:"baseline"}}>
         <span className="ex-A">B</span> Which picture has a
           <span style={{ color: "red" }}>different beginning sound?</span> Listen and
           write <span style={{ color: "red" }}>✕</span> .
@@ -349,7 +349,7 @@ const WB_Unit9_Page6_Q2 = () => {
               </span>
 
               <div key={question.id} className="question-box2-review6-p2-q1">
-                <span className="question-number">{question.id}</span>
+                {/* <span className="question-number">{question.id}</span> */}
 
                 {/* الصورة الواحدة */}
                 <img

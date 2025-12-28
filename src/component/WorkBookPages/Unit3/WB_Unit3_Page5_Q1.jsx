@@ -135,9 +135,9 @@ const WB_Unit3_Page5_Q1 = () => {
           <span style={{ color: "red" }}>✓</span> .
         </h5>
 
-        <div className="shorti-container-wb-u1-q2">
+        <div className="shorti-container-wb-unit3-p5-q1">
           {data.map((question) => (
-            <div key={question.id} className="question-box-wb-u1-q2">
+            <div key={question.id} className="question-box-wb-unit3-p5-q1">
               <div
                 style={{
                   display: "flex",
@@ -163,7 +163,7 @@ const WB_Unit3_Page5_Q1 = () => {
                   return (
                     <div
                       key={index}
-                      className={`img-box-wb-u1-q2  ${
+                      className={`img-box-wb-unit3-p5-q1  ${
                         selected[question.id] === index ? "selected-wb-u1-q2" : ""
                       }`}
                       onClick={() => handleSelect(question.id, index)}

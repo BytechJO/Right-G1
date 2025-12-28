@@ -40,20 +40,7 @@ const WB_Unit3_Page4_Q1 = () => {
   const normalizeAnswer = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
   const normalizeInput = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
 
-  // ✅ كبسة واحدة تحدد "الكلمة كاملة" (كل حروفها)
-  const handleLineClick = (qIndex) => {
-    if (checked || showAnswer) return;
-    setSelectedIndices((prev) => {
-      const next = { ...prev };
-      // toggle: إذا كانت محددة → شيلها، إذا لأ → حددها كلها
-      const already =
-        next[qIndex]?.length === correctIndices[qIndex].length &&
-        next[qIndex].every((v, i) => v === correctIndices[qIndex][i]);
 
-      next[qIndex] = already ? [] : [...correctIndices[qIndex]];
-      return next;
-    });
-  };
   const handleCharClick = (qIndex, cIndex) => {
     if (checked || showAnswer) return;
 
@@ -172,7 +159,7 @@ const WB_Unit3_Page4_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          // gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}

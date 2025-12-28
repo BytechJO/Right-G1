@@ -144,16 +144,17 @@ const WB_Unit8_Page3_Q1 = () => {
         <div className="page8-q1-container">
           <h5 className="header-title-page8">
             {" "}
-            <span className="ex-A">A</span>Read and match.
+            <span className="ex-A">E</span>Read and match.
           </h5>
 
           <div className="container12-wb-unit8-p3-q1" ref={containerRef}>
             {/* الصف الأول */}
             <div className="matching-row2">
-              <div className="word-with-dot2">
-              
+              <div className="word-with-dot2-wb-unit8-p3-q1">
                 <span
-                  className="word-text2-wb-unit8-p3-q1"
+                  className={`word-text2-wb-unit8-p3-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-duck").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -188,9 +189,11 @@ const WB_Unit8_Page3_Q1 = () => {
 
             {/* الصف الثاني */}
             <div className="matching-row2">
-              <div className="word-with-dot2">
+              <div className="word-with-dot2-wb-unit8-p3-q1">
                 <span
-                  className="word-text2-wb-unit8-p3-q1"
+                  className={`word-text2-wb-unit8-p3-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -225,9 +228,11 @@ const WB_Unit8_Page3_Q1 = () => {
 
             {/* الصف الثالث */}
             <div className="matching-row2">
-              <div className="word-with-dot2">
+              <div className="word-with-dot2-wb-unit8-p3-q1">
                 <span
-                  className="word-text2-wb-unit8-p3-q1"
+                  className={`word-text2-wb-unit8-p3-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-dish").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -261,9 +266,11 @@ const WB_Unit8_Page3_Q1 = () => {
             </div>
             {/* الصف الرابع */}
             <div className="matching-row2">
-              <div className="word-with-dot2">
+              <div className="word-with-dot2-wb-unit8-p3-q1">
                 <span
-                  className="word-text2-wb-unit8-p3-q1"
+                  className={`word-text2-wb-unit8-p3-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-paint").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -298,9 +305,11 @@ const WB_Unit8_Page3_Q1 = () => {
 
             {/* الصف الخامس */}
             <div className="matching-row2">
-              <div className="word-with-dot2">
+              <div className="word-with-dot2-wb-unit8-p3-q1">
                 <span
-                  className="word-text2-wb-unit8-p3-q1"
+                  className={`word-text2-wb-unit8-p3-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-eye").click()}
                   style={{ cursor: "pointer" }}
                 >

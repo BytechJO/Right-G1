@@ -152,7 +152,9 @@ const WB_Unit2_Page5_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">1</span>
                 <span
-                  className="word-text2-wb-unit2-p5-q1"
+                  className={`word-text2-wb-unit2-p5-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-duck").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -185,7 +187,9 @@ const WB_Unit2_Page5_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={table}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img1").click()}
                     style={{ cursor: "pointer", height: "100px" }}
@@ -199,7 +203,9 @@ const WB_Unit2_Page5_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">2</span>
                 <span
-                  className="word-text2-wb-unit2-p5-q1"
+                  className={`word-text2-wb-unit2-p5-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -232,7 +238,9 @@ const WB_Unit2_Page5_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={dish}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img2").click()}
                     style={{ cursor: "pointer", height: "110px" }}
@@ -246,11 +254,13 @@ const WB_Unit2_Page5_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">3</span>
                 <span
-                  className="word-text2-wb-unit2-p5-q1"
+                  className={`word-text2-wb-unit2-p5-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-dish").click()}
                   style={{ cursor: "pointer" }}
                 >
-                  My birthday is in <br/> May.
+                  My birthday is in <br /> May.
                 </span>
 
                 {wrongWords.includes("My birthday is in May.") && (
@@ -279,7 +289,9 @@ const WB_Unit2_Page5_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={duck}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img3").click()}
                     style={{ cursor: "pointer", height: "100px" }}
@@ -293,7 +305,9 @@ const WB_Unit2_Page5_Q1 = () => {
               <div className="word-with-dot2">
                 <span className="span-num2">4</span>
                 <span
-                  className="word-text2-wb-unit2-p5-q1"
+                  className={`word-text2-wb-unit2-p5-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-table").click()}
                   style={{ cursor: "pointer" }}
                 >
@@ -326,7 +340,9 @@ const WB_Unit2_Page5_Q1 = () => {
                 <div style={{ width: "150px" }}>
                   <img
                     src={tiger}
-                    className="matched-img2"
+                    className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img4").click()}
                     style={{ cursor: "pointer", height: "100px" }}

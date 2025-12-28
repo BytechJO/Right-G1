@@ -14,7 +14,7 @@
   .row-content10-unit9-page6-q1 {
     display: grid;
     /* margin-bottom: 55px; */
-    gap: 22px;
+    gap: 15px;
     /* margin-top: 20px; */
     grid-template-columns: repeat(2,1fr);
     justify-items: center;

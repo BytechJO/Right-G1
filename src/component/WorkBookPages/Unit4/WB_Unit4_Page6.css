@@ -18,7 +18,15 @@
   left: 35%;
 }
 
-
+.sentence-wb-unit4-p6-q3 {
+    text-align: center;
+    display: flex;
+    /* margin-top: 35px; */
+    font-size: 25px;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 @media (max-width: 1024px) {
   .wb-unit4-p6-q1 {
     top: 14.5%;

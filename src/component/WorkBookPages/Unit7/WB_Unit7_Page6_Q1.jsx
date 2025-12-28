@@ -208,7 +208,7 @@ const WB_Unit7_Page6_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
+          // gap: "15px",
           width: "60%",
           justifyContent: "flex-start",
         }}

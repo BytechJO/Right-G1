@@ -112,7 +112,7 @@ const WB_Unit2_Page2_Q1 = () => {
                   <span className="span-num2">1</span>
                   <img
                     src={table}
-                    className="matched-img2"
+                  
                     alt=""
                     style={{
                       cursor: "pointer",
@@ -123,7 +123,7 @@ const WB_Unit2_Page2_Q1 = () => {
                 </div>
                 <div className="word-with-dot2-wb-u2-p2-q1">
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className="word-text2-wb-u2-p2-q1"
                     style={{ cursor: "pointer" }}
                   >
                     birthday Happy !
@@ -152,7 +152,7 @@ const WB_Unit2_Page2_Q1 = () => {
                   <span className="span-num2">2</span>
                   <img
                     src={dish}
-                    className="matched-img2"
+              
                     alt=""
                     style={{
                       cursor: "pointer",
@@ -163,7 +163,7 @@ const WB_Unit2_Page2_Q1 = () => {
                 </div>
                 <div className="word-with-dot2-wb-u2-p2-q1">
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className="word-text2-wb-u2-p2-q1"
                     style={{ cursor: "pointer" }}
                   >
                     a hat party It’s .
@@ -190,7 +190,7 @@ const WB_Unit2_Page2_Q1 = () => {
                   <span className="span-num2">3</span>
                   <img
                     src={duck}
-                    className="matched-img2"
+                   
                     alt=""
                     style={{
                       cursor: "pointer",
@@ -202,7 +202,7 @@ const WB_Unit2_Page2_Q1 = () => {
 
                 <div className="word-with-dot2-wb-u2-p2-q1">
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className="word-text2-wb-u2-p2-q1"
                     style={{ cursor: "pointer" }}
                   >
                     are How you old ?
@@ -233,7 +233,7 @@ const WB_Unit2_Page2_Q1 = () => {
                   <span className="span-num2">4</span>
                   <img
                     src={tiger}
-                    className="matched-img2"
+                  
                     alt=""
                     style={{
                       cursor: "pointer",
@@ -244,7 +244,7 @@ const WB_Unit2_Page2_Q1 = () => {
                 </div>
                 <div className="word-with-dot2-wb-u2-p2-q1">
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className="word-text2-wb-u2-p2-q1"
                     style={{ cursor: "pointer" }}
                   >
                     seven I’m old years .

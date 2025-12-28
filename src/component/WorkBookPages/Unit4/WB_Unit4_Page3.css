@@ -21,7 +21,7 @@
     position: relative;
 }
 .draw-canvas {
-  width: 100%;
+  width: 600px;
   height: 300px;   /* كبير متل ما بدك */
   border: 2px solid #ccc;
   touch-action: none;

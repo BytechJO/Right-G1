@@ -38,7 +38,7 @@ const WB_Unit6_Page2_Q1 = () => {
   /* ================= HANDLE CHANGE ================= */
 
   const handleChange = (qId, word, value) => {
-    if (locked) return;
+    if (locked ||checked) return;
 
     if (!/^[1-5]?$/.test(value)) return;
 
@@ -56,6 +56,7 @@ const TOTAL_WORDS = questions.reduce(
 );
   /* ================= CHECK ANSWER ================= */
 const checkAnswer = () => {
+   if (locked ||checked) return;
   // ✅ 1. تأكد إنو كل الانبوتات معبّاية
   for (const q of questions) {
     const row = answers[q.id];

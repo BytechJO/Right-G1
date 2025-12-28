@@ -145,7 +145,7 @@ setShowAnswer(true)
       >
         <div className="review3-p1-q3-wrapper">
           <h4 className="header-title-page8">
-            <span className="ex-A"> F</span> Look, read, and write
+            <span className="ex-A">G</span>Read and write
             <span style={{ color: "red" }}>✓</span>.{" "}
           </h4>
 

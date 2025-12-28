@@ -10,20 +10,20 @@ const WB_Unit9_Page2_Q1 = () => {
 
   /* ================= CANVAS SETUP ================= */
 
-useEffect(() => {
-  canvasRefs.current.forEach((canvas) => {
-    if (!canvas) return;
+// useEffect(() => {
+//   canvasRefs.current.forEach((canvas) => {
+//     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+//     const ctx = canvas.getContext("2d");
+//     const rect = canvas.getBoundingClientRect();
+//     const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+//     canvas.width = rect.width * dpr;
+//     canvas.height = rect.height * dpr;
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 🔥 الحل
-  });
-}, []);
+//     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 🔥 الحل
+//   });
+// }, []);
 
 const getPos = (e, canvas) => {
   const rect = canvas.getBoundingClientRect();
@@ -129,6 +129,8 @@ const stopDrawing = (index) => {
             <canvas
               ref={(el) => (canvasRefs.current[i] = el)}
               className="draw-box-wb-unit9-p2-q1"
+              height={120}
+              width={300}
               onMouseDown={(e) => startDrawing(e, i)}
               onMouseMove={(e) => draw(e, i)}
               onMouseUp={() => stopDrawing(i)}

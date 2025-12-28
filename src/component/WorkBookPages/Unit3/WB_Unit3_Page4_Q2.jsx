@@ -139,7 +139,7 @@ setLocked(true); // 🔒 قفل الإجابات
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          gap: "15px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -150,14 +150,14 @@ setLocked(true); // 🔒 قفل الإجابات
         <div className="content-container-wb-unit3-p4-q2">
           {questions.map((q, qIndex) => (
             <div className="question-row-review8-p2-q4" key={q.id}>
-              <div className="sentence-review8-p2-q4">
+              <div className="sentence-wb-unit3-p4-q2">
                 <div
                   style={{
                     display: "flex",
                     width: "100%",
                     justifyContent: "center",
                     alignItems: "flex-start",
-                    gap: "30px",
+                    // gap: "30px",
                   }}
                 >
                   <span
@@ -201,7 +201,7 @@ setLocked(true); // 🔒 قفل الإجابات
                       return (
                         <span
                           key={pIndex}
-                          className="blank-options-review5-p2-q3"
+                          className="blank-options-wb-unit3-p4-q2"
                         >
                           {part.options.map((opt, optIndex) => {
                             const isSelected =

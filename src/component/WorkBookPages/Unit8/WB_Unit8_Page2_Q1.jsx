@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit8_Page2_Q1 = () => {
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+  // useEffect(() => {
+  //   const canvas = canvasRef.current;
+  //   const rect = canvas.getBoundingClientRect();
+  //   const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+  //   canvas.width = rect.width * dpr;
+  //   canvas.height = rect.height * dpr;
 
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-  }, []);
+  //   const ctx = canvas.getContext("2d");
+  //   ctx.scale(dpr, dpr);
+  // }, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -88,15 +88,14 @@ const WB_Unit8_Page2_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          // gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}
       >
         <div>
-          <h5 className="header-title-page8">
-            <span className="ex-A">J</span> Look and draw your classroom. and
-            draw.
+          <h5 className="header-title-page8" style={{alignItems:"baseline"}}> 
+            <span className="ex-A">C</span> Draw a picture of yourself. Label the parts of your body. Use the words below.
           </h5>
         </div>
 
@@ -114,6 +113,8 @@ const WB_Unit8_Page2_Q1 = () => {
         <canvas
           ref={canvasRef}
           className="draw-canvas"
+          height={300}
+          width={600}
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}

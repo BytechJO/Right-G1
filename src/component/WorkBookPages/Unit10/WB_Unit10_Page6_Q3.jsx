@@ -192,7 +192,7 @@ const WB_Unit10_Page6_Q3 = () => {
       >
         <div className="review3-p2-q2-content-container">
           <h5 className="header-title-page8">
-            <span className="ex-A">B</span> Read the words. Circle the word with
+            <span className="ex-A">C</span> Read the words. Circle the word with
             a<span style={{ color: "red" }}>different sound.</span>
           </h5>
           <div
@@ -316,30 +316,33 @@ const WB_Unit10_Page6_Q3 = () => {
                 <span className="review3-p2-q2-num">{sIndex + 1}</span>
 
                 <div className="wb-unit10-p6-q2-word-box">
-                  {[sentence.word1, sentence.word2, sentence.word3,sentence.word4].map(
-                    (word, wIndex) => {
-                      const isCircled = circledWords[sIndex]?.includes(wIndex);
-                      const isWrong =
-                        checked &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(wIndex);
+                  {[
+                    sentence.word1,
+                    sentence.word2,
+                    sentence.word3,
+                    sentence.word4,
+                  ].map((word, wIndex) => {
+                    const isCircled = circledWords[sIndex]?.includes(wIndex);
+                    const isWrong =
+                      checked &&
+                      isCircled &&
+                      !correct[sIndex]?.includes(wIndex);
 
-                      return (
-                        <span
-                          key={wIndex}
-                          className={`wb-unit10-p6-q2-word ${
-                            isCircled ? "circled" : ""
-                          }`}
-                          onClick={() => handleWordClick(sIndex, wIndex)}
-                        >
-                          {word}
-                          {isWrong && (
-                            <span className="review3-p2-q2-wrong-x">✕</span>
-                          )}
-                        </span>
-                      );
-                    }
-                  )}
+                    return (
+                      <span
+                        key={wIndex}
+                        className={`wb-unit10-p6-q2-word ${
+                          isCircled ? "circled" : ""
+                        }`}
+                        onClick={() => handleWordClick(sIndex, wIndex)}
+                      >
+                        {word}
+                        {isWrong && (
+                          <span className="review3-p2-q2-wrong-x">✕</span>
+                        )}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             ))}

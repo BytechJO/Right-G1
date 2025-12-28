@@ -19,7 +19,6 @@ const WB_Unit5_Page4_Q2 = () => {
     { word: "This is a book.", image: "img4" },
     { word: "This is a pen.", image: "img1" },
     { word: "This is a globe.", image: "img3" },
-    
   ];
 
   // ============================
@@ -142,7 +141,9 @@ const WB_Unit5_Page4_Q2 = () => {
             <div className="match-words-row2">
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2   ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("climb-dot").click()}
                 >
                   This is a poster.
@@ -160,7 +161,9 @@ const WB_Unit5_Page4_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2   ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("fly-dot").click()}
                 >
                   This is a book.
@@ -178,7 +181,9 @@ const WB_Unit5_Page4_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2   ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("ride-dot").click()}
                 >
                   This is a pen.
@@ -195,7 +200,9 @@ const WB_Unit5_Page4_Q2 = () => {
               </div>
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2   ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("forks-dot").click()}
                 >
                   This is a globe.
@@ -210,7 +217,6 @@ const WB_Unit5_Page4_Q2 = () => {
                   onClick={handleStartDotClick}
                 ></div>
               </div>
-          
             </div>
             {/* الصور */}
             <div className="match-images-row2">
@@ -218,7 +224,9 @@ const WB_Unit5_Page4_Q2 = () => {
                 <img
                   src={img1}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
 
@@ -233,7 +241,9 @@ const WB_Unit5_Page4_Q2 = () => {
                 <img
                   src={img2}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
                 <div
@@ -247,7 +257,9 @@ const WB_Unit5_Page4_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
                 <div
@@ -261,7 +273,9 @@ const WB_Unit5_Page4_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
                 <div

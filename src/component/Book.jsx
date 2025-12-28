@@ -320,14 +320,88 @@ export default function Book() {
     { id: 7, label: "Unit 7", start: 39, pages: 6 },
     { id: 8, label: "Unit 8", start: 45, pages: 6 },
     { id: 9, label: "Unit 9", start: 51, pages: 6 },
+    { id: 10, label: "Unit 10", start: 57, pages: 6 },
   ];
 
   const teacherUnits = [
     {
       id: 1,
-      label: "Teacher Unit 1",
+      label: "Introduction",
       start: 4,
-      pages: teacherPages.length - 3,
+      pages: 34,
+    },
+    {
+      id: 2,
+      label: "Unit 1",
+      start: 39,
+      pages: 10,
+    },
+    {
+      id: 3,
+      label: "Unit 2",
+      start: 50,
+      pages: 11,
+    },
+    {
+      id: 4,
+      label: "Unit 3",
+      start: 62,
+      pages: 9,
+    },
+    {
+      id: 5,
+      label: "Unit 4",
+      start: 72,
+      pages: 11,
+    },
+    {
+      id: 6,
+      label: "Unit 5",
+      start: 84,
+      pages: 9,
+    },
+    {
+      id: 7,
+      label: "Unit 6",
+      start: 93,
+      pages: 12,
+    },
+    {
+      id: 8,
+      label: "Unit 7",
+      start: 106,
+      pages: 9,
+    },
+
+    {
+      id: 9,
+      label: "Unit 8",
+      start: 115,
+      pages: 13,
+    },
+    {
+      id: 10,
+      label: "Unit 9",
+      start: 128,
+      pages: 8,
+    },
+    {
+      id: 11,
+      label: "Unit 10",
+      start: 136,
+      pages: 12,
+    },
+    {
+      id: 12,
+      label: "Teaching Contractions",
+      start: 149,
+      pages: 3,
+    },
+    {
+      id: 13,
+      label: "Instructions and Answer Keys",
+      start: 153,
+      pages: teacherPages.length - 152,
     },
   ];
 

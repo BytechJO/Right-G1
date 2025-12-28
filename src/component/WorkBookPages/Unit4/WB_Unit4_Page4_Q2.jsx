@@ -2,17 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit4_Page4_Q2 = () => {
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-  }, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -102,6 +92,8 @@ const WB_Unit4_Page4_Q2 = () => {
 
         <canvas
           ref={canvasRef}
+          height={300}
+          width={600}
           className="draw-canvas"
           onMouseDown={startDrawing}
           onMouseMove={draw}

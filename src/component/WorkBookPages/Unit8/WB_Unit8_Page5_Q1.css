@@ -10,13 +10,13 @@
 .word-container-wb-unit8-p5-q1{
   display: grid;
   grid-template-columns: repeat(3,1fr);
-  gap: 50px;
+  gap: 10px;
 }
 
 .wb-unit8-p5-q1-box {
     position: relative;
-    width: 180px;
-    height: 160px;
+    width: 160px;
+    height: 150px;
     border: 2px solid #999;
     border-radius: 14px;
     display: flex;

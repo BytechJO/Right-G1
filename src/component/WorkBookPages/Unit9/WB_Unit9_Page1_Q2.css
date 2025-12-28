@@ -46,7 +46,7 @@
 .wb-unit9-p1-q2-questions {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  /* gap: 18px; */
 }
 
 /* ====== QUESTION ROW ====== */

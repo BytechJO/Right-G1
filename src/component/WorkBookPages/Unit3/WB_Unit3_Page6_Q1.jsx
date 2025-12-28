@@ -216,7 +216,7 @@ const WB_Unit3_Page6_Q1 = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "30px 0px",
+            marginTop: "30px",
             width: "100%",
           }}
         >
@@ -330,7 +330,7 @@ const WB_Unit3_Page6_Q1 = () => {
         <div className="row-content10-review3-p2-q1">
           {[bat, cap, ant, dad, ant2, dad2].map((item, index) => (
             <div className="row2-review3-p2-q1" key={index}>
-              <img src={item} alt="" className="q-img-review3-p2-q1" />
+              <img src={item} alt="" className="q-img-review3-p2-q1" style={{height:"160px"}}/>
 
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">

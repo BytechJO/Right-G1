@@ -162,7 +162,7 @@ const WB_Unit6_Page5_Q2 = () => {
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A"> H</span>Find the words.
+          <span className="ex-A">J</span>Find the words.
         </h4>
         {questions.map((q) => (
           <div className="content-container-wb-unit6-p5-q2">

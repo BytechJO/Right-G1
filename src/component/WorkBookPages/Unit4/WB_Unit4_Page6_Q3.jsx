@@ -159,7 +159,7 @@ const WB_Unit4_Page6_Q3 = () => {
           <div className="row-missing" key={qIndex}>
             <span className="num">{qIndex + 1}.</span>
 
-            <div className="sentence-review10-p2-q3">
+            <div className="sentence-wb-unit4-p6-q3">
               {item.parts.map((p, blankIndex) => (
                 <span
                   key={blankIndex}

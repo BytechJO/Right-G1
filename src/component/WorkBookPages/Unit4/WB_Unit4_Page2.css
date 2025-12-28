@@ -11,17 +11,31 @@
   top: 45.5%;
   left: 35%;
 }
-
 .color-pallet-wb-unit4-p2-q1 {
   gap: 10px;
   border: 2px solid black;
   margin: 20px;
   padding: 8px;
+  position: absolute;
   border-radius: 8px;
-  width: 26%;
+  /* width: 26%; */
+  top: 25%;
+  left: 54%;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.question-text-wb-unit4-p2-q1 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 10px 14px;
+    position: relative;
+    background: white;
+    pointer-events: none;
 }
 
 @media (max-width: 1024px) {

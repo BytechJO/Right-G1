@@ -173,19 +173,21 @@ const WB_Unit7_Page2_Q1 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="page8-q1-container">
+        <div className="page8-q1-container" >
           <h4 className="header-title-page8">
             <span className="ex-A">C</span> Unscramble, write, and match.
           </h4>
 
-          <div className="container12" ref={containerRef}>
+          <div className="container12" ref={containerRef} style={{margin:"30px"}}>
             {/* الصف الأول */}
             <div className="matching-row2">
               <div>
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">1</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-open").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -207,12 +209,11 @@ const WB_Unit7_Page2_Q1 = () => {
                 <input
                   className="unscramble-input"
                   type="text"
-                  value={userInputs[1]}
-                  onChange={(e) =>
-                    setUserInputs((prev) => ({ ...prev, 1: e.target.value }))
-                  }
-                  style={{ color: "red" }}
-                  
+                 value={userInputs[1]}
+                  onChange={(e) => {
+                    setUserInputs((prev) => ({ ...prev, 1: e.target.value }));
+                    setWrongInputs([]);
+                  }}
                 />
               </div>
 
@@ -227,7 +228,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 </div>
 
                 <p
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-img1").click()}
                 >
                   I’m bored.
@@ -241,7 +244,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">2</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-line").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -285,7 +290,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 </div>
 
                 <p
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-img2").click()}
                 >
                   Are you hungry?
@@ -299,7 +306,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">3</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-close").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -344,7 +353,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 </div>
 
                 <p
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-img3").click()}
                 >
                   I’m cold.
@@ -358,7 +369,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">4</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("dot-pencil").click()
                     }
@@ -406,7 +419,9 @@ const WB_Unit7_Page2_Q1 = () => {
 
                 <p
                   src={tiger}
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
                 >
@@ -421,7 +436,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">5</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("dot-hungry").click()
                     }
@@ -469,7 +486,9 @@ const WB_Unit7_Page2_Q1 = () => {
 
                 <p
                   src={tiger}
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img5").click()}
                 >
@@ -484,7 +503,9 @@ const WB_Unit7_Page2_Q1 = () => {
                 <div className="word-with-dot2">
                   <span className="span-num2-wb-unit7-p2-q1">6</span>
                   <span
-                    className="word-text2-review3-p1-q2"
+                    className={`word-text2-wb-unit7-p2-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("dot-cold").click()}
                     style={{ cursor: "pointer" }}
                   >
@@ -530,7 +551,9 @@ const WB_Unit7_Page2_Q1 = () => {
 
                 <p
                   src={tiger}
-                  className="matched-word-wb-unit7-p2-q1"
+                  className={`matched-word-wb-unit7-p2-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img6").click()}
                 >

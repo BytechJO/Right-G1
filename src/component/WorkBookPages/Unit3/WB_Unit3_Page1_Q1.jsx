@@ -182,7 +182,7 @@ const WB_Unit3_Page1_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
+          // gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -221,12 +221,16 @@ const WB_Unit3_Page1_Q1 = () => {
             </div>
           )}
 
-          <div className="match-wrapper2" ref={containerRef}>
+          <div className="match-wrapper2" ref={containerRef} style={{margin:"0px"}}>
             {/* الجمل */}
 
             {/* الصور */}
             <div className="match-images-row2-wb-unit3-p1-q1">
-              <div className="img-box2-wb-unit3-p1-q1">
+              <div
+                className={`img-box2-wb-unit3-p1-q1 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+              >
                 <div>
                   {/* <img
                     src={img1}
@@ -236,20 +240,22 @@ const WB_Unit3_Page1_Q1 = () => {
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     1{" "}
                   </span>
-                  <div className="square-container-wb-unit3-p1-q1">
+                  <div
+                    className={`square-container-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("img1-dot").click()}
+                  >
                     {Array(6).fill(
-                      <svg width="100" height="100">
+                      <svg width="80" height="80">
                         <rect
                           x="10"
                           y="10"
-                          width="80"
-                          height="80"
+                          width="60"
+                          height="60"
                           fill={wordColors[0]}
                           stroke="black"
                           strokeWidth="2"
-                          onClick={() =>
-                            document.getElementById("img1-dot").click()
-                          }
                           onDoubleClick={() => handleWordClick(0)} // فتح الباليت
                           onTouchEnd={() => handleWordClick(0)}
                           style={{
@@ -288,7 +294,7 @@ const WB_Unit3_Page1_Q1 = () => {
                 ></div>
               </div>
 
-              <div className="img-box2-wb-unit3-p1-q1">
+              <div className={`img-box2-wb-unit3-p1-q1`}>
                 <div>
                   {/* <img
                     src={img2}
@@ -298,17 +304,19 @@ const WB_Unit3_Page1_Q1 = () => {
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     2{" "}
                   </span>
-                  <div className="polygon-container-wb-unit3-p1-q1">
+                  <div
+                    className={`polygon-container-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("img2-dot").click()}
+                  >
                     {Array(4).fill(
-                      <svg width="100" height="100">
+                      <svg width="80" height="80">
                         <polygon
-                          points="50,10 90,90 10,90"
+                          points="30,7 60,60 7,60"
                           fill={wordColors[1]}
                           stroke="black"
                           strokeWidth="2"
-                          onClick={() =>
-                            document.getElementById("img2-dot").click()
-                          }
                           onDoubleClick={() => handleWordClick(1)} // فتح الباليت
                           onTouchEnd={() => handleWordClick(1)}
                           style={{
@@ -347,7 +355,7 @@ const WB_Unit3_Page1_Q1 = () => {
                 ></div>
               </div>
 
-              <div className="img-box2-wb-unit3-p1-q1">
+              <div className={`img-box2-wb-unit3-p1-q1`}>
                 <div
                   style={{
                     display: "flex",
@@ -355,6 +363,7 @@ const WB_Unit3_Page1_Q1 = () => {
                     justifyContent: "space-between",
                     height: "90%",
                   }}
+                  className={`img2-box2-wb-unit3-p1-q1 `}
                 >
                   {/* <img
                     src={img3}
@@ -364,19 +373,21 @@ const WB_Unit3_Page1_Q1 = () => {
                   <span style={{ color: "darkblue", fontWeight: "700" }}>
                     3{" "}
                   </span>
-                  <div className="polygon-container-wb-unit3-p1-q1">
+                  <div
+                    className={`polygon-container-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    onClick={() => document.getElementById("img3-dot").click()}
+                  >
                     {Array(2).fill(
-                      <svg width="100" height="100">
+                      <svg width="80" height="80">
                         <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
+                          cx="40"
+                          cy="40"
+                          r="30"
                           fill={wordColors[2]}
                           stroke="black"
                           strokeWidth="2"
-                          onClick={() =>
-                            document.getElementById("img3-dot").click()
-                          }
                           onDoubleClick={() => handleWordClick(2)} // فتح الباليت
                           onTouchEnd={() => handleWordClick(2)}
                           style={{
@@ -427,7 +438,9 @@ const WB_Unit3_Page1_Q1 = () => {
               >
                 <div>
                   <h5
-                    className="h5-wb-unit3-p1-q1"
+                    className={`h5-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("bored-dot").click()}
                   >
                     four
@@ -444,7 +457,9 @@ const WB_Unit3_Page1_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-wb-unit3-p1-q1"
+                    className={`h5-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("cold-dot").click()}
                   >
                     two
@@ -462,7 +477,9 @@ const WB_Unit3_Page1_Q1 = () => {
                 {" "}
                 <div>
                   <h5
-                    className="h5-wb-unit3-p1-q1"
+                    className={`h5-wb-unit3-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("scared-dot").click()
                     }

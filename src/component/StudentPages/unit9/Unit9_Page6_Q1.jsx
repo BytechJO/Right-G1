@@ -93,7 +93,7 @@ const Unit9_Page6_Q1 = () => {
       >
         <h5 className="header-title-page8">
           <span className="ex-A">D</span>
-         Look, read, and write.
+          Look, read, and write.
         </h5>
 
         <div
@@ -102,18 +102,26 @@ const Unit9_Page6_Q1 = () => {
         >
           {/* 🔵 1 */}
           <div className="row2-review8-p1-q2">
-            <span
-              style={{
-                color: "#2c5287",
-                fontSize: "20px",
-                fontWeight: "700",
-              }}
-            >
-              1
-            </span>
-            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
-
-            <div className="input-wrapper-review8-p1-q2">
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                1
+              </span>
+              <img
+                src={bat}
+                alt=""
+                className="q-img-unit3-page6-q1"
+                style={{
+                  height: "130px",
+                }}
+              />
+            </div>
+            <div className="input-wrapper-unit9-page6-q1 ">
               <span
                 style={{
                   textAlign: "center",
@@ -138,18 +146,26 @@ const Unit9_Page6_Q1 = () => {
 
           {/* 🔵 2 */}
           <div className="row2-review8-p1-q2">
-            <span
-              style={{
-                color: "#2c5287",
-                fontSize: "20px",
-                fontWeight: "700",
-              }}
-            >
-              2
-            </span>
-            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-
-            <div className="input-wrapper-unit9-page6-q1">
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                2
+              </span>
+              <img
+                src={cap}
+                alt=""
+                className="q-img-unit3-page6-q1"
+                style={{
+                  height: "130px",
+                }}
+              />
+            </div>
+            <div className="input-wrapper-unit9-page6-q1 ">
               <span
                 style={{
                   textAlign: "center",
@@ -174,18 +190,26 @@ const Unit9_Page6_Q1 = () => {
 
           {/* 🔵 3 */}
           <div className="row2-review8-p1-q2">
-            <span
-              style={{
-                color: "#2c5287",
-                fontSize: "20px",
-                fontWeight: "700",
-              }}
-            >
-              3
-            </span>
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-
-            <div className="input-wrapper-review8-p1-q2">
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                3
+              </span>
+              <img
+                src={ant}
+                alt=""
+                className="q-img-unit3-page6-q1"
+                style={{
+                  height: "130px",
+                }}
+              />
+            </div>
+            <div className="input-wrapper-unit9-page6-q1 ">
               <span
                 style={{
                   textAlign: "center",
@@ -209,18 +233,26 @@ const Unit9_Page6_Q1 = () => {
           </div>
           {/* 🔵 4 */}
           <div className="row2-review8-p1-q2">
-            <span
-              style={{
-                color: "#2c5287",
-                fontSize: "20px",
-                fontWeight: "700",
-              }}
-            >
-              4
-            </span>
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-
-            <div className="input-wrapper-review8-p1-q2">
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                4
+              </span>
+              <img
+                src={ant}
+                alt=""
+                className="q-img-unit3-page6-q1"
+                style={{
+                  height: "130px",
+                }}
+              />
+            </div>
+            <div className="input-wrapper-unit9-page6-q1 ">
               <input
                 style={{ width: "100%" }}
                 type="text"

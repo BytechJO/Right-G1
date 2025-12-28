@@ -11,6 +11,9 @@ const WB_Unit4_Page2_Q1 = () => {
   });
 
   const [selectedColor, setSelectedColor] = useState("#ff0000"); // اللون الحالي
+  const [showPalette, setShowPalette] = useState(false);
+  const [activeShape, setActiveShape] = useState(null);
+
   const questions = [
     {
       id: 1,
@@ -109,11 +112,11 @@ const WB_Unit4_Page2_Q1 = () => {
 
     setShowAnswer(true); // 🔒 يقفل الكتابة
     setWrongInputs([]); // يشيل الإكسات
-      setShapeColors({
-    1: "red",
-    2: "red",
-    3: "red",
-  })
+    setShapeColors({
+      1: "red",
+      2: "red",
+      3: "red",
+    });
   };
 
   const handleReset = () => {
@@ -124,12 +127,14 @@ const WB_Unit4_Page2_Q1 = () => {
       q2: "",
       q3: "",
     });
+    setShowPalette(false);
+
     setShowAnswer(false);
     setShapeColors({
-    1: "#ffffff",
-    2: "#ffffff",
-    3: "#ffffff",
-  })
+      1: "#ffffff",
+      2: "#ffffff",
+      3: "#ffffff",
+    });
   };
 
   return (
@@ -155,32 +160,54 @@ const WB_Unit4_Page2_Q1 = () => {
         <h5 className="header-title-page8" id="ex-d">
           <span className="ex-A">C</span>Look, read, and write. Color.
         </h5>
-        <div
-          className="color-pallet-wb-unit4-p2-q1"
-          style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-        >
-          {["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ff9900"].map((c) => (
-            <button
-              key={c}
-              onClick={() => setSelectedColor(c)}
-              style={{
-                width: "30px",
-                height: "30px",
-                borderRadius: "50%",
-                backgroundColor: c,
-                border:
-                  selectedColor === c ? "3px solid black" : "1px solid #ccc",
-                cursor: "pointer",
-              }}
-            />
-          ))}
-        </div>
+         <span style={{ fontSize: "14px", color: "gray" }}>
+            Hint: Double Click to Color Word
+          </span>
+        {showPalette && (
+          <div
+            className="color-pallet-wb-unit4-p2-q1"
+            style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+          >
+            {["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ff9900"].map(
+              (c) => (
+                <button
+                  key={c}
+                  onClick={() => {
+                    if (activeShape) {
+                      setShapeColors({
+                        ...shapeColors,
+                        [activeShape]: c,
+                      });
+                    }
+                    setSelectedColor(c);
+                    setShowPalette(false);
+                    setActiveShape(null);
+                  }}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    backgroundColor: c,
+                    border:
+                      selectedColor === c
+                        ? "3px solid black"
+                        : "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                />
+              )
+            )}
+          </div>
+        )}
 
         {/* ✅ الصورة هي المرجع */}
         <div style={{ width: "100%" }}>
           {questions.map((q, index) => (
             <div key={q.id} className="question-row-unit7-p2-q3">
-              <div className="question-container-unit7-p6-q3" style={{gap:"20px"}}>
+              <div
+                className="question-container-unit7-p6-q3"
+                style={{ gap: "20px" }}
+              >
                 <span className="num2">{index + 1}</span>
 
                 <div className="shape-wrapper">
@@ -188,9 +215,12 @@ const WB_Unit4_Page2_Q1 = () => {
                     <svg
                       width="120"
                       height="120"
-                      onClick={() =>
-                        setShapeColors({ ...shapeColors, 1: selectedColor })
-                      }
+                      onDoubleClick={() => {
+                        setActiveShape(1);
+                        setShapeColors({ ...shapeColors, 1: shapeColors[1] });
+                        setShowPalette(true);
+                      }}
+                    
                     >
                       <rect
                         x="10"
@@ -207,9 +237,12 @@ const WB_Unit4_Page2_Q1 = () => {
                     <svg
                       width="120"
                       height="120"
-                      onClick={() =>
-                        setShapeColors({ ...shapeColors, 2: selectedColor })
-                      }
+                      onDoubleClick={() => {
+                        setActiveShape(2);
+                        setShapeColors({ ...shapeColors, 2: shapeColors[2] });
+                        setShowPalette(true);
+                      }}
+                     
                     >
                       <polygon
                         points="60,10 110,110 10,110"
@@ -223,9 +256,12 @@ const WB_Unit4_Page2_Q1 = () => {
                     <svg
                       width="120"
                       height="120"
-                      onClick={() =>
-                        setShapeColors({ ...shapeColors, 3: selectedColor })
-                      }
+                      onDoubleClick={() => {
+                        setActiveShape(3);
+                        setShapeColors({ ...shapeColors, 3: shapeColors[3] });
+                        setShowPalette(true);
+                      }}
+                     
                     >
                       <circle
                         cx="60"
@@ -238,7 +274,7 @@ const WB_Unit4_Page2_Q1 = () => {
                     </svg>
                   )}
                 </div>
-                <p className="question-text-unit7-p2-q3">{q.question}</p>
+                <p className="question-text-wb-unit4-p2-q1">{q.question}</p>
               </div>
               <div className="sentence-box-unit7-p2-q3">
                 {q.type === "full" && (

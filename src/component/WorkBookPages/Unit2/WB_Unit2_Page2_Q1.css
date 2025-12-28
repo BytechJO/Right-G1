@@ -1,8 +1,19 @@
 .word-with-dot2-wb-u2-p2-q1 {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     width: 100%;
     flex-direction: column;
 }
 
+.word-text2-wb-u2-p2-q1{
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    /* background: #b7eaff; */
+    border-radius: 20px;
+    font-size: 20px;
+    width: 200px;
+    text-align: start;
+    border: 2px solid transparent;
+}

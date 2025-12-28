@@ -144,15 +144,19 @@ const WB_Unit4_Page1_Q1 = () => {
                 <span className="span-num2">1</span>{" "}
                 <img
                   src={bird}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",width:"350px"  }}
                 >
                  What shape is it?
                 </span>
@@ -179,7 +183,9 @@ const WB_Unit4_Page1_Q1 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-ball").click()}
                   style={{ cursor: "pointer",width:"100px" }}
                 >
@@ -194,15 +200,19 @@ const WB_Unit4_Page1_Q1 = () => {
                 <span className="span-num2">2</span>{" "}
                 <img
                   src={boy}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                   <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-img2").click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",width:"350px"  }}
                 >
                   What shape is it?
                 </span>
@@ -229,7 +239,9 @@ const WB_Unit4_Page1_Q1 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-pizza").click()}
                   style={{ cursor: "pointer",width:"100px"  }}
                 >
@@ -243,15 +255,19 @@ const WB_Unit4_Page1_Q1 = () => {
                 <span className="span-num2">3</span>{" "}
                 <img
                   src={pizza2}
-                  className="matched-img2"
+                  className={`matched-img2 ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",width:"350px"  }}
                 >
                  What shape is it?
                 </span>
@@ -278,7 +294,9 @@ const WB_Unit4_Page1_Q1 = () => {
                 </div>
 
                 <span
-                  className="word-text2-wb-unit4-p1-q1"
+                  className={`word-text2-wb-unit4-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                   onClick={() => document.getElementById("dot-bird").click()}
                   style={{ cursor: "pointer" ,width:"100px" }}
                 >

@@ -116,7 +116,7 @@ const WB_Unit9_Page2_Q3 = () => {
           <div className="wb-unit9-p2-q3-grid">
             {options.map((item, index) => (
               <div key={index} className="wb-unit9-p2-q3-box">
-                <img src={item.img} className="unit3-q3-image" alt="" />
+                <img src={item.img} alt="" />
 
                 {/* إدخال الإجابة */}
                 <div className="wb-unit9-p2-q3-input-wrapper">

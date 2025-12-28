@@ -6,17 +6,17 @@ const WB_Unit2_Page2_Q2 = () => {
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(true); // مؤقت حتى ما يكسر التحقق
   const [isCorrect, setIsCorrect] = useState(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+  // useEffect(() => {
+  //   const canvas = canvasRef.current;
+  //   const rect = canvas.getBoundingClientRect();
+  //   const dpr = window.devicePixelRatio || 1;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+  //   canvas.width = rect.width * dpr;
+  //   canvas.height = rect.height * dpr;
 
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
-  }, []);
+  //   const ctx = canvas.getContext("2d");
+  //   ctx.scale(dpr, dpr);
+  // }, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -138,10 +138,14 @@ const WB_Unit2_Page2_Q2 = () => {
           />
 
           <span>.</span>
-        </div>
-        <div  style={{position:"relative"}}>
+        </div >
+        
+        <div  style={{position:"relative"}}className="canvas-wrapper-wb-unit2-q2">
+           <img src={cake} style={{ height: "150px", width: "auto" }} />
           <canvas
             ref={canvasRef}
+            height={150}
+            width={500}
             className="draw-canvas-wb-unit2-p2-q2"
             onMouseDown={startDrawing}
             onMouseMove={draw}
@@ -151,7 +155,7 @@ const WB_Unit2_Page2_Q2 = () => {
             onTouchMove={draw}
             onTouchEnd={stopDrawing}
           />
-          <img src={cake} style={{ height: "150px", width: "auto" }} />
+         
         </div>
       </div>
 

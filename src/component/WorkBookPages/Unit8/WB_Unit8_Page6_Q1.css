@@ -7,3 +7,11 @@
     margin-top: 20px;
     grid-template-columns: repeat(2,1fr);
 }
+
+
+.img-box img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  
+}

@@ -158,6 +158,9 @@ const WB_Unit9_Page1_Q1 = () => {
                 <img
                   src={img1}
                   alt=""
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
                 {wrongImages.includes("img1") && (
@@ -184,6 +187,9 @@ const WB_Unit9_Page1_Q1 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
                 <img
                   src={img2}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
@@ -211,6 +217,9 @@ const WB_Unit9_Page1_Q1 = () => {
                 <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
                 <img
                   src={img3}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
@@ -237,7 +246,9 @@ const WB_Unit9_Page1_Q1 = () => {
               >
                 <div>
                   <h5
-                    className="h5-wb-unit9-p1-q1"
+                    className={`h5-wb-unit9-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("bored-dot").click()}
                   >
                     How many cats are there? <br />
@@ -255,7 +266,9 @@ const WB_Unit9_Page1_Q1 = () => {
               <div className="word-box2">
                 <div>
                   <h5
-                    className="h5-wb-unit9-p1-q1"
+                    className={`h5-wb-unit9-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() => document.getElementById("cold-dot").click()}
                   >
                     How many horses are there?
@@ -275,7 +288,9 @@ const WB_Unit9_Page1_Q1 = () => {
                 {" "}
                 <div>
                   <h5
-                    className="h5-wb-unit9-p1-q1"
+                    className={`h5-wb-unit9-p1-q1 ${
+                      locked || showAnswer ? "disabled-word" : ""
+                    }`}
                     onClick={() =>
                       document.getElementById("scared-dot").click()
                     }

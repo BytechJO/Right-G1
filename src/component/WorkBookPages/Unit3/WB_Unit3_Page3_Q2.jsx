@@ -142,7 +142,9 @@ const WB_Unit3_Page3_Q2 = () => {
             <div className="match-words-row2">
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("climb-dot").click()}
                 >
                   six chairs
@@ -160,7 +162,9 @@ const WB_Unit3_Page3_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("fly-dot").click()}
                 >
                   five desks
@@ -178,7 +182,9 @@ const WB_Unit3_Page3_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("ride-dot").click()}
                 >
                   two balls
@@ -195,7 +201,9 @@ const WB_Unit3_Page3_Q2 = () => {
               </div>
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("forks-dot").click()}
                 >
                   four forks
@@ -212,7 +220,9 @@ const WB_Unit3_Page3_Q2 = () => {
               </div>
               <div className="word-box2">
                 <h5
-                  className="h5-wb-unit3-p3-q2"
+                  className={`h5-wb-unit3-p3-q2 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("birds-dot").click()}
                 >
                   nine birds
@@ -234,7 +244,9 @@ const WB_Unit3_Page3_Q2 = () => {
                 <img
                   src={img1}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 />
 
@@ -249,7 +261,9 @@ const WB_Unit3_Page3_Q2 = () => {
                 <img
                   src={img2}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 />{" "}
                 <div
@@ -263,7 +277,9 @@ const WB_Unit3_Page3_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 />{" "}
                 <div
@@ -277,7 +293,9 @@ const WB_Unit3_Page3_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img4-dot").click()}
                 />{" "}
                 <div
@@ -291,7 +309,9 @@ const WB_Unit3_Page3_Q2 = () => {
                 <img
                   src={img3}
                   alt=""
-                  className="img-box2-unit6-p6-q3"
+                  className={`img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   onClick={() => document.getElementById("img5-dot").click()}
                 />{" "}
                 <div

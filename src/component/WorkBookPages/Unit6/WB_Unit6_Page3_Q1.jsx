@@ -181,14 +181,14 @@ const WB_Unit6_Page3_Q1 = () => {
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">C</span>Read, look, and circle.
+          <span className="ex-A">E</span>Read, look, and circle.
         </h4>
 
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "30px",
+            gap: "10px",
           }}
         >
           {questions.map((q, qIndex) => {
