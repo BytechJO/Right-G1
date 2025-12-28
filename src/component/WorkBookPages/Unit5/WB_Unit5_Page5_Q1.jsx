@@ -139,7 +139,7 @@ const WB_Unit5_Page5_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           width: "60%",
           display: "flex",

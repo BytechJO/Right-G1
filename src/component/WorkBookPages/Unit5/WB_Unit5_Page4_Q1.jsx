@@ -70,7 +70,7 @@ const WB_Unit5_Page4_Q1 = () => {
       }}
     >
       <div
-        className="div-unit4-q2-p6-forall"
+      className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

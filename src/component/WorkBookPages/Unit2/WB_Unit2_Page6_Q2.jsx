@@ -257,7 +257,7 @@ export default function WB_Unit2_Page6_Q2() {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

@@ -205,8 +205,8 @@ const WB_Unit4_Page5_Q1 = () => {
         alignItems: "center",
         padding: "30px",
       }}
-    >
-      <div
+    > 
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

@@ -94,7 +94,16 @@ export default function WB_Unit3_Page1_Q2() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
+      <div
+        className="div-forall"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          // gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
+        }}
+      >
         <h4 className="header-title-page8">
           <span className="ex-A">B</span> Look, count, and color.
         </h4>
@@ -155,8 +164,7 @@ export default function WB_Unit3_Page1_Q2() {
                       {num}
                     </span>
 
-                    {
-                      wrongAnswers.includes(qIndex) &&
+                    {wrongAnswers.includes(qIndex) &&
                       answers[qIndex]?.value === num && (
                         <span className="wrong-mark-circle">✕</span>
                       )}

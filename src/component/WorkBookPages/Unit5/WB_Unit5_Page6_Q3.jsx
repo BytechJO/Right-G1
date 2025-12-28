@@ -5,7 +5,7 @@ import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
 import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
 import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
-import "./WB_Unit5_Page6_Q3.css"
+import "./WB_Unit5_Page6_Q3.css";
 const WB_Unit5_Page6_Q3 = () => {
   const [answers, setAnswers] = useState(Array(3).fill(null));
   const [showResult, setShowResult] = useState(false);
@@ -97,6 +97,7 @@ const WB_Unit5_Page6_Q3 = () => {
       }}
     >
       <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -136,16 +137,14 @@ const WB_Unit5_Page6_Q3 = () => {
                 >
                   {i + 1}
                 </span>
-                 <img
-                    src={q.img}
-                    className="q3-image-review6-p1-q1"
-                    style={{ height: "120px", width: "auto" }}
-                  />
+                <img
+                  src={q.img}
+                  className="q3-image-review6-p1-q1"
+                  style={{ height: "120px", width: "auto" }}
+                />
               </div>
 
               <div style={{ display: "flex", gap: "10px" }}>
-              
-
                 <div className="options-row-wb-unit5-p6-q3">
                   {q.options.map((word, optIndex) => {
                     const isSelected = answers[i] === optIndex;

@@ -127,7 +127,7 @@ const WB_Unit2_Page3_Q1 = () => {
         }}
       >
         <h5 className="header-title-page8">
-         <span className="ex-A">C</span> Read and write<span style={{ color: "red" }}>✓</span> .
+         <span className="ex-A">E</span> Read and write<span style={{ color: "red" }}>✓</span> .
         </h5>
 
         <div className="shorti-container-review6-p2-q1 ">
