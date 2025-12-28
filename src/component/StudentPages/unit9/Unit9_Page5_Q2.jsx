@@ -154,8 +154,8 @@ const Unit9_Page5_Q2 = () => {
         alignItems: "center",padding:"30px"
       }}
     >
-      <div
-        style={{
+      <div className="div-forall"
+        style={{ 
           display: "flex",
           flexDirection: "column",
           gap: "30px",

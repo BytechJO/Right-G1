@@ -39,3 +39,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 43px;
 }
+
+
+@media (max-width: 1024px) {
+.content-container-unit5-p6-q1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    
+}
+
+}

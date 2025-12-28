@@ -69,5 +69,25 @@
 
 #num-8-unit4 {
   right: 23%;
-    top: 38.5%;
+  top: 38.5%;
+}
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit4-page1-1 {
+    top: 6%;
+    right: 10.5%;
+  }
+
+  .headset-icon-CD-unit4-page1-2 {
+    bottom: 39.5%;
+    left: 26%;
+  }
+  .click-icon-unit4-page1-2 {
+    bottom: 13.5%;
+    right: 42%;
+  }
+  .click-icon-unit4-page1-1 {
+    left: 19%;
+    top: 41%;
+  }
 }

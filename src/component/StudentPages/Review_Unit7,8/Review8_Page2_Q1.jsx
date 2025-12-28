@@ -89,7 +89,7 @@ const Review8_Page2_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -101,7 +101,7 @@ const Review8_Page2_Q1 = () => {
         <div>
           <h5 className="header-title-page8">D Look, read, and circle.</h5>
         </div>
-        <div className="container-review6-p1-q1">
+        <div className="container-review8-p2-q1">
           {items.map((q, i) => (
             <div
               key={i}

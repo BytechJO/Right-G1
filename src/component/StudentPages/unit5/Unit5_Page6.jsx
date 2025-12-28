@@ -39,11 +39,18 @@ const Unit5_Page6 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
-           style={{ overflow: "visible" }}
+          viewBox="0 0 90 90"
+          style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 53 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
       <div
@@ -53,11 +60,18 @@ const Unit5_Page6 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 54 })}
-           style={{ overflow: "visible" }}
+          style={{ overflow: "visible" }}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
 
@@ -68,7 +82,7 @@ const Unit5_Page6 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
               "audio",
@@ -79,13 +93,23 @@ const Unit5_Page6 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={CD25_Pg27_Song_AdultLady} captions={captionsExample} />
+                <AudioWithCaption
+                  src={CD25_Pg27_Song_AdultLady}
+                  captions={captionsExample}
+                />
               </div>
             )
           }
-           style={{ overflow: "visible" }}
+          style={{ overflow: "visible" }}
         >
-          <image href={audioBtn} x="0" y="0" width="60" height="60" />
+          <image
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
     </div>

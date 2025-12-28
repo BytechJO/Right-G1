@@ -168,6 +168,21 @@
   top: 12%;
 }
 
+.div-all{
+  display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    width: 60%;
+}
+
+@media (max-width: 1024px) {
+.div-all{
+
+    width: 100%;
+}
+}
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;700&display=swap");
 
 .word-outline,

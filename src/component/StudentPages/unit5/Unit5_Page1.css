@@ -13,18 +13,18 @@
 }
 
 .headset-icon-CD-unit5-page1-1 {
-     top: 7%;
-    right: 8.5%;
+  top: 7%;
+  right: 8.5%;
 }
 
 .click-icon-unit5-page1-1 {
-     left: 19%;
-    top: 37%;
+  left: 19%;
+  top: 37%;
 }
 
 .headset-icon-CD-unit5-page1-2 {
- bottom: 38.5%;
-    left: 26%;
+  bottom: 38.5%;
+  left: 26%;
 }
 
 .click-icon-unit5-page1-2 {
@@ -70,4 +70,23 @@
 #num-8-unit5 {
   left: 20%;
   top: 32.5%;
+}
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit5-page1-1 {
+    top: 6%;
+    right: 11.5%;
+  }
+  .click-icon-unit5-page1-1 {
+    left: 19%;
+    top: 36%;
+  }
+  .headset-icon-CD-unit5-page1-2 {
+    bottom: 41.5%;
+    left: 25%;
+  }
+  .click-icon-unit5-page1-2 {
+    bottom: 14%;
+    right: 42%;
+  }
 }

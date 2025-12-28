@@ -123,3 +123,14 @@
   z-index: 999999;
   border: 2px solid white;
 }
+
+
+
+@media (max-width: 1024px) {
+  .word-box2 {
+    position: relative;
+    font-size: 20px;
+  
+   
+}
+}

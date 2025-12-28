@@ -5,14 +5,12 @@
   gap: 30px;
 }
 
-
-
 .unscramble-row {
   display: flex;
   gap: 30px;
   justify-content: center;
   justify-content: space-around;
-    width: 100%;
+  width: 100%;
 }
 
 .unscramble-box {
@@ -68,8 +66,8 @@
 
 .error-icon {
   position: absolute;
-  top: -8px;     /* ارفعيه فوق */
-  right: -8px;   /* حطيه يمين */
+  top: -8px; /* ارفعيه فوق */
+  right: -8px; /* حطيه يمين */
   width: 22px;
   height: 22px;
   background-color: red;
@@ -86,4 +84,11 @@
 .input-wrapper {
   position: relative;
   display: inline-block;
+}
+
+@media (max-width: 1024px) {
+  .unscramble-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

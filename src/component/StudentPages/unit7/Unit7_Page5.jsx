@@ -21,11 +21,11 @@ const Unit7_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 73 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>
       </div>
       <div
@@ -35,11 +35,11 @@ const Unit7_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 74 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>
       </div>
       <div
@@ -49,11 +49,11 @@ const Unit7_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 75 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>
       </div>
 
@@ -64,11 +64,11 @@ const Unit7_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 76 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>
       </div>
     </div>

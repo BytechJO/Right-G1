@@ -83,7 +83,7 @@ const Review8_Page2_Q3 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

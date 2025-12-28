@@ -47,7 +47,7 @@
   position: absolute;
   padding: 5px;
   top: 8%;
- left: 75.5%;
+  left: 75.5%;
   cursor: pointer;
 }
 .click-icon-unit6-page5-2 {
@@ -60,8 +60,8 @@
 .click-icon-unit6-page5-3 {
   position: absolute;
   padding: 5px;
- top: 49%;
-    left: 38.5%;
+  top: 49%;
+  left: 38.5%;
   cursor: pointer;
 }
 
@@ -253,4 +253,23 @@
   border-radius: 20px;
   background-color: red;
   left: 14px;
+}
+
+@media (max-width: 1024px) {
+  .click-icon-unit6-page5-1 {
+    left: 76%;
+  }
+
+  .click-icon-unit6-page5-2 {
+    top: 22.5%;
+    left: 44%;
+  }
+  .click-icon-unit6-page5-3 {
+    top: 48.5%;
+    left: 39%;
+  }
+  .click-icon-unit6-page5-4 {
+    bottom: 24.5%;
+    left: 50%;
+  }
 }

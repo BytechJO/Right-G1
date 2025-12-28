@@ -22,3 +22,18 @@
   bottom: 10.5%;
   right: 38%;
 }
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit4-page2-1 {
+    top: 4%;
+    right: 3%;
+  }
+  .headset-icon-CD-unit4-page2-2 {
+    bottom: 30.5%;
+    right: 9%;
+}
+.click-icon-unit4-page2-1 {
+    bottom: 13.5%;
+    right: 42%;
+}
+}

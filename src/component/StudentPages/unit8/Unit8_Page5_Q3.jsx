@@ -9,13 +9,33 @@ import img4 from "../../../assets/unit8/imgs/U8P68EXEB-04.svg";
 const Unit8_Page5_Q3 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
   const [showResult, setShowResult] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false);   // ⭐ NEW
+  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
   const items = [
-    { img: img1, text: "Touch your", options: ["arm", "hand"], correctIndex: 0 },
-    { img: img2, text: "Raise your", options: ["hand.", "leg."], correctIndex: 1 },
-    { img: img3, text: "Bend your", options: ["knee.", "eye."], correctIndex: 0 },
-    { img: img4, text: "Open your", options: ["nose.", "mouth."], correctIndex: 1 },
+    {
+      img: img1,
+      text: "Touch your",
+      options: ["arm", "hand"],
+      correctIndex: 0,
+    },
+    {
+      img: img2,
+      text: "Raise your",
+      options: ["hand.", "leg."],
+      correctIndex: 1,
+    },
+    {
+      img: img3,
+      text: "Bend your",
+      options: ["knee.", "eye."],
+      correctIndex: 0,
+    },
+    {
+      img: img4,
+      text: "Open your",
+      options: ["nose.", "mouth."],
+      correctIndex: 1,
+    },
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
@@ -28,7 +48,7 @@ const Unit8_Page5_Q3 = () => {
   };
 
   const checkAnswers = () => {
-        if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -76,12 +96,24 @@ const Unit8_Page5_Q3 = () => {
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", justifyContent: "center",
-               alignItems: "center", padding: "30px" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+      }}
     >
-      <div style={{ display: "flex", flexDirection: "column",
-                    gap: "30px", width: "60%", justifyContent: "flex-start" }}>
-        
+      <div
+        className="div-forall"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
+        }}
+      >
         <h5 className="header-title-page8">
           <span className="ex-A"> B</span> Read, look, and circle.
         </h5>
@@ -89,18 +121,40 @@ const Unit8_Page5_Q3 = () => {
         <div className="container-review6-unit8-p5-q3">
           {items.map((q, i) => (
             <div key={i} className="question-box-unit8-p5-q3">
-              
-              <div style={{ display: "flex", gap: "10px",
-                            flexDirection: "row", alignItems: "center"}}>
-                <span style={{ color: "#2c5287", fontSize: "20px", fontWeight: "700" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
                   {i + 1}
                 </span>
-                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>{q.text}</h6>
+                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
+                  {q.text}
+                </h6>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
-                <img src={q.img} className="q3-image-review6-p1-q1"
-                     style={{ height: "130px", width: "auto" }} />
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "column",
+                }}
+              >
+                <img
+                  src={q.img}
+                  className="q3-image-review6-p1-q1"
+                  style={{ height: "130px", width: "auto" }}
+                />
 
                 <div className="options-row-unit8-p5-q3 ">
                   {q.options.map((word, optIndex) => {
@@ -113,7 +167,11 @@ const Unit8_Page5_Q3 = () => {
                         className={`
                           option-word-unit8-p5-q3
                           ${isSelected ? "selected3" : ""}
-                          ${showResult && isSelected && !isCorrect ? "wrong" : ""}
+                          ${
+                            showResult && isSelected && !isCorrect
+                              ? "wrong"
+                              : ""
+                          }
                           ${showResult && isCorrect ? "correct" : ""}
                         `}
                         onClick={() => handleSelect(i, optIndex)}
@@ -128,7 +186,6 @@ const Unit8_Page5_Q3 = () => {
                   })}
                 </div>
               </div>
-
             </div>
           ))}
         </div>
@@ -140,8 +197,11 @@ const Unit8_Page5_Q3 = () => {
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn swal-continue" onClick={handleShowAnswer}>
-          Show Answer 
+        <button
+          className="show-answer-btn swal-continue"
+          onClick={handleShowAnswer}
+        >
+          Show Answer
         </button>
 
         <button className="check-button2" onClick={checkAnswers}>

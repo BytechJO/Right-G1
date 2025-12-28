@@ -84,7 +84,7 @@ const Review3_Page2_Q2 = () => {
       }}
     >
       <div
-        className="review3-p2-q2-div-forall"
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

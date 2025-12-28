@@ -105,12 +105,7 @@ const Review3_Page1_Q1 = () => {
         {/* الصور */}
         <div
           className="exercise-image-div-review3-p1-q1"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            marginBottom: "20px",
-            marginTop: "40px",
-          }}
+       
         >
           {data.map((item, index) => (
             <img

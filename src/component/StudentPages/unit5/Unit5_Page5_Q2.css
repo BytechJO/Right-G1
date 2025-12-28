@@ -31,15 +31,14 @@
   display: flex;
   flex-direction: column;
 }
- 
-.selected-Unit5_Page5_Q2{
-      border: 3px solid #2c5287 !important;
-      border-radius: 50%;
+
+.selected-Unit5_Page5_Q2 {
+  border: 3px solid #2c5287 !important;
+  border-radius: 50%;
 }
 
-.selected-Unit5_Page5_Q2 img{
-      
-      border-radius: 50%;
+.selected-Unit5_Page5_Q2 img {
+  border-radius: 50%;
 }
 
 .img-box-Unit5_Page5_Q2 img {
@@ -70,4 +69,12 @@
   align-items: center;
   justify-content: center;
   border: 2px solid white;
+}
+
+@media (max-width: 1024px) {
+  .content-unit5-p5-q3 {
+    display: flex;
+
+    flex-direction: column;
+  }
 }

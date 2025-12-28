@@ -169,7 +169,7 @@ export default function Unit2_Page9_Q2() {
                     locked || showAnswer ? "disabled-hover" : ""
                   }`}
                   onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",width:"150px" }}
                 >
                   {word}
                 </span>

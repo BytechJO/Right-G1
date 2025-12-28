@@ -257,7 +257,7 @@ Watch, house, hat, hammer, web.
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

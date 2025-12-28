@@ -236,7 +236,7 @@ const Review10_Page2_Q1 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          // gap: "20px",
           width: "60%",
           justifyContent: "flex-start",
         }}

@@ -124,17 +124,11 @@ const Review5_Page1_Q2 = () => {
 
           {/* ✅ الصور */}
           <div
-            className="exercise-image-div-review3-p1-q1"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "20px",
-              marginTop: "40px",
-              justifyContent: "space-between",
-            }}
+            className="exercise-image-div-review5-p1-q2"
+         
           >
             {data.map((item, index) => (
-              <>
+              <div style={{display:"flex"}}>
                 <span
                   style={{
                     color: "#2c5287",
@@ -149,7 +143,7 @@ const Review5_Page1_Q2 = () => {
                   src={item.src}
                   className="exercise-image-review5-p1-q2"
                 />
-              </>
+              </div>
             ))}
           </div>
           <div

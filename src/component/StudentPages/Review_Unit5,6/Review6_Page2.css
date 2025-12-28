@@ -29,3 +29,14 @@
   left: 40.5%;
   cursor: pointer;
 }
+
+@media (max-width: 1024px) {
+  .click-icon-review6-page2-2 {
+    top: 3.5%;
+    right: 11%;
+  }
+  .click-icon-review6-page2-1 {
+    bottom: 20.5%;
+    left: 41.5%;
+  }
+}

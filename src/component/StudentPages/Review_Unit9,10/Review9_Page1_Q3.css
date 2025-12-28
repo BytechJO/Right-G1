@@ -1,16 +1,23 @@
 .review9-p1-q3-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-     justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .review9-p1-q3-grid {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    margin-top: 50px;
-    flex-direction: row;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 50px;
+  flex-direction: row;
+}
+
+@media (max-width: 1024px) {
+  .review9-p1-q3-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }

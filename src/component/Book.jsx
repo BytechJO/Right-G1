@@ -131,7 +131,7 @@ export default function Book() {
         setViewMode("single"); // لو شاشة صغيرة → صفحة واحدة دائمًا
       }
     }
-  }, [activeTab, isMobile]);
+  }, [activeTab]);
 
   // ==========================
   // 📌 Adjust pageIndex when switching to SPREAD mode
@@ -155,7 +155,7 @@ export default function Book() {
       }
       return;
     }
-  }, [viewMode]);
+  }, []);
 
   // ===========================================================
   //                 📌 PAGE NAVIGATION

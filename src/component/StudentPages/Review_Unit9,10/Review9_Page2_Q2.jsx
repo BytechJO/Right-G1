@@ -215,7 +215,7 @@ const Review9_Page2_Q2 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          // gap: "20px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -230,7 +230,7 @@ const Review9_Page2_Q2 = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "30px 0px",
+            marginTop: "30px",
             width: "100%",
           }}
         >

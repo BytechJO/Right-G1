@@ -193,7 +193,7 @@ const Review7_Page2_Q3 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -211,7 +211,7 @@ const Review7_Page2_Q3 = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "30px 0px",
+            marginTop: "30px",
             width: "100%",
           }}
         >

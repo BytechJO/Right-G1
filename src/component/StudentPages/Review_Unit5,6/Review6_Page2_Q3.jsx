@@ -107,9 +107,9 @@ const Review6_Page2_Q3 = () => {
         alignItems: "center",
         padding: "30px",
       }}
-    >
-      <div
-        className="review3-p2-q2-div-forall"
+    > 
+      <div 
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -123,7 +123,7 @@ const Review6_Page2_Q3 = () => {
             F Circle <span style={{ color: "red" }}>the short i</span> words.
           </h5>
 
-          <div className="review3-p2-q2-sentence-container2">
+          <div className="review6-p2-q3-sentence-container2">
             {sentences.map((sentence, sIndex) => (
               <div className="review3-p2-q2-sentence-row" key={sIndex}>
                 <span

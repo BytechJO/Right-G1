@@ -95,7 +95,9 @@
     grid-template-columns: 1fr 1fr; /* عمود واحد */
     /* gap: 10px; */
   }
-
+  .unit6-p1-q1-options-box {
+    display: flex;
+  }
   .unit6-p1-q1-question-box {
     flex-direction: column;
     text-align: center;
@@ -108,7 +110,7 @@
   }
 
   .unit6-p1-q1-question-img {
-    width: 80px;
+    width: 150px;
     height: auto;
   }
 

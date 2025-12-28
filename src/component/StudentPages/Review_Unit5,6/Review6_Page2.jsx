@@ -17,7 +17,7 @@ const Review6_Page2 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 70 })}
           style={{ overflow: "visible" }}
         >
@@ -26,8 +26,8 @@ const Review6_Page2 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="60"
-            height="60"
+            width="90"
+            height="90"
           />
         </svg>
       </div>
@@ -39,7 +39,7 @@ const Review6_Page2 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 71 })}
           style={{ overflow: "visible" }}
         >
@@ -48,8 +48,8 @@ const Review6_Page2 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="60"
-            height="60"
+            width="90"
+            height="90"
           />
         </svg>
       </div>
@@ -61,7 +61,7 @@ const Review6_Page2 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 72 })}
           style={{ overflow: "visible" }}
         >
@@ -70,8 +70,8 @@ const Review6_Page2 = ({ openPopup }) => {
             href={arrowBtn}
             x="0"
             y="0"
-            width="60"
-            height="60"
+            width="90"
+            height="90"
           />
         </svg>
       </div>

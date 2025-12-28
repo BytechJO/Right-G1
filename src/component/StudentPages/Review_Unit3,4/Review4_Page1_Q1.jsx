@@ -94,7 +94,7 @@ const Review4_Page1_Q1 = () => {
         justifyContent: "center",padding:"30px"
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

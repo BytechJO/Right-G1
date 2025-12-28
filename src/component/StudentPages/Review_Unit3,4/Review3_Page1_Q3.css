@@ -112,14 +112,14 @@
 
 
 /* 🔻 شاشة تابلت (من 991px وتحت) */
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .review3-p1-q3-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 كروت */
     gap: 5px;
     width: auto;
   }
   .review3-p1-q3-img {
-  width: 100px;
+  width: 150px;
   height: auto;
   
 }

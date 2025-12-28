@@ -5,3 +5,11 @@
     width: 100%;
     flex-direction: row-reverse;
 }
+
+
+@media (max-width: 1024px) {
+.content-review7-p2-q2 {
+
+    flex-direction: column-reverse;
+}
+}

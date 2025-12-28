@@ -24,17 +24,17 @@
 }
 
 @media (max-width: 1024px) {
-  .headset-icon-CD-unit7-page2-1 {
-    top: 3.5%;
-    right: 4%;
-  }
-  .headset-icon-CD-unit7-page2-2 {
-    bottom: 30.5%;
-    right: 11%;
-  }
+    .headset-icon-CD-unit7-page2-1 {
+        top: 4.5%;
+        right: 3%;
+    }
+ .headset-icon-CD-unit7-page2-2 {
+        bottom: 30.5%;
+        right: 10%;
+    }
   .click-icon-unit7-page2-1 {
-    bottom: 15%;
-    right: 41%;
+    bottom: 14%;
+    right: 42%;
   }
 }
 @media (max-width: 820px) {

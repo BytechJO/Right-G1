@@ -168,7 +168,7 @@ export const lessons = [
   { component: Unit2_Page10_Q1, unit: 2, isReview: true },
   { component: Unit2_Page10_Q2, unit: 2, isReview: true },
   { component: Unit2_Page10_Q3, unit: 2, isReview: true },
-  { component: Unit2_Page10_Q4, unit: 2, isReview: true },
+  { component: Unit2_Page10_Q4, unit: 2, isReview: true ,lastOfUnit: true },
 
   // UNIT 3 MAIN
   { component: Unit3_Page5_Q1, unit: 3 },
@@ -198,7 +198,7 @@ export const lessons = [
   { component: Review4_Page1_Q4, unit: 4, isReview: true }, //45
   { component: Review4_Page2_Q1, unit: 4, isReview: true }, //46
   { component: Review4_Page2_Q2, unit: 4, isReview: true }, //47
-  { component: Review4_Page2_Q3, unit: 4, isReview: true }, //48
+  { component: Review4_Page2_Q3, unit: 4, isReview: true ,lastOfUnit: true }, //48
 
   // UNIT 5 MAIN
   { component: Unit5_Page5_Q1, unit: 5 },
@@ -208,12 +208,12 @@ export const lessons = [
   { component: Unit5_Page6_Q1, unit: 5 },
   { component: Unit5_Page6_Q3, unit: 5, lastOfUnit: true }, //54
 
-  { component: Unit6_Page5_Q1, unit: 5 },
-  { component: Unit6_Page5_Q2, unit: 5 },
-  { component: Unit6_Page5_Q3, unit: 5 },
-  { component: Unit6_Page5_Q4, unit: 5 },
-  { component: Unit6_Page6_Q2, unit: 5 },
-  { component: Unit6_Page6_Q3, unit: 5, lastOfUnit: true }, //60
+  { component: Unit6_Page5_Q1, unit: 6 },
+  { component: Unit6_Page5_Q2, unit: 6 },
+  { component: Unit6_Page5_Q3, unit: 6 },
+  { component: Unit6_Page5_Q4, unit: 6 },
+  { component: Unit6_Page6_Q2, unit: 6 },
+  { component: Unit6_Page6_Q3, unit: 6, lastOfUnit: true }, //60
 
   // REVIEW 5 and 6
   { component: Review5_Page1_Q1, unit: 6, isReview: true }, //61
@@ -227,7 +227,7 @@ export const lessons = [
   { component: Review6_Page1_Q3, unit: 6, isReview: true }, //69
   { component: Review6_Page2_Q1, unit: 6, isReview: true }, //70
   { component: Review6_Page2_Q2, unit: 6, isReview: true }, //71
-  { component: Review6_Page2_Q3, unit: 6, isReview: true }, //72
+  { component: Review6_Page2_Q3, unit: 6, isReview: true, lastOfUnit: true }, //72
 
   { component: Unit7_Page5_Q1, unit: 7 }, //73
   { component: Unit7_Page5_Q2, unit: 7 }, //74

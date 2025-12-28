@@ -246,12 +246,6 @@
     row-gap: 18px;
   }
 
-  .mid-col .dot.end-dot,
-  .start-dot,
-  .right-col .dot.end-dot {
-    display: none; /* موبايل: صعب يطلع مثل الكتاب */
-  }
-
   .lines-layer {
     display: none;
   }

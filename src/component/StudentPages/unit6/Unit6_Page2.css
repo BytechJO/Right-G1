@@ -21,3 +21,19 @@
   bottom: 11%;
   right: 38.5%;
 }
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit6-page2-1 {
+    top: 6%;
+    right: 3.5%;
+  }
+  .headset-icon-CD-unit6-page2-2 {
+    bottom: 30%;
+    right: 12%;
+  }
+
+  .click-icon-unit6-page2-1 {
+    bottom: 14%;
+    right: 42%;
+  }
+}

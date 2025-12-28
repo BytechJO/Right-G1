@@ -177,7 +177,7 @@ const Unit5_Page5_Q4 = () => {
                   </span>
                 </div>
                 <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell number">
+                  <span key={i} className="unit3-q4-cell number2">
                     {c.number}
                   </span>
                 </div>

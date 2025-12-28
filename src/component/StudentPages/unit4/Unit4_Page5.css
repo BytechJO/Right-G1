@@ -247,3 +247,15 @@
   background-color: red;
   left: 14px;
 }
+
+@media (max-width: 1024px) {
+  .click-icon-unit4-page5-2 {
+    top: 30.5%;
+    right: 28%;
+  }
+
+  .click-icon-unit4-page5-4 {
+    bottom: 24.5%;
+    left: 51%;
+  }
+}

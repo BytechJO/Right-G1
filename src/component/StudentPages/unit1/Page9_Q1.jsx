@@ -38,27 +38,19 @@ const Page9_Q1 = () => {
         padding:"30px"
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
+      <div className="div-all"
+      
       >
         <h5 className="header-title-page8" id="ex-d">
           <span className="ex-A">D</span> Ask and answer.
         </h5>
 
         {/* ✅ الصورة هي المرجع */}
-     <div
+     <div className="content-container-unit1-p9-q1"
   style={{
     position: "relative",
     width: "100%",
-
-    maxWidth: "900px",
+      maxWidth: "900px",
     aspectRatio: "3 / 1", // نسبة الصورة
   }}
 >

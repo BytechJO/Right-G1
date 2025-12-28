@@ -98,7 +98,7 @@ const Review4_Page2_Q3 = () => {
         alignItems: "center",padding:"30px"
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

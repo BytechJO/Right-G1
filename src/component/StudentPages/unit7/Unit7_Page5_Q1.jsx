@@ -28,7 +28,7 @@ const Unit7_Page5_Q1 = () => {
   };
 
   const checkAnswers = () => {
-        if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -72,12 +72,25 @@ const Unit7_Page5_Q1 = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column",
-      justifyContent: "center", alignItems: "center", padding: "30px" }}>
-      
-      <div style={{ display: "flex", flexDirection: "column",
-        gap: "30px", width: "60%", justifyContent: "flex-start" }}>
-        
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div
+        className="div-forall"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "30px",
+          width: "60%",
+          justifyContent: "flex-start",
+        }}
+      >
         <h5 className="header-title-page8">
           <span className="ex-A">A</span>
           <span style={{ color: "purple" }}>1</span>
@@ -87,15 +100,29 @@ const Unit7_Page5_Q1 = () => {
         <div className="container-unit7-p5-q1">
           {items.map((q, i) => (
             <div key={i} className="question-box-unit7-p5-q1">
-              
-              <span style={{
-                color: "#2c5287", fontSize: "20px", fontWeight: "700"
-              }}>{i + 1}</span>
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                {i + 1}
+              </span>
 
-              <div style={{ display: "flex", gap: "10px", flexDirection: "column" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  flexDirection: "column",
+                }}
+              >
                 <div className="img-div-unit7-p5-q1">
-                  <img src={q.img} className="q3-image-unit7-p5-q1"
-                    style={{ height: "180px", width: "auto" }} />
+                  <img
+                    src={q.img}
+                    className="q3-image-unit7-p5-q1"
+                    style={{ height: "180px", width: "auto" }}
+                  />
                 </div>
 
                 <div className="options-row-unit7-p5-q1">
@@ -104,22 +131,34 @@ const Unit7_Page5_Q1 = () => {
                     const isCorrect = optIndex === q.correctIndex;
 
                     return (
-                      <p key={optIndex}
+                      <p
+                        key={optIndex}
                         className={`
                           option-word-unit7-p5-q1
                           ${isSelected ? "selected3" : ""}
-                          ${showResult && isSelected && !isCorrect ? "wrong" : ""}
+                          ${
+                            showResult && isSelected && !isCorrect
+                              ? "wrong"
+                              : ""
+                          }
                           ${showResult && isCorrect ? "correct" : ""}
                         `}
                         onClick={() => handleSelect(i, optIndex)}
-                        style={{ display: "flex", justifyContent: "center",
-                          alignItems: "center", position: "relative" }}>
-                        
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          position: "relative",
+                        }}
+                      >
                         {word}
 
-                        {showResult && isSelected && !isCorrect && !showAnswer && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
-                        )}
+                        {showResult &&
+                          isSelected &&
+                          !isCorrect &&
+                          !showAnswer && (
+                            <span className="wrong-x-review4-p2-q3">✕</span>
+                          )}
                       </p>
                     );
                   })}
@@ -136,8 +175,11 @@ const Unit7_Page5_Q1 = () => {
           Start Again ↻
         </button>
 
-        <button className="show-answer-btn swal-continue" onClick={handleShowAnswer}>
-          Show Answer 
+        <button
+          className="show-answer-btn swal-continue"
+          onClick={handleShowAnswer}
+        >
+          Show Answer
         </button>
 
         <button className="check-button2" onClick={checkAnswers}>

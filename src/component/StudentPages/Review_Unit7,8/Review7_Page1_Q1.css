@@ -73,6 +73,7 @@
   display: flex;
   gap: 40px;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 .column-box-review7-p1-q1 {
@@ -116,4 +117,12 @@
   justify-content: space-between;
   margin-top: 60px;
   gap: 45px;
+}
+
+
+@media (max-width: 1024px) {
+.grid-container-review7-p1-q1 {
+   
+    flex-direction: column-reverse;
+}
 }

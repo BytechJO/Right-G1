@@ -129,7 +129,7 @@ const Review8_Page2_Q4 = () => {
         }}
       >
         <h3 className="header-title-page8">G Read, look, and circle.</h3>
-        <div style={{ display: "flex", width: "100%" }}>
+        <div className="all-content-review8-p2-q4" style={{ display: "flex", width: "100%" }}>
           {questions.map((q, qIndex) => (
             <div className="question-row-review8-p2-q4" key={q.id}>
               <div className="sentence-review8-p2-q4">

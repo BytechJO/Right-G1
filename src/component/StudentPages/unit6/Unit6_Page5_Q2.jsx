@@ -138,7 +138,10 @@ const Unit6_Page5_Q2 = () => {
         }}
       >
         <div className="page7-q2-container2">
-          <h5 className="header-title-page8">2 Read, look, and match.</h5>
+          <h5 className="header-title-page8">
+            {" "}
+            <span style={{ color: "purple" }}> 2 </span> Read, look, and match.
+          </h5>
 
           <div className="match-wrapper2" ref={containerRef}>
             {/* الجمل */}

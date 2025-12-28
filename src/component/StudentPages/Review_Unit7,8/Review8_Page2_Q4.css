@@ -18,3 +18,15 @@
     justify-content: space-evenly;
     flex-direction: column;
 }
+
+.all-content-review8-p2-q4{
+    display: flex;
+    width: 100%;
+}
+
+
+@media (max-width: 1024px) {
+ .all-content-review8-p2-q4{
+    flex-wrap: wrap;
+ }
+}

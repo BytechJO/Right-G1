@@ -44,3 +44,12 @@
   justify-content: center;
   z-index: 10;
 }
+
+
+@media (max-width: 1024px) {
+.images-row-unit10-page6-q3 {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+
+}
+}

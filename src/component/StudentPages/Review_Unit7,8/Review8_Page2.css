@@ -38,3 +38,14 @@
   left: 39.5%;
   cursor: pointer;
 }
+
+@media (max-width: 1024px) {
+  .click-icon-review8-page2-2 {
+    top: 4%;
+    right: 56%;
+  }
+  .click-icon-review8-page2-4 {
+    top: 65%;
+    left: 39.5%;
+  }
+}

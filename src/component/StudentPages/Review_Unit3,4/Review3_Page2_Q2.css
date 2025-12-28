@@ -75,6 +75,13 @@
   border: 2px solid white;
 }
 
+@media (max-width: 820px) {
+ .review3-p2-q2-sentence-container2 {
+    display: grid;
+ grid-template-columns: repeat(5,1fr);
+}
+}
+
 /* 📱 ريسبونيف */
 @media (max-width: 768px) {
   .review3-p2-q2-word-box {

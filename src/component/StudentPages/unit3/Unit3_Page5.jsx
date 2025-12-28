@@ -22,11 +22,11 @@ const Unit3_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 25 })}
             style={{ overflow: "visible" }}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img" />
         </svg>
       </div>
 
@@ -37,26 +37,26 @@ const Unit3_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 26 })}
             style={{ overflow: "visible" }}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>
         </svg>
       </div>
 
       <div
         className="click-icon-unit3-page5-3 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
+        style={{ overflow: "visible" }} 
       >
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 27 })}
             style={{ overflow: "visible" }}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>
         </svg>
       </div>
 
@@ -67,11 +67,11 @@ const Unit3_Page5 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           onClick={() => openPopup("exercise", { startIndex: 28 })}
         style={{ overflow: "visible" }}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>
         </svg>
       </div>
     </div>

@@ -28,3 +28,10 @@
   left: 24.5%;
   cursor: pointer;
 }
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit3-page6-1 {
+    bottom: 31%;
+    left: 24.5%;
+  }
+}

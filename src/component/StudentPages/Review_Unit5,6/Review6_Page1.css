@@ -36,7 +36,22 @@
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
- bottom: 26%;
-    left: 30.5%;
+  bottom: 26%;
+  left: 30.5%;
   cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .click-icon-review6-page1-1 {
+    top: 9.5%;
+    left: 42%;
+  }
+  .click-icon-review6-page1-4 {
+    bottom: 28%;
+    left: 30.5%;
+  }
+  .click-icon-review6-page1-2 {
+    top: 44.5%;
+    left: 41%;
+  }
 }

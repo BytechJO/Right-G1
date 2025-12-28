@@ -57,3 +57,17 @@
   width: 50px;
   border-radius: 50%;
 }
+
+
+@media (max-width: 1024px) {
+  .unit10-p1-q2-container {
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+
+.unit10-p1-q2-question-box {
+ 
+    justify-content: center;
+}
+}

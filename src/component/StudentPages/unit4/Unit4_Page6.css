@@ -35,7 +35,14 @@
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-bottom: 26%;
-    left: 24.5%;
+  bottom: 26%;
+  left: 24.5%;
   cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit4-page6-1 {
+    bottom: 28%;
+    left: 24.5%;
+  }
 }

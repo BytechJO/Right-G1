@@ -86,7 +86,7 @@ const Review10_Page2_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -100,12 +100,21 @@ const Review10_Page2_Q2 = () => {
         <div className="container-review10-p2-q2">
           {items.map((q, i) => (
             <div key={i} className="question-box-unit8-p5-q3">
+             
+
               <div
                 style={{
                   display: "flex",
                   gap: "10px",
+                  flexDirection: "column",
+                }}
+              >
+                 <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
                   flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   width: "80%",
                 }}
               >
@@ -118,21 +127,14 @@ const Review10_Page2_Q2 = () => {
                 >
                   {i + 1}
                 </span>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "column",
-                }}
-              >
                 <img
                   src={q.img}
                   className="q3-image-review6-p1-q1"
                   style={{ height: "130px", width: "auto" }}
                 />
 
+              </div>
+                
                 <div className="options-row-unit8-p5-q3">
                   {q.options.map((word, optIndex) => {
                     const isSelected = answers[i] === optIndex;

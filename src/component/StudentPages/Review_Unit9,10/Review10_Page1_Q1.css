@@ -36,3 +36,18 @@
     width: 49%;
     gap: 10px;
 }
+
+
+.width-span-review10-p1-q1{
+    font-size: 20px;
+    font-weight: 500;
+    width: 75%;
+}
+
+
+@media (max-width: 1024px) {
+.width-span-review10-p1-q1{
+    
+    width: 100%;
+}
+}

@@ -41,3 +41,12 @@
 .option-word-unit8-p5-q3.selected3{
   border-color: blue;
 }
+
+
+@media (max-width: 1024px) {
+    .container-review6-unit8-p5-q3 {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+ 
+}
+}

@@ -5,7 +5,7 @@
   position: absolute;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  
+
   /* background-color: #6bcff6;
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 2px; */
@@ -65,4 +65,19 @@
 #num-7-unit3 {
   left: 33%;
   bottom: 28.5%;
+}
+
+@media (max-width: 1024px) {
+  .headset-icon-CD-unit3-page1-1 {
+    top: 6%;
+    right: 13.5%;
+  }
+  .headset-icon-CD-unit3-page1-2 {
+    bottom: 40.5%;
+    left: 26%;
+  }
+  .click-icon-unit3-page1-2 {
+    bottom: 14%;
+    right: 42%;
+}
 }

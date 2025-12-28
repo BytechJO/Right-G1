@@ -905,6 +905,15 @@ img {
   }
 }
 @media (max-width: 1024px) {
+  .page1-img-wrapper {
+        width: 100%;
+        height: 100%;
+        min-height: 75vh;
+    }
+  .svg-img {
+    height: 160px;
+    width: 150px;
+  }
   .headset-icon-CD-page4-1 {
     top: 5.5%;
     right: 12.2%;
@@ -921,14 +930,11 @@ img {
   .headset-icon-CD-page4-2 {
     top: 59.5%;
   }
-  .circle-area {
-    width: 36px;
-    height: 38px;
-  }
-  .svg-img {
-    height: 100px;
-    width: 170px;
-  }
+    .circle-area {
+        width: 33px;
+        height: 31px;
+    }
+  
   .click-icon-page8-1 {
     top: 8%;
     right: 6.4%;
@@ -972,8 +978,8 @@ img {
     height: auto; /* خلي الارتفاع تلقائي بالموبايل */
   }
   .svg-img {
-    height: auto;
-    width: 100px;
+    height: 140px;
+    width: 120px;
   }
   .headset-icon-CD-page4-1 {
     top: 6.5%;

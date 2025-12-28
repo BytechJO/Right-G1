@@ -90,3 +90,13 @@ border-color: #8cc2f5;
   justify-content: center;
   z-index: 10;
 }
+
+
+
+@media (max-width: 1024px) {
+  .question-grid-unit4-page5-q1 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+   
+}
+}

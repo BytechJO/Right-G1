@@ -82,7 +82,7 @@ const Unit9_Page6_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

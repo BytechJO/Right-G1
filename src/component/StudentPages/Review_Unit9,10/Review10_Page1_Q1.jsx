@@ -204,14 +204,10 @@ export default function Review10_Page1_Q1() {
             <div className="matching-row-review10-p1-q1" key={item.word}>
               <div className="word-with-dot-review10-p1-q1">
                 <span className="span-num">{index + 1}</span>
-                <div style={{ position: "relative" }}>
+                <div style={{ position: "relative", width: "100%" }}>
                   <span
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "500",
-                      width: "65%",
-                    }}
-                      className={`clickable-word-unit2-p7-q2 ${
+                    id="width-span-review10-p1-q1"
+                    className={`clickable-word-unit2-p7-q2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
                     onClick={() =>
@@ -221,7 +217,7 @@ export default function Review10_Page1_Q1() {
                     {item.word}
                   </span>
                   {!showAnswer &&
-                    locked&&
+                    locked &&
                     wrongConnections.includes(item.word) && (
                       <span className="error-mark-review10-p1-q1">✕</span>
                     )}
@@ -247,9 +243,9 @@ export default function Review10_Page1_Q1() {
                 </div>
                 <img
                   src={imagesMap[index]}
-                 className={`matched-img ${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                  className={`matched-img ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   style={{ height: "100px" }}
                   alt=""
                   onClick={() =>
