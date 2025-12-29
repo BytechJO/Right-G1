@@ -58,21 +58,19 @@
   cursor: pointer;
 }
 .click-icon-unit6-page5-3 {
-  position: absolute;
-  padding: 5px;
-  top: 49%;
-  left: 38.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 48.8%;
+    left: 38.5%;
+    cursor: pointer;
 }
-
 .click-icon-unit6-page5-4 {
-  position: absolute;
-  padding: 5px;
-  bottom: 22.5%;
-  left: 49.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 21.8%;
+    left: 50%;
+    cursor: pointer;
 }
-
 .letter {
   border: 2px solid #2c5287;
   height: 35px;

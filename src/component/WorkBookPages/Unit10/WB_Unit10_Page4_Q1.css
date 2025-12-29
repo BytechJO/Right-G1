@@ -11,3 +11,19 @@
 .wb-unit10-p4-q1-text {
     font-size: 18px;
 }
+
+
+.wb-unit10-p4-q1-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 6px 0;
+}
+
+
+.wb-unit10-p4-q1-grid {
+    display: grid;
+    width: 100%;
+    /* gap: 20px; */
+    grid-template-columns: repeat(2, 1fr);
+}

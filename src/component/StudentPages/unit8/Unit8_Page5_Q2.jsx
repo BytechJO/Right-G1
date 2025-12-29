@@ -4,7 +4,7 @@ import img2 from "../../../assets/unit8/imgs/U8P68EXEA2-02.svg";
 import img3 from "../../../assets/unit8/imgs/U8P68EXEA2-03.svg";
 import img4 from "../../../assets/unit8/imgs/U8P68EXEA2-04.svg";
 // import img5 from "../../../assets/unit8/imgs/U8P68EXEA2-05.svg";
-import sound1 from "../../../assets/unit1/sounds/P17QF.mp3";
+import sound1 from "../../../assets/unit8/sound/U8P68EXEA2.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit8_Page5_Q2.css";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
@@ -14,7 +14,7 @@ import { TbMessageCircle } from "react-icons/tb";
 const Unit8_Page5_Q2 = () => {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
-  const stopAtSecond = 7.3;
+  const stopAtSecond = 12.08;
   const [wrongImages, setWrongImages] = useState([]);
     const [firstDot, setFirstDot] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
@@ -44,14 +44,14 @@ const Unit8_Page5_Q2 = () => {
   const captions = [
     {
       start: 0,
-      end: 7.17,
-      text: "Page 17, exercise F. Does it begin with a D or T? Listen and match.",
+      end: 6.22,
+      text: "Page 68. Right activities. Exercise A, number two.",
     },
-    { start: 7.19, end: 9.16, text: "1-doll. " },
-    { start: 9.18, end: 11.11, text: "2-dog. " },
-    { start: 11.13, end: 13.09, text: "3-tail." },
-    { start: 13.11, end: 15.16, text: "4-tall." },
-    { start: 15.18, end: 17.22, text: "5-dates." },
+    { start: 6.25, end: 12.15, text: "Does it begin with S or Z? Listen and match." },
+    { start: 12.17, end: 14.23, text: "1-sandwich " },
+    { start: 14.25, end: 17.00, text: "2-sponge" },
+    { start: 17.03, end: 19.07, text: "3-zero" },
+    { start: 19.10, end: 21.24, text: "4-soup" },
   ];
 
   // ================================

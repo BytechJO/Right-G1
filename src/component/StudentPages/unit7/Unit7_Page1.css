@@ -24,13 +24,13 @@
 }
 
 .headset-icon-CD-unit7-page1-2 {
-  bottom: 38.5%;
+  bottom: 38%;
     left: 26%;
 }
 
 .click-icon-unit7-page1-2 {
-  bottom: 11.5%;
-  right: 39%;
+  bottom: 10.5%;
+  right: 38%;
 }
 
 #num-1-unit7 {
@@ -81,6 +81,14 @@ top: 39%;
       bottom: 44.5%;
     right: 44%;
 }
+
+.highlight-svg-unit7{
+    position: absolute;
+    top: 54%;
+    left: 16.5%;
+    height: 24%;
+    pointer-events: none;
+}
 @media (max-width: 1024px) {
   .headset-icon-CD-unit7-page1-1 {
      top: 6%;
@@ -98,6 +106,13 @@ top: 39%;
     bottom: 14%;
     right: 42%;
   }
+  .highlight-svg-unit7 {
+    position: absolute;
+    top: 56%;
+    left: 13.5%;
+    height: 22%;
+    pointer-events: none;
+}
 }
 
 @media (max-width: 820px) {

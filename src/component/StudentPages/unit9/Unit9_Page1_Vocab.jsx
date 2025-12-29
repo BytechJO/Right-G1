@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import backgroundImage from "../../../assets/unit5/imgs/P40-41.jpg";
+import backgroundImage from "../../../assets/unit9/imgs/G1_U9 _Pg_76-77 copy.jpg";
 import page2_2 from "../../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
-import vocabulary from "../../../assets/unit3/sound3/Pg22_Vocabulary_Adult Lady.mp3";
-import { CgPlayPauseO } from "react-icons/cg";
+import vocabulary from "../../../assets/unit9/sound/Pg76_Vocabulary_Adult Lady.mp3";
 import num1 from "../../../assets/unit3/imgs3/Num1.svg";
 import num2 from "../../../assets/unit3/imgs3/Num2.svg";
 import num3 from "../../../assets/unit3/imgs3/Num3.svg";
@@ -12,7 +11,6 @@ import num6 from "../../../assets/unit3/imgs3/Num6.svg";
 import num7 from "../../../assets/unit3/imgs3/Num7.svg";
 import num8 from "../../../assets/unit5/imgs/Num8.svg";
 import { TbMessageCircle } from "react-icons/tb";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
@@ -33,7 +31,7 @@ const Unit9_Page1_Vocab = () => {
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
-  const stopAtSecond = 3.5;
+  const stopAtSecond = 3.27;
   const [clickedIndex, setClickedIndex] = useState(null);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -51,14 +49,17 @@ const Unit9_Page1_Vocab = () => {
   const captions = [
     {
       start: 0,
-      end: 3.0,
-      text: "Page 4, Unit 1. Good morning, world.Vocabulary.",
+      end: 3.27,
+      text: "Page 76, Unit 9.Vocabulary.",
     },
-    { start: 3.02, end: 5.1, text: "1. Goodbye." },
-    { start: 5.13, end: 7.0, text: "2. How are you?" },
-    { start: 7.03, end: 10.5, text: "3. Fine, thank you." },
-    { start: 10.52, end: 12.1, text: "4. Hello." },
-    { start: 12.12, end: 15.0, text: "5. Good morning." },
+    { start: 3.3, end: 5.27, text: "1. horse." },
+    { start: 5.3, end: 8.07, text: "2. stable" },
+    { start: 8.10, end: 10.19, text: "3. barn" },
+    { start: 10.22, end: 13.05, text: "4. chicken" },
+    { start: 13.07, end: 15.18, text: "5. goat" },
+    { start: 15.21, end: 18.08, text: "6. cow" },
+    { start: 18.12, end: 20.27, text: "7. grass" },
+    { start: 20.3, end: 23.06, text: "8. cat" },
   ];
 
   // ================================
@@ -66,14 +67,14 @@ const Unit9_Page1_Vocab = () => {
   // ================================
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
-    { start: 3.9, end: 6.2 }, // party hat
-    { start: 6.3, end: 8.5 }, // jellow
-    { start: 8.6, end: 11.5 }, // cake
-    { start: 11.6, end: 14.6 }, // Hello
-    { start: 14.7, end: 17.2 }, // Good morning
-    { start: 17.3, end: 19.8 },
-    { start: 19.9, end: 23.6 },
-    { start: 23.7, end: 25.6 },
+    { start: 3.4, end: 5.27 },
+    { start: 5.3, end: 8.07 },
+    { start: 10.21, end: 10.19 },
+    { start: 10.22, end: 13.05 },
+    { start: 13.07, end: 15.18 },
+    { start: 15.21, end: 18.08 },
+    { start: 18.12, end: 20.27 },
+    { start: 20.3, end: 23.06 },
   ];
   // ================================
   // ✔ Update caption highlight
@@ -369,8 +370,6 @@ const Unit9_Page1_Vocab = () => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
             }}
           />
         ))}

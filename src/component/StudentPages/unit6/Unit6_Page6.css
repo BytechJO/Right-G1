@@ -1,11 +1,10 @@
 .click-icon-unit6-page6-2 {
-  position: absolute;
-  padding: 5px;
-  top: 26.5%;
-  right: 53.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 26.2%;
+    right: 53%;
+    cursor: pointer;
 }
-
 .click-icon-unit6-page6-1 {
   position: absolute;
   padding: 5px;
@@ -14,18 +13,18 @@
   cursor: pointer;
 }
 .click-icon-unit6-page6-3 {
-  position: absolute;
-  padding: 5px;
-  top: 47.5%;
-  right: 53%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 47.8%;
+    right: 52%;
+    cursor: pointer;
 }
 .headset-icon-CD-unit6-page6-1 {
-  position: absolute;
-  padding: 5px;
-  bottom: 22%;
-  right: 68.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 21.8%;
+    right: 68.5%;
+    cursor: pointer;
 }
 
 @media (max-width: 1024px) {

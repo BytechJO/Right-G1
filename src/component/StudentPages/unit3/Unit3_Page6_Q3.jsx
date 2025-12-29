@@ -97,7 +97,7 @@ const Unit3_Page6_Q3 = () => {
               {/* Canvas Area */}
               <canvas
                 ref={(el) => (canvasRefs.current[q.id] = el)}
-                width={300}
+                width={500}
                 height={80}
                 className="unit3-q6-canvas"
                 onMouseDown={(e) => startDrawing(e, q.id)}

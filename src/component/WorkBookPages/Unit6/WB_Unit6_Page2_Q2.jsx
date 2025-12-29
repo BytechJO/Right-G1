@@ -177,6 +177,19 @@ const WB_Unit6_Page2_Q2 = () => {
 
   const checkAnswers = () => {
     if (checked || locked) return;
+    // 🔴 Check empty inputs
+const emptyInputs = Object.keys(correctSentences).filter(
+  (id) => !written[id] || written[id].trim() === ""
+);
+
+if (emptyInputs.length > 0) {
+  ValidationAlert.info(
+    "Pay attention!",
+    "Please complete all the sentences before checking."
+  );
+  return;
+}
+
     if (lines.length < correctMatches.length * 2) {
       ValidationAlert.info(
         "Pay attention!",
@@ -192,7 +205,7 @@ const WB_Unit6_Page2_Q2 = () => {
     Object.entries(correctSentences).forEach(([id, text]) => {
       const userVal = written[id]?.trim().toLowerCase() || "";
       if (userVal && userVal !== text.toLowerCase()) {
-        wrongInputsArr.push(id);
+        wrongInputsArr.push(Number(id));
       }
     });
 
@@ -305,6 +318,7 @@ const WB_Unit6_Page2_Q2 = () => {
       }}
     >
       <div
+        className="div-forall"
         style={{
           width: "60%",
           display: "flex",
@@ -410,7 +424,7 @@ const WB_Unit6_Page2_Q2 = () => {
                   }
                 />
 
-                {!locked && checked && wrongInputs.includes(id) && (
+                {checked&& wrongInputs.includes(Number(id)) && (
                   <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>
                 )}
               </div>

@@ -1,7 +1,7 @@
 import page_6 from "../../../assets/unit9/imgs/Right G1- Class Book_00081.jpg";
 import "./Unit9_Page6.css";
 
-import CD25_Pg27_Song_AdultLady from "../../../assets/unit5/sounds/U5P45Sing.mp3";
+import CD25_Pg27_Song_AdultLady from "../../../assets/unit9/sound/CD74.Pg81_Song_Adult Lady.mp3";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";

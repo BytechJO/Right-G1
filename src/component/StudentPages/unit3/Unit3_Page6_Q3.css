@@ -21,7 +21,7 @@
 }
 
 .unit3-q6-text {
-  flex: 0.5;
+width: 100%;
   font-size: 25px;
   display: flex;
   align-items: center;
@@ -52,6 +52,7 @@
 .unit3-q6-canvas {
   border-left: 1px solid #3fa9f5;
   background: #fff;
-
+height: 80px;
+width: 100%;
   cursor: crosshair;
 }

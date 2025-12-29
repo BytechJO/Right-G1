@@ -14,16 +14,15 @@
 }
 
 .headset-icon-CD-unit5-page2-2 {
-  bottom: 28%;
-  right: 7%;
+    bottom: 27.5%;
+    right: 6%;
 }
+.click-icon-unit5-page2-1
 
-.click-icon-unit5-page2-1 {
-  bottom: 11%;
-    right: 38.5%;
+ {
+    bottom: 10.5%;
+    right: 37.5%;
 }
-
-
 @media (max-width: 1024px) {
   .headset-icon-CD-unit5-page2-1 {
     top: 4%;

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
-import dad from "../../../assets/unit4/imgs/U4P32ExeA2-04.svg";
+import bat from "../../../assets/unit9/imgs/U9P80EXEA2-01.svg";
+import cap from "../../../assets/unit9/imgs/U9P80EXEA2-02.svg";
+import ant from "../../../assets/unit9/imgs/U9P80EXEA2-03.svg";
+import dad from "../../../assets/unit9/imgs/U9P80EXEA2-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit9_Page5_Q2.css";
 import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";

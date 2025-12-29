@@ -1,130 +1,93 @@
-import React, { useState } from "react";
-import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit6_Page4_Q1.css";
+import React, { useState, useRef, useEffect } from "react";
 
-const WB_Unit6_Page4_Q1 = () => {
+import img1 from "../../../assets/unit9/imgs/U9P81EXEE-01.svg";
+import img2 from "../../../assets/unit9/imgs/U9P81EXEE-02.svg";
+import "./WB_Unit7_Page4_Q1.css";
+const WB_Unit7_Page4_Q1 = () => {
   const questions = [
-    {
-      id: 1,
-      image: img1,
-      text: "Can he fly a kite?",
-      items: [
-        { text: "Yes, it is.", correct: "x" },
-        { text: "No, it isn’t.", correct: "✓" },
-      ],
-    },
-    {
-      id: 2,
-      image: img2,
-      text: "Can he fish?",
-      items: [
-        { text: "Yes, it is.", correct: "✓" },
-        { text: "No, it isn’t.", correct: "x" },
-      ],
-    },
-    {
-      id: 3,
-      image: img2,
-      text: "Can it climb a tree?",
-      items: [
-        { text: "Yes, it is.", correct: "x" },
-        { text: "No, it isn’t.", correct: "✓" },
-      ],
-    },
-    {
-      id: 4,
-      image: img2,
-      text: "Can he swim?",
-      items: [
-        { text: "Yes, it is.", correct: "✓" },
-        { text: "No, it isn’t.", correct: "x" },
-      ],
-    },
+    { id: 1, text: "I’m sad.", img: img1 },
+    { id: 2, text: "I’m happy.", img: img2 },
+    { id: 3, text: "I’m bored.", img: img2 },
+    { id: 4, text: "I’m scared.", img: img2 },
   ];
 
-  const [answers, setAnswers] = useState({});
-  const [results, setResults] = useState({});
-  const [showAnswer, setShowAnswer] = useState(false);
+  // نخزن Ref لكل Canvas
+  const canvasRefs = useRef({});
 
-  // -------------------------
-  // اختيار جواب واحد فقط لكل سؤال
-  // -------------------------
-  const handleSelect = (qId, idx) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-    setAnswers({
-      ...answers,
-      [qId]: idx, // نخزن رقم الخيار المختار
-    });
-    setResults({});
-  };
-
-  const checkAnswers = () => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-    const temp = {};
-    let correctCount = 0;
-    let total = questions.length;
-
+  useEffect(() => {
     questions.forEach((q) => {
-      const chosenIndex = answers[q.id];
+      const canvas = canvasRefs.current[q.id];
+      if (!canvas) return;
 
-      if (chosenIndex === undefined) {
-        temp[q.id] = "empty";
-        return;
-      }
+      const ctx = canvas.getContext("2d");
 
-      const isCorrect = q.items[chosenIndex].correct.toLowerCase() === "✓";
+      const img = new Image();
+      img.src = q.img;
 
-      temp[q.id] = isCorrect ? "correct" : "wrong";
-
-      if (isCorrect) correctCount++;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
     });
+  }, []);
 
-    setResults(temp);
-setShowAnswer(true)
-    if (Object.values(temp).includes("empty")) {
-      ValidationAlert.info("Please answer all questions!");
-      return;
-    }
+  // دوال الرسم
+  const startDrawing = (e, id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
 
-    let color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    ctx.isDrawing = true;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "purple";
 
-    const scoreMessage = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    const rect = canvas.getBoundingClientRect();
+    ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
+    ctx.lastY = (e.clientY || e.touches[0].clientY) - rect.top;
   };
-  const reset = () => {
-    setAnswers({});
-    setResults({});
-    setShowAnswer(false); // ← مهم جداً
-  };
-  const handleShowAnswer = () => {
-    const correctAnswers = {};
 
+  const draw = (e, id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
+    if (!ctx.isDrawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+    ctx.beginPath();
+    ctx.moveTo(ctx.lastX, ctx.lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    ctx.lastX = x;
+    ctx.lastY = y;
+  };
+
+  const stopDrawing = (id) => {
+    const canvas = canvasRefs.current[id];
+    const ctx = canvas.getContext("2d");
+    ctx.isDrawing = false;
+  };
+
+  const resetCanvas = () => {
     questions.forEach((q) => {
-      const correctIndex = q.items.findIndex(
-        (item) => item.correct.toLowerCase() === "✓"
-      );
-      correctAnswers[q.id] = correctIndex;
+      const canvas = canvasRefs.current[q.id];
+      const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const img = new Image();
+      img.src = q.img;
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
     });
-
-    setAnswers(correctAnswers);
-    setResults({});
-    setShowAnswer(true);
   };
-
   return (
     <div
+      className="unit4-q2-p6-container"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -143,93 +106,48 @@ setShowAnswer(true)
           justifyContent: "flex-start",
         }}
       >
-        <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            <span className="ex-A"> F</span> Look, read, and write
-            <span style={{ color: "red" }}>✓</span>.{" "}
-          </h4>
+        <h5 className="header-title-page8">
+          <span className="ex-A">G</span>Read and draw.
+        </h5>
 
-          <div className="wb-unit6-p4-q1-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="wb-unit6-p4-q1-box">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <span
-                      className="Unit5-P6-Q3-text"
-                      style={{ color: "#3054c7",fontSize:"25px",fontWeight:"700" }}
-                    >
-                      {q.id}
-                    </span>
-                    <span className="Unit5-P6-Q3-text">{q.text}</span>
-                  </div>
-                  <img src={q.image} alt="" className="wb-unit6-p4-q1-img" />
-                </div>
-                <div>
-                  {q.items.map((item, idx) => {
-                    const isSelected = answers[q.id] === idx;
-                    const isWrong = results[q.id] === "wrong" && isSelected;
+        <div className="wb-unit5-p4-q1-table">
+          {questions.map((q) => (
+            <div key={q.id} className="wb-unit5-p4-q1-row ">
+              {/* Canvas Area */}
 
-                    return (
-                      <div key={idx} className="review3-p1-q3-row">
-                        <span className="Unit5-P6-Q3-text">{item.text}</span>
-
-                        <div className="review3-p1-q3-input-box">
-                          <input
-                            type="text"
-                            readOnly
-                            value={isSelected ? "✓" : ""}
-                            onFocus={() => handleSelect(q.id, idx)}
-                            className={`review3-p1-q3-input`}
-                            disabled={showAnswer}
-                            style={{
-                              cursor: showAnswer ? "not-allowed" : "pointer",
-                            }}
-                          />
-
-                          { isWrong && (
-                            <span className="review3-p1-q3-x">✕</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="wb-unit5-p4-q1-text">
+                <span style={{ color: "darkblue", fontWeight: "700" }}>
+                  {q.id}
+                </span>{" "}
+                {q.text}
               </div>
-            ))}
-          </div>
+              <canvas
+                ref={(el) => (canvasRefs.current[q.id] = el)}
+                width={270}
+                height={150}
+                className="wb-unit7-p4-q1-canvas"
+                onMouseDown={(e) => startDrawing(e, q.id)}
+                onMouseMove={(e) => draw(e, q.id)}
+                onMouseUp={() => stopDrawing(q.id)}
+                onMouseLeave={() => stopDrawing(q.id)}
+                onTouchStart={(e) => startDrawing(e, q.id)}
+                onTouchMove={(e) => {
+                  e.preventDefault();
+                  draw(e, q.id);
+                }}
+                onTouchEnd={() => stopDrawing(q.id)}
+              />
+            </div>
+          ))}
         </div>
       </div>
-
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button
-          onClick={handleShowAnswer}
-          className="show-answer-btn swal-continue"
-        >
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
+        <button onClick={resetCanvas} className="try-again-button">
+          Clear Drawings ↻
         </button>
       </div>
     </div>
   );
 };
 
-export default WB_Unit6_Page4_Q1;
+export default WB_Unit7_Page4_Q1;

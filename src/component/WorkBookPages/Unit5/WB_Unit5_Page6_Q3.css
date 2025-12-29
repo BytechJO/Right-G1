@@ -22,3 +22,12 @@
     align-items: center;
     justify-content: space-around;
 }
+
+
+@media (max-width: 820px) {
+    .container-wb-unit5-p6-q3 {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    justify-content: center;
+}
+}

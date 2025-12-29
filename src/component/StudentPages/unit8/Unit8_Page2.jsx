@@ -5,9 +5,9 @@ import img2 from "../../../assets/unit8/imgs/zoo.svg";
 import img3 from "../../../assets/unit8/imgs/zebra.svg";
 import img4 from "../../../assets/unit8/imgs/zipper.svg";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
-import soundListen from "../../../assets/img_unit2/sounds-unit2/cd10pg11-instruction1-adult-lady_inMDacHf.mp3";
+import soundListen from "../../../assets/unit8/sound/U8P65ListenandReadalong01.mp3";
 import Pg11_1_1_Bebo from "../../../assets/unit8/sound/Pg65_1.1_Bebo.mp3";
-import Pg11_1_1_Stella from "../../../assets/unit8/sound/Pg65_1.1_Jack.mp3";
+import Pg11_1_1_Stella from "../../../assets/unit8/sound/U8P65ComePlay.mp3";
 import Pg11_1_2_Lolo_Take from "../../../assets/unit8/sound/Pg65_1.2_Lolo.mp3";
 import repeat1 from "../../../assets/unit8/imgs/listen and repeat 02.svg";
 import repeat2 from "../../../assets/unit8/imgs/listen and repeat 03.svg";
@@ -15,14 +15,15 @@ import Pg11_2_1_AdultLady from "../../../assets/unit8/sound/Pg65_2.1_Adult Lady.
 import Pg11_2_2_AdultLady from "../../../assets/unit8/sound/Pg65_2.2_Adult Lady.mp3";
 import Pg11_2_3_AdultLady from "../../../assets/unit8/sound/Pg65_2.3_Adult Lady.mp3";
 import Pg11_2_4_AdultLady from "../../../assets/unit8/sound/Pg65_2.4_Adult Lady.mp3";
-import longsound from "../../../assets/img_unit2/sounds-unit2/pg11-instruction2-adult-lady_9RiKbUV1.mp3";
+import longsound from "../../../assets/unit8/sound/U8P65ListenandReadalong02.mp3";
 import read from "../../../assets/unit1/imgs/P1 listen and repeat 01.svg";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound7 from "../../../assets/unit8/sound/U8P64VOC07.mp3";
+import sound8 from "../../../assets/unit8/sound/U8P64VOC08.mp3";
+import sound9 from "../../../assets/unit8/sound/U8P64VOC09.mp3";
 
 import "./Unit8_Page2.css";
 const Unit8_Page2 = ({ openPopup }) => {
@@ -44,39 +45,42 @@ const Unit8_Page2 = ({ openPopup }) => {
     new Audio(Pg11_1_2_Lolo_Take),
   ];
   const captionsExample = [
-    { start: 0, end: 2.0, text: "Page11. Birthdays Are Fun" },
-    { start: 2.05, end: 5.2, text: "Hi, everyone. Today is my birthday." },
-    { start: 5.24, end: 7.2, text: " I'm seven years old." },
-    { start: 7.24, end: 9.0, text: "  My friends are here. It's fun." },
+    { start: 0, end: 3.18, text: "Page 65. Come play." },
+    { start: 3.21, end: 7.11, text: "Soccer is fun. I play soccer a lot." },
+    { start: 7.13, end: 12.11, text: "I use my legs, arms, eyes, feet, and head." },
+    { start: 12.15, end: 13.28, text: " Come play with me. " },
   ];
 
   const captions = [
-    { start: 0, end: 3.17, text: "Page 11. Listen, read & repeat." },
+    { start: 0, end: 3.20, text: "Page 65. Listen and read along." },
     {
-      start: 3.19,
-      end: 4.29,
-      text: "What's your name?",
+      start: 3.23,
+      end: 5.22,
+      text: "Can you touch your head?",
     },
     {
-      start: 4.31,
-      end: 7.03,
-      text: "My name is Lolo. ",
+      start: 5.25,
+      end: 7.18,
+      text: "Yes, I can. ",
     },
-  ];
-  const captions2 = [
-    { start: 0, end: 3.18, text: "Page 11. Listen and read along. " },
-    { start: 3.2, end: 7.01, text: "P, pencil, pink, pizza. " },
   ];
 
+
+  const captions2 = [
+    { start: 0, end: 4.08, text: "Page 65. Listen and read along. " },
+    { start: 4.12, end: 8.23, text:  "Z-zoo, zebra, zipper." },
+  ];
+
+ 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 13.5, y1: 44.1, sound: 1, isPrimary: true },
+    { x1: 13.2, y1: 43.9, sound: 1, isPrimary: true },
 
     // // // // الصوت الأول – منطقة إضافية
     { x1: 21.19, y1: 48.04, x2: 25.9, y2: 50.78, sound: 1, isPrimary: false },
 
     // // // // الصوت الثاني – الأساسية
-    { x1: 35.2, y1: 45.5, sound: 2, isPrimary: true },
+    { x1: 35.2, y1: 45.2, sound: 2, isPrimary: true },
 
     // // // // الصوت الثاني – الإضافية
     { x1: 32.94, y1: 47.58, x2: 48.3, y2: 50.7, sound: 2, isPrimary: false },
@@ -87,9 +91,9 @@ const Unit8_Page2 = ({ openPopup }) => {
     { x1: 9.48, y1: 57.63, x2: 48.3, y2: 59.7, sound: 3, isPrimary: false },
   ];
   const sounds = {
-    1: sound1,
-    2: sound2,
-    3: sound2,
+    1: sound7,
+    2: sound8,
+    3: sound9,
   };
 
   const handleImageClick = (e) => {
@@ -213,7 +217,7 @@ const Unit8_Page2 = ({ openPopup }) => {
               <FourImagesWithAudio
                 images={[read, repeat1, repeat2]}
                 audioSrc={soundListen}
-                checkpoints={[0, 3.7, 5.3]}
+                checkpoints={[0, 3.5, 5.5]}
                 popupOpen={true}
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}
@@ -247,7 +251,7 @@ const Unit8_Page2 = ({ openPopup }) => {
               <FourImagesWithAudio
                 images={[Rabbit, img1, img2, img3, img4]}
                 audioSrc={longsound}
-                checkpoints={[0, 3.4, 4, 4.9, 6]}
+                checkpoints={[0, 4.03, 5.15, 6.06, 7.19]}
                 popupOpen={true}
                 titleQ={"Listen and read along."}
                 audioArr={imageSounds}

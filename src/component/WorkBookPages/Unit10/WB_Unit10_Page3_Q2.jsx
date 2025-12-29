@@ -4,10 +4,10 @@ import bookImg from "../../../assets/unit3/imgs3/pan.svg";
 
 const WB_Unit10_Page3_Q2 = () => {
   const questions = [
-    { id: 1, text: "This is my book.", img: bookImg },
-    { id: 2, text: "This is my pen.", img: bookImg },
-    { id: 3, text: "This is my ruler.", img: bookImg },
-    { id: 4, text: "This is my eraser.", img: bookImg },
+    { id: 1, text: "I want chicken.", img: bookImg },
+    { id: 2, text: "I want bread.", img: bookImg },
+    { id: 3, text: "I want a sweet.", img: bookImg },
+    { id: 4, text: "I want an apple.", img: bookImg },
   ];
 
   // نخزن Ref لكل Canvas
@@ -97,7 +97,7 @@ const WB_Unit10_Page3_Q2 = () => {
       }}
     >
       <div
-        className="div-unit4-q2-p6-forall"
+         className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

@@ -131,7 +131,7 @@ const WB_Unit10_Page5_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -141,7 +141,7 @@ const WB_Unit10_Page5_Q1 = () => {
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">I</span>Read, look, and write..
+          <span className="ex-A">I</span>Read, look, and write.
         </h5>
         <div className="content-container-wb-unit4-p1-q2">
           {questions.map((q, qIndex) => (

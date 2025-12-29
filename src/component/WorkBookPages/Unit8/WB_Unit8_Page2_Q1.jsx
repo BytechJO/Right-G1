@@ -84,7 +84,7 @@ const WB_Unit8_Page2_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

@@ -31,6 +31,11 @@
     flex-direction: row;
     gap: 10px;
 }
+
+.img-wb-unit6-p4-q2 {
+    height: 150px;
+    width: auto;
+}
 @media (max-width: 1024px) {
   .wb-unit6-p4-q1 {
     top: 14.5%;
@@ -47,7 +52,10 @@
   .wb-unit6-p4-q1 {
     top: 14.5%;
   }
-
+.img-wb-unit6-p4-q2 {
+    height: 110px;
+    width: auto;
+}
   .wb-unit6-p4-q2 {
     top: 45.5%;
     left: 35%;

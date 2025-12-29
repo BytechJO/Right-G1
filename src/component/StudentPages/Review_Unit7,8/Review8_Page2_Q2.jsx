@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Review8_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/unit8/imgs/U8P73EXEE.svg";
-import img2 from "../../../assets/unit4/imgs/U4P36EXEC-02.svg";
-import img3 from "../../../assets/unit4/imgs/U4P36EXEC-03.svg";
-import img4 from "../../../assets/unit4/imgs/U4P36EXEC-04.svg";
-import sound1 from "../../../assets/unit5/sounds/U5P44EXEA1.mp3";
+import img1 from "../../../assets/unit8/imgs/U8P73EXEE-01.svg";
+import img2 from "../../../assets/unit8/imgs/U8P73EXEE-02.svg";
+import img3 from "../../../assets/unit8/imgs/U8P73EXEE-03.svg";
+import img4 from "../../../assets/unit8/imgs/U8P73EXEE-04.svg";
+import img5 from "../../../assets/unit8/imgs/U8P73EXEE-05.svg";
+import img6 from "../../../assets/unit8/imgs/U8P73EXEF-04.svg";
+import sound1 from "../../../assets/unit8/sound/U8P73EXEE.mp3";
 
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -17,8 +19,8 @@ const shapesData = [
   { id: 2, img: img2, correct: "S" },
   { id: 3, img: img3, correct: "Z" },
   { id: 4, img: img4, correct: "S" },
-  { id: 5, img: img3, correct: "Z" },
-  { id: 6, img: img4, correct: "Z" },
+  { id: 5, img: img5, correct: "Z" },
+  { id: 6, img: img6, correct: "Z" },
 ];
 
 // الصفوف (الحروف)
@@ -30,7 +32,7 @@ const Review8_Page2_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const audioRef = useRef(null);
 
-  const stopAtSecond = 10.8;
+  const stopAtSecond = 8.22;
   const [paused, setPaused] = useState(false);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -50,18 +52,19 @@ const Review8_Page2_Q2 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 8.22,
+      text: " Page 73, Exercise E. What letter does it begin with?Listen and write check.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 8.25,
+      end: 10.02,
+      text: "Soup",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 10.05, end: 11.05, text: "sack" },
+    { start: 11.07, end: 12.16, text: "zoo" },
+    { start: 12.18, end: 14.06, text: "spoon" },
+    { start: 14.09, end: 15.09, text: "zebra" },
+    { start: 15.12, end: 17.02, text: "zipper" },
   ];
 
   // ================================
@@ -355,7 +358,11 @@ const Review8_Page2_Q2 = () => {
                       src={item.img}
                       alt=""
                       className="shape-img-wrapper-review4-p1-q3"
-                      style={{ height: "50px", width: "auto" }}
+                      style={{
+                        height: "100%",
+                        width: "auto",
+                        objectFit: "contain",
+                      }}
                     />
                   </th>
                 ))}
@@ -366,7 +373,7 @@ const Review8_Page2_Q2 = () => {
               {options.map((letter) => (
                 <tr key={letter}>
                   <td className="img-cell-wrapper-review8-p2-q2">
-                    <strong style={{fontSize:"25px"}}>{letter}</strong>
+                    <strong style={{ fontSize: "25px" }}>{letter}</strong>
                   </td>
 
                   {shapesData.map((item) => {

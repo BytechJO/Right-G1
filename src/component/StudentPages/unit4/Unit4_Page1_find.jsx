@@ -116,13 +116,8 @@ const Unit4_Page1_find = () => {
             <img
               src={MySVG}
               alt="answer highlight"
-              style={{
-                position: "absolute",
-                top: `5.5%`,
-                left: `53.5%`,
-                height: `21.5%`,
-                pointerEvents: "none",
-              }}
+              className="highlight-svg-unit4 "
+              
             />
           )}
         </div>

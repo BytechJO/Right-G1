@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import find_img from "../../../assets/unit5/imgs/P40-41.jpg";
+import find_img from "../../../assets/unit9/imgs/G1_U9 _Pg_76-77 copy.jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
+import MySVG from "../../../assets/unit9/imgs/U8P76 highlight.svg";
+
 const Unit9_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
-
+  const [showAnswer, setShowAnswer] = useState(false);
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 44.25,
-    y1: 28.76,
-    x2: 55.99,
-    y2: 40.27,
+    x1: 17.94,
+    y1: 37.59,
+    x2: 24.99,
+    y2: 44.27,
   };
 
   const handleImageClick = (e) => {
@@ -32,6 +34,7 @@ const Unit9_Page1_find = () => {
   };
 
   const handleCheck = () => {
+    if (showAnswer) return;
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
@@ -52,10 +55,16 @@ const Unit9_Page1_find = () => {
   const handleStartAgain = () => {
     setClickedPoint(null);
     setCheckResult(null);
+        setShowAnswer(false);
+  };
+  const handleShowAnswer = () => {
+    setShowAnswer(true);
+    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
+    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div>
       <div
         style={{
           textAlign: "center",
@@ -103,25 +112,27 @@ const Unit9_Page1_find = () => {
           )}
 
           {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {checkResult === "success" && (
-            <div
+          {(checkResult === "success" || showAnswer) && (
+            <img
+              src={MySVG}
+              alt="answer highlight"
               style={{
                 position: "absolute",
-                top: `${targetArea.y1}%`,
-                left: `${targetArea.x1}%`,
-                width: `${targetArea.x2 - targetArea.x1}%`,
-                height: `${targetArea.y2 - targetArea.y1}%`,
-                backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
-                borderRadius: "8px",
+                top: `35%`,
+                left: `17%`,
+                height: `11%`,
                 pointerEvents: "none",
               }}
-            ></div>
+            />
           )}
         </div>
       </div>
       <div className="action-buttons-container ">
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
+        </button>
+        <button className="show-answer-btn" onClick={handleShowAnswer}>
+          Show Answer
         </button>
         <button className="check-button2" onClick={handleCheck}>
           Check Answer ✓

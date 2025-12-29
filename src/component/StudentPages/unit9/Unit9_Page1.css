@@ -33,41 +33,37 @@
 }
 
 #num-1-unit9 {
-  top: 20%;
-  left: 25.5%;
+    top: 17%;
+    left: 21.5%;
 }
-
 #num-2-unit9 {
-  top: 21%;
-  right: 53%;
+    top: 17%;
+    right: 89%;
 }
 
 #num-3-unit9 {
-  top: 53%;
-  left: 56.5%;
+    top: 11%;
+    left: 50.5%;
+}
+#num-4-unit9 {
+    top: 36%;
+    right: 52%;
+}
+#num-5-unit9 {
+    top: 63%;
+    right: 58%;
 }
 
-#num-4-unit5 {
-  top: 31%;
-  right: 59%;
+#num-6-unit9 {
+    bottom: 74%;
+    right: 21%;
 }
-
-#num-5-unit5 {
-  top: 28%;
-  right: 39%;
-}
-
-#num-6-unit5 {
-  bottom: 59%;
-  right: 38%;
-}
-
 #num-7-unit9 {
-  left: 42%;
-  bottom: 48.5%;
+    left: 75%;
+    bottom: 32.5%;
 }
 
 #num-8-unit9 {
-  left: 20%;
-  top: 32.5%;
+    left: 80%;
+    top: 44.5%;
 }

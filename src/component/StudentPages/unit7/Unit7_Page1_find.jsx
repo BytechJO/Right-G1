@@ -118,13 +118,8 @@ console.log(xPercent,yPercent);
             <img
               src={MySVG}
               alt="answer highlight"
-              style={{
-                position: "absolute",
-                top: `54%`,
-                left: `16.5%`,
-                height: `24%`,
-                pointerEvents: "none",
-              }}
+              className="highlight-svg-unit7"
+           
             />
           )}
         </div>

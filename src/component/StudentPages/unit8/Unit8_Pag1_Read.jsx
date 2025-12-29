@@ -8,7 +8,7 @@ import img2 from "../../../assets/unit8/imgs/sun.svg";
 import img3 from "../../../assets/unit8/imgs/sock.svg";
 import img4 from "../../../assets/unit8/imgs/sea.svg";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
-import longAudio from "../../../assets/img_unit2/sounds-unit2/pg10-instruction1-adult-lady_869fcbJa.mp3";
+import longAudio from "../../../assets/unit8/sound/U8P64ListenandReadalong.mp3";
 
 const Unit8_Page1_Read = () => {
   const imageSounds = [
@@ -20,8 +20,8 @@ const Unit8_Page1_Read = () => {
   ];
 
 const captions = [
-   { start: 0, end: 3.05, text: "Page 64. Listen and read along." },
-    { start: 3.07, end: 6.14, text: "S, sun, sock, sea " },
+   { start: 0, end: 3.5, text: "Page 64. Listen and read along." },
+    { start: 3.6, end:7.24, text: "S, sun, sock, sea " },
     
   ];
   return (
@@ -29,7 +29,7 @@ const captions = [
       <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 2.9, 3.4, 4.2, 5.1]}
+        checkpoints={[0,3.5, 5.04, 5.35, 6.6]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}

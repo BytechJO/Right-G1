@@ -149,8 +149,8 @@ const WB_Unit7_Page3_Q2 = () => {
                   }}
                 />
               </div>
-              <div className="content-input-unit5-p6-q1">
-                <img src={img1} className="img-unit5-p6-q1" />
+              <div className="content-input-wb-unit7-p3-q2">
+                <img src={img1} className="img-wb-unit6-p4-q2" />
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
                     type="text"
@@ -217,7 +217,7 @@ const WB_Unit7_Page3_Q2 = () => {
               </div>
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>
-                  <img src={img2} className="img-unit5-p6-q1" />
+                  <img src={img2} className="img-wb-unit6-p4-q2" />
                 </div>
                 <div style={{ position: "relative", display: "flex" }}>
                   <input
@@ -305,7 +305,7 @@ const WB_Unit7_Page3_Q2 = () => {
               </div>
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative" }}>
-                  <img src={img3} className="img-unit5-p6-q1" />
+                  <img src={img3} className="img-wb-unit6-p4-q2" />
 
                   <div
                     style={{
@@ -371,7 +371,7 @@ const WB_Unit7_Page3_Q2 = () => {
                 </div>
               </div>
               <div className="content-input-unit5-p6-q1">
-                <img src={img4} className="img-unit5-p6-q1" />
+                <img src={img4} className="img-wb-unit6-p4-q2" />
                 <div
                   style={{
                     position: "relative",

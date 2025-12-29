@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review7_Page2_Q3.css";
-import sound1 from "../../../assets/unit5/sounds/U5P44EXEA1.mp3";
+import sound1 from "../../../assets/unit8/sound/U8P71EXEF.mp3";
 import bat from "../../../assets/unit8/imgs/U8P71EXEF-01.svg";
 import box from "../../../assets/unit8/imgs/U8P71EXEF-02.svg";
 import bucket from "../../../assets/unit8/imgs/U8P71EXEF-03.svg";
@@ -17,7 +17,7 @@ const Review7_Page2_Q3 = () => {
   const [answers, setAnswers] = useState([null, null, null, null]);
   const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
-  const stopAtSecond = 10.8;
+  const stopAtSecond = 5.98;
   const [paused, setPaused] = useState(false);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
@@ -47,19 +47,21 @@ const Review7_Page2_Q3 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 6.06,
+      text: "Page 71, exercise F. Listen and circle the beginning sound ",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 6.09,
+      end: 8.11,
+      text: "1-watch",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 8.14, end: 10.17, text: "2- house" },
+    { start: 10.20, end: 12.15, text: "3-whale" },
+    { start: 12.19, end: 14.14, text: "4-hanger" },
+    { start: 14.18, end: 16.22, text: "5-water" },
+    { start: 16.25, end: 18.20, text: "6-hare" },
   ];
+
 
   // ================================
   // ✔ Update caption highlight
@@ -193,7 +195,8 @@ const Review7_Page2_Q3 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

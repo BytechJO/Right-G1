@@ -129,17 +129,10 @@
 /* ========== RESPONSIVE (optional) ========== */
 @media (max-width: 900px) {
   .conversation-row-wb-unit10-p2-q1 {
-    grid-template-columns: 28px 1fr;
+    grid-template-columns: 20px 1fr 1fr 1fr;
     row-gap: 12px;
   }
 
-  .thought-img-wb-unit10-p2-q1,
-  .person-img-wb-unit10-p2-q1 {
-    display: none;
-  }
 
-  .answer-bubble-wb-unit10-p2-q1::before,
-  .question-bubble-wb-unit10-p2-q1::before {
-    display: none;
-  }
+
 }

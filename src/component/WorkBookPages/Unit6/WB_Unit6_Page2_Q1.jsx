@@ -162,7 +162,7 @@ const checkAnswer = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           width: "60%",
           display: "flex",

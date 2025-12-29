@@ -8,13 +8,13 @@ import Unit8_Page1_Read from "./Unit8_Pag1_Read";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import allUnit2 from "../../../assets/unit1/sounds/P10-11.mp3";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
-import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
+import allUnit2 from "../../../assets/unit8/sound/U8P64-65.mp3";
+import sound1 from "../../../assets/unit8/sound/U8P64VOC01.mp3";
+import sound2 from "../../../assets/unit8/sound/U8P64VOC02.mp3";
+import sound3 from "../../../assets/unit8/sound/U8P64VOC03.mp3";
+import sound4 from "../../../assets/unit8/sound/U8P64VOC04.mp3";
+import sound5 from "../../../assets/unit8/sound/U8P64VOC05.mp3";
+import sound6 from "../../../assets/unit8/sound/U8P64VOC06.mp3";
 
 const Unit8_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -22,42 +22,49 @@ const Unit8_Page1 = ({ openPopup }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const captionsExample = [
-    { start: 0, end: 4.0, text: " Page 10, Unit 2, Stella's Birthday. " },
-    { start: 4.05, end: 7.09, text: "Page 10, Unit 2, Vocabulary." },
-    { start: 7.12, end: 9.19, text: " 1. Party Hat. " },
-    { start: 9.22, end: 11.16, text: "2. Jello." },
-    { start: 11.2, end: 14.0, text: "3. Cake. " },
-    { start: 14.04, end: 16.23, text: "4. Happy Birthday." },
-    { start: 16.26, end: 19.1, text: " 5. Balloons." },
-    { start: 19.14, end: 21.17, text: " 6. Present. " },
-    { start: 21.2, end: 24.04, text: "7.card" },
-    { start: 24.08, end: 26.29, text: "Page 10. Listen and read along. " },
-    { start: 26.33, end: 30.12, text: "B, bird, ball, boy " },
-    { start: 30.16, end: 32.28, text: "Page 11. Birthday is fun" },
+    { start: 0, end: 4.12, text: "Page 64, Unit 8: At The Soccer Game." },
+    { start: 4.15, end: 7.27, text: "Page 64, Unit 8 Vocabulary." },
+    { start: 7.3, end: 10.09, text: " 1.eye" },
+    { start: 10.12, end: 12.06, text: "2.nose" },
+    { start: 12.09, end: 14.19, text: "3.mouth" },
+    { start: 14.22, end: 17.1, text: "4.head" },
+    { start: 17.13, end: 19.6, text: " 5.knee" },
+    { start: 19.63, end: 22.09, text: " 6.leg" },
+    { start: 22.12, end: 24.17, text: "7.touch" },
+    { start: 24.19, end: 27.07, text: "8.arm" },
+    { start: 27.1, end: 29.25, text: "9.hand" },
+    { start: 29.28, end: 33.21, text: " Page 64. Listen and read along. " },
+    { start: 33.25, end: 37.26, text: "S-sun, sock, see." },
+    { start: 37.29, end: 41.02, text: " Page 65. Come play." },
     {
-      start: 32.32,
-      end: 40.09,
-      text: "Hi, everyone. Today is my birthday. I'm seven years old. My friends are here. It's fun. ",
+      start: 41.05,
+      end: 51.17,
+      text: "Soccer is fun. I play soccer a lot. I use my legs, arms, eyes, feet, and head. Come play with me. ",
     },
-    { start: 40.12, end: 43.18, text: "Page 11. Listen, read & repeat. " },
+    { start: 51.2, end: 55.03, text: "Page 65. Listen and read along. " },
     {
-      start: 43.22,
-      end: 46.26,
-      text: "What's your name? My name is Lolo. ",
+      start: 55.06,
+      end: 57.12,
+      text: "Can you touch your head? ",
     },
-    { start: 46.3, end: 50.14, text: "Page 11. Listen and read along. " },
-    { start: 50.18, end: 53.25, text: "P, pencil, pink, pizza. " },
+    {
+      start: 57.15,
+      end: 58.2,
+      text: "Yes, I can.  ",
+    },
+    { start: 58.23, end: 63.11, text: "Page 65. Listen and read along. " },
+    { start: 63.14, end: 67.23, text: " Z-zoo, zebra, zipper." },
   ];
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 43.25, y1: 32.8,sound: 1, isPrimary: true },
+    { x1: 43.25, y1: 32.8, sound: 1, isPrimary: true },
 
     // // // الصوت الأول – منطقة إضافية
     { x1: 51.8, y1: 34.79, x2: 53.4, y2: 35.09, sound: 1, isPrimary: false },
 
     // // // الصوت الثاني – الأساسية
-    { x1: 44.80, y1: 36.10, sound: 2, isPrimary: true },
+    { x1: 44.8, y1: 36.1, sound: 2, isPrimary: true },
 
     // // // الصوت الثاني – الإضافية
     { x1: 53.98, y1: 36.16, x2: 55.72, y2: 37.0, sound: 2, isPrimary: false },
@@ -71,19 +78,18 @@ const Unit8_Page1 = ({ openPopup }) => {
     { x1: 61.2, y1: 26.45, sound: 4, isPrimary: true },
 
     // // // الصوت الرابع – الإضافية
-    {  x1: 49.13, y1: 30.83, x2: 61.73, y2: 30.06, sound: 4, isPrimary: false },
+    { x1: 49.13, y1: 30.83, x2: 61.73, y2: 30.06, sound: 4, isPrimary: false },
 
     // // // الصوت الخامس – الأساسية
-    { x1: 51.0, y1: 48.2,  sound: 5, isPrimary: true },
+    { x1: 51.0, y1: 48.2, sound: 5, isPrimary: true },
 
     // // // الصوت الخامس – الإضافية
     { x1: 50.49, y1: 47.27, x2: 54.17, y2: 47.12, sound: 5, isPrimary: false },
-       // // // الصوت الخامس – الأساسية
-    { x1: 45.7, y1: 50.2,  sound: 5, isPrimary: true },
+    // // // الصوت الخامس – الأساسية
+    { x1: 45.7, y1: 50.2, sound: 6, isPrimary: true },
 
     // // // الصوت الخامس – الإضافية
     { x1: 44.28, y1: 49.41, x2: 50.29, y2: 52.15, sound: 6, isPrimary: false },
-  
   ];
   const sounds = {
     1: sound1,
@@ -91,7 +97,7 @@ const Unit8_Page1 = ({ openPopup }) => {
     3: sound3,
     4: sound4,
     5: sound5,
-    6:sound6
+    6: sound6,
   };
 
   const handleImageClick = (e) => {

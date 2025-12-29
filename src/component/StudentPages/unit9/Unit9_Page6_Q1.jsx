@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
+import bat from "../../../assets/unit9/imgs/U9P81EXED-01.svg";
+import cap from "../../../assets/unit9/imgs/U9P81EXED-02.svg";
+import ant from "../../../assets/unit9/imgs/U9P81EXED-03.svg";
+import img4 from "../../../assets/unit9/imgs/U9P81EXED-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit9_Page6_Q1.css";
 
@@ -16,7 +17,7 @@ const Unit9_Page6_Q1 = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
 
     const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
+    newAnswers[index] = value;
     setAnswers(newAnswers);
     setWrongInputs([]);
   };
@@ -244,7 +245,7 @@ const Unit9_Page6_Q1 = () => {
                 4
               </span>
               <img
-                src={ant}
+                src={img4}
                 alt=""
                 className="q-img-unit3-page6-q1"
                 style={{

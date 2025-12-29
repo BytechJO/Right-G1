@@ -1,33 +1,23 @@
 .click-icon-review7-page1-2 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  top: 11%;
-  left: 50.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 10.8%;
+    left: 50.5%;
+    cursor: pointer;
 }
-
 .click-icon-review7-page1-1 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  bottom: 22.5%;
-  left: 41.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 21.8%;
+    left: 41.5%;
+    cursor: pointer;
 }
 .click-icon-review7-page1-3 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  top: 45.5%;
-  left: 40.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 45.5%;
+    left: 41%;
+    cursor: pointer;
 }
 
 @media (max-width: 1024px) {

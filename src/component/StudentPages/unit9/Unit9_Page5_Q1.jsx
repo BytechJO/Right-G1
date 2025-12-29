@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../../assets/img_unit2/imgs/morning.jpg";
-import img2 from "../../../assets/img_unit2/imgs/hey.jpg";
-import img3 from "../../../assets/img_unit2/imgs/bey.jpg";
+import img1 from "../../../assets/unit9/imgs/U9P80EXEA1-01.svg";
+import img2 from "../../../assets/unit9/imgs/U9P80EXEA1-02.svg";
+import img3 from "../../../assets/unit9/imgs/U9P80EXEA1-03.svg";
+import img4 from "../../../assets/unit9/imgs/U9P80EXEA1-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit9_Page5_Q1.css";
 
@@ -245,7 +246,7 @@ const Unit9_Page5_Q1 = () => {
               >
                 <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
                 <img
-                  src={img3}
+                  src={img4}
                    className={`clickable-img-unit2-p7-q2 ${
                     locked || showAnswer ? "disabled-hover" : ""
                   }`}

@@ -9,7 +9,7 @@ import sound5 from "../../../assets/unit8/sound/Pg74_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import video3 from "../../../assets/unit4/sounds/STORY ( 2 ).mp4";
+import video3 from "../../../assets/unit8/sound/STORY (4).mp4";
 const Unit8_Reading_P1 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);

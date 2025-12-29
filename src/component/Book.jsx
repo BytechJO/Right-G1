@@ -132,30 +132,17 @@ export default function Book() {
       }
     }
   }, [activeTab]);
+useEffect(() => {
+  if (viewMode === "spread" && !isMobile) {
+    const currentPageNumber = pageIndex + 1;
 
-  // ==========================
-  // 📌 Adjust pageIndex when switching to SPREAD mode
-  // ==========================
-  useEffect(() => {
-    if (viewMode !== "spread") return;
-
-    const currentPage = pageIndex + 1;
-
-    // ====== ALL TABS EXCEPT WORKBOOK ======
-    if (activeTab !== "work") {
-      if (currentPage % 2 === 1) {
-        // فردية → خليها تعرض مع الصفحة السابقة
-        const leftPage = currentPage - 1;
-        if (leftPage >= 1) {
-          setPageIndex(leftPage - 1);
-        }
-      } else {
-        // زوجية → خليها يسار وتعرض التالية يمين
-        setPageIndex(currentPage - 1);
-      }
-      return;
+    // لو فردية → رجّعها للي قبلها
+    if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
+      setPageIndex(pageIndex - 1);
     }
-  }, []);
+  }
+}, [viewMode]);
+
 
   // ===========================================================
   //                 📌 PAGE NAVIGATION

@@ -10,24 +10,18 @@
 }
 
 .click-icon-review3-page2-1 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  bottom: 30%;
-  left: 67.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 29%;
+    left: 67%;
+    cursor: pointer;
 }
 .click-icon-review3-page2-3 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-  top: 46%;
-  left: 43%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 46.5%;
+    left: 43%;
+    cursor: pointer;
 }
 .headset-icon-CD-review3-page2-1 {
   position: absolute;

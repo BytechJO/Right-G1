@@ -840,14 +840,11 @@ img {
 
 /*===========page9==================*/
 .headset-icon-CD-page9 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 2px; */
-  padding: 5px;
-  bottom: 30.5%;
-  left: 25.8%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 30%;
+    left: 24.8%;
+    cursor: pointer;
 }
 
 .click-icon-page9-1 {

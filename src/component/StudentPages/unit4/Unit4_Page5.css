@@ -51,28 +51,26 @@
   cursor: pointer;
 }
 .click-icon-unit4-page5-2 {
-  position: absolute;
-  padding: 5px;
-  top: 30.5%;
-  right: 26%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 30.5%;
+    right: 25%;
+    cursor: pointer;
 }
 .click-icon-unit4-page5-3 {
-  position: absolute;
-
-  padding: 5px;
-  top: 47%;
-  left: 40.5%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 47%;
+    left: 41%;
+    cursor: pointer;
 }
 
 .click-icon-unit4-page5-4 {
-  position: absolute;
-
-  padding: 5px;
-  bottom: 23%;
-  left: 50%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    bottom: 22%;
+    left: 50.5%;
+    cursor: pointer;
 }
 
 .letter {

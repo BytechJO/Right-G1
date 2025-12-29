@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import backgroundImage from "../../../assets/unit8/imgs/G1_U8 _Pg_64-65 copy.jpg";
+import backgroundImage from "../../../assets/unit8/imgs/G1_U8 _Pg_64-65 copy1.jpg";
 import page2_2 from "../../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
-import vocabulary from "../../../assets/img_unit2/sounds-unit2/Pg10_Vocabulary_Adult Lady.mp3";
+import vocabulary from "../../../assets/unit8/sound/Pg64_Vocabulary_Adult Lady.mp3";
 import "./Unit8_Page1.css";
-import { CgPlayPauseO } from "react-icons/cg";
 import num1 from "../../../assets/img_unit2/imgs/Num1.svg";
 import num2 from "../../../assets/img_unit2/imgs/Num2.svg";
 import num3 from "../../../assets/img_unit2/imgs/Num3.svg";
@@ -13,15 +12,15 @@ import num6 from "../../../assets/img_unit2/imgs/Num6.svg";
 import num7 from "../../../assets/img_unit2/imgs/Num7.svg";
 import num8 from "../../../assets/unit4/imgs/Num8.svg";
 import num9 from "../../../assets/unit7/img/Num9.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
-import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound9 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound1 from "../../../assets/unit8/sound/U8P64VOC01.mp3";
+import sound2 from "../../../assets/unit8/sound/U8P64VOC02.mp3";
+import sound3 from "../../../assets/unit8/sound/U8P64VOC03.mp3";
+import sound4 from "../../../assets/unit8/sound/U8P64VOC04.mp3";
+import sound5 from "../../../assets/unit8/sound/U8P64VOC05.mp3";
+import sound6 from "../../../assets/unit8/sound/U8P64VOC06.mp3";
+import sound7 from "../../../assets/unit8/sound/U8P64VOC07.mp3";
+import sound8 from "../../../assets/unit8/sound/U8P64VOC08.mp3";
+import sound9 from "../../../assets/unit8/sound/U8P64VOC09.mp3";
 import { TbMessageCircle } from "react-icons/tb";
 import { IoMdSettings } from "react-icons/io";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -33,7 +32,7 @@ const Unit8_Page1_Vocab = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeIndex2, setActiveIndex2] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
-  const stopAtSecond = 3.0;
+  const stopAtSecond = 3.15;
   const [clickedIndex, setClickedIndex] = useState(null);
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -51,28 +50,29 @@ const Unit8_Page1_Vocab = () => {
   // ✔ Captions Array
   // ================================
   const captions = [
-    { start: 0, end: 3.1, text: "Page 10, Unit 2, Vocabulary." },
-    { start: 3.12, end: 5.15, text: " 1. Party Hat. " },
-    { start: 5.17, end: 7.16, text: "2. Jello." },
-    { start: 7.18, end: 9.27, text: "3. Cake. " },
-    { start: 9.29, end: 12.2, text: "4. Happy Birthday." },
-    { start: 12.22, end: 15.07, text: " 5. Balloons." },
-    { start: 15.09, end: 17.13, text: " 6. Present. " },
-    { start: 17.15, end: 19.26, text: "7.card" }, 
-    { start: 17.15, end: 19.26, text: "7.card" },
-    { start: 17.15, end: 19.26, text: "7.card" },
+    { start: 0, end: 3.17, text: "Page 64, Unit 8, Vocabulary." },
+    { start: 3.25, end: 5.29, text: " 1.eye" },
+    { start: 5.33, end: 8.01, text: "2.nose" },
+    { start: 8.05, end: 10.12, text: "3.mouth" },
+    { start: 10.15, end: 13.0, text: "4.head" },
+    { start: 13.05, end: 15.11, text: " 5.knee" },
+    { start: 15.15, end: 18.0, text: " 6.leg" },
+    { start: 18.03, end: 20.08, text: "7.touch" },
+    { start: 20.11, end: 22.24, text: "8.arm" },
+    { start: 22.27, end: 25.19, text: "9.hand" },
   ];
+
   // 🎵 فترات الكلمات داخل الأوديو الرئيسي
   const wordTimings = [
-    { start: 3.2, end: 5.15 }, // party hat
-    { start: 5.22, end: 7.2 }, // jellow
-    { start: 7.23, end: 9.43 }, // cake
-    { start: 9.43, end: 12.25 }, // Hello
-    { start: 12.27, end: 15.05 }, // Good morning
-    { start: 15.04, end: 17.13 },
-    { start: 17.15, end: 19.26 },
-     { start: 15.04, end: 17.13 },
-    { start: 17.15, end: 19.26 },
+    { start: 3.25, end: 5.29 },
+    { start: 5.33, end: 8.01 },
+    { start: 8.05, end: 10.12 },
+    { start: 10.15, end: 13.0 },
+    { start: 13.05, end: 15.11 },
+    { start: 15.15, end: 18.0 },
+    { start: 18.03, end: 20.08 },
+    { start: 20.11, end: 22.24 },
+    { start: 22.27, end: 25.19 },
   ];
 
   // ================================
@@ -155,7 +155,17 @@ const Unit8_Page1_Vocab = () => {
       setIsPlaying(false);
     }
   };
-  const wordAudios = [sound1, sound2, sound3, sound4, sound5, sound6, sound7,sound8,sound9];
+  const wordAudios = [
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    sound5,
+    sound6,
+    sound7,
+    sound8,
+    sound9,
+  ];
   const playWordAudio = (index) => {
     // أوقفي الأوديو الرئيسي
     mainAudioRef.current.pause();
@@ -184,7 +194,7 @@ const Unit8_Page1_Vocab = () => {
     };
   };
 
-  const nums = [num1, num2, num3, num4, num5, num6, num7,num8,num9];
+  const nums = [num1, num2, num3, num4, num5, num6, num7, num8, num9];
   const wordRefs = useRef(wordAudios.map(() => React.createRef()));
 
   return (
@@ -313,7 +323,7 @@ const Unit8_Page1_Vocab = () => {
         <img
           src={page2_2}
           style={{
-            height: "210px",
+            height: "245px",
             width: "auto",
             position: "absolute",
             bottom: "0%",
@@ -325,7 +335,7 @@ const Unit8_Page1_Vocab = () => {
         {/* النصوص */}
         <div
           className="vocab_container"
-          style={{ bottom: "1.4%", right: "4.5%" }}
+          style={{ bottom: "0.4%", right: "10.5%" }}
         >
           {[
             "eye",
@@ -357,7 +367,7 @@ const Unit8_Page1_Vocab = () => {
           <img
             key={i}
             src={num}
-            id={`num-${i + 1}`}
+            id={`num-${i + 1}-unit8`}
             className={`num-img ${
               (activeIndex2 === i && current >= 3.2) || clickedIndex === i
                 ? "active"

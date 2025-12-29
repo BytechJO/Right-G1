@@ -122,7 +122,7 @@ const WB_Unit6_Page3_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",

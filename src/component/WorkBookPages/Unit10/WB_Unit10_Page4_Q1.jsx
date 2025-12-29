@@ -149,7 +149,7 @@ const WB_Unit10_Page4_Q1 = () => {
             <span style={{ color: "red" }}>✓</span>.{" "}
           </h4>
 
-          <div className="wb-unit6-p4-q1-grid">
+          <div className="wb-unit10-p4-q1-grid">
             {questions.map((q) => (
               <div key={q.id} className="wb-unit10-p4-q1-box">
                 <div
@@ -181,7 +181,7 @@ const WB_Unit10_Page4_Q1 = () => {
                     </span>
                     <span className="wb-unit10-p4-q1-text"  style={{
                       
-                        fontSize: "22px",
+                        fontSize: "18px",
                         fontWeight: "500",
                       }}>{q.text}</span>
                   </div>
@@ -192,10 +192,8 @@ const WB_Unit10_Page4_Q1 = () => {
                     const isWrong = results[q.id] === "wrong" && isSelected;
 
                     return (
-                      <div key={idx} className="review3-p1-q3-row">
-                        <span className="wb-unit10-p4-q1-text">{item.text}</span>
-
-                        <div className="review3-p1-q3-input-box">
+                      <div key={idx} className="wb-unit10-p4-q1-row">
+                       <div className="review3-p1-q3-input-box">
                           <input
                             type="text"
                             readOnly
@@ -211,7 +209,9 @@ const WB_Unit10_Page4_Q1 = () => {
                           {isWrong && (
                             <span className="review3-p1-q3-x">✕</span>
                           )}
-                        </div>
+                        </div> <span className="wb-unit10-p4-q1-text">{item.text}</span>
+
+                        
                       </div>
                     );
                   })}

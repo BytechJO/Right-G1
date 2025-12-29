@@ -186,7 +186,7 @@ export default function WB_Unit8_Page5_Q2() {
           <h3 className="header-title-page8">
             <span className="ex-A">J</span>Look and complete the puzzle.
           </h3>
-          <div className="container-word-grid-wb-u7-p5-q2">
+          <div className="container-word-grid-wb-u8-p5-q2">
             <div className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}>
               {grid.map((row, rIdx) => (
                 <div key={rIdx} className="row-wb-u1-p6-q2">

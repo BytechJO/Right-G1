@@ -6,17 +6,17 @@ import song from "../../../assets/unit8/sound/CD65.Pg69_Song_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 const Unit8_Page6 = ({ openPopup }) => {
   const captionsExample = [
-    { start: 0, end: 4.24, text: "Page 27, exercise G. Let's sing! " },
+    { start: 0, end: 5.00, text: "Page 69. Exercise G, let's sing. " },
     {
-      start: 4.27,
-      end: 13.09,
-      text: "One, two, open your book. Three, four, close your book. ",
+      start: 5.03,
+      end: 10.28,
+      text: "What is this? What is this? Hey, it's my arm.",
     },
-    { start: 13.12, end: 16.0, text: " Five, six, take out your pencil." },
+    { start: 10.30, end: 16.09, text: "Hey, it's my arm. I touch my arm. I touch my arm." },
     {
-      start: 16.04,
-      end: 21.26,
-      text: " Seven, eight, make a line. Nine, ten, listen, let's play.",
+      start: 16.12,
+      end: 20.02,
+      text: " Touch your arm too. Touch your arm too.",
     },
   ];
 

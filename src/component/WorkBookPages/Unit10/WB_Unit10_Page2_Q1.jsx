@@ -102,20 +102,19 @@ const WB_Unit10_Page2_Q1 = () => {
       >
         <div className="exercise-wrapper-wb-unit10-p2-q1">
           <h5 className="header-title-page8">
-            <span className="ex-A">C</span> Look, read, and
-            write.
+            <span className="ex-A">C</span> Look, read, and write.
           </h5>
 
           {/* ========== ROW 1 (EXAMPLE) ========== */}
           <div className="conversation-row-wb-unit10-p2-q1">
-            <span className="num-wb-unit10-p2-q1">1</span>
+ 
+              <span className="num-wb-unit10-p2-q1">1</span>
 
-            {/* Question bubble */}
-            <div className="bubble question-bubble-wb-unit10-p2-q1">
-              Do you want chicken?
-            </div>
-
-        
+              {/* Question bubble */}
+              <div className="bubble question-bubble-wb-unit10-p2-q1">
+                Do you want chicken?
+              </div>
+       
 
             {/* Person */}
             <img
@@ -132,22 +131,23 @@ const WB_Unit10_Page2_Q1 = () => {
 
           {/* ========== ROW 2 ========== */}
           <div className="conversation-row-wb-unit10-p2-q1">
-            <span className="num-wb-unit10-p2-q1">2</span>
+           
+              <span className="num-wb-unit10-p2-q1">2</span>
 
-            <div className="bubble question-bubble-wb-unit10-p2-q1">
-              Do{" "}
-              <input
-                className="line-input-wb-unit10-p2-q1"
-                value={answers.q2_question}
-                disabled={locked}
-                onChange={(e) =>
-                  setAnswers({ ...answers, q2_question: e.target.value })
-                }
-              />
-              ?
-            </div>
+              <div className="bubble question-bubble-wb-unit10-p2-q1">
+                Do{" "}
+                <input
+                  className="line-input-wb-unit10-p2-q1"
+                  value={answers.q2_question}
+                  disabled={locked}
+                  onChange={(e) =>
+                    setAnswers({ ...answers, q2_question: e.target.value })
+                  }
+                />
+                ?
+              </div>
+     
 
-        
             <img
               src={q2Img}
               alt="girl"
@@ -170,20 +170,21 @@ const WB_Unit10_Page2_Q1 = () => {
 
           {/* ========== ROW 3 ========== */}
           <div className="conversation-row-wb-unit10-p2-q1">
-            <span className="num-wb-unit10-p2-q1">3</span>
+            
+              <span className="num-wb-unit10-p2-q1">3</span>
 
-            <div className="bubble question-bubble-wb-unit10-p2-q1">
-              <input
-                className="line-input-wb-unit10-p2-q1"
-                value={answers.q3_question}
-                disabled={locked}
-                onChange={(e) =>
-                  setAnswers({ ...answers, q3_question: e.target.value })
-                }
-              />{" "}
-              bread?
-            </div>
-
+              <div className="bubble question-bubble-wb-unit10-p2-q1">
+                <input
+                  className="line-input-wb-unit10-p2-q1"
+                  value={answers.q3_question}
+                  disabled={locked}
+                  onChange={(e) =>
+                    setAnswers({ ...answers, q3_question: e.target.value })
+                  }
+                />{" "}
+                bread?
+              </div>
+   
 
             <img src={q2Img} alt="boy" className="person-img-wb-unit10-p2-q1" />
 
@@ -207,16 +208,10 @@ const WB_Unit10_Page2_Q1 = () => {
         <button onClick={resetAll} className="try-again-button">
           Start Again ↻
         </button>
-        <button
-          onClick={showAnswers}
-          className="show-answer-btn"
-        >
+        <button onClick={showAnswers} className="show-answer-btn">
           Show Answer
         </button>
-        <button
-          onClick={checkAnswers}
-          className="check-button2"
-        >
+        <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>

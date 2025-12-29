@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../../assets/unit8/imgs/Right 1 Unit 08 At the Soccer Match3.jpg";
 import "./Unit8_Page3.css";
-import CD11_Pg12_Grammar1_AdultLady from "../../../assets/img_unit2/sounds-unit2/U2 Right Grammar P12.mp3";
+import CD11_Pg12_Grammar1_AdultLady from "../../../assets/unit8/sound/U8P66RG1.mp3";
 import Pg12_1_1_AdultLady from "../../../assets/unit8/sound/Pg66_1.1_Adult Lady.mp3";
 import Pg12_1_2_AdultLady from "../../../assets/unit8/sound/Pg66_1.2_Adult Lady.mp3";
 import Pg12_1_3_AdultLady from "../../../assets/unit8/sound/Pg66_1.3_Adult Lady.mp3";
@@ -11,36 +11,29 @@ import Pg12_2_1_Harley from "../../../assets/unit8/sound/Pg66_4.1_Female Teacher
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import video from "../../../assets/img_unit2/sounds-unit2/p12 1920.mp4";
+import video from "../../../assets/unit8/sound/p66.mp4";
 const Unit8_Page3 = ({ openPopup }) => {
   const audioRef = useRef(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
-    { start: 0, end: 3.22, text: "Page 12, Exercise 1. Right Grammar." },
-    { start: 3.25, end: 7.11, text: " How old are you? I'm seven years old." },
+    { start: 0, end: 4.14, text: "Page 66, exercise one. Right grammar." },
+    { start: 4.17, end: 6.01, text: " Touch your head." },
     {
-      start: 7.15,
-      end: 11.02,
-      text: " When is your birthday? My birthday is in August.",
+      start: 6.04,
+      end: 7.25,
+      text: "Open your mouth.",
     },
     {
-      start: 11.06,
-      end: 13.11,
-      text: "It is on Tuesday. ",
+      start: 7.29,
+      end: 9.18,
+      text: " Raise your hand ",
     },
-    { start: 13.15, end: 14.22, text: "How old are you, Sara? " },
-    { start: 14.26, end: 16.05, text: "I'm three years old. " },
-    { start: 16.09, end: 17.24, text: "When is your birthday party, Stella? " },
-    { start: 17.27, end: 19.16, text: "It is on Tuesday. " },
-    {
-      start: 19.2,
-      end: 22.1,
-      text: "Happy birthday! This is for you, Stella. ",
-    },
-    { start: 22.14, end: 23.1, text: "Thank you.  " },
-    { start: 23.14, end: 25.05, text: "You're welcome. Open it." },
+    { start: 9.20, end: 11.16, text: " Touch your head." },
+    { start: 11.20, end: 13.05, text: "Open your mouth. " },
+    { start: 13.09, end: 15.01, text: "Raise your hand." },
+
   ];
 
   const clickableAreas = [

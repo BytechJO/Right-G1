@@ -118,7 +118,7 @@ const WB_Unit10_Page6_Q1 = () => {
 
           <div className="unscramble-row-wb-unit9-p6-q1 ">
             {data.map((item, index) => (
-              <div className="unscramble-box-wb-unit9-p6-q1" key={index}>
+              <div className="unscramble-box-wb-unit10-p6-q1" key={index}>
                 <div className="img-box-wb-unit10-p6-q1">
                   <span
                     className="num"

@@ -205,7 +205,7 @@ const WB_Unit7_Page1_Q1 = () => {
                 >
                   2
                 </span>{" "}
-                <img src={img2} className="img-unit5-p6-q1" />
+                <img src={img2} className="img-wb-unit6-p4-q2" />
               </div>
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative", display: "flex" }}>

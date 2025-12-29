@@ -1,147 +1,112 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit2_Page1_Q1 = () => {
-  const data = [
-    { scrambled: "morning Good !", answer: "Good morning!" },
-    { scrambled: "you How are ?", answer: "How are you?" },
-    { scrambled: "you Fine, thank .", answer: "Fine, thank you." },
-    { scrambled: "evening Good !", answer: "Good evening!" },
-    { scrambled: "I’m John. Hello!", answer: "Hello! I'm John." },
-  ];
 
-  const [inputs, setInputs] = useState(data.map(() => ""));
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [wrong, setWrong] = useState(data.map(() => false));
 
-  const updateInput = (index, value) => {
-    if (showAnswer) return;
-    setInputs((prev) => prev.map((v, i) => (i === index ? value : v)));
-    setWrong(data.map(() => false));
+  const canvasRef = useRef(null);
+  const getPos = (e, canvas) => {
+    const rect = canvas.getBoundingClientRect();
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
   };
 
-  const checkAnswers = () => {
-    if (showAnswer) return;
+  // 🖌️ Start Drawing
+  const startDrawing = (e) => {
+    e.preventDefault();
 
-    // تجاهل أول إنبوت (index === 0) عند التحقق من المدخلات الفارغة
-    if (inputs.some((v) => v.trim() === "")) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please complete all answers before checking."
-      );
-      return;
-    }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
 
-    let correct = 0;
+    const { x, y } = getPos(e, canvas);
 
-    const wrongStatus = inputs.map((v, i) => {
-      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
-      if (ok) correct++;
-      return !ok;
-    });
+    ctx.isDrawing = true;
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "purple";
 
-    setWrong(wrongStatus);
-
-    const total = data.length; // لأننا حذفنا السؤال الأول من السكور
-
-    let color = correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    let msg = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correct} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
   };
 
-  const reset = () => {
-    setInputs(data.map(() => ""));
-    setWrong(data.map(() => false));
-    setShowAnswer(false);
+  // ✏️ Drawing
+  const draw = (e) => {
+    e.preventDefault();
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx.isDrawing) return;
+
+    const { x, y } = getPos(e, canvas);
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
+
+  const stopDrawing = () => {
+    const ctx = canvasRef.current.getContext("2d");
+    ctx.isDrawing = false;
+    ctx.closePath();
+  };
+
+  const resetCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
   return (
-    <div className="page8-wrapper" style={{padding:"30px"}}>
-      <div
-        className="div-forall"
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
+      <div  className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
+          gap: "30px",
           width: "60%",
+          justifyContent: "flex-start",
         }}
       >
-        <div className="page8-content">
-          <header className="header-title-page8">
-            <span className="ex-A">A</span>
-            Unscramble and write.
-          </header>
-        </div>{" "}
-        {data.map((item, i) => (
-          <div
-            key={i}
-            style={{
-              margin: "10px 0",
-              display: "flex",
-              justifyContent: "space-evenly",
-              width: "100%",
-            }}
-          >
-            <div
-              style={{ fontSize: "20px", marginBottom: "5px", width: "25%" }}
-            >
-              <span
-                style={{
-                  color: "#0d47a1",
-                  fontWeight: "600",
-                  marginRight: "10px",
-                }}
-              >
-                {i + 1}
-              </span>{" "}
-              {item.scrambled}
-            </div>
-            <div style={{ position: "relative", display: "inline-block" }}>
-              <input
-                className="input-text-field"
-                style={{
-                  width: "350px",
-                  height: "35px",
-                  fontWeight: "600",
-                  fontSize: "20px",
-                  borderBottom: "2px solid black",
-                }}
-                value={showAnswer ? item.answer : inputs[i]}
-                onChange={(e) => updateInput(i, e.target.value)}
-              />
+        <div>
+          <h5 className="header-title-page8">
+            <span className="ex-A">A</span> Read and trace.
+          </h5>
+        </div>
 
-              {wrong[i] && <div className="wrong-icon-wb-unit1-p3-q1">✕</div>}
-            </div>
-          </div>
-        ))}
+        <canvas
+          ref={canvasRef}
+          height={300}
+          width={600}
+          className="draw-canvas"
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
+        />
       </div>
 
       <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={() => setShowAnswer(true)}
-        >
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
+        <button onClick={resetCanvas} className="try-again-button">
+          Clear Drawings ↻
         </button>
       </div>
     </div>
