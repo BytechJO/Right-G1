@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
-import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
-import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
+import bat from "../../../assets/U1 WB/U5/U5P28EXED-01.svg";
+import cap from "../../../assets/U1 WB/U5/U5P28EXED-02.svg";
+import ant from "../../../assets/U1 WB/U5/U5P28EXED-03.svg";
+import dad from "../../../assets/U1 WB/U5/U5P28EXED-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit5_Page2_Q2 = () => {

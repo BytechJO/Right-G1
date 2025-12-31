@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page1_Q1.css";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
+import img1 from "../../../assets/unit10/imgs/U10P88EXEA-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P88EXEA-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P88EXEA-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P88EXEA-04.svg";
 
 const Review9_Page1_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
@@ -84,7 +84,8 @@ const Review9_Page1_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -97,16 +98,8 @@ const Review9_Page1_Q1 = () => {
 
         <div className="container-review9-p1-q1">
           {items.map((q, i) => (
-            <div key={i} className="question-box-unit8-p5-q3">
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "80%",
-                }}
-              >
+            <div key={i} className="question-box-review9-p1-q1 ">
+              <div>
                 <span
                   style={{
                     color: "#2c5287",

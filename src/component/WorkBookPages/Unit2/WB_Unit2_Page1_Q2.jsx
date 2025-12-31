@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import conversation from "../../../assets/unit7/img/U7P63EXEF-01.svg";
-import conversation2 from "../../../assets/unit7/img/U7P63EXEF-02.svg";
+import conversation from "../../../assets/U1 WB/U2/U2P9EXEB-01.svg"
+import conversation2 from "../../../assets/U1 WB/U2/U2P9EXEB-02.svg";
+import img1 from "../../../assets/U1 WB/U2/U2P9EXEB-03.svg"
+import img2 from "../../../assets/U1 WB/U2/U2P9EXEB-04.svg"
+import img3 from "../../../assets/U1 WB/U2/U2P9EXEB-05.svg"
+import img4 from "../../../assets/U1 WB/U2/U2P9EXEB-06.svg"
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page1_Q2.css";
 const WB_Unit2_Page1_Q2 = () => {

@@ -1,4 +1,4 @@
-import page_1 from "../../../assets/unit9/imgs/Right G1- Class Book_00076.jpg";
+import page_1 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm.png";
 import "./Unit9_Page1.css";
 import { useState, useRef } from "react";
 import Pg22_U3_Intro_AdultLady from "../../../assets/unit5/sounds/U5P40-41.mp3";
@@ -53,33 +53,33 @@ const Unit9_Page1 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 50.94, y1: 20.52, sound: 1, isPrimary: true },
+    { x1: 41.94, y1: 27.8, sound: 1, isPrimary: true },
 
-    // الصوت الأول – منطقة إضافية
-    { x1: 22.00, y1: 16.23, x2: 71.9, y2: 32.4, sound: 1, isPrimary: false },
+//     // الصوت الأول – منطقة إضافية
+    { x1: 24.37, y1: 25.77, x2: 55.83, y2: 38.4, sound: 1, isPrimary: false },
 
-// الصوت الثاني – الأساسية
-    { x1: 88.0, y1: 22.89, sound: 2, isPrimary: true },
+// // الصوت الثاني – الأساسية
+    { x1: 20.5, y1: 26, sound: 2, isPrimary: true },
 
-    // // // // الصوت الثاني – الإضافية
-    { x1: 87.5, y1: 13.07, x2: 99.35, y2: 28.47, sound: 2, isPrimary: false },
+//     // // // // الصوت الثاني – الإضافية
+    { x1: 18.56, y1: 28.13, x2: 23.51, y2: 36.4, sound: 2, isPrimary: false },
 
-    // // // // الصوت الثالث – الأساسية
-    { x1: 79.3, y1: 32.20, sound: 3, isPrimary: true },
+//     // // // // الصوت الثالث – الأساسية
+    { x1: 85.5, y1: 22.2, sound: 3, isPrimary: true },
 
-    // // // // الصوت الثالث – الإضافية
-    { x1: 76.9, y1: 28.3, x2: 83.4, y2: 37.9, sound: 3, isPrimary: false },
-    // // // // الصوت الرابع – الأساسية
-    { x1: 80.5, y1: 47.4, sound: 4, isPrimary: true },
+//     // // // // الصوت الثالث – الإضافية
+    { x1: 72.42, y1: 19.17, x2: 87.29, y2: 34.4, sound: 3, isPrimary: false },
+//     // // // // الصوت الرابع – الأساسية
+    { x1: 80.9, y1: 45.5, sound: 4, isPrimary: true },
 
-    // // // الصوت الرابع – الإضافية
-    { x1: 73, y1: 49.2, x2: 99.4, y2: 56.03, sound: 4, isPrimary: false },
+//     // // // الصوت الرابع – الإضافية
+    { x1: 74.14, y1: 47.93, x2: 95.48, y2: 58.03, sound: 4, isPrimary: false },
 
-    // // // // الصوت الخامس – الأساسية
-    { x1: 45.4, y1: 34.57, sound: 5, isPrimary: true },
+//     // // // // الصوت الخامس – الأساسية
+    { x1: 69.4, y1: 66.57, sound: 5, isPrimary: true },
 
-    // // // الصوت الخامس – الإضافية
-    { x1: 42.9, y1: 34.57, x2: 52.6, y2: 45.23, sound: 5, isPrimary: false },
+//     // // // الصوت الخامس – الإضافية
+    { x1: 59.92, y1: 64.18, x2: 78.02, y2: 76.03, sound: 5, isPrimary: false },
   ];
   const sounds = {
     1: sound1,

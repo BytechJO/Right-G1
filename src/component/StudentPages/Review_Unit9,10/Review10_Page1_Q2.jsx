@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import deer from "../../../assets/unit6/imgs/U6P54EXEC-01.svg";
+import deer from "../../../assets/unit10/imgs/U10P90EXEB.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review10_Page1_Q2.css"
 const data = [

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import img from "../../../assets/U1 WB/U2/U2P9EXEA.svg"
 const WB_Unit2_Page1_Q1 = () => {
 
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./WB_Unit2_Page2_Q1.css";
-import table from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
-import dish from "../../../assets/unit4/imgs/U4P34EXEB-02.svg";
-import tiger from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
-import duck from "../../../assets/unit4/imgs/U4P34EXEB-04.svg";
+import table from "../../../assets/U1 WB/U2/U2P10EXEC-01.svg";
+import dish from "../../../assets/U1 WB/U2/U2P10EXEC-02.svg";
+import tiger from "../../../assets/U1 WB/U2/U2P10EXEC-03.svg";
+import duck from "../../../assets/U1 WB/U2/U2P10EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit2_Page2_Q1 = () => {

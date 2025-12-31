@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import page_3 from "../../../assets/unit10/imgs/Right G1- Class Book_00084.jpg";
+import page_3 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream3.jpg";
 import "./Unit10_Page3.css";
 import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit5/sounds/U5P42Grammar.mp3";
 import sound1 from "../../../assets/unit10/sound/Pg84_1.1_Adult Lady.mp3";
@@ -44,16 +44,15 @@ const Unit10_Page3 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 10.7, y1: 12.99, x2: 26.3, y2: 16.5, sound: sound1 },
-    { x1: 67.23, y1: 11.47, x2: 86.5, y2: 14.7, sound: sound2 },
-    { x1: 67.23, y1: 15.2, x2: 86.7, y2: 18.4, sound: sound3 },
-    { x1: 6.8, y1: 29.9, x2: 23.5, y2: 33.07, sound: sound4 },
-    { x1: 30.43, y1: 33.8, x2: 47.7, y2: 37.19, sound: sound5 },
-    { x1: 53.38, y1: 30.08, x2: 70.7, y2: 33.72, sound: sound6 },
-    { x1: 76.33, y1: 31.1, x2: 93.86, y2: 34.62, sound: sound7 },
-    { x1: 8.86, y1: 64.81, x2: 27.8, y2: 68.29, sound: sound8 },
-    // { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound9 },
-    // { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound10 },
+    { x1: 7.78, y1: 13.41, x2: 30.62, y2: 17.2, sound: sound1 },
+    { x1: 67.03, y1: 13.41, x2: 81.26, y2: 17.2, sound: sound2 },
+    { x1: 11.45, y1: 28.81, x2: 35.58, y2: 32.1, sound: sound3 },
+    { x1: 34.07, y1: 54.55, x2: 48.94, y2: 57.7, sound: sound4 },
+    { x1: 56.26, y1: 26.10, x2: 80.4, y2: 29.32, sound: sound5 },
+    { x1: 75.22, y1: 32.53, x2: 94.61, y2: 36.09, sound: sound6 },
+    { x1: 35.79, y1: 60.97, x2: 59.71, y2: 64.55, sound: sound7 },
+    { x1: 67.25, y1: 75.69, x2: 83.5, y2: 79, sound: sound8 },
+
   ];
 
   const handleImageClick = (e) => {

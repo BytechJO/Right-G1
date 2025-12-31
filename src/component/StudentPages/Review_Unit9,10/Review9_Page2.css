@@ -4,8 +4,8 @@
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-    top: 3%;
-    left: 65.5%;
+   top: 3%;
+    left: 32%;
   cursor: pointer;
 }
 
@@ -15,19 +15,16 @@
   border-radius: 20px;
   border: rgb(255, 255, 255) solid 3px; */
   padding: 5px;
-    bottom: 25.5%;
-    left: 39%;
+ bottom: 33.5%;
+    left: 42%;
   cursor: pointer;
 }
 .click-icon-review9-page2-3 {
-  position: absolute;
-  /* background-color: #6bcff6;
-  border-radius: 20px;
-  border: rgb(255, 255, 255) solid 3px; */
-  padding: 5px;
-     top: 44%;
-    left: 21%;
-  cursor: pointer;
+    position: absolute;
+    padding: 5px;
+    top: 28%;
+    left: 20.5%;
+    cursor: pointer;
 }
 .headset-icon-CD-review9-page2-1 {
   position: absolute;

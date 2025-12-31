@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import find_img from "../../../assets/unit5/imgs/P40-41.jpg";
+import find_img from "../../../assets/unit10/imgs/G1_10 _Pg_82-83 copy.jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
+import MySVG from "../../../assets/unit10/imgs/U9P82Highlight.svg";
 const Unit10_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
-
+ const [showAnswer, setShowAnswer] = useState(false);
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
-    x1: 44.25,
-    y1: 28.76,
-    x2: 55.99,
-    y2: 40.27,
+    x1: 21.96,
+    y1: 45.26,
+    x2: 28.41,
+    y2: 50.50,
   };
 
   const handleImageClick = (e) => {
@@ -48,10 +49,16 @@ const Unit10_Page1_find = () => {
       ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
     }
   };
+ const handleShowAnswer = () => {
+    setShowAnswer(true);
+    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
+    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
+  };
 
   const handleStartAgain = () => {
     setClickedPoint(null);
     setCheckResult(null);
+     setShowAnswer(false);
   };
 
   return (
@@ -103,25 +110,29 @@ const Unit10_Page1_find = () => {
           )}
 
           {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {checkResult === "success" && (
-            <div
-              style={{
-                position: "absolute",
-                top: `${targetArea.y1}%`,
-                left: `${targetArea.x1}%`,
-                width: `${targetArea.x2 - targetArea.x1}%`,
-                height: `${targetArea.y2 - targetArea.y1}%`,
-                backgroundColor: "rgba(0, 255, 0, 0.55)", // أخضر شفاف
-                borderRadius: "8px",
-                pointerEvents: "none",
-              }}
-            ></div>
-          )}
+         
+                   {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
+                   {(checkResult === "success" || showAnswer) && (
+                     <img
+                       src={MySVG}
+                       alt="answer highlight"
+                       style={{
+                         position: "absolute",
+                         top: `41%`,
+                         left: `21%`,
+                         height: `13%`,
+                         pointerEvents: "none",
+                       }}
+                     />
+                   )}
         </div>
       </div>
       <div className="action-buttons-container ">
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
+        </button>
+            <button className="show-answer-btn" onClick={handleShowAnswer}>
+          Show Answer
         </button>
         <button className="check-button2" onClick={handleCheck}>
           Check Answer ✓

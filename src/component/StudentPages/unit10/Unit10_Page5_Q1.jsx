@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit10_Page5_Q1.css";
-import img1 from "../../../assets/unit1/imgs/U1P8EXEA2-01.svg";
-import img2 from "../../../assets/unit1/imgs/U1P8EXEA2-02.svg";
-import img3 from "../../../assets/unit1/imgs/U1P8EXEA2-03.svg";
-import img4 from "../../../assets/unit1/imgs/U1P8EXEA2-04.svg";
+import img1 from "../../../assets/unit10/imgs/U10P86EXEA1-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P86EXEA1-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P86EXEA1-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P86EXEA1-04.svg";
 
 const exerciseData = {
   pairs: [
@@ -99,7 +99,7 @@ const Unit10_Page5_Q1 = () => {
     });
 
     setWrongDrops(wrongList);
-
+setShowAnswer(true)
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
@@ -206,6 +206,7 @@ const Unit10_Page5_Q1 = () => {
                           <Draggable
                             draggableId={droppedLetters[`drop-${index + 1}`]}
                             index={0}
+                              isDragDisabled={showAnswer} // 🔥 هذا السطر المهم
                           >
                             {(providedDraggable) => (
                               <div

@@ -6,12 +6,12 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { CgPlayPauseO } from "react-icons/cg";
 import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
-import img1 from "../../../assets/unit4/imgs/U4P37EEXEE-01-01.svg";
-import img2 from "../../../assets/unit4/imgs/U4P37EEXEE-01-02.svg";
-import img3 from "../../../assets/unit4/imgs/U4P37EEXEE-02-01.svg";
-import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
-import img5 from "../../../assets/unit4/imgs/U4P37EEXEE-03-01.svg";
-import img6 from "../../../assets/unit4/imgs/U4P37EEXEE-03-02.svg";
+import img1 from "../../../assets/unit10/imgs/U10P91EXEF-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P91EXEF-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P91EXEF-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P91EXEF-04.svg";
+import img5 from "../../../assets/unit10/imgs/U10P91EXEF-05.svg";
+import img6 from "../../../assets/unit10/imgs/U10P91EXEF-06.svg";
 import { TbMessageCircle } from "react-icons/tb";
 
 const data = [
@@ -31,13 +31,13 @@ const data = [
       },
       {
         before: "with",
-        middleImg: img2,
+        middleImg: img3,
         blank: 3,
         after: "",
       },
       {
         before: "",
-        middleImg: img2,
+        middleImg: img4,
         blank: 4,
         after: "s.",
       },
@@ -48,13 +48,13 @@ const data = [
     parts: [
       {
         before: "The",
-        middleImg: img3,
+        middleImg: img5,
         blank: 1,
         after: "",
       },
       {
         before: " is in the ",
-        middleImg: img4,
+        middleImg: img6,
         blank: 2,
         after: ".",
       },

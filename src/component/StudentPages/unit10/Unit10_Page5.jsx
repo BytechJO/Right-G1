@@ -1,4 +1,4 @@
-import page_5 from "../../../assets/unit10/imgs/Right G1- Class Book_00086.jpg";
+import page_5 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream5.jpg";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";

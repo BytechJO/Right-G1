@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Unit10_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
+import img1 from "../../../assets/unit10/imgs/U10P86EXEA2-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P86EXEA2-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P86EXEA2-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
@@ -357,11 +357,7 @@ const Unit10_Page5_Q2 = () => {
                     alt=""
                     className="unit10-p5-q2-question-img"
                   />
-                  <img
-                    src={q.image}
-                    alt=""
-                    className="unit10-p5-q2-question-img"
-                  />
+                
                 </div>
 
                 <div className="unit10-p1-q2-options-box">

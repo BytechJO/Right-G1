@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import "./WB_Unit3_Page2_Q1.css";
-import jello from "../../../assets/img_unit2/imgs/jello.jpg";
-import present from "../../../assets/img_unit2/imgs/Present1.jpg";
-import balloons from "../../../assets/img_unit2/imgs/balloons..jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit3_Page2_Q1 = () => {

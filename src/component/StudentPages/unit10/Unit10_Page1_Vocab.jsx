@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import backgroundImage from "../../../assets/unit5/imgs/P40-41.jpg";
+import backgroundImage from "../../../assets/unit10/imgs/G1_10 _Pg_82-83 copy.jpg";
 import page2_2 from "../../../assets/unit3/imgs3/vocabimg_unit3-ClZR6yN5.jpg";
 import vocabulary from "../../../assets/unit3/sound3/Pg22_Vocabulary_Adult Lady.mp3";
-import { CgPlayPauseO } from "react-icons/cg";
 import num1 from "../../../assets/unit3/imgs3/Num1.svg";
 import num2 from "../../../assets/unit3/imgs3/Num2.svg";
 import num3 from "../../../assets/unit3/imgs3/Num3.svg";
@@ -11,10 +10,11 @@ import num5 from "../../../assets/unit3/imgs3/Num5.svg";
 import num6 from "../../../assets/unit3/imgs3/Num6.svg";
 import num7 from "../../../assets/unit3/imgs3/Num7.svg";
 import num8 from "../../../assets/unit5/imgs/Num8.svg";
+import num9 from "../../../assets/unit7/img/Num9.svg"
+import num10 from "../../../assets/unit7/img/Num10.svg"
 import { TbMessageCircle } from "react-icons/tb";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { IoMdSettings } from "react-icons/io";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { FaPlay, FaPause } from "react-icons/fa";
 import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
 import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
 import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
@@ -23,6 +23,8 @@ import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.m
 import sound6 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
 import sound7 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
 import sound8 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound9 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import sound10 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
 
 const Unit10_Page1_Vocab = () => {
   const audioRef = useRef(null);
@@ -149,7 +151,7 @@ const Unit10_Page1_Vocab = () => {
     }
   };
 
-  const nums = [num1, num2, num3, num4, num5, num6, num7, num8];
+  const nums = [num1, num2, num3, num4, num5, num6, num7, num8,num9 ,num10];
   const wordAudios = [
     sound1,
     sound2,
@@ -159,6 +161,8 @@ const Unit10_Page1_Vocab = () => {
     sound6,
     sound7,
     sound8,
+    sound9,
+    sound10
   ];
   const playWordAudio = (index) => {
     // أوقفي الأوديو الرئيسي
@@ -316,7 +320,7 @@ const Unit10_Page1_Vocab = () => {
           <img
             src={page2_2}
             style={{
-              height: "230px",
+              height: "270px",
               width: "auto",
               position: "absolute",
               bottom: "0%",
@@ -328,7 +332,7 @@ const Unit10_Page1_Vocab = () => {
           {/* النصوص */}
           <div
             className="vocab_container"
-            style={{ bottom: "2%", right: "8.5%" }}
+            style={{ bottom: "0%", right: "10.5%" }}
           >
             {[
               "ice cream",
@@ -371,8 +375,7 @@ const Unit10_Page1_Vocab = () => {
             style={{
               height: "20px",
               position: "absolute",
-              top: ["43%", "43%", "42%", "22%", "25%"][i],
-              left: ["14%", "54%", "71%", "40%", "32%"][i],
+              
             }}
           />
         ))}

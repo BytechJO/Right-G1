@@ -2,10 +2,10 @@ import Pg22_1_1_AdultLady from "../../../assets/unit10/sound/Pg82_1.1_Adult Lady
 import Pg22_1_2_AdultLady from "../../../assets/unit10/sound/Pg82_1.2_Adult Lady.mp3";
 import Pg22_1_3_AdultLady from "../../../assets/unit10/sound/Pg82_1.3_Adult Lady.mp3";
 import Pg22_1_4_AdultLady from "../../../assets/unit10/sound/Pg82_1.4_Adult Lady.mp3";
-import img1 from "../../../assets/unit5/imgs/G.svg";
-import img2 from "../../../assets/unit5/imgs/girl.svg";
-import img3 from "../../../assets/unit5/imgs/green.svg";
-import img4 from "../../../assets/unit5/imgs/garden.svg";
+import img1 from "../../../assets/unit10/imgs/short e.svg";
+import img2 from "../../../assets/unit10/imgs/bed.svg";
+import img3 from "../../../assets/unit10/imgs/egg.svg";
+import img4 from "../../../assets/unit10/imgs/hen.svg";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import longAudio from "../../../assets/unit5/sounds/U5P40 Listen and read along.mp3";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";

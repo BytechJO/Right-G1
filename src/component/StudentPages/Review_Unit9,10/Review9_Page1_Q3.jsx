@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
+import img1 from "../../../assets/unit10/imgs/U10P88EXEC-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P88EXEC-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P88EXEC-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P88EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page1_Q3.css";
 
@@ -9,7 +10,8 @@ const Review9_Page1_Q3 = () => {
   const questions = [
     {
       id: 1,
-      image: img1,
+      image: img3,
+      mainImg: img1,
       text: "What does she like?",
       items: [
         { text: "She likes horses.", correct: "x" },
@@ -18,7 +20,8 @@ const Review9_Page1_Q3 = () => {
     },
     {
       id: 2,
-      image: img2,
+      image: img4,
+      mainImg: img2,
       text: "What does he like?",
       items: [
         { text: "He likes dogs.", correct: "x" },
@@ -132,27 +135,56 @@ const Review9_Page1_Q3 = () => {
           </h4>
 
           <div className="review9-p1-q3-grid">
-            <img src={img3} className="Unit5-P6-Q3-img" />
             <div>
               {questions.map((q) => (
                 <div key={q.id} className="review9-p1-q3-box">
                   <div
                     style={{
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: "space-between",
                       alignItems: "center",
+                      // width:"100%",
+
                     }}
                   >
-                    {/* <span
-                      className="Unit5-P6-Q3-text"
-                      style={{ color: "darkblue" }}
+                    <div
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      {q.id}
-                    </span> */}
-                    <img src={q.image} alt="" className="Unit5-P6-Q3-img" />
+                      <img src={q.mainImg} className="Unit5-P6-Q3-img" />{" "}
+                      <div
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          className="input-text-field"
+                          style={{
+                          
+                            border: "2px solid black",
+                            fontSize: "18px",
+                            borderRadius:"8px"
+                         
+                          }}
+                          value={q.text}
+                        />
+                      </div>{" "}
+                    </div>
+                   
                     {/* <span className="Unit5-P6-Q3-text">{q.text}</span> */}
                   </div>
-                  <div>
+                  <div style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                      }}> 
+                    <img src={q.image} alt="" className="Unit5-P6-Q3-img" />
+                    <div>
                     {q.items.map((item, idx) => {
                       const isSelected = answers[q.id] === idx;
                       const isWrong = results[q.id] === "wrong" && isSelected;
@@ -181,6 +213,7 @@ const Review9_Page1_Q3 = () => {
                         </div>
                       );
                     })}
+                    </div>
                   </div>
                 </div>
               ))}

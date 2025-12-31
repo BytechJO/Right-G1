@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 // import "./Unit2_Page8_Q1.css";
-import table from "../../../assets/unit1/imgs/table2.jpg";
-import dish from "../../../assets/unit1/imgs/dish3.jpg";
+import table from "../../../assets/U1 WB/U5/U5P28EXEC-01.svg";
+import dish from "../../../assets/U1 WB/U5/U5P28EXEC-02.svg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
-import duck from "../../../assets/unit1/imgs/duck.svg";
+import duck from "../../../assets/U1 WB/U5/U5P28EXEC-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit5_Page2_Q1 = () => {

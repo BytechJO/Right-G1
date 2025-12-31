@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import farmImg from "../../../assets/unit4/imgs/feet.svg"; // عدّل المسار حسب مشروعك
+import farmImg from "../../../assets/unit10/imgs/U10P88EXEB.svg"; // عدّل المسار حسب مشروعك
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page1_Q2.css";
 

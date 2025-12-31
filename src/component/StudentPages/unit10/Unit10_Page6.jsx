@@ -1,4 +1,4 @@
-import page_6 from "../../../assets/unit10/imgs/Right G1- Class Book_00087.jpg";
+import page_6 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream6.jpg";
 import "./Unit10_Page6.css";
 
 import CD25_Pg27_Song_AdultLady from "../../../assets/unit5/sounds/U5P45Sing.mp3";

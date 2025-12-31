@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import page_2 from "../../../assets/unit9/imgs/Right G1- Class Book_00077.jpg";
+import page_2 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm2.png";
 import soundSong from "../../../assets/unit5/sounds/U5P41 Welcome to my class.mp3";
 import sound1 from "../../../assets/unit9/sound/Pg77_1.1_Bebo.mp3";
 import sound2_2 from "../../../assets/unit9/sound/Pg77_1.2_Lolo.mp3";
@@ -78,21 +78,21 @@ const Unit9_Page2 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 12.15, y1: 53.86, sound: 1, isPrimary: true },
+    { x1: 28.15, y1: 31.86, sound: 1, isPrimary: true },
 
-    // // الصوت الأول – منطقة إضافية
-    { x1: 8.7, y1: 50.6, x2: 23.3, y2: 58, sound: 1, isPrimary: false },
+    // // // الصوت الأول – منطقة إضافية
+    { x1: 13.44, y1: 29.15, x2: 40.59, y2:47.49, sound: 1, isPrimary: false },
 
-    // // الصوت الثاني – الأساسية
-    { x1: 11.7, y1: 29.5, sound: 2, isPrimary: true },
+    // // // الصوت الثاني – الأساسية
+    { x1: 29.2, y1: 62.8, sound: 2, isPrimary: true },
 
-    // // الصوت الثاني – الإضافية
-    { x1: 11.29, y1: 24.4, x2: 18.4, y2: 33.55, sound: 2, isPrimary: false },
-    // // الصوت الثاني – الأساسية
-    { x1: 14.7, y1: 38.8, sound: 3, isPrimary: true },
+    // // // الصوت الثاني – الإضافية
+    { x1: 25.94, y1: 64.35, x2: 42.10, y2: 75.01, sound: 2, isPrimary: false },
+    // // // الصوت الثاني – الأساسية
+    { x1: 33.2, y1: 49.5, sound: 3, isPrimary: true },
 
-    // // الصوت الثاني – الإضافية
-    { x1: 13.44, y1: 37.10, x2: 18.3, y2: 43.37, sound: 3, isPrimary: false },
+    // // // الصوت الثاني – الإضافية
+    { x1: 26.16, y1: 50.81, x2: 39.95, y2: 58.09, sound: 3, isPrimary: false },
   ];
   const sounds = {
     1: sound2_3,

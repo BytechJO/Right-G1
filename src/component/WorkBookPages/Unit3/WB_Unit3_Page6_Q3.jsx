@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit4/imgs/U4P37EEXEE-01-01.svg";
-import img2 from "../../../assets/unit4/imgs/U4P37EEXEE-01-02.svg";
-import img3 from "../../../assets/unit4/imgs/U4P37EEXEE-02-01.svg";
-import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
-import img5 from "../../../assets/unit4/imgs/U4P37EEXEE-03-01.svg";
-import img6 from "../../../assets/unit4/imgs/U4P37EEXEE-03-02.svg";
+import img1 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-01.svg";
+import img2 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-02.svg";
+import img3 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-03.svg";
+import img4 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-04.svg";
+import img5 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-05.svg";
+// import img6 from "../../../assets/U1 WB/U3/SVG/U3P20EXEC-06.svg";
 
 const data = [
   {
@@ -24,20 +24,20 @@ const data = [
       },
       {
         before: "",
-        middleImg: img2,
+        middleImg: img3,
         blank: 3,
         after: ".Look out ant! Here comes",
       },
       
       {
         before: "",
-        middleImg: img2,
+        middleImg: img4,
         blank: 4,
         after: "with his",
       },
       {
         before: "",
-        middleImg: img2,
+        middleImg: img5,
         blank: 5,
         after: ".",
       },

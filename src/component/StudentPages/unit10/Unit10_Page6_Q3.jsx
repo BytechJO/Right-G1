@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-// import milk from "../../../assets/unit10/imgs/milk.svg";
-// import bread from "../../../assets/unit10/imgs/bread.svg";
-// import apple from "../../../assets/unit10/imgs/apple.svg";
-// import iceCream from "../../../assets/unit10/imgs/icecream.svg";
-// import chicken from "../../../assets/unit10/imgs/chicken.svg";
+import milk from "../../../assets/unit10/imgs/U10P87EXEF-01.svg";
+import bread from "../../../assets/unit10/imgs/U10P87EXEF-02.svg";
+import apple from "../../../assets/unit10/imgs/U10P87EXEF-03.svg";
+import iceCream from "../../../assets/unit10/imgs/U10P87EXEF-04.svg";
+import chicken from "../../../assets/unit10/imgs/U10P87EXEF-05.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit10_Page6_Q3.css";
 
 const Unit10_Page6_Q3 = () => {
   const items = [
-    { img: "./milk", value: "milk" },
-    { img: "./bread", value: "bread" },
-    { img: "./apple", value: "apple" },
-    { img: "./iceCream", value: "ice cream" },
-    { img: "./chicken", value: "chicken" },
+    { img: milk, value: "milk" },
+    { img: bread, value: "bread" },
+    { img: apple, value: "apple" },
+    { img: iceCream, value: "ice cream" },
+    { img: chicken, value: "chicken" },
   ];
 
   const [answer, setAnswer] = useState("");

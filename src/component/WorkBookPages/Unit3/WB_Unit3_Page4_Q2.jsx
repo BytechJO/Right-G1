@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./WB_Unit3_Page4_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P53EXEF-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P53EXEF-02.svg";
+import img1 from "../../../assets/U1 WB/U3/SVG/U3P18EXEH-01.svg";
+import img2 from "../../../assets/U1 WB/U3/SVG/U3P18EXEH-02.svg";
+import img3 from "../../../assets/U1 WB/U3/SVG/U3P18EXEH-03.svg";
+import img4 from "../../../assets/U1 WB/U3/SVG/U3P18EXEH-04.svg";
 const WB_Unit3_Page4_Q2 = () => {
   // ===============================
   // 🔵 1) الأسئلة (كلها داخل نفس الكومبونينت)
@@ -37,7 +39,7 @@ const WB_Unit3_Page4_Q2 = () => {
         { type: "text", value: "" },
       ],
       correct: ["Listen!"],
-      image: img2,
+      image: img3,
     },
     {
       id: 4,
@@ -47,7 +49,7 @@ const WB_Unit3_Page4_Q2 = () => {
         { type: "text", value: "your book." },
       ],
       correct: ["Open"],
-      image: img2,
+      image: img4,
     },
   ];
 

@@ -3,10 +3,10 @@ import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-u
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit4_Page6_Q1.css";
 import sound1 from "../../../assets/unit4/sounds/U4P37EXEF.mp3";
-import bat from "../../../assets/unit4/imgs/U4P37EXEF-01.svg";
-import box from "../../../assets/unit4/imgs/U4P37EXEF-02.svg";
-import bucket from "../../../assets/unit4/imgs/U4P37EXEF-03.svg";
-import boat from "../../../assets/img_unit2/imgs/boat.jpg";
+import bat from "../../../assets/U1 WB/U4/U4P26EXEA-01.svg";
+import box from "../../../assets/U1 WB/U4/U4P26EXEA-02.svg";
+import bucket from "../../../assets/U1 WB/U4/U4P26EXEA-03.svg";
+import boat from "../../../assets/U1 WB/U4/U4P26EXEA-04.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -20,7 +20,7 @@ const WB_Unit4_Page6_Q1 = () => {
     { img: bat, correct: "f" },
     { img: box, correct: "f" },
     { img: bucket, correct: "v" },
-    { img: bucket, correct: "v" },
+    { img: boat, correct: "v" },
   ];
   const stopAtSecond = 9.02;
   const [paused, setPaused] = useState(false);

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import bat from "../../../assets/unit4/imgs/U4P32ExeA1-01.svg";
-import cap from "../../../assets/unit4/imgs/U4P32ExeA1-02.svg";
-import ant from "../../../assets/unit4/imgs/U4P32ExeA1-03.svg";
-import dad from "../../../assets/unit4/imgs/U4P32ExeA1-04.svg";
+import bat from "../../../assets/unit10/imgs/U10P87EXEE-01.svg";
+import cap from "../../../assets/unit10/imgs/U10P87EXEE-02.svg";
+import ant from "../../../assets/unit10/imgs/U10P87EXEE-02.svg";
+import dad from "../../../assets/unit10/imgs/U10P87EXEE-01.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit10_Page6_Q2.css";
 

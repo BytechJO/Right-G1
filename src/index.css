@@ -1050,6 +1050,10 @@ img {
     width: 27px;
     height: 29px;
   }
+  .nav-btn {
+   
+    position: absolute;
+    top: 0%;}
 }
 @media (max-width: 768px) {
   .circle-area {

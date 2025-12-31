@@ -1,5 +1,5 @@
 import React from "react";
-import page_1 from "../../../assets/unit10/imgs/Right G1- Class Book_page-0095.jpg";
+import page_1 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream14.jpg";
 const Writing_Page2 = () => {
   return (
     <div

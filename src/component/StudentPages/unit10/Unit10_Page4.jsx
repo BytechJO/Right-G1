@@ -1,17 +1,16 @@
 import React, { useState, useRef } from "react";
-import page_4 from "../../../assets/unit10/imgs/Right G1- Class Book_00085.jpg";
+import page_4 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream4.jpg";
 import "./Unit10_Page4.css";
 import CD23_pg25_Grammar2_AdultLady from "../../../assets/unit5/sounds/U5P43Grammar.mp3";
 import sound1 from "../../../assets/unit10/sound/Pg85_2.1_Adult Lady.mp3";
 import sound2 from "../../../assets/unit10/sound/Pg85_2.2_Adult Lady.mp3";
-import sound3 from "../../../assets/unit10/sound/Pg85_3.1_Jack.mp3";
-import sound4 from "../../../assets/unit10/sound/Pg85_3.2_Harley.mp3";
-import sound5 from "../../../assets/unit10/sound/Pg85_4.1_Jack.mp3";
-import sound6 from "../../../assets/unit10/sound/Pg85_4.2_Harley.mp3";
-import sound7 from "../../../assets/unit10/sound/Pg85_5.1_Harley.mp3";
-import sound8 from "../../../assets/unit10/sound/Pg85_5.2_Jack.mp3";
-// import sound9 from "../../../assets/unit9/sound/Pg79_4.1_Adult Lady.mp3";
-// import sound10 from "../../../assets/unit9/sound/Pg79_5.1_Adult Lady.mp3";
+import sound3 from "../../../assets/unit10/sound/Pg85_2.2_Adult Lady.mp3";
+import sound4 from "../../../assets/unit10/sound/Pg85_3.1_Jack.mp3";
+import sound5 from "../../../assets/unit10/sound/Pg85_3.2_Harley.mp3";
+import sound6 from "../../../assets/unit10/sound/Pg85_4.1_Jack.mp3";
+import sound7 from "../../../assets/unit10/sound/Pg85_4.2_Harley.mp3";
+import sound8 from "../../../assets/unit10/sound/Pg85_5.1_Harley.mp3";
+import sound9 from "../../../assets/unit10/sound/Pg85_5.2_Jack.mp3";
 import video from "../../../assets/unit5/sounds/P43.mp4";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
@@ -37,16 +36,16 @@ const Unit10_Page4 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 8.35, y1: 12.15, x2: 26.1, y2: 15, sound: sound1 },
-    { x1: 71.56, y1: 11.81, x2: 82.9, y2: 14.7, sound: sound2 },
-    { x1: 8.35, y1: 15.7, x2: 28.9, y2: 18.5, sound: sound3 },
-    { x1: 72.0, y1: 15.53, x2: 84.7, y2: 18.7, sound: sound4 },
-    { x1: 6.55, y1: 31.27, x2: 24.2, y2: 35.07, sound: sound5 },
-    { x1: 30.65, y1: 28.7, x2: 42.99, y2: 32.2, sound: sound6 },
-    { x1: 64.2, y1: 30.09, x2: 81.7, y2: 33.7, sound: sound7 },
-    { x1: 66.15, y1: 56.15, x2: 83.69, y2: 61.2, sound: sound8 },
-    // { x1: 39.09, y1: 63.59, x2: 59.6, y2: 67.23, sound: sound9 },
-    // { x1: 38.9, y1: 91.5, x2: 50.78, y2: 95.2, sound: sound10 },
+    { x1: 7.41, y1: 13.58, x2: 35.0, y2: 16.8, sound: sound1 },
+    { x1: 59.77, y1: 10.87, x2: 70.54, y2: 14.09, sound: sound2 },
+    { x1: 59.77, y1: 15.2, x2: 87.99, y2: 19.83, sound: sound3 },
+    { x1: 23.36, y1: 27.80, x2: 50.29, y2: 31.28, sound: sound4 },
+    { x1: 19.05, y1: 51.32, x2: 31.11, y2: 54.6, sound: sound5 },
+    { x1: 62.78, y1: 26.95, x2: 91.87, y2: 30.2, sound: sound6 },
+    { x1: 62.78, y1: 49.97, x2: 75.2, y2: 53.5, sound: sound7 },
+    { x1: 8.70, y1: 63.33, x2: 35.9, y2: 66.35, sound: sound8 },
+    { x1: 34.56, y1: 91.43, x2: 62.35, y2: 94.64, sound: sound9 },
+
   ];
 
   const handleImageClick = (e) => {

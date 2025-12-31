@@ -172,6 +172,7 @@ const Page8_Q1 = () => {
   };
 
   const checkAnswers = () => {
+    if (showAnswer) return;
     if (answers.some((a) => a.letter === "" || a.number === "")) {
       ValidationAlert.info(
         "Oops!",
@@ -196,7 +197,7 @@ const Page8_Q1 = () => {
 
     setWrongLetters(letterWrongs);
     setWrongNumbers(numberWrongs);
-
+    setShowAnswer(true);
     let color =
       score === totalPoints ? "green" : score === 0 ? "red" : "orange";
 
@@ -226,8 +227,9 @@ const Page8_Q1 = () => {
     }
   };
   return (
-    <div className="page8-wrapper"  style={{padding:"30px"}}>
-      <div   className="div-forall"
+    <div className="page8-wrapper" style={{ padding: "30px" }}>
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -235,7 +237,8 @@ const Page8_Q1 = () => {
           alignItems: "flex-start",
           position: "relative",
           width: "60%",
-        }}>
+        }}
+      >
         <div className="page8-content">
           <header className="header-title-page8">
             <span className="ex-A">A</span>{" "}
@@ -482,7 +485,7 @@ const Page8_Q1 = () => {
                     <div
                       style={{
                         position: "absolute",
-                        right: "-17px",
+                        right: "58px",
                         top: "5%",
                         transform: "translateY(-50%)",
                         width: "25px",

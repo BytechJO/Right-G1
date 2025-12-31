@@ -1,7 +1,10 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../../assets/unit6/imgs/U6P51EXEF-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P51EXEF-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P51EXEF-03.svg";
+import img1 from "../../../assets/U1 WB/U3/SVG/U3P17EXEF-01.svg";
+import img2 from "../../../assets/U1 WB/U3/SVG/U3P17EXEF-02.svg";
+import img3 from "../../../assets/U1 WB/U3/SVG/U3P17EXEF-03.svg";
+import img4 from "../../../assets/U1 WB/U3/SVG/U3P17EXEF-04.svg";
+import img5 from "../../../assets/U1 WB/U3/SVG/U3P17EXEF-05.svg";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit3_Page3_Q2.css";
 
@@ -291,7 +294,7 @@ const WB_Unit3_Page3_Q2 = () => {
               </div>
               <div className="img-box2">
                 <img
-                  src={img3}
+                  src={img4}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
                     locked || showAnswer ? "disabled-hover" : ""
@@ -307,7 +310,7 @@ const WB_Unit3_Page3_Q2 = () => {
               </div>{" "}
               <div className="img-box2">
                 <img
-                  src={img3}
+                  src={img5}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
                     locked || showAnswer ? "disabled-hover" : ""

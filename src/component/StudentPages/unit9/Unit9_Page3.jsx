@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import page_3 from "../../../assets/unit9/imgs/Right G1- Class Book_00078.jpg";
+import page_3 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm3.png";
 import "./Unit9_Page3.css";
 import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit5/sounds/U5P42Grammar.mp3";
 import sound1 from "../../../assets/unit9/sound/Pg78_1.1_Adult Lady.mp3";
@@ -44,16 +44,16 @@ const Unit9_Page3 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 10.7, y1: 12.99, x2: 26.3, y2: 16.5, sound: sound1 },
-    { x1: 67.23, y1: 11.47, x2: 86.5, y2: 14.7, sound: sound2 },
-    { x1: 67.23, y1: 15.2, x2: 86.7, y2: 18.4, sound: sound3 },
-    { x1: 6.8, y1: 29.9, x2: 23.5, y2: 33.07, sound: sound4 },
-    { x1: 30.43, y1: 33.8, x2: 47.7, y2: 37.19, sound: sound5 },
-    { x1: 53.38, y1: 30.08, x2: 70.7, y2: 33.72, sound: sound6 },
-    { x1: 76.33, y1: 31.1, x2: 93.86, y2: 34.62, sound: sound7 },
-    { x1: 8.86, y1: 64.81, x2: 27.8, y2: 68.29, sound: sound8 },
-    { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound9 },
-    { x1: 54.68, y1: 65.45, x2: 75.46, y2: 68.75, sound: sound10 },
+    { x1: 6.49, y1: 11.21, x2: 37.30, y2: 14.8, sound: sound1 },
+    { x1: 72.42, y1: 10.21, x2: 92.24, y2: 13.8, sound: sound2 },
+    { x1:  6.49, y1: 16.12, x2: 41.18, y2: 18.80, sound: sound3 },
+    { x1: 72.42, y1: 14.40, x2: 92.24, y2: 18.83, sound: sound4 },
+    { x1: 5.9, y1: 27.12, x2: 41.83, y2: 31.2, sound: sound5 },
+    { x1: 29.98, y1: 31.69, x2: 47.43, y2: 36.26, sound: sound6 },
+    { x1: 62.51, y1: 28.30, x2: 93.75, y2: 32.37, sound: sound7 },
+    { x1: 53.68, y1: 34.23, x2: 77.16, y2: 38.29, sound: sound8 },
+    { x1: 5.63, y1: 59.78, x2: 25.67, y2: 64.69, sound: sound9 },
+    { x1: 41.61, y1: 61.81, x2: 61.00, y2: 66.07, sound: sound10 },
   ];
 
   const handleImageClick = (e) => {

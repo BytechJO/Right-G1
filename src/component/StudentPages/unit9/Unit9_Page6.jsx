@@ -1,4 +1,4 @@
-import page_6 from "../../../assets/unit9/imgs/Right G1- Class Book_00081.jpg";
+import page_6 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm6.png";
 import "./Unit9_Page6.css";
 
 import CD25_Pg27_Song_AdultLady from "../../../assets/unit9/sound/CD74.Pg81_Song_Adult Lady.mp3";

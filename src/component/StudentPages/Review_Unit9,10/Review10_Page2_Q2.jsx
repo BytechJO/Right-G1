@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review10_Page2_Q2.css";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
+import img1 from "../../../assets/unit10/imgs/U10P91EXEE-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P91EXEE-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P91EXEE-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P91EXEE-04.svg";
+import img5 from "../../../assets/unit10/imgs/U10P91EXEE-05.svg";
+import img6 from "../../../assets/unit10/imgs/U10P91EXEE-06.svg";
 
 const Review10_Page2_Q2 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
@@ -16,8 +18,8 @@ const Review10_Page2_Q2 = () => {
     { img: img2, options: ["ten", "net"], correctIndex: 1 },
     { img: img3, options: ["jet", "hen"], correctIndex: 0 },
     { img: img4, options: ["ten", "egg"], correctIndex: 0 },
-    { img: img3, options: ["jet", "bed"], correctIndex: 1 },
-    { img: img4, options: ["hen", "ten"], correctIndex: 0 },
+    { img: img5, options: ["jet", "bed"], correctIndex: 1 },
+    { img: img6, options: ["hen", "ten"], correctIndex: 0 },
   ];
 
   const handleSelect = (qIndex, optionIndex) => {

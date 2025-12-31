@@ -1,9 +1,12 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-01.svg";
-import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
-import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
-import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
-
+import img1 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-01.svg";
+import img2 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-02.svg";
+import img3 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI02-01.svg";
+import img4 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI02-02.svg";
+import img5 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-01.svg";
+import img6 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI03-02.svg";
+import img7 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-01.svg";
+import img8 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 
@@ -13,32 +16,32 @@ const WB_Unit3_Page5_Q1 = () => {
       id: 1,
       word: "Make a line.",
       imgs: [
-        { src: img2, answer: true }, // short i
-        { src: img3, answer: false },
+        { src: img1, answer: true }, // short i
+        { src: img2, answer: false },
       ],
     },
     {
       id: 2,
       word: "Open your book.",
       imgs: [
-        { src: img4, answer: true }, // short i
-        { src: img2, answer: false },
+        { src: img3, answer: true }, // short i
+        { src: img4, answer: false },
       ],
     },
     {
       id: 3,
       word: "Take out your pencil.",
       imgs: [
-        { src: img4, answer: true },
-        { src: img3, answer: false }, // short i
+        { src: img5, answer: true },
+        { src: img6, answer: false }, // short i
       ],
     },
     {
       id: 4,
       word: "Quiet!",
       imgs: [
-        { src: img1, answer: true }, // short i
-        { src: img4, answer: false },
+        { src: img7, answer: true }, // short i
+        { src: img8, answer: false },
       ],
     },
   ];

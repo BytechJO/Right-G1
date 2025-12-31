@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Review9_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
+import img1 from "../../../assets/unit10/imgs/U10P89EXEE-01.svg";
+import img2 from "../../../assets/unit10/imgs/U10P89EXEE-02.svg";
+import img3 from "../../../assets/unit10/imgs/U10P89EXEE-03.svg";
+import img4 from "../../../assets/unit10/imgs/U10P89EXEE-04.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
@@ -133,7 +133,7 @@ const Review9_Page2_Q2 = () => {
       correct: "✓",
     }, {
       id: 4,
-      image: img3,
+      image: img4,
       correct: "✗",
     },
   ];
@@ -361,11 +361,7 @@ const Review9_Page2_Q2 = () => {
                     alt=""
                     className="unit10-p5-q2-question-img"
                   />
-                  <img
-                    src={q.image}
-                    alt=""
-                    className="unit10-p5-q2-question-img"
-                  />
+                 
                 </div>
 
                 <div className="unit10-p1-q2-options-box">

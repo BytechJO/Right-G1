@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import page_2 from "../../../assets/unit10/imgs/Right G1- Class Book_00091.jpg";
+import page_2 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream10.jpg";
 import { FaHeadphones } from "react-icons/fa";
 import { PiCursorClickBold } from "react-icons/pi";
 import Popup from "../../Popup/Popup";
@@ -22,7 +22,7 @@ const Review10_Page2 = ({ openPopup }) => {
       {/* <img src={page_2} /> */}
 
       <div
-        className="click-icon-review8-page2-2 hover:scale-110 transition"
+        className="click-icon-review10-page2-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -43,7 +43,7 @@ const Review10_Page2 = ({ openPopup }) => {
         </svg>
       </div>
       <div
-        className="click-icon-review8-page2-3  hover:scale-110 transition"
+        className="click-icon-review10-page2-3  hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -64,7 +64,7 @@ const Review10_Page2 = ({ openPopup }) => {
         </svg>
       </div>
       <div
-        className="click-icon-review8-page2-1 hover:scale-110 transition"
+        className="click-icon-review10-page2-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg

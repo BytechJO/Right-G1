@@ -99,7 +99,7 @@ const Page8_Q2 = () => {
     });
 
     setWrongDrops(wrongList);
-
+setShowAnswer(true)
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
@@ -197,6 +197,7 @@ const Page8_Q2 = () => {
                           <Draggable
                             draggableId={droppedLetters[`drop-${index + 1}`]}
                             index={0}
+                              isDragDisabled={showAnswer} // 🔥 هذا السطر المهم
                           >
                             {(providedDraggable) => (
                               <div

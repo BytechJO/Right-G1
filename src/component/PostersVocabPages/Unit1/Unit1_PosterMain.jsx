@@ -12,6 +12,7 @@ import num3 from "../../../assets/U1Poster/U1/U1Poster-03.svg";
 import num4 from "../../../assets/U1Poster/U1/U1Poster-04.svg";
 import num5 from "../../../assets/U1Poster/U1/U1Poster-05.svg";
 import "../../../index.css";
+import "./Unit1_PosterMain.css"
 import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
 import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
 import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
@@ -113,7 +114,7 @@ const Unit1_PosterMain = ({ openPopup }) => {
         style={{ position: "relative", width: "fit-content" }}
       >
         <div
-          className="vocab_container"
+          className="vocab_container_poster_vocab"
           style={{ bottom: "9%", right: "79.5%" }}
         >
           {[

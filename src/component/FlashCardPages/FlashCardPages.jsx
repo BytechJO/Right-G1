@@ -16,13 +16,16 @@ export default function FlashCardViewer({ card, openPopup }) {
       };
     }
   };
+ 
+  
   return (
-    <div className="flashcard-wrapper">
-      <img
+    <div       className="page1-img-wrapper"
+      style={{ backgroundImage: `url(${card.img})` }}>
+      {/* <img
         src={card.img}
         alt="flash"
         className="w-[350px] h-auto rounded-xl shadow-lg"
-      />
+      /> */}
 
       {card.audio && (
         <div

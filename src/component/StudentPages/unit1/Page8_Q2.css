@@ -120,6 +120,7 @@
   background-color: #c6eafa;
   border-radius: 100px;
   margin-bottom: 27px;
+  height: 70px;
   border: solid #5acbf4 3px;
 }
 .letter-sentence-pair {
@@ -177,7 +178,7 @@
     padding: 15px;
     padding-bottom: 90px;
     border-radius: 12px;
-      width: 100%;
+    width: 100%;
   }
 
   .audio2 {
@@ -246,8 +247,6 @@
     gap: 15px;
     width: calc(100% - 30px);
   }
-
-
 }
 
 @media (max-width: 540px) {
@@ -262,7 +261,6 @@
     padding: 12px;
     padding-bottom: 100px;
     border-radius: 10px;
-  
   }
 
   .audio2 {

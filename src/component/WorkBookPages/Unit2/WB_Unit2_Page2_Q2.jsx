@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import cake from "../../../assets/unit3/imgs3/cap.svg";
+import cake from "../../../assets/U1 WB/U2/U2P10EXED.svg";
 const WB_Unit2_Page2_Q2 = () => {
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);

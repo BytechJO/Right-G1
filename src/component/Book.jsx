@@ -9,7 +9,7 @@ import RightSidebar from "./Book/Sidebars/RightSidebar";
 import workbookCover from "../assets/U1 WB/U1/Pages from cover right W.B New Int copy.pdf.png";
 import stbookCover from "../assets/unit1/imgs/Pages from cover right SbEd copy.pdf.png";
 import teacherBookCover from "../assets/Right TB/Right International TB G1_Page_001.png";
-import fcBookCover from "../assets/Right 1 FC/img/right 1 (flashcard) New_Page_01.png";
+import fcBookCover from "../assets/Right 1 FC/img/right_New_Page_01.png";
 import posterBookCover from "../assets/Right Grammar Poster/img/R1 Grammar poster_Page_01.png";
 // === VIEWERS ===
 import FlashCardViewer from "./FlashCardPages/FlashCardPages";
@@ -65,6 +65,33 @@ export default function Book() {
 
   const [leftBarOpen, setLeftBarOpen] = useState(false);
   const [rightBarOpen, setRightBarOpen] = useState(false);
+
+  //------------------ swipe function -----------------------------
+// const touchStartX = useRef(0);
+// const touchEndX = useRef(0);
+// function handleTouchStart(e) {
+//   if (!isMobile) return;
+//   touchStartX.current = e.touches[0].clientX;
+// }
+
+// function handleTouchMove(e) {
+//   if (!isMobile) return;
+//   touchEndX.current = e.touches[0].clientX;
+// }
+
+// function handleTouchEnd() {
+//   if (!isMobile) return;
+
+//   const diff = touchStartX.current - touchEndX.current;
+
+//   if (Math.abs(diff) < 50) return; // تجاهل السحب الخفيف
+
+//   if (diff > 0) {
+//     nextPage(); // 👉 Swipe Left
+//   } else {
+//     prevPage(); // 👈 Swipe Right
+//   }
+// }
 
   // Popup
   const [popupOpen, setPopupOpen] = useState(false);
@@ -499,15 +526,20 @@ useEffect(() => {
       />
 
       {/* ===================== MAIN PAGE VIEW ===================== */}
-      <div
-        className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[87vh] flex items-center justify-center relative"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
+     <div
+  className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[87vh] flex items-center justify-center relative"
+  onMouseDown={handleMouseDown}
+  onMouseMove={handleMouseMove}
+  onMouseUp={handleMouseUp}
+  onMouseLeave={handleMouseUp}
+  //-----------swipe function---------------------
+  // onTouchStart={handleTouchStart}
+  // onTouchMove={handleTouchMove}
+  // onTouchEnd={handleTouchEnd}
+>
+
         {/* ==== NAVIGATION ARROWS (Next / Prev) ==== */}
-        {pageIndex > 0 && (
+        { pageIndex > 0 &&(
           <svg
             width="30"
             height="30"
@@ -519,7 +551,7 @@ useEffect(() => {
           </svg>
         )}
 
-        {pageIndex < pages.length - 1 && (
+       { pageIndex < pages.length - 1 && (
           <svg
             width="30"
             height="30"

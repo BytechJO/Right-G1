@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import page_2 from "../../../assets/unit10/imgs/Right G1- Class Book_00083.jpg";
+import page_2 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream2.jpg";
 import soundSong from "../../../assets/unit5/sounds/U5P41 Welcome to my class.mp3";
 import sound1 from "../../../assets/unit10/sound/Pg83_1.1_Bebo.mp3";
 import sound2_2 from "../../../assets/unit10/sound/Pg83_1.2_Lolo.mp3";
@@ -8,13 +8,13 @@ import sound4 from "../../../assets/unit10/sound/Pg83_2.2_Adult Lady.mp3";
 import sound5 from "../../../assets/unit10/sound/Pg83_2.3_Adult Lady.mp3";
 import sound6 from "../../../assets/unit10/sound/Pg83_2.4_Adult Lady.mp3";
 import sound7 from "../../../assets/unit5/sounds/U5P41 Listen and read along.mp3";
-import img1 from "../../../assets/unit5/imgs/K.svg";
-import img2 from "../../../assets/unit5/imgs/Key.svg";
-import img3 from "../../../assets/unit5/imgs/Kite.svg";
-import img4 from "../../../assets/unit5/imgs/kitchen.svg";
+import img1 from "../../../assets/unit10/imgs/short e.svg";
+import img2 from "../../../assets/unit10/imgs/ten.svg";
+import img3 from "../../../assets/unit10/imgs/net.svg";
+import img4 from "../../../assets/unit10/imgs/jet.svg";
 import CD21_Pg23_Instruction1_AdultLady from "../../../assets/unit5/sounds/U5P41 listen and repeat (1).mp3";
-import repeat1 from "../../../assets/unit5/imgs/listen and repeat 02.svg";
-import repeat2 from "../../../assets/unit5/imgs/listen and repeat 03.svg";
+import repeat1 from "../../../assets/unit10/imgs/listen and repeat 02.svg";
+import repeat2 from "../../../assets/unit10/imgs/listen and repeat 03.svg";
 import read from "../../../assets/unit1/imgs/P1 listen and repeat 01.svg";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
@@ -22,9 +22,8 @@ import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import "./Unit10_Page2.css";
-import sound2_3 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2_5 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound2_6 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound9 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
+
 
 const Unit10_Page2 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -78,26 +77,15 @@ const Unit10_Page2 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 12.15, y1: 53.86, sound: 1, isPrimary: true },
+    { x1: 11.15, y1: 46.2, sound: 1, isPrimary: true },
 
     // // الصوت الأول – منطقة إضافية
-    { x1: 8.7, y1: 50.6, x2: 23.3, y2: 58, sound: 1, isPrimary: false },
+    { x1: 2.89, y1: 34.73, x2: 11.72, y2: 70.10, sound: 1, isPrimary: false },
 
-    // // الصوت الثاني – الأساسية
-    { x1: 11.7, y1: 29.5, sound: 2, isPrimary: true },
-
-    // // الصوت الثاني – الإضافية
-    { x1: 11.29, y1: 24.4, x2: 18.4, y2: 33.55, sound: 2, isPrimary: false },
-    // // الصوت الثاني – الأساسية
-    { x1: 14.7, y1: 38.8, sound: 3, isPrimary: true },
-
-    // // الصوت الثاني – الإضافية
-    { x1: 13.44, y1: 37.10, x2: 18.3, y2: 43.37, sound: 3, isPrimary: false },
   ];
   const sounds = {
-    1: sound2_3,
-    2: sound2_5,
-    3: sound2_6,
+    1: sound9,
+
   };
 
   const handleImageClick = (e) => {

@@ -5,8 +5,8 @@ import img2 from "../../../assets/unit9/imgs/U9P81EXEE-02.svg";
 import "./Unit9_Page6_Q3.css";
 const Unit9_Page6_Q3 = () => {
   const questions = [
-    { id: 1, text: "I want chicken.", img: img1 },
-    { id: 2, text: "I want bread.", img: img2 },
+    { id: 1, text: "I want chicken.", img: img2 },
+    { id: 2, text: "I want bread.", img: img1 },
   ];
 
   // نخزن Ref لكل Canvas

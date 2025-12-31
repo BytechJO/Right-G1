@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Review10_Page1_Q3.css";
-import jello from "../../../assets/img_unit2/imgs/jello.jpg";
-import present from "../../../assets/img_unit2/imgs/Present1.jpg";
+import jello from "../../../assets/unit10/imgs/U10P90EXEC-01.svg";
+import present from "../../../assets/unit10/imgs/U10P90EXEC-02.svg";
 import balloons from "../../../assets/img_unit2/imgs/balloons..jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
@@ -141,7 +141,7 @@ const Review10_Page1_Q3 = () => {
 
               <div className="content-input-review10-p1-q3">
                 {/* Scramble */}
-                <img src={q.img} className="p9-q1-img2" />
+                <img src={q.img} className="p9-q1-img2" style={{height:"160px",width:"auto"}}/>
                 {/* Answer input */}
                 <div style={{ position: "relative", width: "100%" }}>
                   <input

@@ -1,4 +1,4 @@
-import page24 from "../../../assets/unit10/imgs/Right G1- Class Book_00092.jpg";
+import page24 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
 import sound1 from "../../../assets/unit4/sounds/U4ReadingP38-39.mp3";
@@ -61,9 +61,9 @@ const Unit10_Reading_P1 = ({ openPopup }) => {
   ];
   const clickableAreas = [
     { x1: 15.9, y1: 39.1, x2: 51.5, y2: 45.5, sound: sound2 },
-    { x1: 56.0, y1: 39.1, x2: 93.9, y2: 44.0, sound: sound3 },
-    { x1: 16.0, y1: 84.5, x2: 52.9, y2: 89.5, sound: sound4 },
-    { x1: 56.0, y1: 84.5, x2: 93.7, y2: 89.77, sound: sound5 },
+    { x1: 56.0, y1: 39.1, x2: 93.9, y2: 45.5, sound: sound3 },
+    { x1: 16.0, y1: 85.5, x2: 52.9, y2: 89.5, sound: sound4 },
+    { x1: 56.0, y1:85.5, x2: 93.7, y2: 92.27, sound: sound5 },
   ];
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();

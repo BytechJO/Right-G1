@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import page_4 from "../../../assets/unit9/imgs/Right G1- Class Book_00079.jpg";
+import page_4 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm4.png";
 import "./Unit9_Page4.css";
 import CD23_pg25_Grammar2_AdultLady from "../../../assets/unit5/sounds/U5P43Grammar.mp3";
 import sound1 from "../../../assets/unit9/sound/Pg79_2.1_Adult Lady.mp3";
@@ -15,7 +15,6 @@ import sound10 from "../../../assets/unit9/sound/Pg79_5.1_Adult Lady.mp3";
 import video from "../../../assets/unit5/sounds/P43.mp4";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
-import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 const Unit9_Page4 = ({ openPopup }) => {
   const audioRef = useRef(null);
@@ -37,16 +36,16 @@ const Unit9_Page4 = ({ openPopup }) => {
   ];
 
   const clickableAreas = [
-    { x1: 8.35, y1: 12.15, x2: 26.1, y2: 15, sound: sound1 },
-    { x1: 71.56, y1: 11.81, x2: 82.9, y2: 14.7, sound: sound2 },
-    { x1: 8.35, y1: 15.7, x2: 28.9, y2: 18.5, sound: sound3 },
-    { x1: 72.0, y1: 15.53, x2: 84.7, y2: 18.7, sound: sound4 },
-    { x1: 6.55, y1: 31.27, x2: 24.2, y2: 35.07, sound: sound5 },
-    { x1: 30.65, y1: 28.7, x2: 42.99, y2: 32.2, sound: sound6 },
-    { x1: 64.2, y1: 30.09, x2: 81.7, y2: 33.7, sound: sound7 },
-    { x1: 66.15, y1: 56.15, x2: 83.69, y2: 61.2, sound: sound8 },
-    { x1: 39.09, y1: 63.59, x2: 59.6, y2: 67.23, sound: sound9 },
-    { x1: 38.9, y1: 91.5, x2: 50.78, y2: 95.2, sound: sound10 },
+    { x1: 7.20, y1: 9.69, x2: 27.88, y2: 12.8, sound: sound1 },
+    { x1: 69.03, y1: 9.69, x2: 81.96, y2: 13.0, sound: sound2 },
+    { x1: 7.20, y1: 13.58, x2: 28.2, y2: 16.5, sound: sound3 },
+    { x1: 69.03, y1: 13.41, x2: 85.4, y2: 16.5, sound: sound4 },
+    { x1:  7.20, y1: 17.30, x2: 30.0, y2: 20.10, sound: sound5 },
+    { x1: 69.03, y1: 17.17, x2: 87.8, y2: 20.01, sound: sound6 },
+    { x1: 6.98, y1: 29.49, x2: 27.66, y2: 33.04, sound: sound7 },
+    { x1: 33.05, y1: 48.9, x2: 46.63, y2: 52.2, sound: sound8 },
+    { x1: 50.72, y1: 26.95, x2: 75.8, y2: 32.8, sound: sound9 },
+    { x1: 8.70, y1: 88.04, x2: 30.25, y2: 93.56, sound: sound10 },
   ];
 
   const handleImageClick = (e) => {

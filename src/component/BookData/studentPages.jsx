@@ -215,7 +215,7 @@ export const studentPages = (openPopup, goToUnit) => [
   <Review10_Page2 openPopup={openPopup} />,
   <Unit10_Reading_P1 openPopup={openPopup} />,
   <Unit10_Reading_P2 openPopup={openPopup} />,
-  <Writing_Page1 />,
+  <Writing_Page1 openPopup={openPopup}/>,
   <Writing_Page2 />,
   <Writing_Page3 />,
 ];

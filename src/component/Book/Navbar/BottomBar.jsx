@@ -213,7 +213,7 @@ export default function BottomBar({
         onClick={icons.openRightSidebar}
         style={{ color: "#430f68", display: "flex", gap: "5px" }}
       >
-        <span>Icon Key</span> <icons.keyIcon size={24} color="#430f68" />
+         {!isMobile && <span>Icon Key</span>} <icons.keyIcon size={24} color="#430f68" />
       </button>
     </footer>
   );
