@@ -112,7 +112,7 @@ const WB_Unit1_Page3_Q1 = () => {
               <input
                 className="input-text-field"
                 style={{
-                  width: "350px",
+                  width: "auto",
                   height: "35px",
                   fontWeight: "600",
                   fontSize: "20px",

@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-// import horse from "../../../assets/unit10/imgs/milk.svg";
-// import cat from "../../../assets/unit10/imgs/bread.svg";
-// import goat from "../../../assets/unit10/imgs/apple.svg";
-// import cow from "../../../assets/unit10/imgs/icecream.svg";
-// import chicken from "../../../assets/unit10/imgs/chicken.svg";
-// import dog from "../../../assets/unit10/imgs/chicken.svg";
+import img1 from "../../../assets/U1 WB/U9/U9P53EXEG-01.svg";
+import img2 from "../../../assets/U1 WB/U9/U9P53EXEG-02.svg";
+import img3 from "../../../assets/U1 WB/U9/U9P53EXEG-03.svg";
+import img4 from "../../../assets/U1 WB/U9/U9P53EXEG-04.svg";
+import img5 from "../../../assets/U1 WB/U9/U9P53EXEG-05.svg";
+import img6 from "../../../assets/U1 WB/U9/U9P53EXEG-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit9_Page3_Q2.css";
 
 const WB_Unit9_Page3_Q2 = () => {
   const items = [
-    { img: "./horse", value: "horse" },
-    { img: "./cat", value: "cat" },
-    { img: "./goat", value: "goat" },
-    { img: "./cow", value: "cow" },
-    { img: "./chicken", value: "chicken" },
-    { img: "./dog", value: "dog" },
+    { img:img1, value: "horse" },
+    { img: img2, value: "cat" },
+    { img: img3, value: "goat" },
+    { img: img4, value: "cow" },
+    { img: img5, value: "chicken" },
+    { img: img6, value: "dog" },
   ];
 
   const [answer, setAnswer] = useState("");
@@ -113,7 +113,7 @@ const WB_Unit9_Page3_Q2 = () => {
               <img
                 src={item.img}
                 alt={item.value}
-                style={{ height: "100px", width: "auto" }}
+                style={{ height: "130px", width: "auto" }}
               />
             </div>
           ))}

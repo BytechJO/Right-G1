@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./WB_Unit6_Page3_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit8/imgs/U8P73EXEG-01.svg";
-import img2 from "../../../assets/unit8/imgs/U8P73EXEG-02.svg";
+import img1 from "../../../assets/U1 WB/U6/U6P35EXEE-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P35EXEE-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P35EXEE-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P35EXEE-04.svg";
 
 const WB_Unit6_Page3_Q1 = () => {
   /* ================= QUESTIONS ================= */
@@ -42,7 +44,7 @@ const WB_Unit6_Page3_Q1 = () => {
         { type: "text", value: "." },
       ],
       correct: ["he", "fly a kite?", "No, he can’t."],
-      image: img2,
+      image: img3,
     },
     {
       id: 4,
@@ -54,7 +56,7 @@ const WB_Unit6_Page3_Q1 = () => {
         { type: "text", value: "." },
       ],
       correct: ["he", "climb a tree?", "No, he can’t."],
-      image: img2,
+      image: img4,
     },
   ];
 

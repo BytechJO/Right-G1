@@ -1,13 +1,16 @@
 import React, { useRef, useEffect } from "react";
 import "./WB_Unit10_Page3_Q2.css";
-import bookImg from "../../../assets/unit3/imgs3/pan.svg";
+import bookImg from "../../../assets/U1 WB/U10/U10P59EXEF-01.svg";
+import bookImg2 from "../../../assets/U1 WB/U10/U10P59EXEF-02.svg";
+import bookImg3 from "../../../assets/U1 WB/U10/U10P59EXEF-03.svg";
+import bookImg4 from "../../../assets/U1 WB/U10/U10P59EXEF-04.svg";
 
 const WB_Unit10_Page3_Q2 = () => {
   const questions = [
     { id: 1, text: "I want chicken.", img: bookImg },
-    { id: 2, text: "I want bread.", img: bookImg },
-    { id: 3, text: "I want a sweet.", img: bookImg },
-    { id: 4, text: "I want an apple.", img: bookImg },
+    { id: 2, text: "I want bread.", img: bookImg2 },
+    { id: 3, text: "I want a sweet.", img: bookImg3 },
+    { id: 4, text: "I want an apple.", img: bookImg4 },
   ];
 
   // نخزن Ref لكل Canvas
@@ -20,7 +23,7 @@ const WB_Unit10_Page3_Q2 = () => {
       const ctx = canvas.getContext("2d");
 
       const img = new Image();
-      img.src = bookImg; // أو صورة حسب السؤال
+      img.src = q.img; // أو صورة حسب السؤال
 
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);

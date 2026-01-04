@@ -5,10 +5,12 @@ import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P26exeB-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P26exeB-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P26exeB-03.svg";
-import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
+import img1 from "../../../assets/U1 WB/U7/U7P44EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U7/U7P44EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U7/U7P44EXEA-03.svg";
+import img4 from "../../../assets/U1 WB/U7/U7P44EXEA-04.svg";
+import img5 from "../../../assets/U1 WB/U7/U7P44EXEA-05.svg";
+import img6 from "../../../assets/U1 WB/U7/U7P44EXEA-06.svg";
 const WB_Unit7_Page6_Q1 = () => {
   // الإجابات المدخلة من الطالب
   const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
@@ -26,8 +28,8 @@ const WB_Unit7_Page6_Q1 = () => {
     { img: img2 },
     { img: img3 },
     { img: img4 },
-    { img: img4 },
-    { img: img4 },
+    { img: img5 },
+    { img: img6 },
   ];
   const audioRef = useRef(null);
   const [showContinue, setShowContinue] = useState(false);

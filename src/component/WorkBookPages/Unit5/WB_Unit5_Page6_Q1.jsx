@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit5_Page6_Q1.css";
-import img1 from "../../../assets/unit7/img/U7P62EXEA2-01.svg";
-import img2 from "../../../assets/unit7/img/U7P62EXEA2-02.svg";
-import img3 from "../../../assets/unit7/img/U7P62EXEA2-03.svg";
-import img6 from "../../../assets/unit7/img/U7P62EXEA2-06.svg";
-import img7 from "../../../assets/unit7/img/U7P62EXEA2-07.svg";
-import img8 from "../../../assets/unit7/img/U7P62EXEA2-08.svg";
+import img1 from "../../../assets/U1 WB/U5/U5P32EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U5/U5P32EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U5/U5P32EXEA-03.svg";
+import img6 from "../../../assets/U1 WB/U5/U5P32EXEA-04.svg";
+import img7 from "../../../assets/U1 WB/U5/U5P32EXEA-05.svg";
+import img8 from "../../../assets/U1 WB/U5/U5P32EXEA-06.svg";
 
 const data = [
   {

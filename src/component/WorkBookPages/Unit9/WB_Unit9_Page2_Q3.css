@@ -37,8 +37,8 @@
 
 .wb-unit9-p2-q3-input-wrapper {
     position: absolute;
-    bottom: -39px;
-    right: 19px;
+    bottom: -2px;
+    right: -3px;
 }
 
 
@@ -48,7 +48,7 @@
     
     border: 2px solid black;
     border-radius: 12px;
-    position: relative;
+    /* position: relative; */
     background: white;
     display: flex;
     justify-content: center;

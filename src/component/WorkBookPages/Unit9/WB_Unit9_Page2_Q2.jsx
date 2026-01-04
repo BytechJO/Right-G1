@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./WB_Unit9_Page2_Q2.css";
-import table from "../../../assets/unit4/imgs/U4P34EXEB-01.svg";
-import dish from "../../../assets/unit4/imgs/U4P34EXEB-02.svg";
+import table from "../../../assets/U1 WB/U9/U9P52EXED-01.svg";
+import dish from "../../../assets/U1 WB/U9/U9P52EXED-02.svg";
 import tiger from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
 import duck from "../../../assets/unit4/imgs/U4P34EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -219,7 +219,7 @@ const WB_Unit9_Page2_Q2 = () => {
                 </div>
 
                 <img
-                  src={dish}
+                  src={table}
                   className={`matched-img2 ${
                     locked || showAnswer ? "disabled-hover" : ""
                   }`}

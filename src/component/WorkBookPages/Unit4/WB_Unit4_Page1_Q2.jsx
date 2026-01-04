@@ -45,6 +45,41 @@ const WB_Unit4_Page1_Q2 = () => {
   const [answers, setAnswers] = useState(
     questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
   );
+  const [selectedColors, setSelectedColors] = useState(
+    questions.map(() => null)
+  );
+  const paletteColors = ["brown", "rgb(255, 187, 0)", "blue", "red"];
+
+  const [activePaletteIndex, setActivePaletteIndex] = useState(null);
+
+  const [svgContent, setSvgContent] = useState({});
+    // const [svgImages, setSvgImages] = useState({});
+    // const [imageColors, setImageColors] = useState({});
+    // const [activePalette, setActivePalette] = useState(null);
+  
+    useEffect(() => {
+      const loadSvgs = async () => {
+      const files = [bat, cap, ant, dad];
+
+const contents = await Promise.all(
+  files.map((file) =>
+    fetch(file)
+      .then((r) => r.text())
+      .then((text) =>
+        text
+          .replaceAll('fill="none"', 'fill="currentColor"')
+          .replaceAll(/stroke="[^"]*"/g, 'stroke="currentColor"')
+      )
+  )
+);
+
+setSvgContent(contents);
+
+      };
+  
+      loadSvgs();
+    }, []);
+  
 
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -111,13 +146,18 @@ const WB_Unit4_Page1_Q2 = () => {
     setLocked(true); // 🔒 قفل التعديل
   };
 
-  const reset = () => {
-    setAnswers(
-      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
-    );
-    setWrongInputs([]);
-    setLocked(false);
-  };
+const reset = () => {
+  setAnswers(
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+  );
+  setWrongInputs([]);
+  setLocked(false);
+
+  // 🔁 إعادة الصور للون الأسود
+  setSelectedColors(questions.map(() => null));
+  setActivePaletteIndex(null);
+};
+
 
   return (
     <div
@@ -130,7 +170,8 @@ const WB_Unit4_Page1_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -147,8 +188,34 @@ const WB_Unit4_Page1_Q2 = () => {
             <div key={qIndex} className="row2-wb-unit4-p1-q2">
               <div style={{ display: "flex", gap: "10px" }}>
                 <span className="num-span">{qIndex + 1}</span>
-                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+                {svgContent[qIndex] ? (
+                  <div
+                    className="svg-wrapper wb-svg-colorable"
+                    style={{ color: selectedColors[qIndex] || "transparent" }}
+                    onDoubleClick={() => setActivePaletteIndex(qIndex)}
+                    dangerouslySetInnerHTML={{ __html: svgContent[qIndex] }}
+                  />
+                ) : (
+                  <div className="svg-placeholder">Loading...</div>
+                )}
               </div>
+              {activePaletteIndex === qIndex && (
+                <div className="color-palette-wb-unit4-p1-q2 ">
+                  {paletteColors.map((color) => (
+                    <button
+                      key={color}
+                      className="color-circle"
+                      style={{ backgroundColor: color }}
+                      onClick={() => {
+                        const copy = [...selectedColors];
+                        copy[qIndex] = color;
+                        setSelectedColors(copy);
+                        setActivePaletteIndex(null); // سكّر الباليت
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
 
               <div className="sentence-wrapper-wb-unit4-p1-q2">
                 {q.parts.map((part, pIndex) => {
@@ -164,7 +231,6 @@ const WB_Unit4_Page1_Q2 = () => {
                     <span key={pIndex} style={{ position: "relative" }}>
                       <input
                         type="text"
-                      
                         className="inline-input-wb-unit4-p1-q2"
                         value={answers[qIndex][pIndex] || ""}
                         onChange={(e) =>
@@ -173,12 +239,11 @@ const WB_Unit4_Page1_Q2 = () => {
                         disabled={locked}
                       />
 
-                      {
-                        wrongInputs.includes(`${qIndex}-${pIndex}`) && (
-                          <span className="error-mark-input-wb-unit2-page3-q2">
-                            ✕
-                          </span>
-                        )}
+                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                        <span className="error-mark-input-wb-unit2-page3-q2">
+                          ✕
+                        </span>
+                      )}
                     </span>
                   );
                 })}

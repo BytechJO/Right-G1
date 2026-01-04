@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P26exeB-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P26exeB-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P26exeB-03.svg";
+import img1 from "../../../assets/U1 WB/U9/U9P52EXEE-01.svg";
+import img2 from "../../../assets/U1 WB/U9/U9P52EXEE-02.svg";
+import img3 from "../../../assets/U1 WB/U9/U9P52EXEE-03.svg";
 import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
 import "./WB_Unit9_Page2_Q3.css"
 const WB_Unit9_Page2_Q3 = () => {

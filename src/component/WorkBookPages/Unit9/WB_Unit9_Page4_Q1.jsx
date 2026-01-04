@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./WB_Unit9_Page4_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit8/imgs/U8P73EXEG-01.svg";
-import img2 from "../../../assets/unit8/imgs/U8P73EXEG-02.svg";
+import img1 from "../../../assets/U1 WB/U9/U9P54EXEH-01.svg";
+import img2 from "../../../assets/U1 WB/U9/U9P54EXEH-02.svg";
+import img3 from "../../../assets/U1 WB/U9/U9P54EXEH-03.svg";
+import img4 from "../../../assets/U1 WB/U9/U9P54EXEH-04.svg";
 const WB_Unit9_Page4_Q1 = () => {
   // ===============================
   // 🔵 1) الأسئلة (كلها داخل نفس الكومبونينت)
@@ -37,7 +39,7 @@ const WB_Unit9_Page4_Q1 = () => {
         { type: "text", value: "." },
       ],
       correct: ["cats"],
-      image: img2,
+      image: img3,
     },
     {
       id: 4,
@@ -47,7 +49,7 @@ const WB_Unit9_Page4_Q1 = () => {
         { type: "text", value: "." },
       ],
       correct: ["horses"],
-      image: img2,
+      image: img3,
     },
   ];
 

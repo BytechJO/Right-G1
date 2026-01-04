@@ -4,7 +4,7 @@ import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 
 import page_1 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream13.jpg";
-import Writing_Page1_EX from "./Writing_Page1_ex";
+import Writing_Page1_EX from "./Writing_Page1_EX";
 const Writing_Page1 = ({ openPopup }) => {
   return (
     <div

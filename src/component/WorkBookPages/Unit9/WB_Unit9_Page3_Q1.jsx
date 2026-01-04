@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P54EXEA-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P54EXEA-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P54EXEA-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P54EXEA-04.svg";
+import img1 from "../../../assets/U1 WB/U9/U9P53EXEF-01.svg";
+import img2 from "../../../assets/U1 WB/U9/U9P53EXEF-02.svg";
+import img3 from "../../../assets/U1 WB/U9/U9P53EXEF-03.svg";
+import img4 from "../../../assets/U1 WB/U9/U9P53EXEF-04.svg";
 // import "./WB_Unit7_Page4_Q2.css"
 const WB_Unit9_Page3_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
@@ -32,7 +32,7 @@ const WB_Unit9_Page3_Q1 = () => {
       correctIndex: 1,
     },
     {
-      img: img3,
+      img: img4,
       text: "",
       options: ["six goats", "seven goats"],
       correctIndex: 1,

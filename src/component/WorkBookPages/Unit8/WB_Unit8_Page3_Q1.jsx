@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./WB_Unit8_Page3_Q1.css";
-import table from "../../../assets/unit1/imgs/table2.jpg";
+import table from "../../../assets/U1 WB/U8/U8P47EXEE.svg";
 import dish from "../../../assets/unit1/imgs/dish3.jpg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";

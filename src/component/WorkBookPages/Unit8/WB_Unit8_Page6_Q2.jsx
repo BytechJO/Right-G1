@@ -5,10 +5,10 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P55EXED-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P55EXED-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P55EXED-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P55EXED-04.svg";
+import img1 from "../../../assets/U1 WB/U8/U8P50EXEB-01.svg";
+import img2 from "../../../assets/U1 WB/U8/U8P50EXEB-02.svg";
+import img3 from "../../../assets/U1 WB/U8/U8P50EXEB-03.svg";
+import img4 from "../../../assets/U1 WB/U8/U8P50EXEB-04.svg";
 const data = [
   {
     id: 1,

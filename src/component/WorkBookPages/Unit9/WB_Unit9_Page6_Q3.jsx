@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./WB_Unit9_Page6_Q3.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
+import img1 from "../../../assets/U1 WB/U9/U9P56EXEC-01.svg";
+import img2 from "../../../assets/U1 WB/U9/U9P56EXEC-02.svg";
+import img3 from "../../../assets/U1 WB/U9/U9P56EXEC-03.svg";
+import img4 from "../../../assets/U1 WB/U9/U9P56EXEC-04.svg";
 import sound1 from "../../../assets/unit6/sounds/U6P50EXEA1.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";

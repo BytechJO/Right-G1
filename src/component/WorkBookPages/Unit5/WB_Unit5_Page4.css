@@ -1,17 +1,42 @@
 .wb-unit5-p4-q1 {
-  position: absolute;
-  padding: 5px;
-  top: 14.5%;
-  left: 41%;
+    position: absolute;
+    padding: 5px;
+    top: 3.5%;
+    left: 32%;
 }
+
 
 .wb-unit5-p4-q2 {
-  position: absolute;
-  padding: 5px;
-  top: 45.5%;
-  left: 35%;
+    position: absolute;
+    padding: 5px;
+    top: 52.5%;
+    left: 50%;
 }
 
+.svg-wrapper svg {
+  width: 120px;
+  height: auto;
+}
+
+.svg-wrapper svg * {
+  fill: currentColor !important;
+  stroke: black !important;
+}
+
+.color-palette {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.color-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  cursor: pointer;
+}
 
 @media (max-width: 1024px) {
   .wb-unit5-p4-q1 {

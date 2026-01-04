@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 import "./WB_Unit8_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/U1 WB/U8/U8P46EXED-01.svg";
+import img2 from "../../../assets/U1 WB/U8/U8P46EXED-02.svg";
+import img3 from "../../../assets/U1 WB/U8/U8P46EXED-03.svg";
+import img4 from "../../../assets/U1 WB/U8/U8P46EXED-04.svg";
 const questions = [
   {
     id: 1,
-    img: "./img1",
+    img: img1,
     sentence: "Bend your knee.",
     words: ["bend", "your", "knee"],
     letters: "eigstbendzivyourploelkneeshkd",
   },
   {
     id: 2,
-    img: "./img2",
+    img: img2,
     sentence: "Close your eyes.",
     words: ["close", "your", "eyes"],
     letters: "wopdcloseklbgyourzqeyesdt",
   },
   {
     id: 3,
-    img: "./img3",
+    img: img3,
     sentence: "Touch your nose.",
     words: ["touch", "your", "nose"],
     letters: "oitouchwqytyourkhjfmnosevbyw",
   },
   {
     id: 4,
-    img: "./img4",
+    img: img4,
     sentence: "Raise your hand.",
     words: ["raise", "your", "hand"],
     letters: "lkuiraisebcxzyourythandvrmib",

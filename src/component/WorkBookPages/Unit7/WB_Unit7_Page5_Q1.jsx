@@ -1,10 +1,11 @@
 import "./WB_Unit7_Page5_Q1.css";
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P26exeB-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P26exeB-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P26exeB-03.svg";
-import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
+import img1 from "../../../assets/U1 WB/U7/U7P43EXEI-01.svg";
+import img2 from "../../../assets/U1 WB/U7/U7P43EXEI-02.svg";
+import img3 from "../../../assets/U1 WB/U7/U7P43EXEI-03.svg";
+import img4 from "../../../assets/U1 WB/U7/U7P43EXEI-04.svg";
+import img5 from "../../../assets/U1 WB/U7/U7P43EXEI-05.svg";
 const WB_Unit7_Page5_Q1 = () => {
   // الإجابات المدخلة من الطالب
   const [answers, setAnswers] = useState(["", "", "", "", ""]);
@@ -22,7 +23,7 @@ const WB_Unit7_Page5_Q1 = () => {
     { img: img2 },
     { img: img3 },
     { img: img4 },
-    { img: img4 },
+    { img: img5 },
   ];
 
   // تحديث خانة الإدخال

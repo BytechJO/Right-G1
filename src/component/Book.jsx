@@ -46,6 +46,7 @@ import {
 import WorkBookNavigator from "./WorkBookPages/WorkBookNavigator";
 import { postersVocabPages } from "./BookData/postersVocabPages";
 import PosterVocabNavigator from "./PostersVocabPages/PosterVocabNavigator";
+import TeacherBook from "./TeacherBookPages/TeacherBook";
 
 export default function Book() {
   // ===========================================================
@@ -67,31 +68,31 @@ export default function Book() {
   const [rightBarOpen, setRightBarOpen] = useState(false);
 
   //------------------ swipe function -----------------------------
-// const touchStartX = useRef(0);
-// const touchEndX = useRef(0);
-// function handleTouchStart(e) {
-//   if (!isMobile) return;
-//   touchStartX.current = e.touches[0].clientX;
-// }
+  // const touchStartX = useRef(0);
+  // const touchEndX = useRef(0);
+  // function handleTouchStart(e) {
+  //   if (!isMobile) return;
+  //   touchStartX.current = e.touches[0].clientX;
+  // }
 
-// function handleTouchMove(e) {
-//   if (!isMobile) return;
-//   touchEndX.current = e.touches[0].clientX;
-// }
+  // function handleTouchMove(e) {
+  //   if (!isMobile) return;
+  //   touchEndX.current = e.touches[0].clientX;
+  // }
 
-// function handleTouchEnd() {
-//   if (!isMobile) return;
+  // function handleTouchEnd() {
+  //   if (!isMobile) return;
 
-//   const diff = touchStartX.current - touchEndX.current;
+  //   const diff = touchStartX.current - touchEndX.current;
 
-//   if (Math.abs(diff) < 50) return; // تجاهل السحب الخفيف
+  //   if (Math.abs(diff) < 50) return; // تجاهل السحب الخفيف
 
-//   if (diff > 0) {
-//     nextPage(); // 👉 Swipe Left
-//   } else {
-//     prevPage(); // 👈 Swipe Right
-//   }
-// }
+  //   if (diff > 0) {
+  //     nextPage(); // 👉 Swipe Left
+  //   } else {
+  //     prevPage(); // 👈 Swipe Right
+  //   }
+  // }
 
   // Popup
   const [popupOpen, setPopupOpen] = useState(false);
@@ -103,7 +104,7 @@ export default function Book() {
   const pages = {
     student: studentPages(openPopup, goToUnit),
     work: workbookPages(openPopup, goToUnit),
-    teacher: teacherPages,
+    teacher: teacherPages.map((t) => <TeacherBook teacher={t} />),
     flash: flashPages,
     poster: posterPages.map((p) => (
       <PosterViewer poster={p} openPopup={openPopup} />
@@ -159,17 +160,16 @@ export default function Book() {
       }
     }
   }, [activeTab]);
-useEffect(() => {
-  if (viewMode === "spread" && !isMobile) {
-    const currentPageNumber = pageIndex + 1;
+  useEffect(() => {
+    if (viewMode === "spread" && !isMobile) {
+      const currentPageNumber = pageIndex + 1;
 
-    // لو فردية → رجّعها للي قبلها
-    if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
-      setPageIndex(pageIndex - 1);
+      // لو فردية → رجّعها للي قبلها
+      if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
+        setPageIndex(pageIndex - 1);
+      }
     }
-  }
-}, [viewMode]);
-
+  }, [viewMode]);
 
   // ===========================================================
   //                 📌 PAGE NAVIGATION
@@ -526,20 +526,19 @@ useEffect(() => {
       />
 
       {/* ===================== MAIN PAGE VIEW ===================== */}
-     <div
-  className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[87vh] flex items-center justify-center relative"
-  onMouseDown={handleMouseDown}
-  onMouseMove={handleMouseMove}
-  onMouseUp={handleMouseUp}
-  onMouseLeave={handleMouseUp}
-  //-----------swipe function---------------------
-  // onTouchStart={handleTouchStart}
-  // onTouchMove={handleTouchMove}
-  // onTouchEnd={handleTouchEnd}
->
-
+      <div
+        className="content-wrapper overflow-auto lg:overflow-hidden w-full h-[87vh] flex items-center justify-center relative"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        //-----------swipe function---------------------
+        // onTouchStart={handleTouchStart}
+        // onTouchMove={handleTouchMove}
+        // onTouchEnd={handleTouchEnd}
+      >
         {/* ==== NAVIGATION ARROWS (Next / Prev) ==== */}
-        { pageIndex > 0 &&(
+        {pageIndex > 0 && (
           <svg
             width="30"
             height="30"
@@ -551,7 +550,7 @@ useEffect(() => {
           </svg>
         )}
 
-       { pageIndex < pages.length - 1 && (
+        {pageIndex < pages.length - 1 && (
           <svg
             width="30"
             height="30"

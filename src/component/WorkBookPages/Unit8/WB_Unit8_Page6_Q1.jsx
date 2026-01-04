@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./WB_Unit8_Page6_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit8/imgs/U8P68EXEA1-01.svg";
-import img2 from "../../../assets/unit8/imgs/U8P68EXEA1-02.svg";
-import img3 from "../../../assets/unit8/imgs/U8P68EXEA1-03.svg";
-import img4 from "../../../assets/unit8/imgs/U8P68EXEA1-04.svg";
+import img1 from "../../../assets/U1 WB/U8/U8P50EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U8/U8P50EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U8/U8P50EXEA-03.svg";
+import img4 from "../../../assets/U1 WB/U8/U8P50EXEA-04.svg";
 const data = [
   { img: img4, scrambled: "beazr", answer: "z", pattern: "ebra" },
   { img: img2, scrambled: "ksoc", answer: "s", pattern: "ock" },

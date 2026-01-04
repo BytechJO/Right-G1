@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./WB_Unit6_Page6_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
+import img1 from "../../../assets/U1 WB/U6/U6P38EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P38EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P38EXEA-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P38EXEA-04.svg";
 import sound1 from "../../../assets/unit6/sounds/U6P50EXEA1.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
@@ -365,14 +365,14 @@ const WB_Unit6_Page6_Q1 = () => {
                 </span>
               </p>
 
-              <div className="unit6-p1-q1-flex">
+              <div className="wb-unit6-p6-q1-flex">
                 <img
                   src={q.image}
                   alt=""
                   className="unit6-p1-q1-question-img"
                 />
 
-                <div className="unit6-p1-q1-options-box">
+                <div className="wb-unit6-p6-q1-options-box">
                   {/* خيار الصح */}
                   <div className="option-wrapper">
                     <div

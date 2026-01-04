@@ -6,17 +6,6 @@ const WB_Unit2_Page2_Q2 = () => {
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(true); // مؤقت حتى ما يكسر التحقق
   const [isCorrect, setIsCorrect] = useState(null);
-  // useEffect(() => {
-  //   const canvas = canvasRef.current;
-  //   const rect = canvas.getBoundingClientRect();
-  //   const dpr = window.devicePixelRatio || 1;
-
-  //   canvas.width = rect.width * dpr;
-  //   canvas.height = rect.height * dpr;
-
-  //   const ctx = canvas.getContext("2d");
-  //   ctx.scale(dpr, dpr);
-  // }, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -33,6 +22,17 @@ const WB_Unit2_Page2_Q2 = () => {
       y: (clientY - rect.top) * scaleY,
     };
   };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    const image = new Image();
+    image.src = cake;
+
+    image.onload = () => {
+      ctx.drawImage(image, 0,10, canvas.width, canvas.height);
+    };
+  }, []);
 
   // 🖌️ Start Drawing
   const startDrawing = (e) => {
@@ -46,7 +46,7 @@ const WB_Unit2_Page2_Q2 = () => {
     ctx.isDrawing = true;
     ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+    ctx.strokeStyle = "red";
 
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -75,7 +75,14 @@ const WB_Unit2_Page2_Q2 = () => {
   const resetCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const image = new Image();
+    image.src = cake;
+    image.onload = () => {
+      ctx.drawImage(image, 0, 10, canvas.width, canvas.height);
+    };
   };
 
   const checkAnswer = () => {
@@ -113,7 +120,8 @@ const WB_Unit2_Page2_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -138,11 +146,10 @@ const WB_Unit2_Page2_Q2 = () => {
           />
 
           <span>.</span>
-        </div >
-        
-        <div  style={{position:"relative"}}className="canvas-wrapper-wb-unit2-q2">
-           <img src={cake} style={{ height: "150px", width: "auto" }} />
-          <canvas
+        </div>
+
+   <div style={{display:"flex",justifyContent:"center",alignContent:"center"}}>
+     <canvas
             ref={canvasRef}
             height={150}
             width={500}
@@ -155,8 +162,9 @@ const WB_Unit2_Page2_Q2 = () => {
             onTouchMove={draw}
             onTouchEnd={stopDrawing}
           />
+   </div>
          
-        </div>
+    
       </div>
 
       <div className="action-buttons-container">

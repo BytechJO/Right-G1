@@ -347,7 +347,7 @@ const WB_Unit4_Page6_Q1 = () => {
                   >
                     {index + 1}
                   </span>
-                  <img src={item.img} className="fv-image" />
+                  <img src={item.img} className="fv-image-wb-unit4-p6-q1" />
                 </div>
                 <div className="fv-options-wb-unit4-p6-q1">
                   {/* B OPTION */}

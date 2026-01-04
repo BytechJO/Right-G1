@@ -3,11 +3,11 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page1_Q2.css";
 
 // 🔹 استبدلي الصور حسب مشروعك
-// import img1 from "../../../assets/unit6/imgs/u6p1_1.png";
-// import img2 from "../../../assets/unit6/imgs/u6p1_2.png";
-// import img3 from "../../../assets/unit6/imgs/u6p1_3.png";
-// import img4 from "../../../assets/unit6/imgs/u6p1_4.png";
-// import img5 from "../../../assets/unit6/imgs/u6p1_5.png";
+import img1 from "../../../assets/U1 WB/U6/U6P33EXEB-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P33EXEB-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P33EXEB-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P33EXEB-04.svg";
+import img5 from "../../../assets/U1 WB/U6/U6P33EXEB-05.svg";
 
 /* ================= DATA ================= */
 
@@ -16,35 +16,35 @@ const columns = ["He", "She", "can", "can’t"];
 const rows = [
   {
     id: 1,
-    img: "./img1",
+    img: img1,
     subject: "He",
     ability: "can",
     text: "paint a picture.",
   },
   {
     id: 2,
-    img: "./img2",
+    img:img2,
     subject: "He",
     ability: "can",
     text: "ride a bike.",
   },
   {
     id: 3,
-    img: "./img3",
+    img: img3,
     subject: "He",
     ability: "can’t",
     text: "sail a boat.",
   },
   {
     id: 4,
-    img: "./img4",
+    img: img4,
     subject: "He",
     ability: "can’t",
     text: "fly a kite.",
   },
   {
     id: 5,
-    img: "./img5",
+    img: img5,
     subject: "He",
     ability: "can",
     text: "play the violin.",

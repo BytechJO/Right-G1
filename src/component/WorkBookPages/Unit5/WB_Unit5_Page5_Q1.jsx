@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import find_img from "../../../assets/U1 WB/U5/Untitled design.jpg";
+import find_img from "../../../assets/U1 WB/U5/U5P31EXEI-01.svg";
 
 /* ================= DATA ================= */
 

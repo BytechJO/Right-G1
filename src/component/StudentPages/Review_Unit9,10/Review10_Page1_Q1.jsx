@@ -12,10 +12,10 @@ export default function Review10_Page1_Q1() {
   // 🔹 CORRECT ANSWERS (المصدر الوحيد)
   // ============================
   const correctMatches = [
-    { word: "What do you want?I want an apple.", image: "img4" },
-    { word: "What do you want?I want ice cream.", image: "img1" },
-    { word: "What do you want?I want chicken.", image: "img2" },
-    { word: "What do you want?I want milk.", image: "img3" },
+    { word: "What do you want?", word2: "I want an apple.", image: "img4" },
+    { word: "What do you want?", word2: "I want ice cream.", image: "img1" },
+    { word: "What do you want?", word2: "I want chicken.", image: "img2" },
+    { word: "What do you want?.", word2: "I want milk", image: "img3" },
   ];
 
   const imagesMap = [img1, img2, img3, img4];
@@ -87,7 +87,7 @@ export default function Review10_Page1_Q1() {
     // 2️⃣ فحص توصيل كل كلمة
     // =========================
     for (const item of correctMatches) {
-      const hasLine = lines.some((l) => l.word === item.word);
+      const hasLine = lines.some((l) => l.word === item.word + item.word2);
       if (!hasLine) {
         ValidationAlert.info("Please connect all the words to pictures.");
         return;
@@ -113,13 +113,13 @@ export default function Review10_Page1_Q1() {
     let wrongC = [];
 
     correctMatches.forEach((item) => {
-      const line = lines.find((l) => l.word === item.word);
+      const line = lines.find((l) => l.word === (item.word+item.word2));
 
       const imageCorrect = line && line.image === item.image;
 
       if (imageCorrect) score += 1;
 
-      if (!imageCorrect) wrongC.push(item.word);
+      if (!imageCorrect) wrongC.push((item.word+item.word2));
     });
 
     // setWrongLetters(wrongL);
@@ -162,11 +162,11 @@ export default function Review10_Page1_Q1() {
       };
     };
 
-    const finalLines = correctMatches.map((item) => ({
+    const finalLines = correctMatches.map((item, i) => ({
       word: item.word,
       image: item.image,
-      x1: getPos(`${item.word}-dot`).x,
-      y1: getPos(`${item.word}-dot`).y,
+      x1: getPos(`${item.word}-${i + 1}-dot`).x,
+      y1: getPos(`${item.word}-${i + 1}-dot`).y,
       x2: getPos(`${item.image}-dot`).x,
       y2: getPos(`${item.image}-dot`).y,
     }));
@@ -204,29 +204,31 @@ export default function Review10_Page1_Q1() {
             <div className="matching-row-review10-p1-q1" key={item.word}>
               <div className="word-with-dot-review10-p1-q1">
                 <span className="span-num">{index + 1}</span>
-                <div style={{ position: "relative", width: "100%" }}>
+                <div style={{ position: "relative" }}>
                   <span
                     id="width-span-review10-p1-q1"
                     className={`clickable-word-unit2-p7-q2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
                     onClick={() =>
-                      document.getElementById(`${item.word}-dot`).click()
+                      document
+                        .getElementById(`${item.word}-${index + 1}-dot`)
+                        .click()
                     }
                   >
-                    {item.word}
+                    {item.word} <br /> {item.word2}
                   </span>
                   {!showAnswer &&
                     locked &&
-                    wrongConnections.includes(item.word) && (
+                    wrongConnections.includes(item.word + item.word2) && (
                       <span className="error-mark-review10-p1-q1">✕</span>
                     )}
                 </div>
                 <div className="dot-wrapper">
                   <div
                     className="dot start-dot"
-                    id={`${item.word}-dot`}
-                    data-word={item.word}
+                    id={`${item.word}-${index + 1}-dot`}
+                    data-word={item.word + item.word2}
                     onClick={handleStartDotClick}
                   />
                 </div>

@@ -3,10 +3,10 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page2_Q2.css";
 
 // 🔹 الصور
-import img1 from "../../../assets/unit6/imgs/hill.svg";
-import img2 from "../../../assets/unit6/imgs/dig.svg";
-import img3 from "../../../assets/unit6/imgs/mitt.svg";
-import img4 from "../../../assets/unit6/imgs/wig.svg";
+import img1 from "../../../assets/U1 WB/U6/U6P34EXED-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P34EXED-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P34EXED-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P34EXED-04.svg";
 
 /* ================= DATA ================= */
 

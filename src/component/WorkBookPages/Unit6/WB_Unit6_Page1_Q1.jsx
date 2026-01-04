@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 // import "./Unit2_Page8_Q1.css";
-import table from "../../../assets/unit1/imgs/table2.jpg";
-import dish from "../../../assets/unit1/imgs/dish3.jpg";
-import tiger from "../../../assets/unit1/imgs/tiger.svg";
-import duck from "../../../assets/unit1/imgs/duck.svg";
+import table from "../../../assets/U1 WB/U6/U6P33EXEA-01.svg";
+import dish from "../../../assets/U1 WB/U6/U6P33EXEA-02.svg";
+import tiger from "../../../assets/U1 WB/U6/U6P33EXEA-03.svg";
+import duck from "../../../assets/U1 WB/U6/U6P33EXEA-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit6_Page1_Q1 = () => {
@@ -288,7 +288,7 @@ const WB_Unit6_Page1_Q1 = () => {
                 </div>
                 <div style={{ width: "150px" }}>
                   <img
-                    src={duck}
+                    src={tiger}
                      className={`matched-img2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}

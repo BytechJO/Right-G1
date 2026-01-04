@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import CatSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
-import HorseSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
-import DogSvg from "../../../assets/unit7/img/U7P62EXEA1-01.svg";
+import CatSvg from "../../../assets/U1 WB/U9/U9P55EXEK-01.svg";
+import HorseSvg from "../../../assets/U1 WB/U9/U9P55EXEK-02.svg";
+import DogSvg from "../../../assets/U1 WB/U9/U9P55EXEK-03.svg";
 
 import "./WB_Unit9_Page5_Q2.css";
 

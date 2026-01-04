@@ -1,30 +1,39 @@
 import React, { useState } from "react";
 // import "./Unit3_Page6_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P27exeE-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P27exeE-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
-import img4 from "../../../assets/unit3/imgs3/P27exeE-04.svg";
+import img1 from "../../../assets/U1 WB/U5/U5P29EXEF-01.svg";
+import img2 from "../../../assets/U1 WB/U5/U5P29EXEF-02.svg";
+import img3 from "../../../assets/U1 WB/U5/U5P29EXEF-03.svg";
+import img4 from "../../../assets/U1 WB/U5/U5P29EXEF-04.svg";
 const WB_Unit5_Page3_Q2 = () => {
   const questions = [
     {
       id: 1,
-      text: "Is this a book? Yes, it is. ",
+      text1: "Is this a book?",
+      text2: " Yes, it is. ",
       image: img1,
       correct: "✓",
     },
-    { id: 2, text: "Is this a pen? No, it isn’t.", image: img2, correct: "✓" },
+    {
+      id: 2,
+      text1: "Is this a pen?",
+      text2: " No, it isn’t.",
+      image: img2,
+      correct: "✗",
+    },
     {
       id: 3,
-      text: "Is this a chair? No, it isn’t.",
+      text1: "Is this a chair?",
+      text2: " No, it isn’t.",
       image: img3,
       correct: "✗",
     },
     {
       id: 4,
-      text: "Is this an eraser? Yes, it is.",
+      text1: "Is this an eraser?",
+      text2: " Yes, it is. ",
       image: img4,
-      correct: "✗",
+      correct: "✓",
     },
   ];
 
@@ -117,27 +126,27 @@ const WB_Unit5_Page3_Q2 = () => {
           <span style={{ color: "red" }}> ✗</span>.
         </h5>
 
-        <div className="unit3-q5-container"style={{
-                  gap: "70px",
-                }}>
+        <div
+          className="unit3-q5-container"
+          style={{
+            gap: "70px",
+          }}
+        >
           {questions.map((q, index) => (
             <div key={q.id} className="unit3-q5-question-box">
-              <p
-                className="unit3-q5-question-text"
-                style={{
-                  fontSize: "20px",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>
-                  {q.id}.
-                </span>
-                {q.text}
-              </p>
-
-              <div className="unit3-q5-flex">
-                <img src={q.image} alt="" className="unit3-q5-question-img" />
-
-                <div className="unit3-q5-options-box">
+              <div>
+                <p
+                  className="unit3-q5-question-text"
+                  style={{
+                    fontSize: "20px",
+                  }}
+                >
+                  <span style={{ color: "darkblue", fontWeight: "700" }}>
+                    {q.id}.
+                  </span>
+                  {q.text1} <br /> {q.text2}
+                </p>
+                <div className="wb-unit5-p3-q2-options-box">
                   {/* خيار الصح */}
                   <div className="option-wrapper">
                     <div
@@ -170,6 +179,9 @@ const WB_Unit5_Page3_Q2 = () => {
                     )}
                   </div>
                 </div>
+              </div>
+              <div className="unit3-q5-flex">
+                <img src={q.image} alt="" className="unit3-q5-question-img" />
               </div>
             </div>
           ))}

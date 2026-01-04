@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
-import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
-import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
+import bat from "../../../assets/U1 WB/U8/U8P45EXEB-01.svg";
+import cap from "../../../assets/U1 WB/U8/U8P45EXEB-02.svg";
+import ant from "../../../assets/U1 WB/U8/U8P45EXEB-03.svg";
+import dad from "../../../assets/U1 WB/U8/U8P45EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit8_Page1_Q2.css"
 const WB_Unit8_Page1_Q2 = () => {
@@ -32,7 +32,7 @@ const WB_Unit8_Page1_Q2 = () => {
       ],
     },
      {
-      img: ant,
+      img: dad,
       parts: [
          
         { type: "input", answer: "Open your mouth" },

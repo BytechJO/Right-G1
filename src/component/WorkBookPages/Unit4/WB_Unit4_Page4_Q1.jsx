@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import "./WB_Unit4_Page4_Q1.css"
 const WB_Unit4_Page4_Q1 = () => {
   const [labels, setLabels] = useState({
     triangle: "",
@@ -181,7 +181,7 @@ const WB_Unit4_Page4_Q1 = () => {
               <input
                 value={labels.triangle}
                 disabled={checked}
-                className="answer-input33-review10-p1-q3"
+                className="answer-input33-wb-unit4-p4-q1"
                 onChange={(e) =>
                   setLabels({ ...labels, triangle: e.target.value })
                 }
@@ -203,7 +203,7 @@ const WB_Unit4_Page4_Q1 = () => {
               <input
                 value={labels.house}
                 disabled={checked}
-                className="answer-input33-review10-p1-q3"
+                className="answer-input33-wb-unit4-p4-q1"
                 onChange={(e) =>
                   setLabels({ ...labels, house: e.target.value })
                 }
@@ -233,7 +233,7 @@ const WB_Unit4_Page4_Q1 = () => {
               <input
                 value={labels.circle1}
                 disabled={checked}
-                className="answer-input33-review10-p1-q3"
+                className="answer-input33-wb-unit4-p4-q1"
                 onChange={(e) =>
                   setLabels({ ...labels, circle1: e.target.value })
                 }
@@ -245,7 +245,7 @@ const WB_Unit4_Page4_Q1 = () => {
               <input
                 value={labels.circle2}
                 disabled={checked}
-                className="answer-input33-review10-p1-q3"
+                className="answer-input33-wb-unit4-p4-q1"
                 onChange={(e) =>
                   setLabels({ ...labels, circle2: e.target.value })
                 }
@@ -267,7 +267,7 @@ const WB_Unit4_Page4_Q1 = () => {
               <input
                 value={labels.door}
                 disabled={checked}
-                className="answer-input33-review10-p1-q3"
+                className="answer-input33-wb-unit4-p4-q1"
                 onChange={(e) => setLabels({ ...labels, door: e.target.value })}
                 style={{ width: "100%", textAlign: "center" }}
               />

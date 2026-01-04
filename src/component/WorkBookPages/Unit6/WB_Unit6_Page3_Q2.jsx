@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
-import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
+import bat from "../../../assets/U1 WB/U6/U6P35EXEF-01.svg";
+import cap from "../../../assets/U1 WB/U6/U6P35EXEF-02.svg";
+import ant from "../../../assets/U1 WB/U6/U6P35EXEF-03.svg";
 import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page3_Q2.css"

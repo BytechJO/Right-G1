@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page1_Q1.css";
-import jello from "../../../assets/img_unit2/imgs/jello.jpg";
-import present from "../../../assets/img_unit2/imgs/Present1.jpg";
-import balloons from "../../../assets/img_unit2/imgs/balloons..jpg";
+import jello from "../../../assets/U1 WB/U10/U10P57EXEA-01.svg";
+import present from "../../../assets/U1 WB/U10/U10P57EXEA-02.svg";
+import balloons from "../../../assets/U1 WB/U10/U10P57EXEA-03.svg";
+import balloons1 from "../../../assets/U1 WB/U10/U10P57EXEA-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit10_Page1_Q1 = () => {
@@ -35,7 +36,7 @@ const WB_Unit10_Page1_Q1 = () => {
     },
     {
       id: "q4",
-      img: balloons,
+      img: balloons1,
       scramble: "I want eic mreac.",
       questionCorrect: "I want ice cream",
     },

@@ -1,0 +1,10 @@
+.img-div-wb-unit7-p3-q1 {
+    object-fit: cover;
+    /* border: 3px solid rgb(0, 179, 255); */
+    border-radius: 12px;
+    /* padding: 10px; */
+    background: white;
+    width: 180px;
+    display: flex;
+    justify-content: center;
+}

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
+import img1 from "../../../assets/U1 WB/U6/U6P36EXEG-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P36EXEG-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P36EXEG-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P36EXEG-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page4_Q1.css";
 
@@ -27,7 +28,7 @@ const WB_Unit6_Page4_Q1 = () => {
     },
     {
       id: 3,
-      image: img2,
+      image: img3,
       text: "Can it climb a tree?",
       items: [
         { text: "Yes, it is.", correct: "x" },
@@ -36,7 +37,7 @@ const WB_Unit6_Page4_Q1 = () => {
     },
     {
       id: 4,
-      image: img2,
+      image: img4,
       text: "Can he swim?",
       items: [
         { text: "Yes, it is.", correct: "✓" },

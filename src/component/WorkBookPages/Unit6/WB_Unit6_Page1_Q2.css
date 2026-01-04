@@ -32,7 +32,7 @@
 }
 
 .img-cell img {
-  width: 70px;
+  width: 100%;
   height: auto;
   border-radius: 8px;
 }
@@ -40,7 +40,7 @@
 /* ===== ROW NUMBER ===== */
 .row-number {
   position: absolute;
-  left: 8px;
+  left:-26px;
   top: 50%;
   transform: translateY(-50%);
   font-weight: bold;

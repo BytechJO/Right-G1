@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit7_Page6_Q3.css";
-import img1 from "../../../assets/unit4/imgs/U4P37EEXEE-01-01.svg";
-import img2 from "../../../assets/unit4/imgs/U4P37EEXEE-01-02.svg";
-import img3 from "../../../assets/unit4/imgs/U4P37EEXEE-02-01.svg";
-import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
+import img1 from "../../../assets/U1 WB/U7/U7P44EXEC-01.svg";
+import img2 from "../../../assets/U1 WB/U7/U7P44EXEC-02.svg";
+import img3 from "../../../assets/U1 WB/U7/U7P44EXEC-03.svg";
+import img4 from "../../../assets/U1 WB/U7/U7P44EXEC-04.svg";
 
 const data = [
   {

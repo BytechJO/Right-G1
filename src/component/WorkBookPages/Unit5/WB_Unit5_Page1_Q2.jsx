@@ -162,7 +162,7 @@ const WB_Unit5_Page1_Q2 = () => {
                   <img
                     src={q.image}
                     className="question-img-review5-p2-q3"
-                    style={{ width: "180px" }}
+                    style={{ width: "140px" }}
                   />
                 </div>
                 <div

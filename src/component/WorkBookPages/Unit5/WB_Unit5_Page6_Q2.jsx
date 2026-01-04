@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit4/imgs/U4P32ExeA2-01.svg";
-import cap from "../../../assets/unit4/imgs/U4P32ExeA2-02.svg";
-import ant from "../../../assets/unit4/imgs/U4P32ExeA2-03.svg";
-import dad from "../../../assets/unit4/imgs/U4P32ExeA2-04.svg";
+import bat from "../../../assets/U1 WB/U5/U5P32EXEB-01.svg";
+import cap from "../../../assets/U1 WB/U5/U5P32EXEB-02.svg";
+import ant from "../../../assets/U1 WB/U5/U5P32EXEB-03.svg";
+import dad from "../../../assets/U1 WB/U5/U5P32EXEB-04.svg";
+import dad1 from "../../../assets/U1 WB/U5/U5P32EXEB-05.svg";
+import dad2 from "../../../assets/U1 WB/U5/U5P32EXEB-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
@@ -407,7 +409,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">5</span>{" "}
-              <img src={cap} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={dad1} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -429,7 +431,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">6</span>{" "}
-              <img src={cap} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={dad2} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">

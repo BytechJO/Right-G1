@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 import "./WB_Unit6_Page5_Q2.css";
+import img1 from "../../../assets/U1 WB/U6/U6P37EXEJ-01.svg";
+import img2 from "../../../assets/U1 WB/U6/U6P37EXEJ-02.svg";
+import img3 from "../../../assets/U1 WB/U6/U6P37EXEJ-03.svg";
+import img4 from "../../../assets/U1 WB/U6/U6P37EXEJ-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 const questions = [
   {
     id: 1,
-    img: "./img1",
+    img: img1,
     sentence: "She can fly a kite.",
     words: ["she", "can", "fly", "a", "kite"],
     letters: "typolshehguecanvqxzflyiklppatyeikitebcm",
   },
   {
     id: 2,
-    img: "./img2",
+    img: img2,
     sentence: "It can't swim.",
     words: ["it", "cant", "swim"],
     letters: "kloiuitponbcantrwqaswimmhgfd",
   },
   {
     id: 3,
-    img: "./img3",
+    img: img3,
     sentence: "It can't climb a tree.",
     words: ["it", "cant", "climb", "a", "tree"],
     letters: "ascxitwqtycantlnmclimbpxczajhiyktreewqer",
   },
   {
     id: 4,
-    img: "./img4",
+    img: img4,
     sentence: "He can't sail a boat.",
     words: ["he", "cant", "sail", "a", "boat"],
     letters: "kuyjhebzwsacantlzassailtruhavkooboatkhtg",

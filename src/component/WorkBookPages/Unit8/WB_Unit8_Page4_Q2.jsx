@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./WB_Unit8_Page4_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit5/imgs/U5P44EXEA2-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P44EXEA2-02.svg";
-import img3 from "../../../assets/unit5/imgs/U5P44EXEA2-03.svg";
-import img4 from "../../../assets/unit5/imgs/U5P44EXEA2-04.svg";
-import img5 from "../../../assets/unit5/imgs/U5P44EXEA2-05.svg";
-import img6 from "../../../assets/unit5/imgs/U5P44EXEA2-06.svg";
+import img1 from "../../../assets/U1 WB/U8/U8P48EXEH01-01.svg";
+import img2 from "../../../assets/U1 WB/U8/U8P48EXEH01-02.svg";
+import img3 from "../../../assets/U1 WB/U8/U8P48EXEH02-01.svg";
+import img4 from "../../../assets/U1 WB/U8/U8P48EXEH02-02.svg";
+import img5 from "../../../assets/U1 WB/U8/U8P48EXEH03-01.svg";
+import img6 from "../../../assets/U1 WB/U8/U8P48EXEH03-02.svg";
+import img7 from "../../../assets/U1 WB/U8/U8P48EXEH04-01.svg";
+import img8 from "../../../assets/U1 WB/U8/U8P48EXEH04-02.svg";
 const data = [
   {
     id: 1,
@@ -21,8 +23,8 @@ const data = [
     id: 2,
     text: "Touch your eye.",
     images: [
-      { id: 1, src: img1, value: "nose" },
-      { id: 2, src: img2, value: "eye" },
+      { id: 1, src: img3, value: "nose" },
+      { id: 2, src: img4, value: "eye" },
     ],
     correct: ["eye"],
   },
@@ -30,8 +32,8 @@ const data = [
     id: 3,
     text: "Touch your leg.",
     images: [
-      { id: 1, src: img1, value: "arm" },
-      { id: 2, src: img2, value: "leg" },
+      { id: 1, src: img5, value: "arm" },
+      { id: 2, src: img6, value: "leg" },
     ],
     correct: ["leg"],
   },
@@ -39,8 +41,8 @@ const data = [
     id: 4,
     text: "Touch your arm.",
     images: [
-      { id: 1, src: img1, value: "arm" },
-      { id: 2, src: img2, value: "feet" },
+      { id: 1, src: img7, value: "arm" },
+      { id: 2, src: img8, value: "feet" },
     ],
     correct: ["arm"],
   },

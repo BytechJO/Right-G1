@@ -34,9 +34,9 @@ useEffect(() => {
     const ctx = canvas.getContext("2d");
 
     ctx.isDrawing = true;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+    ctx.strokeStyle = "red";
 
     const rect = canvas.getBoundingClientRect();
     const clientX = e.clientX || e.touches[0].clientX;
@@ -127,12 +127,15 @@ useEffect(() => {
       <div
       className="action-buttons-container"
       >
+        {currentIndex >0 &&
         <button  className="show-answer-btn swal-continue"
           disabled={currentIndex === 0}
           onClick={() => setCurrentIndex((prev) => prev - 1)}
         >
           Previous
-        </button>
+        </button> 
+        }
+       
 
         <button className="try-again-button" onClick={resetCanvas}>Clear ↻</button>
 

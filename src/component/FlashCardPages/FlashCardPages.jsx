@@ -19,7 +19,7 @@ export default function FlashCardViewer({ card, openPopup }) {
  
   
   return (
-    <div       className="page1-img-wrapper"
+    <div       className="page1-img-wrapper-flashcard"
       style={{ backgroundImage: `url(${card.img})` }}>
       {/* <img
         src={card.img}

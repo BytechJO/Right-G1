@@ -179,7 +179,7 @@ const WB_Unit3_Page5_Q1 = () => {
                         )}
 
                       <img src={img.src} alt="TEST" />
-                      <div className="check-box-wb-u1-q2 ">
+                      <div className="check-box-wb-unit3-p4-q2 ">
                         {selected[question.id] === index ? "✓" : ""}
                       </div>
                     </div>

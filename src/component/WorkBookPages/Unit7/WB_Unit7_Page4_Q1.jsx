@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import img1 from "../../../assets/unit9/imgs/U9P81EXEE-01.svg";
+import img1 from "../../../assets/U1 WB/U7/U7P42EXEG-01.svg";
 import img2 from "../../../assets/unit9/imgs/U9P81EXEE-02.svg";
 import "./WB_Unit7_Page4_Q1.css";
 const WB_Unit7_Page4_Q1 = () => {
   const questions = [
     { id: 1, text: "I’m sad.", img: img1 },
-    { id: 2, text: "I’m happy.", img: img2 },
-    { id: 3, text: "I’m bored.", img: img2 },
-    { id: 4, text: "I’m scared.", img: img2 },
+    { id: 2, text: "I’m happy.", img: img1 },
+    { id: 3, text: "I’m bored.", img: img1 },
+    { id: 4, text: "I’m scared.", img: img1 },
   ];
 
   // نخزن Ref لكل Canvas

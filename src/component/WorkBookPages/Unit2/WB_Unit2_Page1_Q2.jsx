@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import conversation from "../../../assets/U1 WB/U2/U2P9EXEB-01.svg"
+import conversation from "../../../assets/U1 WB/U2/U2P9EXEB-01.svg";
 import conversation2 from "../../../assets/U1 WB/U2/U2P9EXEB-02.svg";
-import img1 from "../../../assets/U1 WB/U2/U2P9EXEB-03.svg"
-import img2 from "../../../assets/U1 WB/U2/U2P9EXEB-04.svg"
-import img3 from "../../../assets/U1 WB/U2/U2P9EXEB-05.svg"
-import img4 from "../../../assets/U1 WB/U2/U2P9EXEB-06.svg"
+import img1 from "../../../assets/U1 WB/U2/U2P9EXEB-03.svg";
+import img2 from "../../../assets/U1 WB/U2/U2P9EXEB-04.svg";
+import img3 from "../../../assets/U1 WB/U2/U2P9EXEB-05.svg";
+import img4 from "../../../assets/U1 WB/U2/U2P9EXEB-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page1_Q2.css";
 const WB_Unit2_Page1_Q2 = () => {
@@ -12,6 +12,7 @@ const WB_Unit2_Page1_Q2 = () => {
     {
       id: 1,
       img: conversation2,
+      secImg: img2,
       question: "How old are you?",
       type: "word",
       prefix: "years old.",
@@ -20,13 +21,15 @@ const WB_Unit2_Page1_Q2 = () => {
     {
       id: 2,
       img: conversation,
+      secImg: img3,
       question: "How old are you?",
       type: "full",
       correct: "I'm four years old",
     },
     {
       id: 3,
-      img: conversation,
+      img: img1,
+      secImg: img4,
       question: "How old are you?",
       type: "full",
       correct: "I'm seven years old",
@@ -130,7 +133,8 @@ const WB_Unit2_Page1_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -151,41 +155,53 @@ const WB_Unit2_Page1_Q2 = () => {
               <div className="question-container-unit7-p6-q3">
                 <span className="num2">{index + 1}</span>
 
-                <img src={q.img} className="avatar-img-wb-u1-q2" />
+                <img src={q.img} className="avatar-img-wb-u2-q1" />
                 <p className="question-text-unit7-p2-q3">{q.question}</p>
               </div>
-              <div className="sentence-box-unit7-p2-q3">
-                {q.type === "full" && (
-                  <input
-                    type="text"
-                    value={answers.q1}
-                    disabled={showAnswer}
-                    onChange={(e) =>
-                      setAnswers({ ...answers, q1: e.target.value })
-                    }
-                    className="answer-input-unit7-p2-q3"
-                  />
-                )}
-
-                {q.type === "word" && (
-                  <p className="answer-line-unit7-p2-q3">
-                    I'm
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img src={q.secImg} className="avatar-img-wb-u2-q1" />
+                <div className="sentence-box-unit7-p2-q3">
+                  {q.type === "full" && (
                     <input
                       type="text"
-                      value={answers.q2}
-                      disabled={showAnswer}
-                      onChange={(e) =>
-                        setAnswers({ ...answers, q2: e.target.value })
-                      }
-                      className="answer-input-unit7-p2-q3 small"
-                    />
-                    {q.prefix} .
-                  </p>
-                )}
+                    value={answers[`q${q.id}`]}
 
-                {wrongInputs.includes(q.id) && (
-                  <span className="wrong-mark">✕</span>
-                )}
+                      disabled={showAnswer}
+                     onChange={(e) =>
+  setAnswers({
+    ...answers,
+    [`q${q.id}`]: e.target.value,
+  })
+}
+
+                      className="answer-input-unit7-p2-q3"
+                    />
+                  )}
+
+                  {q.type === "word" && (
+                    <p className="answer-line-unit7-p2-q3">
+                      I'm
+                      <input
+                        type="text"
+                        value={answers[`q${q.id}`]}
+                        disabled={showAnswer}
+                       onChange={(e) =>
+  setAnswers({
+    ...answers,
+    [`q${q.id}`]: e.target.value,
+  })
+}
+
+                        className="answer-input-unit7-p2-q3 small"
+                      />
+                      {q.prefix} .
+                    </p>
+                  )}
+
+                  {wrongInputs.includes(q.id) && (
+                    <span className="wrong-mark">✕</span>
+                  )}
+                </div>
               </div>
             </div>
           ))}

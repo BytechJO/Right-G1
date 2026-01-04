@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import q1Img from "../../../assets/unit7/img/U7P63EXEF-01.svg";
-import q2Img from "../../../assets/unit7/img/U7P63EXEF-02.svg";
-// import q3Img from "../../../assets/unit7/img/U7P63EXEF-03.svg";
+import q1Img from "../../../assets/U1 WB/U10/U10P58EXEC-01.svg";
+import q2Img from "../../../assets/U1 WB/U10/U10P58EXEC-02.svg";
+import q3Img from "../../../assets/U1 WB/U10/U10P58EXEC-03.svg";
 import "./WB_Unit10_Page2_Q1.css";
 
 const WB_Unit10_Page2_Q1 = () => {
@@ -118,7 +118,7 @@ const WB_Unit10_Page2_Q1 = () => {
 
             {/* Person */}
             <img
-              src={q2Img}
+              src={q1Img}
               alt="girl"
               className="person-img-wb-unit10-p2-q1"
             />
@@ -186,7 +186,7 @@ const WB_Unit10_Page2_Q1 = () => {
               </div>
    
 
-            <img src={q2Img} alt="boy" className="person-img-wb-unit10-p2-q1" />
+            <img src={q3Img} alt="boy" className="person-img-wb-unit10-p2-q1" />
 
             <div className="bubble answer-bubble-wb-unit10-p2-q1">
               No,{" "}

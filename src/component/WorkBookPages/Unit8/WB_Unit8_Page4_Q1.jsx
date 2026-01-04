@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
-import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
-import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
+import bat from "../../../assets/U1 WB/U8/U8P48EXEG-01.svg";
+import cap from "../../../assets/U1 WB/U8/U8P48EXEG-02.svg";
+import ant from "../../../assets/U1 WB/U8/U8P48EXEG-03.svg";
+import dad from "../../../assets/U1 WB/U8/U8P48EXEG-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit8_Page4_Q1.css";
 const WB_Unit8_Page4_Q1 = () => {
@@ -32,7 +32,7 @@ const WB_Unit8_Page4_Q1 = () => {
       ],
     },
     {id:4,
-      img: ant,
+      img: dad,
       parts: [
         { type: "input", answer: "This is my nose" },
         { type: "text", value: "." },

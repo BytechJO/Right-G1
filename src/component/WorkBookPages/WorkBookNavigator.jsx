@@ -116,7 +116,7 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
             style={{
               padding: "10px",
             }}
-            className="nav-btn w-10 h-10 rounded-full transition"
+            className="nav-btn-ex w-10 h-10 rounded-full transition"
           >
             <image href={back} x="0" y="0" width="90" height="90" />
           </svg>{" "}
@@ -141,7 +141,7 @@ export default function WorkBookNavigator({ startIndex = 0 }) {
             style={{
               padding: "10px",
             }}
-            className="nav-btn w-10 h-10 rounded-full transition"
+            className="nav-btn-ex w-10 h-10 rounded-full transition"
           >
             <image href={next} x="0" y="0" width="90" height="90" />
           </svg>

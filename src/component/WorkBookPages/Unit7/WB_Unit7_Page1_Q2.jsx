@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit7_Page1_Q2.css";
-import bat from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-01.svg";
-import box from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-02.svg";
-import bucket from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-03.svg";
+import bat from "../../../assets/U1 WB/U7/U7P39EXEB-01.svg";
+import box from "../../../assets/U1 WB/U7/U7P39EXEB-02.svg";
+import bucket from "../../../assets/U1 WB/U7/U7P39EXEB-03.svg";
 import boat from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-04.svg";
 
 export default function WB_Unit7_Page1_Q2() {
@@ -129,7 +129,7 @@ const handleOptionClick = (qIndex, word) => {
               <img
                 src={q.image}
                 alt=""
-                style={{ height: "170px", width: "100px" }}
+                style={{ height: "170px", width: "auto" }}
               />
 
               <div className="numbers-row-wb-u7-p1-q2">

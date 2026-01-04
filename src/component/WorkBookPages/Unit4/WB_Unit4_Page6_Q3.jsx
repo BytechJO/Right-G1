@@ -5,6 +5,8 @@ import img1 from "../../../assets/U1 WB/U4/U4P26EXEBC-01.svg";
 import img2 from "../../../assets/U1 WB/U4/U4P26EXEBC-02.svg";
 import img3 from "../../../assets/U1 WB/U4/U4P26EXEBC-03.svg";
 import img4 from "../../../assets/U1 WB/U4/U4P26EXEBC-04.svg";
+import img5 from "../../../assets/U1 WB/U4/U4P26EXEBC-05.svg";
+import img6 from "../../../assets/U1 WB/U4/U4P26EXEBC-06.svg";
 
 const data = [
   {
@@ -40,13 +42,13 @@ const data = [
       },
       {
         before: "bare",
-        middleImg: img4,
+        middleImg: img5,
         blank: 3,
         after: "after the van with",
       },
       {
         before: "a",
-        middleImg: img4,
+        middleImg: img6,
         blank: 4,
         after: "in his hand.",
       },

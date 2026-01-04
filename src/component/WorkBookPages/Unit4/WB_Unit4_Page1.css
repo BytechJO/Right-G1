@@ -6,12 +6,11 @@
 }
 
 .wb-unit4-p1-q2 {
-  position: absolute;
-  padding: 5px;
-  top: 45.5%;
-  left: 35%;
+    position: absolute;
+    padding: 5px;
+    top: 48.5%;
+    left: 40%;
 }
-
 
 @media (max-width: 1024px) {
   .wb-unit4-p1-q1 {

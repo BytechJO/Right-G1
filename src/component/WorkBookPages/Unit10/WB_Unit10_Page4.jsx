@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import page from "../../../assets/U1 WB/imgs/Right G1- Activity Book_page-0060.jpg";
+import page from "../../../assets/U1 WB/U10/Right 1 _WB_Ch104.png";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import "./WB_Unit10_Page4.css";
 

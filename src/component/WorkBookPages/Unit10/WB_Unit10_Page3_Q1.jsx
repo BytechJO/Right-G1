@@ -1,9 +1,12 @@
 import React, { useState, useRef } from "react";
-import img1 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-01.svg";
-import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
-import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
-import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
-
+import img1 from "../../../assets/U1 WB/U10/U10P59EXEE-01-01.svg";
+import img2 from "../../../assets/U1 WB/U10/U10P59EXEE-01-02.svg";
+import img3 from "../../../assets/U1 WB/U10/U10P59EXEE-02-01.svg";
+import img4 from "../../../assets/U1 WB/U10/U10P59EXEE-02-02.svg";
+import img5 from "../../../assets/U1 WB/U10/U10P59EXEE-03-01.svg";
+import img6 from "../../../assets/U1 WB/U10/U10P59EXEE-03-02.svg";
+import img7 from "../../../assets/U1 WB/U10/U10P59EXEE-04-01.svg";
+import img8 from "../../../assets/U1 WB/U10/U10P59EXEE-04-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit10_Page3_Q1.css"
 

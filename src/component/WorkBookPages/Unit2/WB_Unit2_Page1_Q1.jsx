@@ -3,6 +3,17 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import img from "../../../assets/U1 WB/U2/U2P9EXEA.svg"
 const WB_Unit2_Page1_Q1 = () => {
 
+useEffect(() => {
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext("2d");
+
+  const image = new Image();
+  image.src = img;
+
+  image.onload = () => {
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+  };
+}, []);
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -58,11 +69,18 @@ const WB_Unit2_Page1_Q1 = () => {
     ctx.closePath();
   };
 
-  const resetCanvas = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+ const resetCanvas = () => {
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext("2d");
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const image = new Image();
+  image.src = img;
+  image.onload = () => {
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   };
+};
 
   return (
     <div
@@ -91,9 +109,9 @@ const WB_Unit2_Page1_Q1 = () => {
 
         <canvas
           ref={canvasRef}
-          height={300}
+          height={500}
           width={600}
-          className="draw-canvas"
+          className="draw-canvas-wb-u2-q1"
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}

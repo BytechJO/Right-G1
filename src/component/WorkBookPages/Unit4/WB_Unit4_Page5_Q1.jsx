@@ -205,12 +205,12 @@ const WB_Unit4_Page5_Q1 = () => {
         alignItems: "center",
         padding: "30px",
       }}
-    > 
-      <div  className="div-forall"
+    >
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
           width: "60%",
           justifyContent: "flex-start",
         }}
@@ -220,6 +220,9 @@ const WB_Unit4_Page5_Q1 = () => {
           <span style={{ color: "red" }}>✓</span>. Color.
         </h4>
 
+        <span style={{ fontSize: "14px", color: "gray" }}>
+          Hint: Double Click to Color Word
+        </span>
         <div style={{ position: "relative" }}>
           <table className="shapes-table-wrapper-wb-unit4-p5-q1">
             <thead>

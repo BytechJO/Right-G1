@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit3/imgs3/P26exeB-01.svg";
-import img2 from "../../../assets/unit3/imgs3/P26exeB-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P26exeB-03.svg";
-import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
+import img1 from "../../../assets/U1 WB/U8/U8P45EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U8/U8P45EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U8/U8P45EXEA-03.svg";
+import img4 from "../../../assets/U1 WB/U8/U8P45EXEA-04.svg";
 import "./WB_Unit8_Page1_Q1.css"
 const WB_Unit8_Page1_Q1 = () => {
   // الإجابات المدخلة من الطالب

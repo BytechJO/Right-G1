@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import bat from "../../../assets/unit6/imgs/U6P51EXEE-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P51EXEE-02.svg";
+import bat from "../../../assets/U1 WB/U8/U8P50EXEC-01.svg";
+import cap from "../../../assets/U1 WB/U8/U8P50EXEC-02.svg";
+import cap1 from "../../../assets/U1 WB/U8/U8P50EXEC-03.svg";
+import cap2 from "../../../assets/U1 WB/U8/U8P50EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit8_Page6_Q3.css";
 
@@ -21,14 +23,14 @@ const WB_Unit8_Page6_Q3 = () => {
       options: ["sun", "sea"],
     },
     {
-      img: bat,
+      img: cap1,
       correct: "sock",
       correctInput: "sock",
       input: "",
       options: ["sock", "sun"],
     },
     {
-      img: cap,
+      img: cap2,
       correct: "zipper",
       correctInput: "zipper",
       input: "",
@@ -168,7 +170,7 @@ const WB_Unit8_Page6_Q3 = () => {
                 <img
                   src={item.img}
                   className="q-img-unit4-page5-q1"
-                  style={{ height: "auto", width: "200px" }}
+                  style={{ height: "auto", width: "160px" }}
                 />
 
                 {/* f / v choices */}
