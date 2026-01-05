@@ -5,38 +5,45 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/U1 WB/U2/U2P11EXEE-01.svg";
+import img2 from "../../../assets/U1 WB/U2/U2P11EXEE-02.svg";
+import img3 from "../../../assets/U1 WB/U2/U2P11EXEE-03.svg";
+import img4  from "../../../assets/U1 WB/U2/U2P11EXEE-04.svg";
+import img5 from "../../../assets/U1 WB/U2/U2P11EXEE-05.svg";
+import img6 from "../../../assets/U1 WB/U2/U2P11EXEE-06.svg"
+import img7 from "../../../assets/U1 WB/U2/U2P11EXEE-07.svg"
 
 const data = [
   {
     id: 1,
     text: "jello",
     imgs: [
-      { src: "/fish.png", answer: false }, // short i
-      { src: "/kite.png", answer: true },
+      { src: img1, answer: false }, // short i
+      { src: img2, answer: true },
     ],
   },
   {
     id: 2,
     text: "present",
     imgs: [
-      { src: "/crib.png", answer: false }, // short i
-      { src: "/city.png", answer: true },
+      { src: img3, answer: false }, // short i
+      { src: img4, answer: true },
     ],
   },
   {
     id: 3,
     text: "balloons",
     imgs: [
-      { src: "/five.png", answer: true },
-      { src: "/lips.png", answer: false }, // short i
+      { src: img5, answer: true },
+      { src: img6, answer: false }, // short i
     ],
   },
   {
     id: 4,
     text: "card",
     imgs: [
-      { src: "/milk.png", answer: false }, // short i
-      { src: "/fig.png", answer: true },
+      { src: img7, answer: false }, // short i
+      { src: img1, answer: true },
     ],
   },
 ];

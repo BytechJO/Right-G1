@@ -127,7 +127,7 @@ const WB_Unit5_Page3_Q2 = () => {
         </h5>
 
         <div
-          className="unit3-q5-container"
+          className="wb-unit5-p3-q2-container"
           style={{
             gap: "70px",
           }}

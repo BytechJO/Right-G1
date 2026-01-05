@@ -5,19 +5,21 @@ import img1 from "../../../assets/U1 WB/U9/U9P56EXEA-01.svg";
 import img2 from "../../../assets/U1 WB/U9/U9P56EXEA-02.svg";
 import img3 from "../../../assets/U1 WB/U9/U9P56EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U9/U9P56EXEA-04.svg";
+import img5 from "../../../assets/U1 WB/U9/U9P56EXEA-05.svg";
+import img6 from "../../../assets/U1 WB/U9/U9P56EXEA-06.svg";
 const data = [
-  { img: img4, scrambled: "ight", answer: "n", pattern: "ight" },
+  { img: img1, scrambled: "ight", answer: "n", pattern: "ight" },
   { img: img2, scrambled: "an", answer: "m", pattern: "an" },
   {
-    img: img1,
+    img: img3,
     scrambled: "om",
     answer: "m",
     pattern: "om",
   },
 
-  { img: img3, scrambled: "urse", answer: "n", pattern: "urse" },
-  { img: img4, scrambled: "ilk", answer: "m", pattern: "ilk" },
-  { img: img3, scrambled: "est", answer: "n", pattern: "est" },
+  { img: img4, scrambled: "urse", answer: "n", pattern: "urse" },
+  { img: img5, scrambled: "ilk", answer: "m", pattern: "ilk" },
+  { img: img6, scrambled: "est", answer: "n", pattern: "est" },
 ];
 
 const WB_Unit9_Page6_Q1 = () => {

@@ -229,9 +229,9 @@ const WB_Unit8_Page4_Q1 = () => {
                 <span className="num-span">{qIndex + 1}</span>
                 <canvas
                   ref={(el) => (canvasRefs.current[q.id] = el)}
-                  width={270}
-                  height={150}
-                  className="wb-unit7-p4-q1-canvas"
+                  width={225}
+                  height={130}
+                  className="wb-unit8-p4-q1-canvas"
                   onMouseDown={(e) => startDrawing(e, q.id)}
                   onMouseMove={(e) => draw(e, q.id)}
                   onMouseUp={() => stopDrawing(q.id)}

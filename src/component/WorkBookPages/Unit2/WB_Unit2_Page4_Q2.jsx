@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import boy from "../../../assets/img_unit2/imgs/boy 01.png";
-import fotball from "../../../assets/img_unit2/imgs/Football.jpg";
-import bird from "../../../assets/img_unit2/imgs/bird.jpg";
-import pizza2 from "../../../assets/img_unit2/imgs/Pizza (2).jpg";
+import boy from "../../../assets/U1 WB/U2/U2P12EXEH-01.svg";
+import fotball from "../../../assets/U1 WB/U2/U2P12EXEH-02.svg";
+import bird from "../../../assets/U1 WB/U2/U2P12EXEH-03.svg";
+import pizza2 from "../../../assets/U1 WB/U2/U2P12EXEH-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page4_Q2.css";
 // import { faFootball } from "@fortawesome/free-solid-svg-icons";

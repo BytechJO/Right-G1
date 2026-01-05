@@ -149,7 +149,7 @@
     height: 64px;
     object-fit: cover;
     border-radius: 10px;
-    border: 2px solid #bfbfbf;
+    /* border: 2px solid #bfbfbf; */
     background: #fff;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
@@ -235,6 +235,13 @@
   color: #000;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .write-line-wb-unit6-p2-q2 input {
+
+    padding: 0px 9px;
+ 
+}
+}
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1000px) {
   .wb-unit6-p2-q2-wrapper {

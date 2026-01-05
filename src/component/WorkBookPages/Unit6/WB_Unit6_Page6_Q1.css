@@ -18,3 +18,18 @@
 .wb-unit6-p6-q1-options-box{
     display: flex;
 }
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .unit6-p1-q1-question-img {
+    height: 90px;
+   
+}
+
+.unit6-p1-q1-question-box {
+   
+    gap: 2px;
+    padding: 0px;
+
+}
+}

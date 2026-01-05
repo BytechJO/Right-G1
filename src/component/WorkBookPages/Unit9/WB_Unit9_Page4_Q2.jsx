@@ -145,7 +145,7 @@ const WB_Unit9_Page4_Q2 = () => {
 
             <img
               src={deer}
-              className="shape-img-unit5-p5-q3"
+              className="shape-img-wb-unit9-p4-q2"
               alt=""
               style={{ height: "300px", width: "auto" }}
             />

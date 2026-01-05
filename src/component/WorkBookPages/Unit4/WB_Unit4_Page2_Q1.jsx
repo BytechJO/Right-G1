@@ -220,6 +220,11 @@ const WB_Unit4_Page2_Q1 = () => {
                         setShapeColors({ ...shapeColors, 1: shapeColors[1] });
                         setShowPalette(true);
                       }}
+                      onTouchStart={() => {
+                        setActiveShape(1);
+                        setShapeColors({ ...shapeColors, 1: shapeColors[1] });
+                        setShowPalette(true);
+                      }}
                     
                     >
                       <rect
@@ -242,7 +247,11 @@ const WB_Unit4_Page2_Q1 = () => {
                         setShapeColors({ ...shapeColors, 2: shapeColors[2] });
                         setShowPalette(true);
                       }}
-                     
+                     onTouchStart={() => {
+                        setActiveShape(2);
+                        setShapeColors({ ...shapeColors, 2: shapeColors[2] });
+                        setShowPalette(true);
+                      }}
                     >
                       <polygon
                         points="60,10 110,110 10,110"
@@ -261,7 +270,11 @@ const WB_Unit4_Page2_Q1 = () => {
                         setShapeColors({ ...shapeColors, 3: shapeColors[3] });
                         setShowPalette(true);
                       }}
-                     
+                     onTouchStart={() => {
+                        setActiveShape(3);
+                        setShapeColors({ ...shapeColors, 3: shapeColors[3] });
+                        setShowPalette(true);
+                      }}
                     >
                       <circle
                         cx="60"

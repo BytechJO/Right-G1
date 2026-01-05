@@ -159,7 +159,9 @@ const WB_Unit5_Page4_Q2 = () => {
           <h5 className="header-title-page8">
             <span className="ex-A">H</span>Read, look, and match. Color.
           </h5>
-
+  <span style={{ fontSize: "14px", color: "gray" }}>
+          Hint: Double Click to Color Word
+        </span>
           <div className="match-wrapper2" ref={containerRef}>
             <div className="match-words-row2">
               <div className="word-box2">
@@ -259,6 +261,7 @@ const WB_Unit5_Page4_Q2 = () => {
                     }`}
                     style={{ color: imageColors.img1 || "#ffffffff" }}
                     onDoubleClick={() => setActivePalette("img1")}
+                    onTouchStart={() => setActivePalette("img1")}
                     onClick={() => document.getElementById("img1-dot").click()}
                     dangerouslySetInnerHTML={{ __html: svgImages.img1 }}
                   />
@@ -302,6 +305,7 @@ const WB_Unit5_Page4_Q2 = () => {
                     }`}
                     style={{ color: imageColors.img2 || "transparent" }}
                     onDoubleClick={() => setActivePalette("img2")}
+                    onTouchStart={() => setActivePalette("img2")}
                     onClick={() => document.getElementById("img2-dot").click()}
                     dangerouslySetInnerHTML={{ __html: svgImages.img2 }}
                   />
@@ -345,6 +349,7 @@ const WB_Unit5_Page4_Q2 = () => {
                     }`}
                     style={{ color: imageColors.img3 || "#ffffffff" }}
                     onDoubleClick={() => setActivePalette("img3")}
+                    onTouchStart={() => setActivePalette("img3")}
                     onClick={() => document.getElementById("img3-dot").click()}
                     dangerouslySetInnerHTML={{ __html: svgImages.img3 }}
                   />
@@ -389,6 +394,7 @@ const WB_Unit5_Page4_Q2 = () => {
                     }`}
                     style={{ color: imageColors.img4 || "#ffffffff" }}
                     onDoubleClick={() => setActivePalette("img4")}
+                    onTouchStart={() => setActivePalette("img4")}
                     onClick={() => document.getElementById("img4-dot").click()}
                     dangerouslySetInnerHTML={{ __html: svgImages.img4 }}
                   />

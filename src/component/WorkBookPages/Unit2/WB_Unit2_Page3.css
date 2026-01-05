@@ -14,26 +14,26 @@
 .img-box-wb-u2-p3-q1 {
   width: 150px;
   height: 150px;
-  border: 2px solid #ccc;
+  /* border: 2px solid #ccc; */
   /* padding: 10px; */
   border-radius: 10px;
   cursor: pointer;
   position: relative;
 }
 .check-box-wb-u2-p3-q1 {
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 40px;
-  height: 40px;
-  color: red;
-  font-weight: 700;
-  border: 2px solid #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  border-radius: 8px;
+    position: absolute;
+    bottom: 10px;
+    right: 9px;
+    width: 40px;
+    height: 40px;
+    color: red;
+    font-weight: 700;
+    border: 2px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    border-radius: 8px;
 }
 @media (max-width: 1024px) {
   .wb-unit2-p3-q1 {

@@ -169,12 +169,12 @@ setShowAnswer(true)
                     }}
                   >
                     <span
-                      className="Unit5-P6-Q3-text"
+                      className="wb-unit6-p4-q1-text"
                       style={{ color: "#3054c7",fontSize:"25px",fontWeight:"700" }}
                     >
                       {q.id}
                     </span>
-                    <span className="Unit5-P6-Q3-text">{q.text}</span>
+                    <span className="wb-unit6-p4-q1-text">{q.text}</span>
                   </div>
                   <img src={q.image} alt="" className="wb-unit6-p4-q1-img" />
                 </div>

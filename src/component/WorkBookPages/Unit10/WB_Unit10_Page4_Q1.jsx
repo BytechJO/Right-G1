@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import img1 from "../../../assets/unit5/imgs/U5P45EXEF-01.svg";
-import img2 from "../../../assets/unit5/imgs/U5P45EXEF-02.svg";
-import img3 from "../../../assets/unit3/imgs3/P27exeE-03.svg";
+import img1 from "../../../assets/U1 WB/U10/U10P60EXEG-01.svg";
+import img2 from "../../../assets/U1 WB/U10/U10P60EXEG-02.svg";
+import img3 from "../../../assets/U1 WB/U10/U10P60EXEG-03.svg";
+import img4 from "../../../assets/U1 WB/U10/U10P60EXEG-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit10_Page4_Q1.css";
 
@@ -27,7 +28,7 @@ const WB_Unit10_Page4_Q1 = () => {
     },
     {
       id: 3,
-      image: img2,
+      image: img3,
       text: "Do you want fruit?",
       items: [
         { text: "Yes, I do.", correct: "x" },
@@ -36,7 +37,7 @@ const WB_Unit10_Page4_Q1 = () => {
     },
     {
       id: 4,
-      image: img2,
+      image: img4,
       text: "Do you want milk?",
       items: [
         { text: "Yes, I do.", correct: "x" },
@@ -160,7 +161,7 @@ const WB_Unit10_Page4_Q1 = () => {
                     flexDirection: "column",
                   }}
                 >
-                  <img src={q.image} alt="" className="wb-unit6-p4-q1-img" />
+                  <img src={q.image} alt="" className="wb-unit10-p4-q1-img" />
                   <div
                     style={{
                       display: "flex",

@@ -4,21 +4,13 @@
     top: 3.5%;
     left: 39%;
 }
-.wb-unit3-p1-q2 {
+.wb-unit3-p3-q2 {
     position: absolute;
     padding: 5px;
     top: 53.5%;
     left: 43.5%;
 }
-.img-box-wb-u2-p3-q1 {
-    width: 150px;
-    height: 150px;
-    border: 2px solid #ccc;
-    /* padding: 10px; */
-    border-radius: 10px;
-    cursor: pointer;
-    position: relative;
-}
+
 .check-box-wb-u2-p3-q1  {
     position: absolute;
     bottom: -1px;

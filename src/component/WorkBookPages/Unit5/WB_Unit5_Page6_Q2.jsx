@@ -321,7 +321,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">1</span>{" "}
-              <img src={bat} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={bat} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -343,7 +343,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">2</span>{" "}
-              <img src={cap} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={cap} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -365,7 +365,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">3</span>{" "}
-              <img src={ant} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={ant} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -387,7 +387,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">4</span>{" "}
-              <img src={dad} alt="" className="q-img-unit3-page6-q1"style={{height:"140px"}} />
+              <img src={dad} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -409,7 +409,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">5</span>{" "}
-              <img src={dad1} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={dad1} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
@@ -431,7 +431,7 @@ const WB_Unit5_Page6_Q2 = () => {
           <div className="row2-unit3-page6-q1">
             <div style={{ display: "flex", gap: "15px" }}>
               <span className="num-span">6</span>{" "}
-              <img src={dad2} alt="" className="q-img-unit3-page6-q1" style={{height:"140px"}}/>
+              <img src={dad2} alt="" className="q-img-wb-unit5-p6-q2" />
             </div>
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">

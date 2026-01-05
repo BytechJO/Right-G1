@@ -243,7 +243,7 @@ const WB_Unit6_Page1_Q1 = () => {
                     }`}
                     alt=""
                     onClick={() => document.getElementById("dot-img2").click()}
-                    style={{ cursor: "pointer", height: "110px" }}
+                    style={{ cursor: "pointer", height: "100px" }}
                   />
                 </div>
               </div>

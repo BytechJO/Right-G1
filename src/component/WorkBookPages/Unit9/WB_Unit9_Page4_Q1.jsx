@@ -49,7 +49,7 @@ const WB_Unit9_Page4_Q1 = () => {
         { type: "text", value: "." },
       ],
       correct: ["horses"],
-      image: img3,
+      image: img4,
     },
   ];
 
@@ -151,7 +151,7 @@ const WB_Unit9_Page4_Q1 = () => {
         </h3>
         <div
           className="content-container-wb-unit9-p4-q1 "
-          style={{ display: "flex", flexDirection: "column" }}
+   
         >
           {questions.map((q, qIndex) => (
             <div className="question-row-wb-unit9-p4-q1" key={q.id}>
@@ -178,7 +178,7 @@ const WB_Unit9_Page4_Q1 = () => {
                   <img
                     src={q.image}
                     className="question-img-review5-p2-q3"
-                    style={{ width: "180px" }}
+                    style={{ width: "150px" }}
                   />
                 </div>
                 <div

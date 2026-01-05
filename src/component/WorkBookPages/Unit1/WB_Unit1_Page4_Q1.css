@@ -52,91 +52,29 @@
   /* max-width: 100%; */
   position: relative;
 }
-@media (max-width: 820px) {
-  .matched-img {
-    height: 100px;
-    width: auto;
-  }
-  .word-with-dot {
-    width: 40%;
-  }
-  .word-text {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .matching-scale {
-    transform: scale(0.85);
-    width: 100%;
-  }
-}
-
-@media (max-width: 500px) {
-  .matching-scale {
-    transform: scale(0.75);
-  }
-}
-
-@media (max-width: 400px) {
-  .matching-scale {
-    transform: scale(0.63);
-  }
-}
-
-/* النص يأخذ مساحة عشان النقطة ما تتحرك */
-.word-text {
-  flex: 1;
-  font-size: 25px;
-  font-weight: 700;
-}
-
-.span-num {
-  font-weight: 800;
-  font-size: 25px;
-  color: purple;
-}
-
-/* الصورة + النقطة */
-.img-with-dot {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 45%;
-  gap: 10px;
-}
-
-.matched-img {
+.img-wb-unit1-p4-q1{
   height: 150px;
   width: auto;
 }
 
-/* مكان ثابت للنقطة */
-.dot-wrapper {
-  width: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+@media (max-width: 1180px) {
+.img-box-wb-u1-q4{
+  flex-direction: column;
+}
+.word-bank-wb-u1-q4 {
+
+    font-size: 18px;
+    margin: 0px;
+}
+.img-wb-unit1-p4-q1{
+  height: 100px;
+  width: auto;
+}
 }
 
-/* النقاط */
-.dot {
-  width: 14px;
-  height: 14px;
-  background: red;
-  border-radius: 50%;
-  cursor: pointer;
-}
 
-/* طبقة الخطوط */
-.lines-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
+
 
 /* ⭐ تم إضافتها */
 .wrong-icon-wb-u1-p4-q1 {

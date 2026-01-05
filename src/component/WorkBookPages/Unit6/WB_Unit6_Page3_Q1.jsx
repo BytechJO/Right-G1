@@ -214,7 +214,8 @@ const WB_Unit6_Page3_Q1 = () => {
                   <span className="header-title-page8">{q.id}</span>
                   <img
                     src={q.image}
-                    style={{ width: "200px", height: "auto" }}
+                 
+                    className="img-wb-unit6-p3-q1"
                   />
                 </div>
 

@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit6/imgs/U6P50EXEA1-01.svg";
-import img2 from "../../../assets/unit6/imgs/U6P50EXEA1-02.svg";
-import img3 from "../../../assets/unit6/imgs/U6P50EXEA1-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
+import img1 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-01.svg";
+import img2 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-02.svg";
+import img3 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-03.svg";
+import img4 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-04.svg";
+import img5 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-05.svg";
+import img6 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-06.svg";
+import img7 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-07.svg";
+import img8 from "../../../assets/U1 WB/U3/SVG/U3P20EXEB-08.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
@@ -122,17 +126,21 @@ const WB_Unit3_Page6_Q2 = () => {
   const questions = [
     {
       id: 1,
-      image: img1,
+      image1: img1,
+      image2: img2,
       correct: "✗",
     },
-    { id: 2, image: img2, correct: "✓" },
+    { id: 2, image1: img3, image2: img4, correct: "✓" },
     {
       id: 3,
-      image: img3,
+      image1: img5,
+      image2: img6,
       correct: "✓",
-    }, {
+    },
+    {
       id: 4,
-      image: img3,
+      image1: img7,
+      image2: img8,
       correct: "✗",
     },
   ];
@@ -214,13 +222,13 @@ const WB_Unit3_Page6_Q2 = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-        //   gap: "20px",
+          //   gap: "20px",
           width: "60%",
           justifyContent: "flex-start",
         }}
       >
         <h5 className="header-title-page8">
-      <span className="ex-A">B</span>  Do they have the same
+          <span className="ex-A">B</span> Do they have the same
           <span style={{ color: "red" }}> vowel sound </span>? Listen and write
           <span style={{ color: "red" }}> ✓ </span> or
           <span style={{ color: "red" }}> ✗</span>.
@@ -341,7 +349,7 @@ const WB_Unit3_Page6_Q2 = () => {
             </div>
           </div>
         </div>
-        <div className="review9-p2-q2-container">
+        <div className="wb-unit3-p6-q2-container">
           {questions.map((q, index) => (
             <div key={q.id} className="review9-p2-q2-question-box">
               <p
@@ -354,16 +362,16 @@ const WB_Unit3_Page6_Q2 = () => {
               </p>
 
               <div className="unit10-p1-q2-flex">
-                <div style={{display:"flex"}}>
-                  <img 
-                    src={q.image}
+                <div style={{ display: "flex" }}>
+                  <img
+                    src={q.image1}
                     alt=""
-                    className="unit10-p5-q2-question-img"
+                    className="wb-unit3-p6-q2-question-img"
                   />
                   <img
-                    src={q.image}
+                    src={q.image2}
                     alt=""
-                    className="unit10-p5-q2-question-img"
+                    className="wb-unit3-p6-q2-question-img"
                   />
                 </div>
 

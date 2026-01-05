@@ -8,37 +8,47 @@ const items = [
   {
     key: "pen",
     label: "pen",
-    area: { x1: 23.96, y1: 48.13, x2: 32.96, y2: 57.13 },
+    area: { x1: 26.4395, y1: 48.9356, x2: 34.2037, y2: 53.5385 },
   },
   {
     key: "book",
     label: "book",
-    area: { x1: 16.5, y1: 30, x2: 25.5, y2: 40 },
+    area: { x1: 17.6300, y1: 33.6881, x2: 28.9778, y2: 37.7158 },
   },
   {
     key: "eraser",
     label: "eraser",
     area: {
-      x1: 55,
-      y1: 49.5,
-      x2: 64,
-      y2: 59.5,
+      x1: 56.1526,
+      y1: 50.0863,
+      x2: 61.2292,
+      y2: 54.9770,
     },
   },
   {
-    key: "chair",
+    key: "chair1",
     label: "chair",
     area: {
-      x1: 27,
-      y1: 68.5,
-      x2: 36,
-      y2: 78.5,
+      x1: 72.8756,
+      y1: 53.5385,
+      x2: 82.2822,
+      y2: 85.4718,
+    },
+  },
+  {
+    key: "chair2",
+    label: "chair",
+    area: {
+      x1: 27.6340,
+      y1: 56.7031,
+      x2: 36.4434,
+      y2: 88.3487,
     },
   },
   {
     key: "ruler",
     label: "ruler",
-    area: { x1: 67.5, y1: 44.5, x2: 76.5, y2: 54.5 },
+    area: { x1: 68.2469, y1: 44.3326, x2: 76.5180, y2: 54.5 },
   },
 ];
 
@@ -57,7 +67,7 @@ const WB_Unit5_Page5_Q1 = () => {
     const rect = e.target.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-
+  console.log(`x: ${x.toFixed(4)}, y: ${y.toFixed(4)}`);
     setCircles((prev) => ({
       ...prev,
       [selectedItem]: { x, y },
@@ -91,7 +101,7 @@ const WB_Unit5_Page5_Q1 = () => {
 
     setChecked(true);
 
-  const color =
+    const color =
       score === items.length ? "green" : score === 0 ? "red" : "orange";
     const scoreMessage = `
     <div style="font-size: 20px; margin-top: 10px; text-align:center;">
@@ -139,7 +149,8 @@ const WB_Unit5_Page5_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           width: "60%",
           display: "flex",

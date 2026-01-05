@@ -150,8 +150,8 @@ const WB_Unit7_Page3_Q1 = () => {
                 <div className="img-div-wb-unit7-p3-q1">
                   <img
                     src={q.img}
-                    className="q3-image-review6-p1-q1"
-                    style={{ height: "100px", width: "auto" }}
+                    className="q3-image-wb-unit7-p3-q1"
+      
                   />
                 </div>
 
@@ -164,7 +164,7 @@ const WB_Unit7_Page3_Q1 = () => {
                       <p
                         key={optIndex}
                         className={`
-                    option-word-review6-p1-q1
+                    option-word-wb-unit7-p3-q1
                     ${isSelected ? "selected3" : ""}
                     ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                     ${showResult && isCorrect ? "correct" : ""}

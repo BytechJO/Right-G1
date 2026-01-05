@@ -158,6 +158,7 @@ const WB_Unit9_Page1_Q1 = () => {
                 <img
                   src={img1}
                   alt=""
+                  style={{height:"150px"}}
                   className={`matched-img2 ${
                     locked || showAnswer ? "disabled-hover" : ""
                   }`}

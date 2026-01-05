@@ -27,15 +27,6 @@
     font-size: 14px;
     border: 2px solid white;
 }
-.word-bank-wb-u4-p5-q1 {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin: 15px 0;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
 
 @media (max-width: 1024px) {
   .wb-unit5-p5-q1 {

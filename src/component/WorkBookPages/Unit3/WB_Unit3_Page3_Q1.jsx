@@ -135,7 +135,7 @@ const WB_Unit3_Page3_Q1 = () => {
           >
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">1</span>
-              <img src={bat} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={bat} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
             <div
               className="input-wrapper-unit3-page6-q1"
@@ -159,7 +159,7 @@ const WB_Unit3_Page3_Q1 = () => {
           >
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">2</span>{" "}
-              <img src={cap} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={cap} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
             <div
               className="input-wrapper-unit3-page6-q1"
@@ -183,7 +183,7 @@ const WB_Unit3_Page3_Q1 = () => {
           >
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">3</span>{" "}
-              <img src={ant} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={ant} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
             <div
               className="input-wrapper-unit3-page6-q1"
@@ -208,7 +208,7 @@ const WB_Unit3_Page3_Q1 = () => {
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">4</span>
 
-              <img src={dad} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={dad} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
 
             <div
@@ -234,7 +234,7 @@ const WB_Unit3_Page3_Q1 = () => {
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">5</span>
 
-              <img src={dad2} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={dad2} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
 
             <div
@@ -260,7 +260,7 @@ const WB_Unit3_Page3_Q1 = () => {
             <div style={{ display: "flex", gap: "10px" }}>
               <span className="num-span">6</span>
 
-              <img src={dad3} alt="" className="q-img-wb-unit2-page3-q2" />
+              <img src={dad3} alt="" className="q-img-wb-unit3-page3-q2" />
             </div>
 
             <div

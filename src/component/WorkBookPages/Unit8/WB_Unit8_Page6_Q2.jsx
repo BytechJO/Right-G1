@@ -352,7 +352,7 @@ const WB_Unit8_Page6_Q2 = () => {
             </div>
           </div>
         </div>
-        <div className="shorti-container-review6-p2-q1 ">
+        <div className="shorti-container-wb-unit8-p6-q2 ">
           {data.map((question) => (
             <div key={question.id} className="question-box-review6-p2-q1 ">
               <span
@@ -371,9 +371,9 @@ const WB_Unit8_Page6_Q2 = () => {
                 {/* الصورة الواحدة */}
                 <img
                   src={question.src}
-                  className="main-img-review6-p2-q1"
+                  className="main-img-wb-unit8-p6-q2"
                   alt=""
-                  style={{ height: "150px" }}
+         
                 />
 
                 {/* الخيارات */}

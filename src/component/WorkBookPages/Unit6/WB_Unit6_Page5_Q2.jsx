@@ -201,7 +201,7 @@ const WB_Unit6_Page5_Q2 = () => {
                 ))}
               </div>
             </div>
-            <img src={q.img} style={{height:"100px",width:"auto"}}/>
+            <img src={q.img} className="img-wb-unit6-p5-q2"/>
           </div>
         ))}
       </div>

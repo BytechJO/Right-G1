@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import bat from "../../../assets/unit6/imgs/U6P50EXEB-01.svg";
-import cap from "../../../assets/unit6/imgs/U6P50EXEB-02.svg";
-import ant from "../../../assets/unit6/imgs/U6P50EXEB-03.svg";
-import dad from "../../../assets/unit6/imgs/U6P50EXEB-04.svg";
+import bat from "../../../assets/U1 WB/U2/U2P11EXEF-01.svg";
+import cap from "../../../assets/U1 WB/U2/U2P11EXEF-02.svg";
+import ant from "../../../assets/U1 WB/U2/U2P11EXEF-03.svg";
+import dad from "../../../assets/U1 WB/U2/U2P11EXEF-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page3_Q2.css";
 const WB_Unit2_Page3_Q2 = () => {
@@ -80,7 +80,8 @@ const WB_Unit2_Page3_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -92,7 +93,7 @@ const WB_Unit2_Page3_Q2 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">F</span>Read, look, and write.
         </h5>
-        <div className="word-bank-wb-u1-p8-q2">
+        <div className="word-bank-wb-unit2-page3-q2">
           {correctAnswers.map((w, i) => (
             <span key={i} className="word-box-wb-u1-p8-q2">
               {w}
@@ -108,7 +109,10 @@ const WB_Unit2_Page3_Q2 = () => {
               <span className="num-span">1</span>
               <img src={bat} alt="" className="q-img-wb-unit2-page3-q2" />
             </div>
-            <div className="input-wrapper-unit3-page6-q1"style={{position:"relative"}}>
+            <div
+              className="input-wrapper-unit3-page6-q1"
+              style={{ position: "relative" }}
+            >
               <input
                 type="text"
                 className="q-input-unit3-page6-q1"
@@ -130,7 +134,10 @@ const WB_Unit2_Page3_Q2 = () => {
               <span className="num-span">2</span>{" "}
               <img src={cap} alt="" className="q-img-wb-unit2-page3-q2" />
             </div>
-            <div className="input-wrapper-unit3-page6-q1"style={{position:"relative"}}>
+            <div
+              className="input-wrapper-unit3-page6-q1"
+              style={{ position: "relative" }}
+            >
               <input
                 type="text"
                 className="q-input-unit3-page6-q1"
@@ -152,7 +159,10 @@ const WB_Unit2_Page3_Q2 = () => {
               <span className="num-span">3</span>{" "}
               <img src={ant} alt="" className="q-img-wb-unit2-page3-q2" />
             </div>
-            <div className="input-wrapper-unit3-page6-q1"style={{position:"relative"}}>
+            <div
+              className="input-wrapper-unit3-page6-q1"
+              style={{ position: "relative" }}
+            >
               <input
                 type="text"
                 className="q-input-unit3-page6-q1"
@@ -176,7 +186,10 @@ const WB_Unit2_Page3_Q2 = () => {
               <img src={dad} alt="" className="q-img-wb-unit2-page3-q2" />
             </div>
 
-            <div className="input-wrapper-unit3-page6-q1" style={{position:"relative"}}>
+            <div
+              className="input-wrapper-unit3-page6-q1"
+              style={{ position: "relative" }}
+            >
               <input
                 type="text"
                 className="q-input-unit3-page6-q1"

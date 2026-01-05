@@ -153,7 +153,7 @@ const WB_Unit8_Page6_Q3 = () => {
           <span className="ex-A">C</span> Look, circle, and write.
         </h5>
 
-        <div className="question-grid-unit6-page6-q2">
+        <div className="question-grid-wb-unit8-p6-q3">
           {items.map((item, i) => (
             <div className="question-box-wb-unit8-p6-q3" key={i}>
               <div  style={{display:"flex",gap:"20px" }}>
@@ -169,12 +169,12 @@ const WB_Unit8_Page6_Q3 = () => {
               <div className="img-option-wb-unit8-p6-q3">
                 <img
                   src={item.img}
-                  className="q-img-unit4-page5-q1"
-                  style={{ height: "auto", width: "160px" }}
+                  className="q-img-wb-unit8-p6-q3"
+               
                 />
 
                 {/* f / v choices */}
-                <div className="choices-unit6-page6-q2">
+                <div className="choices-wb-unit8-p6-q3">
                   {item.options.map((choice, idx) => (
                     <div className="circle-wrapper" key={idx}>
                       <div

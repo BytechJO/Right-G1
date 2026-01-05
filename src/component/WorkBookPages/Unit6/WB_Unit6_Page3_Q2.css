@@ -13,3 +13,18 @@
     align-items: center;
     width: 100%;
 }
+
+
+.q-img-wb-unit6-p3-q2 {
+    width: auto;
+    height: 140px;
+}
+
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .q-img-wb-unit6-p3-q2 {
+    width: auto;
+    height: 100px;
+}
+}

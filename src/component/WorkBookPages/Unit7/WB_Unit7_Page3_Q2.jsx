@@ -125,7 +125,7 @@ const WB_Unit7_Page3_Q2 = () => {
           <h4 className="header-title-page8">
             <span className="ex-A">F</span> Look, read, and write.
           </h4>
-          <div className="content-container-unit5-p6-q1">
+          <div className="content-container-wb-unit6-p4-q2">
             <div className="section-one-wb-unit6-p4-q2">
               <div className="img-container-wb-unit6-p4-q2">
                 <span

@@ -14,7 +14,9 @@ import img6 from "../../../assets/U1 WB/U9/U9P56EXEB02-03.svg";
 const data = [
   {
     id: 1,
-    src: img1,
+    src1: img1,
+    src2: img2,
+    src3: img3,
     options: [
       { label: "Fish", answer: true },
       { label: "Kite", answer: false },
@@ -23,14 +25,15 @@ const data = [
   },
   {
     id: 2,
-    src: img2,
+    src1: img4,
+    src2: img5,
+    src3: img6,
     options: [
       { label: "Crib", answer: false },
       { label: "Knight", answer: true },
       { label: "Fish", answer: false },
     ],
   },
- 
 ];
 
 const WB_Unit9_Page6_Q2 = () => {
@@ -216,10 +219,10 @@ const WB_Unit9_Page6_Q2 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <h5 className="header-title-page8" style={{alignItems:"baseline"}}>
-        <span className="ex-A">B</span> Which picture has a
-          <span style={{ color: "red" }}>different beginning sound?</span> Listen and
-          write <span style={{ color: "red" }}>✕</span> .
+        <h5 className="header-title-page8" style={{ alignItems: "baseline" }}>
+          <span className="ex-A">B</span> Which picture has a
+          <span style={{ color: "red" }}>different beginning sound?</span>{" "}
+          Listen and write <span style={{ color: "red" }}>✕</span> .
         </h5>
 
         <div
@@ -337,7 +340,7 @@ const WB_Unit9_Page6_Q2 = () => {
             </div>
           </div>
         </div>
-        <div className="shorti-container-review6-p2-q1 ">
+        <div className="shorti-container-wb-unit9-p6-q2 ">
           {data.map((question) => (
             <div key={question.id} className="question-box-review6-p2-q1 ">
               <span
@@ -350,17 +353,31 @@ const WB_Unit9_Page6_Q2 = () => {
                 {question.id}
               </span>
 
-              <div key={question.id} className="question-box2-review6-p2-q1">
+              <div
+                key={question.id}
+                className="question-box2-review6-p2-q1"
+                style={{ gap: "5px" }}
+              >
                 {/* <span className="question-number">{question.id}</span> */}
 
                 {/* الصورة الواحدة */}
-                <img
-                  src={question.src}
-                  className="main-img-review6-p2-q1"
-                  alt=""
-                  style={{ height: "150px" }}
-                />
-
+                <div style={{ display: "flex" }}>
+                  <img
+                    src={question.src1}
+                    className="main-img-wb-unit9-p6-q2"
+                    alt=""
+                  />
+                  <img
+                    src={question.src2}
+                    className="main-img-wb-unit9-p6-q2"
+                    alt=""
+                  />
+                  <img
+                    src={question.src3}
+                    className="main-img-wb-unit9-p6-q2"
+                    alt=""
+                  />
+                </div>
                 {/* الخيارات */}
                 <div className="options-review6-p2-q1">
                   {question.options.map((opt, index) => (

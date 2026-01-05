@@ -5,6 +5,8 @@ import img1 from "../../../assets/U1 WB/U6/U6P38EXEA-01.svg";
 import img2 from "../../../assets/U1 WB/U6/U6P38EXEA-02.svg";
 import img3 from "../../../assets/U1 WB/U6/U6P38EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U6/U6P38EXEA-04.svg";
+import img5 from "../../../assets/U1 WB/U6/U6P38EXEA-05.svg";
+import img6 from "../../../assets/U1 WB/U6/U6P38EXEA-06.svg";
 import sound1 from "../../../assets/unit6/sounds/U6P50EXEA1.mp3";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { TbMessageCircle } from "react-icons/tb";
@@ -139,12 +141,12 @@ const WB_Unit6_Page6_Q1 = () => {
     },
     {
       id: 5,
-      image: img4,
+      image: img5,
       correct: "✓",
     },
     {
       id: 6,
-      image: img4,
+      image: img6,
       correct: "✗",
     },
   ];

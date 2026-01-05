@@ -16,3 +16,15 @@
   right: 8%;
   top: -15%;
 }
+
+.word-text-unit1-p4-q2{
+  width: 240px !important;
+}
+
+
+@media (max-width: 1024px) {
+.word-text-unit1-p4-q2{
+  width: 170px!important;
+}
+
+}

@@ -13,7 +13,15 @@
 }
 
 
-
+.wb-unit8-p4-q1-canvas {
+    border: 3px solid #6ec1ff;
+    background: #ffffff;
+    border-radius: 12px;
+    height: 130px;
+    width: 223px;
+    box-sizing: border-box;
+    cursor: crosshair;
+}
 
 .row2-wb-unit8-p4-q1 {
     display: flex;

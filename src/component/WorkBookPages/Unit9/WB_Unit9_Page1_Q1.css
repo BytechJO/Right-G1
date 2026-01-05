@@ -37,3 +37,10 @@
   top: -30px;
   left: 50%;
 }
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .h5-wb-unit9-p1-q1 {
+    font-size: 14px;
+        margin-bottom: 10px;
+  }
+}

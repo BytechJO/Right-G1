@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit4_Page4_Q1.css"
+import "./WB_Unit4_Page4_Q1.css";
 const WB_Unit4_Page4_Q1 = () => {
   const [labels, setLabels] = useState({
     triangle: "",
@@ -140,7 +140,8 @@ const WB_Unit4_Page4_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           width: "60%",
           display: "flex",
@@ -165,10 +166,8 @@ const WB_Unit4_Page4_Q1 = () => {
           <svg
             width="300"
             height="350"
-            style={{
-              transform: "scale(1.5)",
-              transformOrigin: "top",
-            }}
+            className="all-svg-house-wb-unit4-p4-q1"
+           
           >
             {/* Triangle */}
             <polygon
@@ -176,6 +175,7 @@ const WB_Unit4_Page4_Q1 = () => {
               fill={colors.triangle}
               stroke="black"
               onDoubleClick={() => openColorPicker("triangle")}
+              onTouchStart={() => openColorPicker("triangle")}
             />
             <foreignObject x="90" y="60" width="120" height="40">
               <input
@@ -198,6 +198,7 @@ const WB_Unit4_Page4_Q1 = () => {
               fill={colors.house}
               stroke="black"
               onDoubleClick={() => openColorPicker("house")}
+              onTouchStart={() => openColorPicker("house")}
             />
             <foreignObject x="100" y="190" width="100" height="30">
               <input
@@ -219,6 +220,7 @@ const WB_Unit4_Page4_Q1 = () => {
               fill={colors.circle1}
               stroke="black"
               onDoubleClick={() => openColorPicker("circle1")}
+              onTouchStart={() => openColorPicker("circle1")}
             />
             <circle
               cx="200"
@@ -227,6 +229,7 @@ const WB_Unit4_Page4_Q1 = () => {
               fill={colors.circle2}
               stroke="black"
               onDoubleClick={() => openColorPicker("circle2")}
+              onTouchStart={() => openColorPicker("circle2")}
             />
 
             <foreignObject x="75" y="160" width="50" height="30">
@@ -261,6 +264,7 @@ const WB_Unit4_Page4_Q1 = () => {
               fill={colors.door}
               stroke="black"
               onDoubleClick={() => openColorPicker("door")}
+              onTouchStart={() => openColorPicker("door")}
             />
 
             <foreignObject x="115" y="240" width="60" height="30">

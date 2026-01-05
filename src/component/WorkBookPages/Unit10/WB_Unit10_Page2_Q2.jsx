@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import mainImg from "../../../assets/U1 WB/U10/U10P58EXED.svg"
 import img1 from "../../../assets/U1 WB/U10/U10P58EXED01-01.svg";
 import img2 from "../../../assets/U1 WB/U10/U10P58EXED01-02.svg";
 import img3 from "../../../assets/U1 WB/U10/U10P58EXED01-03.svg";
@@ -173,8 +174,8 @@ export default function WB_Unit10_Page2_Q2() {
           <span className="ex-A">D</span> Read, look, and circle.
         </h5>
         <img
-          src="./cccccccccccccccc"
-          style={{ height: "130px", width: "auto" }}
+          src={mainImg}
+          style={{ height: "160px", width: "auto" }}
         />
         {data.map((q) => (
           <div key={q.id} className="question-row-wb-unit10-p2-q2">
@@ -189,7 +190,7 @@ export default function WB_Unit10_Page2_Q2() {
               >
                 {q.id}.
               </span>
-              <img src={q.mainImg} style={{ height: "80px", width: "auto" }} />
+              <img src={q.mainImg} style={{ height: "95px", width: "auto" }} />
             </div>
             <div className="images-row-Unit5_Page5_Q2">
               {q.images.map((img) => {

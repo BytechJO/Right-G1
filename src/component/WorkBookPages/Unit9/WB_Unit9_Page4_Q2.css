@@ -16,3 +16,18 @@
     line-height: normal;
 }
 
+
+.shape-img-wb-unit9-p4-q2{
+    height: 300px ;
+    width: auto;
+}
+
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .shape-img-wb-unit9-p4-q2{
+    height: 230px ;
+    width: auto;
+}
+
+}

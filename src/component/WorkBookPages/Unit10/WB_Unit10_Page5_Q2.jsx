@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import img1 from "../../../assets/U1 WB/U10/U10P61EXEJ-01.svg";
+import img2 from "../../../assets/U1 WB/U10/U10P61EXEJ-02.svg";
+import img3 from "../../../assets/U1 WB/U10/U10P61EXEJ-03.svg";
+import img4 from "../../../assets/U1 WB/U10/U10P61EXEJ-04.svg";
+import img5 from "../../../assets/U1 WB/U10/U10P61EXEJ-05.svg";
+import img6 from "../../../assets/U1 WB/U10/U10P61EXEJ-06.svg";
 
 const grid = [
   ["m", "e", "l", "h", "m", "e", "d", "s", "k"],
@@ -17,6 +23,7 @@ const grid = [
 const words = [
   {
     text: "milk",
+    src: img1,
     coords: [
       [2, 5],
       [2, 6],
@@ -26,6 +33,7 @@ const words = [
   },
   {
     text: "apple",
+    src: img2,
     coords: [
       [1, 0],
       [1, 1],
@@ -36,6 +44,7 @@ const words = [
   },
   {
     text: "chicken",
+    src: img3,
     coords: [
       [6, 0],
       [6, 1],
@@ -48,6 +57,7 @@ const words = [
   },
   {
     text: "bread",
+    src: img4,
     coords: [
       [4, 3],
       [4, 4],
@@ -58,6 +68,7 @@ const words = [
   },
   {
     text: "fruit",
+    src: img5,
     coords: [
       [4, 8],
       [5, 8],
@@ -68,6 +79,7 @@ const words = [
   },
   {
     text: "ice cream",
+    src: img6,
     coords: [
       [3, 0],
       [3, 1],
@@ -193,8 +205,8 @@ export default function WB_Unit10_Page5_Q2() {
   };
 
   return (
-    <div className="wordsearch-wrapper" >
-      <div className="page8-wrapper" >
+    <div className="wordsearch-wrapper">
+      <div className="page8-wrapper">
         <div className="div-forall" style={{ width: "60%" }}>
           <h3 className="header-title-page8">
             <span className="ex-A">J</span>Look and find the words.
@@ -221,19 +233,16 @@ export default function WB_Unit10_Page5_Q2() {
 
             <div className="word-btn-wb-unit10-p5-q2">
               {words.map((w, i) => (
-                <div key={w.text} className="word-label-wrapper-wb-u2-p5-q2">
-                  <div
-                    className={`word-label-wb-u2-p5-q2 ${
-                      foundWords.includes(w.text) ? "done" : ""
-                    }`}
-                  >
-                    <img
-                      src="./ssssssss"
-                      style={{ height: "100px", width: "100px" }}
-                    />
-                    <p>{w.text}</p>
-                  </div>
-
+                <div
+                  className={`word-label-wb-u10-p5-q2 ${
+                    foundWords.includes(w.text) ? "done" : ""
+                  }`}
+                >
+                  <img
+                    src={w.src}
+                    style={{ height: "100px", width: "100px" }}
+                  />
+                  <p>{w.text}</p>
                   {/* ✖ إكس داخل دائرة للكلمات الخاطئة */}
                   {wrongWords.includes(w.text) && (
                     <span className="wrong-x-circle-wb-unit10-p5-q2">✕</span>

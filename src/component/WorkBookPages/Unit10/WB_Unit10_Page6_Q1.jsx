@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page6_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img1 from "../../../assets/unit8/imgs/U8P68EXEA1-01.svg";
-import img2 from "../../../assets/unit8/imgs/U8P68EXEA1-02.svg";
-import img3 from "../../../assets/unit8/imgs/U8P68EXEA1-03.svg";
-import img4 from "../../../assets/unit8/imgs/U8P68EXEA1-04.svg";
+import img1 from "../../../assets/U1 WB/U10/U10P62EXEA-01.svg";
+import img2 from "../../../assets/U1 WB/U10/U10P62EXEA-02.svg";
+import img3 from "../../../assets/U1 WB/U10/U10P62EXEA-03.svg";
+import img4 from "../../../assets/U1 WB/U10/U10P62EXEA-04.svg";
+import img5 from "../../../assets/U1 WB/U10/U10P62EXEA-05.svg";
+import img6 from "../../../assets/U1 WB/U10/U10P62EXEA-06.svg";
 const data = [
-  { img: img4, scrambled: "geg", answer: "egg", pattern: "geg" },
+  { img: img1, scrambled: "geg", answer: "egg", pattern: "geg" },
   { img: img2, scrambled: "ent", answer: "net", pattern: "ent" },
   {
-    img: img1,
+    img: img3,
     scrambled: "tej",
     answer: "jet",
     pattern: "tej",
   },
 
-  { img: img3, scrambled: "ebd", answer: "bed", pattern: "ebd" },
-  { img: img4, scrambled: "neh", answer: "hen", pattern: "neh" },
-  { img: img3, scrambled: "nte", answer: "ten", pattern: "nte" },
+  { img: img4, scrambled: "ebd", answer: "bed", pattern: "ebd" },
+  { img: img5, scrambled: "neh", answer: "hen", pattern: "neh" },
+  { img: img6, scrambled: "nte", answer: "ten", pattern: "nte" },
 ];
 
 const WB_Unit10_Page6_Q1 = () => {

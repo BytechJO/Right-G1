@@ -926,6 +926,15 @@ img {
     height: 23px;
   }
 }
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .header-title-page8 {
+    font-size: 22px;
+   
+    /* white-space: wrap; */
+}
+}
 @media (max-width: 1024px) {
   .page1-img-wrapper,
   .page1-img-wrapper-flashcard,

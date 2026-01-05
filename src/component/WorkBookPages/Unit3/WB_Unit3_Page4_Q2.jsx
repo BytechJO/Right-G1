@@ -172,7 +172,7 @@ setLocked(true); // 🔒 قفل الإجابات
                   >
                     {q.id}
                   </span>
-                  <img src={q.image} className="question-img-review5-p2-q3" />
+                  <img src={q.image} className="question-img-wb-unit3-p4-q2" />
                 </div>
                 <div
                   style={{

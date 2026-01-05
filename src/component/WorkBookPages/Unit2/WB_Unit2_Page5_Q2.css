@@ -23,9 +23,7 @@
   border: 2px solid rgb(0, 179, 255);
 }
 
-
 .cell-wb-u2-p5-q2.found {
- 
   background-color: #dcffcd;
   border: 2px solid green;
   font-weight: bold;
@@ -47,51 +45,55 @@
   background: #fff;
 } */
 
-.container-word-grid-wb-u2-p5-q2  {
+.container-word-grid-wb-u2-p5-q2 {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
-      gap: 70px
-}
-.word-btn-wb-u2-p5-q2 {
-  display: grid;
-    flex-direction: column;
-    gap: 20px;
-    grid-template-columns: 1fr 1fr;
-}
-
-
-.word-label-wrapper-wb-u2-p5-q2{
-  width: 160px;              /* عرض ثابت مثل الصورة */
-  height: auto;              /* ارتفاع قريب من الصورة */
-  border-radius: 12px;       /* زوايا ناعمة */  
-  display: flex;             /* لتمركز النص */
-  justify-content: center;
-  align-items: center;
-  
-  font-size: 18px;           /* حجم خط مشابه */
-  font-weight: 500;
-  color: black;
-  background: white;
-  
-  /* margin: 12px 0;            مسافة بين الكلمات */
-  position: relative;        /* للسماح بوضع علامة X لاحقاً */
+  gap: 20px;
 }
 
 .word-label-wb-u2-p5-q2 {
-  pointer-events: none;      /* لا نريد تفاعل مع النص فقط */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.word-btn-wb-u2-p5-q2 {
+  display: grid;
+  flex-direction: column;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
 }
 
+.word-label-wrapper-wb-u2-p5-q2 {
+  width: 160px; /* عرض ثابت مثل الصورة */
+  height: auto; /* ارتفاع قريب من الصورة */
+  border-radius: 12px; /* زوايا ناعمة */
+  display: flex; /* لتمركز النص */
+  justify-content: center;
+  align-items: center;
 
+  font-size: 18px; /* حجم خط مشابه */
+  font-weight: 500;
+  color: black;
+  background: white;
+
+  /* margin: 12px 0;            مسافة بين الكلمات */
+  position: relative; /* للسماح بوضع علامة X لاحقاً */
+}
+
+.word-label-wb-u2-p5-q2 {
+  pointer-events: none; /* لا نريد تفاعل مع النص فقط */
+}
 
 /* دائرة X للكلمة الخطأ */
 .wrong-x-circle-wb-u1-p6-q2 {
   position: absolute;
-  right: -12px;       /* يظهر بجانب الصندوق */
+  right: -12px; /* يظهر بجانب الصندوق */
   top: -3%;
   transform: translateY(-50%);
-  
+
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -100,16 +102,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   font-size: 14px;
   font-weight: bold;
 }
 
-
-
-@media (max-width: 820px) {
-   .container-word-grid-wb-u2-p5-q2 {
-
-    gap: 5px;
+@media (max-width: 1024px) {
+  .container-word-grid-wb-u2-p5-q2 {
+    flex-wrap: wrap;
+  }
 }
+@media screen and (max-width: 1024px) and (max-height:800px) {
+.container-word-grid-wb-u2-p5-q2 {
+    flex-wrap: nowrap;
+  }
+}
+@media (max-width: 820px) {
+  .container-word-grid-wb-u2-p5-q2 {
+    gap: 5px;
+  }
 }

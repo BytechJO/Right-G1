@@ -146,8 +146,8 @@ const WB_Unit1_Page5_Q1 = () => {
                 <div className="img-div-unit7-p5-q1">
                   <img
                     src={q.img}
-                    className="q3-image-unit7-p5-q1"
-                    style={{ height: "140px", width: "auto" }}
+                    className="q3-image-wb-unit1-p5-q1"
+                    
                   />
                 </div>
 

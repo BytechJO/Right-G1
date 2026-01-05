@@ -161,8 +161,8 @@ const WB_Unit5_Page1_Q2 = () => {
                   </span>
                   <img
                     src={q.image}
-                    className="question-img-review5-p2-q3"
-                    style={{ width: "140px" }}
+                    className="question-img-wb-unit5-p1-q2"
+                   
                   />
                 </div>
                 <div

@@ -1,17 +1,15 @@
 .wb-unit7-p1-q1 {
-  position: absolute;
-  padding: 5px;
-  top: 14.5%;
-  left: 41%;
+    position: absolute;
+    padding: 5px;
+    top: 14.8%;
+    left: 31%;
 }
-
 .wb-unit7-p1-q2 {
-  position: absolute;
-  padding: 5px;
-  top: 45.5%;
-  left: 35%;
+    position: absolute;
+    padding: 5px;
+    top: 61.8%;
+    left: 39%;
 }
-
 @media (max-width: 1024px) {
   .wb-unit7-p1-q1 {
     top: 14.5%;

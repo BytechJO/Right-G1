@@ -53,33 +53,31 @@ const WB_Unit4_Page1_Q2 = () => {
   const [activePaletteIndex, setActivePaletteIndex] = useState(null);
 
   const [svgContent, setSvgContent] = useState({});
-    // const [svgImages, setSvgImages] = useState({});
-    // const [imageColors, setImageColors] = useState({});
-    // const [activePalette, setActivePalette] = useState(null);
-  
-    useEffect(() => {
-      const loadSvgs = async () => {
+  // const [svgImages, setSvgImages] = useState({});
+  // const [imageColors, setImageColors] = useState({});
+  // const [activePalette, setActivePalette] = useState(null);
+
+  useEffect(() => {
+    const loadSvgs = async () => {
       const files = [bat, cap, ant, dad];
 
-const contents = await Promise.all(
-  files.map((file) =>
-    fetch(file)
-      .then((r) => r.text())
-      .then((text) =>
-        text
-          .replaceAll('fill="none"', 'fill="currentColor"')
-          .replaceAll(/stroke="[^"]*"/g, 'stroke="currentColor"')
-      )
-  )
-);
+      const contents = await Promise.all(
+        files.map((file) =>
+          fetch(file)
+            .then((r) => r.text())
+            .then((text) =>
+              text
+                .replaceAll('fill="none"', 'fill="currentColor"')
+                .replaceAll(/stroke="[^"]*"/g, 'stroke="currentColor"')
+            )
+        )
+      );
 
-setSvgContent(contents);
+      setSvgContent(contents);
+    };
 
-      };
-  
-      loadSvgs();
-    }, []);
-  
+    loadSvgs();
+  }, []);
 
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
@@ -146,18 +144,17 @@ setSvgContent(contents);
     setLocked(true); // 🔒 قفل التعديل
   };
 
-const reset = () => {
-  setAnswers(
-    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
-  );
-  setWrongInputs([]);
-  setLocked(false);
+  const reset = () => {
+    setAnswers(
+      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    );
+    setWrongInputs([]);
+    setLocked(false);
 
-  // 🔁 إعادة الصور للون الأسود
-  setSelectedColors(questions.map(() => null));
-  setActivePaletteIndex(null);
-};
-
+    // 🔁 إعادة الصور للون الأسود
+    setSelectedColors(questions.map(() => null));
+    setActivePaletteIndex(null);
+  };
 
   return (
     <div
@@ -183,6 +180,9 @@ const reset = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">B</span>Look, write, and color.
         </h5>
+        <span style={{ fontSize: "14px", color: "gray" }}>
+          Hint: Double Click to Color Word
+        </span>
         <div className="content-container-wb-unit4-p1-q2">
           {questions.map((q, qIndex) => (
             <div key={qIndex} className="row2-wb-unit4-p1-q2">
@@ -193,6 +193,7 @@ const reset = () => {
                     className="svg-wrapper wb-svg-colorable"
                     style={{ color: selectedColors[qIndex] || "transparent" }}
                     onDoubleClick={() => setActivePaletteIndex(qIndex)}
+                    onTouchStart={() => setActivePaletteIndex(qIndex)}
                     dangerouslySetInnerHTML={{ __html: svgContent[qIndex] }}
                   />
                 ) : (

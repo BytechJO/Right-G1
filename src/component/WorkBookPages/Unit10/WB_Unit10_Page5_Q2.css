@@ -25,7 +25,20 @@
     font-weight: 600;
 }
 
-
+.word-label-wb-u10-p5-q2{
+    width: 160px;
+    height: auto;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+    background: white;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
+}
 .cell-wb-unit10-p5-q2.highlight {
     background-color: #cdfffa;
     border: 2px solid rgb(0, 179, 255);

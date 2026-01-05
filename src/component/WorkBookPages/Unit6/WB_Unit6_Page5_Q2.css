@@ -71,3 +71,31 @@
    padding: 0px 3px;
   font-weight: bold;
 }
+
+.img-wb-unit6-p5-q2{
+  height: 100px;
+    width: auto;
+}
+
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .img-wb-unit6-p5-q2{
+  height: 80px;
+    width: auto;
+}
+.wb-unit6-p5-q2-question {
+    margin-bottom: 0px;
+}
+.wb-unit6-p5-q2-letters {
+    display: flex;
+    flex-wrap: wrap;
+    /* gap: 6px; */
+    font-size: 16px;
+}
+.wb-unit6-p5-q2-sentence {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+}

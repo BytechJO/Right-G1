@@ -127,7 +127,7 @@ const WB_Unit10_Page3_Q2 = () => {
               <canvas
                 ref={(el) => (canvasRefs.current[q.id] = el)}
                 width={270}
-                height={150}
+                height={190}
                 className="wb-unit10-p3-q2-canvas"
                 onMouseDown={(e) => startDrawing(e, q.id)}
                 onMouseMove={(e) => draw(e, q.id)}

@@ -4,7 +4,7 @@ import cap from "../../../assets/U1 WB/U5/U5P28EXED-02.svg";
 import ant from "../../../assets/U1 WB/U5/U5P28EXED-03.svg";
 import dad from "../../../assets/U1 WB/U5/U5P28EXED-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import "./WB_Unit5_Page2_Q2.css"
 const WB_Unit5_Page2_Q2 = () => {
   const questions = [
     {
@@ -127,7 +127,8 @@ const WB_Unit5_Page2_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -144,7 +145,8 @@ const WB_Unit5_Page2_Q2 = () => {
             <div key={qIndex} className="row2-wb-unit4-p1-q2">
               <div style={{ display: "flex", gap: "10px" }}>
                 <span className="num-span">{qIndex + 1}</span>
-                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+                <img src={q.img} alt="" className="q-img-wb-unit5-page2-q2" />
+                <span className="word-box-wb-unit5-page2-q2"> What’s this? </span>
               </div>
 
               <div className="sentence-wrapper-wb-unit4-p1-q2">
@@ -161,7 +163,7 @@ const WB_Unit5_Page2_Q2 = () => {
                     <span key={pIndex} style={{ position: "relative" }}>
                       <input
                         type="text"
-                          style={{width:"100%"}}
+                        style={{ width: "100%" }}
                         className="inline-input-wb-unit4-p1-q2"
                         value={answers[qIndex][pIndex] || ""}
                         onChange={(e) =>

@@ -12,22 +12,6 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.option-word-unit7-p5-q1 {
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 4px 15px; /* نفس حجم selected */
-  border-radius: 25px;
-  border: 2px solid transparent; /* مهم جداً */
-  transition: 0.2s;
-  position: relative;
-  user-select: none;
-}
-
-.option-word-unit7-p5-q1.selected3-wb-u1-p5-q1 {
-  border-color: red; /* فقط نغيّر اللون */
-}
-
 .wrong-x-wb-u1-p5-q1 {
   width: 25px;
   height: 25px;
@@ -46,4 +30,19 @@
   left: 91%;
   top: -36%;
   z-index: 99;
+}
+
+
+
+.q3-image-wb-unit1-p5-q1{
+  height: 140px;
+  width: auto;
+}
+
+@media (max-width: 1024px) {
+.q3-image-wb-unit1-p5-q1{
+  height: 100px;
+  width: auto;
+}
+
 }

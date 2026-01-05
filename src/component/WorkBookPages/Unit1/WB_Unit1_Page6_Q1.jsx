@@ -100,7 +100,8 @@ export default function WB_Unit1_Page6_Q1() {
                   <img
                     src={item.img}
                     alt=""
-                    style={{ height: "150px", width: "auto" }}
+                    className="img-wb-unit1-p6-q1"
+                 
                   />
                 </div>
                 <div

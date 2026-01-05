@@ -13,6 +13,12 @@
     justify-items: end;
 
 }
+.wb-svg-colorable svg {
+  pointer-events: none;
+}
+.wb-unit9-qk-svg-wrapper {
+  cursor: pointer;
+}
 
 .wb-unit9-qk-item {
   display: flex;
@@ -77,7 +83,17 @@
   border: 2px solid white;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit9-qk-layout {
 
+    grid-template-columns: 1fr 1fr 1fr;
+ 
+}
+.wb-unit9-qk-item.right {
+    grid-row:auto;
+    justify-content: flex-start;
+}
+}
 @media (max-width: 820px) {
   .wb-unit9-qk-layout {
   

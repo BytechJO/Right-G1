@@ -19,7 +19,7 @@ export default function WB_Unit1_Page4_Q1() {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const updateInput = (index, value) => {
-    if ( showAnswer) return;
+    if (showAnswer) return;
     setInputs((prev) => prev.map((v, i) => (i === index ? value : v)));
     setWrong([false, false, false, false]);
   };
@@ -67,7 +67,7 @@ export default function WB_Unit1_Page4_Q1() {
   };
 
   return (
-    <div className="page8-wrapper" style={{padding:"30px"}}>
+    <div className="page8-wrapper" style={{ padding: "30px" }}>
       <div className="div-forall" style={{ width: "60%" }}>
         {/* العنوان */}
         <h3 className="header-title-page8">
@@ -88,7 +88,7 @@ export default function WB_Unit1_Page4_Q1() {
             <div key={i} className="question-row-wb-u1-q4">
               <div
                 className="img-box-wb-u1-q4"
-                style={{ display: "flex", gap: "20px" }}
+                style={{ display: "flex"}}
               >
                 <span
                   style={{
@@ -100,9 +100,10 @@ export default function WB_Unit1_Page4_Q1() {
                   {i + 1}
                 </span>{" "}
                 <img
+                  className="img-wb-unit1-p4-q1"
                   src={item.img}
                   alt=""
-                  style={{ height: "150px", width: "auto" }}
+               
                 />
                 <div
                   style={{
@@ -122,12 +123,10 @@ export default function WB_Unit1_Page4_Q1() {
                     }}
                     value={showAnswer ? item.answer : inputs[i]}
                     onChange={(e) => updateInput(i, e.target.value)}
-                    disabled={ showAnswer}
+                    disabled={showAnswer}
                   />
 
-                  {wrong[i] && (
-                    <div className="wrong-icon-wb-u1-p4-q1">✕</div>
-                  )}
+                  {wrong[i] && <div className="wrong-icon-wb-u1-p4-q1">✕</div>}
                 </div>{" "}
               </div>
             </div>

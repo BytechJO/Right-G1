@@ -2,16 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import "./WB_Unit2_Page6_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-import img1 from "../../../assets/unit7/img/U7P62EXEA2-01.svg";
-import img2 from "../../../assets/unit7/img/U7P62EXEA2-02.svg";
-import img3 from "../../../assets/unit7/img/U7P62EXEA2-03.svg";
-import img4 from "../../../assets/unit7/img/U7P62EXEA2-04.svg";
-import img5 from "../../../assets/unit7/img/U7P62EXEA2-05.svg";
-import img6 from "../../../assets/unit7/img/U7P62EXEA2-06.svg";
-import img7 from "../../../assets/unit7/img/U7P62EXEA2-07.svg";
-import img8 from "../../../assets/unit7/img/U7P62EXEA2-08.svg";
-import img9 from "../../../assets/unit7/img/U7P62EXEA2-09.svg";
-import img10 from "../../../assets/unit7/img/U7P62EXEA2-10.svg";
+import img1 from "../../../assets/U1 WB/U2/U2P14EXEB01-01.svg";
+import img2 from "../../../assets/U1 WB/U2/U2P14EXEB01-02.svg";
+import img3 from "../../../assets/U1 WB/U2/U2P14EXEB01-03.svg";
+import img4 from "../../../assets/U1 WB/U2/U2P14EXEB02-01.svg";
+import img5 from "../../../assets/U1 WB/U2/U2P14EXEB02-02.svg";
+import img6 from "../../../assets/U1 WB/U2/U2P14EXEB02-03.svg";
+import img7 from "../../../assets/U1 WB/U2/U2P14EXEB03-01.svg";
+import img8 from "../../../assets/U1 WB/U2/U2P14EXEB03-02.svg";
+import img9 from "../../../assets/U1 WB/U2/U2P14EXEB03-03.svg";
+import img10 from "../../../assets/U1 WB/U2/U2P14EXEB04-01.svg";
+import img11 from "../../../assets/U1 WB/U2/U2P14EXEB04-02.svg";
+import img12 from "../../../assets/U1 WB/U2/U2P14EXEB04-03.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -31,9 +33,9 @@ const data = [
     id: 2,
 
     images: [
-      { id: 1, src: img6, value: 1 },
-      { id: 2, src: img7, value: 2 },
-      { id: 3, src: img8, value: 3 },
+      { id: 1, src: img4, value: 1 },
+      { id: 2, src: img5, value: 2 },
+      { id: 3, src: img6, value: 3 },
     ],
     correct: [1],
   },
@@ -41,9 +43,9 @@ const data = [
     id: 3,
 
     images: [
-      { id: 1, src: img1, value: 1 },
-      { id: 2, src: img2, value: 2 },
-      { id: 3, src: img3, value: 3 },
+      { id: 1, src: img7, value: 1 },
+      { id: 2, src: img8, value: 2 },
+      { id: 3, src: img9, value: 3 },
     ],
     correct: [0],
   },
@@ -51,9 +53,9 @@ const data = [
     id: 4,
 
     images: [
-      { id: 1, src: img6, value: 1 },
-      { id: 2, src: img7, value: 2 },
-      { id: 3, src: img8, value: 3 },
+      { id: 1, src: img10, value: 1 },
+      { id: 2, src: img11, value: 2 },
+      { id: 3, src: img12, value: 3 },
     ],
     correct: [1],
   },
@@ -82,20 +84,19 @@ export default function WB_Unit2_Page6_Q2() {
 
   // -----------------------------------------------------------------------
 
- const handleSelect = (qId, value) => {
-  if (showAnswer||submitted) return;
+  const handleSelect = (qId, value) => {
+    if (showAnswer || submitted) return;
 
-  setAnswers((prev) => {
-    const current = prev[qId]?.[0];
+    setAnswers((prev) => {
+      const current = prev[qId]?.[0];
 
-    if (current === value) {
-      return { ...prev, [qId]: [] }; // إلغاء الاختيار
-    }
+      if (current === value) {
+        return { ...prev, [qId]: [] }; // إلغاء الاختيار
+      }
 
-    return { ...prev, [qId]: [value] }; // استبدال
-  });
-};
-
+      return { ...prev, [qId]: [value] }; // استبدال
+    });
+  };
 
   const handleCheck = () => {
     if (showAnswer) return;
@@ -257,7 +258,8 @@ export default function WB_Unit2_Page6_Q2() {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -266,8 +268,8 @@ export default function WB_Unit2_Page6_Q2() {
         }}
       >
         <h5 className="header-title-page8">
-         <span className="ex-A">B</span>
-       Listen and circle the picture with a different
+          <span className="ex-A">B</span>
+          Listen and circle the picture with a different
           <span style={{ color: "red" }}>beginning sound</span>
         </h5>
 
@@ -407,7 +409,7 @@ export default function WB_Unit2_Page6_Q2() {
                 {q.id}
               </span>
 
-              <div className="images-row-Unit7_Page5_Q2">
+              <div className="images-row-wb-unit2-p6-q2">
                 {q.images.map((img) => {
                   const isSelected = answers[q.id]?.includes(img.value);
                   const isWrong =
@@ -424,7 +426,7 @@ export default function WB_Unit2_Page6_Q2() {
                       ${isWrong ? "wrong" : ""}`}
                       onClick={() => handleSelect(q.id, img.value)}
                     >
-                      <img src={img.src} alt="" />
+                      <img src={img.src} alt="" style={{height:"120px" ,objectFit:"cover"}}/>
 
                       {isWrong && (
                         <div className="wrong-mark-Unit5_Page5_Q2">✕</div>

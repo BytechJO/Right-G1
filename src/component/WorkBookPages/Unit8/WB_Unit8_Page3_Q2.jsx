@@ -98,7 +98,8 @@ const WB_Unit8_Page3_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -112,7 +113,7 @@ const WB_Unit8_Page3_Q2 = () => {
             <span className="ex-A">F</span> Look, read, and circle.
           </h5>
         </div>
-        <div className="container-review6-p1-q1">
+        <div className="container-wb-unit8-p3-q2">
           {items.map((q, i) => (
             <div
               key={i}
@@ -137,11 +138,7 @@ const WB_Unit8_Page3_Q2 = () => {
                   {i + 1}
                 </span>
                 <div className="img-div-review6-p1-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-review6-p1-q1"
-                    style={{ height: "150px", width: "auto" }}
-                  />
+                  <img src={q.img} className="q3-image-wb-unit8-p3-q2" />
                 </div>
               </div>
 

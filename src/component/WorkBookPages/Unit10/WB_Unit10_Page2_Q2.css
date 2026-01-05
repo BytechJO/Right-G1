@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   /* margin-bottom: 25px; */
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .selected-wb-unit10-p2-q2 {

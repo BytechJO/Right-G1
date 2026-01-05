@@ -126,7 +126,7 @@ const WB_Unit6_Page4_Q2 = () => {
           <h4 className="header-title-page8">
             <span className="ex-A"> H</span> Look and write.
           </h4>
-          <div className="content-container-unit5-p6-q1">
+          <div className="content-container-wb-unit6-p4-q2">
             <div className="section-one-wb-unit6-p4-q2">
               <div className="img-container-wb-unit6-p4-q2">
                 <span
@@ -298,7 +298,7 @@ const WB_Unit6_Page4_Q2 = () => {
                 >
                   3
                 </span>{" "}
-                <img src={img3} className="img-unit5-p6-q1" />
+                <img src={img3} className="img-wb-unit6-p4-q2" />
               </div>
               <div className="content-input-unit5-p6-q1">
                 <div style={{ position: "relative" }}>
@@ -356,7 +356,7 @@ const WB_Unit6_Page4_Q2 = () => {
                 >
                   4
                 </span>{" "}
-                <img src={img4} className="img-unit5-p6-q1" />
+                <img src={img4} className="img-wb-unit6-p4-q2" />
               </div>
               <div className="content-input-unit5-p6-q1">
                 <div

@@ -139,7 +139,7 @@ const WB_Unit6_Page3_Q2 = () => {
             <div key={qIndex} className="row2-wb-unit6-p3-q2">
               <div style={{ display: "flex", gap: "10px" ,alignItems:"center"}}>
                 <span className="num-span">{qIndex + 1}</span>
-                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+                <img src={q.img} alt="" className="q-img-wb-unit6-p3-q2" />
               </div>
 
               <div className="sentence-wrapper-wb-unit4-p1-q2">

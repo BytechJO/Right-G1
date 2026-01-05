@@ -29,3 +29,10 @@
     flex-direction: column;
     align-items: flex-start;
 }
+
+
+@media (max-width: 1024px) {
+.H5 {
+    font-size: clamp(24px, 6vw, 48px);
+  }
+}
