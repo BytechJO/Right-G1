@@ -74,14 +74,25 @@
   font-weight: bold;
   border: 2px solid white;
 }
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .check-box-wb-u1-q2 {
+    position: absolute;
+    bottom: 21px;
+    right: 11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  
+}
 @media (max-width: 1024px) {
   .img-box-wb-u1-q2 {
     width: 164px;
     height: 173px;
-  }.check-box-wb-u1-q2 {
+  }
+  .check-box-wb-u1-q2 {
     position: absolute;
-    bottom: 30px;
+    bottom: 22px;
     right: 10px;
     width: 40px;
     height: 40px;
@@ -94,16 +105,14 @@
     font-size: 28px;
     background: white;
     border-radius: 9px;
-}
-
-
+  }
 }
 @media (max-width: 540px) {
-    .img-box-wb-u1-q2 {
-        width: 120px;
-        height: 150px;
-    }
-.check-box-wb-u1-q2 {
+  .img-box-wb-u1-q2 {
+    width: 120px;
+    height: 150px;
+  }
+  .check-box-wb-u1-q2 {
     position: absolute;
     bottom: 27px;
     right: 9px;
@@ -118,5 +127,5 @@
     font-size: 28px;
     background: white;
     border-radius: 9px;
-}
+  }
 }

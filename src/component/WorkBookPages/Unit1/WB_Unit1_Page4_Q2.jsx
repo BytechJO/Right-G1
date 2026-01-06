@@ -155,7 +155,7 @@ export default function WB_Unit1_Page4_Q2() {
       >
         <h5 className="header-title-page8">
           {" "}
-          <span className="ex-A">B</span> Unscramble and match.
+          <span className="ex-A">D</span> Unscramble and match.
         </h5>
 
         <div className="matching-wrapper2" ref={containerRef}>

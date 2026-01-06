@@ -23,3 +23,28 @@
   width: 100%;
   gap: 25px;
 }
+.wb-unit8-p1-q1-box {
+  position: relative;
+  width: 160px;
+  height: 150px;
+  /* border: 2px solid #999; */
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+.wb-unit8-p1-q1-input-wrapper {
+    width: 40px;
+    height: 40px;
+    border: 2px solid black;
+    border-radius: 9px;
+    position: relative;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 26px;
+    right: 4px;
+}

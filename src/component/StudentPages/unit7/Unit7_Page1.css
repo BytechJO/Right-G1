@@ -116,12 +116,12 @@ top: 39%;
 }
 
 @media (max-width: 820px) {
-  .headset-icon-CD-unit7-page1-1 {
-    top: 6.5%;
-    right: 16%;
-  }
- .headset-icon-CD-unit7-page1-2 {
-        bottom: 36.5%;
+     .headset-icon-CD-unit7-page1-1 {
+        top: 6.5%;
+        right: 11%;
+    }
+     .headset-icon-CD-unit7-page1-2 {
+        bottom: 40.5%;
         left: 25%;
     }
   .click-icon-unit7-page1-2 {

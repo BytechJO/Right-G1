@@ -11,3 +11,18 @@
     flex-direction: column;
     align-items: center;
 }
+
+
+
+.q-img-wb-unit10-p5-q1 {
+    width: auto;
+    height: 130px;
+}
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .q-img-wb-unit10-p5-q1 {
+  
+    height: 105px;
+}
+}

@@ -186,9 +186,9 @@ const Review9_Page2_Q1 = () => {
               </div>
               <img
                 src={item.img}
-                className="middle-img"
+                className="middle-img-review9-p2-q2"
                 alt=""
-                style={{ height: "140px" }}
+
               />
             </div>
           </div>

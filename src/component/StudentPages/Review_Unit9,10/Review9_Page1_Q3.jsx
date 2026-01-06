@@ -154,7 +154,7 @@ const Review9_Page1_Q3 = () => {
                         alignItems: "center",
                       }}
                     >
-                      <img src={q.mainImg} className="Unit5-P6-Q3-img" />{" "}
+                      <img src={q.mainImg} className="review9-p1-q3-img" />{" "}
                       <div
                         style={{
                           position: "relative",
@@ -183,7 +183,7 @@ const Review9_Page1_Q3 = () => {
                         display: "flex",
                         alignItems: "center",
                       }}> 
-                    <img src={q.image} alt="" className="Unit5-P6-Q3-img" />
+                    <img src={q.image} alt="" className="review9-p1-q3-img" />
                     <div>
                     {q.items.map((item, idx) => {
                       const isSelected = answers[q.id] === idx;
@@ -191,7 +191,7 @@ const Review9_Page1_Q3 = () => {
 
                       return (
                         <div key={idx} className="review3-p1-q3-row">
-                          <span className="Unit5-P6-Q3-text">{item.text}</span>
+                          <span className="review9-p1-q3-text">{item.text}</span>
 
                           <div className="review3-p1-q3-input-box">
                             <input

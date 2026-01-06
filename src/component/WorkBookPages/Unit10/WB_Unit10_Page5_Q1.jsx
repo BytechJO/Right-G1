@@ -164,7 +164,7 @@ const WB_Unit10_Page5_Q1 = () => {
                     {q.text}
                   </p>
                 </div>
-                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+                <img src={q.img} alt="" className="q-img-wb-unit10-p5-q1" />
               </div>
 
               <div className="sentence-wrapper-wb-unit4-p1-q2">

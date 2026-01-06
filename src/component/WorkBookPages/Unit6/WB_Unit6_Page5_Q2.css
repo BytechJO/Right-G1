@@ -99,3 +99,12 @@
     margin-bottom: 0px;
 }
 }
+
+
+@media (max-width: 1024px){
+.wb-unit6-p5-q2-letters {
+   
+    flex-wrap: wrap;
+   
+}
+}

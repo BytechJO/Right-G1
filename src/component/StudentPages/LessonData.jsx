@@ -168,7 +168,7 @@ export const lessons = [
   { component: Unit2_Page10_Q1, unit: 2, isReview: true },
   { component: Unit2_Page10_Q2, unit: 2, isReview: true },
   { component: Unit2_Page10_Q3, unit: 2, isReview: true },
-  { component: Unit2_Page10_Q4, unit: 2, isReview: true ,lastOfUnit: true },
+  { component: Unit2_Page10_Q4, unit: 2, isReview: true, lastOfUnit: true },
 
   // UNIT 3 MAIN
   { component: Unit3_Page5_Q1, unit: 3 },
@@ -198,7 +198,7 @@ export const lessons = [
   { component: Review4_Page1_Q4, unit: 4, isReview: true }, //45
   { component: Review4_Page2_Q1, unit: 4, isReview: true }, //46
   { component: Review4_Page2_Q2, unit: 4, isReview: true }, //47
-  { component: Review4_Page2_Q3, unit: 4, isReview: true ,lastOfUnit: true }, //48
+  { component: Review4_Page2_Q3, unit: 4, isReview: true, lastOfUnit: true }, //48
 
   // UNIT 5 MAIN
   { component: Unit5_Page5_Q1, unit: 5 },
@@ -255,7 +255,7 @@ export const lessons = [
   { component: Review8_Page2_Q1, unit: 8, isReview: true }, //94
   { component: Review8_Page2_Q2, unit: 8, isReview: true }, //95
   { component: Review8_Page2_Q3, unit: 8, isReview: true }, //96
-  { component: Review8_Page2_Q4, unit: 8, isReview: true }, //97
+  { component: Review8_Page2_Q4, unit: 8, isReview: true, lastOfUnit: true }, //97
 
   { component: Unit9_Page5_Q1, unit: 9 }, //98
   { component: Unit9_Page5_Q2, unit: 9 }, //99

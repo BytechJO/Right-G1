@@ -4,7 +4,7 @@ import cap from "../../../assets/U1 WB/U10/U10P57EXEB-02.svg";
 import ant from "../../../assets/U1 WB/U10/U10P57EXEB-03.svg";
 import dad from "../../../assets/U1 WB/U10/U10P57EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-
+import "./WB_Unit10_Page1_Q2.css";
 const WB_Unit10_Page1_Q2 = () => {
   const questions = [
     {
@@ -127,7 +127,8 @@ const WB_Unit10_Page1_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div   className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -139,7 +140,7 @@ const WB_Unit10_Page1_Q2 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">B</span>Look and write.
         </h5>
-        <div className="content-container-wb-unit4-p1-q2">
+        <div className="content-container-wb-unit10-p1-q2">
           {questions.map((q, qIndex) => (
             <div key={qIndex} className="row2-wb-unit4-p1-q2">
               <div style={{ display: "flex", gap: "10px" }}>
@@ -161,7 +162,7 @@ const WB_Unit10_Page1_Q2 = () => {
                     <span key={pIndex} style={{ position: "relative" }}>
                       <input
                         type="text"
-                          style={{width:"100%"}}
+                        style={{ width: "100%" }}
                         className="inline-input-wb-unit4-p1-q2"
                         value={answers[qIndex][pIndex] || ""}
                         onChange={(e) =>

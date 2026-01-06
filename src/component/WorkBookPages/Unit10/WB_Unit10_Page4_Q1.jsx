@@ -180,11 +180,7 @@ const WB_Unit10_Page4_Q1 = () => {
                     >
                       {q.id}
                     </span>
-                    <span className="wb-unit10-p4-q1-text"  style={{
-                      
-                        fontSize: "18px",
-                        fontWeight: "500",
-                      }}>{q.text}</span>
+                    <span className="wb-unit10-p4-q1-text" >{q.text}</span>
                   </div>
                 </div>
                 <div>
@@ -200,7 +196,7 @@ const WB_Unit10_Page4_Q1 = () => {
                             readOnly
                             value={isSelected ? "✓" : ""}
                             onFocus={() => handleSelect(q.id, idx)}
-                            className={`review3-p1-q3-input`}
+                            className={`wb-unit10-p4-q1-input`}
                             disabled={showAnswer}
                             style={{
                               cursor: showAnswer ? "not-allowed" : "pointer",

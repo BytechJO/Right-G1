@@ -3,7 +3,7 @@
   padding: 10px;
 }
 
-.match-wrapper2 {
+.match-wrapper2-review1-p2-q3 {
   position: relative;
   margin-top: 20px;
   display: flex;
@@ -116,4 +116,12 @@
     margin-top: 10px;
     align-items: center;
 
+}
+
+
+@media  screen and (max-width: 1024px) and (max-height: 600px) {
+  
+  .match-wrapper2-review1-p2-q3{
+    gap: 105px;
+  }
 }

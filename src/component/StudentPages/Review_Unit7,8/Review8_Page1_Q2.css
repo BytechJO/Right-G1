@@ -22,8 +22,28 @@
   z-index: 999999;
   border: 2px solid white;
 }
-
+.row-content10-review8-p1-q2  {
+    display: flex;
+    margin-bottom: 55px;
+    gap: 22px;
+    margin-top: 20px;
+}
 .input-wrapper-review8-p1-q2 {
   position: relative;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .row-content10-review8-p1-q2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr !important;
+        justify-items: center;
+    }
+}
+
+@media (max-width: 1024px) {
+    .row-content10-review8-p1-q2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr ;
+        justify-items: center;
+    }
+}

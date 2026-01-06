@@ -119,6 +119,11 @@
   gap: 45px;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+ .grid-container-review7-p1-q1 { 
+  flex-direction: row !important;
+ }
+}
 
 @media (max-width: 1024px) {
 .grid-container-review7-p1-q1 {

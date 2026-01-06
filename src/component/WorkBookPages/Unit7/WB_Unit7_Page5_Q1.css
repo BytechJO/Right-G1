@@ -42,9 +42,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.wb-unit7-p5-q1-input-wrapper {
   position: absolute;
   bottom: -1px;
   right: -1px;
@@ -67,8 +64,23 @@
     height: 120px;
   }
   .wb-unit7-p5-q1-grid {
-
     gap: 5px;
+  }
 
+  .wb-unit7-p5-q1-input-wrapper {
+    position: absolute;
+    bottom: 17px !important;
+    right: 3px !important;
+    border-radius: 9px;
+    width: 35px;
+    height: 35px;
+  }
 }
+@media (max-width: 1024px) {
+  .wb-unit7-p5-q1-input-wrapper {
+    position: absolute;
+    bottom: 24px;
+    right: 5px;
+    border-radius: 9px;
+  }
 }

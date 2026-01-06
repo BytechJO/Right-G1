@@ -95,7 +95,7 @@ const Review8_Page1_Q2 = () => {
         <h5 className="header-title-page8">B Look, read, and write.</h5>
 
         <div
-          className="row-content10-unit3-page6-q1"
+          className="row-content10-review8-p1-q2"
           style={{ alignItems: "center", justifyContent: "space-between" }}
         >
           {/* 🔵 1 */}

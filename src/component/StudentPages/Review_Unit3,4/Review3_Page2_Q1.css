@@ -64,7 +64,12 @@
   border-color: gray; /* هنا يصير اللون رمادي */
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* ظل خفيف لطيف */
 }
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .q-img-review3-p2-q1 {
+    width: auto;
+    height: 150px;
+}
+}
 @media (max-width: 991px) {
   .row-content10-review3-p2-q1{
     grid-template-columns: repeat(2, 1fr); /* 2 كروت */

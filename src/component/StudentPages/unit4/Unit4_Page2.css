@@ -23,6 +23,21 @@
   right: 38%;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .headset-icon-CD-unit4-page2-1 {
+    top: 5% !important;
+    right: -3% !important;
+  }
+  .headset-icon-CD-unit4-page2-2 {
+    bottom: 25.5% !important;
+    right: 2% !important;
+  }
+  .click-icon-unit4-page2-1 {
+        bottom: 8.5% !important;
+        right: 34% !important;
+    }
+}
+
 @media (max-width: 1024px) {
   .headset-icon-CD-unit4-page2-1 {
     top: 4%;
@@ -31,9 +46,9 @@
   .headset-icon-CD-unit4-page2-2 {
     bottom: 30.5%;
     right: 9%;
-}
-.click-icon-unit4-page2-1 {
+  }
+  .click-icon-unit4-page2-1 {
     bottom: 13.5%;
     right: 42%;
-}
+  }
 }

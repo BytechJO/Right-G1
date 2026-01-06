@@ -166,7 +166,7 @@ const WB_Unit5_Page4_Q2 = () => {
             <div className="match-words-row2">
               <div className="word-box2">
                 <h5
-                  className={`h5-wb-unit3-p3-q2   ${
+                  className={`h5-wb-unit5-p4-q2   ${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("climb-dot").click()}
@@ -186,7 +186,7 @@ const WB_Unit5_Page4_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className={`h5-wb-unit3-p3-q2   ${
+                  className={`h5-wb-unit5-p4-q2   ${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("fly-dot").click()}
@@ -206,7 +206,7 @@ const WB_Unit5_Page4_Q2 = () => {
 
               <div className="word-box2">
                 <h5
-                  className={`h5-wb-unit3-p3-q2   ${
+                  className={`h5-wb-unit5-p4-q2   ${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("ride-dot").click()}
@@ -225,7 +225,7 @@ const WB_Unit5_Page4_Q2 = () => {
               </div>
               <div className="word-box2">
                 <h5
-                  className={`h5-wb-unit3-p3-q2   ${
+                  className={`h5-wb-unit5-p4-q2   ${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("forks-dot").click()}
@@ -267,7 +267,7 @@ const WB_Unit5_Page4_Q2 = () => {
                   />
                 )}
                 {activePalette === "img1" && (
-                  <div className="color-palette">
+                  <div className="color-palette-wb-unit5-p4-q2">
                     {["red", "blue", "yellow", "brown"].map((color) => (
                       <button
                         key={color}
@@ -312,7 +312,7 @@ const WB_Unit5_Page4_Q2 = () => {
                 )}
 
                 {activePalette === "img2" && (
-                  <div className="color-palette">
+                  <div className="color-palette-wb-unit5-p4-q2">
                     {["red", "blue", "yellow", "brown"].map((color) => (
                       <button
                         key={color}
@@ -356,7 +356,7 @@ const WB_Unit5_Page4_Q2 = () => {
                 )}
 
                 {activePalette === "img3" && (
-                  <div className="color-palette">
+                  <div className="color-palette-wb-unit5-p4-q2">
                     {["red", "blue", "yellow", "brown"].map((color) => (
                       <button
                         key={color}
@@ -401,7 +401,7 @@ const WB_Unit5_Page4_Q2 = () => {
                 )}
 
                 {activePalette === "img4" && (
-                  <div className="color-palette">
+                  <div className="color-palette-wb-unit5-p4-q2">
                     {["red", "blue", "yellow", "brown"].map((color) => (
                       <button
                         key={color}

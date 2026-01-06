@@ -144,7 +144,7 @@ const Review8_Page2_Q4 = () => {
                   >
                     {q.id}
                   </span>
-                  <img src={q.image} className="question-img-review5-p2-q3" style={{width:"300px"}} />
+                  <img src={q.image} className="question-img-review8-p2-q4"  />
                 </div>
                 <div style={{ display: "flex", width: "100%" ,justifyContent:"space-around",alignItems:"center"}}>
                   {q.parts.map((part, pIndex) => {

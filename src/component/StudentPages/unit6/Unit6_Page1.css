@@ -93,3 +93,10 @@ left: 20%;
     right: 42%;
 }
 }
+
+@media (max-width: 820px) {
+  .click-icon-unit6-page1-2 {
+        bottom: 13%;
+        right: 41%;
+    }
+}

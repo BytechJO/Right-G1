@@ -118,7 +118,7 @@ const WB_Unit10_Page6_Q1 = () => {
             <span className="ex-A">A</span>Look, unscramble, and write. words.
           </h3>
 
-          <div className="unscramble-row-wb-unit9-p6-q1 ">
+          <div className="unscramble-row-wb-unit10-p6-q1 ">
             {data.map((item, index) => (
               <div className="unscramble-box-wb-unit10-p6-q1" key={index}>
                 <div className="img-box-wb-unit10-p6-q1">
@@ -128,7 +128,7 @@ const WB_Unit10_Page6_Q1 = () => {
                   >
                     {index + 1}
                   </span>{" "}
-                  <img src={item.img} alt="" style={{ height: "130px" }} />
+                  <img src={item.img} alt="" className="img-wb-unit10-p6-q1" />
                 </div>
                 <div className="input-row">
                   <span className="pattern" style={{ fontSize: "22px" }}>
@@ -145,9 +145,7 @@ const WB_Unit10_Page6_Q1 = () => {
                     />
 
                     {/* ❌ علامة الخطأ */}
-                    {wrongInputs[index] && (
-                      <div className="error-icon">✕</div>
-                    )}
+                    {wrongInputs[index] && <div className="error-icon">✕</div>}
                   </div>
                 </div>
               </div>

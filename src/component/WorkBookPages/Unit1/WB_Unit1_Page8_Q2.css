@@ -96,3 +96,15 @@
   font-weight: bold;
   font-size: 14px;
 }
+
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .word-bank-wb-u1-p8-q2 {
+    flex-wrap: nowrap;
+    gap: 2px;
+  }
+  .word-box-wb-u1-p8-q2 {
+    font-size: 16px;
+  }
+}

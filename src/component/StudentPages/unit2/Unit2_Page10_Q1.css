@@ -28,14 +28,6 @@
   margin-bottom: 50px;
 }
 
-/* ===== الجملة ===== */
-.sentence-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1.1rem;
-  justify-content: flex-start;
-}
 
 /* رقم الجملة */
 .num2 {

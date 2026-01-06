@@ -18,6 +18,12 @@
   left: 43%;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .headset-icon-CD-unit3-page3-1, .pauseBtn-icon-CD-unit3-page3-1 {
+        top: 6% !important;
+    }
+}
+
 @media (max-width: 1024px) {
   .headset-icon-CD-unit3-page3-1,
   .pauseBtn-icon-CD-unit3-page3-1 {

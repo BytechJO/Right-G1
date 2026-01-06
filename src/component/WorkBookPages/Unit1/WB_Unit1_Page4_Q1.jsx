@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import img1 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-01.svg";
-import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
-import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
+import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
+import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
 import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit1_Page4_Q1.css";
@@ -9,9 +9,9 @@ import "./WB_Unit1_Page4_Q1.css";
 export default function WB_Unit1_Page4_Q1() {
   const data = [
     { img: img1, answer: "Goodbye!" },
-    { img: img2, answer: "Hello! I'm Stella." },
+    { img: img2, answer: "Good morning!" },
     { img: img3, answer: "Good afternoon!" },
-    { img: img4, answer: "Good morning!" },
+    { img: img4, answer: "Hello! I'm Stella." },
   ];
 
   const [inputs, setInputs] = useState(["", "", "", ""]);
@@ -115,7 +115,7 @@ export default function WB_Unit1_Page4_Q1() {
                   <input
                     className="input-text-field"
                     style={{
-                      width: "70%",
+                      width: "100%",
                       height: "40px",
                       borderBottom: "2px solid black",
                       fontSize: "20px",

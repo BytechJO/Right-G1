@@ -101,7 +101,7 @@ const Unit6_Page5_Q3 = () => {
               <span className="num-span">1</span>
               <h6 style={{ fontSize: "22px" }}>climb a tree</h6>
             </div>
-            <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+            <img src={bat} alt="" className="q-img-unit6-page5-q3" />
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
                 <input
@@ -126,7 +126,7 @@ const Unit6_Page5_Q3 = () => {
               <span className="num-span">2</span>{" "}
               <h6 style={{ fontSize: "22px" }}>fly a kite</h6>
             </div>
-            <img src={cap} alt="" className="q-img-unit3-page6-q1" />
+            <img src={cap} alt="" className="q-img-unit6-page5-q3" />
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
                 <input
@@ -151,7 +151,7 @@ const Unit6_Page5_Q3 = () => {
               <span className="num-span">3</span>{" "}
               <h6 style={{ fontSize: "22px" }}>fish</h6>
             </div>
-            <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+            <img src={ant} alt="" className="q-img-unit6-page5-q3" />
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
                 <input
@@ -176,7 +176,7 @@ const Unit6_Page5_Q3 = () => {
               <span className="num-span">4</span>
               <h6 style={{ fontSize: "22px" }}>ride a bike</h6>
             </div>
-            <img src={dad} alt="" className="q-img-unit3-page6-q1" />
+            <img src={dad} alt="" className="q-img-unit6-page5-q3" />
             <span style={{ position: "relative", display: "flex" }}>
               <div className="input-wrapper-unit3-page6-q1">
                 <input

@@ -117,6 +117,12 @@
   transition: transform 0.2s ease;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .person-img {
+    width: 95px;
+    height: auto;
+  }
+}
 /* ✅ Responsive Fixes */
 @media (max-width: 900px) {
   .layout {
@@ -130,7 +136,7 @@
     height: auto;
   }
   .left-side {
-  display: flex;
+    display: flex;
     gap: 10px;
   }
 

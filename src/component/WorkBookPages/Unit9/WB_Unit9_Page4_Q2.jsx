@@ -164,7 +164,7 @@ const WB_Unit9_Page4_Q2 = () => {
         </button>
 
         <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
+          Check Answer ✓
         </button>
       </div>
     </div>

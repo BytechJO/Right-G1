@@ -25,12 +25,3 @@
   left: 41%;
 }
 
-@media (max-width: 1180px) {
-  .wb-unit1-p8-q1 {
-    top: 9.5%;
-    left: 65%;
-  }
-}
-
-@media (max-width: 820px) {
-}

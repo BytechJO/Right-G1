@@ -11,7 +11,11 @@
   top: 45.5%;
   left: 35%;
 }
-
+.scrambled-wb-unit1-p3-q1 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  width: 25%;
+}
 .wrong-icon-wb-unit1-p3-q1 {
   position: absolute;
   top: -8px;
@@ -31,7 +35,14 @@
   z-index: 10;
 }
 
-@media (max-width: 1024px) {
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .scrambled-wb-unit1-p3-q1{
+    width: 30%;
+  }
+}
+
+/* @media (max-width: 1024px) {
   .wb-unit1-p3-q1 {
     top: 14.5%;
     left: 41%;
@@ -45,12 +56,11 @@
 
 @media (max-width: 820px) {
   .wb-unit1-p3-q1 {
-           top: 14.5%;
-    
+    top: 14.5%;
   }
 
   .wb-unit1-p3-q2 {
     top: 45.5%;
     left: 35%;
   }
-}
+} */

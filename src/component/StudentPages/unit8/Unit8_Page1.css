@@ -93,12 +93,12 @@
 }
 
 @media (max-width: 820px) {
-  .headset-icon-CD-unit8-page1-1 {
-    top: 6.5%;
-    right: 16%;
-  }
+ .headset-icon-CD-unit8-page1-1 {
+        top: 6.5%;
+        right: 12%;
+    }
   .headset-icon-CD-unit8-page1-2 {
-    bottom: 36.5%;
+    bottom: 39.5%;
     left: 25%;
   }
   .click-icon-unit8-page1-2 {

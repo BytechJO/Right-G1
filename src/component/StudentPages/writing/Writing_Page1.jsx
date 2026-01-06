@@ -18,11 +18,11 @@ const Writing_Page1 = ({ openPopup }) => {
         <svg
           width="22"
           height="22"
-          viewBox="0 0 60 60"
+          viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
           onClick={() => openPopup("html", <Writing_Page1_EX />)}
         >
-          <image href={arrowBtn} x="0" y="0" width="60" height="60" />
+          <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
         </svg>
       </div>
     </div>

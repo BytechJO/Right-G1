@@ -18,12 +18,14 @@
   position: absolute;
   border-radius: 8px;
   /* width: 26%; */
-  top: 25%;
-  left: 54%;
+    top: -16%;
+    left: 73%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  transform: rotate(90deg);
+  z-index: 9999999;
 }
 
 .question-text-wb-unit4-p2-q1 {
@@ -36,7 +38,7 @@
     background: white;
     pointer-events: none;
 }
-
+/* 
 @media (max-width: 1024px) {
   .wb-unit4-p2-q1 {
     top: 14.5%;
@@ -58,4 +60,4 @@
     top: 45.5%;
     left: 35%;
   }
-}
+} */

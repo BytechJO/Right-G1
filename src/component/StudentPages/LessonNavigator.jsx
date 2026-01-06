@@ -8,10 +8,40 @@ import { lessons } from "./LessonData";
 export default function LessonNavigator({ startIndex = 0 }) {
   const [index, setIndex] = useState(startIndex);
 
-  
   const CurrentLesson = lessons[index].component;
   const handleNext = () => {
     const lesson = lessons[index];
+    
+    if (lesson.lastOfUnit && lesson.unit % 2 === 0 && lesson.isReview) {
+      Swal.fire({
+        html: `
+          <div class="custom-popup-content">
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit-1} exercises?</h2>
+          </div>
+        `,
+        imageWidth: 200,
+        imageHeight: 200,
+        icon: "question",
+        background: "#dfeaf6",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        showCancelButton: true, // ✔️ هذا هو السبب الرئيسي
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        buttonsStyling: false,
+        customClass: {
+          popup: "my-popup",
+          image: "my-image",
+          title: "my-title",
+          content: "my-content",
+          confirmButton: "my-button",
+          cancelButton: "my-button1",
+        },
+      }).then((res) => {
+        if (res.isConfirmed) setIndex(index + 1);
+      });
+      return;
+    }
     if (lesson.lastOfUnit && lesson.unit % 2 === 0) {
       Swal.fire({
         html: `
@@ -40,6 +70,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
       }).then((res) => {
         if (res.isConfirmed) setIndex(index + 1);
       });
+
       return;
     }
     // آخر درس في الوحدة
@@ -47,9 +78,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
       Swal.fire({
         html: `
           <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${
-              lesson.unit + 1
-            } exercises?</h2>
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit-1} exercises?</h2>
           </div>
         `,
         imageWidth: 200,
@@ -141,13 +170,13 @@ export default function LessonNavigator({ startIndex = 0 }) {
               height="15"
               viewBox="0 0 90 90"
               style={{
-              padding: "12px",
-            }}
+                padding: "12px",
+              }}
               className="nav-btn-ex w-10 h-10 rounded-full transition"
             >
               <image href={back} x="0" y="0" width="90" height="90" />
             </svg>{" "}
-            Previous activity 
+            Previous activity
           </button>
         ) : (
           <button
@@ -164,13 +193,13 @@ export default function LessonNavigator({ startIndex = 0 }) {
               height="15"
               viewBox="0 0 90 90"
               style={{
-              padding: "12px",
-            }}
+                padding: "12px",
+              }}
               className="nav-btn-ex w-10 h-10 rounded-full transition"
             >
               <image href={back} x="0" y="0" width="90" height="90" />
             </svg>{" "}
-            Previous activity 
+            Previous activity
           </button>
         )}
 
@@ -184,10 +213,10 @@ export default function LessonNavigator({ startIndex = 0 }) {
             cursor: "pointer",
           }}
         >
-          Next activity 
+          Next activity
           <svg
-          width="15"
-              height="15"
+            width="15"
+            height="15"
             viewBox="0 0 90 90"
             style={{
               padding: "12px",

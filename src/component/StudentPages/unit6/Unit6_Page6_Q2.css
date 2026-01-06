@@ -21,23 +21,6 @@
   flex-direction: row;
   align-items: center;
 }
-.question-box-unit4-page5-q1 {
-  border: 2px solid #8cc2f5;
-  border-radius: 12px;
-  padding: 15px;
-  width: 100%;
-  background: white;
-  position: relative;
-}
-
-.q-img-unit4-page5-q1 {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-}
-
 .circle-wrapper,
 .input-wrapper {
   position: relative;
@@ -75,15 +58,6 @@
   border-color: #1d4f7b;
 }
 
-.write-input-unit4-page5-q1 {
-  width: 100%;
-  border: none;
-  border-bottom: 2px solid #888;
-  outline: none;
-  font-size: 16px;
-  margin-top: 10px;
-  text-align: center;
-}
 
 .wrong-mark {
   position: absolute;

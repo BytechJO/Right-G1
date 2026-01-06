@@ -38,3 +38,13 @@
     height: 95px;
   }
 }
+
+
+@media (max-width: 1024px){
+.shorti-container-wb-unit9-p6-q2 {
+ 
+    grid-template-columns: 1fr ;
+    justify-items: center;
+    gap: 20px;
+}
+}

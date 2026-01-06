@@ -109,10 +109,7 @@
   .div-forall {
     width: 100% !important;
   }
-  .sentence-row {
-    flex-direction: column;
-    gap: 48px;
-  }
+ 
 
   .num-container {
     /* width: 60vw; */
@@ -121,6 +118,23 @@
   }
   .input-sentence {
     width: 60px;
+  }
+}
+
+@media (max-width: 912px) {
+   .sentence-row {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    font-size: 1.1rem;
+    justify-content: flex-start;
+    flex-direction: row;
+  }
+
+  .num-container {
+  
+    justify-content: flex-start;
+    gap: 13px;
   }
 }
 
@@ -135,7 +149,7 @@
   }
 
   .num-container {
-    /* width: 60vw; */
+  
     justify-content: flex-start;
     gap: 13px;
   }

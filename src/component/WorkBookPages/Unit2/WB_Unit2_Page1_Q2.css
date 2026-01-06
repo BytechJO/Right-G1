@@ -12,12 +12,16 @@
     height: 150px;
 }
 
+
 @media (max-width: 1024px) {
   .img-box-wb-u1-q2 {
     width: 164px;
     height: 173px;
   }
-
+.avatar-img-wb-u2-q1 {
+    width: auto;
+    height: 110px;
+}
   .question-row-unit7-p2-q3 {
 
     margin-bottom: 0px;

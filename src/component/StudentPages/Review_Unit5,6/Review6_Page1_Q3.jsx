@@ -88,7 +88,7 @@ const Review6_Page1_Q3 = () => {
   const reset = () => {
     setAnswers(Array(data.length).fill(""));
     setWrongInputs([]);
-    setLocked(false)
+    setLocked(false);
   };
 
   return (
@@ -114,12 +114,7 @@ const Review6_Page1_Q3 = () => {
         <div className="component-wrapper">
           <h3 className="header-title-page8">C Look and write.</h3>
           <div className="content-unit5-p5-q3">
-            <img
-              src={deer}
-              className="shape-img-unit5-p5-q3"
-              alt=""
-              style={{ height: "320px", width: "auto" }}
-            />
+            <img src={deer} className="shape-img-review6-p1-q3" alt="" />
             <div className="group-input-unit5-p5-q3">
               {data.map((item, index) => (
                 <div

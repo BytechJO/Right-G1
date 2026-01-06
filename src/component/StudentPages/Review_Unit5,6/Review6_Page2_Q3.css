@@ -1,10 +1,10 @@
 .review3-p2-q2-word {
-    position: relative;
-    /* display: inline-block; */
-    padding: 5px 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  /* display: inline-block; */
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .circled {
   /* احذفي أي border يزيد الحجم */
@@ -24,17 +24,22 @@
   pointer-events: none;
 }
 .review6-p2-q3-sentence-container2 {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    margin: 50px 20px;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin: 50px 20px;
+}
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .review6-p2-q3-sentence-container2 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
 }
 
 @media (max-width: 1024px) {
-.review6-p2-q3-sentence-container2 {
+  .review6-p2-q3-sentence-container2 {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
-  
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
-}
-

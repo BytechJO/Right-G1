@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import mainImg from "../../../assets/U1 WB/U10/U10P58EXED.svg"
+import mainImg from "../../../assets/U1 WB/U10/U10P58EXED.svg";
 import img1 from "../../../assets/U1 WB/U10/U10P58EXED01-01.svg";
 import img2 from "../../../assets/U1 WB/U10/U10P58EXED01-02.svg";
 import img3 from "../../../assets/U1 WB/U10/U10P58EXED01-03.svg";
@@ -21,7 +21,7 @@ import img16 from "../../../assets/U1 WB/U10/U10P58EXED04-04.svg";
 const data = [
   {
     id: 1,
-    mainImg:img1,
+    mainImg: img1,
     images: [
       { id: 1, src: img2, value: "kite" },
       { id: 2, src: img3, value: "girl" },
@@ -41,7 +41,7 @@ const data = [
   },
   {
     id: 3,
-    mainImg:img9,
+    mainImg: img9,
     images: [
       { id: 1, src: img10, value: "kitchen" },
       { id: 2, src: img11, value: "grass" },
@@ -161,7 +161,8 @@ export default function WB_Unit10_Page2_Q2() {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -173,53 +174,61 @@ export default function WB_Unit10_Page2_Q2() {
         <h5 className="header-title-page8">
           <span className="ex-A">D</span> Read, look, and circle.
         </h5>
-        <img
-          src={mainImg}
-          style={{ height: "160px", width: "auto" }}
-        />
-        {data.map((q) => (
-          <div key={q.id} className="question-row-wb-unit10-p2-q2">
-            <div style={{ display: "flex" }}>
-              <span
-                className="q-number"
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                {q.id}.
-              </span>
-              <img src={q.mainImg} style={{ height: "95px", width: "auto" }} />
-            </div>
-            <div className="images-row-Unit5_Page5_Q2">
-              {q.images.map((img) => {
-                const isSelected = answers[q.id]?.includes(img.value);
+        <div className="img-options-container-wb-unit10-p2-q2">
+          <div className="img-container-wb-unit10-p2-q2">
+            <img src={mainImg} style={{ height: "160px", width: "auto" }} />
+          </div>
+          <div>
+            {data.map((q) => (
+              <div key={q.id} className="question-row-wb-unit10-p2-q2">
+                <div style={{ display: "flex" }}>
+                  <span
+                    className="q-number"
+                    style={{
+                      color: "#2c5287",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {q.id}.
+                  </span>
+                  <img
+                    src={q.mainImg}
+                    style={{ height: "95px", width: "auto" }}
+                  />
+                </div>
+                <div className="images-row-Unit5_Page5_Q2">
+                  {q.images.map((img) => {
+                    const isSelected = answers[q.id]?.includes(img.value);
 
-                const isWrong =
-                  isSelected && !q.correct.includes(img.value) && !showAnswer;
+                    const isWrong =
+                      isSelected &&
+                      !q.correct.includes(img.value) &&
+                      !showAnswer;
 
-                return (
-                  <div
-                    key={img.id}
-                    style={{position:"relative"}}
-                    className={`img-box-wb-unit10-p2-q2 
+                    return (
+                      <div
+                        key={img.id}
+                        style={{ position: "relative" }}
+                        className={`img-box-wb-unit10-p2-q2 
                     ${isSelected ? "selected-wb-unit10-p2-q2" : ""} 
                 
                     ${isWrong ? "wrong" : ""}`}
-                    onClick={() => handleSelect(q.id, img.value)}
-                  >
-                    <img src={img.src} alt="" />
-                    {/* علامة X تظهر فقط عند الغلط */}
-                    {isWrong&& submitted && (
-                      <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                        onClick={() => handleSelect(q.id, img.value)}
+                      >
+                        <img src={img.src} alt="" />
+                        {/* علامة X تظهر فقط عند الغلط */}
+                        {isWrong && submitted && (
+                          <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       <div className="action-buttons-container">

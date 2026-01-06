@@ -72,6 +72,13 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); /* ظل خفيف لطيف */
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .q-img-unit3-page6-q1 {
+    width: auto;
+    height: 115px;
+}
+}
+
 @media (max-width: 1024px) {
   .row-content10-unit3-page6-q1 {
     display: grid;

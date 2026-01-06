@@ -40,12 +40,21 @@
   gap: 43px;
 }
 
-
-@media (max-width: 1024px) {
-.content-container-unit5-p6-q1 {
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .content-container-unit5-p6-q1 {
     display: grid;
-    grid-template-columns: 1fr;
-    
+    grid-template-columns: 1fr 1fr !important;
+    gap: 72px;
+  }
+  .img-unit5-p6-q1 {
+    height: 75px;
+    width: auto;
+  }
 }
 
+@media (max-width: 1024px) {
+  .content-container-unit5-p6-q1 {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }

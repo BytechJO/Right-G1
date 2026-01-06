@@ -927,13 +927,87 @@ img {
   }
 }
 
-
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .header-title-page8 {
     font-size: 22px;
-   
+
     /* white-space: wrap; */
-}
+  }
+  .word-text3 {
+    border-radius: 20px;
+    font-size: 18px;
+    min-width: 120px;
+  }
+  .svg-img {
+    height: 90px !important;
+    width: 75px !important;
+  }
+  .circle-area {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  .headset-icon-CD-page4-1 {
+    top: 7.5% !important;
+    right: 5.2% !important;
+  }
+  .headset-icon-CD-page4-2 {
+    top: 60.5% !important;
+  }
+  .click-icon-page4 {
+    bottom: 8.5% !important;
+    right: 35% !important;
+  }
+  #CD-1-page5 {
+    top: 2% !important;
+    right: 2% !important;
+  }
+  #CD-2-page5 {
+    bottom: 29.5% !important;
+    right: 7.2% !important;
+  }
+  .click-icon-page5 {
+    bottom: 13% !important;
+  }
+  .headset-icon-CD-page6 {
+    top: 2.5% !important;
+  }
+  .pauseBtn-icon-CD-page6 {
+    top: 2.5% !important;
+  }
+  .headset-icon-CD-page7 {
+    top: 2.5% !important;
+    right: 56.2% !important;
+  }
+  .pauseBtn-icon-CD-page7 {
+    top: 2.5% !important;
+    right: 51% !important;
+  }
+  .click-icon-page8-1 {
+    top: 6.5% !important;
+    right: 1.4% !important;
+  }
+  .click-icon-page8-2 {
+    top: 25%;
+    left: 33.3%;
+  }
+  .click-icon-page8-3 {
+    top: 46%;
+    left: 32.5%;
+  }
+  .click-icon-page8-4 {
+    bottom: 22% !important;
+    left: 49.7%;
+  }
+  .click-icon-page9-1 {
+    top: 2.5%;
+  }
+  .click-icon-page9-2 {
+    top: 25%;
+    left: 32.8%;
+  }
+      .headset-icon-CD-page9 {
+        bottom: 28.5% !important;
+    }
 }
 @media (max-width: 1024px) {
   .page1-img-wrapper,
@@ -944,8 +1018,11 @@ img {
     min-height: 75vh;
   }
   .svg-img {
-    height: 160px;
-    width: 150px;
+    height: 140px;
+    width: 140px;
+  }
+  .header-title-page8 {
+    font-size: 22px;
   }
   .headset-icon-CD-page4-1 {
     top: 5.5%;
@@ -967,7 +1044,11 @@ img {
     width: 33px;
     height: 31px;
   }
-
+  .word-text3 {
+    border-radius: 20px;
+    font-size: 18px;
+    min-width: 120px;
+  }
   .click-icon-page8-1 {
     top: 8%;
     right: 6.4%;
@@ -1011,6 +1092,10 @@ img {
   .page-image {
     width: 100%;
     height: auto; /* خلي الارتفاع تلقائي بالموبايل */
+  }
+  .header-title-page8 {
+    font-size: 22px;
+    white-space: wrap;
   }
   .svg-img {
     height: 140px;

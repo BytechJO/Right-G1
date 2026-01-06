@@ -152,8 +152,8 @@ const Unit8_Page5_Q3 = () => {
               >
                 <img
                   src={q.img}
-                  className="q3-image-review6-p1-q1"
-                  style={{ height: "130px", width: "auto" }}
+                  className="q3-image-unit8-p5-q3"
+                 
                 />
 
                 <div className="options-row-unit8-p5-q3 ">

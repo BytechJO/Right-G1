@@ -23,7 +23,13 @@
   padding: 10px;
   margin-left: 10px;
 }
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .img-box-wb-unit2-p6-q2 {
+    width: 100px;
+    height: 100px;
 
+}
+}
 @media (max-width: 820px) {
   .content-container-wb-p6-q2 {
     grid-template-columns: 1fr;

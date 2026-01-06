@@ -194,7 +194,7 @@ const Unit3_Page5_Q4 = () => {
                 ))}
               </div>
             ))}
-            <img src={img} style={{ height: "auto", width: "190px" }} />
+            <img src={img} className="main-img-unit3-p5-q4 " />
           </div>
 
           <div className="unit3-q4-sentence">

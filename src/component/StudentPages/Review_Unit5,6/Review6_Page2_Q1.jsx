@@ -368,7 +368,7 @@ const Review6_Page2_Q1 = () => {
                   src={question.src}
                   className="main-img-review6-p2-q1"
                   alt=""
-                  style={{ height: "150px" }}
+                 
                 />
 
                 {/* الخيارات */}

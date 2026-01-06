@@ -135,7 +135,7 @@ const Review8_Page1_Q1 = () => {
                 <img
                   src={q.img}
                   className="q3-image-review8-p1-q1"
-                  style={{ height: "130px", width: "auto" }}
+                 
                 />
 
                 <div className="options-row-review8-p1-q1">

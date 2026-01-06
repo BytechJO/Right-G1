@@ -115,11 +115,11 @@ const WB_Unit8_Page1_Q1 = () => {
         {/* الصور */}
         <div className="wb-unit8-p1-q1-grid ">
           {options.map((item, index) => (
-            <div key={index} className="wb-unit7-p5-q1-box">
+            <div key={index} className="wb-unit8-p1-q1-box">
               <img src={item.img} className="unit3-q3-image" alt="" />
 
               {/* إدخال الإجابة */}
-              <div className="wb-unit7-p5-q1-input-wrapper">
+              <div className="wb-unit8-p1-q1-input-wrapper">
                 <input
                   type="text"
                   maxLength="1"

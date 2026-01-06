@@ -167,10 +167,10 @@ const WB_Unit2_Page6_Q1 = () => {
             <span style={{ color: "red" }}>✓</span>
           </h4>
 
-          <div className="review3-p1-q3-grid">
+          <div className="wb-unit2-p6-q1-grid">
             {questions.map((q) => (
               <div key={q.id} className="review3-p1-q3-box">
-                <img src={q.image} alt="" className="review3-p1-q3-img" style={{width:"130px"}}/>
+                <img src={q.image} alt="" className="wb-unit2-p6-q1-img" />
 
                 {q.items.map((item, idx) => {
                   const isSelected = answers[q.id] === idx;

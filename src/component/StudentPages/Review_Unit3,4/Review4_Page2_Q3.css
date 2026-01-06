@@ -88,8 +88,16 @@
   font-weight: bold;
   border: 2px solid white;
 }
-
-
+.q3-image-review4-p2-q3{
+  height: 120px;
+  width: auto;
+}
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .q3-image-review4-p2-q3{
+  height: 100px;
+  width: auto;
+}
+}
 
 @media (max-width: 990px) {
 .q3-image-review3-p2-q3 {

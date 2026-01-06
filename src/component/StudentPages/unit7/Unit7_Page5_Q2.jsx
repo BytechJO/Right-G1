@@ -426,7 +426,7 @@ Watch, house, hat, hammer, web.
                 return (
                   <div
                     key={img.id}
-                    className={`img-box-Unit5_Page5_Q2 
+                    className={`img-box-Unit7_Page5_Q2 
                       ${isSelected ? "selected-Unit5_Page5_Q2" : ""} 
                       ${isWrong ? "wrong" : ""}`}
                     onClick={() => handleSelect(q.id, img.value)}

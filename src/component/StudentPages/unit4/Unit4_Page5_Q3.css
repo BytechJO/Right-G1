@@ -30,8 +30,19 @@
     right: 10%;
     top: 8%;
 }
+.img-unit4-p5-q3{
+    height: 200px;
+    width: auto;
+}
 
-@media (max-width: 820px) {
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .img-unit4-p5-q3{
+    height: 160px;
+    width: auto;
+}
+}
+@media (max-width: 912px) {
    .matching-wrapper2-unit4-p5-q3 {
     
     /* margin: 40px auto; */

@@ -47,11 +47,7 @@
   justify-content: center;
 }
 
-.matching-scale {
-  width: 60%;
-  /* max-width: 100%; */
-  position: relative;
-}
+
 .img-wb-unit1-p4-q1{
   height: 150px;
   width: auto;

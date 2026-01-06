@@ -118,6 +118,20 @@ border: 2px solid transparent;
   }
 }
 
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+      .questions-grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap !important;
+        /* width: 50vw; */
+        flex-direction: row !important;
+    }
+    .question-img-unit2-p10-q3 {
+    width: 75px;
+    height: auto;
+}
+}
 /* Responsive */
 @media (max-width: 1024px) {
   .question-box {

@@ -137,7 +137,8 @@ export default function WB_Unit3_Page1_Q2() {
               <img
                 src={q.image}
                 alt=""
-                style={{ height: "100px", width: "100px" }}
+                className="img-wb-unit3-p1-q2"
+               
               />
 
               <div className="numbers-row">

@@ -106,14 +106,23 @@
   font-size: 14px;
   font-weight: bold;
 }
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .cell-wb-u2-p5-q2 {
+    width: 50px;
+    height: 40px;
+  }
+  .word-label-wrapper-wb-u2-p5-q2 {
+    width: 155px;
+    height: 130px;
+  }
+}
 @media (max-width: 1024px) {
   .container-word-grid-wb-u2-p5-q2 {
     flex-wrap: wrap;
   }
 }
-@media screen and (max-width: 1024px) and (max-height:800px) {
-.container-word-grid-wb-u2-p5-q2 {
+@media screen and (max-width: 1024px) and (max-height: 800px) {
+  .container-word-grid-wb-u2-p5-q2 {
     flex-wrap: nowrap;
   }
 }

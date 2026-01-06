@@ -87,8 +87,8 @@
 ============================ */
 
 /* correct answer X (green) */
-.wrong-x-circle-review5-p2-q2{
-   position: absolute;
+.wrong-x-circle-review5-p2-q2 {
+  position: absolute;
   top: -10px;
   right: -10px;
   width: 28px;
@@ -119,12 +119,22 @@
   pointer-events: none;
   opacity: 0.9;
 }
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .exercise-row-review5-p2-q2 {
+    /* display: flex; */
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .ds-group-box-review5-p2-q2 {
+    gap: 0px;
+  }
+}
 @media (max-width: 1024px) {
   .exercise-row-review5-p2-q2 {
     /* display: flex; */
-  
+
     grid-template-columns: 1fr;
-}
+  }
 }
 /* ============================
    RESPONSIVE

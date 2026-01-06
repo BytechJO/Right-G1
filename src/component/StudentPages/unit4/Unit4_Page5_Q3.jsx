@@ -161,7 +161,7 @@ export default function Unit4_Page5_Q3() {
         </h5>
 
         <div className="matching-wrapper2-unit4-p5-q3" ref={containerRef}>
-          <img src={img} style={{ height: "200px", width: "auto" }} />
+          <img src={img} className="img-unit4-p5-q3" />
           <div
             style={{
               display: "flex",

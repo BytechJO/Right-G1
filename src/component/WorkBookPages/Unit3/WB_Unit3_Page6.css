@@ -48,7 +48,7 @@
   display: grid;
   gap: 20px;
   /* margin-bottom: 60px; */
-  margin-top: 20px;
+  /* margin-top: 20px; */
   width: 100%;
   grid-template-columns: 1fr 1fr;
 }
@@ -64,7 +64,7 @@
   }
 
   .wb-unit3-p6-q2-question-img {
-    height: 90px;
+    height: 75px;
   }
   .sentence-wb-unit3-p6-q3 {
     margin-top: 0px;
@@ -76,7 +76,7 @@
     margin: 0 8px;
 }
 }
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .wb-unit3-p6-q1 {
     top: 14.5%;
     left: 41%;
@@ -97,4 +97,4 @@
     top: 43.5%;
     left: 89%;
   }
-}
+} */

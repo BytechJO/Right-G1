@@ -21,7 +21,19 @@
   left: 32.5%;
   cursor: pointer;
 }
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .click-icon-unit2-page9-1 {
+    top: 9.8% !important;
+    left: 29.3% !important;
+  }
+  .click-icon-unit2-page9-2 {
+    top: 29.8%;
+    left: 31.5%;
+  }
+  .click-icon-unit2-page9-3 {
+    bottom: 43% !important;
+  }
+}
 @media (max-width: 1024px) {
   .click-icon-unit2-page9-3 {
     bottom: 46%;

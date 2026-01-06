@@ -54,7 +54,7 @@
     width: auto;
 }
 }
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .wb-unit6-p4-q1 {
     top: 14.5%;
     left: 41%;
@@ -64,18 +64,18 @@
     top: 45.5%;
     left: 35%;
   }
-}
+} */
 
 @media (max-width: 820px) {
-  .wb-unit6-p4-q1 {
+  /* .wb-unit6-p4-q1 {
     top: 14.5%;
-  }
+  } */
 .img-wb-unit6-p4-q2 {
     height: 110px;
     width: auto;
 }
-  .wb-unit6-p4-q2 {
+  /* .wb-unit6-p4-q2 {
     top: 45.5%;
     left: 35%;
-  }
+  } */
 }

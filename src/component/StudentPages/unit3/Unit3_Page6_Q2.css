@@ -85,21 +85,33 @@
 }
 
 /* -------------- RESPONSIVE -------------- */
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .unit3-q5-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .unit3-q5-flex {
+    flex-direction: column !important;
+    gap: 0px;
+  }
+  .unit3-q5-options-box {
+    flex-direction: row !important;
+  }
+  .unit3-q5-question-img {
+    height: 96px;
+    width: auto;
+    object-fit: contain;
+  }
+}
 /* الموبايل الصغير */
 @media (max-width: 1024px) {
-.unit3-q5-container {
-   
+  .unit3-q5-container {
     grid-template-columns: repeat(1, 1fr);
- 
-}
+  }
 }
 @media (max-width: 820px) {
-.unit3-q5-container {
-   
+  .unit3-q5-container {
     grid-template-columns: repeat(2, 1fr);
- 
-}
+  }
   .unit3-q5-question-box {
     flex-direction: column;
     text-align: center;

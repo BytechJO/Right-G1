@@ -5,3 +5,17 @@
     gap: 20px;
         width: 100%;
 }
+
+
+.middle-img-review9-p2-q2{
+    height: 140px;
+    width: auto;
+}
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+    .middle-img-review9-p2-q2{
+    height: 110px;
+    width: auto;
+}
+
+}
