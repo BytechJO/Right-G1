@@ -18,7 +18,28 @@
   left: 35%;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit6-p6-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 8.5%;
+    left: 71%;
+}
 
+.wb-unit6-p6-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 40.5%;
+    left: 31%;
+}
+.wb-unit6-p6-q3 {
+  position: absolute;
+  padding: 5px;
+  top: 59%;
+  left: 35%;
+}
+
+}
 /* 
 @media (max-width: 1024px) {
   .wb-unit6-p6-q1 {

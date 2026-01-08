@@ -40,6 +40,14 @@
   .scrambled-wb-unit1-p3-q1{
     width: 30%;
   }
+  .wb-unit1-p3-q1 {
+
+    top: 13.5%;
+  }
+  .wb-unit1-p3-q2 {
+   
+    top: 44.5%;
+  }
 }
 
 /* @media (max-width: 1024px) {

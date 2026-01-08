@@ -44,6 +44,18 @@
   .word-bank-wb-u4-p5-q1{
      margin: 0px 0;
   }
+  .wb-unit4-p5-q1 {
+  position: absolute;
+  padding: 5px;
+  top: 2.5%;
+  left: 52%;
+}
+.wb-unit4-p5-q2 {
+  position: absolute;
+  padding: 5px;
+  top: 50.5%;
+  left: 31%;
+}
 }
 /* @media (max-width: 1024px) {
   .wb-unit4-p5-q1 {

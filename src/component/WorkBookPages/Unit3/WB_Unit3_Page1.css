@@ -30,6 +30,22 @@
   z-index: 10;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+ .wb-unit3-p1-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 13.8%;
+    left: 53%;
+}
+
+.wb-unit3-p1-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 56.5%;
+    left: 41%;
+} 
+}
+
 /* @media (max-width: 1024px) {
   .wb-unit3-p1-q1 {
     top: 14.5%;

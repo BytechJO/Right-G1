@@ -29,3 +29,16 @@
     left: 43.5%;
   cursor: pointer;
 }
+
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .click-icon-review9-page1-2 {
+    position: absolute;
+    padding: 5px;
+    top: 10%;
+  }
+  .click-icon-review9-page1-1 {
+
+    bottom: 22%;
+  }
+}

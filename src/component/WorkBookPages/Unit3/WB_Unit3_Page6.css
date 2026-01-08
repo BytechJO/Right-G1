@@ -75,6 +75,18 @@
     height: 80px;
     margin: 0 8px;
 }
+.wb-unit3-p6-q1 {
+  position: absolute;
+  padding: 5px;
+  top: 8.5%;
+  left: 40%;
+}
+.wb-unit3-p6-q2 {
+  position: absolute;
+  padding: 5px;
+  top: 43%;
+  right: 4%;
+}
 }
 /* @media (max-width: 1024px) {
   .wb-unit3-p6-q1 {

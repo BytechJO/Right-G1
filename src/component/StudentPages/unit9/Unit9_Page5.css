@@ -46,22 +46,22 @@
 .click-icon-unit9-page5-1 {
   position: absolute;
   padding: 5px;
- top: 7%;
-    left: 43.5%;
+  top: 7%;
+  left: 43.5%;
   cursor: pointer;
 }
 .click-icon-unit9-page5-2 {
   position: absolute;
   padding: 5px;
-top: 29%;
-    left: 70%;
+  top: 29%;
+  left: 70%;
   cursor: pointer;
 }
 .click-icon-unit9-page5-3 {
   position: absolute;
   padding: 5px;
-top: 47.5%;
-    left: 32.5%;
+  top: 47.5%;
+  left: 32.5%;
   cursor: pointer;
 }
 
@@ -69,16 +69,29 @@ top: 47.5%;
   position: absolute;
   padding: 5px;
   bottom: 23%;
-    left: 50%;
+  left: 50%;
   cursor: pointer;
 }
 
-
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .click-icon-unit9-page5-1 {
+    top: 6%;
+    left: 43.5%;
+  }
+  .click-icon-unit9-page5-2 {
+    top: 28%;
+    left: 70%;
+  }
+  .click-icon-unit9-page5-3 {
+    top: 46.5%;
+  }
+  .click-icon-unit9-page5-4 {
+    bottom: 22%;
+  }
+}
 
 @media (max-width: 820px) {
   .click-icon-unit9-page5-4 {
-  
     bottom: 24%;
   }
 }

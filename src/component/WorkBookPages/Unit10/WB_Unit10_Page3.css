@@ -10,6 +10,20 @@
     top: 41.8%;
     left: 32%;
 }
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit10-p3-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 2.5%;
+    left: 42.5%;
+}
+.wb-unit10-p3-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 40.8%;
+    left: 32%;
+}
+}
 
 /* @media (max-width: 1024px) {
   .wb-unit10-p3-q1 {

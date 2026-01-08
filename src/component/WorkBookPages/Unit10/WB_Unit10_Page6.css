@@ -23,6 +23,32 @@
   left: 35%;
 }
 
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit10-p6-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 8.5%;
+    left: 49%;
+}
+.wb-unit10-p6-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 48%;
+    left: 61%;
+}
+.wb-unit10-p6-q3 {
+    position: absolute;
+    padding: 5px;
+    top: 68%;
+    left: 80.5%;
+}
+.wb-unit10-p6-q4 {
+  position: absolute;
+  padding: 5px;
+  top: 69%;
+  left: 35%;
+}
+}
 
 /* @media (max-width: 1024px) {
   .wb-unit10-p6-q1 {

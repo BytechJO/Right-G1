@@ -38,6 +38,20 @@
     background: white;
     pointer-events: none;
 }
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit4-p2-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 2.5%;
+    left: 48%;
+}
+.wb-unit4-p2-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 63.5%;
+    left: 41%;
+}
+}
 /* 
 @media (max-width: 1024px) {
   .wb-unit4-p2-q1 {

@@ -18,7 +18,20 @@
   touch-action: none;
   cursor: pointer;
 }
-
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .wb-unit4-p3-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 2.5%;
+    left: 40%;
+}
+.wb-unit4-p3-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 41%;
+    left: 75%;
+}
+}
 /* 
 @media (max-width: 1024px) {
   .wb-unit4-p3-q1 {

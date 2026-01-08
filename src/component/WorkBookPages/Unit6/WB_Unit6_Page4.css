@@ -53,6 +53,19 @@
     height: 110px;
     width: auto;
 }
+.wb-unit6-p4-q1 {
+    position: absolute;
+    padding: 5px;
+    top: 2.5%;
+    left: 35.5%;
+}
+
+.wb-unit6-p4-q2 {
+    position: absolute;
+    padding: 5px;
+    top: 52.5%;
+    left: 31%;
+}
 }
 /* @media (max-width: 1024px) {
   .wb-unit6-p4-q1 {
