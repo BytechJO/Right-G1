@@ -133,23 +133,7 @@
   display: inline-block;
 }
 
-.error-mark1 {
-  position: absolute;
-  top: 0px; /* تحريك لفوق */
-  right: -8px; /* تحريك لليمين */
-  width: 20px;
-  height: 20px;
-  border: 2px solid white;
-  background-color: red;
-  border-radius: 50%;
-  color: white;
-  font-weight: bold;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none; /* عشان ما تأثر على السحب أو الكتابة */
-}
+
 .main-img-unit3-p5-q4 {
   width: auto;
   height: 190px;

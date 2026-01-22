@@ -61,7 +61,9 @@
   align-items: center;
   gap: 15px;
 }
-
+.word-number-unit2-p7-q1{
+  display: flex;
+}
 .sentence-label {
   color: #2c5287;
   font-weight: 700;

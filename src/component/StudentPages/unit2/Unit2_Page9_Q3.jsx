@@ -4,12 +4,12 @@ import jello from "../../../assets/img_unit2/imgs/jello.jpg";
 import present from "../../../assets/img_unit2/imgs/Present1.jpg";
 import balloons from "../../../assets/img_unit2/imgs/balloons..jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Unit2_Page9_Q3 = () => {
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState({});
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswers, setShowAnswers] = useState(false);
-  const [disableInputs, setDisableInputs] = useState(false);
 
   const correctMatches = [
     { input: "It’s jello", num: "input1" },
@@ -17,20 +17,32 @@ const Unit2_Page9_Q3 = () => {
     { input: "These are balloons", num: "input3" },
   ];
 
-  const handleChange = (e) => {
-    if (disableInputs) return; // 🔥 يمنع التعديل عند Show Answer
+  const wordBank = correctMatches.map((c) => c.input);
+  const getValue = (id) => answers[id] || "";
 
-    const { id, value } = e.target;
+  // 🧲 Drag logic
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswers) return;
+
+    const word = draggableId
+      .replace("bank-", "")
+      .replace(/^slot-.*?-/, "");
 
     setAnswers((prev) => {
-      const updated = [...prev];
-      const existingIndex = updated.findIndex((ans) => ans.num === id);
+      const updated = { ...prev };
 
-      if (existingIndex !== -1) {
-        updated[existingIndex] = { input: value, num: id };
-      } else {
-        updated.push({ input: value, num: id });
+      // إزالة الكلمة من أي مكان سابق
+      Object.keys(updated).forEach((k) => {
+        if (updated[k] === word) delete updated[k];
+      });
+
+      // إذا انحطت داخل slot
+      if (destination.droppableId.startsWith("slot-")) {
+        const id = destination.droppableId.replace("slot-", "");
+        updated[id] = word;
       }
+
       return updated;
     });
 
@@ -39,21 +51,18 @@ const Unit2_Page9_Q3 = () => {
 
   const checkAnswers = () => {
     if (showAnswers) return;
-    if (answers.length === 0) {
+
+    if (Object.keys(answers).length < correctMatches.length) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    let correctCount = 0;
     let wrong = [];
+    let correctCount = 0;
 
-    correctMatches.forEach((ans, i) => {
-      const userAns = answers.find((a) => a.num === ans.num)?.input || "";
-      if (ans.input === userAns) {
-        correctCount++;
-      } else {
-        wrong.push(ans.num);
-      }
+    correctMatches.forEach((ans) => {
+      if (answers[ans.num] === ans.input) correctCount++;
+      else wrong.push(ans.num);
     });
 
     setWrongWords(wrong);
@@ -62,145 +71,144 @@ const Unit2_Page9_Q3 = () => {
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-      <div style="font-size: 20px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
+    ValidationAlert[
+      correctCount === total
+        ? "success"
+        : correctCount === 0
+        ? "error"
+        : "warning"
+    ](`
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
-    `;
-
-    if (total === correctCount) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    `);
   };
 
-  // ⭐ Show Correct Answers
   const showCorrectAnswers = () => {
-    const correctFilled = correctMatches.map((item) => ({
-      input: item.input,
-      num: item.num,
-    }));
-
-    setAnswers(correctFilled);
-    setDisableInputs(true);
-    setShowAnswers(true);
+    const filled = {};
+    correctMatches.forEach((c) => (filled[c.num] = c.input));
+    setAnswers(filled);
     setWrongWords([]);
+    setShowAnswers(true);
+  };
+
+  const resetAll = () => {
+    setAnswers({});
+    setWrongWords([]);
+    setShowAnswers(false);
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" ,
-        padding:"30px"}}>
-      <div style={{ width: "60%" }}  className="div-forall">
-        <h5 className="header-title-page8">C Look and answer.</h5>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+        <div className="div-forall" style={{ width: "60%" }}>
+          <h5 className="header-title-page8">C Look and answer.</h5>
 
-        <div className="content-container-P9-Q3">
-          {/* ========== Q1 ========== */}
-          <div className="section-one11">
-            <div style={{ display: "flex" }}>
-              <span className="num2">1</span>
-              <img src={jello} className="p9-q1-img2" />
-            </div>
-
-            <div className="content-input">
-              <input readOnly value="What is it?" />
-
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  id="input1"
-                  className={`answer-input33 ${showAnswers ? "red-text" : ""}`}
-                  value={answers.find((a) => a.num === "input1")?.input || ""}
-                  onChange={handleChange}
-                />
-
-                {wrongWords.includes("input1") && (
-                  <span className="error-mark-input1">✕</span>
-                )}
+          {/* 🔤 Word Bank */}
+          <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
+            {(provided) => (
+              <div
+                className="word-bank-unit2-p8-q2"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {wordBank.map((word, index) => (
+                  <Draggable
+                    key={word}
+                    draggableId={`bank-${word}`}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {word}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            </div>
+            )}
+          </Droppable>
+
+          <div className="content-container-P9-Q3">
+            {/* ===== Q1 ===== */}
+            {[
+              { id: "input1", img: jello, label: "What is it?" },
+              { id: "input2", img: present, label: "What is it?" },
+              { id: "input3", img: balloons, label: "What are these?" },
+            ].map((q, i) => (
+              <div key={q.id} className="section-q3">
+                <div style={{ display: "flex" }}>
+                  <span className="num2">{i + 1}</span>
+                  <img src={q.img} className="p9-q1-img2" />
+                </div>
+
+                <div className="content-input">
+                  <input readOnly value={q.label} />
+
+                  <Droppable droppableId={`slot-${q.id}`}>
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="drop-slot-q3"
+                      >
+                        {getValue(q.id) && (
+                          <Draggable
+                            draggableId={`slot-${q.id}-${getValue(q.id)}`}
+                            index={0}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="word-item"
+                              >
+                                {getValue(q.id)}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+
+                        {provided.placeholder}
+
+                        {wrongWords.includes(q.id) && !showAnswers && (
+                          <span className="error-badge">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* ========== Q2 ========== */}
-          <div className="section-two22">
-            <div style={{ display: "flex" }}>
-              <span className="num2">2</span>
-              <img src={present} className="p9-q1-img2" />
-            </div>
-
-            <div className="content-input">
-              <input readOnly value="What is it?" />
-
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  id="input2"
-                  className={`answer-input33 ${showAnswers ? "red-text" : ""}`}
-                  value={answers.find((a) => a.num === "input2")?.input || ""}
-                  onChange={handleChange}
-                />
-
-                {wrongWords.includes("input2") && (
-                  <span className="error-mark-input1">✕</span>
-                )}
-              </div>
-            </div>
+          {/* 🔘 Buttons */}
+          <div className="action-buttons-container">
+            <button className="try-again-button" onClick={resetAll}>
+              Start Again ↻
+            </button>
+            <button
+              className="show-answer-btn swal-continue"
+              onClick={showCorrectAnswers}
+            >
+              Show Answer
+            </button>
+            <button className="check-button2" onClick={checkAnswers}>
+              Check Answer ✓
+            </button>
           </div>
-
-          {/* ========== Q3 ========== */}
-          <div className="section-three33">
-            <div style={{ display: "flex" }}>
-              <span className="num2">3</span>
-              <img src={balloons} className="p9-q1-img2" />
-            </div>
-
-            <div className="content-input">
-              <input readOnly value="What are these?" />
-
-              <div style={{ position: "relative" }}>
-                <input
-                  type="text"
-                  id="input3"
-                  className={`answer-input33 ${showAnswers ? "red-text" : ""}`}
-                  value={answers.find((a) => a.num === "input3")?.input || ""}
-                  onChange={handleChange}
-                />
-
-                {wrongWords.includes("input3") && (
-                  <span className="error-mark-input1">✕</span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ⭐ Buttons */}
-        <div className="action-buttons-container">
-          <button
-            className="try-again-button"
-            onClick={() => {
-              setAnswers([]);
-              setWrongWords([]);
-              setShowAnswers(false);
-              setDisableInputs(false);
-            }}
-          >
-            Start Again ↻
-          </button>
-
-          <button
-            className="show-answer-btn swal-continue"
-            onClick={showCorrectAnswers}
-          >
-            Show Answer
-          </button>
-
-          <button className="check-button2" onClick={checkAnswers}>
-            Check Answer ✓
-          </button>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

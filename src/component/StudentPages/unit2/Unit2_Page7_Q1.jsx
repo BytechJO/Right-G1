@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Unit2_Page7_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Unit2_Page7_Q1 = () => {
   const words = [
@@ -43,37 +44,54 @@ const Unit2_Page7_Q1 = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [checked, setChecked] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [error, setError] = useState("");
   const [wrongInputs, setWrongInputs] = useState({});
+  const [usedNumbers, setUsedNumbers] = useState([]); // ⭐ الجديد
 
+  // نفس handleChange
   const handleChange = (key, index, value) => {
     setUserAnswers((prev) => {
       const updated = { ...prev };
-      if (!updated[key]) updated[key] = []; // ✅ نعمل Array إذا مش موجودة
-      updated[key][index] = value; // ✅ نخزن القيمة
+      if (!updated[key]) updated[key] = [];
+      updated[key][index] = value;
       return updated;
     });
     setWrongInputs({});
   };
 
+  // 🧲 Drag logic مع تعطيل الرقم بعد الاستخدام
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    if (destination.droppableId.startsWith("slot-")) {
+      const [, key, index] = destination.droppableId.split("-");
+      const num = Number(draggableId.replace("num-", ""));
+
+      // ⛔ إذا الرقم مستخدم، نوقف
+      if (usedNumbers.includes(num)) return;
+
+      const draggedWord =
+        words.find((w) => w.num === num)?.word || "";
+
+      handleChange(key, Number(index), draggedWord);
+
+      // 🔒 نعلّم الرقم كمستخدم
+      setUsedNumbers((prev) => [...prev, num]);
+    }
+  };
+
+  // نفس checkAnswers
   const checkAnswers = () => {
     if (showAnswer) return;
+
     let tempScore = 0;
     let totalInputs = 0;
+    let newWrongInputs = {};
 
-    const sentenceEntries = Object.entries(sentences);
+    for (const key in sentences) {
+      totalInputs += sentences[key].length;
 
-    // ✅ نتجاهل الجملة الأولى (sentenceEntries[0])
-    for (let s = 0; s < sentenceEntries.length; s++) {
-      const [key, correctNums] = sentenceEntries[s];
-
-      totalInputs += correctNums.length;
-
-      // ✅ التأكد من تعبئة المدخلات قبل التصحيح
-      if (
-        !userAnswers[key] ||
-        Object.keys(userAnswers[key]).length !== correctNums.length
-      ) {
+      if (!userAnswers[key] || userAnswers[key].length !== sentences[key].length) {
         ValidationAlert.info(
           "Oops!",
           "Please fill all fields before checking."
@@ -81,29 +99,13 @@ const Unit2_Page7_Q1 = () => {
         return;
       }
 
-      for (let i = 0; i < correctNums.length; i++) {
-        if (!userAnswers[key][i]) {
-          ValidationAlert.info(
-            "Oops!",
-            "Please fill all fields before checking."
-          );
-          return;
-        }
-      }
-    }
-
-    let newWrongInputs = {};
-
-    // ✅ التصحيح بدون الجملة الأولى
-    for (let s = 0; s < sentenceEntries.length; s++) {
-      const [key, correctNums] = sentenceEntries[s];
       newWrongInputs[key] = [];
 
-      correctNums.forEach((_, index) => {
-        const enteredWord = userAnswers[key][index]?.trim().toLowerCase();
-        const correctWord = correctAnswers2[key][index].trim().toLowerCase();
+      sentences[key].forEach((_, index) => {
+        const entered = userAnswers[key][index]?.toLowerCase();
+        const correct = correctAnswers2[key][index].toLowerCase();
 
-        if (enteredWord !== correctWord) {
+        if (entered !== correct) {
           newWrongInputs[key][index] = true;
         } else {
           newWrongInputs[key][index] = false;
@@ -113,56 +115,52 @@ const Unit2_Page7_Q1 = () => {
     }
 
     setWrongInputs(newWrongInputs);
+    setChecked(true);
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${totalInputs}
-      </span>
-    </div>
-  `;
+    ValidationAlert[
+      tempScore === totalInputs
+        ? "success"
+        : tempScore === 0
+        ? "error"
+        : "warning"
+    ](`
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${tempScore} / ${totalInputs}
+        </span>
+      </div>
+    `);
+  };
 
-    if (tempScore === totalInputs) ValidationAlert.success(scoreMessage);
-    else if (tempScore === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-
-    setChecked(true);
+  // نفس Show Answer
+  const handleShowAnswer = () => {
+    setUserAnswers(correctAnswers2);
+    setShowAnswer(true);
+    setChecked(false);
+    setWrongInputs({});
+    setUsedNumbers(words.map((w) => w.num)); // 🔒 كل الأرقام تُعتبر مستخدمة
   };
 
   const reset = () => {
     setUserAnswers({});
     setChecked(false);
-    setError("");
     setShowAnswer(false);
     setWrongInputs({});
-  };
-  const handleShowAnswer = () => {
-    let filled = {};
-
-    Object.entries(sentences).forEach(([key, arr], index) => {
-      if (index === 0) return; // نتجاهل الجملة الأولى
-
-      filled[key] = arr.map((num, i) => correctAnswers2[key][i]);
-    });
-
-    setUserAnswers(filled);
-    setShowAnswer(true);
-    setChecked(false);
-    setWrongInputs({});
+    setUsedNumbers([]); // ⭐ مهم
   };
 
   return (
-    <>
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        padding:"30px"
+          padding: "30px",
         }}
       >
         <div
@@ -178,64 +176,97 @@ const Unit2_Page7_Q1 = () => {
           <div className="unit7-container">
             <h5 className="header-title-page8">A Read and write.</h5>
 
-            <div className="number-word-section">
-              {words.map((item) => (
-                <div className="word-number" key={item.num}>
-                  <span className="num-word">{item.num}</span>
-                  <span className="word-num">{item.word}</span>
+            {/* 🔤 الأرقام (Draggable + تعطيل بعد الاستخدام) */}
+            <Droppable droppableId="words" isDropDisabled>
+              {(provided) => (
+                <div
+                  className="number-word-section"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {words.map((item, index) => (
+                    <Draggable
+                      key={item.num}
+                      draggableId={`num-${item.num}`}
+                      index={index}
+                      isDragDisabled={usedNumbers.includes(item.num)}
+                    >
+                      {(provided) => (
+                        <div 
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`word-number-unit2-p7-q1 ${
+                            usedNumbers.includes(item.num) ? "used" : ""
+                          }`}
+                        >
+                          <span className="num-word">{item.num}</span>
+                          <span className="word-num">{item.word}</span>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
                 </div>
-              ))}
-            </div>
+              )}
+            </Droppable>
 
+            {/* 🧩 الدروب للكلمة فقط */}
             <div className="num-input-section">
-              {Object.entries(sentences).map(
-                ([key, correctArray], sentenceIndex) => (
-                  <div key={key} className="sentence-row">
-                    <span className="sentence-label">{key}</span>
-                    <div className="num-container">
-                      {correctArray.map((num, i) => (
-                        <span key={i} className="sentence-preview">
-                          {num}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="sentence-line">
-                      {correctArray.map((num, index) => {
-                        const correctWord =
-                          words.find((w) => w.num === num)?.word || "";
+              {Object.entries(sentences).map(([key, correctArray]) => (
+                <div key={key} className="sentence-row">
+                  <span className="sentence-label">{key}</span>
 
-                        return (
-                          <div className="input-wrapper1" key={index}>
-                            <input
-                              className={`input-sentence 
-                                 ${
-                                   checked && wrongInputs[key]?.[index]
-                                     ? "wrong-input1"
-                                     : ""
-                                 } 
-                                 ${showAnswer ? "show-red" : ""}`}
-                              value={userAnswers[key]?.[index] || ""}
-                              onChange={(e) =>
-                               showAnswer
-                                  ? null
-                                  : handleChange(key, index, e.target.value)
-                              }
-                              readOnly={showAnswer}
-                            />
+                  <div className="num-container">
+                    {correctArray.map((num, i) => (
+                      <span key={i} className="sentence-preview">
+                        {num}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="sentence-line">
+                    {correctArray.map((_, index) => (
+                      <Droppable
+                        key={index}
+                        droppableId={`slot-${key}-${index}`}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="input-wrapper1"
+                          >
+                            <div
+                              className={`input-sentence
+                                ${
+                                  checked && wrongInputs[key]?.[index]
+                                    ? "wrong-input1"
+                                    : ""
+                                }
+                                ${showAnswer ? "show-red" : ""}
+                              `}
+                            >
+                              {userAnswers[key]?.[index] || ""}
+                            </div>
 
                             {checked && wrongInputs[key]?.[index] && (
                               <span className="wrong-icon">✕</span>
                             )}
+
+                            {provided.placeholder}
                           </div>
-                        );
-                      })}
-                    </div>
+                        )}
+                      </Droppable>
+                    ))}
                   </div>
-                )
-              )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
+
+        {/* 🔘 الأزرار نفسها */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
@@ -243,13 +274,12 @@ const Unit2_Page7_Q1 = () => {
           <button onClick={handleShowAnswer} className="show-answer-btn">
             Show Answer
           </button>
-
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
-    </>
+    </DragDropContext>
   );
 };
 

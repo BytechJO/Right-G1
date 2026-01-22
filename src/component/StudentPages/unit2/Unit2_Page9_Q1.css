@@ -21,6 +21,31 @@
   font-weight: 500;
   width: 95%;
 }
+/* خلي المربع position relative */
+.drop-slot-inline-unit2-p8-q2 {
+  position: relative;
+  min-width: 120px;
+  min-height: 36px;
+}
+
+/* دائرة حمرا + X أبيض */
+.error-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  background-color: #e53935; /* أحمر */
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
 
 .section-one {
   display: flex;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Page8_Q4.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Page8_Q4 = () => {
   const data = [
@@ -38,66 +39,76 @@ const Page8_Q4 = () => {
     [25, 15, 21], // you
   ];
 
+  const [slots, setSlots] = useState(
+    questionGroups.map((g) => g.map(() => null)),
+  );
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-
-  const [letters, setLetters] = useState(
-    questionGroups.map((group) => group.map(() => ""))
+  // تكوين الكلمات من الخانات
+  const formedWords = slots.map((group) =>
+    group.map((letter) => letter || "").join(""),
   );
+  const sentence = formedWords.join(" ");
 
-  const handleInputChange = (value, groupIndex, letterIndex) => {
-    if (showAnswer) return; // ❌ يمنع الكتابة بعد Show Answer
+  // ========================
+  // Drag Logic
+  // ========================
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
 
-    const updated = [...letters];
-    updated[groupIndex][letterIndex] = value.toLowerCase();
-    setLetters(updated);
+    if (destination.droppableId.startsWith("slot-")) {
+      const [g, l] = destination.droppableId.split("-").slice(1);
+
+      if (slots[g][l]) return;
+
+      const letter = draggableId.replace("letter-", "");
+      const updated = [...slots];
+      updated[g][l] = letter;
+      setSlots(updated);
+    }
   };
 
-  // ⭐ تكوين الكلمات لعرضها تحت
-  const formedWords = letters.map((group) => group.join(""));
-
   // ========================
-  //  ✔ Show Answer
+  // Show Answer
   // ========================
   const handleShowAnswer = () => {
-    const correctLetters = questionGroups.map((group) =>
-      group.map((num) => data.find((d) => d.number === num).letter)
+    const correct = questionGroups.map((group) =>
+      group.map((num) => data.find((d) => d.number === num).letter),
     );
 
-    setLetters(correctLetters);
+    setSlots(correct);
     setWrongInputs([]);
     setShowAnswer(true);
   };
 
   // ========================
-  //  ✔ Check Answer
+  // Check Answer
   // ========================
   const handleCheckAnswers = () => {
-    if (showAnswer) return; // ❌ إذا مستخدم show answer ما نعمل check
+    if (showAnswer) return;
 
-    const hasEmpty = letters.some((g) => g.some((l) => l === ""));
+    const hasEmpty = slots.some((g) => g.some((l) => !l));
     if (hasEmpty) {
       ValidationAlert.info(
         "Oops!",
-        "Please complete all fields before checking."
+        "Please complete all fields before checking.",
       );
       return;
     }
 
     let wrong = [];
     let correctCount = 0;
-    let total = letters.flat().length;
+    let total = slots.flat().length;
 
-    for (let g = 0; g < letters.length; g++) {
-      for (let l = 0; l < letters[g].length; l++) {
-        const letter = letters[g][l];
-        const correctNum = data.find((d) => d.letter === letter)?.number;
+    for (let g = 0; g < slots.length; g++) {
+      for (let l = 0; l < slots[g].length; l++) {
+        const correctLetter = data.find(
+          (d) => d.number === questionGroups[g][l],
+        ).letter;
 
-        if (correctNum === questionGroups[g][l]) {
-          correctCount++;
-        } else {
-          wrong.push(`${g}-${l}`);
-        }
+        if (slots[g][l] === correctLetter) correctCount++;
+        else wrong.push(`${g}-${l}`);
       }
     }
 
@@ -107,8 +118,8 @@ const Page8_Q4 = () => {
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
@@ -120,104 +131,118 @@ const Page8_Q4 = () => {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" ,padding:"30px"}}>
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
-      >
+    <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div className="div-forall" style={{ width: "60%" }}>
         <div className="container8">
           <h5 className="header-title-page8">
-            <span className="ex-A"> C</span>Answer the question.
+            <span className="ex-A">C</span> Answer the question.
           </h5>
 
           <div className="alphabet-box">
-            <div className="row1">
-              {data.map((c, i) => (
-                <div className="letter-char1" key={i}>
-                  <div className="data">
-                    <span className="cell1">{c.letter}</span>
-                  </div>
-                  <div className="data">
-                    <span className="cell1 number1">{c.number}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <DragDropContext onDragEnd={onDragEnd}>
+              {/* 🔤 الحروف فوق الأرقام */}
+              <Droppable
+                droppableId="alphabet"
+                direction="horizontal"
+                isDropDisabled
+              >
+                {(provided) => (
+                  <div
+                    className="row1"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {data.map((item, index) => (
+                      <div className="letter-char1" key={index}>
+                        <Draggable
+                          draggableId={`letter-${item.letter}`}
+                          index={index}
+                          isDragDisabled={showAnswer}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="cell1 drag-letter"
+                            >
+                              {item.letter}
+                            </div>
+                          )}
+                        </Draggable>
 
-            <div className="words">
-              {questionGroups.map((group, groupIndex) => (
-                <div className="word-group" key={groupIndex}>
-                  {group.map((num, letterIndex) => (
-                    <div className="input-h6" key={letterIndex}>
-                      <h6
-                        className="unit1-page8-q4-nums"
-                        style={{ fontSize: "25px" }}
-                      >
-                        {num}
-                      </h6>
-
-                      <div className="input-wrapper">
-                        <input
-                          className="inputs"
-                          maxLength={1}
-                          value={letters[groupIndex][letterIndex]}
-                          onChange={(e) =>
-                            handleInputChange(
-                              e.target.value,
-                              groupIndex,
-                              letterIndex
-                            )
-                          }
-                          style={{
-                            color: showAnswer ? "red" : "black", // 🔥 لوّن الأحمر عند Show Answer
-                            fontWeight: showAnswer ? "bold" : "normal",
-                          }}
-                        />
-
-                        {wrongInputs.includes(`${groupIndex}-${letterIndex}`) &&
-                          !showAnswer && <span className="error-mark1">✕</span>}
+                        <div className="cell1 number1">{item.number}</div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
 
-            <div className="sentence">
-              {formedWords.map((word, i) => (
-                <span key={i} className="sentence-word">
-                  {word}
-                </span>
-              ))}
-            </div>
+              {/* 🧩 خانات الإجابة */}
+              <div className="words">
+                {questionGroups.map((group, gIndex) => (
+                  <div className="word-group" key={gIndex}>
+                    {group.map((num, lIndex) => (
+                      <Droppable droppableId={`slot-${gIndex}-${lIndex}`}>
+                        {(provided, snapshot) => (
+                          <div className="slot-wrapper">
+                            {/* 🔢 الرقم فوق المربع */}
+                            <h6 className="slot-number">{num}</h6>
+
+                            {/* ⬜ مربع الدروب */}
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`drop-slot
+                              ${snapshot.isDraggingOver ? "drag-over" : ""}
+                              ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
+                            >
+                              {wrongInputs.includes(`${gIndex}-${lIndex}`) && (
+                                <div className="error-mark1">✕</div>
+                              )}
+                              {slots[gIndex][lIndex] && (
+                                <div className="dropped-letter">
+                                  {slots[gIndex][lIndex]}
+                                </div>
+                              )}
+                              {provided.placeholder}
+                            </div>
+                          </div>
+                        )}
+                      </Droppable>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div className="sentence-box">
+                <span className="sentence-text">{sentence}</span>
+              </div>
+            </DragDropContext>
           </div>
         </div>
-      </div>{" "}
+      </div>
+
+      {/* 🔘 Buttons */}
       <div className="action-buttons-container">
         <button
           onClick={() => {
-            setLetters(questionGroups.map((g) => g.map(() => "")));
+            setSlots(questionGroups.map((g) => g.map(() => null)));
             setWrongInputs([]);
-            setShowAnswer(false); // 🔄 رجوع طبيعي
+            setShowAnswer(false);
           }}
           className="try-again-button"
         >
           Start Again ↻
         </button>
-        {/* 🔥 زر Show Answer */}
+
         <button
           onClick={handleShowAnswer}
           className="show-answer-btn swal-continue"
         >
           Show Answer
         </button>
+
         <button onClick={handleCheckAnswers} className="check-button2">
           Check Answer ✓
         </button>

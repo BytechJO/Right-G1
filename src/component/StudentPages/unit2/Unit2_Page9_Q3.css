@@ -19,6 +19,32 @@
     font-weight: 500;
     width: 80%;
 }
+
+.drop-slot-q3 {
+  position: relative;
+  min-width: 200px;
+  min-height: 36px;
+  border-bottom: 2px solid #333;
+  display: flex;
+  align-items: center;
+}
+
+.error-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  background: #e53935;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 .red-text {
   color: red !important;
   font-weight: 600;

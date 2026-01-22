@@ -3,202 +3,273 @@ import deer from "../../../assets/unit1/imgs/deer flip.svg";
 import taxi from "../../../assets/unit1/imgs/taxi_1.svg";
 import table from "../../../assets/unit1/imgs/table2.jpg";
 import dish from "../../../assets/unit1/imgs/dish3.jpg";
-import ValidationAlert from "../../Popup/ValidationAlert"; // تأكدي إنها موجودة
+import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./Unit2_Page8_Q2.css";
 
 const Unit2_Page8_Q2 = () => {
   const correctAnswers = ["deer", "taxi", "table", "dish"];
   const [answers, setAnswers] = useState(["", "", "", ""]);
-  const [score, setScore] = useState(null);
+  const [usedWords, setUsedWords] = useState([]);
   const [wrongInput, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const handleChange = (value, index) => {
-    if(showAnswer)return
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
+  // 🧲 Drag logic
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    if (destination.droppableId.startsWith("slot-")) {
+      const index = Number(destination.droppableId.split("-")[1]);
+      const word = draggableId.replace("word-", "");
+
+      if (answers[index]) return;
+
+      const updated = [...answers];
+      updated[index] = word;
+      setAnswers(updated);
+
+      setUsedWords((prev) => [...prev, word]);
+      setWrongInputs([]);
+    }
   };
 
   const checkAnswers = () => {
+    if (showAnswer) return;
 
-    if(showAnswer)return
-    // 1️⃣ التحقق إذا في فراغات
-    if (answers.some((ans) => ans.trim() === "")) {
+    if (answers.some((ans) => ans === "")) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    // 2️⃣ احسبي عدد الإجابات الصحيحة
-    let tempScore = 0;
+    let score = 0;
     let wrong = [];
+
     answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        tempScore++;
-      } else {
-        wrong.push(ans);
-      }
+      if (ans === correctAnswers[i]) score++;
+      else wrong.push(ans);
     });
 
     setWrongInputs(wrong);
-    setScore(tempScore);
 
-    // 3️⃣ تحديد الحالة وعرض الرسالة المناسبة
-    const total = correctAnswers.length;
-    const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
+    const color = score === 4 ? "green" : score === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    ValidationAlert[
+      score === 4 ? "success" : score === 0 ? "error" : "warning"
+    ](`
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${score} / 4
+        </span>
+      </div>
+    `);
   };
 
   const reset = () => {
-    setShowAnswer(false);
     setAnswers(["", "", "", ""]);
-    setChecked(false);
-    setError("");
-    setScore(null);
-    setWrongInputs();
-    
+    setUsedWords([]);
+    setWrongInputs([]);
+    setShowAnswer(false);
   };
+
   const showAnswerFun = () => {
-    setAnswers(correctAnswers); // عبّي الإجابات
-    setWrongInputs([]); // شيل الأخطاء
-    setScore(correctAnswers.length);
-    setShowAnswer(true); // 🔥 ممنوع تعديل بعد Show Answer
+    setAnswers(correctAnswers);
+    setUsedWords(correctAnswers);
+    setWrongInputs([]);
+    setShowAnswer(true);
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding:"30px"
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <div className="question-wrapper">
-          <h5 className="header-title-page8">E Read, look, and write.</h5>
-          <div className="row-content22">
-            <div className="row2">
-              <span style={{ position: "relative" }}>
-                <span className="num-span">1</span> The{" "}
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                      className={`q-input ${showAnswer ? "show-red" : ""}`}
-                    onChange={(e) => handleChange(e.target.value, 0)}
-                    value={answers[0]}
-                  />
-                  {wrongInput.includes(answers[0]) && (
-                    <span className="error-mark-input">✕</span>
-                  )}
-                </div>
-                is brown.
-              </span>{" "}
-              <img src={deer} alt="" className="q-img" />
-            </div>
+        <div className="div-forall" style={{ width: "60%" }}>
+          <div className="question-wrapper">
+            <h5 className="header-title-page8">E Read, look, and write.</h5>
 
-            <div className="row2">
-              <span style={{ position: "relative" }}>
-                <span className="num-span">2</span> My brother takes a{" "}
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                     className={`q-input ${showAnswer ? "show-red" : ""}`}
-                    onChange={(e) => handleChange(e.target.value, 1)}
-                    value={answers[1]}
-                  />{" "}
-                  {wrongInput.includes(answers[1]) && (
-                    <span className="error-mark-input">✕</span>
-                  )}
+            {/* 🔤 الكلمات (فوق – نفس الكتاب) */}
+            <Droppable
+              droppableId="words"
+              direction="horizontal"
+              isDropDisabled
+            >
+              {(provided) => (
+                <div
+                  className="word-bank-unit2-p8-q2"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {correctAnswers.map((word, index) => (
+                    <Draggable
+                      key={word}
+                      draggableId={`word-${word}`}
+                      index={index}
+                      isDragDisabled={usedWords.includes(word)}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`word-item-unit2-p8-q2 ${
+                            usedWords.includes(word) ? "used" : ""
+                          }`}
+                        >
+                          {word}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
                 </div>
-                .
-              </span>
-              <img src={taxi} alt="" className="q-img" />
-            </div>
+              )}
+            </Droppable>
 
-            <div className="row2">
-              <span style={{ position: "relative" }}>
-                <span className="num-span">3</span> The{" "}
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                      className={`q-input ${showAnswer ? "show-red" : ""}`}
-                    onChange={(e) => handleChange(e.target.value, 2)}
-                    value={answers[2]}
-                  />{" "}
-                  {wrongInput.includes(answers[2]) && (
-                    <span className="error-mark-input">✕</span>
-                  )}
-                </div>
-                is round.
-              </span>
-              <img src={table} alt="" className="q-img" />
-            </div>
+            {/* 🧩 الجمل – Inline 100% */}
+            <div className="row-content22">
+              {/* 1 */}
+              <div className="row2">
+                <span>
+                  <span className="num-span">1</span> The{" "}
+                  <Droppable droppableId="slot-0">
+                    {(provided) => (
+                      <span className="drop-slot-wrapper-unit2-p8-q2">
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`drop-slot-inline-unit2-p8-q2 ${
+                            wrongInput.includes(answers[0]) ? "wrong" : ""
+                          }`}
+                        >
+                          {answers[0]}
+                          {provided.placeholder}
+                        </span>
 
-            <div className="row2">
-              <span style={{ position: "relative" }}>
-                <span className="num-span">4</span> The
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                      className={`q-input ${showAnswer ? "show-red" : ""}`}
-                    onChange={(e) => handleChange(e.target.value, 3)}
-                    value={answers[3]}
-                  />{" "}
-                  {wrongInput.includes(answers[3]) && (
-                    <span className="error-mark-input">✕</span>
-                  )}
-                </div>
-                is white.
-              </span>{" "}
-              <img src={dish} alt="" className="q-img" />
+                        {wrongInput.includes(answers[0]) && (
+                          <span className="error-mark-input">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>{" "}
+                  is brown.
+                </span>
+                <img src={deer} alt="" className="q-img" />
+              </div>
+
+              {/* 2 */}
+              <div className="row2">
+                <span>
+                  <span className="num-span">2</span> My brother takes a{" "}
+                  <Droppable droppableId="slot-1">
+                    {(provided) => (
+                       <span className="drop-slot-wrapper-unit2-p8-q2">
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`drop-slot-inline-unit2-p8-q2 ${
+                            wrongInput.includes(answers[1]) ? "wrong" : ""
+                          }`}
+                        >
+                          {answers[1]}
+                          {provided.placeholder}
+                        </span>
+
+                        {wrongInput.includes(answers[1]) && (
+                          <span className="error-mark-input">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>
+                  .
+                </span>
+                <img src={taxi} alt="" className="q-img" />
+              </div>
+
+              {/* 3 */}
+              <div className="row2">
+                <span>
+                  <span className="num-span">3</span> The{" "}
+                  <Droppable droppableId="slot-2">
+                    {(provided) => (
+                      <span className="drop-slot-wrapper-unit2-p8-q2">
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`drop-slot-inline-unit2-p8-q2 ${
+                            wrongInput.includes(answers[2]) ? "wrong" : ""
+                          }`}
+                        >
+                          {answers[2]}
+                          {provided.placeholder}
+                        </span>
+
+                        {wrongInput.includes(answers[2]) && (
+                          <span className="error-mark-input">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>{" "}
+                  is round.
+                </span>
+                <img src={table} alt="" className="q-img" />
+              </div>
+
+              {/* 4 */}
+              <div className="row2">
+                <span>
+                  <span className="num-span">4</span> The{" "}
+                  <Droppable droppableId="slot-3">
+                    {(provided) => (
+                      <span className="drop-slot-wrapper-unit2-p8-q2">
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`drop-slot-inline-unit2-p8-q2 ${
+                            wrongInput.includes(answers[3]) ? "wrong" : ""
+                          }`}
+                        >
+                          {answers[3]}
+                          {provided.placeholder}
+                        </span>
+
+                        {wrongInput.includes(answers[3]) && (
+                          <span className="error-mark-input">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>{" "}
+                  is white.
+                </span>
+                <img src={dish} alt="" className="q-img" />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="action-buttons-container">
-          <button onClick={reset} className="try-again-button">
-            Start Again ↻
-          </button>
-          <button
-            onClick={showAnswerFun}
-            className="show-answer-btn swal-continue"
-          >
-            Show Answer
-          </button>
 
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+          {/* 🔘 الأزرار نفسها */}
+          <div className="action-buttons-container">
+            <button onClick={reset} className="try-again-button">
+              Start Again ↻
+            </button>
+            <button
+              onClick={showAnswerFun}
+              className="show-answer-btn swal-continue"
+            >
+              Show Answer
+            </button>
+            <button onClick={checkAnswers} className="check-button2">
+              Check Answer ✓
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

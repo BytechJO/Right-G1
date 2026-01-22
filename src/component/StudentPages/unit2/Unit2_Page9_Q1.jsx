@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./Unit2_Page9_Q1.css";
 import partyhats from "../../../assets/img_unit2/imgs/party hats..jpg";
 import present from "../../../assets/img_unit2/imgs/Present1.jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Unit2_Page9_Q1 = () => {
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState({});
   const [wrongWords, setWrongWords] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false); // ⭐ جديد
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const correctMatches = [
     { input: "party hats", num: "input1" },
@@ -16,19 +17,35 @@ const Unit2_Page9_Q1 = () => {
     { input: "present", num: "input4" },
   ];
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
+  const wordBank = correctMatches.map((c) => c.input);
 
-    // إذا ظهر الحل ممنوع التعديل
-    if (showAnswer) return;
+  const getValue = (id) => answers[id] || "";
+
+  // 🧲 Drag logic (ثابت + قابل للتعديل دائمًا)
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    // استخرج الكلمة من أي draggableId
+    const word = draggableId
+      .replace("bank-", "")
+      .replace(/^slot-.*?-/, "");
 
     setAnswers((prev) => {
-      const updated = [...prev];
-      const idx = updated.findIndex((a) => a.num === id);
+      const updated = { ...prev };
 
-      if (idx !== -1) updated[idx] = { input: value, num: id };
-      else updated.push({ input: value, num: id });
+      // إزالة الكلمة من أي slot سابق
+      Object.keys(updated).forEach((k) => {
+        if (updated[k] === word) delete updated[k];
+      });
 
+      // إذا انحطت داخل slot
+      if (destination.droppableId.startsWith("slot-")) {
+        const id = destination.droppableId.replace("slot-", "");
+        updated[id] = word;
+      }
+
+      // إذا رجعت للبنك → لا نضيفها لأي slot
       return updated;
     });
 
@@ -37,7 +54,8 @@ const Unit2_Page9_Q1 = () => {
 
   const checkAnswers = () => {
     if (showAnswer) return;
-    if (answers.length === 0) {
+
+    if (Object.keys(answers).length < correctMatches.length) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
@@ -45,8 +63,8 @@ const Unit2_Page9_Q1 = () => {
     let wrong = [];
     let correctCount = 0;
 
-    correctMatches.forEach((ans, i) => {
-      if (ans.input === answers[i]?.input) correctCount++;
+    correctMatches.forEach((ans) => {
+      if (answers[ans.num] === ans.input) correctCount++;
       else wrong.push(ans.num);
     });
 
@@ -56,153 +74,178 @@ const Unit2_Page9_Q1 = () => {
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    const msg = `
+    ValidationAlert[
+      correctCount === total
+        ? "success"
+        : correctCount === 0
+        ? "error"
+        : "warning"
+    ](`
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color};font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
-    `;
-
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    `);
   };
 
   const showCorrectAnswers = () => {
+    const filled = {};
+    correctMatches.forEach((c) => (filled[c.num] = c.input));
+    setAnswers(filled);
+    setWrongWords([]);
     setShowAnswer(true);
-
-    setAnswers([...correctMatches]); // تعبئة الحقول بالحل الصحيح
-    setWrongWords([]); // إزالة الأخطاء
   };
 
   const resetAll = () => {
-    setAnswers([]);
+    setAnswers({});
     setWrongWords([]);
     setShowAnswer(false);
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center",
-        padding:"30px" }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="unit2-page9-q1-container">
-          <h5 className="header-title-page8">A Look and write.</h5>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+        <div className="div-forall" style={{ width: "60%" }}>
+          <div className="unit2-page9-q1-container">
+            <h5 className="header-title-page8">A Look and write.</h5>
 
-          <div className="content-container-P90-Q1">
-            {/* SECTION 1 */}
-            <div className="section-one">
-              <span>1</span> <img src={partyhats} className="p9-q1-img" />
-              <div className="content-input">
-                <input type="text" value="What are these?" readOnly />
-                <input type="text" value="These are" readOnly />
+            {/* 🔤 Word Bank */}
+            <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
+              {(provided) => (
+                <div
+                  className="word-bank-unit2-p8-q2"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {wordBank.map((word, index) => (
+                    <Draggable
+                      key={word}
+                      draggableId={`bank-${word}`}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-item-unit2-p8-q2"
+                        >
+                          {word}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
 
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    id="input1"
-                    className="answer-input"
-                    value={answers.find((a) => a.num === "input1")?.input || ""}
-                    onChange={handleChange}
-                    style={{
-                      color: showAnswer ? "red" : "black", // ⭐ لون أحمر عند show answer
-                      borderColor: "black",
-                    }}
-                  />
+            <div className="content-container-P90-Q1">
+              {/* SECTION 1 */}
+              <div className="section-one">
+                <span>1</span>
+                <img src={partyhats} className="p9-q1-img" />
+                <div className="content-input">
+                  <input type="text" value="What are these?" readOnly />
+                  <input type="text" value="These are" readOnly />
 
-                  {wrongWords.includes("input1") && !showAnswer && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
+                  <Droppable droppableId="slot-input1">
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="drop-slot-inline-unit2-p8-q2"
+                      >
+                        {getValue("input1") && (
+                          <Draggable
+                            draggableId={`slot-input1-${getValue("input1")}`}
+                            index={0}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="word-item"
+                              >
+                                {getValue("input1")}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                        {wrongWords.includes("input1") && !showAnswer && (
+                          <span className="error-mark-input1">✕</span>
+                        )}
+                      </span>
+                    )}
+                  </Droppable>
                 </div>
               </div>
-            </div>
 
-            {/* SECTION 2 */}
-            <div className="section-two">
-              <span>2</span> <img src={present} className="p9-q1-img" />
-              <div className="content-input">
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    id="input2"
-                    className="answer-input"
-                    value={answers.find((a) => a.num === "input2")?.input || ""}
-                    onChange={handleChange}
-                    style={{
-                      color: showAnswer ? "red" : "black",
-                      borderColor: "black",
-                    }}
-                  />
-                  {wrongWords.includes("input2") && !showAnswer && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
-                  ?
-                </div>
-
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    id="input3"
-                    className="answer-input"
-                    value={answers.find((a) => a.num === "input3")?.input || ""}
-                    onChange={handleChange}
-                    style={{
-                      color: showAnswer ? "red" : "black",
-                      borderColor: "black",
-                    }}
-                  />
-                  {wrongWords.includes("input3") && !showAnswer && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
-                  a
-                </div>
-
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    id="input4"
-                    className="answer-input"
-                    value={answers.find((a) => a.num === "input4")?.input || ""}
-                    onChange={handleChange}
-                    style={{
-                      color: showAnswer ? "red" : "black",
-                      borderColor: "black",
-                    }}
-                  />
-                  {wrongWords.includes("input4") && !showAnswer && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
+              {/* SECTION 2 */}
+              <div className="section-two">
+                <span>2</span>
+                <img src={present} className="p9-q1-img" />
+                <div className="content-input">
+                  {["input2", "input3", "input4"].map((id, idx) => (
+                    <React.Fragment key={id}>
+                      <Droppable droppableId={`slot-${id}`}>
+                        {(provided) => (
+                          <span
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="drop-slot-inline-unit2-p8-q2"
+                          >
+                            {getValue(id) && (
+                              <Draggable
+                                draggableId={`slot-${id}-${getValue(id)}`}
+                                index={0}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className="word-item"
+                                  >
+                                    {getValue(id)}
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                            {wrongWords.includes(id) && !showAnswer && (
+                              <span className="error-mark-input1">✕</span>
+                            )}
+                          </span>
+                        )}
+                      </Droppable>
+                      {idx === 0 && " ? "}
+                      {idx === 1 && " a "}
+                    </React.Fragment>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* BUTTONS */}
-        <div className="action-buttons-container">
-          <button className="try-again-button" onClick={resetAll}>
-            Start Again ↻
-          </button>
-          <button className="show-answer-btn" onClick={showCorrectAnswers}>
-            Show Answer
-          </button>
-          <button className="check-button2" onClick={checkAnswers}>
-            Check Answer ✓
-          </button>
+          {/* BUTTONS */}
+          <div className="action-buttons-container">
+            <button className="try-again-button" onClick={resetAll}>
+              Start Again ↻
+            </button>
+            <button className="show-answer-btn" onClick={showCorrectAnswers}>
+              Show Answer
+            </button>
+            <button className="check-button2" onClick={checkAnswers}>
+              Check Answer ✓
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 
