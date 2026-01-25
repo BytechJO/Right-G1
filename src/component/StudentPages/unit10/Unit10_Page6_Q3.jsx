@@ -104,9 +104,11 @@ const Unit10_Page6_Q3 = () => {
                 selectedImage === item.value ? "selected-unit10-page6-q3" : ""
               }`}
               onClick={() => {
-                if (checked) return;
-                setSelectedImage(item.value); // بس circle
-              }}
+  if (checked) return;
+  setSelectedImage(item.value);
+  setAnswer(item.value); // ⭐ يكتب الكلمة مباشرة
+}}
+
             >
               <img
                 src={item.img}
@@ -124,13 +126,10 @@ const Unit10_Page6_Q3 = () => {
         >
           <span>I want</span>
 
-          <input
-            type="text"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            className="write-input-unit10-page6-q3"
-            disabled={checked}
-          />
+       <span className="auto-answer-unit10-page6-q3">
+  {answer || ""}
+</span>
+
 
           {checked && isCorrect === false && (
             <div className="wrong-mark-unit10-p6-q3">✕</div>

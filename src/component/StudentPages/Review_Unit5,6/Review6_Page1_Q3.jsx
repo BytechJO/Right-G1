@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import deer from "../../../assets/unit6/imgs/U6P54EXEC-01.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review6_Page1_Q3.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const data = [
   {
@@ -19,10 +20,31 @@ const data = [
 ];
 
 const Review6_Page1_Q3 = () => {
-  const [answers, setAnswers] = useState(Array(data.length).fill(""));
+  const [answers, setAnswers] = useState(Array(data.length).fill(null));
   const [score, setScore] = useState(null);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
+
+    const value = draggableId.replace("word-", "");
+    const index = Number(destination.droppableId.split("-")[1]);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      // منع التكرار
+      const oldIndex = updated.findIndex((a) => a === value);
+      if (oldIndex !== -1) updated[oldIndex] = null;
+
+      updated[index] = value;
+      return updated;
+    });
+
+    setWrongInputs([]);
+  };
 
   const handleChange = (value, index) => {
     if (locked) return; // 🔒 منع التعديل بعد إظهار الإجابات
@@ -33,11 +55,10 @@ const Review6_Page1_Q3 = () => {
     setWrongInputs([]);
   };
   const showAnswers = () => {
-    const correctOnly = data.map((d) => d.correct); // يجيب كل الإجابات الصحيحة
-
-    setAnswers(correctOnly); // نعرضهم
+    const correctOnly = data.map((d) => d.correct);
+    setAnswers(correctOnly);
+    setLocked(true);
     setWrongInputs([]); // نخفي كل الأخطاء
-    setLocked(true); // 🔒 منع أي تعديل
   };
 
   const checkAnswers = () => {
@@ -49,7 +70,7 @@ const Review6_Page1_Q3 = () => {
     }
 
     const correctCount = answers.filter(
-      (ans, i) => ans.trim().toLowerCase() === data[i].correct.toLowerCase()
+      (ans, i) => (ans || "").toLowerCase() === data[i].correct.toLowerCase(),
     ).length;
     let wrong = [];
 
@@ -61,12 +82,13 @@ const Review6_Page1_Q3 = () => {
 
     setWrongInputs(wrong);
     setScore(correctCount);
+    setLocked(true)
     let color =
       correctCount === data.length
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size:20px; text-align:center;">
@@ -86,96 +108,157 @@ const Review6_Page1_Q3 = () => {
   };
 
   const reset = () => {
-    setAnswers(Array(data.length).fill(""));
+    setAnswers(Array(data.length).fill(null));
+
     setWrongInputs([]);
     setLocked(false);
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <div className="component-wrapper">
-          <h3 className="header-title-page8">C Look and write.</h3>
-          <div className="content-unit5-p5-q3">
-            <img src={deer} className="shape-img-review6-p1-q3" alt="" />
-            <div className="group-input-unit5-p5-q3">
-              {data.map((item, index) => (
-                <div
-                  className="question-row"
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    margin: "20px",
-                  }}
-                >
-                  <span
-                    className="q-number"
-                    style={{
-                      color: "#0d47a1",
-                      fontWeight: "700",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {index + 1}.
-                  </span>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div className="component-wrapper">
+            <h3 className="header-title-page8">C Look and write.</h3>
 
+            <Droppable droppableId="bank" isDropDisabled={locked}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="word-bank-unit2-p8-q2"
+                >
+                  {data.map((item, index) => (
+                    <Draggable
+                      key={item.correct}
+                      draggableId={`word-${item.correct}`}
+                      index={index}
+                      isDragDisabled={locked}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-item-unit2-p8-q2"
+                        >
+                          {item.correct}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
+            <div className="content-unit5-p5-q3">
+              <img src={deer} className="shape-img-review6-p1-q3" alt="" />
+              <div className="group-input-unit5-p5-q3">
+                {data.map((item, index) => (
                   <div
-                    className="question-text"
+                    className="question-row"
+                    key={index}
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      position: "relative",
+                      gap: "10px",
+                      margin: "20px",   width:"100%"
                     }}
                   >
-                    <input
-                      type="text"
-                      className="q-input"
-                      value={answers[index]}
-                      disabled={locked}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                    />
-                    {/* ❌ علامة الخطأ */}
-                    {!locked && wrongInputs.includes(index) && (
-                      <span className="wrong-icon-review6-p1-q3">✕</span>
-                    )}
+                    <span
+                      className="q-number"
+                      style={{
+                        color: "#0d47a1",
+                        fontWeight: "700",
+                        fontSize: "20px",
+                      }}
+                    >
+                      {index + 1}.
+                    </span>
+
+                    <div
+                      className="question-text"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        position: "relative",
+                        width:"100%"
+                      }}
+                    >
+                      <Droppable
+                        droppableId={`slot-${index}`}
+                        isDropDisabled={locked}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="q-input-review6-p1-q3"
+                          >
+                            {answers[index] && (
+                              <Draggable
+                                draggableId={`filled-${answers[index]}-${index}`}
+                                index={0}
+                                isDragDisabled={locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {answers[index]}
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+
+                      {/* ❌ علامة الخطأ */}
+                      { wrongInputs.includes(index) && (
+                        <span className="wrong-icon-review6-p1-q3">✕</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
+        <div className="action-buttons-container">
+          <button className="try-again-button" onClick={reset}>
+            Start Again ↻
+          </button>
+          <button onClick={showAnswers} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answers ✓
+          </button>
+        </div>
       </div>
-      <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
-          Start Again ↻
-        </button>
-        <button onClick={showAnswers} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

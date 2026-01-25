@@ -5,6 +5,7 @@ import ant from "../../../assets/unit10/imgs/U10P87EXEE02-01.svg";
 import dad from "../../../assets/unit10/imgs/U10P87EXEE02-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit10_Page6_Q2.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Unit10_Page6_Q2 = () => {
   const items = [
@@ -32,6 +33,7 @@ const Unit10_Page6_Q2 = () => {
       inputsCount: 2,
     },
   ];
+  const wordBank = ["What do you want", "I want", "I want an"];
 
   const [selected, setSelected] = useState(["", ""]);
   const [answers, setAnswers] = useState([[""], ["", ""]]);
@@ -46,6 +48,32 @@ const Unit10_Page6_Q2 = () => {
     setSelected(newSel);
     setShowResult(false);
   };
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showCorrect) return;
+
+    const value = draggableId.replace("word-", "");
+    const [qIndex, inputIndex] = destination.droppableId
+      .replace("slot-", "")
+      .split("-")
+      .map(Number);
+
+    setAnswers((prev) => {
+      const updated = prev.map((row) => [...row]);
+
+      // منع التكرار
+      updated.forEach((row, r) =>
+        row.forEach((cell, c) => {
+          if (cell === value) updated[r][c] = "";
+        }),
+      );
+
+      updated[qIndex][inputIndex] = value;
+      return updated;
+    });
+
+    setShowResult(false);
+  };
 
   const handleInput = (value, qIndex, inputIndex = 0) => {
     if (showCorrect) return;
@@ -55,36 +83,36 @@ const Unit10_Page6_Q2 = () => {
     setShowResult(false);
   };
 
- const showAnswers = () => {
-  // اختيار الصور الصحيحة
-  setSelected(items.map((item) => item.correct));
+  const showAnswers = () => {
+    // اختيار الصور الصحيحة
+    setSelected(items.map((item) => item.correct));
 
-  // تعبئة الـ inputs حسب نوع السؤال
-  const filledAnswers = items.map((item) => {
-    let arr = [];
+    // تعبئة الـ inputs حسب نوع السؤال
+    const filledAnswers = items.map((item) => {
+      let arr = [];
 
-    if (item.correctQuestion) {
-      // 🔹 السؤال الثاني
-      arr.push(item.correctQuestion); // input السؤال
+      if (item.correctQuestion) {
+        // 🔹 السؤال الثاني
+        arr.push(item.correctQuestion); // input السؤال
 
-      for (let i = 1; i < item.inputsCount; i++) {
-        arr.push(item.correctInput); // inputs الجواب
+        for (let i = 1; i < item.inputsCount; i++) {
+          arr.push(item.correctInput); // inputs الجواب
+        }
+      } else {
+        // 🔹 السؤال الأول
+        for (let i = 0; i < item.inputsCount; i++) {
+          arr.push(item.correctInput);
+        }
       }
-    } else {
-      // 🔹 السؤال الأول
-      for (let i = 0; i < item.inputsCount; i++) {
-        arr.push(item.correctInput);
-      }
-    }
 
-    return arr;
-  });
+      return arr;
+    });
 
-  setAnswers(filledAnswers);
-  setWrongInputs([]);
-  setShowResult(true);
-  setShowCorrect(true);
-};
+    setAnswers(filledAnswers);
+    setWrongInputs([]);
+    setShowResult(true);
+    setShowCorrect(true);
+  };
 
   const resetAll = () => {
     setSelected(["", ""]);
@@ -95,83 +123,81 @@ const Unit10_Page6_Q2 = () => {
   };
 
   const checkAnswers = () => {
-  if (showCorrect) return;
+    if (showCorrect) return;
 
-  // 1️⃣ لازم يكون في اختيار صورة لكل سؤال
-  if (selected.some((s) => s === "")) {
-    ValidationAlert.info("Please circle one picture in each question!");
-    return;
-  }
+    // 1️⃣ لازم يكون في اختيار صورة لكل سؤال
+    if (selected.some((s) => s === "")) {
+      ValidationAlert.info("Please circle one picture in each question!");
+      return;
+    }
 
-  // 2️⃣ لازم كل الـ inputs المطلوبة تكون معبّاية
-  for (let i = 0; i < items.length; i++) {
-    for (let j = 0; j < items[i].inputsCount; j++) {
-      if (!answers[i][j] || answers[i][j].trim() === "") {
-        ValidationAlert.info("Please write all answers!");
-        return;
+    // 2️⃣ لازم كل الـ inputs المطلوبة تكون معبّاية
+    for (let i = 0; i < items.length; i++) {
+      for (let j = 0; j < items[i].inputsCount; j++) {
+        if (!answers[i][j] || answers[i][j].trim() === "") {
+          ValidationAlert.info("Please write all answers!");
+          return;
+        }
       }
     }
-  }
 
-  let wrong = [];
-  let score = 0;
+    let wrong = [];
+    let score = 0;
 
-  items.forEach((item, i) => {
-    // 🔹 تشييك الصورة
-    if (selected[i] === item.correct) {
-      score++;
-    } else {
-      wrong.push({ qIndex: i, type: "image" });
-    }
-
-    // 🔹 تشييك الـ inputs
-    if (item.correctQuestion) {
-      // input السؤال
-      if (
-        answers[i][0].trim().toLowerCase() ===
-        item.correctQuestion.trim().toLowerCase()
-      ) {
+    items.forEach((item, i) => {
+      // 🔹 تشييك الصورة
+      if (selected[i] === item.correct) {
         score++;
       } else {
-        wrong.push({ qIndex: i, inputIndex: 0 });
+        wrong.push({ qIndex: i, type: "image" });
       }
 
-      // inputs الجواب
-      for (let j = 1; j < item.inputsCount; j++) {
+      // 🔹 تشييك الـ inputs
+      if (item.correctQuestion) {
+        // input السؤال
         if (
-          answers[i][j].trim().toLowerCase() ===
-          item.correctInput.trim().toLowerCase()
+          answers[i][0].trim().toLowerCase() ===
+          item.correctQuestion.trim().toLowerCase()
         ) {
           score++;
         } else {
-          wrong.push({ qIndex: i, inputIndex: j });
+          wrong.push({ qIndex: i, inputIndex: 0 });
+        }
+
+        // inputs الجواب
+        for (let j = 1; j < item.inputsCount; j++) {
+          if (
+            answers[i][j].trim().toLowerCase() ===
+            item.correctInput.trim().toLowerCase()
+          ) {
+            score++;
+          } else {
+            wrong.push({ qIndex: i, inputIndex: j });
+          }
+        }
+      } else {
+        // السؤال الأول
+        for (let j = 0; j < item.inputsCount; j++) {
+          if (
+            answers[i][j].trim().toLowerCase() ===
+            item.correctInput.trim().toLowerCase()
+          ) {
+            score++;
+          } else {
+            wrong.push({ qIndex: i, inputIndex: j });
+          }
         }
       }
-    } else {
-      // السؤال الأول
-      for (let j = 0; j < item.inputsCount; j++) {
-        if (
-          answers[i][j].trim().toLowerCase() ===
-          item.correctInput.trim().toLowerCase()
-        ) {
-          score++;
-        } else {
-          wrong.push({ qIndex: i, inputIndex: j });
-        }
-      }
-    }
-  });
+    });
 
-  setWrongInputs(wrong);
-  setShowResult(true);
+    setWrongInputs(wrong);
+    setShowResult(true);
 
-  const total =
-    items.reduce((sum, item) => sum + item.inputsCount + 1, 0);
+    const total = items.reduce((sum, item) => sum + item.inputsCount + 1, 0);
 
-  const color =
-    score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
-  const msg = `
+    const msg = `
     <div style="font-size:20px;text-align:center;">
       <span style="color:${color};font-weight:bold">
         Score: ${score} / ${total}
@@ -179,137 +205,218 @@ const Unit10_Page6_Q2 = () => {
     </div>
   `;
 
-  if (score === total) ValidationAlert.success(msg);
-  else if (score === 0) ValidationAlert.error(msg);
-  else ValidationAlert.warning(msg);
-};
-
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
+  };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">E</span> Look, read, circle, and write.
-        </h5>
-
-        <div className="question-grid-unit10-page6-q2">
-          {items.map((item, i) => (
-            <div className="question-box-unit4-page5-q1" key={i}>
-              <div className="choices-unit4-page5-q1">
-                {item.images.map((imgObj, idx) => (
-                  <div
-                    key={idx}
-                    className={`circle-wrapper-unit10-page6-q2 ${
-                      selected[i] === imgObj.value ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect(imgObj.value, i)}
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">E</span> Look, read, circle, and write.
+          </h5>
+          <Droppable droppableId="word-bank" isDropDisabled={showCorrect}>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-unit2-p8-q2"
+              >
+                {wordBank.map((word, index) => (
+                  <Draggable
+                    key={word}
+                    draggableId={`word-${word}`}
+                    index={index}
+                    isDragDisabled={showCorrect}
                   >
-                    <img
-                      src={imgObj.img}
-                      className="q-img-unit10-page6-q2"
-                      alt=""
-                    />
-
-                    {showResult &&
-                      selected[i] === imgObj.value &&
-                      imgObj.value !== item.correct && (
-                        <div className="wrong-mark">✕</div>
-                      )}
-                  </div>
-                ))}
-              </div>
-
-              {item.question.length ? (
-                <p className="question-text">{item.question}</p>
-              ) : null}
-
-              <div className="input-wrapper-unit10-page6-q2">
-                {/* 🔹 input السؤال (بسطر لحاله) */}
-                {item.correctQuestion && (
-                  <div style={{ width: "100%", position: "relative" }}>
-                    <input
-                      type="text"
-                      className={`write-input-unit4-page5-q1 question-input-unit10-p6-q2 ${
-                        showCorrect ? "correct-color" : ""
-                      }`}
-                      value={answers[i][0]}
-                      onChange={(e) => handleInput(e.target.value, i, 0)}
-                    />
-                    {showResult && wrongInputs.includes(i) && (
-                      <div className="wrong-mark-unit10-p6-q2">✕</div>
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {word}
+                      </span>
                     )}
-                  </div>
-                )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-                {/* 🔹 input/inputs الإجابة */}
-                {Array.from({
-                  length: item.correctQuestion
-                    ? item.inputsCount - 1
-                    : item.inputsCount,
-                }).map((_, idx) => {
-                  const inputIndex = item.correctQuestion ? idx + 1 : idx;
-
-                  return (
+          <div className="question-grid-unit10-page6-q2">
+            {items.map((item, i) => (
+              <div className="question-box-unit4-page5-q1" key={i}>
+                <div className="choices-unit4-page5-q1">
+                  {item.images.map((imgObj, idx) => (
                     <div
-                      key={inputIndex}
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "flex-end",
-                      }}
+                      key={idx}
+                      className={`circle-wrapper-unit10-page6-q2 ${
+                        selected[i] === imgObj.value ? "active" : ""
+                      }`}
+                      onClick={() => handleSelect(imgObj.value, i)}
                     >
-                      <input
-                        type="text"
-                        className={`write-input-unit4-page5-q1 ${
-                          showCorrect ? "correct-color" : ""
-                        }`}
-                        value={answers[i][inputIndex]}
-                        onChange={(e) =>
-                          handleInput(e.target.value, i, inputIndex)
-                        }
+                      <img
+                        src={imgObj.img}
+                        className="q-img-unit10-page6-q2"
+                        alt=""
                       />
 
-                      {showResult && wrongInputs.includes(i) && (
-                        <div className="wrong-mark-unit10-p6-q2">✕</div>
-                      )}
-                      <span>{item.afterAnswer}</span>
+                      {showResult &&
+                        selected[i] === imgObj.value &&
+                        imgObj.value !== item.correct && (
+                          <div className="wrong-mark">✕</div>
+                        )}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+
+                {item.question.length ? (
+                  <p className="question-text">{item.question}</p>
+                ) : null}
+
+                <div className="input-wrapper-unit10-page6-q2">
+                  {/* 🔹 input السؤال (بسطر لحاله) */}
+                  {item.correctQuestion && (
+                    <div style={{ width: "100%", position: "relative" }}>
+                      <Droppable
+                        droppableId={`slot-${i}-${0}`}
+                        isDropDisabled={showCorrect}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className={`write-input-unit4-page5-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
+                          >
+                            {answers[i][0] && (
+                              <Draggable
+                                draggableId={`filled-${answers[i][0]}-${i}-${0}`}
+                                index={0}
+                                isDragDisabled={showCorrect}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {answers[i][0]}
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+
+                      {wrongInputs.some(
+                        (w) => w.qIndex === i && w.inputIndex === 0,
+                      ) && <div className="wrong-mark-unit10-p6-q2">✕</div>}
+                    </div>
+                  )}
+
+                  {/* 🔹 input/inputs الإجابة */}
+                  {Array.from({
+                    length: item.correctQuestion
+                      ? item.inputsCount - 1
+                      : item.inputsCount,
+                  }).map((_, idx) => {
+                    const inputIndex = item.correctQuestion ? idx + 1 : idx;
+
+                    return (
+                      <div
+                        key={inputIndex}
+                        style={{
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "flex-end",
+                          width: "100%",
+                        }}
+                      >
+                        <Droppable
+                          droppableId={`slot-${i}-${inputIndex}`}
+                          isDropDisabled={showCorrect}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`write-input-unit4-page5-q1 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
+                            >
+                              {answers[i][inputIndex] && (
+                                <Draggable
+                                  draggableId={`filled-${answers[i][inputIndex]}-${i}-${inputIndex}`}
+                                  index={0}
+                                  isDragDisabled={showCorrect}
+                                >
+                                  {(provided) => (
+                                    <span
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      {answers[i][inputIndex]}
+                                    </span>
+                                  )}
+                                </Draggable>
+                              )}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+
+                        {wrongInputs.some(
+                          (w) => w.qIndex === i && w.inputIndex === 0,
+                        ) && <div className="wrong-mark-unit10-p6-q2">✕</div>}
+                        <span>{item.afterAnswer}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        <div className="action-buttons-container">
+          <button onClick={resetAll} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={showAnswers} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-
-      <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={showAnswers} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

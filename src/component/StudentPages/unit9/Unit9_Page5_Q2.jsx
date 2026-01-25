@@ -4,6 +4,8 @@ import cap from "../../../assets/unit9/imgs/U9P80EXEA2-02.svg";
 import ant from "../../../assets/unit9/imgs/U9P80EXEA2-03.svg";
 import dad from "../../../assets/unit9/imgs/U9P80EXEA2-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import "./Unit9_Page5_Q2.css";
 import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
@@ -11,8 +13,25 @@ import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 const Unit9_Page5_Q2 = () => {
   const correctAnswers = ["m", "n", "n", "m"];
-  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [answers, setAnswers] = useState([null, null, null, null]);
   const [wrongInputs, setWrongInputs] = useState([]);
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    const value = draggableId.replace("letter-", "");
+    const index = Number(destination.droppableId.split("-")[1]);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
+
+    setWrongInputs([]);
+  };
+
   const stopAtSecond = 11;
 
   const audioRef = useRef(null);
@@ -72,13 +91,7 @@ const Unit9_Page5_Q2 = () => {
 
     return () => clearInterval(timer);
   }, []);
-  const handleChange = (value, index) => {
-    if (showAnswer) return;
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
+
   const handleShowAnswer = () => {
     setAnswers([...correctAnswers]); // املي الأجوبة الصحيحة
     setWrongInputs([]); // ما في غلط عند عرض الحل
@@ -127,7 +140,7 @@ const Unit9_Page5_Q2 = () => {
   const reset = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
-    setShowAnswer(false)
+    setShowAnswer(false);
   };
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -145,225 +158,350 @@ const Unit9_Page5_Q2 = () => {
     }
   };
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",padding:"30px"
-      }}
-    >
-      <div className="div-forall"
-        style={{ 
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        className="question-wrapper-unit3-page6-q1"
+        style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span style={{ color: "purple" }}>2</span>Does it begin with{" "}
-          <span style={{ color: "red" }}>m</span> or{" "}
-          <span style={{ color: "red" }}>n</span>? Listen and write.
-        </h5>
         <div
+          className="div-forall"
           style={{
             display: "flex",
-            justifyContent: "center",
-            width: "100%",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
           }}
         >
+          <h5 className="header-title-page8">
+            <span style={{ color: "purple" }}>2</span>Does it begin with{" "}
+            <span style={{ color: "red" }}>m</span> or{" "}
+            <span style={{ color: "red" }}>n</span>? Listen and write.
+          </h5>
+
           <div
-            className="audio-popup-read"
             style={{
-              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
             }}
           >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
-
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
+            <div
+              className="audio-popup-read"
+              style={{
+                width: "50%",
+              }}
+            >
+              <div className="audio-inner player-ui">
+                <audio
+                  ref={audioRef}
+                  src={sound}
+                  onTimeUpdate={(e) => {
+                    const time = e.target.currentTime;
+                    setCurrent(time);
                   }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                ></audio>
+                {/* الوقت - السلايدر - الوقت */}
+                <div className="top-row">
+                  <span className="audio-time">
+                    {new Date(current * 1000).toISOString().substring(14, 19)}
+                  </span>
 
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div className={`round-btn ${showCaption ? "active" : ""}`}>
-                  <TbMessageCircle size={36} />
+                  <input
+                    type="range"
+                    className="audio-slider"
+                    min="0"
+                    max={duration}
+                    value={current}
+                    onChange={(e) => {
+                      audioRef.current.currentTime = e.target.value;
+                      updateCaption(Number(e.target.value));
+                    }}
+                    style={{
+                      background: `linear-gradient(to right, #430f68 ${
+                        (current / duration) * 100
+                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                    }}
+                  />
+
+                  <span className="audio-time">
+                    {new Date(duration * 1000).toISOString().substring(14, 19)}
+                  </span>
                 </div>
+                {/* الأزرار 3 أزرار بنفس السطر */}
+                <div className="bottom-row">
+                  {/* فقاعة */}
+                  <div className={`round-btn ${showCaption ? "active" : ""}`}>
+                    <TbMessageCircle size={36} />
+                  </div>
 
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <IoMdSettings size={36} />
+                  {/* Play */}
+                  <button className="play-btn2" onClick={togglePlay}>
+                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                   </button>
 
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
+                  {/* Settings */}
+                  <div className="settings-wrapper" ref={settingsRef}>
+                    <button
+                      className={`round-btn ${showSettings ? "active" : ""}`}
+                      onClick={() => setShowSettings(!showSettings)}
+                    >
+                      <IoMdSettings size={36} />
+                    </button>
+
+                    {showSettings && (
+                      <div className="settings-popup">
+                        <label>Volume</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => {
+                            setVolume(e.target.value);
+                            audioRef.current.volume = e.target.value;
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>{" "}
+              </div>
+            </div>
+          </div>
+          <Droppable droppableId="bank" isDropDisabled={showAnswer}>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-unit9-p5-q2"
+              >
+                {["m", "n"].map((letter, index) => (
+                  <Draggable
+                    key={letter}
+                    draggableId={`letter-${letter}`}
+                    index={index}
+                    isDragDisabled={showAnswer}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {letter}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div className="row-content10-unit3-page6-q1">
+            <div className="row2-unit3-page6-q1">
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span className="num-span">1</span>{" "}
+                <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+              </div>
+              <span style={{ position: "relative", display: "flex" }}>
+                <div className="input-wrapper-unit3-page6-q1">
+                  <Droppable droppableId="slot-0" isDropDisabled={showAnswer}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        } ${showAnswer ? "red-text" : ""}`}
+                      >
+                        {answers[0] && (
+                          <Draggable
+                            draggableId={`filled-${answers[0]}-0`}
+                            index={0}
+                            isDragDisabled={showAnswer}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[0]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  {wrongInputs.includes(0) && (
+                    <span className="error-mark-input">✕</span>
                   )}
                 </div>
-              </div>{" "}
+              </span>
+            </div>
+
+            <div className="row2-unit3-page6-q1">
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span className="num-span">2</span>{" "}
+                <img src={cap} alt="" className="q-img-unit3-page6-q1" />
+              </div>
+              <span style={{ position: "relative", display: "flex" }}>
+                <div className="input-wrapper-unit3-page6-q1">
+                  <Droppable droppableId="slot-1" isDropDisabled={showAnswer}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        } ${showAnswer ? "red-text" : ""}`}
+                      >
+                        {answers[1] && (
+                          <Draggable
+                            draggableId={`filled-${answers[1]}-0`}
+                            index={0}
+                            isDragDisabled={showAnswer}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[1]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  {wrongInputs.includes(1) && (
+                    <span className="error-mark-input">✕</span>
+                  )}
+                </div>
+              </span>
+            </div>
+
+            <div className="row2-unit3-page6-q1">
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span className="num-span">3</span>{" "}
+                <img src={ant} alt="" className="q-img-unit3-page6-q1" />
+              </div>
+              <span style={{ position: "relative", display: "flex" }}>
+                <div className="input-wrapper-unit3-page6-q1">
+                  <Droppable droppableId="slot-2" isDropDisabled={showAnswer}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        } ${showAnswer ? "red-text" : ""}`}
+                      >
+                        {answers[2] && (
+                          <Draggable
+                            draggableId={`filled-${answers[2]}-0`}
+                            index={0}
+                            isDragDisabled={showAnswer}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[2]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  {wrongInputs.includes(2) && (
+                    <span className="error-mark-input">✕</span>
+                  )}
+                </div>
+              </span>
+            </div>
+
+            <div className="row2-unit3-page6-q1">
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span className="num-span">4</span>{" "}
+                <img src={dad} alt="" className="q-img-unit3-page6-q1" />
+              </div>
+              <span style={{ position: "relative", display: "flex" }}>
+                <div className="input-wrapper-unit3-page6-q1">
+                  <Droppable droppableId="slot-3" isDropDisabled={showAnswer}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        } ${showAnswer ? "red-text" : ""}`}
+                      >
+                        {answers[3] && (
+                          <Draggable
+                            draggableId={`filled-${answers[3]}-0`}
+                            index={0}
+                            isDragDisabled={showAnswer}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[3]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  {wrongInputs.includes(3) && (
+                    <span className="error-mark-input">✕</span>
+                  )}
+                </div>
+              </span>
             </div>
           </div>
         </div>
-        <div className="row-content10-unit3-page6-q1">
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">1</span>{" "}
-              <img src={bat} alt="" className="q-img-unit3-page6-q1" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 0)}
-                  value={answers[0]}
-                />
-                {wrongInputs.includes(0) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">2</span>{" "}
-              <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 1)}
-                  value={answers[1]}
-                />{" "}
-                {wrongInputs.includes(1) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">3</span>{" "}
-              <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 2)}
-                  value={answers[2]}
-                />{" "}
-                {wrongInputs.includes(2) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">4</span>{" "}
-              <img src={dad} alt="" className="q-img-unit3-page6-q1" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 3)}
-                  value={answers[3]}
-                />{" "}
-                {wrongInputs.includes(3) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

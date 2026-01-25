@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import bat from "../../../assets/unit8/imgs/U8P71EXED-01.svg";
 import cap from "../../../assets/unit8/imgs/U8P71EXED-02.svg";
 import ant from "../../../assets/unit8/imgs/U8P71EXED-03.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review7_Page2_Q1.css";
@@ -17,6 +18,26 @@ const Review7_Page2_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showCorrect) return;
+
+    const value = draggableId.replace("word-", "");
+    const index = Number(destination.droppableId.split("-")[1]);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      // منع التكرار
+      const oldIndex = updated.findIndex((a) => a === value);
+      if (oldIndex !== -1) updated[oldIndex] = "";
+
+      updated[index] = value;
+      return updated;
+    });
+
+    setShowResult(false);
+  };
 
   const handleSelect = (value, index) => {
     if (showCorrect) return;
@@ -35,14 +56,6 @@ const Review7_Page2_Q1 = () => {
     setWrongInputs([]);
     setShowResult(true);
     setShowCorrect(true);
-  };
-
-  const handleInput = (value, index) => {
-    if (showCorrect) return;
-    const newAns = [...answers];
-    newAns[index] = value;
-    setAnswers(newAns);
-    setShowResult(false);
   };
 
   const resetAll = () => {
@@ -108,111 +121,167 @@ const Review7_Page2_Q1 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          D Does it begin with <span style={{ color: "red" }}>h </span>or{" "}
-          <span style={{ color: "red" }}>w</span>? Look, circle, and write.
-        </h5>
-
-        <div className="question-grid-review7-p2-q1">
-          {items.map((item, i) => (
-            <div className="question-box-unit4-page5-q1" key={i}>
-              <img src={item.img} className="q-img-unit4-page5-q1" />
-
-              {/* f / v choices */}
-              <div className="choices-unit4-page5-q1">
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-unit4-page5-q1 ${
-                      selected[i] === "h" ? "active" : ""
-                    } ${showCorrect ? "correct-color" : ""}`}
-                    onClick={() => handleSelect("h", i)}
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            D Does it begin with <span style={{ color: "red" }}>h </span>or{" "}
+            <span style={{ color: "red" }}>w</span>? Look, circle, and write.
+          </h5>
+          <Droppable droppableId="bank" isDropDisabled={showCorrect}>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-review7-p2-q1"
+              >
+                {items.map((item, index) => (
+                  <Draggable
+                    key={item.correctInput}
+                    draggableId={`word-${item.correctInput}`}
+                    index={index}
+                    isDragDisabled={showCorrect}
                   >
-                    h
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {item.correctInput}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="question-grid-review7-p2-q1">
+            {items.map((item, i) => (
+              <div className="question-box-unit4-page5-q1" key={i}>
+                <img src={item.img} className="q-img-unit4-page5-q1" />
+
+                {/* f / v choices */}
+                <div className="choices-unit4-page5-q1">
+                  <div className="circle-wrapper">
+                    <div
+                      className={`circle-choice-unit4-page5-q1 ${
+                        selected[i] === "h" ? "active" : ""
+                      } ${showCorrect ? "correct-color" : ""}`}
+                      onClick={() => handleSelect("h", i)}
+                    >
+                      h
+                    </div>
+
+                    {/* X فوق دائرة f إذا كانت غلط */}
+                    {showResult &&
+                      selected[i] === "h" &&
+                      selected[i] !== item.correct && (
+                        <div className="wrong-mark">✕</div>
+                      )}
                   </div>
 
-                  {/* X فوق دائرة f إذا كانت غلط */}
-                  {showResult &&
-                    selected[i] === "w" &&
-                    selected[i] !== item.correct && (
-                      <div className="wrong-mark">✕</div>
-                    )}
+                  <div className="circle-wrapper">
+                    <div
+                      className={`circle-choice-unit4-page5-q1 ${
+                        selected[i] === "w" ? "active" : ""
+                      } ${showCorrect ? "correct-color" : ""}`}
+                      onClick={() => handleSelect("w", i)}
+                    >
+                      w
+                    </div>
+
+                    {/* X فوق دائرة v إذا كانت غلط */}
+                    {showResult &&
+                      selected[i] === "w" &&
+                      selected[i] !== item.correct && (
+                        <div className="wrong-mark">✕</div>
+                      )}
+                  </div>
                 </div>
 
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-unit4-page5-q1 ${
-                      selected[i] === "w" ? "active" : ""
-                    } ${showCorrect ? "correct-color" : ""}`}
-                    onClick={() => handleSelect("w", i)}
+                {/* writing input */}
+                <div className="input-wrapper">
+                  <Droppable
+                    droppableId={`slot-${i}`}
+                    isDropDisabled={showCorrect}
                   >
-                    w
-                  </div>
-
-                  {/* X فوق دائرة v إذا كانت غلط */}
-                  {showResult &&
-                    selected[i] === "w" &&
-                    selected[i] !== item.correct && (
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`write-input-unit4-page5-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        } ${showCorrect ? "correct-color" : ""}`}
+                      >
+                        {answers[i] && (
+                          <Draggable
+                            draggableId={`filled-${answers[i]}-${i}`}
+                            index={0}
+                            isDragDisabled={showCorrect}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[i]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}{" "}
+                      </div>
+                    )}
+                  </Droppable>
+                  {/* X فوق الإنبت إذا كانت الكلمة غلط */}
+                  {
+                    answers[i].trim() !== "" &&
+                    answers[i].trim().toLowerCase() !==
+                      item.correctInput.toLowerCase() &&
+                    wrongInputs.includes(i) && (
                       <div className="wrong-mark">✕</div>
                     )}
                 </div>
               </div>
+            ))}
+          </div>
+        </div>{" "}
+        <div className="action-buttons-container">
+          <button onClick={resetAll} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={showAnswers} className="show-answer-btn">
+            Show Answer
+          </button>
 
-              {/* writing input */}
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  className={`write-input-unit4-page5-q1 ${
-                    showCorrect ? "correct-color" : ""
-                  }`}
-                  value={answers[i]}
-                  onChange={(e) => handleInput(e.target.value, i)}
-                />
-
-                {/* X فوق الإنبت إذا كانت الكلمة غلط */}
-                {showResult &&
-                  answers[i].trim() !== "" &&
-                  answers[i].trim().toLowerCase() !==
-                    item.correctInput.toLowerCase() &&
-                  wrongInputs.includes(i) && (
-                    <div className="wrong-mark">✕</div>
-                  )}
-              </div>
-            </div>
-          ))}
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
-      </div>{" "}
-      <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={showAnswers} className="show-answer-btn">
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

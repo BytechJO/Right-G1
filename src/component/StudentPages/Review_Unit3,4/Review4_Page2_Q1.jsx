@@ -12,6 +12,7 @@ import img3 from "../../../assets/unit4/imgs/U4P37EEXEE-02-01.svg";
 import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
 import img5 from "../../../assets/unit4/imgs/U4P37EEXEE-03-01.svg";
 import img6 from "../../../assets/unit4/imgs/U4P37EEXEE-03-02.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { TbMessageCircle } from "react-icons/tb";
 
 const data = [
@@ -70,7 +71,7 @@ const data = [
 
 const Review4_Page2_Q1 = () => {
   const [answers, setAnswers] = useState(
-    data.map((d) => Array(d.correct.length).fill(""))
+    data.map((d) => Array(d.correct.length).fill("")),
   );
   const [wrongInputs, setWrongInputs] = useState([]);
   const audioRef = useRef(null);
@@ -89,6 +90,28 @@ const Review4_Page2_Q1 = () => {
   const [showCaption, setShowCaption] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
 
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
+
+    const letter = draggableId.replace("letter-", "");
+    const [qIndex, blankIndex] = destination.droppableId
+      .replace("slot-", "")
+      .split("-")
+      .map(Number);
+
+    setAnswers((prev) => {
+      const updated = prev.map((row) => [...row]);
+
+  
+
+      updated[qIndex][blankIndex] = letter;
+      return updated;
+    });
+
+    setWrongInputs([]);
+  };
+
   // ================================
   // ✔ Captions Array
   // ================================
@@ -103,17 +126,16 @@ const Review4_Page2_Q1 = () => {
       end: 9.05,
       text: "1. The fork is on the vet. ",
     },
-    { start: 9.07, end: 12.20, text: "2. The fish is in the van. " },
+    { start: 9.07, end: 12.2, text: "2. The fish is in the van. " },
     { start: 12.22, end: 16.16, text: "3. The vest is on my feet." },
-
   ];
-  
+
   // ================================
   // ✔ Update caption highlight
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -166,19 +188,12 @@ const Review4_Page2_Q1 = () => {
   }, [activeIndex]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
-  const handleChange = (value, qIndex, blankIndex) => {
-    if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
 
-    const newAnswers = [...answers];
-    newAnswers[qIndex][blankIndex] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
     // 1) افحص إذا في أي خانة فاضية
     const hasEmpty = answers.some((arr) =>
-      arr.some((val) => val.trim() === "")
+      arr.some((val) => val.trim() === ""),
     );
 
     if (hasEmpty) {
@@ -205,7 +220,7 @@ const Review4_Page2_Q1 = () => {
     // 3) احسب العدد الكلي للحقول
     const totalInputs = data.reduce(
       (acc, item) => acc + item.correct.length,
-      0
+      0,
     );
 
     // 4) اختر اللون حسب السكور
@@ -213,8 +228,8 @@ const Review4_Page2_Q1 = () => {
       correctCount === totalInputs
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size:20px; text-align:center;">
@@ -258,195 +273,252 @@ const Review4_Page2_Q1 = () => {
     }
   };
   return (
-    <div className="page8-wrapper">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
-      >
-        <h3 className="header-title-page8">
-          E Listen and write the missing letters.
-        </h3>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="page8-wrapper">
         <div
+          className="div-forall"
           style={{
             display: "flex",
-            justifyContent: "center",
-            marginTop: "30px",
-            width: "100%",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
           }}
         >
+          <h3 className="header-title-page8">
+            E Listen and write the missing letters.
+          </h3>
           <div
-            className="audio-popup-read"
             style={{
-              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "30px",
+              width: "100%",
             }}
           >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound1}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
-
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
+            <div
+              className="audio-popup-read"
+              style={{
+                width: "50%",
+              }}
+            >
+              <div className="audio-inner player-ui">
+                <audio
+                  ref={audioRef}
+                  src={sound1}
+                  onTimeUpdate={(e) => {
+                    const time = e.target.currentTime;
+                    setCurrent(time);
+                    updateCaption(time);
                   }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                ></audio>
+                {/* Play / Pause */}
+                {/* Play / Pause */}
+                {/* الوقت - السلايدر - الوقت */}
+                <div className="top-row">
+                  <span className="audio-time">
+                    {new Date(current * 1000).toISOString().substring(14, 19)}
+                  </span>
 
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  style={{ position: "relative" }}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                  <div
-                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                    style={{ top: "100%", left: "10%" }}
-                  >
-                    {captions.map((cap, i) => (
-                      <p
-                        key={i}
-                        id={`caption-${i}`}
-                        className={`caption-inPopup-line2 ${
-                          activeIndex === i ? "active" : ""
-                        }`}
-                      >
-                        {cap.text}
-                      </p>
-                    ))}
-                  </div>
+                  <input
+                    type="range"
+                    className="audio-slider"
+                    min="0"
+                    max={duration}
+                    value={current}
+                    onChange={(e) => {
+                      audioRef.current.currentTime = e.target.value;
+                      updateCaption(Number(e.target.value));
+                    }}
+                    style={{
+                      background: `linear-gradient(to right, #430f68 ${
+                        (current / duration) * 100
+                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                    }}
+                  />
+
+                  <span className="audio-time">
+                    {new Date(duration * 1000).toISOString().substring(14, 19)}
+                  </span>
                 </div>
-
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
+                {/* الأزرار 3 أزرار بنفس السطر */}
+                <div className="bottom-row">
+                  {/* فقاعة */}
+                  <div
+                    className={`round-btn ${showCaption ? "active" : ""}`}
+                    style={{ position: "relative" }}
+                    onClick={() => setShowCaption(!showCaption)}
                   >
-                    <IoMdSettings size={36} />
+                    <TbMessageCircle size={36} />
+                    <div
+                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                      style={{ top: "100%", left: "10%" }}
+                    >
+                      {captions.map((cap, i) => (
+                        <p
+                          key={i}
+                          id={`caption-${i}`}
+                          className={`caption-inPopup-line2 ${
+                            activeIndex === i ? "active" : ""
+                          }`}
+                        >
+                          {cap.text}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Play */}
+                  <button className="play-btn2" onClick={togglePlay}>
+                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                   </button>
 
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>{" "}
-            </div>
-          </div>
-        </div>
-        {data.map((item, qIndex) => (
-          <div className="row-missing" key={qIndex}>
-            <span className="num">{qIndex + 1}.</span>
+                  {/* Settings */}
+                  <div className="settings-wrapper" ref={settingsRef}>
+                    <button
+                      className={`round-btn ${showSettings ? "active" : ""}`}
+                      onClick={() => setShowSettings(!showSettings)}
+                    >
+                      <IoMdSettings size={36} />
+                    </button>
 
-            <div className="sentence-review4-p2-q1">
-              {item.parts.map((p, blankIndex) => (
-                <span
-                  key={blankIndex}
-                  className="sentence-part"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  {p.before}
-
-                  <div className="input-wrapper">
-                    <input
-                      className="missing-input-review4-p2-q1"
-                      maxLength="2"
-                      value={answers[qIndex][blankIndex]}
-                      onChange={(e) =>
-                        handleChange(e.target.value, qIndex, blankIndex)
-                      }
-                      readOnly={locked} // ⭐ NEW — منع التعديل بعد Show Answer
-                    />
-                    {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
-                      <span className="wrong-icon-review4-p2-q1">✕</span>
+                    {showSettings && (
+                      <div className="settings-popup">
+                        <label>Volume</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => {
+                            setVolume(e.target.value);
+                            audioRef.current.volume = e.target.value;
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
-
-                  {p.after}
-                  <img src={p.middleImg} className="middle-img" alt="" />
-                </span>
-              ))}
+                </div>{" "}
+              </div>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setAnswers(data.map((d) => Array(d.correct.length).fill("")));
-            setWrongInputs([]);
-            setLocked(false); // ⭐ NEW — فتح التعديل من جديد
-          }}
-        >
-          Start Again ↻
-        </button>
 
-        {/* ⭐⭐⭐ NEW BUTTON */}
-        <button onClick={showAnswer} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
+          <Droppable droppableId="letters" isDropDisabled>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-review4-p2-q1"
+              >
+                {["f", "b", "v"].map((l, i) => (
+                  <Draggable
+                    key={l}
+                    draggableId={`letter-${l}`}
+                    index={i}
+                    isDragDisabled={locked}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {l}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
-        </button>
+          {data.map((item, qIndex) => (
+            <div className="row-missing" key={qIndex}>
+              <span className="num">{qIndex + 1}.</span>
+
+              <div className="sentence-review4-p2-q1">
+                {item.parts.map((p, blankIndex) => (
+                  <span
+                    key={blankIndex}
+                    className="sentence-part"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    {p.before}
+
+                    <div className="input-wrapper">
+                      <Droppable droppableId={`slot-${qIndex}-${blankIndex}`}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="missing-input-review4-p2-q1"
+                          >
+                            {answers[qIndex][blankIndex] && (
+                              <Draggable
+                                draggableId={`filled-${answers[qIndex][blankIndex]}`}
+                                index={0}
+                                isDragDisabled={locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {answers[qIndex][blankIndex]}
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+
+                      {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
+                        <span className="wrong-icon-review4-p2-q1">✕</span>
+                      )}
+                    </div>
+
+                    {p.after}
+                    <img src={p.middleImg} className="middle-img" alt="" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="action-buttons-container">
+          <button
+            className="try-again-button"
+            onClick={() => {
+              setAnswers(data.map((d) => Array(d.correct.length).fill("")));
+              setWrongInputs([]);
+              setLocked(false); // ⭐ NEW — فتح التعديل من جديد
+            }}
+          >
+            Start Again ↻
+          </button>
+
+          {/* ⭐⭐⭐ NEW BUTTON */}
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answers ✓
+          </button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

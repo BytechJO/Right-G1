@@ -4,10 +4,10 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import imgDown1 from "../../../assets/unit8/imgs/U8P70EXEA-01.svg";
 import imgDown2 from "../../../assets/unit8/imgs/U8P70EXEA-02.svg";
 import imgDown3 from "../../../assets/unit8/imgs/U8P70EXEA-03.svg";
-
 import imgAcross1 from "../../../assets/unit8/imgs/U8P70EXEA-04.svg";
 import imgAcross2 from "../../../assets/unit8/imgs/U8P70EXEA-05.svg";
 import imgAcross3 from "../../../assets/unit8/imgs/U8P70EXEA-06.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const crosswordStructure = [
   // Row 1 (10 columns)
@@ -43,11 +43,12 @@ const solution = [
 export default function Review7_Page1_Q1() {
   const [userGrid, setUserGrid] = useState(
     crosswordStructure.map((row) =>
-      row.map((cell) => (cell === "W" || /[1-9]/.test(cell) ? "" : null))
-    )
+      row.map((cell) => (cell === "W" || /[1-9]/.test(cell) ? "" : null)),
+    ),
   );
   const [wrongCells, setWrongCells] = useState([]);
   const [showAnswers, setShowAnswers] = useState(false);
+  const letters = "abcdefghijklmnopqrstuvwxyz".split("");
 
   const findCellPosition = (num) => {
     for (let r = 0; r < crosswordStructure.length; r++) {
@@ -96,7 +97,7 @@ export default function Review7_Page1_Q1() {
     // 2) لو في خانة فاضية → alert
     if (hasEmptyCell) {
       return ValidationAlert.info(
-        `<div style="font-size:20px; text-align:center;">Please fill all cells before checking.</div>`
+        `<div style="font-size:20px; text-align:center;">Please fill all cells before checking.</div>`,
       );
     }
 
@@ -126,7 +127,7 @@ export default function Review7_Page1_Q1() {
 
     // 4) تحديث الخلايا الخاطئة
     setWrongCells(Array.from(wrongSet));
-
+    setShowAnswers(true)
     // عدد الخلايا الصحيحة الحقيقي
     const correctFilledCells = correctSet.size;
 
@@ -135,8 +136,8 @@ export default function Review7_Page1_Q1() {
       correctFilledCells === totalInputCells
         ? "green"
         : correctFilledCells === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size: 20px; text-align:center;">
@@ -156,12 +157,18 @@ export default function Review7_Page1_Q1() {
     }
   };
 
-  const handleChange = (r, c, value) => {
-    const letter = value.slice(-1).toLowerCase();
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswers) return;
+
+    const letter = draggableId.replace("letter-", "");
+    const [r, c] = destination.droppableId.split("-").map(Number);
+
     const updated = [...userGrid];
     updated[r][c] = letter;
     setUserGrid(updated);
   };
+
   const handleShowAnswers = () => {
     const updated = [...userGrid];
 
@@ -185,148 +192,235 @@ export default function Review7_Page1_Q1() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <div className="crossword-container">
-          <h3 className="header-title-page8">
-            A Look and complete the puzzle.
-          </h3>
-          {/* ===================== الصور ===================== */}
-          <div className="grid-container-review7-p1-q1">
-            <div className="puzzle-images-box-review7-p1-q1">
-              <div className="column-box-review7-p1-q1">
-                <h4 className="label">Down</h4>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div className="crossword-container">
+            <h3 className="header-title-page8">
+              A Look and complete the puzzle.
+            </h3>
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">1</span>
-                  <img src={imgDown1} alt="down1" />
+            <Droppable droppableId="letters-bank" isDropDisabled>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="word-bank-unit2-p8-q2"
+                >
+                  {letters.map((l, index) => (
+                    <Draggable
+                      key={l + index}
+                      draggableId={`letter-${l}`}
+                      index={index}
+                      isDragDisabled={showAnswers}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-item-unit2-p8-q2"
+                        >
+                          {l}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
+            {/* ===================== الصور ===================== */}
+            <div className="grid-container-review7-p1-q1">
+              <div className="puzzle-images-box-review7-p1-q1">
+                <div className="column-box-review7-p1-q1">
+                  <h4 className="label">Down</h4>
+
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">1</span>
+                    <img src={imgDown1} alt="down1" />
+                  </div>
+
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">2</span>
+                    <img src={imgDown2} alt="down2" />
+                  </div>
+
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">3</span>
+                    <img src={imgDown3} alt="down3" />
+                  </div>
                 </div>
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">2</span>
-                  <img src={imgDown2} alt="down2" />
-                </div>
+                <div className="column-box-review7-p1-q1">
+                  <h4 className="label">Across</h4>
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">3</span>
-                  <img src={imgDown3} alt="down3" />
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">2</span>
+                    <img src={imgAcross1} alt="across2" />
+                  </div>
+
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">3</span>
+                    <img src={imgAcross2} alt="across3" />
+                  </div>
+
+                  <div className="img-item-review7-p1-q1">
+                    <span className="num">4</span>
+                    <img src={imgAcross3} alt="across4" />
+                  </div>
                 </div>
               </div>
 
-              <div className="column-box-review7-p1-q1">
-                <h4 className="label">Across</h4>
+              <div className="crossword-grid">
+                {crosswordStructure.map((row, r) => (
+                  <div key={r} className="row-review7-p1-q1">
+                    {row.map((cell, c) => {
+                      const isBlock = cell === "B";
+                      const isNumber = /[1-9]/.test(cell);
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">2</span>
-                  <img src={imgAcross1} alt="across2" />
-                </div>
+                      return (
+                        <div
+                          key={r + "-" + c}
+                          className={`cell2 ${isBlock ? "block" : "white"}`}
+                        >
+                          {/* رقم + input */}
+                          {isNumber && (
+                            <>
+                              <span className="number">{cell}</span>
+                              <Droppable
+                                droppableId={`${r}-${c}`}
+                                isDropDisabled={showAnswers}
+                              >
+                                {(provided,snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                       className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
+                                  >
+                                    {userGrid[r][c] && (
+                                      <Draggable
+                                        draggableId={`filled-${r}-${c}-${userGrid[r][c]}`}
+                                        index={0}
+                                        isDragDisabled={showAnswers}
+                                      >
+                                        {(provided) => (
+                                          <span
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            {userGrid[r][c]}
+                                          </span>
+                                        )}
+                                      </Draggable>
+                                    )}
+                                    {provided.placeholder}
+                                  </div>
+                                )}
+                              </Droppable>
+                            </>
+                          )}
+                          {/* خانة بيضاء أو رقم */}
+                          {!isBlock && !isNumber && (
+                            <>
+                              {isNumber && (
+                                <span className="number">{cell}</span>
+                              )}
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">3</span>
-                  <img src={imgAcross2} alt="across3" />
-                </div>
+                              <Droppable
+                                droppableId={`${r}-${c}`}
+                                isDropDisabled={showAnswers}
+                              >
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                    className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
+                                  >
+                                    {userGrid[r][c] && (
+                                      <Draggable
+                                        draggableId={`filled-${r}-${c}-${userGrid[r][c]}`}
+                                        index={0}
+                                        isDragDisabled={showAnswers}
+                                      >
+                                        {(provided) => (
+                                          <span
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            {userGrid[r][c]}
+                                          </span>
+                                        )}
+                                      </Draggable>
+                                    )}
+                                    {provided.placeholder}
+                                  </div>
+                                )}
+                              </Droppable>
+                            </>
+                          )}
 
-                <div className="img-item-review7-p1-q1">
-                  <span className="num">4</span>
-                  <img src={imgAcross3} alt="across4" />
-                </div>
+                          {/* ❌ دائرة فوق اليمين للخطأ */}
+                          {!isBlock && wrongCells.includes(`${r}-${c}`) && (
+                            <span className="error-badge-review7-p1-q1">✕</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
-            </div>
-
-            <div className="crossword-grid">
-              {crosswordStructure.map((row, r) => (
-                <div key={r} className="row-review7-p1-q1">
-                  {row.map((cell, c) => {
-                    const isBlock = cell === "B";
-                    const isNumber = /[1-9]/.test(cell);
-
-                    return (
-                      <div
-                        key={r + "-" + c}
-                        className={`cell2 ${isBlock ? "block" : "white"}`}
-                      >
-                        {/* رقم + input */}
-                        {isNumber && (
-                          <>
-                            <span className="number">{cell}</span>
-                            <input
-                              maxLength={1}
-                              value={userGrid[r][c] || ""}
-                              onChange={(e) =>
-                                handleChange(r, c, e.target.value)
-                              }
-                              className="letter22"
-                            />
-                          </>
-                        )}
-
-                        {/* خانة بيضاء عادية */}
-                        {!isBlock && !isNumber && (
-                          <input
-                            maxLength={1}
-                            value={userGrid[r][c] || ""}
-                            onChange={(e) => handleChange(r, c, e.target.value)}
-                            className="letter22"
-                          />
-                        )}
-
-                        {/* ❌ دائرة فوق اليمين للخطأ */}
-                        {!isBlock && wrongCells.includes(`${r}-${c}`) && (
-                          <span className="error-badge-review7-p1-q1">✕</span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
             </div>
           </div>
         </div>
+        <div className="action-buttons-container">
+          <button
+            className="try-again-button"
+            onClick={() => {
+              setUserGrid(
+                crosswordStructure.map((row) =>
+                  row.map((cell) =>
+                    cell === "W" || /[1-9]/.test(cell) ? "" : null,
+                  ),
+                ),
+              );
+              setWrongCells([]);
+            }}
+          >
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={handleShowAnswers}
+          >
+            Show Answer
+          </button>
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-      <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setUserGrid(
-              crosswordStructure.map((row) =>
-                row.map((cell) =>
-                  cell === "W" || /[1-9]/.test(cell) ? "" : null
-                )
-              )
-            );
-            setWrongCells([]);
-          }}
-        >
-          Start Again ↻
-        </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={handleShowAnswers}
-        >
-          Show Answer
-        </button>
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 }

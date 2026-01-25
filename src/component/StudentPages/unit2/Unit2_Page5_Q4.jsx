@@ -33,17 +33,17 @@ const Unit2_Page5_Q4 = () => {
     { letter: "z", number: 26 },
   ];
 
-
   const questionGroups = [
-    [8, 15, 23],   // how
-    [15, 12, 4],   // old
-    [1, 18, 5],    // are
-    [25, 15, 21],  // you
+    [8, 15, 23], // how
+    [15, 12, 4], // old
+    [1, 18, 5], // are
+    [25, 15, 21], // you
   ];
 
   const [slots, setSlots] = useState(
     questionGroups.map((g) => g.map(() => null)),
   );
+  const [isChecked, setIsChecked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   // تكوين الكلمات من الخانات
@@ -89,6 +89,7 @@ const Unit2_Page5_Q4 = () => {
   // ========================
   const handleCheckAnswers = () => {
     if (showAnswer) return;
+    setIsChecked(true);
 
     const hasEmpty = slots.some((g) => g.some((l) => !l));
     if (hasEmpty) {
@@ -159,7 +160,7 @@ const Unit2_Page5_Q4 = () => {
                         <Draggable
                           draggableId={`letter-${item.letter}`}
                           index={index}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={showAnswer || isChecked}
                         >
                           {(provided) => (
                             <div
@@ -186,7 +187,10 @@ const Unit2_Page5_Q4 = () => {
                 {questionGroups.map((group, gIndex) => (
                   <div className="word-group" key={gIndex}>
                     {group.map((num, lIndex) => (
-                      <Droppable droppableId={`slot-${gIndex}-${lIndex}`}>
+                      <Droppable
+                        droppableId={`slot-${gIndex}-${lIndex}`}
+                        isDropDisabled={showAnswer || isChecked}
+                      >
                         {(provided, snapshot) => (
                           <div className="slot-wrapper">
                             {/* 🔢 الرقم فوق المربع */}
@@ -232,6 +236,7 @@ const Unit2_Page5_Q4 = () => {
             setSlots(questionGroups.map((g) => g.map(() => null)));
             setWrongInputs([]);
             setShowAnswer(false);
+            setIsChecked(false);
           }}
           className="try-again-button"
         >

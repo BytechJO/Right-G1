@@ -3,7 +3,20 @@
     grid-template-columns: repeat(3,1fr);
 }
 
-
+.word-bank-review3-p2-q1 {
+    display: flex;
+    gap: 5px;
+    margin: 15px 0 25px;
+    flex-wrap: wrap;
+    border: 2px solid #4b74ff;
+    background-color: #f2f6ff;
+    border-radius: 8px;
+    padding: 10px;
+    /* height: 60px; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
 .question-wrapper10 {
   margin: auto;
   font-size: 1.4rem;
@@ -25,11 +38,13 @@
   border-bottom: 2px solid #000000;
   padding: 5px 8px;
   /* border-radius: 6px; */
-  font-size: 18px;
+  font-size: 22px;
   width: 170px;
   text-align: center; /* توسيط أفقي */
   vertical-align: middle; /* توسيط عمودي */
   line-height: normal;
+      height: 40px;
+      position: relative;
 }
 
 

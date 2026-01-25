@@ -5,24 +5,48 @@ import img1 from "../../../assets/unit8/imgs/U8P68EXEA1-01.svg";
 import img2 from "../../../assets/unit8/imgs/U8P68EXEA1-02.svg";
 import img3 from "../../../assets/unit8/imgs/U8P68EXEA1-03.svg";
 import img4 from "../../../assets/unit8/imgs/U8P68EXEA1-04.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 const data = [
   {
     img: img1,
     scrambled: "perpzi",
-    answer: "zipp",
+    answer: "zipper",
     pattern: "er",
   },
-  { img: img2, scrambled: "ksoc", answer: "so", pattern: "ck" },
-  { img: img3, scrambled: "ozo", answer: "z", pattern: "oo" },
-  { img: img4, scrambled: "beazr", answer: "ze", pattern: "bra" },
+  { img: img2, scrambled: "ksoc", answer: "sock", pattern: "ck" },
+  { img: img3, scrambled: "ozo", answer: "zoo", pattern: "oo" },
+  { img: img4, scrambled: "beazr", answer: "zebra", pattern: "bra" },
 ];
 
 const Unit8_Page5_Q1 = () => {
-  const [inputs, setInputs] = useState(Array(data.length).fill(""));
+  const [inputs, setInputs] = useState(Array(data.length).fill(null));
+
   const [wrongInputs, setWrongInputs] = useState(
-    Array(data.length).fill(false)
+    Array(data.length).fill(false),
   );
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    const value = draggableId.replace("word-", "");
+    const index = Number(destination.droppableId.split("-")[1]);
+
+    setInputs((prev) => {
+      const updated = [...prev];
+
+      // منع التكرار
+      const oldIndex = updated.findIndex((v) => v === value);
+      if (oldIndex !== -1) updated[oldIndex] = null;
+
+      updated[index] = value;
+      return updated;
+    });
+
+    setWrongInputs(Array(data.length).fill(false));
+  };
 
   const checkAnswers = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
@@ -30,7 +54,7 @@ const Unit8_Page5_Q1 = () => {
     if (inputs.some((val) => val.trim() === "")) {
       ValidationAlert.info(
         "Oops!",
-        "Please fill in all the answers before checking."
+        "Please fill in all the answers before checking.",
       );
       return;
     }
@@ -39,7 +63,7 @@ const Unit8_Page5_Q1 = () => {
     const wrongFlags = [];
 
     data.forEach((item, index) => {
-      if (inputs[index].toLowerCase() === item.answer) {
+      if (inputs[index] === item.answer) {
         correctCount++;
         wrongFlags[index] = false;
       } else {
@@ -65,16 +89,6 @@ const Unit8_Page5_Q1 = () => {
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
-
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-
-    const updated = [...inputs];
-    updated[index] = value;
-    setInputs(updated);
-    setWrongInputs(Array(data.length).fill(false));
-  };
-
   const handleShowAnswer = () => {
     const correct = data.map((item) => item.answer);
     setInputs(correct); // ⭐ تعبئة الإجابة الصحيحة
@@ -89,92 +103,145 @@ const Unit8_Page5_Q1 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-       className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <div className="unscramble-container">
-          <h3 className="header-title-page8">
-            <span className="ex-A">A</span>{" "}
-            <span style={{ color: "purple" }}>1</span> Look, unscramble, and
-            write.
-          </h3>
-
-          <div className="unscramble-row">
-            {data.map((item, index) => (
-              <div className="unscramble-box" key={index}>
-                <div className="img-box">
-                  <img src={item.img} alt="" />
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div className="unscramble-container">
+            <h3 className="header-title-page8">
+              <span className="ex-A">A</span>{" "}
+              <span style={{ color: "purple" }}>1</span> Look, unscramble, and
+              write.
+            </h3>
+            <Droppable droppableId="bank" isDropDisabled={showAnswer}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="word-bank-unit8-p5-q1"
+                >
+                  {data.map((item, index) => (
+                    <Draggable
+                      key={item.answer}
+                      draggableId={`word-${item.answer}`}
+                      index={index}
+                      isDragDisabled={showAnswer}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-item-unit2-p8-q2"
+                        >
+                          {item.answer}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
                 </div>
+              )}
+            </Droppable>
 
-                <p className="scrambled-word" style={{ fontSize: "22px" }}>
-                  {item.scrambled}
-                </p>
-
-                <div className="input-row">
-                  <span className="num" style={{ fontSize: "22px" }}>
-                    {index + 1}
-                  </span>
-
-                  <div className="input-wrapper">
-                    <input
-                      type="text"
-                      style={{ fontSize: "22px" }}
-                      value={inputs[index]}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                      className="text-input"
-                      disabled={showAnswer} // ⭐ NEW
-                    />
-
-                    {/* ❌ علامة الخطأ */}
-                    {wrongInputs[index] && !showAnswer && (
-                      <div className="error-icon">✕</div>
-                    )}
+            <div className="unscramble-row">
+              {data.map((item, index) => (
+                <div className="unscramble-box" key={index}>
+                  <div className="img-box1-unit8-p5-q1">
+                    <img src={item.img} alt="" />
                   </div>
 
-                  <span className="pattern" style={{ fontSize: "22px" }}>
-                    {item.pattern}
-                  </span>
+                  <p className="scrambled-word" style={{ fontSize: "22px" }}>
+                    {item.scrambled}
+                  </p>
+
+                  <div className="input-row">
+                    <span className="num" style={{ fontSize: "22px" }}>
+                      {index + 1}
+                    </span>
+
+                    <div className="input-wrapper">
+                      <Droppable
+                        droppableId={`slot-${index}`}
+                        isDropDisabled={showAnswer}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="text-input"
+                            style={{ fontSize: "22px" }}
+                          >
+                            {inputs[index] && (
+                              <Draggable
+                                draggableId={`filled-${inputs[index]}-${index}`}
+                                index={0}
+                                isDragDisabled={showAnswer}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {inputs[index]}
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+
+                      {/* ❌ علامة الخطأ */}
+                      {wrongInputs[index] && !showAnswer && (
+                        <div className="error-icon">✕</div>
+                      )}
+                    </div>
+
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* ⭐ BUTTONS */}
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+
+          <button
+            onClick={handleShowAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-
-      {/* ⭐ BUTTONS */}
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-
-        <button
-          onClick={handleShowAnswer}
-          className="show-answer-btn swal-continue"
-        >
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

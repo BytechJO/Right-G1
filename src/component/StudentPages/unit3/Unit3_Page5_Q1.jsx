@@ -4,139 +4,224 @@ import cap from "../../../assets/unit3/imgs3/P26exeA1-02.svg";
 import ant from "../../../assets/unit3/imgs3/P26exeA1-03.svg";
 import dad from "../../../assets/unit3/imgs3/P26exeA1-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./Unit3_Page5_Q1.css";
 
 const Unit3_Page5_Q1 = () => {
   const correctAnswers = ["bat", "cap", "ant", "dad"];
+  const wordBank = ["bat", "cap", "ant", "dad"];
+
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false); // ⬅ جديد
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [checked, setChecked] = useState(false);
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ⛔ منع التعديل بعد Show Answer
+  // 🧲 Drag & Drop logic (يسمح بالتكرار)
+  const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || showAnswer || checked) return;
 
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
+  if (destination.droppableId.startsWith("slot-")) {
+    const index = Number(destination.droppableId.split("-")[1]);
+    const word = draggableId
+      .replace("bank-", "")
+      .replace(/^slot-.*?-/, "");
+
+    const updated = [...answers];
+
+    // 🔒 منع التكرار: شيل الكلمة من أي مكان سابق
+    const oldIndex = updated.findIndex((a) => a === word);
+    if (oldIndex !== -1) {
+      updated[oldIndex] = "";
+    }
+
+    // حطها بالمكان الجديد
+    updated[index] = word;
+
+    setAnswers(updated);
     setWrongInputs([]);
-  };
+  }
+};
+
 
   const checkAnswers = () => {
-    if (answers.some((ans) => ans.trim() === "")) {
+    if (showAnswer) return;
+
+    if (answers.some((ans) => ans === "")) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    let tempScore = 0;
+    let score = 0;
     let wrong = [];
 
     answers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) tempScore++;
+      if (ans === correctAnswers[i]) score++;
       else wrong.push(i);
     });
 
     setWrongInputs(wrong);
+    setChecked(true);
 
     const total = correctAnswers.length;
     const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
+      score === total ? "green" : score === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${tempScore} / ${total}
+    ValidationAlert[
+      score === total ? "success" : score === 0 ? "error" : "warning"
+    ](`
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${score} / ${total}
         </span>
       </div>
-    `;
+    `);
+  };
 
-    if (tempScore === total) ValidationAlert.success(scoreMessage);
-    else if (tempScore === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+  const handleShowAnswer = () => {
+    setAnswers(correctAnswers);
+    setWrongInputs([]);
+    setShowAnswer(true);
+    setChecked(true);
   };
 
   const reset = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
-    setShowAnswer(false); // ⬅ إعادة تفعيل الإجابة
+    setShowAnswer(false);
+    setChecked(false);
   };
 
-  const handleShowAnswer = () => {
-    setAnswers(correctAnswers); // عرض الإجابات
-    setShowAnswer(true); // تفعيل اللون الأحمر + منع التعديل
-    setWrongInputs([]); // إخفاء الإكس
-  };
+  const images = [bat, cap, ant, dad];
 
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding:"30px"
-      }}
-    >
-      <div className="div-forall"
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        className="question-wrapper-unit3-page6-q1"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">A</span>
-          <span style={{ color: "purple" }}>1</span> Look and write.
-        </h5>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">A</span>
+            <span style={{ color: "purple" }}>1</span> Look and write.
+          </h5>
 
-        <div className="row-content10-unit3-page6-q1">
-          {["bat", "cap", "ant", "dad"].map((_, i) => (
-            <div className="row2-unit3-page6-q1" key={i}>
-              <div style={{ display: "flex", gap: "15px" }}>
-                <span className="num-span">{i + 1}</span>{" "}
-                <img
-                  src={[bat, cap, ant, dad][i]}
-                  alt=""
-                  className="q-img-unit3-page6-q1"
-                />
+          {/* 🔤 Word Bank */}
+          <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
+            {(provided) => (
+              <div
+                className="word-bank-unit2-p8-q2"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {wordBank.map((word, index) => (
+                  <Draggable
+                    key={word}
+                    draggableId={`bank-${word}`}
+                    index={index}
+                    isDragDisabled={showAnswer || checked}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {word}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
+            )}
+          </Droppable>
 
-              <span style={{ position: "relative", display: "flex" }}>
-                <div className="input-wrapper-unit3-page6-q1">
-                  <input
-                    type="text"
-                    className={`q-input-unit3-page6-q1 ${
-                      showAnswer ? "show-answer-red" : ""
-                    }`}
-                    value={answers[i]}
-                    onChange={(e) => handleChange(e.target.value, i)}
-                    disabled={showAnswer}
+          <div className="row-content10-unit3-page6-q1">
+            {answers.map((value, i) => (
+              <div className="row2-unit3-page6-q1" key={i}>
+                <div style={{ display: "flex", gap: "15px" }}>
+                  <span className="num-span">{i + 1}</span>
+                  <img
+                    src={images[i]}
+                    alt=""
+                    className="q-img-unit3-page6-q1"
                   />
-
-                  {wrongInputs.includes(i) && !showAnswer && (
-                    <span className="error-mark-input">✕</span>
-                  )}
                 </div>
-              </span>
-            </div>
-          ))}
+
+                <span style={{ position: "relative", display: "flex" }}>
+                  <div className="input-wrapper-unit3-page6-q1">
+                    <Droppable droppableId={`slot-${i}`}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`q-input-unit3-page6-q1 ${
+                            showAnswer ? "show-answer-red" : ""
+                          }`}
+                        >
+                          {value && (
+                            <Draggable
+                              draggableId={`slot-${i}-${value}`}
+                              index={0}
+                              isDragDisabled={showAnswer || checked}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className="word-item"
+                                >
+                                  {value}
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+
+                    {wrongInputs.includes(i) && !showAnswer && (
+                      <span className="error-mark-input">✕</span>
+                    )}
+                  </div>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

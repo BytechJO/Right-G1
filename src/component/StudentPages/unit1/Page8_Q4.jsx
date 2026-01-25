@@ -42,6 +42,7 @@ const Page8_Q4 = () => {
   const [slots, setSlots] = useState(
     questionGroups.map((g) => g.map(() => null)),
   );
+  const [isChecked, setIsChecked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   // تكوين الكلمات من الخانات
@@ -87,6 +88,7 @@ const Page8_Q4 = () => {
   // ========================
   const handleCheckAnswers = () => {
     if (showAnswer) return;
+    setIsChecked(true);
 
     const hasEmpty = slots.some((g) => g.some((l) => !l));
     if (hasEmpty) {
@@ -157,7 +159,7 @@ const Page8_Q4 = () => {
                         <Draggable
                           draggableId={`letter-${item.letter}`}
                           index={index}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={showAnswer || isChecked}
                         >
                           {(provided) => (
                             <div
@@ -184,7 +186,10 @@ const Page8_Q4 = () => {
                 {questionGroups.map((group, gIndex) => (
                   <div className="word-group" key={gIndex}>
                     {group.map((num, lIndex) => (
-                      <Droppable droppableId={`slot-${gIndex}-${lIndex}`}>
+                      <Droppable
+                        droppableId={`slot-${gIndex}-${lIndex}`}
+                        isDropDisabled={showAnswer || isChecked}
+                      >
                         {(provided, snapshot) => (
                           <div className="slot-wrapper">
                             {/* 🔢 الرقم فوق المربع */}
@@ -230,6 +235,8 @@ const Page8_Q4 = () => {
             setSlots(questionGroups.map((g) => g.map(() => null)));
             setWrongInputs([]);
             setShowAnswer(false);
+            setIsChecked(false);
+
           }}
           className="try-again-button"
         >

@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* gap: 35px; */
 }
 
 .q-img-unit3-page6-q1 {
@@ -23,6 +24,7 @@
   text-align: center; /* توسيط أفقي */
   vertical-align: middle; /* توسيط عمودي */
   line-height: normal;
+      height: 40px;
 }
 
 .row-content {

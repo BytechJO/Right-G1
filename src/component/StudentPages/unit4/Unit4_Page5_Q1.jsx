@@ -4,7 +4,9 @@ import cap from "../../../assets/unit4/imgs/U4P32ExeA1-02.svg";
 import ant from "../../../assets/unit4/imgs/U4P32ExeA1-03.svg";
 import dad from "../../../assets/unit4/imgs/U4P32ExeA1-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./Unit4_Page5_Q1.css";
+
 const Unit4_Page5_Q1 = () => {
   const items = [
     { img: bat, correct: "v", correctInput: "vet" },
@@ -13,58 +15,58 @@ const Unit4_Page5_Q1 = () => {
     { img: dad, correct: "f", correctInput: "fork" },
   ];
 
+  const wordBank = items.map((i) => i.correctInput);
+
   const [selected, setSelected] = useState(["", "", "", ""]);
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
+const [checked, setChecked] = useState(false);
 
+  /* ================= Drag Logic (منع التكرار) ================= */
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+   if (!destination || showCorrect || checked) return;
+
+
+    if (destination.droppableId.startsWith("slot-")) {
+      const index = Number(destination.droppableId.split("-")[1]);
+      const word = draggableId
+        .replace("bank-", "")
+        .replace(/^slot-.*?-/, "");
+
+      const updated = [...answers];
+
+      // 🔒 منع التكرار
+      const oldIndex = updated.findIndex((a) => a === word);
+      if (oldIndex !== -1) updated[oldIndex] = "";
+
+      updated[index] = word;
+      setAnswers(updated);
+      setShowResult(false);
+    }
+  };
+
+  /* ================= Circle Logic (كما هو) ================= */
   const handleSelect = (value, index) => {
-     if (showCorrect) return;
+    if (showCorrect) return;
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
     setShowResult(false);
   };
-  const showAnswers = () => {
-    const correctCircles = items.map((item) => item.correct);
-    const correctInputs = items.map((item) => item.correctInput);
 
-    setSelected(correctCircles);
-    setAnswers(correctInputs);
-
-    setWrongInputs([]);
-    setShowResult(true);
-    setShowCorrect(true);
-  };
-
-  const handleInput = (value, index) => {
-    if (showCorrect) return;
-    const newAns = [...answers];
-    newAns[index] = value;
-    setAnswers(newAns);
-    setShowResult(false);
-  };
-
-  const resetAll = () => {
-    setSelected(["", "", "", ""]);
-    setAnswers(["", "", "", ""]);
-    setWrongInputs([]);
-    setShowResult(false);
-    setShowCorrect(false);
-   
-  };
-
+  /* ================= Check Answers ================= */
   const checkAnswers = () => {
-     if (showCorrect) return;
-    // 1) التشييك إذا في دائرة مش مختارة
+    if (showCorrect) return;
+
     if (selected.some((s) => s === "")) {
       ValidationAlert.info("Please choose a circle (f or v) for all items!");
       return;
     }
 
-    // 2) التشييك إذا في input فاضي
-    if (answers.some((a) => a.trim() === "")) {
+    if (answers.some((a) => a === "")) {
       ValidationAlert.info("Please fill in all the writing boxes!");
       return;
     }
@@ -75,145 +77,196 @@ const Unit4_Page5_Q1 = () => {
     items.forEach((item, i) => {
       const circleCorrect = selected[i] === item.correct;
       const inputCorrect =
-        answers[i].trim().toLowerCase() === item.correctInput.toLowerCase();
+        answers[i].toLowerCase() === item.correctInput.toLowerCase();
 
-      // نقطة للدائرة + نقطة للكتابة
       if (circleCorrect) score++;
       if (inputCorrect) score++;
 
-      if (!circleCorrect || !inputCorrect) {
-        wrong.push(i);
-      }
+      if (!circleCorrect || !inputCorrect) wrong.push(i);
     });
 
     setWrongInputs(wrong);
     setShowResult(true);
+setChecked(true);
 
-    const total = items.length * 2; // 8 نقاط
+    const total = items.length * 2;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (score === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (score === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    ValidationAlert[
+      score === total ? "success" : score === 0 ? "error" : "warning"
+    ](`
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${score} / ${total}
+        </span>
+      </div>
+    `);
   };
 
+  /* ================= Show Answers ================= */
+const showAnswers = () => {
+  setSelected(items.map((i) => i.correct));
+  setAnswers(items.map((i) => i.correctInput));
+  setWrongInputs([]);
+  setShowResult(true);
+  setShowCorrect(true);
+  setChecked(true); // 🔒
+};
+
+const resetAll = () => {
+  setSelected(["", "", "", ""]);
+  setAnswers(["", "", "", ""]);
+  setWrongInputs([]);
+  setShowResult(false);
+  setShowCorrect(false);
+  setChecked(false); // 🔓
+};
+
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",padding:"30px"
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">A</span>{" "}
-          <span style={{ color: "purple" }}>1</span> Look, circle, and write.
-        </h5>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">A</span>{" "}
+            <span style={{ color: "purple" }}>1</span> Look, circle, and write.
+          </h5>
 
-        <div className="question-grid-unit4-page5-q1">
-          {items.map((item, i) => (
-            <div className="question-box-unit4-page5-q1" key={i}>
-              <img src={item.img} className="q-img-unit4-page5-q1" />
-
-              {/* f / v choices */}
-              <div className="choices-unit4-page5-q1">
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-unit4-page5-q1 ${
-                      selected[i] === "f" ? "active" : ""
-                    } ${showCorrect ? "correct-color" : ""}`}
-                    onClick={() => handleSelect("f", i)}
+          {/* 🔤 Word Bank */}
+          <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
+            {(provided) => (
+              <div
+                className="word-bank-unit2-p8-q2"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {wordBank.map((word, index) => (
+                  <Draggable
+                    key={word}
+                    draggableId={`bank-${word}`}
+                    index={index}
+                   isDragDisabled={showCorrect || checked}
                   >
-                    f
-                  </div>
-
-                  {/* X فوق دائرة f إذا كانت غلط */}
-                  {showResult &&
-                    selected[i] === "f" &&
-                    selected[i] !== item.correct && (
-                      <div className="wrong-mark">✕</div>
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {word}
+                      </span>
                     )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="question-grid-unit4-page5-q1">
+            {items.map((item, i) => (
+              <div className="question-box-unit4-page5-q1" key={i}>
+                <img src={item.img} className="q-img-unit4-page5-q1" />
+
+                {/* f / v circles */}
+                <div className="choices-unit4-page5-q1">
+                  {["f", "v"].map((letter) => (
+                    <div className="circle-wrapper" key={letter}>
+                      <div
+                        className={`circle-choice-unit4-page5-q1 ${
+                          selected[i] === letter ? "active" : ""
+                        } ${showCorrect ? "correct-color" : ""}`}
+                        onClick={() => handleSelect(letter, i)}
+                      >
+                        {letter}
+                      </div>
+
+                      {showResult &&
+                        selected[i] === letter &&
+                        selected[i] !== item.correct && (
+                          <div className="wrong-mark">✕</div>
+                        )}
+                    </div>
+                  ))}
                 </div>
 
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-unit4-page5-q1 ${
-                      selected[i] === "v" ? "active" : ""
-                    } ${showCorrect ? "correct-color" : ""}`}
-                    onClick={() => handleSelect("v", i)}
-                  >
-                    v
-                  </div>
+                {/* 🧩 Drag slot بدل input */}
+                <div className="input-wrapper-unit4-page5-q1">
+                  <Droppable droppableId={`slot-${i}`}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`write-input-unit4-page5-q1 ${
+                          showCorrect ? "correct-color" : ""
+                        }`}
+                      >
+                        {answers[i] && (
+                          <Draggable
+                            draggableId={`slot-${i}-${answers[i]}`}
+                            index={0}
+                        isDragDisabled={showCorrect || checked}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="word-item"
+                              >
+                                {answers[i]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
 
-                  {/* X فوق دائرة v إذا كانت غلط */}
                   {showResult &&
-                    selected[i] === "v" &&
-                    selected[i] !== item.correct && (
+                    answers[i] !== "" &&
+                    answers[i].toLowerCase() !==
+                      item.correctInput.toLowerCase() &&
+                    wrongInputs.includes(i) && (
                       <div className="wrong-mark">✕</div>
                     )}
                 </div>
               </div>
-
-              {/* writing input */}
-              <div className="input-wrapper">
-                <input
-                  type="text"
-                  className={`write-input-unit4-page5-q1 ${
-                    showCorrect ? "correct-color" : ""
-                  }`}
-                  value={answers[i]}
-                  onChange={(e) => handleInput(e.target.value, i)}
-                />
-
-                {/* X فوق الإنبت إذا كانت الكلمة غلط */}
-                {showResult &&
-                  answers[i].trim() !== "" &&
-                  answers[i].trim().toLowerCase() !==
-                    item.correctInput.toLowerCase() &&
-                  wrongInputs.includes(i) && (
-                    <div className="wrong-mark">✕</div>
-                  )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>{" "}
-      <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={showAnswers} className="show-answer-btn">
-          Show Answer
-        </button>
 
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
+        <div className="action-buttons-container">
+          <button onClick={resetAll} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={showAnswers} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

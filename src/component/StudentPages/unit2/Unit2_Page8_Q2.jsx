@@ -15,24 +15,34 @@ const Unit2_Page8_Q2 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   // 🧲 Drag logic
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || showAnswer) return;
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const index = Number(destination.droppableId.split("-")[1]);
-      const word = draggableId.replace("word-", "");
+  if (destination.droppableId.startsWith("slot-")) {
+    const newIndex = Number(destination.droppableId.split("-")[1]);
+    const word = draggableId.replace("word-", "");
 
-      if (answers[index]) return;
+    const updated = [...answers];
 
-      const updated = [...answers];
-      updated[index] = word;
-      setAnswers(updated);
+    // 🔍 نشوف إذا الكلمة موجودة بخانة ثانية
+    const oldIndex = updated.findIndex((ans) => ans === word);
 
-      setUsedWords((prev) => [...prev, word]);
-      setWrongInputs([]);
+    // إذا كانت موجودة → نفرغ مكانها القديم
+    if (oldIndex !== -1) {
+      updated[oldIndex] = "";
     }
-  };
+
+    // 🔁 نحطها بالمكان الجديد
+    updated[newIndex] = word;
+
+    setAnswers(updated);
+    setWrongInputs([]);
+  }
+};
+
+
+
 
   const checkAnswers = () => {
     if (showAnswer) return;
@@ -51,6 +61,7 @@ const Unit2_Page8_Q2 = () => {
     });
 
     setWrongInputs(wrong);
+setUsedWords(correctAnswers);
 
     const color = score === 4 ? "green" : score === 0 ? "red" : "orange";
 

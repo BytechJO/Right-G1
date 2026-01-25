@@ -4,6 +4,8 @@ import cap from "../../../assets/unit6/imgs/U6P53EXED-02.svg";
 import ant from "../../../assets/unit6/imgs/U6P53EXED-03.svg";
 import dad from "../../../assets/unit6/imgs/U6P53EXED-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import "./Review5_Page2_Q1.css";
 const Review5_Page2_Q1 = () => {
   const items = [
@@ -13,8 +15,9 @@ const Review5_Page2_Q1 = () => {
     { img: dad, correct: "g", correctInput: "garden" },
   ];
 
-  const [answers, setAnswers] = useState(["", "", "", ""]);
   const [selected, setSelected] = useState(["", "", "", ""]);
+  const [answers, setAnswers] = useState([null, null, null, null]);
+
   const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
@@ -26,29 +29,38 @@ const Review5_Page2_Q1 = () => {
     setShowResult(false);
   };
 
-  const handleInput = (value, index) => {
-    if (locked) return; // 🔒 منع التعديل بعد Show Answer
-    const newAns = [...answers];
-    newAns[index] = value;
-    setAnswers(newAns);
-    setShowResult(false);
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
+
+    const value = draggableId.replace("letter-", "");
+    const index = Number(destination.droppableId.split("-")[1]);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
+
     setWrongInputs([]);
+    setShowResult(false);
   };
+
   const resetAll = () => {
     setSelected(["", "", "", ""]);
-    setAnswers(["", "", "", ""]);
+   setAnswers([null, null, null, null]);
     setWrongInputs([]);
     setShowResult(false);
-      setLocked(false);    // ← مهم جدًا
+    setLocked(false); // ← مهم جدًا
   };
   const showAnswers = () => {
     const correctSelected = items.map((item) => item.correct);
     const correctLetters = items.map((item) =>
-      item.correctInput[0].toLowerCase()
+      item.correctInput[0].toLowerCase(),
     );
+    setAnswers(correctLetters);
 
     setSelected(correctSelected);
-    setAnswers(correctLetters);
 
     setWrongInputs([]);
     setShowResult(false);
@@ -57,7 +69,7 @@ const Review5_Page2_Q1 = () => {
   };
 
   const checkAnswers = () => {
-        if (locked) return; // 🔒 منع التعديل بعد Show Answer
+    if (locked) return; // 🔒 منع التعديل بعد Show Answer
     // 1) التشييك إذا في دائرة مش مختارة
     if (selected.some((s) => s === "")) {
       ValidationAlert.info("Please choose a circle (f or v) for all items!");
@@ -75,8 +87,7 @@ const Review5_Page2_Q1 = () => {
 
     items.forEach((item, i) => {
       const circleCorrect = selected[i] === item.correct;
-      const inputCorrect =
-        answers[i].toLowerCase() === item.correctInput[0].toLowerCase();
+      const inputCorrect = answers[i] === item.correctInput[0].toLowerCase();
 
       // نقطة للدائرة + نقطة للكتابة
       if (circleCorrect) score++;
@@ -111,115 +122,173 @@ const Review5_Page2_Q1 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          D Does it begin with <span style={{ color: "red" }}>g </span>or
-          <span style={{ color: "red" }}>k </span> ? Circle and write.
-        </h5>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            D Does it begin with <span style={{ color: "red" }}>g </span>or
+            <span style={{ color: "red" }}>k </span> ? Circle and write.
+          </h5>
 
-        <div className="question-grid-unit4-page5-q1">
-          {items.map((item, i) => (
-            <div className="question-box-unit4-page5-q1" key={i}>
-              <div style={{ display: "flex" }}>
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  {i + 1}
-                </span>
-                <img src={item.img} className="q-img-unit4-page5-q1" />
-              </div>
-              {/* g/ v choices */}
-              <div className="choices-unit4-page5-q1">
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-review5-page2-q1 ${
-                      selected[i] === "g" ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect("g", i)}
+          <Droppable droppableId="letters-bank" isDropDisabled={locked}>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-unit2-p8-q2"
+              >
+                {["g", "k"].map((letter, index) => (
+                  <Draggable
+                    key={`${letter}-${index}`}
+                    draggableId={`letter-${letter}`}
+                    index={index}
+                    isDragDisabled={locked}
                   >
-                    g
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
+                      >
+                        {letter}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="question-grid-unit4-page5-q1">
+            {items.map((item, i) => (
+              <div className="question-box-unit4-page5-q1" key={i}>
+                <div style={{ display: "flex" }}>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
+                  <img src={item.img} className="q-img-unit4-page5-q1" />
+                </div>
+                {/* g/ v choices */}
+                <div className="choices-unit4-page5-q1">
+                  <div className="circle-wrapper">
+                    <div
+                      className={`circle-choice-review5-page2-q1 ${
+                        selected[i] === "g" ? "active" : ""
+                      }`}
+                      onClick={() => handleSelect("g", i)}
+                    >
+                      g
+                    </div>
+
+                    {/* X فوق دائرة f إذا كانت غلط */}
+                    {!locked &&
+                      showResult &&
+                      selected[i] === "g" &&
+                      selected[i] !== item.correct && (
+                        <div className="wrong-mark">✕</div>
+                      )}
                   </div>
 
-                  {/* X فوق دائرة f إذا كانت غلط */}
-                  {!locked &&showResult &&
-                    selected[i] === "g" &&
-                    selected[i] !== item.correct && (
-                      <div className="wrong-mark">✕</div>
-                    )}
-                </div>
+                  <div className="circle-wrapper">
+                    <div
+                      className={`circle-choice-review5-page2-q1 ${
+                        selected[i] === "k" ? "active" : ""
+                      }`}
+                      onClick={() => handleSelect("k", i)}
+                    >
+                      k
+                    </div>
 
-                <div className="circle-wrapper">
-                  <div
-                    className={`circle-choice-review5-page2-q1 ${
-                      selected[i] === "k" ? "active" : ""
-                    }`}
-                    onClick={() => handleSelect("k", i)}
-                  >
-                    k
+                    {/* X فوق دائرة v إذا كانت غلط */}
+                    {!locked &&
+                      showResult &&
+                      selected[i] === "k" &&
+                      selected[i] !== item.correct && (
+                        <div className="wrong-mark">✕</div>
+                      )}
                   </div>
+                </div>
 
-                  {/* X فوق دائرة v إذا كانت غلط */}
-                  {!locked &&showResult &&
-                    selected[i] === "k" &&
-                    selected[i] !== item.correct && (
-                      <div className="wrong-mark">✕</div>
+                {/* writing input */}
+                <div key={item.id} className="word-row-review5-p2-q1">
+                  <Droppable droppableId={`slot-${i}`} isDropDisabled={locked}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="first-letter-input-review5-p2-q1"
+                      >
+                        {answers[i] && (
+                          <Draggable
+                            draggableId={`filled-${answers[i]}-${i}`}
+                            index={0}
+                            isDragDisabled={locked}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers[i]}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
                     )}
+                  </Droppable>
+
+                  {!locked && showResult && (
+                    <div className="wrong-mark-review5-p2-q1">✕</div>
+                  )}
+                  <span className="rest-word">
+                    {item.correctInput.slice(1)}
+                  </span>
                 </div>
               </div>
-
-              {/* writing input */}
-              <div key={item.id} className="word-row-review5-p2-q1">
-                <input
-                  type="text"
-                  maxLength={1}
-                  value={answers[i]}
-                  onChange={(e) => handleInput(e.target.value, i)}
-                  className="first-letter-input-review5-p2-q1"
-                  readOnly={locked}                 // 🔒 قفل الكتابة
-                />
-                {!locked && showResult && (
-                  <div className="wrong-mark-review5-p2-q1">✕</div>
-                )}
-                <span className="rest-word">{item.correctInput.slice(1)}</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="action-buttons-container">
-        <button onClick={resetAll} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={showAnswers} className="show-answer-btn">
+        <div className="action-buttons-container">
+          <button onClick={resetAll} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={showAnswers} className="show-answer-btn">
             Show Answer
           </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

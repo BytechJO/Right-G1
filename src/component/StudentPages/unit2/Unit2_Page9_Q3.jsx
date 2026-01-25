@@ -10,6 +10,7 @@ const Unit2_Page9_Q3 = () => {
   const [answers, setAnswers] = useState({});
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswers, setShowAnswers] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const correctMatches = [
     { input: "It’s jello", num: "input1" },
@@ -23,11 +24,9 @@ const Unit2_Page9_Q3 = () => {
   // 🧲 Drag logic
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-    if (!destination || showAnswers) return;
+    if (!destination || showAnswers || checked) return;
 
-    const word = draggableId
-      .replace("bank-", "")
-      .replace(/^slot-.*?-/, "");
+    const word = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
 
     setAnswers((prev) => {
       const updated = { ...prev };
@@ -66,6 +65,7 @@ const Unit2_Page9_Q3 = () => {
     });
 
     setWrongWords(wrong);
+    setChecked(true);
 
     const total = correctMatches.length;
     const color =
@@ -75,8 +75,8 @@ const Unit2_Page9_Q3 = () => {
       correctCount === total
         ? "success"
         : correctCount === 0
-        ? "error"
-        : "warning"
+          ? "error"
+          : "warning"
     ](`
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color};font-weight:bold;">
@@ -92,17 +92,21 @@ const Unit2_Page9_Q3 = () => {
     setAnswers(filled);
     setWrongWords([]);
     setShowAnswers(true);
+    setChecked(true); // 🔒
   };
 
   const resetAll = () => {
     setAnswers({});
     setWrongWords([]);
     setShowAnswers(false);
+      setChecked(false); // 🔓
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "30px" }}
+      >
         <div className="div-forall" style={{ width: "60%" }}>
           <h5 className="header-title-page8">C Look and answer.</h5>
 
@@ -119,6 +123,7 @@ const Unit2_Page9_Q3 = () => {
                     key={word}
                     draggableId={`bank-${word}`}
                     index={index}
+                    isDragDisabled={checked || showAnswers}
                   >
                     {(provided) => (
                       <span
@@ -164,6 +169,7 @@ const Unit2_Page9_Q3 = () => {
                           <Draggable
                             draggableId={`slot-${q.id}-${getValue(q.id)}`}
                             index={0}
+                              isDragDisabled={checked || showAnswers}
                           >
                             {(provided) => (
                               <span

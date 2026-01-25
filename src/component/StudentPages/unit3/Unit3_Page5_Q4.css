@@ -132,7 +132,11 @@
   position: relative; /* مهم جدا حتى يصير المرجع */
   display: inline-block;
 }
-
+.word-group-unit3-p5-q4 {
+    display: flex;
+    /* gap: 12px; */
+    margin-bottom: 12px;
+}
 
 .main-img-unit3-p5-q4 {
   width: auto;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./Unit10_Page5_Q4.css";
+import React, { useState } from "react";
+// import "./Page8_Q4.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img from "../../../assets/unit5/imgs/U5P44EXEC.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 const Unit10_Page5_Q4 = () => {
   const data = [
     { letter: "a", number: 1 },
@@ -38,232 +39,216 @@ const Unit10_Page5_Q4 = () => {
     [25, 15, 21],
     [23, 1, 14, 20],
   ];
-  const [bigInput, setBigInput] = useState("");
-  const [bigInputWrong, setBigInputWrong] = useState(false);
-  const [wrongInputs, setWrongInputs] = useState([]); // ⭐ تم التعديل هون
-  const [showAnswer, setShowAnswer] = useState(false);
-
-  const [letters, setLetters] = useState(
-    questionGroups.map((group) => group.map(() => ""))
+  const [slots, setSlots] = useState(
+    questionGroups.map((g) => g.map(() => null)),
   );
-  const handleInputChange = (value, groupIndex, letterIndex) => {
-    if (showAnswer) return;
-    const updated = [...letters];
-    updated[groupIndex][letterIndex] = value.toLowerCase();
-    setLetters(updated);
+  const [isChecked, setIsChecked] = useState(false);
+  const [wrongInputs, setWrongInputs] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
+  // تكوين الكلمات من الخانات
+  const formedWords = slots.map((group) =>
+    group.map((letter) => letter || "").join(""),
+  );
+  const sentence = formedWords.join(" ");
+
+  // ========================
+  // Drag Logic
+  // ========================
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
+
+    if (destination.droppableId.startsWith("slot-")) {
+      const [g, l] = destination.droppableId.split("-").slice(1);
+
+      if (slots[g][l]) return;
+
+      const letter = draggableId.replace("letter-", "");
+      const updated = [...slots];
+      updated[g][l] = letter;
+      setSlots(updated);
+    }
   };
 
-  const formedWords = letters.map((group) => group.join(""));
-  const fullSentence = "This is a ruler";
+  // ========================
+  // Show Answer
+  // ========================
+  const handleShowAnswer = () => {
+    const correct = questionGroups.map((group) =>
+      group.map((num) => data.find((d) => d.number === num).letter),
+    );
 
+    setSlots(correct);
+    setWrongInputs([]);
+    setShowAnswer(true);
+  };
+
+  // ========================
+  // Check Answer
+  // ========================
   const handleCheckAnswers = () => {
     if (showAnswer) return;
-    // 1️⃣ التحقق من وجود فراغات
-    const hasEmpty = letters.some((group) =>
-      group.some((letter) => letter === "")
-    );
-    if (hasEmpty || bigInput.length===0 ) {
+    setIsChecked(true);
+
+    const hasEmpty = slots.some((g) => g.some((l) => !l));
+    if (hasEmpty) {
       ValidationAlert.info(
         "Oops!",
-        "Please complete all fields before checking."
+        "Please complete all fields before checking.",
       );
       return;
     }
 
-    // 2️⃣ حساب عدد الصحيحة
-    let correctCount = 1;
-    let total = letters.flat().length + 1; // +1 for big input
-    let wrong = []; // ⭐ تم التعديل هون
-    // const isBigCorrect =
-    //   bigInput.trim().toLowerCase() === fullSentence.trim().toLowerCase();
+    let wrong = [];
+    let correctCount = 0;
+    let total = slots.flat().length;
 
-    // setBigInputWrong(!isBigCorrect);
+    for (let g = 0; g < slots.length; g++) {
+      for (let l = 0; l < slots[g].length; l++) {
+        const correctLetter = data.find(
+          (d) => d.number === questionGroups[g][l],
+        ).letter;
 
-    // // 🔥 أضيفي هاي
-    // if (isBigCorrect) {
-    //   correctCount++; // add point for the big sentence
-    // }
-    for (let g = 0; g < letters.length; g++) {
-      for (let l = 0; l < letters[g].length; l++) {
-        const letter = letters[g][l];
-        const correctNum = data.find((d) => d.letter === letter)?.number;
-
-        if (correctNum === questionGroups[g][l]) {
-          correctCount++;
-        } else {
-          wrong.push(`${g}-${l}`); // ⭐ تم التعديل هون
-        }
+        if (slots[g][l] === correctLetter) correctCount++;
+        else wrong.push(`${g}-${l}`);
       }
     }
-    setWrongInputs(wrong); // ⭐ تم التعديل هون
-    // 3️⃣ تحديد اللون حسب السكور
+
+    setWrongInputs(wrong);
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
-    // 4️⃣ رسالة النتيجة
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
-    // 🔹 3) التحقق من الجملة الكبيرة
-    const correctSentence = fullSentence.trim().toLowerCase(); // from small inputs
-
-    // الآن الشرط رح يكون صحيح
-    if (correctCount === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
-  };
-  const handleShowAnswer = () => {
-    // 1) جهزي مصفوفة الحروف الصحيحة
-    const correctLetters = questionGroups.map((group) =>
-      group.map((num) => {
-        const item = data.find((d) => d.number === num);
-        return item ? item.letter : "";
-      })
-    );
-
-    // 2) ضعي الإجابات الصحيحة
-    setLetters(correctLetters);
-
-    // 3) امسحي الأخطاء
-    setWrongInputs([]);
-
-    // 4) اتركي big input فاضي كما طلبتِ
-    setBigInput("");
-    setBigInputWrong(false);
-
-    // 5) فعّلي وضع show answer
-    setShowAnswer(true);
+    if (correctCount === total) ValidationAlert.success(scoreMessage);
+    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
+    else ValidationAlert.warning(scoreMessage);
   };
 
   return (
-    <div
-      className="unit3-q4-container3"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <h5 className="header-title-page8">
-          <span className="ex-A"> C</span>Answer the question..
-        </h5>
+    <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div className="div-forall" style={{ width: "60%" }}>
+        <div className="container8">
+          <h5 className="header-title-page8">
+            <span className="ex-A">C</span> Answer the question.
+          </h5>
 
-        <div className="unit3-q4-alphabet-box">
-          <div className="unit3-q4-row">
-            {data.map((c, i) => (
-              <div className="unit3-q4-letter-char">
-                <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell">
-                    {c.letter}
-                  </span>
-                </div>
-                <div className="unit3-q4-data">
-                  <span key={i} className="unit3-q4-cell number2">
-                    {c.number}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="alphabet-box">
+            <DragDropContext onDragEnd={onDragEnd}>
+              {/* 🔤 الحروف فوق الأرقام */}
+              <Droppable
+                droppableId="alphabet"
+                direction="horizontal"
+                isDropDisabled
+              >
+                {(provided) => (
+                  <div
+                    className="row1"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {data.map((item, index) => (
+                      <div className="letter-char1" key={index}>
+                        <Draggable
+                          draggableId={`letter-${item.letter}`}
+                          index={index}
+                          isDragDisabled={showAnswer || isChecked}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="cell1 drag-letter"
+                            >
+                              {item.letter}
+                            </div>
+                          )}
+                        </Draggable>
 
-          <div className="unit3-q4-words">
-            {questionGroups.map((group, groupIndex) => (
-              <div className="unit3-q4-word-group" key={groupIndex}>
-                {group.map((num, letterIndex) => (
-                  <div className="unit3-q4-input-h6" key={letterIndex}>
-                    <h6 style={{ fontSize: "20px" }}>{num}</h6>
-                    <div className="unit3-q4-input-wrapper">
-                      {" "}
-                      {/* ⭐ تم التعديل هون */}
-                      <input
-                        className="unit3-q4-inputs"
-                        maxLength={1}
-                        value={letters[groupIndex][letterIndex]}
-                        onChange={(e) =>
-                          !showAnswer &&
-                          handleInputChange(
-                            e.target.value,
-                            groupIndex,
-                            letterIndex
-                          )
-                        }
-                        disabled={showAnswer}
-                      />
-                      {!showAnswer &&
-                        wrongInputs.includes(
-                          `${groupIndex}-${letterIndex}`
-                        ) && (
-                          <span className="error-mark1-unit4-page5-q4">✕</span> // ⭐ تم التعديل هون
+                        <div className="cell1 number1">{item.number}</div>
+                      </div>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+
+              {/* 🧩 خانات الإجابة */}
+              <div className="words">
+                {questionGroups.map((group, gIndex) => (
+                  <div className="word-group" key={gIndex}>
+                    {group.map((num, lIndex) => (
+                      <Droppable
+                        droppableId={`slot-${gIndex}-${lIndex}`}
+                        isDropDisabled={showAnswer || isChecked}
+                      >
+                        {(provided, snapshot) => (
+                          <div className="slot-wrapper">
+                            {/* 🔢 الرقم فوق المربع */}
+                            <h6 className="slot-number">{num}</h6>
+
+                            {/* ⬜ مربع الدروب */}
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`drop-slot
+                              ${snapshot.isDraggingOver ? "drag-over" : ""}
+                              ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
+                            >
+                              {wrongInputs.includes(`${gIndex}-${lIndex}`) && (
+                                <div className="error-mark1">✕</div>
+                              )}
+                              {slots[gIndex][lIndex] && (
+                                <div className="dropped-letter">
+                                  {slots[gIndex][lIndex]}
+                                </div>
+                              )}
+                              {provided.placeholder}
+                            </div>
+                          </div>
                         )}
-                    </div>
+                      </Droppable>
+                    ))}
                   </div>
                 ))}
               </div>
-            ))}
-           
-          </div>
-
-          <div className="unit3-q4-sentence">
-            <div
-              className="big-answer-wrapper"
-              style={{ position: "relative", marginTop: "30px" }}
-            >
-              <input
-                type="text"
-                className="big-answer-input"
-                placeholder="Write the answer here..."
-                value={bigInput}
-                onChange={(e) => setBigInput(e.target.value.toLowerCase())}
-              />
-
-              {!showAnswer && bigInputWrong && (
-                <span className="error-mark1-unit4-page5-q4">✕</span>
-              )}
-            </div>
+              <div className="sentence-box">
+                <span className="sentence-text">{sentence}</span>
+              </div>
+            </DragDropContext>
           </div>
         </div>
       </div>
+
+      {/* 🔘 Buttons */}
       <div className="action-buttons-container">
         <button
           onClick={() => {
-            setLetters(questionGroups.map((group) => group.map(() => "")));
+            setSlots(questionGroups.map((g) => g.map(() => null)));
             setWrongInputs([]);
-            setBigInputWrong(false);
-            setBigInput("");
             setShowAnswer(false);
+            setIsChecked(false);
           }}
           className="try-again-button"
         >
           Start Again ↻
         </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+
         <button
           onClick={handleShowAnswer}
           className="show-answer-btn swal-continue"
         >
           Show Answer
         </button>
+
         <button onClick={handleCheckAnswers} className="check-button2">
           Check Answer ✓
         </button>

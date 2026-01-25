@@ -9,6 +9,7 @@ const Unit2_Page9_Q1 = () => {
   const [answers, setAnswers] = useState({});
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+const [checked, setChecked] = useState(false);
 
   const correctMatches = [
     { input: "party hats", num: "input1" },
@@ -24,7 +25,8 @@ const Unit2_Page9_Q1 = () => {
   // 🧲 Drag logic (ثابت + قابل للتعديل دائمًا)
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+if (!destination || showAnswer || checked) return;
+
 
     // استخرج الكلمة من أي draggableId
     const word = draggableId
@@ -69,6 +71,7 @@ const Unit2_Page9_Q1 = () => {
     });
 
     setWrongWords(wrong);
+setChecked(true);
 
     const total = correctMatches.length;
     const color =
@@ -89,18 +92,20 @@ const Unit2_Page9_Q1 = () => {
     `);
   };
 
-  const showCorrectAnswers = () => {
-    const filled = {};
-    correctMatches.forEach((c) => (filled[c.num] = c.input));
-    setAnswers(filled);
-    setWrongWords([]);
-    setShowAnswer(true);
-  };
+const showCorrectAnswers = () => {
+  const filled = {};
+  correctMatches.forEach((c) => (filled[c.num] = c.input));
+  setAnswers(filled);
+  setWrongWords([]);
+  setShowAnswer(true);
+  setChecked(true); // 🔒
+};
 
   const resetAll = () => {
     setAnswers({});
     setWrongWords([]);
     setShowAnswer(false);
+      setChecked(false); // 🔓 رجّع التفاعل
   };
 
   return (
@@ -123,6 +128,7 @@ const Unit2_Page9_Q1 = () => {
                       key={word}
                       draggableId={`bank-${word}`}
                       index={index}
+                      isDragDisabled={checked || showAnswer}
                     >
                       {(provided) => (
                         <span
@@ -161,6 +167,7 @@ const Unit2_Page9_Q1 = () => {
                           <Draggable
                             draggableId={`slot-input1-${getValue("input1")}`}
                             index={0}
+                            isDragDisabled={checked || showAnswer}
                           >
                             {(provided) => (
                               <span
@@ -202,6 +209,7 @@ const Unit2_Page9_Q1 = () => {
                               <Draggable
                                 draggableId={`slot-${id}-${getValue(id)}`}
                                 index={0}
+                                isDragDisabled={checked || showAnswer}
                               >
                                 {(provided) => (
                                   <span

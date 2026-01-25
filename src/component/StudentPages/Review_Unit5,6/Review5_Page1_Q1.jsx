@@ -5,36 +5,54 @@ import img2 from "../../../assets/unit6/imgs/U6P52EXEA-02.svg";
 import img3 from "../../../assets/unit6/imgs/U6P52EXEA-03.svg";
 import img4 from "../../../assets/unit6/imgs/U6P52EXEA-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 const Review5_Page1_Q1 = () => {
   const [answers, setAnswers] = useState([]);
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const [locked, setLocked] = useState(false);
 
   const correctMatches = [
-    { input: "pen", num: "input1" },
-    { input: "What’s this", num: "input2" },
-    { input: "This is a map", num: "input3" },
-    { input: "What’s this", num: "input4" },
-    { input: "This is a globe", num: "input5" },
+    { id: "w1", input: "pen", num: "input1" },
+    { id: "w2", input: "What’s this", num: "input2" },
+    { id: "w3", input: "This is a map", num: "input3" },
+    { id: "w4", input: "What’s this", num: "input4" },
+    { id: "w5", input: "This is a globe", num: "input5" },
   ];
 
-  const handleChange = (e) => {
-    if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
-    const { id, value } = e.target;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
+
+    const dragged = correctMatches.find(
+      (w) => `word-${w.id}` === draggableId || `filled-${w.id}` === draggableId,
+    );
+
+    if (!dragged) return;
+
+    const value = dragged.input; // النص
+    const wordId = dragged.id; // الهوية
+    const id = destination.droppableId;
+
     setAnswers((prev) => {
       const updated = [...prev];
-      const existingIndex = updated.findIndex((ans) => ans.num === id);
 
+      // امنع تكرار نفس الـ ID (مش النص)
+      const oldIndex = updated.findIndex((a) => a.wordId === wordId);
+      if (oldIndex !== -1) updated.splice(oldIndex, 1);
+
+      const existingIndex = updated.findIndex((a) => a.num === id);
       if (existingIndex !== -1) {
-        updated[existingIndex] = { input: value, num: id };
+        updated[existingIndex] = { input: value, num: id, wordId };
       } else {
-        updated.push({ input: value, num: id });
+        updated.push({ input: value, num: id, wordId });
       }
 
       return updated;
     });
+
     setWrongWords([]);
   };
+
   const showAnswers = () => {
     const filled = correctMatches.map((item) => ({
       input: item.input,
@@ -47,7 +65,7 @@ const Review5_Page1_Q1 = () => {
   };
 
   const checkAnswers = () => {
-        if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
+    if (locked) return; // 🔒 يمنع التعديل بعد Show Answer
 
     // تأكد إنو الطالب وصل كل الأزواج
 
@@ -101,82 +119,71 @@ const Review5_Page1_Q1 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <div className="unit2-page9-q1-container">
-          <h5 className="header-title-page8">A Look, read, and write.</h5>
-
-          <div className="content-container-unit5-p6-q1">
-            <div className="section-one-unit5-p6-q1">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                }}
-              >
-                1
-              </span>{" "}
-              <img src={img1} className="img-unit5-p6-q1" />
-              <div className="content-input-unit5-p6-q1">
-                <input
-                  type="text"
-                  value={"What’s this?"}
-                  readOnly
-                  style={{
-                    pointerEvents: "none",
-                    borderBottom: "2px solid black",
-                    width: "200px",
-                    fontSize: "22px",
-                  }}
-                />
-
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    value={"This is an eraser."}
-                    readOnly
-                    style={{
-                      pointerEvents: "none",
-                      borderBottom: "2px solid black",
-                      width: "200px",
-                      fontSize: "22px",
-                    }}
-                  />
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div className="unit2-page9-q1-container">
+            <h5 className="header-title-page8">A Look, read, and write.</h5>
+            <Droppable droppableId="bank" isDropDisabled>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="word-bank-unit2-p8-q2"
+                >
+                  {correctMatches.map((item, index) => (
+                    <Draggable
+                      key={item.input}
+                      draggableId={`word-${item.id}`}
+                      index={index}
+                      isDragDisabled={locked}
+                    >
+                      {(provided) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-item-unit2-p8-q2"
+                        >
+                          {item.input}
+                        </span>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
                 </div>
-              </div>
-            </div>
-
-            <div className="section-two-unit5-p6-q1">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                }}
-              >
-                2
-              </span>{" "}
-              <img src={img2} className="img-unit5-p6-q1" />
-              <div className="content-input-unit5-p6-q1">
-                <div style={{ position: "relative", display: "flex" }}>
+              )}
+            </Droppable>
+            <div className="content-container-unit5-p6-q1">
+              <div className="section-one-unit5-p6-q1">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  1
+                </span>{" "}
+                <img src={img1} className="img-unit5-p6-q1" />
+                <div className="content-input-unit5-p6-q1">
                   <input
                     type="text"
                     value={"What’s this?"}
@@ -188,187 +195,337 @@ const Review5_Page1_Q1 = () => {
                       fontSize: "22px",
                     }}
                   />
-                </div>
-                <div style={{ position: "relative", display: "flex" }}>
-                  <input
-                    type="text"
-                    value={"This is a"}
-                    readOnly
-                    style={{
-                      pointerEvents: "none",
-                      borderBottom: "2px solid black",
-                      width: "90px",
-                      fontSize: "22px",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      className="answer-input-unit5-p6-q1"
-                      value={
-                        answers.find((a) => a.num === "input1")?.input || ""
-                      }
-                      id="input1"
-                      style={{
-                        fontSize: "22px",
-                      }}
-                      onChange={handleChange}
-                        disabled={locked}
-                    />
-                    .
-                    {!locked && wrongWords.includes(answers[0]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="section-three-unit5-p6-q1">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                }}
-              >
-                3
-              </span>{" "}
-              <img src={img3} className="img-unit5-p6-q1" />
-              <div className="content-input-unit5-p6-q1">
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    className="answer-input-unit5-p6-q1"
-                    value={answers.find((a) => a.num === "input2")?.input || ""}
-                    id="input2"
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type="text"
+                      value={"This is an eraser."}
+                      readOnly
+                      style={{
+                        pointerEvents: "none",
+                        borderBottom: "2px solid black",
+                        width: "200px",
+                        fontSize: "22px",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="section-two-unit5-p6-q1">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  2
+                </span>{" "}
+                <img src={img2} className="img-unit5-p6-q1" />
+                <div className="content-input-unit5-p6-q1">
+                  <div style={{ position: "relative", display: "flex" }}>
+                    <input
+                      type="text"
+                      value={"What’s this?"}
+                      readOnly
+                      style={{
+                        pointerEvents: "none",
+                        borderBottom: "2px solid black",
+                        width: "200px",
+                        fontSize: "22px",
+                      }}
+                    />
+                  </div>
+                  <div style={{ position: "relative", display: "flex" }}>
+                    <input
+                      type="text"
+                      value={"This is a"}
+                      readOnly
+                      style={{
+                        pointerEvents: "none",
+                        borderBottom: "2px solid black",
+                        width: "90px",
+                        fontSize: "22px",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "flex-end",
+                        fontSize: "22px",
+                      }}
+                    >
+                      <Droppable droppableId="input1">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="answer-input-unit5-p6-q1"
+                          >
+                            {answers.find((a) => a.num === "input1") && (
+                              <Draggable
+                                draggableId={`filled-${answers.find((a) => a.num === "input1").wordId}`}
+                                index={0}
+                                isDragDisabled={locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {
+                                      answers.find((a) => a.num === "input1")
+                                        .input
+                                    }
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                      .
+                      {!locked && wrongWords.includes(answers[0]?.num) && (
+                        <span className="error-mark-input1">✕</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="section-three-unit5-p6-q1">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  3
+                </span>{" "}
+                <img src={img3} className="img-unit5-p6-q1" />
+                <div className="content-input-unit5-p6-q1">
+                  <div
                     style={{
+                      position: "relative",
                       fontSize: "22px",
                     }}
-                    onChange={handleChange}
-                      disabled={locked}
-                  />
-                  {!locked && wrongWords.includes(answers[1]?.num) && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
-                  ?
+                  >
+                    <Droppable droppableId="input2">
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="answer-input-unit5-p6-q1"
+                        >
+                          {answers.find((a) => a.num === "input2") && (
+                            <Draggable
+                              draggableId={`filled-${answers.find((a) => a.num === "input2").wordId}`}
+                              index={0}
+                              isDragDisabled={locked}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {
+                                    answers.find((a) => a.num === "input2")
+                                      .input
+                                  }
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                    {!locked && wrongWords.includes(answers[1]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                    ?
+                    <div
+                      style={{
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "flex-end",
+                        fontSize: "22px",
+                      }}
+                    >
+                      <Droppable droppableId="input3">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="answer-input-unit5-p6-q1"
+                          >
+                            {answers.find((a) => a.num === "input3") && (
+                              <Draggable
+                                draggableId={`filled-${answers.find((a) => a.num === "input3").wordId}`}
+                                index={0}
+                                isDragDisabled={locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {
+                                      answers.find((a) => a.num === "input3")
+                                        .input
+                                    }
+                                  </span>
+                                )}
+                              </Draggable>
+                            )}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                      .
+                      {!locked && wrongWords.includes(answers[2]?.num) && (
+                        <span className="error-mark-input1">✕</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="section-four-unit5-p6-q1">
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  4
+                </span>{" "}
+                <img src={img4} className="img-unit5-p6-q1" />
+                <div className="content-input-unit5-p6-q1">
                   <div
                     style={{
                       position: "relative",
                       display: "flex",
                       alignItems: "flex-end",
+                      fontSize: "22px",
                     }}
                   >
-                    <input
-                      type="text"
-                      className="answer-input-unit5-p6-q1"
-                      value={
-                        answers.find((a) => a.num === "input3")?.input || ""
-                      }
-                      style={{
-                        fontSize: "22px",
-                      }}
-                      id="input3"
-                      onChange={handleChange}
-                        disabled={locked}
-                    />
-                    .
-                    {!locked&& wrongWords.includes(answers[2]?.num) && (
+                    <Droppable droppableId="input4">
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="answer-input-unit5-p6-q1"
+                        >
+                          {answers.find((a) => a.num === "input4") && (
+                            <Draggable
+                              draggableId={`filled-${answers.find((a) => a.num === "input4").wordId}`}
+                              index={0}
+                              isDragDisabled={locked}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {
+                                    answers.find((a) => a.num === "input4")
+                                      .input
+                                  }
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                    ?
+                    {!locked && wrongWords.includes(answers[3]?.num) && (
                       <span className="error-mark-input1">✕</span>
                     )}
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className="section-four-unit5-p6-q1">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                }}
-              >
-                4
-              </span>{" "}
-              <img src={img4} className="img-unit5-p6-q1" />
-              <div className="content-input-unit5-p6-q1">
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <input
-                    type="text"
-                    className="answer-input-unit5-p6-q1"
-                    value={answers.find((a) => a.num === "input4")?.input || ""}
-                    id="input4"
-                    onChange={handleChange}
+                  <div
                     style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
                       fontSize: "22px",
                     }}
-                      disabled={locked}
-                  />
-                  ?
-                  {!locked && wrongWords.includes(answers[3]?.num) && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
-                </div>
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <input
-                    type="text"
-                    className="answer-input-unit5-p6-q1"
-                    value={answers.find((a) => a.num === "input5")?.input || ""}
-                    id="input5"
-                    onChange={handleChange}
-                    style={{
-                      fontSize: "22px",
-                    }}
-                      disabled={locked}
-                  />
-                  .
-                  {!locked && wrongWords.includes(answers[4]?.num) && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
+                  >
+                    <Droppable droppableId="input5">
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="answer-input-unit5-p6-q1"
+                        >
+                          {answers.find((a) => a.num === "input5") && (
+                            <Draggable
+                              draggableId={`filled-${answers.find((a) => a.num === "input5").wordId}`}
+                              index={0}
+                              isDragDisabled={locked}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {
+                                    answers.find((a) => a.num === "input5")
+                                      .input
+                                  }
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                    .
+                    {!locked && wrongWords.includes(answers[4]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="action-buttons-container">
-          <button
-            onClick={() => {
-              setAnswers([]);
-              setWrongWords([]);
-               setLocked(false);   // ⬅ رجّع التعديل
-            }}
-            className="try-again-button"
-          >
-            Start Again ↻
-          </button>
+          <div className="action-buttons-container">
+            <button
+              onClick={() => {
+                setAnswers([]);
+                setWrongWords([]);
+                setLocked(false); // ⬅ رجّع التعديل
+              }}
+              className="try-again-button"
+            >
+              Start Again ↻
+            </button>
             {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button className="show-answer-btn swal-continue" onClick={showAnswers}>
-          Show Answer
-        </button>
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+            <button
+              className="show-answer-btn swal-continue"
+              onClick={showAnswers}
+            >
+              Show Answer
+            </button>
+            <button onClick={checkAnswers} className="check-button2">
+              Check Answer ✓
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

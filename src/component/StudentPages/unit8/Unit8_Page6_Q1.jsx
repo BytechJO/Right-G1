@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import deer from "../../../assets/unit8/imgs/U8P69EXED.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const data = [
   { question: "", correct: "head" },
@@ -11,9 +12,33 @@ const data = [
 ];
 
 const Unit8_Page6_Q1 = () => {
-  const [answers, setAnswers] = useState(Array(data.length).fill(""));
+  const [answers, setAnswers] = useState(Array(data.length).fill(null));
+
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+
+
+const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || showAnswer) return;
+
+  const value = draggableId.replace("word-", "");
+  const index = Number(destination.droppableId.split("-")[1]);
+
+  setAnswers((prev) => {
+    const updated = [...prev];
+
+    // منع تكرار الكلمة
+    const oldIndex = updated.findIndex((a) => a === value);
+    if (oldIndex !== -1) updated[oldIndex] = null;
+
+    updated[index] = value;
+    return updated;
+  });
+
+  setWrongInputs([]);
+};
+
 
   const handleChange = (value, index) => {
     if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
@@ -36,7 +61,7 @@ const Unit8_Page6_Q1 = () => {
     let wrong = [];
 
     answers.forEach((ans, i) => {
-      if (ans.trim().toLowerCase() === data[i].correct.toLowerCase()) {
+      if (ans === data[i].correct) {
         correctCount++;
       } else {
         wrong.push(i);
@@ -80,6 +105,7 @@ const Unit8_Page6_Q1 = () => {
   };
 
   return (
+      <DragDropContext onDragEnd={onDragEnd}>
     <div
       style={{
         display: "flex",
@@ -103,6 +129,36 @@ const Unit8_Page6_Q1 = () => {
           <h3 className="header-title-page8">
             <span className="ex-A"> D</span> Look and write.
           </h3>
+<Droppable droppableId="bank" isDropDisabled={showAnswer}>
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      className="word-bank-unit2-p8-q2"
+    >
+      {data.map((item, index) => (
+        <Draggable
+          key={item.correct}
+          draggableId={`word-${item.correct}`}
+          index={index}
+          isDragDisabled={showAnswer}
+        >
+          {(provided) => (
+            <span
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              className="word-item-unit2-p8-q2"
+            >
+              {item.correct}
+            </span>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
 
           <div className="content-unit5-p5-q3">
             <div className="group-input-unit5-p5-q3">
@@ -129,12 +185,34 @@ const Unit8_Page6_Q1 = () => {
                   </span>
 
                   <div className="question-text" style={{ position: "relative" }}>
-                    <input
-                      type="text"
-                      className="q-input"
-                      value={answers[index]}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                    />
+                   <Droppable droppableId={`slot-${index}`} isDropDisabled={showAnswer}>
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      className="q-input-unit8-page6-q1"
+    >
+      {answers[index] && (
+        <Draggable
+          draggableId={`filled-${answers[index]}-${index}`}
+          index={0}
+          isDragDisabled={showAnswer}
+        >
+          {(provided) => (
+            <span
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            >
+              {answers[index]}
+            </span>
+          )}
+        </Draggable>
+      )}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
 
                     {wrongInputs.includes(index) && (
                       <span className="wrong-icon-review6-p1-q3">✕</span>
@@ -169,6 +247,7 @@ const Unit8_Page6_Q1 = () => {
         </button>
       </div>
     </div>
+    </DragDropContext>
   );
 };
 

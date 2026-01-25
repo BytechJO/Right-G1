@@ -59,26 +59,20 @@ const Unit2_Page7_Q1 = () => {
   };
 
   // 🧲 Drag logic مع تعطيل الرقم بعد الاستخدام
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+ const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || showAnswer) return;
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const [, key, index] = destination.droppableId.split("-");
-      const num = Number(draggableId.replace("num-", ""));
+  if (destination.droppableId.startsWith("slot-")) {
+    const [, key, index] = destination.droppableId.split("-");
+    const num = Number(draggableId.replace("num-", ""));
 
-      // ⛔ إذا الرقم مستخدم، نوقف
-      if (usedNumbers.includes(num)) return;
+    const draggedWord = words.find((w) => w.num === num)?.word || "";
 
-      const draggedWord =
-        words.find((w) => w.num === num)?.word || "";
+    handleChange(key, Number(index), draggedWord);
+  }
+};
 
-      handleChange(key, Number(index), draggedWord);
-
-      // 🔒 نعلّم الرقم كمستخدم
-      setUsedNumbers((prev) => [...prev, num]);
-    }
-  };
 
   // نفس checkAnswers
   const checkAnswers = () => {
@@ -91,10 +85,13 @@ const Unit2_Page7_Q1 = () => {
     for (const key in sentences) {
       totalInputs += sentences[key].length;
 
-      if (!userAnswers[key] || userAnswers[key].length !== sentences[key].length) {
+      if (
+        !userAnswers[key] ||
+        userAnswers[key].length !== sentences[key].length
+      ) {
         ValidationAlert.info(
           "Oops!",
-          "Please fill all fields before checking."
+          "Please fill all fields before checking.",
         );
         return;
       }
@@ -116,6 +113,7 @@ const Unit2_Page7_Q1 = () => {
 
     setWrongInputs(newWrongInputs);
     setChecked(true);
+setUsedNumbers(words.map((w) => w.num));
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
@@ -124,8 +122,8 @@ const Unit2_Page7_Q1 = () => {
       tempScore === totalInputs
         ? "success"
         : tempScore === 0
-        ? "error"
-        : "warning"
+          ? "error"
+          : "warning"
     ](`
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color};font-weight:bold;">
@@ -192,16 +190,21 @@ const Unit2_Page7_Q1 = () => {
                       isDragDisabled={usedNumbers.includes(item.num)}
                     >
                       {(provided) => (
-                        <div 
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={`word-number-unit2-p7-q1 ${
-                            usedNumbers.includes(item.num) ? "used" : ""
-                          }`}
-                        >
+                        <div className="word-number-unit2-p7-q1">
+                          {/* 🔢 الرقم ثابت */}
                           <span className="num-word">{item.num}</span>
-                          <span className="word-num">{item.word}</span>
+
+                          {/* 🔤 فقط الكلمة draggable */}
+                          <span
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`word-num ${
+                              usedNumbers.includes(item.num) ? "used" : ""
+                            }`}
+                          >
+                            {item.word}
+                          </span>
                         </div>
                       )}
                     </Draggable>

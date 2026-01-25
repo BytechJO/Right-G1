@@ -26,15 +26,33 @@
   /* margin-left: 10px;*/
 }
 
+.word-bank-review5-p1-q2 {
+    display: flex;
+    gap: 5px;
+    margin: 15px 0 25px;
+    flex-wrap: wrap;
+    border: 2px solid #4b74ff;
+    background-color: #f2f6ff;
+    border-radius: 8px;
+    padding: 10px;
+    /* height: 60px; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
 .missing-input-review5-p1-q2 {
-  width: 38px;
-  height: 38px;
-  border: 2px solid #6ec1ff;
-  border-radius: 50%;
-  text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  transition: transform 0.2s ease, font-size 0.2s ease;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    border: 2px solid #6ec1ff;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    transition: transform 0.2s ease, font-size 0.2s ease;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 1024px) {
