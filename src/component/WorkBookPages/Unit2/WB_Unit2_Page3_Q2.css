@@ -9,15 +9,33 @@
 
 .q-img-wb-unit2-page3-q2 {
   width: auto;
-  height: 130px;
+  height: 170px;
 }
-.word-bank-wb-unit2-page3-q2 {
+/* .word-bank-wb-unit2-page3-q2 {
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
   margin: 15px 0;
   align-items: center;
   justify-content: center;
+} */
+
+.word-bank-wb-unit2-page3-q2 {
+    display: flex;
+    gap: 5px;
+    /* margin: 15px 0 25px; */
+    flex-wrap: wrap;
+    border: 2px solid #4b74ff;
+    background-color: #f2f6ff;
+    justify-content: center;
+    border-radius: 8px;
+    /* padding: 10px; */
+    /* height: 60px; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0px;
 }
 .error-mark-input-wb-unit2-page3-q2 {
   position: absolute;

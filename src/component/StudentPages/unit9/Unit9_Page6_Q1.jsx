@@ -43,11 +43,11 @@ const Unit9_Page6_Q1 = () => {
 
   const checkAnswers = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
+if (answers.some((ans) => !ans)) {
+  ValidationAlert.info("Please fill in all the blanks before checking!");
+  return;
+}
 
-    if (answers.some((ans) => ans.trim() === "")) {
-      ValidationAlert.info("Please fill in all the blanks before checking!");
-      return;
-    }
 
     let correctCount = 0;
     let wrong = [];

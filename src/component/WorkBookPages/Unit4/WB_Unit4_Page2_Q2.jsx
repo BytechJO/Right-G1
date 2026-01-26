@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./WB_Unit4_Page2_Q2.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 
@@ -12,6 +13,8 @@ const WB_Unit4_Page2_Q2 = () => {
   const [wrong, setWrong] = useState({});
   const [showAnswers, setShowAnswers] = useState(false);
   const [locked, setLocked] = useState(false);
+  const getWords = (scramble) => scramble.replace(/[’']/g, "'").split("/");
+
   const questions = [
     {
       id: "1",
@@ -35,12 +38,46 @@ const WB_Unit4_Page2_Q2 = () => {
     },
   ];
 
-  const handleChange = (e) => {
-    if (showAnswers || locked) return;
+const onDragEnd = (result) => {
+  if (!result.destination || locked || showAnswers) return;
 
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
-  };
+  const { draggableId, destination } = result;
+
+  // لازم يكون الدروب على input
+  if (!destination.droppableId.startsWith("blank-")) return;
+
+  // مثال: blank-1_question → 1
+  const targetQuestionId = destination.droppableId
+    .replace("blank-", "")
+    .split("_")[0];
+
+  // مثال: 1::It's
+  const [sourceQuestionId, word] = draggableId.split("::");
+
+  // ❌ إذا الكلمة مش من نفس السؤال → امنع
+  if (sourceQuestionId !== targetQuestionId) {
+    return;
+  }
+
+  setInputs((prev) => {
+    const updated = { ...prev };
+
+    // ❌ منع تكرار الكلمة داخل نفس الجملة
+    if (updated[`${targetQuestionId}_question`]?.includes(word)) {
+      return prev;
+    }
+
+    updated[`${targetQuestionId}_question`] =
+      updated[`${targetQuestionId}_question`]
+        ? `${updated[`${targetQuestionId}_question`]} ${word}`
+        : word;
+
+    return updated;
+  });
+
+  setWrong({});
+};
+
 
   const checkAnswers = () => {
     if (showAnswers || locked) return;
@@ -48,13 +85,13 @@ const WB_Unit4_Page2_Q2 = () => {
     // ❌ فحص إذا في input فاضي
     const hasEmptyInput = questions.some(
       (q) =>
-        !inputs[`${q.id}_question`] || inputs[`${q.id}_question`].trim() === ""
+        !inputs[`${q.id}_question`] || inputs[`${q.id}_question`].trim() === "",
     );
 
     if (hasEmptyInput) {
       ValidationAlert.info(
         "Oops!",
-        "Please answer all the questions before checking."
+        "Please answer all the questions before checking.",
       );
       return;
     }
@@ -103,73 +140,122 @@ const WB_Unit4_Page2_Q2 = () => {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div style={{ width: "60%" }} className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="ex-A">D</span>Unscramble and write.
-        </h5>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "30px" }}
+      >
+        <div style={{ width: "60%" }} className="div-forall">
+          <h5 className="header-title-page8">
+            <span className="ex-A">D</span>Unscramble and write.
+          </h5>
 
-        <div className="content-container-wb-unit4-p2-q2 ">
-          {questions.map((q, index) => (
-            <div style={{ display: "flex", width: "100%" }}>
-              <div className="input-container-wb-unit4-p2-q2 ">
-                <div style={{ display: "flex" }}>
-                  <span className="num2">{q.id}</span>
-                  <input
-                    readOnly
-                    value={q.scramble}
-                    className="answer-input-review10-p1-q3"
-                  />
-                </div>
-                {/* Unscramble input */}
-                <div style={{ position: "relative" }}>
-                  <input
-                    type="text"
-                    name={`${q.id}_question`}
-                    value={inputs[`${q.id}_question`] || ""}
-                    onChange={handleChange}
-                    disabled={locked ||showAnswers}
-                    className="answer-input33-review10-p1-q3"
-                  />
-                  {wrong[`${q.id}_question`] && (
-                    <span className="error-mark-input1">✕</span>
-                  )}
+          <div className="content-container-wb-unit4-p2-q2 ">
+            {questions.map((q, index) => (
+              <div style={{ display: "flex", width: "100%" }}>
+                <div className="input-container-wb-unit4-p2-q2 ">
+                  <div style={{ display: "flex" ,flexDirection:"column" }}>
+                    <div style={{ display: "flex" }}>
+                    <span className="num2">{q.id}</span>
+                    <input
+                      readOnly
+                      value={q.scramble}
+                      className="answer-input-review10-p1-q3"
+                    />
+                    </div>
+                    <Droppable
+                      droppableId={`bank-${q.id}`}
+                      direction="horizontal"
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="word-bank-wb-unit3-p6-q1"
+                        >
+                          {getWords(q.scramble).map((word, i) => (
+                            <Draggable
+                              key={`${q.id}-${word}-${i}`}
+                              draggableId={`${q.id}::${word}`}
+                              index={i}
+                              isDragDisabled={locked ||showAnswers}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                   className="word-box-wb-unit4-p2-q2"
+                                >
+                                  {word}
+                                </span>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                  {/* Unscramble input */}
+                  <div style={{ position: "relative" }}>
+                    <Droppable droppableId={`blank-${q.id}_question`}>
+                      {(provided, snapshot) => (
+                        <input
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          value={inputs[`${q.id}_question`] || ""}
+                          readOnly
+                          disabled={locked || showAnswers}
+                          className="answer-input33-review10-p1-q3"
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? "#e3f2fd"
+                              : "white",
+                          }}
+                        />
+                      )}
+                    </Droppable>
+
+                    {wrong[`${q.id}_question`] && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* ⭐ Buttons */}
-        <div className="action-buttons-container">
-          <button
-            className="try-again-button"
-            onClick={() => {
-              setAnswers([]);
-              setInputs({});
-              setWrong({});
-              setWrongWords([]);
-              setShowAnswers(false);
-              setDisableInputs(false);
-              setLocked(false);
-            }}
-          >
-            Start Again ↻
-          </button>
+          {/* ⭐ Buttons */}
+          <div className="action-buttons-container">
+            <button
+              className="try-again-button"
+              onClick={() => {
+                setAnswers([]);
+                setInputs({});
+                setWrong({});
+                setWrongWords([]);
+                setShowAnswers(false);
+                setDisableInputs(false);
+                setLocked(false);
+              }}
+            >
+              Start Again ↻
+            </button>
 
-          <button
-            className="show-answer-btn swal-continue"
-            onClick={showCorrectAnswers}
-          >
-            Show Answer
-          </button>
+            <button
+              className="show-answer-btn swal-continue"
+              onClick={showCorrectAnswers}
+            >
+              Show Answer
+            </button>
 
-          <button className="check-button2" onClick={checkAnswers}>
-            Check Answer ✓
-          </button>
+            <button className="check-button2" onClick={checkAnswers}>
+              Check Answer ✓
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

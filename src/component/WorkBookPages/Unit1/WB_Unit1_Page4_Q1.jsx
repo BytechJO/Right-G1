@@ -4,6 +4,8 @@ import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
 import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
 import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import "./WB_Unit1_Page4_Q1.css";
 
 export default function WB_Unit1_Page4_Q1() {
@@ -17,10 +19,30 @@ export default function WB_Unit1_Page4_Q1() {
   const [inputs, setInputs] = useState(["", "", "", ""]);
   const [wrong, setWrong] = useState([false, false, false, false]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [locked, setLocked] = useState(false);
 
-  const updateInput = (index, value) => {
-    if (showAnswer) return;
-    setInputs((prev) => prev.map((v, i) => (i === index ? value : v)));
+  
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
+
+    const { draggableId, destination } = result;
+    const newIndex = Number(destination.droppableId.replace("blank-", ""));
+
+    const draggedWord = draggableId.split("-").slice(1, -1).join("-");
+
+    const newInputs = [...inputs];
+
+    // ⭐⭐ إذا الكلمة مستخدمة بمكان ثاني → امسحيها
+    newInputs.forEach((val, i) => {
+      if (val === draggedWord) {
+        newInputs[i] = "";
+      }
+    });
+
+    // ⭐⭐ حطيها بالمكان الجديد
+    newInputs[newIndex] = draggedWord;
+
+    setInputs(newInputs);
     setWrong([false, false, false, false]);
   };
 
@@ -30,7 +52,7 @@ export default function WB_Unit1_Page4_Q1() {
     if (inputs.some((v) => v.trim() === "")) {
       ValidationAlert.info(
         "Oops!",
-        "Please complete all answers before checking."
+        "Please complete all answers before checking.",
       );
       return;
     }
@@ -43,7 +65,7 @@ export default function WB_Unit1_Page4_Q1() {
     });
 
     setWrong(wrongStatus);
-
+    setLocked(true)
     let total = data.length;
     let color = correct === total ? "green" : correct === 0 ? "red" : "orange";
 
@@ -64,90 +86,117 @@ export default function WB_Unit1_Page4_Q1() {
     setInputs(["", "", "", ""]);
     setWrong([false, false, false, false]);
     setShowAnswer(false);
+    setLocked(false)
   };
 
   return (
-    <div className="page8-wrapper" style={{ padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
-        {/* العنوان */}
-        <h3 className="header-title-page8">
-          <span className="ex-A">C</span> Read, look, and write.
-        </h3>
-
-        {/* الكلمات فوق */}
-        <div className="word-bank-wb-u1-q4">
-          <span className="word-wb-u1-p2-q1">Good morning!</span>
-          <span className="word-wb-u1-p2-q1">Good afternoon!</span>
-          <span className="word-wb-u1-p2-q1">Hello! I'm Stella.</span>
-          <span className="word-wb-u1-p2-q1">Goodbye!</span>
-        </div>
-
-        <div className="question-container-wb-u1-p4-q1">
-          {/* الأسئلة */}
-          {data.map((item, i) => (
-            <div key={i} className="question-row-wb-u1-q4">
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="page8-wrapper" style={{ padding: "30px" }}>
+        <div className="div-forall" style={{ width: "60%" }}>
+          {/* العنوان */}
+          <h3 className="header-title-page8">
+            <span className="ex-A">C</span> Read, look, and write.
+          </h3>
+          <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
               <div
-                className="img-box-wb-u1-q4"
-                style={{ display: "flex"}}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-wb-u1-p4-q1"
               >
-                <span
-                  style={{
-                    color: "darkblue",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  {i + 1}
-                </span>{" "}
-                <img
-                  className="img-wb-unit1-p4-q1"
-                  src={item.img}
-                  alt=""
-               
-                />
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <input
-                    className="input-text-field"
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      borderBottom: "2px solid black",
-                      fontSize: "20px",
-                      fontWeight: "600",
-                    }}
-                    value={showAnswer ? item.answer : inputs[i]}
-                    onChange={(e) => updateInput(i, e.target.value)}
-                    disabled={showAnswer}
-                  />
-
-                  {wrong[i] && <div className="wrong-icon-wb-u1-p4-q1">✕</div>}
-                </div>{" "}
+                {data.map((item, i) => (
+                  <Draggable
+                    key={`bank-${item.answer}-${i}`}
+                    draggableId={`bank-${item.answer}-${i}`}
+                    index={i}
+                    isDragDisabled={showAnswer ||locked}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-wb-u1-p2-q1"
+                      >
+                        {item.answer}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            </div>
-          ))}
+            )}
+          </Droppable>
+
+          <div className="question-container-wb-u1-p4-q1">
+            {/* الأسئلة */}
+            {data.map((item, i) => (
+              <div key={i} className="question-row-wb-u1-q4">
+                <div className="img-box-wb-u1-q4" style={{ display: "flex" }}>
+                  <span
+                    style={{
+                      color: "darkblue",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                    }}
+                  >
+                    {i + 1}
+                  </span>{" "}
+                  <img className="img-wb-unit1-p4-q1" src={item.img} alt="" />
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Droppable droppableId={`blank-${i}`}>
+                      {(provided, snapshot) => (
+                        <input
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`missing-input-wb-unit1-p3-q1 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                          style={{
+                            width: "100%",
+                            height: "40px",
+                            borderBottom: "2px solid black",
+                            fontSize: "20px",
+                            fontWeight: "600",
+                          }}
+                          value={showAnswer ? item.answer : inputs[i]}
+                          readOnly
+                          disabled={showAnswer || locked}
+                        />
+                      )}
+                    </Droppable>
+
+                    {!showAnswer && wrong[i] && (
+                      <div className="wrong-icon-wb-u1-p4-q1">✕</div>
+                    )}
+                  </div>{" "}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* الأزرار */}
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={() => setShowAnswer(true)}
+          >
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      {/* الأزرار */}
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={() => setShowAnswer(true)}
-        >
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 }

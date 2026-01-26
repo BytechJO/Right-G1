@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review10_Page2_Q3.css";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
-import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
 import img1 from "../../../assets/unit10/imgs/U10P91EXEF-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P91EXEF-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P91EXEF-03.svg";
 import img4 from "../../../assets/unit10/imgs/U10P91EXEF-04.svg";
 import img5 from "../../../assets/unit10/imgs/U10P91EXEF-05.svg";
 import img6 from "../../../assets/unit10/imgs/U10P91EXEF-06.svg";
-import { TbMessageCircle } from "react-icons/tb";
-
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 const data = [
   {
     parts: [
@@ -65,24 +59,47 @@ const data = [
 
 const Review10_Page2_Q3 = () => {
   const [answers, setAnswers] = useState(
-    data.map((d) => Array(d.correct.length).fill(""))
+    data.map((d) => Array(d.correct.length).fill("")),
   );
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
-  const handleChange = (value, qIndex, blankIndex) => {
-    if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
+  const onDragEnd = (result) => {
+  if (!result.destination || locked) return;
 
-    const newAnswers = [...answers];
-    newAnswers[qIndex][blankIndex] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
+  const { draggableId, destination } = result;
+
+  const [newQ, newBlank] = destination.droppableId
+    .replace("blank-", "")
+    .split("-")
+    .map(Number);
+
+  const draggedWord = draggableId.split("-").slice(1, -1).join("-");
+
+  const newAnswers = answers.map((row) => [...row]);
+
+  // ⭐⭐ دور على الكلمة القديمة واحذفها
+  newAnswers.forEach((row, qIndex) => {
+    row.forEach((val, bIndex) => {
+      if (val === draggedWord) {
+        newAnswers[qIndex][bIndex] = "";
+      }
+    });
+  });
+
+  // ⭐⭐ حط الكلمة بالمكان الجديد
+  newAnswers[newQ][newBlank] = draggedWord;
+
+  setAnswers(newAnswers);
+  setWrongInputs([]);
+};
+
+ 
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
     // 1) افحص إذا في أي خانة فاضية
     const hasEmpty = answers.some((arr) =>
-      arr.some((val) => val.trim() === "")
+      arr.some((val) => val.trim() === ""),
     );
 
     if (hasEmpty) {
@@ -93,7 +110,7 @@ const Review10_Page2_Q3 = () => {
     // 2) اجمع كل الأخطاء
     let wrong = [];
     let correctCount = 0;
-
+setLocked(true)
     answers.forEach((arr, qIndex) => {
       arr.forEach((val, blankIndex) => {
         if (val.trim() === data[qIndex].correct[blankIndex]) {
@@ -109,7 +126,7 @@ const Review10_Page2_Q3 = () => {
     // 3) احسب العدد الكلي للحقول
     const totalInputs = data.reduce(
       (acc, item) => acc + item.correct.length,
-      0
+      0,
     );
 
     // 4) اختر اللون حسب السكور
@@ -117,8 +134,8 @@ const Review10_Page2_Q3 = () => {
       correctCount === totalInputs
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size:20px; text-align:center;">
@@ -147,6 +164,7 @@ const Review10_Page2_Q3 = () => {
   };
 
   return (
+    <DragDropContext onDragEnd={onDragEnd}>
     <div className="page8-wrapper">
       <div
         className="div-forall"
@@ -162,6 +180,38 @@ const Review10_Page2_Q3 = () => {
         <h3 className="header-title-page8">
           F Read, look, and write. Then, say.
         </h3>
+        <Droppable droppableId="word-bank" direction="horizontal">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="word-bank-review10-p2-q3"
+            >
+              {Array.from(new Set(data.flatMap((d) => d.correct))).map(
+                (word, i) => (
+                  <Draggable
+                    key={`bank-${word}-${i}`}
+                    draggableId={`bank-${word}-${i}`}
+                    index={i}
+                    isDragDisabled={locked}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-review10-p1-q3"
+                      >
+                        {word}
+                      </div>
+                    )}
+                  </Draggable>
+                ),
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
 
         {data.map((item, qIndex) => (
           <div className="row-missing" key={qIndex}>
@@ -176,22 +226,28 @@ const Review10_Page2_Q3 = () => {
                 >
                   {p.before}
 
-                  <div className="input-wrapper">
-                    <input
-                      className="missing-input-review10-p2-q3"
-                      value={answers[qIndex][blankIndex]}
-                      onChange={(e) =>
-                        handleChange(e.target.value, qIndex, blankIndex)
-                      }
-                      readOnly={locked} // ⭐ NEW — منع التعديل بعد Show Answer
-                    />
+                  <div className="input-wrapper-review10-p2-q3">
+                    <Droppable droppableId={`blank-${qIndex}-${blankIndex}`} isDropDisabled={locked}>
+                      {(provided ,snapshot) => (
+                        <input
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                       className={`letter-input-review10-p2-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                          value={answers[qIndex][blankIndex]}
+                          readOnly
+                        />
+                      )}
+                    </Droppable>
+
                     {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
                       <span className="wrong-icon-review4-p2-q1">✕</span>
                     )}
                   </div>
 
                   {p.after}
-                  <img src={p.middleImg} className="middle-img" alt="" />
+                  <img src={p.middleImg} className="middle-img-review10-p2-q3 " alt="" />
                 </span>
               ))}
             </div>
@@ -219,7 +275,7 @@ const Review10_Page2_Q3 = () => {
           Check Answers ✓
         </button>
       </div>
-    </div>
+    </div></DragDropContext>
   );
 };
 

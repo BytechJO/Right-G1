@@ -315,3 +315,343 @@ const WB_Unit4_Page4_Q1 = () => {
 };
 
 export default WB_Unit4_Page4_Q1;
+
+
+
+
+
+// import React, { useState, useRef } from "react";
+// import ValidationAlert from "../../Popup/ValidationAlert";
+// import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+// import "./WB_Unit4_Page4_Q1.css";
+
+// const WORDS = ["triangle", "circle", "square", "rectangle"];
+
+// const WB_Unit4_Page4_Q1 = () => {
+//   const [labels, setLabels] = useState({
+//     triangle: "",
+//     circle1: "",
+//     circle2: "",
+//     house: "",
+//     door: "",
+//   });
+
+//   const [colors, setColors] = useState({
+//     triangle: "#ffffff",
+//     circle1: "#ffffff",
+//     circle2: "#ffffff",
+//     house: "#ffffff",
+//     door: "#ffffff",
+//   });
+
+//   const [checked, setChecked] = useState(false);
+//   const [activeShape, setActiveShape] = useState(null);
+//   const [showPalette, setShowPalette] = useState(false);
+
+//   const BASIC_COLORS = [
+//     "#ff0000",
+//     "#0000ff",
+//     "#ffff00",
+//     "#00aa00",
+//     "#ffa200ff",
+//   ];
+
+//   // 🎨 فتح palette
+//   const openColorPicker = (shape) => {
+//     if (checked) return;
+//     setActiveShape(shape);
+//     setShowPalette(true);
+//   };
+
+//   const selectColor = (color) => {
+//     setColors((prev) => ({
+//       ...prev,
+//       [activeShape]: color,
+//     }));
+//     setShowPalette(false);
+//   };
+
+//   // 🟦 Drag & Drop logic
+//   const onDragEnd = (result) => {
+//     if (!result.destination || checked) return;
+
+//     const { draggableId, destination } = result;
+
+//     if (!destination.droppableId.startsWith("shape-")) return;
+
+//     const shapeKey = destination.droppableId.replace("shape-", "");
+//     const word = draggableId;
+
+//     setLabels((prev) => {
+//       const updated = { ...prev };
+
+//       // ❌ منع استخدام نفس الكلمة بأكثر من مكان
+//       Object.keys(updated).forEach((k) => {
+//         if (updated[k] === word) {
+//           updated[k] = "";
+//         }
+//       });
+
+//       updated[shapeKey] = word;
+//       return updated;
+//     });
+//   };
+
+//   // ✅ Check Answer
+//   const checkAnswer = () => {
+//     if (checked) return;
+
+//     if (
+//       !labels.triangle ||
+//       !labels.circle1 ||
+//       !labels.circle2 ||
+//       !labels.house ||
+//       !labels.door
+//     ) {
+//       ValidationAlert.info("Please label all the shapes.");
+//       return;
+//     }
+
+//     let score = 0;
+//     const total = 5;
+
+//     if (labels.triangle === "triangle") score++;
+//     if (labels.circle1 === "circle") score++;
+//     if (labels.circle2 === "circle") score++;
+//     if (["square", "rectangle"].includes(labels.house)) score++;
+//     if (["square", "rectangle"].includes(labels.door)) score++;
+
+//     setChecked(true);
+
+//     const color =
+//       score === total ? "green" : score === 0 ? "red" : "orange";
+
+//     ValidationAlert[
+//       score === total
+//         ? "success"
+//         : score === 0
+//         ? "error"
+//         : "warning"
+//     ](`
+//       <div style="font-size:20px;text-align:center;">
+//         <span style="color:${color};font-weight:bold">
+//           Score: ${score} / ${total}
+//         </span>
+//       </div>
+//     `);
+//   };
+
+//   const reset = () => {
+//     setLabels({
+//       triangle: "",
+//       circle1: "",
+//       circle2: "",
+//       house: "",
+//       door: "",
+//     });
+
+//     setColors({
+//       triangle: "#ffffff",
+//       circle1: "#ffffff",
+//       circle2: "#ffffff",
+//       house: "#ffffff",
+//       door: "#ffffff",
+//     });
+
+//     setChecked(false);
+//   };
+
+//   const showAnswers = () => {
+//     setLabels({
+//       triangle: "triangle",
+//       circle1: "circle",
+//       circle2: "circle",
+//       house: "square",
+//       door: "square",
+//     });
+
+//     setColors({
+//       triangle: "blue",
+//       circle1: "red",
+//       circle2: "red",
+//       house: "#ffff00",
+//       door: "green",
+//     });
+
+//     setChecked(true);
+//   };
+
+//   return (
+//     <DragDropContext onDragEnd={onDragEnd}>
+//       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 30 }}>
+//         <div className="div-forall" style={{ width: "60%" }}>
+//           <h5 className="header-title-page8">
+//             <span className="ex-A">G</span> Look and label the shapes. Then color.
+//           </h5>
+
+//           {/* 🟨 Word Bank */}
+//           <Droppable droppableId="word-bank" direction="horizontal">
+//             {(provided) => (
+//               <div
+//                 ref={provided.innerRef}
+//                 {...provided.droppableProps}
+//                 className="word-bank-wb-unit3-p6-q1"
+//               >
+//                 {WORDS.map((word, index) => (
+//                   <Draggable draggableId={word} index={index} key={word}>
+//                     {(provided) => (
+//                       <div
+//                         ref={provided.innerRef}
+//                         {...provided.draggableProps}
+//                         {...provided.dragHandleProps}
+//                         className="word-box-wb-unit4-p2-q2"
+//                       >
+//                         {word}
+//                       </div>
+//                     )}
+//                   </Draggable>
+//                 ))}
+//                 {provided.placeholder}
+//               </div>
+//             )}
+//           </Droppable>
+
+//           {/* 🏠 SVG */}
+//           <svg width="300" height="350" className="all-svg-house-wb-unit4-p4-q1">
+//             {/* Triangle */}
+//             <polygon
+//               points="150,20 50,120 250,120"
+//               fill={colors.triangle}
+//               stroke="black"
+//               onDoubleClick={() => openColorPicker("triangle")}
+//             />
+//             <foreignObject x="90" y="60" width="120" height="40">
+//               <Droppable droppableId="shape-triangle">
+//                 {(provided) => (
+//                   <div ref={provided.innerRef} {...provided.droppableProps} className="drop-label-box">
+//                     {labels.triangle && (
+//                       <Draggable draggableId={labels.triangle} index={0}>
+//                         {(provided) => (
+//                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+//                             {labels.triangle}
+//                           </div>
+//                         )}
+//                       </Draggable>
+//                     )}
+//                     {provided.placeholder}
+//                   </div>
+//                 )}
+//               </Droppable>
+//             </foreignObject>
+
+//             {/* House */}
+//             <rect x="50" y="120" width="200" height="180" fill={colors.house} stroke="black" />
+//             <foreignObject x="100" y="190" width="100" height="30">
+//               <Droppable droppableId="shape-house">
+//                 {(provided) => (
+//                   <div ref={provided.innerRef} {...provided.droppableProps} className="drop-label-box">
+//                     {labels.house && (
+//                       <Draggable draggableId={labels.house} index={0}>
+//                         {(provided) => (
+//                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+//                             {labels.house}
+//                           </div>
+//                         )}
+//                       </Draggable>
+//                     )}
+//                     {provided.placeholder}
+//                   </div>
+//                 )}
+//               </Droppable>
+//             </foreignObject>
+
+//             {/* Circles */}
+//             <circle cx="100" cy="170" r="30" fill={colors.circle1} stroke="black" />
+//             <circle cx="200" cy="170" r="30" fill={colors.circle2} stroke="black" />
+
+//             <foreignObject x="75" y="160" width="50" height="30">
+//               <Droppable droppableId="shape-circle1">
+//                 {(provided) => (
+//                   <div ref={provided.innerRef} {...provided.droppableProps} className="drop-label-box">
+//                     {labels.circle1 && (
+//                       <Draggable draggableId={labels.circle1} index={0}>
+//                         {(provided) => (
+//                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+//                             {labels.circle1}
+//                           </div>
+//                         )}
+//                       </Draggable>
+//                     )}
+//                     {provided.placeholder}
+//                   </div>
+//                 )}
+//               </Droppable>
+//             </foreignObject>
+
+//             <foreignObject x="175" y="160" width="50" height="30">
+//               <Droppable droppableId="shape-circle2">
+//                 {(provided) => (
+//                   <div ref={provided.innerRef} {...provided.droppableProps} className="drop-label-box">
+//                     {labels.circle2 && (
+//                       <Draggable draggableId={labels.circle2} index={0}>
+//                         {(provided) => (
+//                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+//                             {labels.circle2}
+//                           </div>
+//                         )}
+//                       </Draggable>
+//                     )}
+//                     {provided.placeholder}
+//                   </div>
+//                 )}
+//               </Droppable>
+//             </foreignObject>
+
+//             {/* Door */}
+//             <rect x="110" y="230" width="70" height="70" fill={colors.door} stroke="black" />
+//             <foreignObject x="115" y="240" width="60" height="30">
+//               <Droppable droppableId="shape-door">
+//                 {(provided) => (
+//                   <div ref={provided.innerRef} {...provided.droppableProps} className="drop-label-box">
+//                     {labels.door && (
+//                       <Draggable draggableId={labels.door} index={0}>
+//                         {(provided) => (
+//                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+//                             {labels.door}
+//                           </div>
+//                         )}
+//                       </Draggable>
+//                     )}
+//                     {provided.placeholder}
+//                   </div>
+//                 )}
+//               </Droppable>
+//             </foreignObject>
+//           </svg>
+
+//           {showPalette && (
+//             <div className="color-palette-wb-u1-p7-q1">
+//               {BASIC_COLORS.map((color) => (
+//                 <div
+//                   key={color}
+//                   className="color-circle"
+//                   style={{ backgroundColor: color }}
+//                   onClick={() => selectColor(color)}
+//                 />
+//               ))}
+//             </div>
+//           )}
+//         </div>
+
+//         {/* Buttons */}
+//         <div className="action-buttons-container">
+//           <button className="try-again-button" onClick={reset}>Start Again ↻</button>
+//           <button className="show-answer-btn" onClick={showAnswers}>Show Answer</button>
+//           <button className="check-button2" onClick={checkAnswer}>Check Answer ✓</button>
+//         </div>
+//       </div>
+//     </DragDropContext>
+//   );
+// };
+
+// export default WB_Unit4_Page4_Q1;

@@ -1,7 +1,7 @@
 .content-review9-p1-q2 {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .question-box-review9-p1-q2 {
@@ -14,6 +14,9 @@
 }
 .question-blank-review9-p1-q2 {
   border-bottom: 2px solid black;
+  display: flex;
+  width: 100%;
+  height: 30px;
 }
 
 .answer-input-review9-p1-q2{
@@ -25,6 +28,26 @@
     font-size: 22px;
     font-weight: 500;
     width: 95%;
-    /* height: 60px; */
+    height: 30px;
+    position: relative;
 
+}
+
+
+.wrong-x-circle-review9-p1-q2 {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 25px;
+  height: 25px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border:  2px white solid;
 }

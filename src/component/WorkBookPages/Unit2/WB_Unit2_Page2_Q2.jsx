@@ -137,15 +137,15 @@ const WB_Unit2_Page2_Q2 = () => {
           </h5>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <input
+          {/* <input
             type="text"
             value={answer}
             className="answer-input33-review10-p1-q3"
             onChange={(e) => setAnswer(e.target.value)}
             disabled={checked}
-          />
+          /> */}
 
-          <span>.</span>
+          {/* <span>.</span> */}
         </div>
 
    <div style={{display:"flex",justifyContent:"center",alignContent:"center"}}>

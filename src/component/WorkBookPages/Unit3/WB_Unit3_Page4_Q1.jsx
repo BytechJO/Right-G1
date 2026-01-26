@@ -40,28 +40,34 @@ const WB_Unit3_Page4_Q1 = () => {
   const normalizeAnswer = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
   const normalizeInput = (s) => s.toLowerCase().replace(/[^a-z]/g, "");
 
+const handleCharClick = (qIndex, cIndex) => {
+  if (checked || showAnswer) return;
 
-  const handleCharClick = (qIndex, cIndex) => {
-    if (checked || showAnswer) return;
+  const correct = correctIndices[qIndex];
 
-    const correct = correctIndices[qIndex];
+  // ❌ إذا الحرف مو من الكلمة الصحيحة → تجاهل
+  if (!correct.includes(cIndex)) return;
 
-    // ❌ إذا الحرف مو من الكلمة الصحيحة → لا تعمل شيء
-    if (!correct.includes(cIndex)) return;
+  setSelectedIndices((prev) => {
+    const next = { ...prev };
 
-    setSelectedIndices((prev) => {
-      const next = { ...prev };
+    const isAlreadyCorrect =
+      next[qIndex]?.length === correct.length &&
+      next[qIndex].every((v, i) => v === correct[i]);
 
-      const alreadySelected =
-        next[qIndex]?.length === correct.length &&
-        next[qIndex].every((v, i) => v === correct[i]);
+    // toggle
+    next[qIndex] = isAlreadyCorrect ? [] : [...correct];
 
-      // toggle
-      next[qIndex] = alreadySelected ? [] : [...correct];
+    return next;
+  });
 
-      return next;
-    });
-  };
+  // ✅ ⭐⭐ الجديد: تعبئة input مباشرة بالكلمة الصحيحة
+  setInputs((prev) => ({
+    ...prev,
+    [qIndex]: questions[qIndex].answer,
+  }));
+};
+
 
   const startAgain = () => {
     setSelectedIndices({});
@@ -103,7 +109,7 @@ const WB_Unit3_Page4_Q1 = () => {
     }
 
     let score = 0;
-    let maxScore = questions.length * 2; // 8
+    let maxScore = questions.length; // 8
 
     questions.forEach((q, i) => {
       const selected = (selectedIndices[i] || []).slice().sort((a, b) => a - b);
@@ -116,11 +122,7 @@ const WB_Unit3_Page4_Q1 = () => {
 
       if (isCircleCorrect) score += 1;
 
-      // ✅ 2) فحص الكتابة
-      const isWriteCorrect =
-        normalizeInput(inputs[i] || "") === normalizeAnswer(q.answer);
-
-      if (isWriteCorrect) score += 1;
+ 
     });
 
     setChecked(true);
@@ -203,7 +205,6 @@ const WB_Unit3_Page4_Q1 = () => {
                 <div className="wb-unit3-p4-q1-write">
                   <input
                     className="wb-unit3-p4-q1-input"
-                    placeholder="Write here..."
                     value={inputs[qIndex] || ""}
                     onChange={(e) => {
                       if (checked || showAnswer) return;
@@ -212,6 +213,7 @@ const WB_Unit3_Page4_Q1 = () => {
                         [qIndex]: e.target.value,
                       }));
                     }}
+                    readOnly
                   />
                   {/* ❌ X للكتابة */}
                   {checked &&

@@ -30,6 +30,24 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   cursor: pointer;
 }
+.word-bank-wb-unit3-p1-q1 {
+    display: flex;
+    gap: 5px;
+    /* margin: 15px 0 25px; */
+    flex-wrap: wrap;
+    border: 2px solid #4b74ff;
+    background-color: #f2f6ff;
+    justify-content: center;
+    border-radius: 8px;
+    /* padding: 10px; */
+    /* height: 60px; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0px;
+}
+
 
 .h5-wb-unit3-p1-q1:active {
   transform: scale(0.98);

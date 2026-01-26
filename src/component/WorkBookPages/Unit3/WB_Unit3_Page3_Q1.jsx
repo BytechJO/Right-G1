@@ -4,8 +4,9 @@ import cap from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-02.svg";
 import ant from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-03.svg";
 import dad from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-04.svg";
 import dad2 from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-05.svg";
-import dad3  from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-06.svg";
+import dad3 from "../../../assets/U1 WB/U3/SVG/U3P17EXEE-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import "./WB_Unit3_Page3_Q1.css";
 const WB_Unit3_Page3_Q1 = () => {
   const correctAnswers = [
@@ -28,17 +29,62 @@ const WB_Unit3_Page3_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
   const [shuffledWords, setShuffledWords] = useState([]);
+  const [bank, setBank] = useState([]);
+  const [slots, setSlots] = useState(Array(6).fill(null));
   useEffect(() => {
-    setShuffledWords(shuffleArray(correctAnswers));
+    setBank(shuffleArray(correctAnswers));
+    setSlots(Array(6).fill(null));
   }, []);
 
-  const handleChange = (value, index) => {
-    if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
+
+    const { source, destination } = result;
+
+    // لازم يكون الإسقاط على slot
+    if (!destination.droppableId.startsWith("slot-")) return;
+
+    const targetIndex = Number(destination.droppableId.replace("slot-", ""));
+
+    let draggedItem = null;
+
+    // 🟢 جاي من البنك (نسخ)
+    if (source.droppableId === "bank") {
+      draggedItem = bank[source.index];
+    }
+
+    // 🟡 جاي من slot ثاني (نقل)
+    if (source.droppableId.startsWith("slot-")) {
+      const fromIndex = Number(source.droppableId.replace("slot-", ""));
+      draggedItem = slots[fromIndex];
+
+      // نشيلها من مكانها القديم
+      setSlots((prev) => {
+        const copy = [...prev];
+        copy[fromIndex] = null;
+        return copy;
+      });
+    }
+
+    if (!draggedItem) return;
+
+    setSlots((prev) => {
+      const copy = [...prev];
+
+      // ❌ منع تكرار نفس الكلمة بأكثر من slot
+      const existingIndex = copy.findIndex((item) => item === draggedItem);
+
+      if (existingIndex !== -1) {
+        copy[existingIndex] = null; // نشيلها من مكانها القديم
+      }
+
+      // ✅ نحطها بالمكان الجديد
+      copy[targetIndex] = draggedItem;
+
+      return copy;
+    });
   };
+
   const normalizeText = (text) => {
     return text
       .toLowerCase() // تجاهل capital / small
@@ -49,251 +95,379 @@ const WB_Unit3_Page3_Q1 = () => {
 
   const checkAnswers = () => {
     if (locked) return;
-    if (answers.some((ans) => ans.trim() === "")) {
+
+    if (slots.some((s) => !s)) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
-    let tempScore = 0;
+    let correct = 0;
     let wrong = [];
-    answers.forEach((ans, i) => {
-      if (normalizeText(ans) === normalizeText(correctAnswers[i])) {
-        tempScore++;
+
+    slots.forEach((s, i) => {
+      if (normalizeText(s) === normalizeText(correctAnswers[i])) {
+        correct++;
       } else {
-        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
+        wrong.push(i);
       }
     });
+
     setWrongInputs(wrong);
+    setLocked(true);
 
     const total = correctAnswers.length;
     const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
+      correct === total ? "green" : correct === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
+    ValidationAlert[
+      correct === total ? "success" : correct === 0 ? "error" : "warning"
+    ](`
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color};font-weight:bold;">
+        Score: ${correct} / ${total}
       </span>
     </div>
-  `;
-
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+  `);
   };
+
   const showAnswers = () => {
-    setAnswers(correctAnswers); // ضع كل الإجابات الصحيحة
-    setWrongInputs([]); // اخفاء الأخطاء
-    setLocked(true); // 🔒 قفل التعديل
+    setSlots([...correctAnswers]);
+    setWrongInputs([]);
+    setLocked(true);
   };
 
   const reset = () => {
-    setAnswers(["", "", "", "", "", ""]);
+    setBank(shuffleArray(correctAnswers));
+    setSlots(Array(6).fill(null));
     setWrongInputs([]);
-    setLocked(false); // ⬅ مهم
-    setShuffledWords(shuffleArray(correctAnswers)); // 🔀 إعادة شفل
+    setLocked(false);
   };
 
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div  className="div-forall"
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        className="question-wrapper-unit3-page6-q1"
         style={{
           display: "flex",
           flexDirection: "column",
-          //   gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">E</span>Look, read, and write.
-        </h5>
-        <div className="word-bank-wb-unit3-page3-q1">
-          {shuffledWords.map((w, i) => (
-            <span key={i} className="word-box-wb-u1-p8-q2">
-              {w}
-            </span>
-          ))}
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            //   gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">E</span>Look, read, and write.
+          </h5>
+
+          <Droppable droppableId="bank" direction="vertical">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-wb-unit3-page3-q1"
+              >
+                {bank.map((w, i) => (
+                  <Draggable draggableId={`bank-${i}`} index={i} key={w}>
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-box-wb-u1-p8-q2"
+                      >
+                        {w}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="row-content10-wb-unit3-page3-q1">
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">1</span>
+                <img src={bat} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-0">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[0] && (
+                      <Draggable draggableId={`slot-0`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[0]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}
+                    {wrongInputs.includes(0) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">2</span>
+                <img src={cap} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-1">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[1] && (
+                      <Draggable draggableId={`slot-1`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[1]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}{" "}
+                    {wrongInputs.includes(1) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">3</span>{" "}
+                <img src={ant} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-2">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[2] && (
+                      <Draggable draggableId={`slot-2`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[2]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}{" "}
+                    {wrongInputs.includes(2) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">4</span>
+
+                <img src={dad} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-3">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[3] && (
+                      <Draggable draggableId={`slot-3`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[3]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}{" "}
+                    {wrongInputs.includes(3) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">5</span>
+
+                <img src={dad2} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-4">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[4] && (
+                      <Draggable draggableId={`slot-4`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[4]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}{" "}
+                    {wrongInputs.includes(4) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>{" "}
+            <div
+              className="row2-unit3-page6-q1"
+              style={{ alignItems: "flex-start" }}
+            >
+              <div style={{ display: "flex", gap: "10px" }}>
+                <span className="num-span">6</span>
+
+                <img src={dad3} alt="" className="q-img-wb-unit3-page3-q2" />
+              </div>
+
+              <Droppable droppableId="slot-5">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="q-input-wb-unit3-page3-q1"
+                    style={{
+                      background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+                    }}
+                  >
+                    {slots[5] && (
+                      <Draggable draggableId={`slot-5`} index={0}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {slots[5]}
+                          </div>
+                        )}
+                      </Draggable>
+                    )}
+                    {provided.placeholder}
+                    {wrongInputs.includes(5) && (
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Droppable>
+            </div>
+          </div>
         </div>
-        <div className="row-content10-wb-unit3-page3-q1">
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
           >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">1</span>
-              <img src={bat} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 0)}
-                value={answers[0]}
-                disabled={locked}
-              />
-              {!locked && wrongInputs.includes(0) && (
-                <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
-              )}
-            </div>
-          </div>
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
-          >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">2</span>{" "}
-              <img src={cap} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 1)}
-                value={answers[1]}
-                disabled={locked}
-              />{" "}
-              {!locked && wrongInputs.includes(1) && (
-                <span className="error-mark-input">✕</span>
-              )}
-            </div>
-          </div>
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
-          >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">3</span>{" "}
-              <img src={ant} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 2)}
-                value={answers[2]}
-                disabled={locked}
-              />{" "}
-              {!locked && wrongInputs.includes(2) && (
-                <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
-              )}
-            </div>
-          </div>
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
-          >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">4</span>
-
-              <img src={dad} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 3)}
-                value={answers[3]}
-                disabled={locked}
-              />{" "}
-              {!locked && wrongInputs.includes(3) && (
-                <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
-              )}
-            </div>
-          </div>
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
-          >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">5</span>
-
-              <img src={dad2} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 4)}
-                value={answers[4]}
-                disabled={locked}
-              />{" "}
-              {!locked && wrongInputs.includes(4) && (
-                <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
-              )}
-            </div>
-          </div>{" "}
-          <div
-            className="row2-unit3-page6-q1"
-            style={{ alignItems: "flex-start" }}
-          >
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span className="num-span">6</span>
-
-              <img src={dad3} alt="" className="q-img-wb-unit3-page3-q2" />
-            </div>
-
-            <div
-              className="input-wrapper-unit3-page6-q1"
-              style={{ position: "relative" }}
-            >
-              <input
-                type="text"
-                className="q-input-wb-unit3-page3-q1"
-                onChange={(e) => handleChange(e.target.value, 5)}
-                value={answers[5]}
-                disabled={locked}
-              />{" "}
-              {!locked && wrongInputs.includes(5) && (
-                <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
-              )}
-            </div>
-          </div>
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button onClick={showAnswers} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

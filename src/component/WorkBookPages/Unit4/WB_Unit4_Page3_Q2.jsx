@@ -130,7 +130,7 @@ const WB_Unit4_Page3_Q2 = () => {
             and draw.
           </h5>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        {/* <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <p style={{width:"10%",fontSize:"25px",fontWeight:"500"}}>I like</p>
 
           <input
@@ -142,7 +142,7 @@ const WB_Unit4_Page3_Q2 = () => {
           />
 
           <span>.</span>
-        </div>
+        </div> */}
 
         <canvas
           ref={canvasRef}

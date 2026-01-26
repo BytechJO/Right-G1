@@ -22,8 +22,10 @@
     font-size: 19px;
     width: 100%;
     /* text-align: center; */
+    height: 50px;
     vertical-align: middle;
     line-height: normal;
+    position: relative;
 }
 
 .q-img-wb-unit3-page3-q2 {

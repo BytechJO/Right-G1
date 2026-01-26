@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import conversation from "../../../assets/unit7/img/U7P63EXEF-01.svg";
 import conversation2 from "../../../assets/unit7/img/U7P63EXEF-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 // import "./WB_Unit2_Page1_Q2.css";
 const WB_Unit4_Page2_Q1 = () => {
   const [shapeColors, setShapeColors] = useState({
@@ -13,7 +15,7 @@ const WB_Unit4_Page2_Q1 = () => {
   const [selectedColor, setSelectedColor] = useState("#ff0000"); // اللون الحالي
   const [showPalette, setShowPalette] = useState(false);
   const [activeShape, setActiveShape] = useState(null);
-
+ 
   const questions = [
     {
       id: 1,
@@ -41,6 +43,26 @@ const WB_Unit4_Page2_Q1 = () => {
     q1: "It is a square.",
     q2: "It is a triangle",
     q3: "It is a circle",
+  };
+   const wordBank = Object.values(correctAnswers);
+
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
+
+    const { draggableId, destination } = result;
+
+    if (!destination.droppableId.startsWith("blank-")) return;
+
+    const qId = destination.droppableId.replace("blank-", "");
+
+    const word = draggableId.replace("word-", "");
+
+    setAnswers((prev) => ({
+      ...prev,
+      [qId]: word,
+    }));
+
+    setWrongInputs([]);
   };
 
   const [inputs, setInputs] = useState(Array(3).fill(""));
@@ -83,8 +105,8 @@ const WB_Unit4_Page2_Q1 = () => {
       correctCount === results.length
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size:20px; text-align:center;">
@@ -138,215 +160,276 @@ const WB_Unit4_Page2_Q1 = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div  className="div-forall"
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8" id="ex-d">
-          <span className="ex-A">C</span>Look, read, and write. Color.
-        </h5>
-         <span style={{ fontSize: "14px", color: "gray" }}>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
+          }}
+        >
+          <h5 className="header-title-page8" id="ex-d">
+            <span className="ex-A">C</span>Look, read, and write. Color.
+          </h5>
+          <span style={{ fontSize: "14px", color: "gray" }}>
             Hint: Double Click to Color Word
           </span>
-        {showPalette && (
-          <div
-            className="color-pallet-wb-unit4-p2-q1"
-            style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+          {showPalette && (
+            <div
+              className="color-pallet-wb-unit4-p2-q1"
+              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+            >
+              {["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ff9900"].map(
+                (c) => (
+                  <button
+                    key={c}
+                    onClick={() => {
+                      if (activeShape) {
+                        setShapeColors({
+                          ...shapeColors,
+                          [activeShape]: c,
+                        });
+                      }
+                      setSelectedColor(c);
+                      setShowPalette(false);
+                      setActiveShape(null);
+                    }}
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "50%",
+                      backgroundColor: c,
+                      border:
+                        selectedColor === c
+                          ? "3px solid black"
+                          : "1px solid #ccc",
+                      cursor: "pointer",
+                    }}
+                  />
+                ),
+              )}
+            </div>
+          )}
+          <Droppable
+            droppableId="word-bank"
+            direction="vertical"
+            isDropDisabled
           >
-            {["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ff9900"].map(
-              (c) => (
-                <button
-                  key={c}
-                  onClick={() => {
-                    if (activeShape) {
-                      setShapeColors({
-                        ...shapeColors,
-                        [activeShape]: c,
-                      });
-                    }
-                    setSelectedColor(c);
-                    setShowPalette(false);
-                    setActiveShape(null);
-                  }}
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    backgroundColor: c,
-                    border:
-                      selectedColor === c
-                        ? "3px solid black"
-                        : "1px solid #ccc",
-                    cursor: "pointer",
-                  }}
-                />
-              )
-            )}
-          </div>
-        )}
-
-        {/* ✅ الصورة هي المرجع */}
-        <div style={{ width: "100%" }}>
-          {questions.map((q, index) => (
-            <div key={q.id} className="question-row-unit7-p2-q3">
+            {(provided) => (
               <div
-                className="question-container-unit7-p6-q3"
-                style={{ gap: "20px" }}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-wb-unit3-p6-q1"
               >
-                <span className="num2">{index + 1}</span>
+                {wordBank.map((word, i) => (
+                  <Draggable draggableId={`word-${word}`} index={i} key={word}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                       className="word-box-wb-u1-p8-q2"
+                      >
+                        {word}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-                <div className="shape-wrapper">
-                  {q.id === 1 && (
-                    <svg
-                      width="120"
-                      height="120"
-                      onDoubleClick={() => {
-                        setActiveShape(1);
-                        setShapeColors({ ...shapeColors, 1: shapeColors[1] });
-                        setShowPalette(true);
-                      }}
-                      onTouchStart={() => {
-                        setActiveShape(1);
-                        setShapeColors({ ...shapeColors, 1: shapeColors[1] });
-                        setShowPalette(true);
-                      }}
-                    
-                    >
-                      <rect
-                        x="10"
-                        y="10"
-                        width="100"
-                        height="100"
-                        fill={shapeColors[1]}
-                        stroke="#999"
-                        strokeWidth="4"
-                      />
-                    </svg>
+          {/* ✅ الصورة هي المرجع */}
+          <div style={{ width: "100%" }}>
+            {questions.map((q, index) => (
+              <div key={q.id} className="question-row-unit7-p2-q3">
+                <div
+                  className="question-container-unit7-p6-q3"
+                  style={{ gap: "20px" }}
+                >
+                  <span className="num2">{index + 1}</span>
+
+                  <div className="shape-wrapper">
+                    {q.id === 1 && (
+                      <svg
+                        width="120"
+                        height="120"
+                        onDoubleClick={() => {
+                          setActiveShape(1);
+                          setShapeColors({ ...shapeColors, 1: shapeColors[1] });
+                          setShowPalette(true);
+                        }}
+                        onTouchStart={() => {
+                          setActiveShape(1);
+                          setShapeColors({ ...shapeColors, 1: shapeColors[1] });
+                          setShowPalette(true);
+                        }}
+                      >
+                        <rect
+                          x="10"
+                          y="10"
+                          width="100"
+                          height="100"
+                          fill={shapeColors[1]}
+                          stroke="#999"
+                          strokeWidth="4"
+                        />
+                      </svg>
+                    )}
+                    {q.id === 2 && (
+                      <svg
+                        width="120"
+                        height="120"
+                        onDoubleClick={() => {
+                          setActiveShape(2);
+                          setShapeColors({ ...shapeColors, 2: shapeColors[2] });
+                          setShowPalette(true);
+                        }}
+                        onTouchStart={() => {
+                          setActiveShape(2);
+                          setShapeColors({ ...shapeColors, 2: shapeColors[2] });
+                          setShowPalette(true);
+                        }}
+                      >
+                        <polygon
+                          points="60,10 110,110 10,110"
+                          fill={shapeColors[2]}
+                          stroke="#999"
+                          strokeWidth="4"
+                        />
+                      </svg>
+                    )}
+                    {q.id === 3 && (
+                      <svg
+                        width="120"
+                        height="120"
+                        onDoubleClick={() => {
+                          setActiveShape(3);
+                          setShapeColors({ ...shapeColors, 3: shapeColors[3] });
+                          setShowPalette(true);
+                        }}
+                        onTouchStart={() => {
+                          setActiveShape(3);
+                          setShapeColors({ ...shapeColors, 3: shapeColors[3] });
+                          setShowPalette(true);
+                        }}
+                      >
+                        <circle
+                          cx="60"
+                          cy="60"
+                          r="50"
+                          fill={shapeColors[3]}
+                          stroke="#999"
+                          strokeWidth="4"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <p className="question-text-wb-unit4-p2-q1">{q.question}</p>
+                </div>
+                <div className="sentence-box-wb-unit4-p2-q1">
+                  {q.type === "full" && (
+                    <Droppable droppableId={`blank-q${q.id}`}>
+                      {(provided, snapshot) => (
+                        <span
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                           <Droppable droppableId={`blank-q${q.id}`}>
+                        {(provided, snapshot) => (
+                          <span
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            <input
+                              type="text"
+                              value={answers[`q${q.id}`]}
+                              readOnly
+                              disabled={showAnswer}
+                              className="answer-input-wb-unit4-p2-q1"
+                              style={{
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "",
+                              }}
+                            />
+                            {provided.placeholder}
+                          </span>
+                        )}
+                      </Droppable>
+                          {provided.placeholder}
+                        </span>
+                      )}
+                    </Droppable>
                   )}
-                  {q.id === 2 && (
-                    <svg
-                      width="120"
-                      height="120"
-                      onDoubleClick={() => {
-                        setActiveShape(2);
-                        setShapeColors({ ...shapeColors, 2: shapeColors[2] });
-                        setShowPalette(true);
-                      }}
-                     onTouchStart={() => {
-                        setActiveShape(2);
-                        setShapeColors({ ...shapeColors, 2: shapeColors[2] });
-                        setShowPalette(true);
-                      }}
-                    >
-                      <polygon
-                        points="60,10 110,110 10,110"
-                        fill={shapeColors[2]}
-                        stroke="#999"
-                        strokeWidth="4"
-                      />
-                    </svg>
+
+                  {q.type === "word" && (
+                    <p className="answer-line-unit7-p2-q3">
+                      <Droppable droppableId={`blank-q${q.id}`}>
+                        {(provided, snapshot) => (
+                          <span
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            <input
+                              type="text"
+                              value={answers[`q${q.id}`]}
+                              readOnly
+                              disabled={showAnswer}
+                              className="answer-input-wb-unit4-p2-q1"
+                              style={{
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "",
+                              }}
+                            />
+                            {provided.placeholder}
+                          </span>
+                        )}
+                      </Droppable>
+                      {q.prefix} .
+                    </p>
                   )}
-                  {q.id === 3 && (
-                    <svg
-                      width="120"
-                      height="120"
-                      onDoubleClick={() => {
-                        setActiveShape(3);
-                        setShapeColors({ ...shapeColors, 3: shapeColors[3] });
-                        setShowPalette(true);
-                      }}
-                     onTouchStart={() => {
-                        setActiveShape(3);
-                        setShapeColors({ ...shapeColors, 3: shapeColors[3] });
-                        setShowPalette(true);
-                      }}
-                    >
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="50"
-                        fill={shapeColors[3]}
-                        stroke="#999"
-                        strokeWidth="4"
-                      />
-                    </svg>
+
+                  {wrongInputs.includes(q.id) && (
+                    <span className="wrong-mark">✕</span>
                   )}
                 </div>
-                <p className="question-text-wb-unit4-p2-q1">{q.question}</p>
               </div>
-              <div className="sentence-box-unit7-p2-q3">
-                {q.type === "full" && (
-                  <input
-                    type="text"
-                    value={answers[`q${q.id}`]}
-                    disabled={showAnswer}
-                    onChange={(e) =>
-                      setAnswers({
-                        ...answers,
-                        [`q${q.id}`]: e.target.value,
-                      })
-                    }
-                    className="answer-input-unit7-p2-q3"
-                  />
-                )}
-
-                {q.type === "word" && (
-                  <p className="answer-line-unit7-p2-q3">
-                    <input
-                      type="text"
-                      value={answers[`q${q.id}`]}
-                      disabled={showAnswer}
-                      onChange={(e) =>
-                        setAnswers({
-                          ...answers,
-                          [`q${q.id}`]: e.target.value,
-                        })
-                      }
-                      className="answer-input-unit7-p2-q3"
-                    />
-                    {q.prefix} .
-                  </p>
-                )}
-
-                {wrongInputs.includes(q.id) && (
-                  <span className="wrong-mark">✕</span>
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+        {/* Buttons */}
+        <div className="action-buttons-container">
+          <button onClick={handleReset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={handleShowAnswer}
+          >
+            Show Answer
+          </button>
+          <button onClick={handleCheck} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      {/* Buttons */}
-      <div className="action-buttons-container">
-        <button onClick={handleReset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={handleShowAnswer}
-        >
-          Show Answer
-        </button>
-        <button onClick={handleCheck} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

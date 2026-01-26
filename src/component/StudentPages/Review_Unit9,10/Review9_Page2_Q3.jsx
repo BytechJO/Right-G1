@@ -3,6 +3,7 @@ import img1 from "../../../assets/unit10/imgs/U10P89EXEF-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P89EXEF-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P89EXEF-03.svg";
 import img4 from "../../../assets/unit10/imgs/U10P89EXEF-04.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import "./Review9_Page2_Q3.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -32,8 +33,23 @@ export default function Review9_Page2_Q3() {
   const [letters, setLetters] = useState({});
   const [wrongLetters, setWrongLetters] = useState([]);
   const [wrongConnections, setWrongConnections] = useState([]);
-
   const containerRef = useRef(null);
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked || showAnswer) return;
+
+    const value = draggableId.replace("char-", "");
+    const word = destination.droppableId.replace("letter-", "");
+
+    setLetters((prev) => {
+      const updated = { ...prev };
+      updated[word] = value;
+      return updated;
+    });
+
+    setWrongLetters([]);
+  };
 
   // ============================
   // 1️⃣ Start dot
@@ -157,8 +173,8 @@ export default function Review9_Page2_Q3() {
     score === totalScore
       ? ValidationAlert.success(msg)
       : score === 0
-      ? ValidationAlert.error(msg)
-      : ValidationAlert.warning(msg);
+        ? ValidationAlert.error(msg)
+        : ValidationAlert.warning(msg);
   };
 
   // ============================
@@ -218,122 +234,191 @@ export default function Review9_Page2_Q3() {
   // 🔹 JSX
   // ============================
   return (
-    <div className="matching-wrapper" style={{ padding: "30px" }}>
-      <div className="matching-scale">
-        <h5 className="header-title-page8">F Read, write, and match.</h5>
-        <div key={resetKey} className="container1" ref={containerRef}>
-          {correctMatches.map((item, index) => (
-            <div className="matching-row-review9-p2-q3" key={item.word}>
-              <div className={`word-with-dot `}>
-                <div
-                  onClick={() =>
-                    document.getElementById(`${item.word}-dot`).click()
-                  }
-                  className={`word-with-dot-review9-p2-q3  ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  style={{ position: "relative", width: "90px" }}
-                >
-                  <span className="span-num">{index + 1}</span>
-
-                  <input
-                    type="text"
-                    maxLength={1}
-                    className="letter-input-review9-p2-q3"
-                    value={letters[item.word] || ""}
-                    disabled={locked || showAnswer}
-                    onChange={(e) =>
-                      setLetters({
-                        ...letters,
-                        [item.word]: e.target.value.toLowerCase(),
-                      })
-                    }
-                  />
-
-                  {!showAnswer &&
-                    locked &&
-                    wrongLetters.includes(item.word) && (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="matching-wrapper" style={{ padding: "30px" }}>
+        <div className="matching-scale">
+          <h5 className="header-title-page8">F Read, write, and match.</h5>
+          <Droppable
+            droppableId="letters-bank"
+            isDropDisabled={locked || showAnswer}
+          >
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-unit2-p8-q2"
+              >
+                {["m", "n"].map((char, index) => (
+                  <Draggable
+                    key={char}
+                    draggableId={`char-${char}`}
+                    index={index}
+                    isDragDisabled={locked || showAnswer}
+                  >
+                    {(provided) => (
                       <span
-                        className="error-mark-review9-p2-q3"
-                        style={{ top: "-3px", left: "25%" }}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-item-unit2-p8-q2"
                       >
-                        ✕
+                        {char}
                       </span>
                     )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-                  <span style={{ fontSize: "20px", fontWeight: "500" }}>
-                    {item.word.slice(1)}
+          <div key={resetKey} className="container1" ref={containerRef}>
+            {correctMatches.map((item, index) => (
+              <div className="matching-row-review9-p2-q3" key={item.word}>
+                <div className={`word-with-dot `}>
+                  <div
+                    onClick={() =>
+                      document.getElementById(`${item.word}-dot`).click()
+                    }
+                    className={`word-with-dot-review9-p2-q3  ${
+                      locked || showAnswer ? "disabled-hover" : ""
+                    }`}
+                    style={{
+                      position: "relative",
+                      width: "90px",
+                      display: "flex",
+                    }}
+                  >
+                    <span className="span-num">{index + 1}</span>
+
+                    <Droppable
+                      droppableId={`letter-${item.word}`}
+                      isDropDisabled={locked || showAnswer}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`letter-input-review9-p2-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                        >
+                          {letters[item.word] && (
+                            <Draggable
+                              draggableId={`filled-${letters[item.word]}-${item.word}`}
+                              index={0}
+                              isDragDisabled
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {letters[item.word]}
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+
+                          {provided.placeholder}
+
+                          {!showAnswer &&
+                            locked &&
+                            wrongLetters.includes(item.word) && (
+                              <span className="error-mark-review9-p2-q3">
+                                ✕
+                              </span>
+                            )}
+                        </div>
+                      )}
+                    </Droppable>
 
                     {!showAnswer &&
                       locked &&
-                      wrongConnections.includes(item.word) && (
-                        <span className="error-mark-review9-p2-q3" >✕</span>
+                      wrongLetters.includes(item.word) && (
+                        <span
+                          className="error-mark-review9-p2-q3"
+                          style={{ top: "-3px", left: "25%" }}
+                        >
+                          ✕
+                        </span>
                       )}
-                  </span>
+
+                    <span style={{ fontSize: "20px", fontWeight: "500" }}>
+                      {item.word.slice(1)}
+
+                      {!showAnswer &&
+                        locked &&
+                        wrongConnections.includes(item.word) && (
+                          <span className="error-mark-review9-p2-q3">✕</span>
+                        )}
+                    </span>
+                  </div>
+                  <div className="dot-wrapper">
+                    <div
+                      className="dot start-dot"
+                      id={`${item.word}-dot`}
+                      data-word={item.word}
+                      onClick={handleStartDotClick}
+                    />
+                  </div>
                 </div>
-                <div className="dot-wrapper">
-                  <div
-                    className="dot start-dot"
-                    id={`${item.word}-dot`}
-                    data-word={item.word}
-                    onClick={handleStartDotClick}
+
+                <div className="img-with-dot">
+                  <div className="dot-wrapper">
+                    <div
+                      className="dot end-dot"
+                      id={`img${index + 1}-dot`}
+                      data-image={`img${index + 1}`}
+                      onClick={handleEndDotClick}
+                    />
+                  </div>
+                  <img
+                    src={imagesMap[index]}
+                    className="matched-img"
+                    style={{ height: "100px" }}
+                    alt=""
+                    onClick={() =>
+                      document.getElementById(`img${index + 1}-dot`).click()
+                    }
                   />
                 </div>
               </div>
-
-              <div className="img-with-dot">
-                <div className="dot-wrapper">
-                  <div
-                    className="dot end-dot"
-                    id={`img${index + 1}-dot`}
-                    data-image={`img${index + 1}`}
-                    onClick={handleEndDotClick}
-                  />
-                </div>
-                <img
-                  src={imagesMap[index]}
-                  className="matched-img"
-                  style={{ height: "100px" }}
-                  alt=""
-                  onClick={() =>
-                    document.getElementById(`img${index + 1}-dot`).click()
-                  }
-                />
-              </div>
-            </div>
-          ))}
-
-          <svg className="lines-layer">
-            {lines.map((l, i) => (
-              <line
-                key={i}
-                x1={l.x1}
-                y1={l.y1}
-                x2={l.x2}
-                y2={l.y2}
-                stroke="red"
-                strokeWidth="3"
-              />
             ))}
-          </svg>
+
+            <svg className="lines-layer">
+              {lines.map((l, i) => (
+                <line
+                  key={i}
+                  x1={l.x1}
+                  y1={l.y1}
+                  x2={l.x2}
+                  y2={l.y2}
+                  stroke="red"
+                  strokeWidth="3"
+                />
+              ))}
+            </svg>
+          </div>
+        </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+
+          <button
+            onClick={showCorrectAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-
-        <button
-          onClick={showCorrectAnswer}
-          className="show-answer-btn swal-continue"
-        >
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 }

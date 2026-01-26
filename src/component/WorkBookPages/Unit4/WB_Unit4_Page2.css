@@ -10,6 +10,21 @@
     top: 64.5%;
     left: 41%;
 }
+.answer-input-wb-unit4-p2-q1{
+    border: none;
+    border-bottom: 2px solid black;
+    font-size: 18px;
+    width: 180px;
+    height: 35px;
+}
+.sentence-box-wb-unit4-p2-q1 {
+    border: 2px solid black;
+    border-radius: 12px;
+    padding: 10px 14px;
+    position: relative;
+    background: white;
+    height: 65px;
+}
 .color-pallet-wb-unit4-p2-q1 {
   gap: 10px;
   border: 2px solid black;
