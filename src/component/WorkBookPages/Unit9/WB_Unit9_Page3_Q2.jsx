@@ -105,10 +105,12 @@ const WB_Unit9_Page3_Q2 = () => {
               className={`image-box-unit10-page6-q3 ${
                 selectedImage === item.value ? "selected-unit10-page6-q3" : ""
               }`}
-              onClick={() => {
-                if (checked) return;
-                setSelectedImage(item.value); // بس circle
-              }}
+            onClick={() => {
+  if (checked) return;
+  setSelectedImage(item.value);
+  setAnswer(item.value); // ⭐ اكتب اسم الصورة داخل الانبوت
+}}
+
             >
               <img
                 src={item.img}

@@ -144,6 +144,7 @@ const WB_Unit6_Page5_Q1 = () => {
 
               {/* RIGHT */}
               <canvas
+              style={{width:"220px" ,height:"120px"}}
                 ref={(el) => (canvasRefs.current[i] = el)}
                 className="draw-box-wb-unit6-p5-q1"
                 onMouseDown={(e) => startDrawing(e, i)}

@@ -4,19 +4,22 @@
   gap: 25px;
   justify-items: center;
 }
-
-.sentence-wb-unit8-p1-q1 {
-  font-size: 18px;
-  font-weight: 600;
-  border: 2px solid black;
-  border-radius: 8px;
-  /* height: 40px; */
-  /* width: 193px; */
-  padding: 10px;
-  width: 60%;
-  text-align: start;
+.sentence-container-wb-unit8-p1-q1 {
+    display: flex;
+    width: 40%;
+    /* gap: 20px; */
 }
-
+.sentence-wb-unit8-p1-q1 {
+    font-size: 16px;
+    /* font-weight: 600; */
+    border: 2px solid black;
+    border-radius: 8px;
+    /* height: 40px; */
+    /* width: 193px; */
+    padding: 5px;
+    width: 60%;
+    text-align: start;
+}
 .word-container-wb-unit8-p1-q1 {
   display: grid;
   grid-template-columns: 1fr 1fr;

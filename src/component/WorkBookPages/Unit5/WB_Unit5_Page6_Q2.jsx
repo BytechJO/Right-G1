@@ -8,12 +8,14 @@ import dad2 from "../../../assets/U1 WB/U5/U5P32EXEB-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
-import "./WB_Unit5_Page6_Q2.css"
+import "./WB_Unit5_Page6_Q2.css";
 const WB_Unit5_Page6_Q2 = () => {
   const correctAnswers = ["g", "g", "k", "k", "g", "k"];
   const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
+  const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const stopAtSecond = 11.13;
 
@@ -54,7 +56,7 @@ const WB_Unit5_Page6_Q2 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -104,14 +106,21 @@ const WB_Unit5_Page6_Q2 = () => {
     }
     return () => clearInterval(timer);
   }, [activeIndex]);
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return;
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
+    const letter = result.draggableId;
+    const dest = result.destination.droppableId;
+
+    // dest مثال: blank-3
+    const index = Number(dest.split("-")[1]);
+
+    const updated = [...answers];
+    updated[index] = letter;
+    setAnswers(updated);
     setWrongInputs([]);
   };
+
   const handleShowAnswer = () => {
     setAnswers([...correctAnswers]); // املي الأجوبة الصحيحة
     setWrongInputs([]); // ما في غلط عند عرض الحل
@@ -119,7 +128,7 @@ const WB_Unit5_Page6_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return;
     if (answers.some((ans) => ans.trim() === "")) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
@@ -135,7 +144,7 @@ const WB_Unit5_Page6_Q2 = () => {
       }
     });
     setWrongInputs(wrong);
-
+    setLocked(true);
     const total = correctAnswers.length;
     const color =
       tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
@@ -161,6 +170,7 @@ const WB_Unit5_Page6_Q2 = () => {
     setAnswers(["", "", "", "", "", ""]);
     setWrongInputs([]);
     setShowAnswer(false);
+    setLocked(false);
   };
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -178,291 +188,248 @@ const WB_Unit5_Page6_Q2 = () => {
     }
   };
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div  className="div-forall"
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        className="question-wrapper-unit3-page6-q1"
         style={{
           display: "flex",
           flexDirection: "column",
-          // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">B</span> Does it begin with
-          <span style={{ color: "red" }}>g</span> or{" "}
-          <span style={{ color: "red" }}>k</span>? Listen, look, and write.
-        </h5>
         <div
+          className="div-forall"
           style={{
             display: "flex",
-            justifyContent: "center",
-            marginTop: "30px",
-            width: "100%",
+            flexDirection: "column",
+            // gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
           }}
         >
+          <h5 className="header-title-page8">
+            <span className="ex-A">B</span> Does it begin with
+            <span style={{ color: "red" }}>g</span> or{" "}
+            <span style={{ color: "red" }}>k</span>? Listen, look, and write.
+          </h5>
+        
           <div
-            className="audio-popup-read"
             style={{
-              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "30px",
+              width: "100%",
             }}
           >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
-
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
+            <div
+              className="audio-popup-read"
+              style={{
+                width: "50%",
+              }}
+            >
+              <div className="audio-inner player-ui">
+                <audio
+                  ref={audioRef}
+                  src={sound}
+                  onTimeUpdate={(e) => {
+                    const time = e.target.currentTime;
+                    setCurrent(time);
+                    updateCaption(time);
                   }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                ></audio>
+                {/* Play / Pause */}
+                {/* الوقت - السلايدر - الوقت */}
+                <div className="top-row">
+                  <span className="audio-time">
+                    {new Date(current * 1000).toISOString().substring(14, 19)}
+                  </span>
 
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  style={{ position: "relative" }}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                  <div
-                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                    style={{ top: "100%", left: "10%" }}
-                  >
-                    {captions.map((cap, i) => (
-                      <p
-                        key={i}
-                        id={`caption-${i}`}
-                        className={`caption-inPopup-line2 ${
-                          activeIndex === i ? "active" : ""
-                        }`}
-                      >
-                        {cap.text}
-                      </p>
-                    ))}
-                  </div>
+                  <input
+                    type="range"
+                    className="audio-slider"
+                    min="0"
+                    max={duration}
+                    value={current}
+                    onChange={(e) => {
+                      audioRef.current.currentTime = e.target.value;
+                      updateCaption(Number(e.target.value));
+                    }}
+                    style={{
+                      background: `linear-gradient(to right, #430f68 ${
+                        (current / duration) * 100
+                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                    }}
+                  />
+
+                  <span className="audio-time">
+                    {new Date(duration * 1000).toISOString().substring(14, 19)}
+                  </span>
                 </div>
-
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
+                {/* الأزرار 3 أزرار بنفس السطر */}
+                <div className="bottom-row">
+                  {/* فقاعة */}
+                  <div
+                    className={`round-btn ${showCaption ? "active" : ""}`}
+                    style={{ position: "relative" }}
+                    onClick={() => setShowCaption(!showCaption)}
                   >
-                    <IoMdSettings size={36} />
+                    <TbMessageCircle size={36} />
+                    <div
+                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                      style={{ top: "100%", left: "10%" }}
+                    >
+                      {captions.map((cap, i) => (
+                        <p
+                          key={i}
+                          id={`caption-${i}`}
+                          className={`caption-inPopup-line2 ${
+                            activeIndex === i ? "active" : ""
+                          }`}
+                        >
+                          {cap.text}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Play */}
+                  <button className="play-btn2" onClick={togglePlay}>
+                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                   </button>
 
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
+                  {/* Settings */}
+                  <div className="settings-wrapper" ref={settingsRef}>
+                    <button
+                      className={`round-btn ${showSettings ? "active" : ""}`}
+                      onClick={() => setShowSettings(!showSettings)}
+                    >
+                      <IoMdSettings size={36} />
+                    </button>
+
+                    {showSettings && (
+                      <div className="settings-popup">
+                        <label>Volume</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => {
+                            setVolume(e.target.value);
+                            audioRef.current.volume = e.target.value;
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>{" "}
+              </div>
+            </div>
+          </div> 
+           <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                 className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: 20,
+                  justifyContent: "center",
+                  margin: "20px 0",
+                }}
+              >
+                {["g", "k"].map((letter, i) => (
+                  <Draggable
+                    draggableId={letter}
+                    index={i}
+                    key={letter}
+                   isDragDisabled={locked || showAnswer}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                         className="word-box-wb-unit4-p4-q1"
+                        style={{
+                          width: 50,
+                          textAlign: "center",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
                         }}
-                      />
-                    </div>
-                  )}
+                      >
+                        {letter}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="row-content10-wb-unit5-p6-q2">
+            {[bat, cap, ant, dad, dad1, dad2].map((img, i) => (
+              <div className="row2-unit3-page6-q1" key={i}>
+                <div style={{ display: "flex", gap: "15px" }}>
+                  <span className="num-span">{i + 1}</span>
+                  <img src={img} alt="" className="q-img-wb-unit5-p6-q2" />
                 </div>
-              </div>{" "}
-            </div>
+
+                <span style={{ position: "relative", display: "flex" }}>
+                  <div className="input-wrapper-unit3-page6-q1">
+                    <Droppable
+                      droppableId={`blank-${i}`}
+                      isDropDisabled={locked || showAnswer}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`q-input-unit3-page6-q1 ${
+                            showAnswer ? "red-text" : ""
+                          }`}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: snapshot.isDraggingOver
+                              ? "#e3f2fd"
+                              : "",
+                          }}
+                        >
+                          {answers[i]}
+                          {wrongInputs.includes(i) && (
+                            <span className="error-mark-input">✕</span>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                </span>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="row-content10-wb-unit5-p6-q2">
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">1</span>{" "}
-              <img src={bat} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 0)}
-                  value={answers[0]}
-                />
-                {wrongInputs.includes(0) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">2</span>{" "}
-              <img src={cap} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 1)}
-                  value={answers[1]}
-                />{" "}
-                {wrongInputs.includes(1) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">3</span>{" "}
-              <img src={ant} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 2)}
-                  value={answers[2]}
-                />{" "}
-                {wrongInputs.includes(2) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">4</span>{" "}
-              <img src={dad} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 3)}
-                  value={answers[3]}
-                />{" "}
-                {wrongInputs.includes(3) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">5</span>{" "}
-              <img src={dad1} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 4)}
-                  value={answers[4]}
-                />{" "}
-                {wrongInputs.includes(4) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
-
-          <div className="row2-unit3-page6-q1">
-            <div style={{ display: "flex", gap: "15px" }}>
-              <span className="num-span">6</span>{" "}
-              <img src={dad2} alt="" className="q-img-wb-unit5-p6-q2" />
-            </div>
-            <span style={{ position: "relative", display: "flex" }}>
-              <div className="input-wrapper-unit3-page6-q1">
-                <input
-                  type="text"
-                  className={`q-input-unit3-page6-q1 ${
-                    showAnswer ? "red-text" : ""
-                  }`}
-                  onChange={(e) => handleChange(e.target.value, 5)}
-                  value={answers[5]}
-                />{" "}
-                {wrongInputs.includes(5) && (
-                  <span className="error-mark-input">✕</span>
-                )}
-              </div>
-            </span>
-          </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

@@ -5,17 +5,19 @@ import img1 from "../../../assets/U1 WB/U8/U8P50EXEA-01.svg";
 import img2 from "../../../assets/U1 WB/U8/U8P50EXEA-02.svg";
 import img3 from "../../../assets/U1 WB/U8/U8P50EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U8/U8P50EXEA-04.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 const data = [
-  { img: img4, scrambled: "beazr", answer: "z", pattern: "ebra" },
+  { img: img1, scrambled: "beazr", answer: "z", pattern: "ebra" },
   { img: img2, scrambled: "ksoc", answer: "s", pattern: "ock" },
   {
-    img: img1,
+    img: img3,
     scrambled: "perpzi",
     answer: "z",
     pattern: "ipper",
   },
 
-  { img: img3, scrambled: "ozo", answer: "s", pattern: "un" },
+  { img: img4, scrambled: "ozo", answer: "s", pattern: "un" },
 ];
 
 const WB_Unit8_Page6_Q1 = () => {
@@ -24,6 +26,30 @@ const WB_Unit8_Page6_Q1 = () => {
     Array(data.length).fill(false)
   );
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+const lettersBank = [...new Set(data.map((item) => item.answer))].map(
+  (letter, i) => ({
+    id: `l-${i}`,
+    value: letter,
+  })
+);
+
+
+
+const onDragEnd = (result) => {
+  if (!result.destination || showAnswer) return;
+
+  const letter = result.draggableId;
+  const targetIndex = Number(result.destination.droppableId);
+
+  setInputs((prev) => {
+    const copy = [...prev];
+    copy[targetIndex] = letter; // ✔ نفس الحرف مسموح يتكرر
+    return copy;
+  });
+
+  setWrongInputs(Array(data.length).fill(false));
+};
+
 
   const checkAnswers = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
@@ -90,6 +116,8 @@ const WB_Unit8_Page6_Q1 = () => {
   };
 
   return (
+    <DragDropContext onDragEnd={onDragEnd}>
+
     <div
       style={{
         display: "flex",
@@ -115,6 +143,56 @@ const WB_Unit8_Page6_Q1 = () => {
             words.
           </h3>
 
+<Droppable droppableId="letters" direction="horizontal">
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+     style={{
+                  display: "flex",
+                  gap: "12px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // marginBottom: "20px",
+                  justifyContent: "center",
+                  width:"100%",
+                  justifyContent:"center"
+                }}
+    >
+      {lettersBank.map((l, i) => (
+        <Draggable key={l.id} draggableId={l.value} index={i}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              style={{
+                
+                borderRadius: "8px",
+                border: "2px solid #2c5287",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 22,
+                fontWeight: "bold",
+                background: "white",
+                cursor: "grab",
+                padding:"10px",
+                ...provided.draggableProps.style,
+              }}
+            >
+              {l.value}
+            </div>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
+
+
           <div className="unscramble-row-wb-unit8-p6-q1 ">
             {data.map((item, index) => (
               <div className="unscramble-box" key={index}>
@@ -127,14 +205,24 @@ const WB_Unit8_Page6_Q1 = () => {
                   </span>
 
                   <div className="input-wrapper">
-                    <input
-                      type="text"
-                      style={{ fontSize: "25px",fontWeight:"600"  }}
-                      value={inputs[index]}
-                      onChange={(e) => handleChange(e.target.value, index)}
-                      className="text-input"
-                      disabled={showAnswer} // ⭐ NEW
-                    />
+                   <Droppable droppableId={String(index)}>
+  {(provided, snapshot) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      className="text-input"
+      style={{
+        background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+        fontSize: "25px",
+        fontWeight: "600",
+      }}
+    >
+      {inputs[index]}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
+
 
                     {/* ❌ علامة الخطأ */}
                     {wrongInputs[index] && !showAnswer && (
@@ -170,6 +258,7 @@ const WB_Unit8_Page6_Q1 = () => {
         </button>
       </div>
     </div>
+    </DragDropContext>
   );
 };
 

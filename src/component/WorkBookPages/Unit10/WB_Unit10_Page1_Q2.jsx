@@ -3,6 +3,8 @@ import bat from "../../../assets/U1 WB/U10/U10P57EXEB-01.svg";
 import cap from "../../../assets/U1 WB/U10/U10P57EXEB-02.svg";
 import ant from "../../../assets/U1 WB/U10/U10P57EXEB-03.svg";
 import dad from "../../../assets/U1 WB/U10/U10P57EXEB-04.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit10_Page1_Q2.css";
 const WB_Unit10_Page1_Q2 = () => {
@@ -38,22 +40,42 @@ const WB_Unit10_Page1_Q2 = () => {
       ],
     },
   ];
+  const wordBank = questions.flatMap((q, qIndex) =>
+    q.parts
+      .filter((p) => p.type === "input")
+      .map((p, i) => ({
+        id: `q${qIndex}-${i}`,
+        value: p.answer,
+      })),
+  );
 
   const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null))),
   );
 
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
 
-  const handleChange = (value, qIndex, pIndex) => {
-    if (locked) return;
+    const { draggableId, destination } = result;
+    const word = draggableId.split("|")[1];
 
-    const copy = [...answers];
-    copy[qIndex][pIndex] = value.toLowerCase();
-    setAnswers(copy);
+    const [qIndex, pIndex] = destination.droppableId
+      .replace("drop-", "")
+      .split("-")
+      .map(Number);
+
+    setAnswers((prev) => {
+      const copy = prev.map((row) => [...row]);
+      copy[qIndex][pIndex] = word.toLowerCase();
+      return copy;
+    });
+
     setWrongInputs([]);
   };
+
+ 
 
   const checkAnswers = () => {
     if (locked) return;
@@ -100,7 +122,7 @@ const WB_Unit10_Page1_Q2 = () => {
   };
   const showAnswers = () => {
     const filled = questions.map((q) =>
-      q.parts.map((p) => (p.type === "input" ? p.answer : null))
+      q.parts.map((p) => (p.type === "input" ? p.answer : null)),
     );
 
     setAnswers(filled);
@@ -110,93 +132,157 @@ const WB_Unit10_Page1_Q2 = () => {
 
   const reset = () => {
     setAnswers(
-      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+      questions.map((q) =>
+        q.parts.map((p) => (p.type === "input" ? "" : null)),
+      ),
     );
     setWrongInputs([]);
     setLocked(false);
   };
 
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
+        className="question-wrapper-unit3-page6-q1"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">B</span>Look and write.
-        </h5>
-        <div className="content-container-wb-unit10-p1-q2">
-          {questions.map((q, qIndex) => (
-            <div key={qIndex} className="row2-wb-unit4-p1-q2">
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span className="num-span">{qIndex + 1}</span>
-                <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
-              </div>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: "30px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">B</span>Look and write.
+          </h5>
 
-              <div className="sentence-wrapper-wb-unit4-p1-q2">
-                {q.parts.map((part, pIndex) => {
-                  if (part.type === "text") {
+          <Droppable droppableId="bank" direction="horizontal">
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      style={{
+                  display: "flex",
+                  gap: "12px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  marginBottom: "20px",
+                  justifyContent: "center",
+                }}
+    >
+      {wordBank.map((w, i) => (
+        <Draggable
+          key={w.id}
+          draggableId={`${w.id}|${w.value}`}
+          index={i}
+        >
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              style={{
+                padding: "6px 12px",
+                border: "2px solid #2c5287",
+                borderRadius: "8px",
+                background: "white",
+                cursor: "grab",
+                fontWeight: "600",
+                ...provided.draggableProps.style,
+              }}
+            >
+              {w.value}
+            </div>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
+
+          <div className="content-container-wb-unit10-p1-q2">
+            {questions.map((q, qIndex) => (
+              <div key={qIndex} className="row2-wb-unit4-p1-q2">
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <span className="num-span">{qIndex + 1}</span>
+                  <img src={q.img} alt="" className="q-img-wb-unit2-page3-q2" />
+                </div>
+
+                <div className="sentence-wrapper-wb-unit4-p1-q2">
+                  {q.parts.map((part, pIndex) => {
+                    if (part.type === "text") {
+                      return (
+                        <span key={pIndex} className="sentence-text">
+                          {part.value}
+                        </span>
+                      );
+                    }
+
                     return (
-                      <span key={pIndex} className="sentence-text">
-                        {part.value}
+                      <span key={pIndex} style={{ position: "relative" }}>
+                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="inline-input-wb-unit4-p1-q2"
+                              style={{
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "white",
+                                minWidth: "120px",
+                                minHeight: "35px",
+                                padding: "5px",
+                              }}
+                            >
+                              {answers[qIndex][pIndex]}
+                              {provided.placeholder}
+
+                              {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                                <span className="error-mark-input-wb-unit2-page3-q2">
+                                  ✕
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </Droppable>
                       </span>
                     );
-                  }
-
-                  return (
-                    <span key={pIndex} style={{ position: "relative" }}>
-                      <input
-                        type="text"
-                        style={{ width: "100%" }}
-                        className="inline-input-wb-unit4-p1-q2"
-                        value={answers[qIndex][pIndex] || ""}
-                        onChange={(e) =>
-                          handleChange(e.target.value, qIndex, pIndex)
-                        }
-                        disabled={locked}
-                      />
-
-                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
-                        <span className="error-mark-input-wb-unit2-page3-q2">
-                          ✕
-                        </span>
-                      )}
-                    </span>
-                  );
-                })}
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button onClick={showAnswers} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

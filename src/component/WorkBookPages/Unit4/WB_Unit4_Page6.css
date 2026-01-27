@@ -17,7 +17,20 @@
     top: 71.5%;
     left: 43%;
 }
-
+.missing-input-wb-unit4-p6-q3 {
+    width: 50px;
+    border: none;
+    border-bottom: 2px solid black;
+    margin: 0 6px;
+    font-size: 25px;
+    text-align: center;
+    height: 45px;
+}
+.input-wrapper-wb-unit4-p6-q3  {
+    position: relative;
+    display: inline-block;
+    /* width: 100%; */
+}
 .sentence-wb-unit4-p6-q3 {
     text-align: center;
     display: flex;

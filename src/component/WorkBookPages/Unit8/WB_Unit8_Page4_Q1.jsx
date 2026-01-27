@@ -4,18 +4,23 @@ import cap from "../../../assets/U1 WB/U8/U8P48EXEG-02.svg";
 import ant from "../../../assets/U1 WB/U8/U8P48EXEG-03.svg";
 import dad from "../../../assets/U1 WB/U8/U8P48EXEG-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import "./WB_Unit8_Page4_Q1.css";
 const WB_Unit8_Page4_Q1 = () => {
   const questions = [
     {
-      id:1,
+      id: 1,
       img: bat,
       parts: [
-        { type: "text", value: "This is my arm" },
+        
+        { type: "text", value: "This" },
+        { type: "input", answer: "is my arm" },
         { type: "text", value: "." },
       ],
     },
-    {id:2,
+    {
+      id: 2,
       img: cap,
       parts: [
         { type: "text", value: "This" },
@@ -23,15 +28,16 @@ const WB_Unit8_Page4_Q1 = () => {
         { type: "text", value: "." },
       ],
     },
-    {id:3,
+    {
+      id: 3,
       img: ant,
       parts: [
-        { type: "text", value: "This" },
-        { type: "input", answer: "is my leg" },
+        { type: "input", answer: "This is my leg" },
         { type: "text", value: "." },
       ],
     },
-    {id:4,
+    {
+      id: 4,
       img: dad,
       parts: [
         { type: "input", answer: "This is my nose" },
@@ -39,22 +45,48 @@ const WB_Unit8_Page4_Q1 = () => {
       ],
     },
   ];
+  const wordBank = [
+    { id: "w1", text: "is my arm" },
+    { id: "w2", text: "is my head" },
+    { id: "w3", text: "This is my leg" },
+    { id: "w4", text: "This is my nose" },
+  ];
 
   const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+    questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null))),
   );
-
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const handleChange = (value, qIndex, pIndex) => {
-    if (locked) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
 
-    const copy = [...answers];
-    copy[qIndex][pIndex] = value.toLowerCase();
-    setAnswers(copy);
+    const wordId = result.draggableId;
+
+    const [qIndex, pIndex] = result.destination.droppableId
+      .replace("drop-", "")
+      .split("-")
+      .map(Number);
+
+    setAnswers((prev) => {
+      const copy = prev.map((row) => [...row]);
+
+      // إزالة الكلمة من أي مكان سابق (منع التكرار)
+      copy.forEach((row, qi) =>
+        row.forEach((val, pi) => {
+          if (val === wordId) copy[qi][pi] = "";
+        }),
+      );
+
+      // وضعها بالمكان الجديد
+      copy[qIndex][pIndex] = wordId;
+      return copy;
+    });
+
     setWrongInputs([]);
   };
+
+ 
 
   const checkAnswers = () => {
     if (locked) return;
@@ -83,7 +115,10 @@ const WB_Unit8_Page4_Q1 = () => {
       q.parts.forEach((p, pIndex) => {
         if (p.type === "input") {
           total++;
-          if (answers[qIndex][pIndex]?.trim() === p.answer) {
+          const word =
+            wordBank.find((w) => w.id === answers[qIndex][pIndex])?.text || "";
+
+          if (word === p.answer) {
             score++;
           } else {
             wrong.push(`${qIndex}-${pIndex}`);
@@ -101,7 +136,7 @@ const WB_Unit8_Page4_Q1 = () => {
   };
   const showAnswers = () => {
     const filled = questions.map((q) =>
-      q.parts.map((p) => (p.type === "input" ? p.answer : null))
+      q.parts.map((p) => (p.type === "input" ? p.answer : null)),
     );
 
     setAnswers(filled);
@@ -112,7 +147,9 @@ const WB_Unit8_Page4_Q1 = () => {
   const reset = () => {
     resetCanvas();
     setAnswers(
-      questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null)))
+      questions.map((q) =>
+        q.parts.map((p) => (p.type === "input" ? "" : null)),
+      ),
     );
     setWrongInputs([]);
     setLocked(false);
@@ -193,110 +230,171 @@ const WB_Unit8_Page4_Q1 = () => {
     });
   };
   return (
-    <div
-      className="question-wrapper-unit3-page6-q1"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
+        className="question-wrapper-unit3-page6-q1"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">G</span>Trace and write.
-        </h5>
-        <div className="content-container-wb-unit8-p4-q1">
-          {questions.map((q, qIndex) => (
-            <div key={qIndex} className="row2-wb-unit8-p4-q1">
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">G</span>Trace and write.
+          </h5>
+
+          <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
               <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
                 style={{
                   display: "flex",
-                  gap: "10px",
-                  alignItems: "flex-start",
+                  gap: 12,
+                  padding: 12,
+                  border: "2px dashed #ccc",
+                  borderRadius: 10,
+                  justifyContent:"center"
                 }}
               >
-                <span className="num-span">{qIndex + 1}</span>
-                <canvas
-                  ref={(el) => (canvasRefs.current[q.id] = el)}
-                  width={225}
-                  height={130}
-                  className="wb-unit8-p4-q1-canvas"
-                  onMouseDown={(e) => startDrawing(e, q.id)}
-                  onMouseMove={(e) => draw(e, q.id)}
-                  onMouseUp={() => stopDrawing(q.id)}
-                  onMouseLeave={() => stopDrawing(q.id)}
-                  onTouchStart={(e) => startDrawing(e, q.id)}
-                  onTouchMove={(e) => {
-                    e.preventDefault();
-                    draw(e, q.id);
-                  }}
-                  onTouchEnd={() => stopDrawing(q.id)}
-                />
+                {wordBank.map((w, i) => (
+                  <Draggable key={w.id} draggableId={w.id} index={i} isDragDisabled={locked}>
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                       style={{
+                         borderRadius: "8px",
+                          border: "2px solid #2c5287",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          background: "white",
+                          padding:"8px",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {w.text}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
+            )}
+          </Droppable>
 
-              <div className="sentence-wrapper-wb-unit8-p4-q1">
-                {q.parts.map((part, pIndex) => {
-                  if (part.type === "text") {
+          <div className="content-container-wb-unit8-p4-q1">
+            {questions.map((q, qIndex) => (
+              <div key={qIndex} className="row2-wb-unit8-p4-q1">
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <span className="num-span">{qIndex + 1}</span>
+                  <canvas
+                    ref={(el) => (canvasRefs.current[q.id] = el)}
+                    width={290}
+                    height={160}
+                    className="wb-unit8-p4-q1-canvas"
+                    onMouseDown={(e) => startDrawing(e, q.id)}
+                    onMouseMove={(e) => draw(e, q.id)}
+                    onMouseUp={() => stopDrawing(q.id)}
+                    onMouseLeave={() => stopDrawing(q.id)}
+                    onTouchStart={(e) => startDrawing(e, q.id)}
+                    onTouchMove={(e) => {
+                      e.preventDefault();
+                      draw(e, q.id);
+                    }}
+                    onTouchEnd={() => stopDrawing(q.id)}
+                  />
+                </div>
+
+                <div className="sentence-wrapper-wb-unit8-p4-q1">
+                  {q.parts.map((part, pIndex) => {
+                    if (part.type === "text") {
+                      return (
+                        <span key={pIndex} className="sentence-text">
+                          {part.value}
+                        </span>
+                      );
+                    }
+
                     return (
-                      <span key={pIndex} className="sentence-text">
-                        {part.value}
+                      <span
+                        key={pIndex}
+                        style={{ position: "relative", width: "90%" }}
+                      >
+                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`} isDropDisabled={locked}>
+                          {(provided, snapshot) => (
+                            <span
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="inline-input-wb-unit4-p1-q2"
+                              style={{
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "transparent",
+                                display: "inline-block",
+                                width: "100%",
+                              }}
+                            >
+                              {wordBank.find(
+                                (w) => w.id === answers[qIndex][pIndex],
+                              )?.text || ""}
+                              {provided.placeholder}
+
+                              {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
+                                <span className="error-mark-input-wb-unit2-page3-q2">
+                                  ✕
+                                </span>
+                              )}
+                            </span>
+                          )}
+                        </Droppable>
                       </span>
                     );
-                  }
-
-                  return (
-                    <span
-                      key={pIndex}
-                      style={{ position: "relative", width: "90%" }}
-                    >
-                      <input
-                        type="text"
-                        style={{ width: "100%" }}
-                        className="inline-input-wb-unit4-p1-q2"
-                        value={answers[qIndex][pIndex] || ""}
-                        onChange={(e) =>
-                          handleChange(e.target.value, qIndex, pIndex)
-                        }
-                        disabled={locked}
-                      />
-
-                      {wrongInputs.includes(`${qIndex}-${pIndex}`) && (
-                        <span className="error-mark-input-wb-unit2-page3-q2">
-                          ✕
-                        </span>
-                      )}
-                    </span>
-                  );
-                })}
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          {/* ⭐⭐⭐ NEW — زر Show Answer */}
+          <button
+            onClick={showAnswers}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
-        <button onClick={showAnswers} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page2_Q2.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 // 🔹 الصور
 import img1 from "../../../assets/U1 WB/U6/U6P34EXED-01.svg";
@@ -57,6 +58,30 @@ const WB_Unit6_Page2_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const [checked, setChecked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
+
+  const onDragEnd = (result) => {
+    if (!result.destination || locked || checked) return;
+
+    const sentence = result.draggableId;
+    const dest = result.destination.droppableId;
+
+    // dest مثال: write-2
+    if (!dest.startsWith("write-")) return;
+
+    const id = dest.replace("write-", "");
+
+    setWritten((prev) => {
+      const updated = { ...prev };
+
+      // ⭐ شيل الجملة من أي مكان قديم
+      Object.keys(updated).forEach((key) => {
+        if (updated[key] === sentence) delete updated[key];
+      });
+
+      updated[id] = sentence;
+      return updated;
+    });
+  };
 
   /* ================= HELPERS ================= */
 
@@ -159,7 +184,7 @@ const WB_Unit6_Page2_Q2 = () => {
     if (firstPoint.type === "left" && endType === "image") {
       const startFromImagePos = getDotCenterFromParent(
         e.currentTarget,
-        ".start-dot"
+        ".start-dot",
       );
 
       setFirstPoint({
@@ -178,22 +203,22 @@ const WB_Unit6_Page2_Q2 = () => {
   const checkAnswers = () => {
     if (checked || locked) return;
     // 🔴 Check empty inputs
-const emptyInputs = Object.keys(correctSentences).filter(
-  (id) => !written[id] || written[id].trim() === ""
-);
+    const emptyInputs = Object.keys(correctSentences).filter(
+      (id) => !written[id] || written[id].trim() === "",
+    );
 
-if (emptyInputs.length > 0) {
-  ValidationAlert.info(
-    "Pay attention!",
-    "Please complete all the sentences before checking."
-  );
-  return;
-}
+    if (emptyInputs.length > 0) {
+      ValidationAlert.info(
+        "Pay attention!",
+        "Please complete all the sentences before checking.",
+      );
+      return;
+    }
 
     if (lines.length < correctMatches.length * 2) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -213,11 +238,11 @@ if (emptyInputs.length > 0) {
 
     correctMatches.forEach((c) => {
       const leftToImg = lines.find(
-        (l) => l.leftId === c.leftId && l.image === c.image
+        (l) => l.leftId === c.leftId && l.image === c.image,
       );
 
       const imgToRight = lines.find(
-        (l) => l.image === c.image && l.right === c.right
+        (l) => l.image === c.image && l.right === c.right,
       );
 
       if (leftToImg && imgToRight) {
@@ -245,7 +270,7 @@ if (emptyInputs.length > 0) {
     ](
       `<div style="font-size:20px;text-align:center;color:${color}">
         <b>Score: ${score} / ${total}</b>
-      </div>`
+      </div>`,
     );
   };
 
@@ -309,142 +334,191 @@ if (emptyInputs.length > 0) {
   /* ================= RENDER ================= */
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
         style={{
-          width: "60%",
           display: "flex",
           flexDirection: "column",
-          // gap: "20px",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h4 className="header-title-page8">
-          <span className="ex-A">D</span> Read, match, and write.
-        </h4>
-
-        <div className="matching-area" ref={containerRef}>
-          {/* LEFT */}
-          <div className="left-col-wb-unit6-p2-q2">
-            {leftParts.map((l, i) => (
+        <div
+          className="div-forall"
+          style={{
+            width: "60%",
+            display: "flex",
+            flexDirection: "column",
+            // gap: "20px",
+          }}
+        >
+          <h4 className="header-title-page8">
+            <span className="ex-A">D</span> Read, match, and write.
+          </h4>
+          <Droppable droppableId="sentence-bank" direction="vertical">
+            {(provided) => (
               <div
-                key={i}
-                className="item-wb-unit6-p2-q2 clickable"
-                data-left-id={l.id}
-                onClick={handleStart}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="word-bank-wb-unit3-p6-q1"
               >
-                <span className="num-wb-unit6-p2-q2">{i + 1}</span>
-                <span
-                  className={`word-text-wb-unit6-p2-q2 ${
-                    locked || checked ? "disabled-word" : ""
-                  }`}
+                {Object.values(correctSentences).map((sentence, i) => {
+                  return (
+                    <Draggable
+                      key={sentence}
+                      draggableId={sentence}
+                      index={i}
+                      isDragDisabled={locked || checked}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-box-wb-unit4-p4-q1"
+                          style={{
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {sentence}
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="matching-area" ref={containerRef}>
+            {/* LEFT */}
+            <div className="left-col-wb-unit6-p2-q2">
+              {leftParts.map((l, i) => (
+                <div
+                  key={i}
+                  className="item-wb-unit6-p2-q2 clickable"
+                  data-left-id={l.id}
+                  onClick={handleStart}
                 >
-                  {l.text}
-                </span>
-                <div className="dot-wb-unit6-p2-q2 start-dot" />
-                {wrongLeft.includes(l.id) && checked && (
-                  <span className="wrong-mark-wb-unit6-p2-q2">✕</span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* IMAGES */}
-          <div className="mid-col-wb-unit6-p2-q2">
-            {images.map((img) => (
-              <div
-                key={img.id}
-                className="item-wb-unit6-p2-q2 clickable"
-                data-image={img.id}
-                onClick={(e) => (firstPoint ? handleEnd(e) : handleStart(e))}
-              >
-                <div className="dot-wb-unit6-p2-q2 end-dot" />
-                <img
-                  src={img.src}
-                  alt=""
-                  className={`matched-img2 ${
-                    locked || checked ? "disabled-hover" : ""
-                  }`}
-                />
-
-                <div className="dot-wb-unit6-p2-q2 start-dot" />
-              </div>
-            ))}
-          </div>
-
-          {/* RIGHT */}
-          <div className="right-col-wb-unit6-p2-q2">
-            {rightParts.map((r) => (
-              <div
-                key={r.id}
-                className="item-wb-unit6-p2-q2 clickable"
-                data-right={r.text}
-                onClick={handleEnd}
-              >
-                <div className="dot-wb-unit6-p2-q2 end-dot" />
-                <span
-                  className={`word-text-wb-unit6-p2-q2 ${
-                    locked || checked ? "disabled-word" : ""
-                  }`}
-                >
-                  {" "}
-                  {r.text}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* LINES */}
-          <svg className="lines-layer">
-            {lines.map((l, i) => (
-              <line key={i} {...l} stroke="red" strokeWidth="3" />
-            ))}
-          </svg>
-        </div>
-
-        {/* WRITE SECTION */}
-        <div className="write-section-wb-unit6-p2-q2">
-          {Object.keys(correctSentences).map((id) => (
-            <div className="write-line-wb-unit6-p2-q2">
-              <span>{id}</span>
-
-              <div className="input-wrapper-wb-unit6-p2-q2">
-                <input
-                  value={written[id] || ""}
-                  disabled={locked}
-                  onChange={(e) =>
-                    setWritten({ ...written, [id]: e.target.value })
-                  }
-                />
-
-                {checked&& wrongInputs.includes(Number(id)) && (
-                  <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>
-                )}
-              </div>
+                  <span className="num-wb-unit6-p2-q2">{i + 1}</span>
+                  <span
+                    className={`word-text-wb-unit6-p2-q2 ${
+                      locked || checked ? "disabled-word" : ""
+                    }`}
+                  >
+                    {l.text}
+                  </span>
+                  <div className="dot-wb-unit6-p2-q2 start-dot" />
+                  {wrongLeft.includes(l.id) && checked && (
+                    <span className="wrong-mark-wb-unit6-p2-q2">✕</span>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
+
+            {/* IMAGES */}
+            <div className="mid-col-wb-unit6-p2-q2">
+              {images.map((img) => (
+                <div
+                  key={img.id}
+                  className="item-wb-unit6-p2-q2 clickable"
+                  data-image={img.id}
+                  onClick={(e) => (firstPoint ? handleEnd(e) : handleStart(e))}
+                >
+                  <div className="dot-wb-unit6-p2-q2 end-dot" />
+                  <img
+                    src={img.src}
+                    alt=""
+                    className={`matched-img2 ${
+                      locked || checked ? "disabled-hover" : ""
+                    }`}
+                  />
+
+                  <div className="dot-wb-unit6-p2-q2 start-dot" />
+                </div>
+              ))}
+            </div>
+
+            {/* RIGHT */}
+            <div className="right-col-wb-unit6-p2-q2">
+              {rightParts.map((r) => (
+                <div
+                  key={r.id}
+                  className="item-wb-unit6-p2-q2 clickable"
+                  data-right={r.text}
+                  onClick={handleEnd}
+                >
+                  <div className="dot-wb-unit6-p2-q2 end-dot" />
+                  <span
+                    className={`word-text-wb-unit6-p2-q2 ${
+                      locked || checked ? "disabled-word" : ""
+                    }`}
+                  >
+                    {" "}
+                    {r.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* LINES */}
+            <svg className="lines-layer">
+              {lines.map((l, i) => (
+                <line key={i} {...l} stroke="red" strokeWidth="3" />
+              ))}
+            </svg>
+          </div>
+
+          {/* WRITE SECTION */}
+          <div className="write-section-wb-unit6-p2-q2">
+            {Object.keys(correctSentences).map((id) => (
+              <div className="write-line-wb-unit6-p2-q2">
+                <span>{id}</span>
+
+                <div className="input-wrapper-wb-unit6-p2-q2">
+                  <Droppable droppableId={`write-${id}`}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="write-drop-wb-unit6-p2-q2"
+                        style={{
+                          background: snapshot.isDraggingOver ? "#e3f2fd" : "",
+                        }}
+                      >
+                        {written[id] || ""}
+
+                        {checked && wrongInputs.includes(Number(id)) && (
+                          <span className="wrong-input-mark-wb-unit6-p2-q2">
+                            ✕
+                          </span>
+                        )}
+
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* BUTTONS */}
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={showAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      {/* BUTTONS */}
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={showAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

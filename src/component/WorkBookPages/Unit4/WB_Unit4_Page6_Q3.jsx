@@ -7,6 +7,7 @@ import img3 from "../../../assets/U1 WB/U4/U4P26EXEBC-03.svg";
 import img4 from "../../../assets/U1 WB/U4/U4P26EXEBC-04.svg";
 import img5 from "../../../assets/U1 WB/U4/U4P26EXEBC-05.svg";
 import img6 from "../../../assets/U1 WB/U4/U4P26EXEBC-06.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const data = [
   {
@@ -52,7 +53,6 @@ const data = [
         blank: 4,
         after: "in his hand. ",
       },
-       
     ],
     correct: ["vet", "vest", "feet", "fork"],
   },
@@ -60,24 +60,43 @@ const data = [
 
 const WB_Unit4_Page6_Q3 = () => {
   const [answers, setAnswers] = useState(
-    data.map((d) => Array(d.correct.length).fill(""))
+    data.map((d) => Array(d.correct.length).fill("")),
   );
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
 
-  const handleChange = (value, qIndex, blankIndex) => {
-    if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
+    const word = result.draggableId;
+    const dest = result.destination.droppableId;
 
-    const newAnswers = [...answers];
-    newAnswers[qIndex][blankIndex] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
+    // blank-qIndex-blankIndex
+    const [, qIndex, blankIndex] = dest.split("-").map(Number);
+
+    const updated = answers.map((arr) => [...arr]);
+
+    // ⭐ امسح الكلمة من أي مكان قديم
+    updated.forEach((row) => {
+      row.forEach((val, i) => {
+        if (val === word) row[i] = "";
+      });
+    });
+
+    // ⭐ حط الكلمة بالمكان الجديد
+    updated[qIndex][blankIndex] = word;
+
+    setAnswers(updated);
+
+    setWrongInputs((prev) =>
+      prev.filter((w) => w !== `${qIndex}-${blankIndex}`),
+    );
   };
+
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
     // 1) افحص إذا في أي خانة فاضية
     const hasEmpty = answers.some((arr) =>
-      arr.some((val) => val.trim() === "")
+      arr.some((val) => val.trim() === ""),
     );
 
     if (hasEmpty) {
@@ -100,11 +119,10 @@ const WB_Unit4_Page6_Q3 = () => {
     });
 
     setWrongInputs(wrong);
-
     // 3) احسب العدد الكلي للحقول
     const totalInputs = data.reduce(
       (acc, item) => acc + item.correct.length,
-      0
+      0,
     );
 
     // 4) اختر اللون حسب السكور
@@ -112,8 +130,8 @@ const WB_Unit4_Page6_Q3 = () => {
       correctCount === totalInputs
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
     <div style="font-size:20px; text-align:center;">
@@ -142,79 +160,141 @@ const WB_Unit4_Page6_Q3 = () => {
   };
 
   return (
-    <div className="page8-wrapper">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
-      >
-        <h3 className="header-title-page8">
-       <span className="ex-A">C</span> Look and write. Then say.
-        </h3>
-
-        {data.map((item, qIndex) => (
-          <div className="row-missing" key={qIndex}>
-            <span className="num">{qIndex + 1}.</span>
-
-            <div className="sentence-wb-unit4-p6-q3">
-              {item.parts.map((p, blankIndex) => (
-                <span
-                  key={blankIndex}
-                  className="sentence-part"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  {p.before}
-
-                  <div className="input-wrapper">
-                    <input
-                      className="missing-input-review10-p2-q3"
-                      value={answers[qIndex][blankIndex]}
-                      onChange={(e) =>
-                        handleChange(e.target.value, qIndex, blankIndex)
-                      }
-                      readOnly={locked} // ⭐ NEW — منع التعديل بعد Show Answer
-                    />
-                    {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
-                      <span className="wrong-icon-review4-p2-q1">✕</span>
-                    )}
-                  </div>
-
-                  {p.after}
-                  <img src={p.middleImg} className="middle-img" alt="" />
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setAnswers(data.map((d) => Array(d.correct.length).fill("")));
-            setWrongInputs([]);
-            setLocked(false); // ⭐ NEW — فتح التعديل من جديد
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="page8-wrapper">
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
           }}
         >
-          Start Again ↻
-        </button>
+          <h3 className="header-title-page8">
+            <span className="ex-A">C</span> Look and write. Then say.
+          </h3>
+          <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{ display: "flex", gap: 10, marginBottom: 20 }}
+                className="word-bank-wb-unit3-p6-q1"
+              >
+                {data
+                  .flatMap((d) => d.correct)
+                  .map((word, i) => (
+                    <Draggable
+                      draggableId={word}
+                      index={i}
+                      key={word}
+                      isDragDisabled={locked}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="word-box-wb-unit4-p4-q1"
+                          style={{
+                            cursor: "grab",
+                            textAlign: "center",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {word}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-        {/* ⭐⭐⭐ NEW BUTTON */}
-        <button onClick={showAnswer} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
+          {data.map((item, qIndex) => (
+            <div className="row-missing" key={qIndex}>
+              <span className="num">{qIndex + 1}.</span>
 
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
-        </button>
+              <div className="sentence-wb-unit4-p6-q3">
+                {item.parts.map((p, blankIndex) => (
+                  <span
+                    key={blankIndex}
+                    className="sentence-part"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    {p.before}
+
+                    <div className="input-wrapper-wb-unit4-p6-q3 ">
+                      <Droppable
+                        droppableId={`blank-${qIndex}-${blankIndex}`}
+                        isDropDisabled={locked}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="missing-input-wb-unit4-p6-q3"
+                            style={{
+                              background: snapshot.isDraggingOver
+                                ? "#e3f2fd"
+                                : "",
+                              position: "relative",
+                            }}
+                          >
+                            {answers[qIndex][blankIndex]}
+
+                            {wrongInputs.includes(
+                              `${qIndex}-${blankIndex}`,
+                            ) && (
+                              <span className="wrong-icon-review4-p2-q1">
+                                ✕
+                              </span>
+                            )}
+
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+
+                    {p.after}
+                    <img src={p.middleImg} className="middle-img" alt="" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="action-buttons-container">
+          <button
+            className="try-again-button"
+            onClick={() => {
+              setAnswers(data.map((d) => Array(d.correct.length).fill("")));
+              setWrongInputs([]);
+              setLocked(false); // ⭐ NEW — فتح التعديل من جديد
+            }}
+          >
+            Start Again ↻
+          </button>
+
+          {/* ⭐⭐⭐ NEW BUTTON */}
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answers ✓
+          </button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

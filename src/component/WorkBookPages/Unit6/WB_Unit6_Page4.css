@@ -29,11 +29,40 @@
   display: flex;
   flex-direction: column;
 }
-.answer-input-wb-unit6-p4-q2{
+.answer-input-wb-unit6-p4-q2 {
     border-bottom: 2px solid black;
-    width: 90%;
+    width: 100%;
+    height: 30px;
+    font-size: 22px;
+}
+.word-bank-wb-unit6-p4-q2 {
+    display: flex;
+    gap: 5px;
+    /* margin: 15px 0 25px; */
+    border: 2px solid #4b74ff;
+    background-color: #f2f6ff;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 10px;
+    height:75px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0px;
+    flex-wrap: wrap;
 }
 
+.word-box-wb-unit6-p4-q2  {
+    display: inline-block;
+    padding: 7px 14px;
+    border: 2px solid #4b74ff;
+    border-radius: 10px;
+    font-size: 16px;
+    /* margin: 5px; */
+    font-weight: 600;
+    background: transparent;
+}
 .img-container-wb-unit6-p4-q2{
       display: flex;
     align-items: flex-start;
@@ -43,7 +72,7 @@
 }
 
 .img-wb-unit6-p4-q2 {
-    height: 150px;
+    height: 130px;
     width: auto;
 }
 

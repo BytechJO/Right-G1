@@ -147,7 +147,7 @@
 .mid-col-wb-unit6-p2-q2 img {
     width: 130px;
     height: 64px;
-    object-fit: cover;
+    object-fit: fill;
     border-radius: 10px;
     /* border: 2px solid #bfbfbf; */
     background: #fff;
@@ -176,6 +176,14 @@
 .input-wrapper-wb-unit6-p2-q2 {
   position: relative;
   display: inline-block;
+}
+.write-drop-wb-unit6-p2-q2 {
+  height: 40px;
+  border-bottom: 2px solid #999;
+  /* border-radius: 6px; */
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
 }
 
 .wrong-input-mark-wb-unit6-p2-q2 {

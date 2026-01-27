@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit4_Page6_Q2.css";
-
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import img1 from "../../../assets/U1 WB/U4/U4P26EXEB-01.svg";
 import img2 from "../../../assets/U1 WB/U4/U4P26EXEB-02.svg";
 import img3 from "../../../assets/U1 WB/U4/U4P26EXEB-03.svg";
@@ -18,6 +18,28 @@ export default function WB_Unit4_Page6_Q2() {
   const [columnT, setColumnT] = useState(["", "", ""]);
   const [wrong, setWrong] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
+
+    const word = result.draggableId;
+    const dest = result.destination.droppableId;
+
+    if (dest.startsWith("f-")) {
+      const index = Number(dest.split("-")[1]);
+      const updated = [...columnD];
+      updated[index] = word;
+      setColumnD(updated);
+    }
+
+    if (dest.startsWith("v-")) {
+      const index = Number(dest.split("-")[1]);
+      const updated = [...columnT];
+      updated[index] = word;
+      setColumnT(updated);
+    }
+
+    setWrong((prev) => prev.filter((w) => w !== word));
+  };
 
   const handleInputChange = (col, index, value) => {
     if (showAnswer) return;
@@ -46,7 +68,7 @@ export default function WB_Unit4_Page6_Q2() {
     if (hasEmpty) {
       return ValidationAlert.info(
         "Oops!",
-        "Please complete all answers before checking."
+        "Please complete all answers before checking.",
       );
     }
 
@@ -66,11 +88,7 @@ export default function WB_Unit4_Page6_Q2() {
     const correctCount = total - wrongWords.length;
 
     const color =
-      correctCount === total
-        ? "green"
-        : correctCount === 0
-        ? "red"
-        : "orange";
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
@@ -100,92 +118,165 @@ export default function WB_Unit4_Page6_Q2() {
   };
 
   return (
-    <div className="page8-wrapper" style={{ padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
-        <h3 className="header-title-page8">
-          <span className="ex-A">B</span>
-          Look and write the words in the correct column.
-        </h3>
-
-        <div className="content-container-wb-unit4-p6-q2">
-          {/* IMAGE BANK */}
-          <div className="img-bank-wb-unit4-p6-q2">
-            {images.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={correctWords[i]}
-                style={{ height: "100px", width: "auto" }}
-              />
-            ))}
-          </div>
-
-          {/* TABLE */}
-          <div className="table-div-wb-unit4-p6-q2">
-            <table className="sorting-table-wb-u1-p8-q2">
-              <thead>
-                <tr>
-                  <th>f</th>
-                  <th>v</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[0, 1, 2].map((row, i) => (
-                  <tr key={i}>
-                    <td style={{ position: "relative" }}>
-                      <input
-                        className="input-cell-wb-u1-p8-q2"
-                        value={columnD[i]}
-                        onChange={(e) =>
-                          handleInputChange("f", i, e.target.value)
-                        }
-                        disabled={showAnswer}
-                      />
-                      {wrong.includes(columnD[i]) &&
-                        columnD[i].trim() !== "" && (
-                          <span className="wrong-x-circle-wb-u1-p8-q2">✕</span>
-                        )}
-                    </td>
-
-                    <td style={{ position: "relative" }}>
-                      <input
-                        className="input-cell-wb-u1-p8-q2"
-                        value={columnT[i]}
-                        onChange={(e) =>
-                          handleInputChange("v", i, e.target.value)
-                        }
-                        disabled={showAnswer}
-                      />
-                      {wrong.includes(columnT[i]) &&
-                        columnT[i].trim() !== "" && (
-                          <span className="wrong-x-circle-wb-u1-p8-q2">✕</span>
-                        )}
-                    </td>
-                  </tr>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="page8-wrapper" style={{ padding: "30px" }}>
+        <div className="div-forall" style={{ width: "60%" }}>
+          <h3 className="header-title-page8">
+            <span className="ex-A">B</span>
+            Look and write the words in the correct column.
+          </h3>
+          <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{ display: "flex", gap: 10, marginTop: 20 }}
+                className="word-bank-wb-unit3-p6-q1"
+              >
+                {correctWords.map((word, i) => (
+                  <Draggable draggableId={word} index={i} key={word}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="word-box-wb-unit4-p4-q1"
+                        style={{
+                          textAlign: "center",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {word}
+                      </div>
+                    )}
+                  </Draggable>
                 ))}
-              </tbody>
-            </table>
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          <div className="content-container-wb-unit4-p6-q2">
+            {/* IMAGE BANK */}
+            <div className="img-bank-wb-unit4-p6-q2">
+              {images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={correctWords[i]}
+                  style={{ height: "100px", width: "auto" }}
+                />
+              ))}
+            </div>
+
+            {/* TABLE */}
+            <div className="table-div-wb-unit4-p6-q2">
+              <table className="sorting-table-wb-unit4-p6-q2">
+                <thead>
+                  <tr>
+                    <th>f</th>
+                    <th>v</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[0, 1, 2].map((row, i) => (
+                    <tr key={i}>
+                      <td style={{ position: "relative" }}>
+                        <Droppable droppableId={`f-${i}`}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="input-cell-wb-unit4-p6-q2"
+                              style={{
+                                position: "relative",
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "",
+                              }}
+                            >
+                              {columnD[i]}
+                              {wrong.includes(columnD[i]) && columnD[i] && (
+                                <span className="wrong-x-circle-wb-u1-p8-q2">
+                                  ✕
+                                </span>
+                              )}
+                            {provided.placeholder && (
+  <div style={{ display: "none" }}>{provided.placeholder}</div>
+)}
+                            </div>
+                          )}
+                        </Droppable>
+
+                        {wrong.includes(columnD[i]) &&
+                          columnD[i].trim() !== "" && (
+                            <span className="wrong-x-circle-wb-u1-p8-q2">
+                              ✕
+                            </span>
+                          )}
+                      </td>
+
+                      <td style={{ position: "relative" }}>
+                        <Droppable droppableId={`v-${i}`}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className="input-cell-wb-unit4-p6-q2"
+                              style={{
+                                position: "relative",
+                                background: snapshot.isDraggingOver
+                                  ? "#e3f2fd"
+                                  : "",
+                              }}
+                            >
+                              {columnT[i]}
+                              {wrong.includes(columnT[i]) && columnT[i] && (
+                                <span className="wrong-x-circle-wb-u1-p8-q2">
+                                  ✕
+                                </span>
+                              )}
+                             {provided.placeholder && (
+  <div style={{ display: "none" }}>{provided.placeholder}</div>
+)}
+                            </div>
+                          )}
+                        </Droppable>
+
+                        {wrong.includes(columnT[i]) &&
+                          columnT[i].trim() !== "" && (
+                            <span className="wrong-x-circle-wb-u1-p8-q2">
+                              ✕
+                            </span>
+                          )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+
+        {/* ACTION BUTTONS */}
+        <div className="action-buttons-container">
+          <button className="try-again-button" onClick={reset}>
+            Start Again ↻
+          </button>
+
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={showCorrectAnswers}
+          >
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-
-      {/* ACTION BUTTONS */}
-      <div className="action-buttons-container">
-        <button className="try-again-button" onClick={reset}>
-          Start Again ↻
-        </button>
-
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={showCorrectAnswers}
-        >
-          Show Answer
-        </button>
-
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 }

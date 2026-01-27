@@ -10,6 +10,7 @@
   align-items: center;
   gap: 6px;
   font-size: 18px;
+  width: 100%;
 }
 
 
@@ -17,8 +18,8 @@
     border: 3px solid #6ec1ff;
     background: #ffffff;
     border-radius: 12px;
-    height: 130px;
-    width: 223px;
+    height: 160px;
+    width: 290px;
     box-sizing: border-box;
     cursor: crosshair;
 }

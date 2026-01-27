@@ -74,6 +74,7 @@
   font-weight: 600;
   text-align: center;
   padding: 4px 2px;
+  height: 40px;
 }
 
 /* .wb-unit9-p1-q2-input:disabled {
@@ -113,6 +114,7 @@
 .wb-unit9-p1-q2-input-wrapper {
   position: relative;
   display: inline-block;
+      width: 59%;
 }
 
 .wb-unit9-p1-q2-wrong-mark {

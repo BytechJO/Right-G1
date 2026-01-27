@@ -5,6 +5,8 @@ import cap1 from "../../../assets/U1 WB/U8/U8P50EXEC-03.svg";
 import cap2 from "../../../assets/U1 WB/U8/U8P50EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit8_Page6_Q3.css";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 
 const WB_Unit8_Page6_Q3 = () => {
   const items = [
@@ -41,9 +43,40 @@ const WB_Unit8_Page6_Q3 = () => {
   const [selected, setSelected] = useState(Array(items.length).fill(""));
   const [answers, setAnswers] = useState(Array(items.length).fill(""));
 
+
   const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
+const wordBank = [
+  { id: "w1", text: "zebra" },
+  { id: "w2", text: "sun" },
+  { id: "w3", text: "sock" },
+  { id: "w4", text: "zipper" },
+];
+
+
+const onDragEnd = (result) => {
+  if (!result.destination || locked || showResult) return;
+
+  const wordId = result.draggableId;
+  const index = Number(result.destination.droppableId);
+
+  setAnswers((prev) => {
+    const copy = [...prev];
+
+    // إزالة الكلمة من أي مكان سابق (منع التكرار)
+    copy.forEach((v, i) => {
+      if (v === wordId) copy[i] = "";
+    });
+
+    copy[index] = wordId;
+    return copy;
+  });
+
+  setShowResult(false);
+};
+
+
   const handleSelect = (value, index) => {
     if (locked) return; // 🔒 لا تعديل بعد show answer
     const newSel = [...selected];
@@ -95,8 +128,11 @@ const WB_Unit8_Page6_Q3 = () => {
 
     items.forEach((item, i) => {
       const circleCorrect = selected[i] === item.correct;
-      const inputCorrect =
-        answers[i].trim().toLowerCase() === item.correctInput.toLowerCase();
+    const word =
+  wordBank.find((w) => w.id === answers[i])?.text || "";
+
+const inputCorrect =
+  word.toLowerCase() === item.correctInput.toLowerCase();
 
       if (circleCorrect) score++;
       if (inputCorrect) score++;
@@ -130,6 +166,7 @@ const WB_Unit8_Page6_Q3 = () => {
   };
 
   return (
+    <DragDropContext onDragEnd={onDragEnd}>
     <div
       style={{
         display: "flex",
@@ -152,6 +189,47 @@ const WB_Unit8_Page6_Q3 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">C</span> Look, circle, and write.
         </h5>
+<Droppable droppableId="bank" direction="horizontal">
+  {(provided) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      style={{
+        display: "flex",
+        gap: 12,
+        padding: 12,
+        border: "2px dashed #ccc",
+        borderRadius: 10,
+        // marginBottom: 20,
+        justifyContent:"center"
+      }}
+    >
+      {wordBank.map((w, i) => (
+        <Draggable key={w.id} draggableId={w.id} index={i} isDragDisabled={locked}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              style={{
+                padding: "8px 14px",
+                border: "2px solid #1d4f7b",
+                borderRadius: 10,
+                background: "white",
+                fontWeight: "600",
+                cursor: "grab",
+                ...provided.draggableProps.style,
+              }}
+            >
+              {w.text}
+            </div>
+          )}
+        </Draggable>
+      ))}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
 
         <div className="question-grid-wb-unit8-p6-q3">
           {items.map((item, i) => (
@@ -200,13 +278,22 @@ const WB_Unit8_Page6_Q3 = () => {
               {/* writing input */}
               <div className="input-wrapper-unit6-p6-q2">
                 {item.input}
-                <input
-                  type="text"
-                  className="write-input-unit4-page5-q1"
-                  value={answers[i]}
-                  disabled={locked}
-                  onChange={(e) => handleInput(e.target.value, i)}
-                />
+               <Droppable droppableId={`${i}`} isDropDisabled={locked}>
+  {(provided, snapshot) => (
+    <div
+      ref={provided.innerRef}
+      {...provided.droppableProps}
+      className="write-input-unit4-page5-q1"
+      style={{
+        background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
+      }}
+    >
+      {wordBank.find((w) => w.id === answers[i])?.text || ""}
+      {provided.placeholder}
+    </div>
+  )}
+</Droppable>
+
 
                 {/* X فوق الإنبت إذا كانت الكلمة غلط */}
                 {!locked &&
@@ -235,6 +322,7 @@ const WB_Unit8_Page6_Q3 = () => {
         </button>
       </div>
     </div>
+    </DragDropContext>
   );
 };
 
