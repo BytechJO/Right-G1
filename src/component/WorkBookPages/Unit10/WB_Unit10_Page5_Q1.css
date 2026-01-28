@@ -12,7 +12,14 @@
     align-items: center;
 }
 
-
+.sentence-wrapper-wb-unit10-p5-q1 {
+    display: flex;
+    align-items: center;
+    /* flex-wrap: wrap; */
+    gap: 6px;
+    font-size: 18px;
+    width: 100%;
+}
 
 .q-img-wb-unit10-p5-q1 {
     width: auto;

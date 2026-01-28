@@ -137,13 +137,13 @@ const WB_Unit2_Page2_Q2 = () => {
           </h5>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {/* <input
+          <input
             type="text"
             value={answer}
             className="answer-input33-review10-p1-q3"
             onChange={(e) => setAnswer(e.target.value)}
             disabled={checked}
-          /> */}
+          />
 
           {/* <span>.</span> */}
         </div>
@@ -172,9 +172,9 @@ const WB_Unit2_Page2_Q2 = () => {
           Start Again ↻
         </button>
 
-        <button className="check-button2" onClick={checkAnswer}>
+        {/* <button className="check-button2" onClick={checkAnswer}>
           Check Answer ✓
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ const Unit2_Page9_Q1 = () => {
   const [answers, setAnswers] = useState({});
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const correctMatches = [
     { input: "party hats", num: "input1" },
@@ -25,13 +25,10 @@ const [checked, setChecked] = useState(false);
   // 🧲 Drag logic (ثابت + قابل للتعديل دائمًا)
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-if (!destination || showAnswer || checked) return;
-
+    if (!destination || showAnswer || checked) return;
 
     // استخرج الكلمة من أي draggableId
-    const word = draggableId
-      .replace("bank-", "")
-      .replace(/^slot-.*?-/, "");
+    const word = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
 
     setAnswers((prev) => {
       const updated = { ...prev };
@@ -71,7 +68,7 @@ if (!destination || showAnswer || checked) return;
     });
 
     setWrongWords(wrong);
-setChecked(true);
+    setChecked(true);
 
     const total = correctMatches.length;
     const color =
@@ -81,8 +78,8 @@ setChecked(true);
       correctCount === total
         ? "success"
         : correctCount === 0
-        ? "error"
-        : "warning"
+          ? "error"
+          : "warning"
     ](`
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color};font-weight:bold;">
@@ -92,25 +89,27 @@ setChecked(true);
     `);
   };
 
-const showCorrectAnswers = () => {
-  const filled = {};
-  correctMatches.forEach((c) => (filled[c.num] = c.input));
-  setAnswers(filled);
-  setWrongWords([]);
-  setShowAnswer(true);
-  setChecked(true); // 🔒
-};
+  const showCorrectAnswers = () => {
+    const filled = {};
+    correctMatches.forEach((c) => (filled[c.num] = c.input));
+    setAnswers(filled);
+    setWrongWords([]);
+    setShowAnswer(true);
+    setChecked(true); // 🔒
+  };
 
   const resetAll = () => {
     setAnswers({});
     setWrongWords([]);
     setShowAnswer(false);
-      setChecked(false); // 🔓 رجّع التفاعل
+    setChecked(false); // 🔓 رجّع التفاعل
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "30px" }}
+      >
         <div className="div-forall" style={{ width: "60%" }}>
           <div className="unit2-page9-q1-container">
             <h5 className="header-title-page8">A Look and write.</h5>
@@ -119,9 +118,18 @@ const showCorrectAnswers = () => {
             <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
               {(provided) => (
                 <div
-                  className="word-bank-unit2-p8-q2"
+                  // className="word-bank-unit2-p8-q2"
                   ref={provided.innerRef}
                   {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",justifyContent:"center"
+                  }}
                 >
                   {wordBank.map((word, index) => (
                     <Draggable
@@ -135,7 +143,15 @@ const showCorrectAnswers = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {word}
                         </span>
@@ -157,11 +173,15 @@ const showCorrectAnswers = () => {
                   <input type="text" value="These are" readOnly />
 
                   <Droppable droppableId="slot-input1">
-                    {(provided) => (
+                    {(provided,snapshot) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="drop-slot-inline-unit2-p8-q2"
+                        className={`drop-slot-inline-unit2-p8-q2  ${
+                                      snapshot.isDraggingOver
+                                        ? "drag-over-cell"
+                                        : ""
+                                    }`}
                       >
                         {getValue("input1") && (
                           <Draggable
@@ -169,12 +189,12 @@ const showCorrectAnswers = () => {
                             index={0}
                             isDragDisabled={checked || showAnswer}
                           >
-                            {(provided) => (
+                            {(provided, snapshot) => (
                               <span
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                className="word-item"
+                                className={`word-item`}
                               >
                                 {getValue("input1")}
                               </span>
@@ -199,11 +219,15 @@ const showCorrectAnswers = () => {
                   {["input2", "input3", "input4"].map((id, idx) => (
                     <React.Fragment key={id}>
                       <Droppable droppableId={`slot-${id}`}>
-                        {(provided) => (
+                        {(provided ,snapshot) => (
                           <span
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="drop-slot-inline-unit2-p8-q2"
+                            className={`drop-slot-inline-unit2-p8-q2  ${
+                                      snapshot.isDraggingOver
+                                        ? "drag-over-cell"
+                                        : ""
+                                    }`}
                           >
                             {getValue(id) && (
                               <Draggable
@@ -216,7 +240,7 @@ const showCorrectAnswers = () => {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className="word-item"
+                                    className={`word-item`}
                                   >
                                     {getValue(id)}
                                   </span>

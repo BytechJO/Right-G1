@@ -791,11 +791,13 @@ const WB_Unit7_Page2_Q1 = () => {
                   </Droppable>
 
                   <Droppable droppableId="sentence-6" direction="horizontal">
-                    {(provided) => (
+                    {(provided ,snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input-wb-unit7-p2-q1"
+                        className={`unscramble-input-wb-unit7-p2-q1 ${
+                          snapshot.isDraggingOver ? "active-drop" : ""
+                        }`}
                       >
                         {userInputs[6].join(" ")}
                         {provided.placeholder}

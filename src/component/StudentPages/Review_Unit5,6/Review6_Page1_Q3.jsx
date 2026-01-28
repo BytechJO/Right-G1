@@ -82,7 +82,7 @@ const Review6_Page1_Q3 = () => {
 
     setWrongInputs(wrong);
     setScore(correctCount);
-    setLocked(true)
+    setLocked(true);
     let color =
       correctCount === data.length
         ? "green"
@@ -143,7 +143,15 @@ const Review6_Page1_Q3 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",justifyContent:"center"
+                  }}
                 >
                   {data.map((item, index) => (
                     <Draggable
@@ -157,7 +165,15 @@ const Review6_Page1_Q3 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "2px 5px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.correct}
                         </span>
@@ -180,7 +196,8 @@ const Review6_Page1_Q3 = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
-                      margin: "20px",   width:"100%"
+                      margin: "20px",
+                      width: "100%",
                     }}
                   >
                     <span
@@ -200,18 +217,20 @@ const Review6_Page1_Q3 = () => {
                         display: "flex",
                         alignItems: "center",
                         position: "relative",
-                        width:"100%"
+                        width: "100%",
                       }}
                     >
                       <Droppable
                         droppableId={`slot-${index}`}
                         isDropDisabled={locked}
                       >
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="q-input-review6-p1-q3"
+                            className={`q-input-review6-p1-q3 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers[index] && (
                               <Draggable
@@ -236,7 +255,7 @@ const Review6_Page1_Q3 = () => {
                       </Droppable>
 
                       {/* ❌ علامة الخطأ */}
-                      { wrongInputs.includes(index) && (
+                      {wrongInputs.includes(index) && (
                         <span className="wrong-icon-review6-p1-q3">✕</span>
                       )}
                     </div>

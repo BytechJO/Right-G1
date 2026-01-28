@@ -157,7 +157,15 @@ const Unit6_Page6_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center"
+                }}
               >
                 {items.map((item, index) => (
                   <Draggable
@@ -171,7 +179,15 @@ const Unit6_Page6_Q2 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {item.correctInput}
                       </span>
@@ -215,8 +231,7 @@ const Unit6_Page6_Q2 = () => {
                       </div>
 
                       {/* X فوق دائرة f إذا كانت غلط */}
-                      {
-                        showResult &&
+                      {showResult &&
                         selected[i] === "can" &&
                         selected[i] !== item.correct && (
                           <div className="wrong-mark">✕</div>
@@ -234,8 +249,7 @@ const Unit6_Page6_Q2 = () => {
                       </div>
 
                       {/* X فوق دائرة v إذا كانت غلط */}
-                      {
-                        showResult &&
+                      {showResult &&
                         selected[i] === "can't" &&
                         selected[i] !== item.correct && (
                           <div className="wrong-mark">✕</div>
@@ -247,11 +261,13 @@ const Unit6_Page6_Q2 = () => {
                 <div className="input-wrapper-unit6-p6-q2">
                   {item.input}
                   <Droppable droppableId={`slot-${i}`}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="write-input-unit4-page5-q1"
+                        className={`write-input-unit4-page5-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[i] && (
                           <Draggable

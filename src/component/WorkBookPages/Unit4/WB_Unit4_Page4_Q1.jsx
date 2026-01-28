@@ -18,7 +18,7 @@ const WrongIcon = () => (
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      border:"2px solid white",
+      border: "2px solid white",
       boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
     }}
   >
@@ -199,7 +199,16 @@ const WB_Unit4_Page4_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {WORDS.map((word, index) => (
                   <Draggable
@@ -212,7 +221,15 @@ const WB_Unit4_Page4_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-unit4-p4-q1"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </div>
@@ -294,9 +311,11 @@ const WB_Unit4_Page4_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="drop-label-box"
+                    className={`drop-label-box ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
-                      minHeight: 30,
+                      height: 30,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -332,9 +351,11 @@ const WB_Unit4_Page4_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="drop-label-box"
+                    className={`drop-label-box ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
-                      minHeight: 30,
+                      height: 30,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -370,9 +391,11 @@ const WB_Unit4_Page4_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="drop-label-box"
+                    className={`drop-label-box ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
-                      minHeight: 30,
+                      height: 30,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -407,9 +430,11 @@ const WB_Unit4_Page4_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="drop-label-box"
+                    className={`drop-label-box ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
-                      minHeight: 30,
+                      height: 30,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -450,9 +475,11 @@ const WB_Unit4_Page4_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="drop-label-box"
+                    className={`drop-label-box ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
-                      minHeight: 30,
+                      height: 30,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

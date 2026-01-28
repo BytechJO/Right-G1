@@ -146,7 +146,16 @@ const Review5_Page1_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {correctMatches.map((item, index) => (
                     <Draggable
@@ -160,7 +169,15 @@ const Review5_Page1_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.input}
                         </span>
@@ -258,11 +275,13 @@ const Review5_Page1_Q1 = () => {
                       }}
                     >
                       <Droppable droppableId="input1">
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-unit5-p6-q1"
+                            className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers.find((a) => a.num === "input1") && (
                               <Draggable
@@ -316,11 +335,13 @@ const Review5_Page1_Q1 = () => {
                     }}
                   >
                     <Droppable droppableId="input2">
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                         >
                           {answers.find((a) => a.num === "input2") && (
                             <Draggable
@@ -359,11 +380,13 @@ const Review5_Page1_Q1 = () => {
                       }}
                     >
                       <Droppable droppableId="input3">
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-unit5-p6-q1"
+                            className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers.find((a) => a.num === "input3") && (
                               <Draggable
@@ -418,11 +441,13 @@ const Review5_Page1_Q1 = () => {
                     }}
                   >
                     <Droppable droppableId="input4">
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                         >
                           {answers.find((a) => a.num === "input4") && (
                             <Draggable
@@ -462,11 +487,13 @@ const Review5_Page1_Q1 = () => {
                     }}
                   >
                     <Droppable droppableId="input5">
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                         >
                           {answers.find((a) => a.num === "input5") && (
                             <Draggable

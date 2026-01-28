@@ -226,7 +226,17 @@ const WB_Unit4_Page1_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-               className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "center",
+                }}
               >
                 {wordBank.map((word, i) => (
                   <Draggable
@@ -239,7 +249,15 @@ const WB_Unit4_Page1_Q2 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-u1-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -306,7 +324,11 @@ const WB_Unit4_Page1_Q2 = () => {
                             >
                               <input
                                 type="text"
-                                className="inline-input-wb-unit4-p1-q2"
+                                className={`inline-input-wb-unit4-p1-q2 ${
+                                  snapshot.isDraggingOver
+                                    ? "drag-over-cell"
+                                    : ""
+                                }`}
                                 value={answers[qIndex][pIndex] || ""}
                                 readOnly
                                 disabled={locked}

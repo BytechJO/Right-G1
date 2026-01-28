@@ -42,7 +42,7 @@ const Unit10_Page6_Q2 = () => {
   const [showCorrect, setShowCorrect] = useState(false);
 
   const handleSelect = (value, index) => {
-    if (showCorrect) return;
+    if (showResult) return;
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
@@ -50,7 +50,7 @@ const Unit10_Page6_Q2 = () => {
   };
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-    if (!destination || showCorrect) return;
+    if (!destination || showResult) return;
 
     const value = draggableId.replace("word-", "");
     const [qIndex, inputIndex] = destination.droppableId
@@ -72,14 +72,6 @@ const Unit10_Page6_Q2 = () => {
       return updated;
     });
 
-    setShowResult(false);
-  };
-
-  const handleInput = (value, qIndex, inputIndex = 0) => {
-    if (showCorrect) return;
-    const newAns = [...answers];
-    newAns[qIndex][inputIndex] = value;
-    setAnswers(newAns);
     setShowResult(false);
   };
 
@@ -123,7 +115,7 @@ const Unit10_Page6_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (showCorrect) return;
+    if (showResult) return;
 
     // 1️⃣ لازم يكون في اختيار صورة لكل سؤال
     if (selected.some((s) => s === "")) {
@@ -233,26 +225,42 @@ const Unit10_Page6_Q2 = () => {
           <h5 className="header-title-page8">
             <span className="ex-A">E</span> Look, read, circle, and write.
           </h5>
-          <Droppable droppableId="word-bank" isDropDisabled={showCorrect}>
+          <Droppable droppableId="word-bank" isDropDisabled={showResult}>
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center"
+                }}
               >
                 {wordBank.map((word, index) => (
                   <Draggable
                     key={word}
                     draggableId={`word-${word}`}
                     index={index}
-                    isDragDisabled={showCorrect}
+                    isDragDisabled={showResult}
                   >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -301,7 +309,7 @@ const Unit10_Page6_Q2 = () => {
                     <div style={{ width: "100%", position: "relative" }}>
                       <Droppable
                         droppableId={`slot-${i}-${0}`}
-                        isDropDisabled={showCorrect}
+                        isDropDisabled={showResult}
                       >
                         {(provided, snapshot) => (
                           <div
@@ -315,7 +323,7 @@ const Unit10_Page6_Q2 = () => {
                               <Draggable
                                 draggableId={`filled-${answers[i][0]}-${i}-${0}`}
                                 index={0}
-                                isDragDisabled={showCorrect}
+                                isDragDisabled={showResult}
                               >
                                 {(provided) => (
                                   <span
@@ -359,7 +367,7 @@ const Unit10_Page6_Q2 = () => {
                       >
                         <Droppable
                           droppableId={`slot-${i}-${inputIndex}`}
-                          isDropDisabled={showCorrect}
+                          isDropDisabled={showResult}
                         >
                           {(provided, snapshot) => (
                             <div
@@ -373,7 +381,7 @@ const Unit10_Page6_Q2 = () => {
                                 <Draggable
                                   draggableId={`filled-${answers[i][inputIndex]}-${i}-${inputIndex}`}
                                   index={0}
-                                  isDragDisabled={showCorrect}
+                                  isDragDisabled={showResult}
                                 >
                                   {(provided) => (
                                     <span

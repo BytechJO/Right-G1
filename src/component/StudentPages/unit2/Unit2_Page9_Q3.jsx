@@ -99,7 +99,7 @@ const Unit2_Page9_Q3 = () => {
     setAnswers({});
     setWrongWords([]);
     setShowAnswers(false);
-      setChecked(false); // 🔓
+    setChecked(false); // 🔓
   };
 
   return (
@@ -114,7 +114,16 @@ const Unit2_Page9_Q3 = () => {
           <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
             {(provided) => (
               <div
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -130,7 +139,15 @@ const Unit2_Page9_Q3 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -159,17 +176,19 @@ const Unit2_Page9_Q3 = () => {
                   <input readOnly value={q.label} />
 
                   <Droppable droppableId={`slot-${q.id}`}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="drop-slot-q3"
+                        className={`drop-slot-q3  ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {getValue(q.id) && (
                           <Draggable
                             draggableId={`slot-${q.id}-${getValue(q.id)}`}
                             index={0}
-                              isDragDisabled={checked || showAnswers}
+                            isDragDisabled={checked || showAnswers}
                           >
                             {(provided) => (
                               <span

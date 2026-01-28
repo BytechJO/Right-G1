@@ -67,11 +67,11 @@
 .word-item-unit2-p8-q2 {
   padding: 8px 14px;
   background-color: #f2f6ff;
-  border: 2px solid #4b74ff;
+  border: 2px solid #2c5287;
   border-radius: 8px;
   font-size: 20px;
-  font-weight: bold;
-  color: #1f3cff;
+  /* font-weight: bold; */
+  /* color: #1f3cff; */
   cursor: grab;
   user-select: none;
   transition: all 0.2s ease;

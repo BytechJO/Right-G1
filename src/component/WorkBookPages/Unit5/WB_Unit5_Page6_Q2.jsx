@@ -214,7 +214,7 @@ const WB_Unit5_Page6_Q2 = () => {
             <span style={{ color: "red" }}>g</span> or{" "}
             <span style={{ color: "red" }}>k</span>? Listen, look, and write.
           </h5>
-        
+
           <div
             style={{
               display: "flex",
@@ -329,18 +329,22 @@ const WB_Unit5_Page6_Q2 = () => {
                 </div>{" "}
               </div>
             </div>
-          </div> 
-           <Droppable droppableId="word-bank" direction="horizontal">
+          </div>
+          <Droppable droppableId="word-bank" direction="horizontal">
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                 className="word-bank-wb-unit3-p6-q1"
                 style={{
                   display: "flex",
-                  gap: 20,
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  width: "100%",
                   justifyContent: "center",
-                  margin: "20px 0",
                 }}
               >
                 {["g", "k"].map((letter, i) => (
@@ -348,17 +352,19 @@ const WB_Unit5_Page6_Q2 = () => {
                     draggableId={letter}
                     index={i}
                     key={letter}
-                   isDragDisabled={locked || showAnswer}
+                    isDragDisabled={locked || showAnswer}
                   >
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                         className="word-box-wb-unit4-p4-q1"
                         style={{
-                          width: 50,
-                          textAlign: "center",
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
                           cursor: "grab",
                           ...provided.draggableProps.style,
                         }}
@@ -392,7 +398,7 @@ const WB_Unit5_Page6_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`q-input-unit3-page6-q1 ${
-                            showAnswer ? "red-text" : ""
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
                           }`}
                           style={{
                             display: "flex",

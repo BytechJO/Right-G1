@@ -127,7 +127,7 @@ export default function Review7_Page1_Q1() {
 
     // 4) تحديث الخلايا الخاطئة
     setWrongCells(Array.from(wrongSet));
-    setShowAnswers(true)
+    setShowAnswers(true);
     // عدد الخلايا الصحيحة الحقيقي
     const correctFilledCells = correctSet.size;
 
@@ -222,7 +222,17 @@ export default function Review7_Page1_Q1() {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                  }}
                 >
                   {letters.map((l, index) => (
                     <Draggable
@@ -236,7 +246,16 @@ export default function Review7_Page1_Q1() {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            fontSize: "18px",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {l}
                         </span>
@@ -310,11 +329,11 @@ export default function Review7_Page1_Q1() {
                                 droppableId={`${r}-${c}`}
                                 isDropDisabled={showAnswers}
                               >
-                                {(provided,snapshot) => (
+                                {(provided, snapshot) => (
                                   <div
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
-                                       className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
+                                    className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                                   >
                                     {userGrid[r][c] && (
                                       <Draggable

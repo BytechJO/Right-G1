@@ -30,7 +30,7 @@
 }
 .inline-input-wb-unit6-p3-q2 {
     width: 100%;
-    border: none;
+    /* border: none; */
     border-bottom: 2px solid #333;
     text-align: center;
     font-size: 22px;

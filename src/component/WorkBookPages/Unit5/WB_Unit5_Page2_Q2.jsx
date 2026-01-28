@@ -167,23 +167,35 @@ const WB_Unit5_Page2_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
-                style={{ display: "flex", gap: 10, marginBottom: 20 }}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
               >
                 {allWords.map((word, i) => (
                   <Draggable draggableId={word} index={i} key={word}>
-                    {(provided) => {  
-                    return (
+                    {(provided) => {
+                      return (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                           className="word-box-wb-unit4-p4-q1"
-                          style={{
-                        
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
+                           style={{
+                                  padding: "7px 14px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                         >
                           {word}
                         </div>
@@ -212,20 +224,28 @@ const WB_Unit5_Page2_Q2 = () => {
                   {q.parts.map((part, pIndex) => {
                     if (part.type === "text") {
                       return (
-                        <span key={pIndex} className="sentence-text-wb-unit5-page2-q2">
+                        <span
+                          key={pIndex}
+                          className="sentence-text-wb-unit5-page2-q2"
+                        >
                           {part.value}
                         </span>
                       );
                     }
 
                     return (
-                      <span key={pIndex} style={{ position: "relative" ,width:"100%" }}>
+                      <span
+                        key={pIndex}
+                        style={{ position: "relative", width: "100%" }}
+                      >
                         <Droppable droppableId={`blank-${qIndex}-${pIndex}`}>
                           {(provided, snapshot) => (
                             <span
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit5-page2-q2"
+                              className={`inline-input-wb-unit5-page2-q2 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                               style={{
                                 display: "inline-flex",
                                 alignItems: "center",

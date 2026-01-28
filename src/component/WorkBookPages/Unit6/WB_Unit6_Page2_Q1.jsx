@@ -189,7 +189,7 @@ const WB_Unit6_Page2_Q1 = () => {
             width: "60%",
             display: "flex",
             flexDirection: "column",
-            // gap: "20px",
+            gap: "10px",
           }}
         >
           <h4 className="header-title-page8">
@@ -200,12 +200,16 @@ const WB_Unit6_Page2_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-               className="word-bank-wb-unit3-p6-q1"
                 style={{
                   display: "flex",
-                  gap: 20,
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
                   justifyContent: "center",
-                  margin: "20px 0",
+                  width: "100%",
                 }}
               >
                 {[1, 2, 3, 4, 5].map((num, i) => (
@@ -215,10 +219,12 @@ const WB_Unit6_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-unit4-p4-q1"
                         style={{
-                          width: 50,
-                          textAlign: "center",
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
                           cursor: "grab",
                           ...provided.draggableProps.style,
                         }}
@@ -248,7 +254,9 @@ const WB_Unit6_Page2_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="wb-unit6-p2-q1-input"
+                            className={`wb-unit6-p2-q1-input  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               display: "flex",
                               alignItems: "center",

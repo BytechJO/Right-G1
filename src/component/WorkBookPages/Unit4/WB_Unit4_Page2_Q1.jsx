@@ -15,7 +15,7 @@ const WB_Unit4_Page2_Q1 = () => {
   const [selectedColor, setSelectedColor] = useState("#ff0000"); // اللون الحالي
   const [showPalette, setShowPalette] = useState(false);
   const [activeShape, setActiveShape] = useState(null);
- 
+
   const questions = [
     {
       id: 1,
@@ -44,7 +44,7 @@ const WB_Unit4_Page2_Q1 = () => {
     q2: "It is a triangle",
     q3: "It is a circle",
   };
-   const wordBank = Object.values(correctAnswers);
+  const wordBank = Object.values(correctAnswers);
 
   const onDragEnd = (result) => {
     if (!result.destination || showAnswer) return;
@@ -232,7 +232,17 @@ const WB_Unit4_Page2_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "center",
+                }}
               >
                 {wordBank.map((word, i) => (
                   <Draggable draggableId={`word-${word}`} index={i} key={word}>
@@ -241,7 +251,15 @@ const WB_Unit4_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                       className="word-box-wb-u1-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </div>
@@ -349,28 +367,32 @@ const WB_Unit4_Page2_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                         >
-                           <Droppable droppableId={`blank-q${q.id}`}>
-                        {(provided, snapshot) => (
-                          <span
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            <input
-                              type="text"
-                              value={answers[`q${q.id}`]}
-                              readOnly
-                              disabled={showAnswer}
-                              className="answer-input-wb-unit4-p2-q1"
-                              style={{
-                                background: snapshot.isDraggingOver
-                                  ? "#e3f2fd"
-                                  : "",
-                              }}
-                            />
-                            {provided.placeholder}
-                          </span>
-                        )}
-                      </Droppable>
+                          <Droppable droppableId={`blank-q${q.id}`}>
+                            {(provided, snapshot) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                              >
+                                <input
+                                  type="text"
+                                  value={answers[`q${q.id}`]}
+                                  readOnly
+                                  disabled={showAnswer}
+                                  className={`answer-input-wb-unit4-p2-q1 ${
+                                    snapshot.isDraggingOver
+                                      ? "drag-over-cell"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    background: snapshot.isDraggingOver
+                                      ? "#e3f2fd"
+                                      : "",
+                                  }}
+                                />
+                                {provided.placeholder}
+                              </span>
+                            )}
+                          </Droppable>
                           {provided.placeholder}
                         </span>
                       )}
@@ -390,7 +412,11 @@ const WB_Unit4_Page2_Q1 = () => {
                               value={answers[`q${q.id}`]}
                               readOnly
                               disabled={showAnswer}
-                              className="answer-input-wb-unit4-p2-q1"
+                            className={`answer-input-wb-unit4-p2-q1 ${
+                                    snapshot.isDraggingOver
+                                      ? "drag-over-cell"
+                                      : ""
+                                  }`}
                               style={{
                                 background: snapshot.isDraggingOver
                                   ? "#e3f2fd"

@@ -56,37 +56,51 @@ const WB_Unit8_Page1_Q2 = () => {
   const onDragEnd = (result) => {
     if (!result.destination || locked) return;
 
-    const wordId = result.draggableId;
-    const [qIndex, pIndex] = result.destination.droppableId
-      .replace("drop-", "")
-      .split("-")
-      .map(Number);
+    const { draggableId, destination } = result;
 
-    setAnswers((prev) => {
-      const copy = prev.map((row) => [...row]);
+    // 🟡 إذا رجعنا الكلمة على الـ word bank
+    if (destination.droppableId === "word-bank") {
+      setAnswers((prev) => {
+        const copy = prev.map((row) => [...row]);
 
-      // إزالة الكلمة من أي مكان قديم (منع التكرار)
-      copy.forEach((row, qi) =>
-        row.forEach((val, pi) => {
-          if (val === wordId) copy[qi][pi] = "";
-        }),
-      );
+        // شيل الكلمة من أي مكان كانت فيه
+        copy.forEach((row, qi) =>
+          row.forEach((val, pi) => {
+            if (val === draggableId) copy[qi][pi] = "";
+          }),
+        );
 
-      // وضعها بالمكان الجديد
-      copy[qIndex][pIndex] = wordId;
-      return copy;
-    });
+        return copy;
+      });
 
-    setWrongInputs([]);
-  };
+      setWrongInputs([]);
+      return;
+    }
 
-  const handleChange = (value, qIndex, pIndex) => {
-    if (locked) return;
+    // 🟢 إذا نزلت داخل سؤال
+    if (destination.droppableId.startsWith("drop-")) {
+      const [qIndex, pIndex] = destination.droppableId
+        .replace("drop-", "")
+        .split("-")
+        .map(Number);
 
-    const copy = [...answers];
-    copy[qIndex][pIndex] = value.toLowerCase();
-    setAnswers(copy);
-    setWrongInputs([]);
+      setAnswers((prev) => {
+        const copy = prev.map((row) => [...row]);
+
+        // إزالة الكلمة من مكانها القديم
+        copy.forEach((row, qi) =>
+          row.forEach((val, pi) => {
+            if (val === draggableId) copy[qi][pi] = "";
+          }),
+        );
+
+        // وضعها بالمكان الجديد
+        copy[qIndex][pIndex] = draggableId;
+        return copy;
+      });
+
+      setWrongInputs([]);
+    }
   };
 
   const checkAnswers = () => {
@@ -195,7 +209,12 @@ const WB_Unit8_Page1_Q2 = () => {
                 }}
               >
                 {wordBank.map((w, i) => (
-                  <Draggable key={w.id} draggableId={w.id} index={i}>
+                  <Draggable
+                    key={w.id}
+                    draggableId={w.id}
+                    index={i}
+                    isDragDisabled={locked}
+                  >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
@@ -209,7 +228,7 @@ const WB_Unit8_Page1_Q2 = () => {
                           justifyContent: "center",
                           fontWeight: "bold",
                           cursor: "grab",
-                          padding:"5px",
+                          padding: "5px",
                           background: "white",
                           ...provided.draggableProps.style,
                         }}
@@ -249,17 +268,22 @@ const WB_Unit8_Page1_Q2 = () => {
                         key={pIndex}
                         style={{ position: "relative", width: "90%" }}
                       >
-                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`}>
+                        <Droppable
+                          droppableId={`drop-${qIndex}-${pIndex}`}
+                          isDropDisabled={locked}
+                        >
                           {(provided, snapshot) => (
                             <span
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit8-p1-q2"
+                              className={`inline-input-wb-unit8-p1-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 background: snapshot.isDraggingOver
                                   ? "#c4e5fcff"
                                   : "transparent",
-                                  width:"100%"
+                                width: "100%",
                               }}
                             >
                               {wordBank.find(

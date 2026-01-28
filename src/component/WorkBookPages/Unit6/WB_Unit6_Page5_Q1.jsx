@@ -163,9 +163,9 @@ const WB_Unit6_Page5_Q1 = () => {
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
-        <button className="check-button2" onClick={checkAnswer}>
+        {/* <button className="check-button2" onClick={checkAnswer}>
           Check Answer ✓
-        </button>
+        </button> */}
       </div>
     </div>
   );

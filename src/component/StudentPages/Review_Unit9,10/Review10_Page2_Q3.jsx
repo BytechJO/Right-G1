@@ -185,7 +185,15 @@ setLocked(true)
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="word-bank-review10-p2-q3"
+             style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",justifyContent:"center",width:"100%"
+                        }}
             >
               {Array.from(new Set(data.flatMap((d) => d.correct))).map(
                 (word, i) => (
@@ -200,7 +208,15 @@ setLocked(true)
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-review10-p1-q3"
+                          style={{
+                                  padding: "7px 14px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                       >
                         {word}
                       </div>

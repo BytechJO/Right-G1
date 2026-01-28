@@ -48,7 +48,7 @@ const Review5_Page2_Q1 = () => {
 
   const resetAll = () => {
     setSelected(["", "", "", ""]);
-   setAnswers([null, null, null, null]);
+    setAnswers([null, null, null, null]);
     setWrongInputs([]);
     setShowResult(false);
     setLocked(false); // ← مهم جدًا
@@ -152,7 +152,16 @@ const Review5_Page2_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {["g", "k"].map((letter, index) => (
                   <Draggable
@@ -166,7 +175,15 @@ const Review5_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {letter}
                       </span>
@@ -237,11 +254,13 @@ const Review5_Page2_Q1 = () => {
                 {/* writing input */}
                 <div key={item.id} className="word-row-review5-p2-q1">
                   <Droppable droppableId={`slot-${i}`} isDropDisabled={locked}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="first-letter-input-review5-p2-q1"
+                        className={`first-letter-input-review5-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[i] && (
                           <Draggable

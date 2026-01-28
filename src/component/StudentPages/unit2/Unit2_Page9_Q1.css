@@ -24,7 +24,7 @@
 /* خلي المربع position relative */
 .drop-slot-inline-unit2-p8-q2 {
   position: relative;
-  min-width: 120px;
+ width:300px;
   min-height: 36px;
 }
 

@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import conversation from "../../../assets/U1 WB/U2/U2P9EXEB-01.svg";
 import conversation2 from "../../../assets/U1 WB/U2/U2P9EXEB-02.svg";
 import img1 from "../../../assets/U1 WB/U2/U2P9EXEB-03.svg";
@@ -52,7 +52,7 @@ const WB_Unit2_Page1_Q2 = () => {
   });
   const [showAnswer, setShowAnswer] = useState(false);
   // const [wrong, setWrong] = useState([]);
- const [locked, setLocked] = useState(false);
+  const [locked, setLocked] = useState(false);
 
   const onDragEnd = (result) => {
     if (!result.destination || showAnswer) return;
@@ -99,7 +99,7 @@ const WB_Unit2_Page1_Q2 = () => {
       .filter((v) => v !== null);
 
     setWrongInputs(wrong);
-setLocked(true)
+    setLocked(true);
     const correctCount = results.filter(Boolean).length;
     const wrongCount = results.length - correctCount;
 
@@ -147,7 +147,7 @@ setLocked(true)
       q3: "",
     });
     setShowAnswer(false);
-    setLocked(false)
+    setLocked(false);
   };
 
   return (
@@ -181,21 +181,39 @@ setLocked(true)
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-u2-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  margin: "10px 0",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "center",
+                }}
               >
                 {Object.values(correctAnswers).map((word, i) => (
                   <Draggable
                     key={`bank-${word}-${i}`}
                     draggableId={`bank-${word}-${i}`}
                     index={i}
-                    isDragDisabled={showAnswer ||locked}
+                    isDragDisabled={showAnswer || locked}
                   >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-wb-u1-p2-q1"
+                        style={{
+                          padding: "2px 5px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -221,16 +239,18 @@ setLocked(true)
                   <img src={q.secImg} className="avatar-img-wb-u2-q1" />
                   <div className="sentence-box-unit7-p2-q3">
                     {q.type === "full" && (
-                      <Droppable droppableId={`q${q.id}`} >
-                        {(provided) => (
+                      <Droppable droppableId={`q${q.id}`}>
+                        {(provided, snapshot) => (
                           <input
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             type="text"
                             value={answers[`q${q.id}`]}
-                            className="answer-input-unit7-p2-q3"
+                            className={`answer-input-unit7-p2-q3 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             readOnly
-                            disabled={showAnswer ||locked}
+                            disabled={showAnswer || locked}
                           />
                         )}
                       </Droppable>
@@ -240,15 +260,17 @@ setLocked(true)
                       <p className="answer-line-unit7-p2-q3">
                         I'm
                         <Droppable droppableId={`q${q.id}`}>
-                          {(provided) => (
+                          {(provided ,snapshot) => (
                             <input
                               ref={provided.innerRef}
                               {...provided.droppableProps}
                               type="text"
                               value={answers[`q${q.id}`]}
-                              className="answer-input-unit7-p2-q3 small"
+                              className={`answer-input-unit7-p2-q3 small ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               readOnly
-                              disabled={showAnswer ||locked}
+                              disabled={showAnswer || locked}
                             />
                           )}
                         </Droppable>

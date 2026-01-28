@@ -126,15 +126,15 @@ const WB_Unit10_Page2_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                   style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  marginBottom: "20px",
-                  justifyContent: "center",
-                }}
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    marginBottom: "20px",
+                    justifyContent: "center",
+                  }}
                 >
                   {wordBank.map((w, i) => (
                     <Draggable key={w} draggableId={w} index={i}>
@@ -192,29 +192,31 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble question-bubble-wb-unit10-p2-q1">
                 Do{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                <Droppable droppableId="q2_question">
-                  {(provided, snapshot) => (
-                    <span
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="line-input-wb-unit10-p2-q1"
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "#e3f2fd"
-                          : "white",
-                        display: "inline-block",
-                        minWidth: "120px",
-                        padding: "4px",
-                      }}
-                    >
-                      {answers.q2_question}
-                      {provided.placeholder}
-                    </span>
+                  <Droppable droppableId="q2_question">
+                    {(provided, snapshot) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`line-input-wb-unit10-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#e3f2fd"
+                            : "white",
+                          display: "inline-block",
+                          minWidth: "120px",
+                          padding: "4px",
+                        }}
+                      >
+                        {answers.q2_question}
+                        {provided.placeholder}
+                      </span>
+                    )}
+                  </Droppable>
+                  {wrongInputs.includes("q2_question") && (
+                    <span className="wrong-circle-x-wb-unit10-p2-q1">✕</span>
                   )}
-                </Droppable>
-                 {wrongInputs.includes("q2_question") && (
-    <span className="wrong-circle-x">✕</span>
-  )}
                 </div>
                 ?
               </div>
@@ -228,29 +230,32 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble answer-bubble-wb-unit10-p2-q1">
                 Yes,{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                <Droppable droppableId="q2_answer">
-                  {(provided, snapshot) => (
-                    <span
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="line-input-wb-unit10-p2-q1"
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "#e3f2fd"
-                          : "white",
-                        display: "inline-block",
-                        minWidth: "120px",
-                        padding: "4px",
-                      }}
-                    >
-                      {answers.q2_answer}
-                      {provided.placeholder}
-                    </span>
+                  <Droppable droppableId="q2_answer">
+                    {(provided, snapshot) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`line-input-wb-unit10-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#e3f2fd"
+                            : "white",
+                          display: "inline-block",
+                          minWidth: "120px",
+                          padding: "4px",
+                        }}
+                      >
+                        {answers.q2_answer}
+                        {provided.placeholder}
+                      </span>
+                    )}
+                  </Droppable>
+                  {wrongInputs.includes("q2_answer") && (
+                    <span className="wrong-circle-x-wb-unit10-p2-q1">✕</span>
                   )}
-                </Droppable>
-                {wrongInputs.includes("q2_answer") && (
-    <span className="wrong-circle-x">✕</span>
-  )}</div>
+                </div>
                 .
               </div>
             </div>
@@ -261,29 +266,31 @@ const WB_Unit10_Page2_Q1 = () => {
 
               <div className="bubble question-bubble-wb-unit10-p2-q1">
                 <div style={{ position: "relative", display: "inline-block" }}>
-                <Droppable droppableId="q3_question">
-                  {(provided, snapshot) => (
-                    <span
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="line-input-wb-unit10-p2-q1"
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "#e3f2fd"
-                          : "white",
-                        display: "inline-block",
-                        minWidth: "120px",
-                        padding: "4px",
-                      }}
-                    >
-                      {answers.q3_question}
-                      {provided.placeholder}
-                    </span>
+                  <Droppable droppableId="q3_question">
+                    {(provided, snapshot) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                         className={`line-input-wb-unit10-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#e3f2fd"
+                            : "white",
+                          display: "inline-block",
+                          minWidth: "120px",
+                          padding: "4px",
+                        }}
+                      >
+                        {answers.q3_question}
+                        {provided.placeholder}
+                      </span>
+                    )}
+                  </Droppable>
+                  {wrongInputs.includes("q3_question") && (
+                    <span className="wrong-circle-x-wb-unit10-p2-q1">✕</span>
                   )}
-                </Droppable>
-                 {wrongInputs.includes("q3_question") && (
-    <span className="wrong-circle-x">✕</span>
-  )}
                 </div>
                 bread?
               </div>
@@ -297,29 +304,32 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble answer-bubble-wb-unit10-p2-q1">
                 No,{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                <Droppable droppableId="q3_answer">
-                  {(provided, snapshot) => (
-                    <span
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className="line-input-wb-unit10-p2-q1"
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "#e3f2fd"
-                          : "white",
-                        display: "inline-block",
-                        minWidth: "120px",
-                        padding: "4px",
-                      }}
-                    >
-                      {answers.q3_answer}
-                      {provided.placeholder}
-                    </span>
+                  <Droppable droppableId="q3_answer">
+                    {(provided, snapshot) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`line-input-wb-unit10-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#e3f2fd"
+                            : "white",
+                          display: "inline-block",
+                          minWidth: "120px",
+                          padding: "4px",
+                        }}
+                      >
+                        {answers.q3_answer}
+                        {provided.placeholder}
+                      </span>
+                    )}
+                  </Droppable>
+                  {wrongInputs.includes("q3_answer") && (
+                    <span className="wrong-circle-x-wb-unit10-p2-q1">✕</span>
                   )}
-                </Droppable>
-                {wrongInputs.includes("q3_answer") && (
-    <span className="wrong-circle-x">✕</span>
-  )}</div>
+                </div>
                 .
               </div>
             </div>

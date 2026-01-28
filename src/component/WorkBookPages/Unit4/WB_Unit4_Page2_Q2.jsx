@@ -23,18 +23,18 @@ const WB_Unit4_Page2_Q2 = () => {
     },
     {
       id: "2",
-      scramble: "circle/It’s/a",
+      scramble: "circle/It's/a",
       questionCorrect: "It's a circle",
     },
     {
       id: "3",
-      scramble: "brown/It’s/a/boat",
+      scramble: "brown/It's/a/boat",
       questionCorrect: "It's a brown boat",
     },
     {
       id: "4",
-      scramble: "square/red/a/It’s",
-      questionCorrect: "it's a red square",
+      scramble: "square/red/a/It's",
+      questionCorrect: "It's a red square",
     },
   ];
 
@@ -170,7 +170,16 @@ const onDragEnd = (result) => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="word-bank-wb-unit3-p6-q1"
+                         style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",
+                          justifyContent:"center"
+                        }}
                         >
                           {getWords(q.scramble).map((word, i) => (
                             <Draggable
@@ -184,7 +193,15 @@ const onDragEnd = (result) => {
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
-                                   className="word-box-wb-unit4-p2-q2"
+                                    style={{
+                                  padding: "2px 5px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                                 >
                                   {word}
                                 </span>
@@ -206,7 +223,9 @@ const onDragEnd = (result) => {
                           value={inputs[`${q.id}_question`] || ""}
                           readOnly
                           disabled={locked || showAnswers}
-                          className="answer-input33-review10-p1-q3"
+                          className={`answer-input33-review10-p1-q3 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

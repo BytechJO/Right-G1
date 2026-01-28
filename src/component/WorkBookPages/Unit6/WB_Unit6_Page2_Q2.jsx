@@ -360,7 +360,16 @@ const WB_Unit6_Page2_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {Object.values(correctSentences).map((sentence, i) => {
                   return (
@@ -375,8 +384,12 @@ const WB_Unit6_Page2_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-box-wb-unit4-p4-q1"
                           style={{
+                            padding: "2px 5px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
                             cursor: "grab",
                             ...provided.draggableProps.style,
                           }}
@@ -483,7 +496,9 @@ const WB_Unit6_Page2_Q2 = () => {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="write-drop-wb-unit6-p2-q2"
+                        className={`write-drop-wb-unit6-p2-q2  ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                         style={{
                           background: snapshot.isDraggingOver ? "#e3f2fd" : "",
                         }}

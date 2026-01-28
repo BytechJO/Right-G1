@@ -13,41 +13,39 @@ const Unit9_Page6_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
- const onDragEnd = (result) => {
-  const { destination, draggableId, source } = result;
-  if (!destination || showAnswer) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId, source } = result;
+    if (!destination || showAnswer) return;
 
-  // ❗ تجاهل السحب داخل البنك نفسه
-  if (destination.droppableId === "bank") return;
+    // ❗ تجاهل السحب داخل البنك نفسه
+    if (destination.droppableId === "bank") return;
 
-  const value = draggableId
-    .replace("word-", "")
-    .replace(/^filled-/, "")
-    .replace(/-slot-\d+$/, "");
+    const value = draggableId
+      .replace("word-", "")
+      .replace(/^filled-/, "")
+      .replace(/-slot-\d+$/, "");
 
-  const index = Number(destination.droppableId.split("-")[1]);
+    const index = Number(destination.droppableId.split("-")[1]);
 
-  setAnswers((prev) => {
-    const updated = [...prev];
+    setAnswers((prev) => {
+      const updated = [...prev];
 
-    const oldIndex = updated.findIndex((a) => a === value);
-    if (oldIndex !== -1) updated[oldIndex] = null;
+      const oldIndex = updated.findIndex((a) => a === value);
+      if (oldIndex !== -1) updated[oldIndex] = null;
 
-    updated[index] = value;
-    return updated;
-  });
+      updated[index] = value;
+      return updated;
+    });
 
-  setWrongInputs([]);
-};
-
+    setWrongInputs([]);
+  };
 
   const checkAnswers = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
-if (answers.some((ans) => !ans)) {
-  ValidationAlert.info("Please fill in all the blanks before checking!");
-  return;
-}
-
+    if (answers.some((ans) => !ans)) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
+      return;
+    }
 
     let correctCount = 0;
     let wrong = [];
@@ -123,7 +121,16 @@ if (answers.some((ans) => !ans)) {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {correctAnswers.map((word, index) => (
                   <Draggable
@@ -137,7 +144,15 @@ if (answers.some((ans) => !ans)) {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -180,6 +195,7 @@ if (answers.some((ans) => !ans)) {
                     textAlign: "center",
                     fontSize: "20px",
                     alignSelf: "center",
+                    width: "100%",
                   }}
                 >
                   I like
@@ -195,8 +211,7 @@ if (answers.some((ans) => !ans)) {
                     >
                       {answers[0] && (
                         <Draggable
-                         draggableId={`filled-${answers[0]}-slot-0`}
-
+                          draggableId={`filled-${answers[0]}-slot-0`}
                           index={0}
                           isDragDisabled={showAnswer}
                         >
@@ -249,6 +264,7 @@ if (answers.some((ans) => !ans)) {
                     textAlign: "center",
                     fontSize: "20px",
                     alignSelf: "center",
+                    width: "100%",
                   }}
                 >
                   He likes
@@ -265,7 +281,6 @@ if (answers.some((ans) => !ans)) {
                       {answers[1] && (
                         <Draggable
                           draggableId={`filled-${answers[1]}-slot-1`}
-
                           index={0}
                           isDragDisabled={showAnswer}
                         >
@@ -318,6 +333,7 @@ if (answers.some((ans) => !ans)) {
                     textAlign: "center",
                     fontSize: "20px",
                     alignSelf: "center",
+                    width: "100%",
                   }}
                 >
                   She likes
@@ -333,8 +349,7 @@ if (answers.some((ans) => !ans)) {
                     >
                       {answers[2] && (
                         <Draggable
-                         draggableId={`filled-${answers[2]}-slot-2`}
-
+                          draggableId={`filled-${answers[2]}-slot-2`}
                           index={0}
                           isDragDisabled={showAnswer}
                         >
@@ -392,8 +407,7 @@ if (answers.some((ans) => !ans)) {
                     >
                       {answers[3] && (
                         <Draggable
-                         draggableId={`filled-${answers[3]}-slot-3`}
-
+                          draggableId={`filled-${answers[3]}-slot-3`}
                           index={0}
                           isDragDisabled={showAnswer}
                         >

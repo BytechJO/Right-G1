@@ -15,7 +15,7 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 const WB_Unit3_Page6_Q1 = () => {
   const correctAnswers = ["rat", "cap", "ant", "bat", "dad", "pan"];
-  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
+  // const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل الإدخال بعد Show Answer
   const [bank] = useState([...correctAnswers]); // ثابت
@@ -63,54 +63,48 @@ const WB_Unit3_Page6_Q1 = () => {
   const [duration, setDuration] = useState(0);
   const [showCaption, setShowCaption] = useState(false);
 
-  const handleChange = (value, index) => {
-    if (locked) return; // ⭐ منع التعديل بعد Show Answer
-
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
-
+ 
   const checkAnswers = () => {
-    if (locked) return; // ⭐ منع التعديل بعد Show Answer
-    if (answers.some((ans) => ans.trim() === "")) {
-      ValidationAlert.info("Please fill in all the blanks before checking!");
-      return;
+  if (locked) return;
+
+  // ✅ فحص الخانات الفاضية (الصح)
+  if (slots.some((slot) => !slot)) {
+    ValidationAlert.info("Please fill in all the blanks before checking!");
+    return;
+  }
+
+  let tempScore = 0;
+  let wrong = [];
+
+  slots.forEach((ans, i) => {
+    if (ans === correctAnswers[i]) {
+      tempScore++;
+    } else {
+      wrong.push(i);
     }
+  });
 
-    let tempScore = 0;
-    let wrong = [];
-    const finalAnswers = slots.map((s) => s || "");
+  setWrongInputs(wrong);
+  setLocked(true);
 
-    finalAnswers.forEach((ans, i) => {
-      if (ans === correctAnswers[i]) {
-        tempScore++;
-      } else {
-        wrong.push(i);
-      }
-    });
+  const total = correctAnswers.length;
+  const color =
+    tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
 
-    setWrongInputs(wrong);
+  const msg = `
+    <div style="font-size:20px;text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${tempScore} / ${total}
+      </span>
+    </div>
+  `;
 
-    const total = correctAnswers.length;
-    const color =
-      tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
-
-    const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${tempScore} / ${total}
-        </span>
-      </div>
-    `;
-
-    if (tempScore === total) ValidationAlert.success(scoreMessage);
-    else if (tempScore === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-
-    setLocked(true); // ⭐ إغلاق التعديل بعد Check Answer
-  };
+  tempScore === total
+    ? ValidationAlert.success(msg)
+    : tempScore === 0
+    ? ValidationAlert.error(msg)
+    : ValidationAlert.warning(msg);
+};
 
   const reset = () => {
     setSlots(Array(6).fill(null));
@@ -120,11 +114,12 @@ const WB_Unit3_Page6_Q1 = () => {
   };
 
   // ⭐⭐⭐ NEW — Show Answer
-  const showAnswer = () => {
-    setAnswers([...correctAnswers]); // تعبئة الإجابات الصحيحة
-    setWrongInputs([]); // إزالة كل الأخطاء
-    setLocked(true); // قفل التعديل
-  };
+const showAnswer = () => {
+  setSlots([...correctAnswers]); // ✅ هذا الصح
+  setWrongInputs([]);
+  setLocked(true);
+};
+
 
   // ================================
   // ✔ Captions Array
@@ -367,7 +362,16 @@ const WB_Unit3_Page6_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                 className="word-bank-wb-unit3-p6-q1"
+                  style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",
+                          justifyContent:"center"
+                        }}
               >
                 {bank.map((word, i) => (
                   <Draggable key={word} draggableId={word} index={i}>
@@ -376,7 +380,15 @@ const WB_Unit3_Page6_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-u1-p8-q2"
+                         style={{
+                                  padding: "7px 14px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                       >
                         {word}
                       </span>
@@ -400,7 +412,9 @@ const WB_Unit3_Page6_Q1 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="q-input-review3-p2-q1"
+                          className={`q-input-review3-p2-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

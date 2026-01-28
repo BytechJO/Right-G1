@@ -59,20 +59,19 @@ const Unit2_Page7_Q1 = () => {
   };
 
   // 🧲 Drag logic مع تعطيل الرقم بعد الاستخدام
- const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showAnswer) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
 
-  if (destination.droppableId.startsWith("slot-")) {
-    const [, key, index] = destination.droppableId.split("-");
-    const num = Number(draggableId.replace("num-", ""));
+    if (destination.droppableId.startsWith("slot-")) {
+      const [, key, index] = destination.droppableId.split("-");
+      const num = Number(draggableId.replace("num-", ""));
 
-    const draggedWord = words.find((w) => w.num === num)?.word || "";
+      const draggedWord = words.find((w) => w.num === num)?.word || "";
 
-    handleChange(key, Number(index), draggedWord);
-  }
-};
-
+      handleChange(key, Number(index), draggedWord);
+    }
+  };
 
   // نفس checkAnswers
   const checkAnswers = () => {
@@ -113,7 +112,7 @@ const Unit2_Page7_Q1 = () => {
 
     setWrongInputs(newWrongInputs);
     setChecked(true);
-setUsedNumbers(words.map((w) => w.num));
+    setUsedNumbers(words.map((w) => w.num));
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
@@ -234,7 +233,7 @@ setUsedNumbers(words.map((w) => w.num));
                         key={index}
                         droppableId={`slot-${key}-${index}`}
                       >
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
@@ -247,7 +246,7 @@ setUsedNumbers(words.map((w) => w.num));
                                     ? "wrong-input1"
                                     : ""
                                 }
-                                ${showAnswer ? "show-red" : ""}
+                              ${snapshot.isDraggingOver ? "drag-over-cell" : ""}
                               `}
                             >
                               {userAnswers[key]?.[index] || ""}

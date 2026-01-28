@@ -219,7 +219,9 @@ const WB_Unit10_Page1_Q1 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input33-review10-p1-q3"
+                          className={`answer-input33-review10-p1-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

@@ -129,7 +129,16 @@ const WB_Unit2_Page3_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit2-page3-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {correctAnswers.map((w, i) => (
                   <Draggable
@@ -143,7 +152,15 @@ const WB_Unit2_Page3_Q2 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-u1-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {w}
                       </span>
@@ -174,7 +191,9 @@ const WB_Unit2_Page3_Q2 = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       type="text"
-                      className="q-input-unit3-page6-q1"
+                      className={`q-input-unit3-page6-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                       value={answers[0]}
                       readOnly
                       style={{
@@ -187,7 +206,7 @@ const WB_Unit2_Page3_Q2 = () => {
                   )}
                 </Droppable>
 
-                { wrongInputs.includes(0) && (
+                {wrongInputs.includes(0) && (
                   <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
                 )}
               </div>
@@ -211,7 +230,9 @@ const WB_Unit2_Page3_Q2 = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       type="text"
-                      className="q-input-unit3-page6-q1"
+                      className={`q-input-unit3-page6-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                       value={answers[1]}
                       readOnly
                       style={{
@@ -248,7 +269,9 @@ const WB_Unit2_Page3_Q2 = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       type="text"
-                      className="q-input-unit3-page6-q1"
+                      className={`q-input-unit3-page6-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                       value={answers[2]}
                       readOnly
                       style={{
@@ -261,7 +284,7 @@ const WB_Unit2_Page3_Q2 = () => {
                   )}
                 </Droppable>
 
-                { wrongInputs.includes(2) && (
+                {wrongInputs.includes(2) && (
                   <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
                 )}
               </div>
@@ -287,7 +310,9 @@ const WB_Unit2_Page3_Q2 = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       type="text"
-                      className="q-input-unit3-page6-q1"
+                       className={`q-input-unit3-page6-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                       value={answers[3]}
                       readOnly
                       style={{
@@ -300,7 +325,7 @@ const WB_Unit2_Page3_Q2 = () => {
                   )}
                 </Droppable>
 
-                { wrongInputs.includes(3) && (
+                {wrongInputs.includes(3) && (
                   <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
                 )}
               </div>

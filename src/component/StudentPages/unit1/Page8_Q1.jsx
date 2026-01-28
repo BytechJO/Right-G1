@@ -8,6 +8,8 @@ import deer from "../../../assets/unit1/imgs/deer flip.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";
 import taxi from "../../../assets/unit1/imgs/taxi_1.svg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { TbMessageCircle } from "react-icons/tb";
 import { FaPlay, FaPause } from "react-icons/fa";
@@ -50,9 +52,11 @@ const Page8_Q1 = () => {
 
   const displayOrder = [2, 3, 1, 0]; // ترتيب الكلمات
 
-  const [answers, setAnswers] = useState(
-    data.map(() => ({ letter: "", number: "" }))
-  );
+  const [answers, setAnswers] = useState({
+    letters: Array(data.length).fill(null), // لكل كلمة حرف
+    numbers: Array(data.length).fill(null), // لكل صورة رقم
+  });
+
   const [wrongLetters, setWrongLetters] = useState(data.map(() => false));
   const [wrongNumbers, setWrongNumbers] = useState(data.map(() => false));
 
@@ -69,6 +73,20 @@ const Page8_Q1 = () => {
   const [duration, setDuration] = useState(0);
   const [showCaption, setShowCaption] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
+
+  const lettersBank = [
+    { id: "l-d-0", value: "d" },
+    { id: "l-d-1", value: "d" },
+    { id: "l-t-0", value: "t" },
+    { id: "l-t-1", value: "t" },
+  ];
+
+  const numbersBank = [
+    { id: "n-1", value: "1" },
+    { id: "n-2", value: "2" },
+    { id: "n-3", value: "3" },
+    { id: "n-4", value: "4" },
+  ];
 
   // ================================
   // ✔ Captions Array
@@ -95,7 +113,7 @@ const Page8_Q1 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -149,8 +167,8 @@ const Page8_Q1 = () => {
   const updateAnswer = (index, field, value) => {
     setAnswers((prev) =>
       prev.map((a, i) =>
-        i === index ? { ...a, [field]: value.toLowerCase() } : a
-      )
+        i === index ? { ...a, [field]: value.toLowerCase() } : a,
+      ),
     );
     setWrongLetters(data.map(() => false));
     setWrongNumbers(data.map(() => false));
@@ -162,55 +180,126 @@ const Page8_Q1 = () => {
     clickAudioRef.current.currentTime = 0;
     clickAudioRef.current.play();
   };
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
 
-  const reset = () => {
-    setAnswers(data.map(() => ({ letter: "", number: "" })));
-    setWrongLetters(data.map(() => false));
-    setWrongNumbers(data.map(() => false));
-    setShowAnswer(false);
-    setIsAutoAnswer(false); // ← رجع اللون للأسود
-  };
+    const { draggableId, destination } = result;
 
-  const checkAnswers = () => {
-    if (showAnswer) return;
-    if (answers.some((a) => a.letter === "" || a.number === "")) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please complete all answers before checking."
-      );
+    // 1) Letter drop zones
+    if (
+      draggableId.startsWith("l-") &&
+      destination.droppableId.startsWith("letter-drop-")
+    ) {
+      const index = Number(destination.droppableId.replace("letter-drop-", ""));
+
+      setAnswers((prev) => {
+        const letters = [...prev.letters];
+
+        // شيل الحرف من مكانه القديم لو كان مستخدم
+        const oldIndex = letters.findIndex((v) => v === draggableId);
+        if (oldIndex !== -1) letters[oldIndex] = null;
+
+        letters[index] = draggableId;
+        return { ...prev, letters };
+      });
+
+      setWrongLetters(data.map(() => false));
       return;
     }
 
-    let correctLetters = 0;
-    let correctNumbers = 0;
+    // 2) Number drop zones
+    if (
+      draggableId.startsWith("n-") &&
+      destination.droppableId.startsWith("number-drop-")
+    ) {
+      const index = Number(destination.droppableId.replace("number-drop-", ""));
 
-    answers.forEach((a, i) => {
-      if (a.letter === data[i].missing) correctLetters++;
-      if (a.number === data[i].num) correctNumbers++;
-    });
+      setAnswers((prev) => {
+        const numbers = [...prev.numbers];
 
-    let totalPoints = data.length * 2;
-    let score = correctLetters + correctNumbers;
+        const oldIndex = numbers.findIndex((v) => v === draggableId);
+        if (oldIndex !== -1) numbers[oldIndex] = null;
 
-    const letterWrongs = answers.map((a, i) => a.letter !== data[i].missing);
-    const numberWrongs = answers.map((a, i) => a.number !== data[i].num);
+        numbers[index] = draggableId;
+        return { ...prev, numbers };
+      });
 
-    setWrongLetters(letterWrongs);
-    setWrongNumbers(numberWrongs);
-    setShowAnswer(true);
-    let color =
-      score === totalPoints ? "green" : score === 0 ? "red" : "orange";
-
-    let scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">Score: ${score} / ${totalPoints}</span>
-      </div>
-    `;
-
-    if (score === totalPoints) ValidationAlert.success(scoreMessage);
-    else if (score === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+      setWrongNumbers(data.map(() => false));
+      return;
+    }
   };
+
+const reset = () => {
+  setAnswers({
+    letters: Array(data.length).fill(null),
+    numbers: Array(data.length).fill(null),
+  });
+
+  setWrongLetters(data.map(() => false));
+  setWrongNumbers(data.map(() => false));
+
+  setShowAnswer(false);
+  setIsAutoAnswer(false);
+};
+
+
+ const checkAnswers = () => {
+  if (showAnswer) return;
+
+  // 1️⃣ فحص الفراغ
+  if (answers.letters.some((v) => !v) || answers.numbers.some((v) => !v)) {
+    ValidationAlert.info(
+      "Oops!",
+      "Please complete all answers before checking.",
+    );
+    return;
+  }
+
+  let correctLetters = 0;
+  let correctNumbers = 0;
+
+  // 2️⃣ الحساب
+  data.forEach((item, i) => {
+    const pickedLetter = answers.letters[i]?.split("-")[1];
+    const pickedNumber = answers.numbers[i]?.split("-")[1];
+
+    if (pickedLetter === item.missing) correctLetters++;
+    if (pickedNumber === item.num) correctNumbers++;
+  });
+
+  const totalPoints = data.length * 2;
+  const score = correctLetters + correctNumbers;
+
+  // 3️⃣ تحديد الغلط
+  const letterWrongs = data.map(
+    (item, i) => answers.letters[i]?.split("-")[1] !== item.missing,
+  );
+
+  const numberWrongs = data.map(
+    (item, i) => answers.numbers[i]?.split("-")[1] !== item.num,
+  );
+
+  setWrongLetters(letterWrongs);
+  setWrongNumbers(numberWrongs);
+  setShowAnswer(true);
+
+  // 4️⃣ الرسالة
+  const color =
+    score === totalPoints ? "green" : score === 0 ? "red" : "orange";
+
+  const scoreMessage = `
+    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+      <span style="color:${color}; font-weight:bold;">
+        Score: ${score} / ${totalPoints}
+      </span>
+    </div>
+  `;
+
+  if (score === totalPoints) ValidationAlert.success(scoreMessage);
+  else if (score === 0) ValidationAlert.error(scoreMessage);
+  else ValidationAlert.warning(scoreMessage);
+};
+
   const togglePlay = () => {
     const audio = audioRef.current;
 
@@ -227,266 +316,255 @@ const Page8_Q1 = () => {
     }
   };
   return (
-    <div className="page8-wrapper" style={{ padding: "30px" }}>
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
-      >
-        <div className="page8-content">
-          <header className="header-title-page8">
-            <span className="ex-A">A</span>{" "}
-            <span className="number-of-q">1</span> Listen and write the missing
-            letters. Number the pictures.
-          </header>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "30px 0px",
-              width: "100%",
-            }}
-          >
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="page8-wrapper" style={{ padding: "30px" }}>
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
+          }}
+        >
+          <div className="page8-content">
+            <header className="header-title-page8">
+              <span className="ex-A">A</span>{" "}
+              <span className="number-of-q">1</span> Listen and write the
+              missing letters. Number the pictures.
+            </header>
             <div
-              className="audio-popup-read"
               style={{
-                width: "50%",
+                display: "flex",
+                justifyContent: "center",
+                margin: "30px 0px",
+                width: "100%",
               }}
             >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={CD6_Pg8_Instruction1_AdultLady}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
-
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
+              <div
+                className="audio-popup-read"
+                style={{
+                  width: "50%",
+                }}
+              >
+                <div className="audio-inner player-ui">
+                  <audio
+                    ref={audioRef}
+                    src={CD6_Pg8_Instruction1_AdultLady}
+                    onTimeUpdate={(e) => {
+                      const time = e.target.currentTime;
+                      setCurrent(time);
+                      updateCaption(time);
                     }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
+                    onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                  ></audio>
+                  {/* Play / Pause */}
+                  {/* الوقت - السلايدر - الوقت */}
+                  <div className="top-row">
+                    <span className="audio-time">
+                      {new Date(current * 1000).toISOString().substring(14, 19)}
+                    </span>
 
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
+                    <input
+                      type="range"
+                      className="audio-slider"
+                      min="0"
+                      max={duration}
+                      value={current}
+                      onChange={(e) => {
+                        audioRef.current.currentTime = e.target.value;
+                        updateCaption(Number(e.target.value));
+                      }}
+                      style={{
+                        background: `linear-gradient(to right, #430f68 ${
+                          (current / duration) * 100
+                        }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                      }}
+                    />
+
+                    <span className="audio-time">
+                      {new Date(duration * 1000)
+                        .toISOString()
+                        .substring(14, 19)}
+                    </span>
                   </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
+                  {/* الأزرار 3 أزرار بنفس السطر */}
+                  <div className="bottom-row">
+                    {/* فقاعة */}
+                    <div
+                      className={`round-btn ${showCaption ? "active" : ""}`}
+                      style={{ position: "relative" }}
+                      onClick={() => setShowCaption(!showCaption)}
                     >
-                      <IoMdSettings size={36} />
+                      <TbMessageCircle size={36} />
+                      <div
+                        className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                        style={{ top: "100%", left: "10%" }}
+                      >
+                        {captions.map((cap, i) => (
+                          <p
+                            key={i}
+                            id={`caption-${i}`}
+                            className={`caption-inPopup-line2 ${
+                              activeIndex === i ? "active" : ""
+                            }`}
+                          >
+                            {cap.text}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Play */}
+                    <button className="play-btn2" onClick={togglePlay}>
+                      {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                     </button>
 
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
+                    {/* Settings */}
+                    <div className="settings-wrapper" ref={settingsRef}>
+                      <button
+                        className={`round-btn ${showSettings ? "active" : ""}`}
+                        onClick={() => setShowSettings(!showSettings)}
+                      >
+                        <IoMdSettings size={36} />
+                      </button>
+
+                      {showSettings && (
+                        <div className="settings-popup">
+                          <label>Volume</label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={volume}
+                            onChange={(e) => {
+                              setVolume(e.target.value);
+                              audioRef.current.volume = e.target.value;
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>{" "}
+                </div>
               </div>
             </div>
-          </div>
-          <audio ref={clickAudioRef} style={{ display: "none" }} />
+            <audio ref={clickAudioRef} style={{ display: "none" }} />
 
-          {/* ✅ الكلمات */}
-          <div
-            className="div-input"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "30px",
-              // marginLeft:"40px",
-              width: "100%",
-            }}
-          >
-            {displayOrder.map((dataIndex, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  position: "relative",
-                }}
-              >
-                <span className="number-of-q">{index + 1}</span>
-                <input
-                  type="text"
-                  maxLength="1"
-                  className="char-input"
-                  value={answers[dataIndex].letter}
-                  onChange={(e) =>
-                    !showAnswer &&
-                    updateAnswer(dataIndex, "letter", e.target.value)
-                  }
-                  disabled={showAnswer}
+            <Droppable droppableId="letters-bank" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
                   style={{
-                    width: "40px",
-                    textAlign: "center",
-                    fontSize: "30px",
-                    marginRight: "5px",
-                    color: isAutoAnswer ? "red" : "black", // ← هون
-                  }}
-                />
-
-                <span
-                  style={{
-                    textAlign: "center",
-                    fontSize: "25px",
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  {data[dataIndex].word.slice(1)}
-                </span>
-                {wrongLetters[dataIndex] && (
-                  <div
+                  {lettersBank.map((l, i) => (
+                    <Draggable key={l.id} draggableId={l.id} index={i}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="bank-item"
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                            border: "2px solid #2c5287",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            background: "white",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {l.value}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
+            {/* ✅ الكلمات */}
+            <div
+              className="div-input"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "30px",
+                // marginLeft:"40px",
+                width: "100%",
+              }}
+            >
+              {displayOrder.map((dataIndex, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    position: "relative",
+                  }}
+                >
+                  <span className="number-of-q">{index + 1}</span>
+                  <Droppable droppableId={`letter-drop-${dataIndex}`}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`char-drop ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        style={{
+                          width: "40px",
+                          height: "45px",
+                          borderBottom: "2px solid #2c5287",
+                          // borderRadius: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "30px",
+                          background: snapshot.isDraggingOver
+                            ? "#c4e5fcff"
+                            : "white",
+                          color: isAutoAnswer ? "red" : "black",
+                        }}
+                      >
+                        {answers.letters[dataIndex]?.split("-")[1] || ""}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  <span
                     style={{
-                      position: "absolute",
-                      left: "56%",
-                      top: "19%",
-                      transform: "translateY(-50%)",
-                      width: "25px",
-                      height: "25px",
-                      background: "red",
-                      color: "white",
-                      borderRadius: "50%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      border: "2px solid white",
+                      textAlign: "center",
+                      fontSize: "25px",
                     }}
                   >
-                    ✕
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* ✅ الصور */}
-          <div
-            className="exercise-image-div"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginBottom: "20px",
-            }}
-          >
-            {data.map((item, index) => (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "20px",
-                  flexDirection: "column",
-                }}
-              >
-                <img
-                  key={item.num}
-                  src={item.src}
-                  className="exercise-image"
-                  onClick={() => playSound(item.sound)}
-                />
-                <div
-                  key={index + 1}
-                  className="exercise-item"
-                  style={{ position: "relative" }}
-                >
-                  <input
-                    type="text"
-                    maxLength="1"
-                    className="missing-input"
-                    value={answers[index].number}
-                    onChange={(e) =>
-                      !showAnswer &&
-                      updateAnswer(index, "number", e.target.value)
-                    }
-                    disabled={showAnswer}
-                    style={{
-                      color: isAutoAnswer ? "red" : "black", // ← نفس الشي هون
-                    }}
-                  />
-
-                  {wrongNumbers[index] && (
+                    {data[dataIndex].word.slice(1)}
+                  </span>
+                  {wrongLetters[dataIndex] && (
                     <div
                       style={{
                         position: "absolute",
-                        right: "58px",
-                        top: "5%",
+                        left: "56%",
+                        top: "19%",
                         transform: "translateY(-50%)",
                         width: "25px",
                         height: "25px",
@@ -504,42 +582,172 @@ const Page8_Q1 = () => {
                       ✕
                     </div>
                   )}
-                </div>{" "}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
+
+            {/* ✅ الصور */}
+            <div
+              className="exercise-image-div"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                marginBottom: "20px",
+              }}
+            >
+              {data.map((item, index) => (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "20px",
+                    flexDirection: "column",
+                  }}
+                >
+                  <img
+                    key={item.num}
+                    src={item.src}
+                    className="exercise-image"
+                    onClick={() => playSound(item.sound)}
+                  />
+                  <div
+                    key={index + 1}
+                    className="exercise-item"
+                    style={{ position: "relative" }}
+                  >
+                    <Droppable droppableId={`number-drop-${index}`}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`number-drop ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "24px",
+                            background: snapshot.isDraggingOver
+                              ? "#c4e5fcff"
+                              : "white",
+                            color: isAutoAnswer ? "red" : "black",
+                          }}
+                        >
+                          {answers.numbers[index]?.split("-")[1] || ""}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+
+                    {wrongNumbers[index] && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          right: "58px",
+                          top: "5%",
+                          transform: "translateY(-50%)",
+                          width: "25px",
+                          height: "25px",
+                          background: "red",
+                          color: "white",
+                          borderRadius: "50%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          border: "2px solid white",
+                        }}
+                      >
+                        ✕
+                      </div>
+                    )}
+                  </div>{" "}
+                </div>
+              ))}
+            </div>
+            <Droppable droppableId="letters-bank" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {numbersBank.map((l, i) => (
+                    <Draggable key={l.id} draggableId={l.id} index={i}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="bank-item"
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                            border: "2px solid #2c5287",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            background: "white",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {l.value}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
           </div>
         </div>
+        <div className="action-buttons-container">
+          <button onClick={reset} className="try-again-button">
+            Start Again ↻
+          </button>
+
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={() => {
+              setShowAnswer(true);
+              setIsAutoAnswer(true);
+
+              setAnswers({
+                letters: data.map((item, i) => `l-${item.missing}-${i}`),
+                numbers: data.map((item) => `n-${item.num}`),
+              });
+
+              setWrongLetters(data.map(() => false));
+              setWrongNumbers(data.map(() => false));
+            }}
+          >
+            Show Answer
+          </button>
+
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={reset} className="try-again-button">
-          Start Again ↻
-        </button>
-
-        <button
-          className="show-answer-btn swal-continue"
-          onClick={() => {
-            setShowAnswer(true);
-            setIsAutoAnswer(true); // ← الإجابات تظهر باللون الأحمر
-
-            setAnswers(
-              data.map((item) => ({
-                letter: item.missing,
-                number: item.num,
-              }))
-            );
-
-            setWrongLetters(data.map(() => false));
-            setWrongNumbers(data.map(() => false));
-          }}
-        >
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

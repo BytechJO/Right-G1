@@ -246,7 +246,16 @@ export default function Review9_Page2_Q3() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {["m", "n"].map((char, index) => (
                   <Draggable
@@ -260,7 +269,16 @@ export default function Review9_Page2_Q3() {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          fontSize:"22px",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {char}
                       </span>

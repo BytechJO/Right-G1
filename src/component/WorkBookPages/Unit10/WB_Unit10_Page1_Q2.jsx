@@ -75,8 +75,6 @@ const WB_Unit10_Page1_Q2 = () => {
     setWrongInputs([]);
   };
 
- 
-
   const checkAnswers = () => {
     if (locked) return;
 
@@ -167,11 +165,11 @@ const WB_Unit10_Page1_Q2 = () => {
           </h5>
 
           <Droppable droppableId="bank" direction="horizontal">
-  {(provided) => (
-    <div
-      ref={provided.innerRef}
-      {...provided.droppableProps}
-      style={{
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
                   display: "flex",
                   gap: "12px",
                   padding: "10px",
@@ -180,37 +178,37 @@ const WB_Unit10_Page1_Q2 = () => {
                   marginBottom: "20px",
                   justifyContent: "center",
                 }}
-    >
-      {wordBank.map((w, i) => (
-        <Draggable
-          key={w.id}
-          draggableId={`${w.id}|${w.value}`}
-          index={i}
-        >
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              style={{
-                padding: "6px 12px",
-                border: "2px solid #2c5287",
-                borderRadius: "8px",
-                background: "white",
-                cursor: "grab",
-                fontWeight: "600",
-                ...provided.draggableProps.style,
-              }}
-            >
-              {w.value}
-            </div>
-          )}
-        </Draggable>
-      ))}
-      {provided.placeholder}
-    </div>
-  )}
-</Droppable>
+              >
+                {wordBank.map((w, i) => (
+                  <Draggable
+                    key={w.id}
+                    draggableId={`${w.id}|${w.value}`}
+                    index={i}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          padding: "6px 12px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          cursor: "grab",
+                          fontWeight: "600",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {w.value}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
           <div className="content-container-wb-unit10-p1-q2">
             {questions.map((q, qIndex) => (
@@ -237,7 +235,9 @@ const WB_Unit10_Page1_Q2 = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit4-p1-q2"
+                              className={`inline-input-wb-unit4-p1-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 background: snapshot.isDraggingOver
                                   ? "#e3f2fd"

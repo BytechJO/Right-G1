@@ -19,7 +19,7 @@
 }
 .missing-input-wb-unit4-p6-q3 {
     width: 50px;
-    border: none;
+    /* border: none; */
     border-bottom: 2px solid black;
     margin: 0 6px;
     font-size: 25px;

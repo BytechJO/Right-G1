@@ -135,47 +135,48 @@ const WB_Unit8_Page1_Q1 = () => {
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 style={{
-                  display: "flex",
+                  display: "grid",
                   gap: "12px",
                   padding: "10px",
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   marginBottom: "20px",
                   justifyContent: "center",
+                  gridTemplateColumns:"1fr 1fr",height:"150px"
                 }}
               >
                 {["1", "2", "3", "4"].map((num, index) => (
                   <Draggable draggableId={num} index={index} key={num}>
                     {(provided) => (
                       <div className="sentence-container-wb-unit8-p1-q1">
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: "50%",
-                          border: "2px solid #2c5287",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontWeight: "bold",
-                          cursor: "grab",
-                          background: "white",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {num}
-                        
-                      </div> 
-                      <span className="sentence-wb-unit8-p1-q1">{words[index]}</span></div>
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                            border: "2px solid #2c5287",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            background: "white",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {num}
+                        </div>
+                        <span className="sentence-wb-unit8-p1-q1">
+                          {words[index]}
+                        </span>
+                      </div>
                     )}
-                   
                   </Draggable>
                 ))}
                 {provided.placeholder}
-                
               </div>
             )}
           </Droppable>
@@ -193,7 +194,9 @@ const WB_Unit8_Page1_Q1 = () => {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="wb-unit7-p5-q1-input"
+                        className={`wb-unit7-p5-q1-input  ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                         style={{
                           background: snapshot.isDraggingOver
                             ? "#e3f2fd"

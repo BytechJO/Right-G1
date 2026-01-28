@@ -160,7 +160,7 @@ const WB_Unit3_Page3_Q1 = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            //   gap: "30px",
+              gap: "10px",
             width: "60%",
             justifyContent: "flex-start",
           }}
@@ -174,7 +174,16 @@ const WB_Unit3_Page3_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-page3-q1"
+                style={{
+                  display: "grid",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  gridTemplateColumns:"1fr 1fr 1fr"
+                }}
               >
                 {bank.map((w, i) => (
                   <Draggable draggableId={`bank-${i}`} index={i} key={w}>
@@ -183,7 +192,15 @@ const WB_Unit3_Page3_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-box-wb-u1-p8-q2"
+                        style={{
+                          padding: "7px 7px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {w}
                       </span>
@@ -210,7 +227,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                    className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
@@ -252,7 +271,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                    className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
@@ -272,7 +293,9 @@ const WB_Unit3_Page3_Q1 = () => {
                     )}
                     {provided.placeholder}{" "}
                     {wrongInputs.includes(1) && (
-                      <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
+                      <span className="error-mark-input-wb-unit2-page3-q2">
+                        ✕
+                      </span>
                     )}
                   </div>
                 )}
@@ -292,7 +315,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                   className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
@@ -335,7 +360,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                   className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
@@ -378,7 +405,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                   className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
@@ -421,7 +450,9 @@ const WB_Unit3_Page3_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="q-input-wb-unit3-page3-q1"
+                   className={`q-input-wb-unit3-page3-q1 ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}

@@ -84,34 +84,33 @@ const Review3_Page1_Q2 = () => {
     setLines((prev) => [...prev, newLine]);
     setFirstDot(null);
   };
- const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || locked || showAnswer) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked || showAnswer) return;
 
-  if (destination.droppableId.startsWith("input-")) {
-    const targetKey = destination.droppableId.split("-")[1];
-    const sentence = draggableId.replace("sentence-", "");
+    if (destination.droppableId.startsWith("input-")) {
+      const targetKey = destination.droppableId.split("-")[1];
+      const sentence = draggableId.replace("sentence-", "");
 
-    setUserInputs((prev) => {
-      const updated = { ...prev };
+      setUserInputs((prev) => {
+        const updated = { ...prev };
 
-      // 🔒 إزالة الجملة من أي مكان سابق
-      Object.keys(updated).forEach((key) => {
-        if (updated[key] === sentence) {
-          updated[key] = "";
-        }
+        // 🔒 إزالة الجملة من أي مكان سابق
+        Object.keys(updated).forEach((key) => {
+          if (updated[key] === sentence) {
+            updated[key] = "";
+          }
+        });
+
+        // ✅ وضعها بالمكان الجديد
+        updated[targetKey] = sentence;
+
+        return updated;
       });
 
-      // ✅ وضعها بالمكان الجديد
-      updated[targetKey] = sentence;
-
-      return updated;
-    });
-
-    setWrongInputs([]);
-  }
-};
-
+      setWrongInputs([]);
+    }
+  };
 
   const checkAnswers = () => {
     if (showAnswer || locked) return;
@@ -205,7 +204,16 @@ const Review3_Page1_Q2 = () => {
             <Droppable droppableId="sentences" isDropDisabled>
               {(provided) => (
                 <div
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -221,9 +229,13 @@ const Review3_Page1_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
                           style={{
-                            marginBottom: "8px",
+                            padding: "2px 5px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
                             ...provided.draggableProps.style,
                           }}
                         >
@@ -268,11 +280,13 @@ const Review3_Page1_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="input-1">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input"
+                        className={`unscramble-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         <div className="drop-inner-review3-p1-q2">
                           {userInputs[1] && (
@@ -356,11 +370,13 @@ const Review3_Page1_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="input-2">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input"
+                        className={`unscramble-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         <div className="drop-inner-review3-p1-q2">
                           {userInputs[2] && (
@@ -449,11 +465,13 @@ const Review3_Page1_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="input-3">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input"
+                        className={`unscramble-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         <div className="drop-inner-review3-p1-q2">
                           {userInputs[3] && (
@@ -542,11 +560,13 @@ const Review3_Page1_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="input-4">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input"
+                        className={`unscramble-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         <div className="drop-inner-review3-p1-q2">
                           {userInputs[4] && (

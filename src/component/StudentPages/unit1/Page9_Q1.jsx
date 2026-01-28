@@ -89,10 +89,10 @@ const Page9_Q1 = () => {
         <button onClick={handleReset} className="try-again-button">
           Start Again ↻
         </button>
-
+{/* 
         <button onClick={handleCheck} className="check-button2">
           Check Answer ✓
-        </button>
+        </button> */}
       </div>
     </div>
   );

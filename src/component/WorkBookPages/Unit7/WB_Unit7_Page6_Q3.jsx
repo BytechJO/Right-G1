@@ -162,19 +162,18 @@ const WB_Unit7_Page6_Q3 = () => {
     }
   };
   // ⭐⭐⭐ NEW — Show Answer
-const showAnswer = () => {
-  const filled = data.map((item) =>
-    item.correct.map((correctWord) => {
-      const found = wordBank.find((w) => w.text === correctWord);
-      return found ? found.id : "";
-    })
-  );
+  const showAnswer = () => {
+    const filled = data.map((item) =>
+      item.correct.map((correctWord) => {
+        const found = wordBank.find((w) => w.text === correctWord);
+        return found ? found.id : "";
+      }),
+    );
 
-  setAnswers(filled);
-  setWrongInputs([]);
-  setLocked(true);
-};
-
+    setAnswers(filled);
+    setWrongInputs([]);
+    setLocked(true);
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -206,8 +205,8 @@ const showAnswer = () => {
                   border: "2px dashed #ccc",
                   borderRadius: 10,
                   marginBottom: 20,
-                  width:"100%",
-                  justifyContent:"center"
+                  width: "100%",
+                  justifyContent: "center",
                 }}
               >
                 {wordBank.map((word, index) => (
@@ -223,10 +222,11 @@ const showAnswer = () => {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         style={{
-                          padding: "6px 12px",
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
                           background: "white",
-                          border: "1px solid #ccc",
-                          borderRadius: 8,
+                          fontWeight: "bold",
                           cursor: "grab",
                           ...provided.draggableProps.style,
                         }}
@@ -260,7 +260,9 @@ const showAnswer = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="missing-input-wb-unit7-p6-q3"
+                            className={`missing-input-wb-unit7-p6-q3  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"

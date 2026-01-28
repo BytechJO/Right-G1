@@ -139,8 +139,8 @@ const Review9_Page2_Q1 = () => {
   };
   const audioRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(null);
-   const [showContinue, setShowContinue] = useState(false);
-   const [paused, setPaused] = useState(false);
+  const [showContinue, setShowContinue] = useState(false);
+  const [paused, setPaused] = useState(false);
   const stopAtSecond = 3.5;
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -381,7 +381,17 @@ const Review9_Page2_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-review9-p2-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "center",
+                }}
               >
                 {["m", "n"].map((char, index) => (
                   <Draggable
@@ -395,7 +405,16 @@ const Review9_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          fontSize:"22px",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {char}
                       </span>

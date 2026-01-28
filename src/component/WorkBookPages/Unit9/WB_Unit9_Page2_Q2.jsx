@@ -45,18 +45,17 @@ const WB_Unit9_Page2_Q2 = () => {
     // فقط داخل نفس الجملة
     if (destination.droppableId !== `drop-${qId}`) return;
 
-   setUserInputs((prev) => {
-  const copy = [...prev[qId]];
+    setUserInputs((prev) => {
+      const copy = [...prev[qId]];
 
-  const existingIndex = copy.indexOf(draggableId);
-  if (existingIndex !== -1) copy.splice(existingIndex, 1);
+      const existingIndex = copy.indexOf(draggableId);
+      if (existingIndex !== -1) copy.splice(existingIndex, 1);
 
-  // ⬅️ دايمًا أضف في النهاية
-  copy.push(draggableId);
+      // ⬅️ دايمًا أضف في النهاية
+      copy.push(draggableId);
 
-  return { ...prev, [qId]: copy };
-});
-
+      return { ...prev, [qId]: copy };
+    });
 
     setWrongInputs([]);
   };
@@ -273,11 +272,13 @@ const WB_Unit9_Page2_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="drop-1" direction="horizontal">
-                    {(provided) => (
+                    {(provided ,snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input-wb-unit9-p2-q1"
+                      className={`unscramble-input-wb-unit9-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {userInputs[1].join(" ")}
                         {provided.placeholder}
@@ -338,11 +339,11 @@ const WB_Unit9_Page2_Q2 = () => {
                       )}
 
                       <Droppable droppableId="bank-2" direction="horizontal">
-                        {(provided) => (
+                        {(provided ,snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                              style={{
+                            style={{
                               display: "flex",
                               gap: "12px",
                               padding: "10px",
@@ -359,7 +360,7 @@ const WB_Unit9_Page2_Q2 = () => {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                              style={{
+                                    style={{
                                       borderRadius: "8px",
                                       border: "2px solid #2c5287",
                                       display: "flex",
@@ -393,11 +394,13 @@ const WB_Unit9_Page2_Q2 = () => {
                   </div>
 
                   <Droppable droppableId="drop-2" direction="horizontal">
-                    {(provided) => (
+                    {(provided ,snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="unscramble-input-wb-unit9-p2-q1"
+                        className={`unscramble-input-wb-unit9-p2-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {userInputs[2].join(" ")}
                         {provided.placeholder}

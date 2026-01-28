@@ -29,7 +29,15 @@ border: 2px solid white;
     /* border-radius: 6px; */
     font-size: 22px;
     width: 30%;
+    height: 30px;
     text-align: center;
     vertical-align: middle;
     line-height: normal;
+    position: relative;
+}
+.question-text-review4-p1-q4 {
+    font-size: 20px;
+    font-weight: 400;
+    width: 100%;
+    display: flex;
 }

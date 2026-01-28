@@ -22,19 +22,16 @@ const Unit4_Page5_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
-const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   /* ================= Drag Logic (منع التكرار) ================= */
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-   if (!destination || showCorrect || checked) return;
-
+    if (!destination || showCorrect || checked) return;
 
     if (destination.droppableId.startsWith("slot-")) {
       const index = Number(destination.droppableId.split("-")[1]);
-      const word = draggableId
-        .replace("bank-", "")
-        .replace(/^slot-.*?-/, "");
+      const word = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
 
       const updated = [...answers];
 
@@ -87,7 +84,7 @@ const [checked, setChecked] = useState(false);
 
     setWrongInputs(wrong);
     setShowResult(true);
-setChecked(true);
+    setChecked(true);
 
     const total = items.length * 2;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
@@ -104,24 +101,23 @@ setChecked(true);
   };
 
   /* ================= Show Answers ================= */
-const showAnswers = () => {
-  setSelected(items.map((i) => i.correct));
-  setAnswers(items.map((i) => i.correctInput));
-  setWrongInputs([]);
-  setShowResult(true);
-  setShowCorrect(true);
-  setChecked(true); // 🔒
-};
+  const showAnswers = () => {
+    setSelected(items.map((i) => i.correct));
+    setAnswers(items.map((i) => i.correctInput));
+    setWrongInputs([]);
+    setShowResult(true);
+    setShowCorrect(true);
+    setChecked(true); // 🔒
+  };
 
-const resetAll = () => {
-  setSelected(["", "", "", ""]);
-  setAnswers(["", "", "", ""]);
-  setWrongInputs([]);
-  setShowResult(false);
-  setShowCorrect(false);
-  setChecked(false); // 🔓
-};
-
+  const resetAll = () => {
+    setSelected(["", "", "", ""]);
+    setAnswers(["", "", "", ""]);
+    setWrongInputs([]);
+    setShowResult(false);
+    setShowCorrect(false);
+    setChecked(false); // 🔓
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -152,23 +148,40 @@ const resetAll = () => {
           <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
             {(provided) => (
               <div
-                className="word-bank-unit2-p8-q2"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent:"center"
+                }}
               >
                 {wordBank.map((word, index) => (
                   <Draggable
                     key={word}
                     draggableId={`bank-${word}`}
                     index={index}
-                   isDragDisabled={showCorrect || checked}
+                    isDragDisabled={showCorrect || checked}
                   >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -210,19 +223,19 @@ const resetAll = () => {
                 {/* 🧩 Drag slot بدل input */}
                 <div className="input-wrapper-unit4-page5-q1">
                   <Droppable droppableId={`slot-${i}`}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                         className={`write-input-unit4-page5-q1 ${
                           showCorrect ? "correct-color" : ""
-                        }`}
+                        } ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                       >
                         {answers[i] && (
                           <Draggable
                             draggableId={`slot-${i}-${answers[i]}`}
                             index={0}
-                        isDragDisabled={showCorrect || checked}
+                            isDragDisabled={showCorrect || checked}
                           >
                             {(provided) => (
                               <span

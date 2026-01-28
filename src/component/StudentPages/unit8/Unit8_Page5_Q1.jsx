@@ -72,7 +72,7 @@ const Unit8_Page5_Q1 = () => {
     });
 
     setWrongInputs(wrongFlags);
-
+    setShowAnswer(true);
     const total = data.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -134,7 +134,17 @@ const Unit8_Page5_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-unit8-p5-q1"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
                 >
                   {data.map((item, index) => (
                     <Draggable
@@ -148,7 +158,15 @@ const Unit8_Page5_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.answer}
                         </span>
@@ -181,11 +199,13 @@ const Unit8_Page5_Q1 = () => {
                         droppableId={`slot-${index}`}
                         isDropDisabled={showAnswer}
                       >
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="text-input"
+                            className={`text-input ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{ fontSize: "22px" }}
                           >
                             {inputs[index] && (
@@ -211,11 +231,10 @@ const Unit8_Page5_Q1 = () => {
                       </Droppable>
 
                       {/* ❌ علامة الخطأ */}
-                      {wrongInputs[index] && !showAnswer && (
+                      {wrongInputs[index] && (
                         <div className="error-icon">✕</div>
                       )}
                     </div>
-
                   </div>
                 </div>
               ))}

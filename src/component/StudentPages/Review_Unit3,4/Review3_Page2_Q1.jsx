@@ -114,9 +114,17 @@ const Review3_Page2_Q1 = () => {
           <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
             {(provided) => (
               <div
-                className="word-bank-review3-p2-q1"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center"
+                }}
               >
                 {correctAnswers.map((word, index) => (
                   <Draggable
@@ -130,7 +138,15 @@ const Review3_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -148,11 +164,13 @@ const Review3_Page2_Q1 = () => {
                 <img src={img} className="q-img-review3-p2-q1" />
 
                 <Droppable droppableId={`slot-${index}`}>
-                  {(provided) => (
+                  {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className="q-input-review3-p2-q1"
+                      className={`q-input-review3-p2-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                     >
                       {answers[index] && (
                         <Draggable
@@ -192,7 +210,10 @@ const Review3_Page2_Q1 = () => {
             Start Again ↻
           </button>
 
-          <button onClick={showAnswer} className="show-answer-btn swal-continue">
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
             Show Answer
           </button>
 

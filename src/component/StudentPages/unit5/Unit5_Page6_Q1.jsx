@@ -62,20 +62,18 @@ const Unit5_Page6_Q1 = () => {
       return;
     }
 
-   correctMatches.forEach((correct) => {
-  const userAnswer = answers.find(
-    (a) => a.num === correct.num
-  );
+    correctMatches.forEach((correct) => {
+      const userAnswer = answers.find((a) => a.num === correct.num);
 
-  if (
-    userAnswer &&
-    userAnswer.input.toLowerCase() === correct.input.toLowerCase()
-  ) {
-    correctCount++;
-  } else {
-    wrong.push(correct.num);
-  }
-});
+      if (
+        userAnswer &&
+        userAnswer.input.toLowerCase() === correct.input.toLowerCase()
+      ) {
+        correctCount++;
+      } else {
+        wrong.push(correct.num);
+      }
+    });
 
     setWrongWords(wrong);
 
@@ -148,7 +146,16 @@ const Unit5_Page6_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {correctMatches.map((item, i) => (
                     <Draggable
@@ -162,7 +169,15 @@ const Unit5_Page6_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.input}
                         </span>
@@ -202,11 +217,13 @@ const Unit5_Page6_Q1 = () => {
                     />
                     <div style={{ position: "relative" }}>
                       <Droppable droppableId="input1">
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-unit5-p6-q1"
+                            className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers.find((a) => a.num === "input1") && (
                               <Draggable
@@ -232,13 +249,11 @@ const Unit5_Page6_Q1 = () => {
                             )}
                             {provided.placeholder}
                             {wrongWords.includes(answers[0]?.num) && (
-                        <span className="error-mark-input1">✕</span>
-                      )}
+                              <span className="error-mark-input1">✕</span>
+                            )}
                           </div>
                         )}
                       </Droppable>
-
-                      
                     </div>
                   </div>
                 </div>
@@ -264,11 +279,13 @@ const Unit5_Page6_Q1 = () => {
                       style={{ pointerEvents: "none", width: "70px" }}
                     />
                     <Droppable droppableId="input2">
-                      {(provided) => (
+                      {(provided ,snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                         >
                           {answers.find((a) => a.num === "input2") && (
                             <Draggable
@@ -294,21 +311,22 @@ const Unit5_Page6_Q1 = () => {
                           )}
                           {provided.placeholder}
                           {wrongWords.includes(answers[1]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                            <span className="error-mark-input1">✕</span>
+                          )}
                         </div>
                       )}
                     </Droppable>
-                    
                     ?
                   </div>
                   <div style={{ position: "relative", display: "flex" }}>
                     <Droppable droppableId="input3">
-                      {(provided) => (
+                      {(provided ,snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                           className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                         >
                           {answers.find((a) => a.num === "input3") && (
                             <Draggable
@@ -334,13 +352,12 @@ const Unit5_Page6_Q1 = () => {
                           )}
                           {provided.placeholder}
                           {wrongWords.includes(answers[2]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                            <span className="error-mark-input1">✕</span>
+                          )}
                         </div>
                       )}
                     </Droppable>
 
-                    
                     <input
                       type="text"
                       value={"global"}
@@ -371,11 +388,13 @@ const Unit5_Page6_Q1 = () => {
                   />
                   <div style={{ position: "relative" }}>
                     <Droppable droppableId="input4">
-                      {(provided) => (
+                      {(provided ,snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                         >
                           {answers.find((a) => a.num === "input4") && (
                             <Draggable
@@ -400,14 +419,12 @@ const Unit5_Page6_Q1 = () => {
                             </Draggable>
                           )}
                           {provided.placeholder}
-                           {wrongWords.includes(answers[3]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                          {wrongWords.includes(answers[3]?.num) && (
+                            <span className="error-mark-input1">✕</span>
+                          )}
                         </div>
                       )}
                     </Droppable>
-
-                   
                   </div>
                 </div>
               </div>
@@ -425,11 +442,13 @@ const Unit5_Page6_Q1 = () => {
                 >
                   <div style={{ position: "relative", display: "flex" }}>
                     <Droppable droppableId="input5">
-                      {(provided) => (
+                      {(provided ,snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                         >
                           {answers.find((a) => a.num === "input5") && (
                             <Draggable
@@ -455,13 +474,12 @@ const Unit5_Page6_Q1 = () => {
                           )}
                           {provided.placeholder}
                           {wrongWords.includes(answers[4]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                            <span className="error-mark-input1">✕</span>
+                          )}
                         </div>
                       )}
                     </Droppable>
 
-                    
                     <input
                       type="text"
                       value={"ruler?"}
@@ -477,11 +495,13 @@ const Unit5_Page6_Q1 = () => {
                       style={{ pointerEvents: "none", width: "70px" }}
                     />
                     <Droppable droppableId="input6">
-                      {(provided) => (
+                      {(provided ,snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit5-p6-q1"
+                          className={`answer-input-unit5-p6-q1 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                         >
                           {answers.find((a) => a.num === "input6") && (
                             <Draggable
@@ -506,14 +526,12 @@ const Unit5_Page6_Q1 = () => {
                             </Draggable>
                           )}
                           {provided.placeholder}
-                           {wrongWords.includes(answers[5]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                          {wrongWords.includes(answers[5]?.num) && (
+                            <span className="error-mark-input1">✕</span>
+                          )}
                         </div>
                       )}
                     </Droppable>
-
-                   
                   </div>
                 </div>
               </div>

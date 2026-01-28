@@ -160,13 +160,15 @@ const WB_Unit7_Page1_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                   className="word-bank-wb-unit3-p6-q1"
-                style={{
-                  display: "flex",
-                  gap: 20,
-                  justifyContent: "center",
-                  margin: "20px 0",
-                }}
+                 style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",justifyContent:"center"
+                        }}
                 >
                   {correctMatches.map((item, i) => (
                     <Draggable
@@ -180,12 +182,15 @@ const WB_Unit7_Page1_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                        className="word-box-wb-unit4-p4-q1"
-                        style={{
-                          textAlign: "center",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
+                       style={{
+                                  padding: "2px 5px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                         >
                           {item.input}
                         </div>
@@ -240,7 +245,7 @@ const WB_Unit7_Page1_Q1 = () => {
                       style={{
                         position: "relative",
                         display: "flex",
-                        alignItems: "flex-end",
+                        alignItems: "flex-end",width:"100%"
                       }}
                     >
                       <Droppable droppableId="drop-input1">
@@ -248,12 +253,14 @@ const WB_Unit7_Page1_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
                                 : "",
-                              minWidth: 120,
+                              // minWidth: 120,
                             }}
                           >
                             {answers.find((a) => a.num === "input1")?.input ||
@@ -286,7 +293,7 @@ const WB_Unit7_Page1_Q1 = () => {
                   <img src={img2} className="img-wb-unit6-p4-q2" />
                 </div>
                 <div className="content-input-unit5-p6-q1">
-                  <div style={{ position: "relative", display: "flex" }}>
+                  <div style={{ position: "relative", display: "flex" ,width:"100%"}}>
                     <input
                       type="text"
                       value={"Are you cold?"}
@@ -294,7 +301,7 @@ const WB_Unit7_Page1_Q1 = () => {
                       style={{
                         pointerEvents: "none",
                         borderBottom: "2px solid black",
-                        width: "80%",
+                        width: "100%",
                         fontSize: "22px",
                       }}
                     />
@@ -323,7 +330,9 @@ const WB_Unit7_Page1_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -378,7 +387,9 @@ const WB_Unit7_Page1_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -410,7 +421,9 @@ const WB_Unit7_Page1_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                           className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -458,7 +471,9 @@ const WB_Unit7_Page1_Q1 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-wb-unit6-p4-q2"
+                        className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"
@@ -489,7 +504,9 @@ const WB_Unit7_Page1_Q1 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-wb-unit6-p4-q2"
+                         className={`answer-input-wb-unit6-p4-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

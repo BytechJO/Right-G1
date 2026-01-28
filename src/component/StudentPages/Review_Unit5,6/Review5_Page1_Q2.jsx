@@ -29,7 +29,7 @@ const data = [
   },
 ];
 
-const numbers =["1","2","3","4"]
+const numbers = ["1", "2", "3", "4"];
 const Review5_Page1_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const [answers, setAnswers] = useState(Array(data.length).fill(null));
@@ -138,7 +138,16 @@ const Review5_Page1_Q2 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-review5-p1-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {numbers.map((item, index) => (
                     <Draggable
@@ -152,7 +161,15 @@ const Review5_Page1_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item}
                         </span>
@@ -208,7 +225,7 @@ const Review5_Page1_Q2 = () => {
                       justifyContent: "center",
                       alignItems: "center",
                       gap: "10px",
-                      fontSize:"22px"
+                      fontSize: "22px",
                     }}
                   >
                     <span style={{ width: "200px" }}>{item.word}</span>{" "}
@@ -221,11 +238,13 @@ const Review5_Page1_Q2 = () => {
                         droppableId={`slot-${index}`}
                         isDropDisabled={locked}
                       >
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="missing-input-review5-p1-q2"
+                            className={`missing-input-review5-p1-q2 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers[index] && (
                               <Draggable

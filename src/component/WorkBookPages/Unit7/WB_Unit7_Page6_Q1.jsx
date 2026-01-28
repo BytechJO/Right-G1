@@ -11,9 +11,11 @@ import img3 from "../../../assets/U1 WB/U7/U7P44EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U7/U7P44EXEA-04.svg";
 import img5 from "../../../assets/U1 WB/U7/U7P44EXEA-05.svg";
 import img6 from "../../../assets/U1 WB/U7/U7P44EXEA-06.svg";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 const WB_Unit7_Page6_Q1 = () => {
   // الإجابات المدخلة من الطالب
-  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
+  const [answers, setAnswers] = useState([null, null, null, null, null, null]);
 
   // النتيجة لكل خانة (صح/غلط)
   const [showResult, setShowResult] = useState([]);
@@ -21,6 +23,29 @@ const WB_Unit7_Page6_Q1 = () => {
 
   // الإجابات الصحيحة
   const correctData = ["w", "w", "h", "w", "h", "w"];
+  const letterBank = ["h", "w"];
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
+
+    const { draggableId, destination } = result;
+    const value = draggableId.replace("letter-", "");
+
+    // لازم يكون إسقاط على input
+    if (!destination.droppableId.startsWith("drop-")) return;
+
+    const index = Number(destination.droppableId.replace("drop-", ""));
+
+    setAnswers((prev) => {
+      const copy = [...prev];
+
+      // شيل الحرف من مكانه القديم
+
+      copy[index] = value;
+      return copy;
+    });
+
+    setShowResult([]);
+  };
 
   // البيانات
   const options = [
@@ -73,7 +98,7 @@ const WB_Unit7_Page6_Q1 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -147,15 +172,15 @@ const WB_Unit7_Page6_Q1 = () => {
     setShowAnswer(false);
   };
   const handleShowAnswer = () => {
-    setShowAnswer(true); // تفعيل وضع إظهار الإجابات
-    setShowResult([]); // إخفاء إكسات
-    setAnswers(correctData); // تعبئة كل الخانات بالإجابات الصحيحة
+    setShowAnswer(true);
+    setShowResult([]);
+    setAnswers(correctData);
   };
 
   const checkAnswers = () => {
     if (showAnswer) return;
     // ❗ الخطوة 1: فحص الخانات الفارغة
-    if (answers.includes("")) {
+    if (answers.some((v) => v === null)) {
       ValidationAlert.info("Please fill all answer boxes before checking!");
       return; // وقف التشييك
     }
@@ -166,7 +191,7 @@ const WB_Unit7_Page6_Q1 = () => {
     });
 
     setShowResult(results);
-
+    setShowAnswer(true);
     // ❗ الخطوة 3: حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;
@@ -195,186 +220,252 @@ const WB_Unit7_Page6_Q1 = () => {
   };
 
   return (
-    <div
-      className="unit3-q3-wrapper"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
+        className="unit3-q3-wrapper"
         style={{
           display: "flex",
           flexDirection: "column",
-          // gap: "15px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">A</span>Does it begin with{" "}
-          <span style={{ color: "red" }}>h</span> or{" "}
-          <span style={{ color: "red" }}>h</span>? Listen and write.
-        </h5>
         <div
+          className="div-forall"
           style={{
             display: "flex",
-            justifyContent: "center",
-            margin: "30px 0px",
-            width: "100%",
+            flexDirection: "column",
+            // gap: "15px",
+            width: "60%",
+            justifyContent: "flex-start",
           }}
         >
+          <h5 className="header-title-page8">
+            <span className="ex-A">A</span>Does it begin with{" "}
+            <span style={{ color: "red" }}>h</span> or{" "}
+            <span style={{ color: "red" }}>h</span>? Listen and write.
+          </h5>
+
           <div
-            className="audio-popup-read"
             style={{
-              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+              margin: "30px 0px",
+              width: "100%",
             }}
           >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound1}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
-
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
+            <div
+              className="audio-popup-read"
+              style={{
+                width: "50%",
+              }}
+            >
+              <div className="audio-inner player-ui">
+                <audio
+                  ref={audioRef}
+                  src={sound1}
+                  onTimeUpdate={(e) => {
+                    const time = e.target.currentTime;
+                    setCurrent(time);
+                    updateCaption(time);
                   }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                ></audio>
+                {/* Play / Pause */}
+                {/* Play / Pause */}
+                {/* الوقت - السلايدر - الوقت */}
+                <div className="top-row">
+                  <span className="audio-time">
+                    {new Date(current * 1000).toISOString().substring(14, 19)}
+                  </span>
 
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  style={{ position: "relative" }}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                  <div
-                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                    style={{ top: "100%", left: "10%" }}
-                  >
-                    {captions.map((cap, i) => (
-                      <p
-                        key={i}
-                        id={`caption-${i}`}
-                        className={`caption-inPopup-line2 ${
-                          activeIndex === i ? "active" : ""
-                        }`}
-                      >
-                        {cap.text}
-                      </p>
-                    ))}
-                  </div>
+                  <input
+                    type="range"
+                    className="audio-slider"
+                    min="0"
+                    max={duration}
+                    value={current}
+                    onChange={(e) => {
+                      audioRef.current.currentTime = e.target.value;
+                      updateCaption(Number(e.target.value));
+                    }}
+                    style={{
+                      background: `linear-gradient(to right, #430f68 ${
+                        (current / duration) * 100
+                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+                    }}
+                  />
+
+                  <span className="audio-time">
+                    {new Date(duration * 1000).toISOString().substring(14, 19)}
+                  </span>
                 </div>
-
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
+                {/* الأزرار 3 أزرار بنفس السطر */}
+                <div className="bottom-row">
+                  {/* فقاعة */}
+                  <div
+                    className={`round-btn ${showCaption ? "active" : ""}`}
+                    style={{ position: "relative" }}
+                    onClick={() => setShowCaption(!showCaption)}
                   >
-                    <IoMdSettings size={36} />
+                    <TbMessageCircle size={36} />
+                    <div
+                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                      style={{ top: "100%", left: "10%" }}
+                    >
+                      {captions.map((cap, i) => (
+                        <p
+                          key={i}
+                          id={`caption-${i}`}
+                          className={`caption-inPopup-line2 ${
+                            activeIndex === i ? "active" : ""
+                          }`}
+                        >
+                          {cap.text}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Play */}
+                  <button className="play-btn2" onClick={togglePlay}>
+                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
                   </button>
 
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>{" "}
-            </div>
-          </div>
-        </div>
-        {/* الصور */}
-        <div className="wb-unit7-p5-q1-grid">
-          {options.map((item, index) => (
-            <div key={index} className="wb-unit7-p5-q1-box">
-              <img src={item.img} className="unit3-q3-image" alt="" />
+                  {/* Settings */}
+                  <div className="settings-wrapper" ref={settingsRef}>
+                    <button
+                      className={`round-btn ${showSettings ? "active" : ""}`}
+                      onClick={() => setShowSettings(!showSettings)}
+                    >
+                      <IoMdSettings size={36} />
+                    </button>
 
-              {/* إدخال الإجابة */}
-              <div className="wb-unit7-p5-q1-input-wrapper">
-                <input
-                  type="text"
-                  maxLength="1"
-                  value={answers[index]}
-                  onChange={(e) => handleChange(index, e.target.value)}
-                  className={`wb-unit7-p5-q1-input `}
-                  readOnly={showAnswer} // ← new 👈 منع التعديل بعد Show Answer
-                />
-
-                {/* إشارة X */}
-                {showResult[index] === "wrong" && (
-                  <div className="unit3-q3-wrong">X</div>
-                )}
+                    {showSettings && (
+                      <div className="settings-popup">
+                        <label>Volume</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={volume}
+                          onChange={(e) => {
+                            setVolume(e.target.value);
+                            audioRef.current.volume = e.target.value;
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>{" "}
               </div>
             </div>
-          ))}
+          </div>
+          <Droppable droppableId="letter-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                {letterBank.map((l, i) => (
+                  <Draggable
+                    key={l}
+                    draggableId={`letter-${l}`}
+                    index={i}
+                    isDragDisabled={showAnswer}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                          background: "white",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {l}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
+          {/* الصور */}
+          <div className="wb-unit7-p5-q1-grid">
+            {options.map((item, index) => (
+              <div key={index} className="wb-unit7-p5-q1-box">
+                <img src={item.img} className="unit3-q3-image" alt="" />
+
+                {/* إدخال الإجابة */}
+                <div className="wb-unit7-p5-q1-input-wrapper">
+                  <Droppable
+                    droppableId={`drop-${index}`}
+                    isDropDisabled={showAnswer}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="wb-unit7-p5-q1-input"
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "#e3f2fd"
+                            : "white",
+                        }}
+                      >
+                        {answers[index] || ""}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+
+                  {/* إشارة X */}
+                  {showResult[index] === "wrong" && (
+                    <div className="unit3-q3-wrong">X</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="action-buttons-container">
+          <button onClick={resetAnswers} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
+
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
         </div>
       </div>
-      <div className="action-buttons-container">
-        <button onClick={resetAnswers} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
-
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    </DragDropContext>
   );
 };
 

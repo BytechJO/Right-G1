@@ -77,15 +77,15 @@ const Review4_Page1_Q4 = () => {
       correctCount === data.length
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     ValidationAlert[
       correctCount === data.length
         ? "success"
         : correctCount === 0
-        ? "error"
-        : "warning"
+          ? "error"
+          : "warning"
     ](`
       <div style="font-size:20px; text-align:center;">
         <span style="color:${color}; font-weight:bold;">
@@ -130,17 +130,23 @@ const Review4_Page1_Q4 = () => {
           }}
         >
           <div className="component-wrapper">
-            <h3 className="header-title-page8">
-              D Look, read, and write.
-            </h3>
+            <h3 className="header-title-page8">D Look, read, and write.</h3>
 
             {/* 🔤 Word Bank */}
             <Droppable droppableId="bank" isDropDisabled>
               {(provided) => (
                 <div
-                  className="word-bank-unit2-p8-q2"
                   ref={provided.innerRef}
                   {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",justifyContent:"center"
+                  }}
                 >
                   {data.map((item, index) => (
                     <Draggable
@@ -154,7 +160,15 @@ const Review4_Page1_Q4 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.correct}
                         </span>
@@ -177,15 +191,17 @@ const Review4_Page1_Q4 = () => {
                   style={{ height: "100px", width: "100px" }}
                 />
 
-                <div className="question-text">
+                <div className="question-text-review4-p1-q4">
                   <h6>{item.question}</h6>
 
                   <Droppable droppableId={`slot-${index}`}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="q-input-review4-p1-q4"
+                        className={`q-input-review4-p1-q4 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[index] && (
                           <Draggable

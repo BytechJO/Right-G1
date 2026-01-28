@@ -34,90 +34,90 @@ const WB_Unit7_Page3_Q2 = () => {
   });
 
   // ✅ word bank items (unique IDs حتى لو النص متكرر "Yes, I am")
- const wordBank = useMemo(
-  () => [
-    { id: "w1", text: "I am" },
-    { id: "w2", text: "happy" },
-    { id: "w3", text: "hungry" },
-    { id: "w4", text: "Yes, I am" },
-    { id: "w5", text: "Are you bored" },
-    { id: "w6", text: "Yes, I am" }, // لازم id مختلف
-  ],
-  []
-);
+  const wordBank = useMemo(
+    () => [
+      { id: "w1", text: "I am" },
+      { id: "w2", text: "happy" },
+      { id: "w3", text: "hungry" },
+      { id: "w4", text: "Yes, I am" },
+      { id: "w5", text: "Are you bored" },
+      { id: "w6", text: "Yes, I am" }, // لازم id مختلف
+    ],
+    [],
+  );
 
   const [bank, setBank] = useState(wordBank);
-const usedWordIds = new Set(Object.values(answersMap).filter(Boolean));
+  const usedWordIds = new Set(Object.values(answersMap).filter(Boolean));
 
   // ✅ onDragEnd: drop word into input
-const onDragEnd = (result) => {
-  if (!result.destination || locked) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
 
-  const { draggableId, destination } = result;
+    const { draggableId, destination } = result;
 
-  // لازم نسمح drop فقط على inputs
-  if (!destination.droppableId.startsWith("drop-")) return;
+    // لازم نسمح drop فقط على inputs
+    if (!destination.droppableId.startsWith("drop-")) return;
 
-  const targetInput = destination.droppableId.replace("drop-", "");
+    const targetInput = destination.droppableId.replace("drop-", "");
 
-  setAnswersMap((prev) => {
-    // ✅ إذا الكلمة مستخدمة بمكان ثاني → امنعيها (no change)
-    const alreadyUsedInAnotherInput = Object.entries(prev).some(
-      ([inpId, wordId]) => wordId === draggableId && inpId !== targetInput
-    );
-    if (alreadyUsedInAnotherInput) return prev;
+    setAnswersMap((prev) => {
+      // ✅ إذا الكلمة مستخدمة بمكان ثاني → امنعيها (no change)
+      const alreadyUsedInAnotherInput = Object.entries(prev).some(
+        ([inpId, wordId]) => wordId === draggableId && inpId !== targetInput,
+      );
+      if (alreadyUsedInAnotherInput) return prev;
 
-    // ✅ إذا كان في كلمة قديمة بنفس input → استبدليها (القديمة "ترجع للبنك" يعني تنمسح من input)
-    // فعلياً: بس بنعمل overwrite
-    return {
-      ...prev,
-      [targetInput]: draggableId,
-    };
-  });
+      // ✅ إذا كان في كلمة قديمة بنفس input → استبدليها (القديمة "ترجع للبنك" يعني تنمسح من input)
+      // فعلياً: بس بنعمل overwrite
+      return {
+        ...prev,
+        [targetInput]: draggableId,
+      };
+    });
 
-  setWrongWords([]);
-};
-const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
+    setWrongWords([]);
+  };
+  const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
 
+  const showAnswers = () => {
+    setAnswersMap({
+      input1: "w1", // I am
+      input2: "w2", // happy
+      input3: "w3", // hungry
+      input4: "w4", // Yes, I am
+      input5: "w5", // Are you bored
+      input6: "w6", // Yes, I am (الثانية)
+    });
+    setWrongWords([]);
+    setLocked(true);
+  };
 
- const showAnswers = () => {
-  setAnswersMap({
-    input1: "w1", // I am
-    input2: "w2", // happy
-    input3: "w3", // hungry
-    input4: "w4", // Yes, I am
-    input5: "w5", // Are you bored
-    input6: "w6", // Yes, I am (الثانية)
-  });
-  setWrongWords([]);
-  setLocked(true);
-};
+  const checkAnswers = () => {
+    if (locked) return;
 
+    const allFilled = Object.values(answersMap).every((v) => v);
+    if (!allFilled) {
+      ValidationAlert.info("Please fill in all the blanks before checking!");
+      return;
+    }
 
- const checkAnswers = () => {
-  if (locked) return;
+    let correctCount = 0;
+    const wrong = [];
 
-  const allFilled = Object.values(answersMap).every((v) => v);
-  if (!allFilled) {
-    ValidationAlert.info("Please fill in all the blanks before checking!");
-    return;
-  }
+    correctMatches.forEach((ans) => {
+      const userText = getWordTextById(answersMap[ans.num])
+        .trim()
+        .toLowerCase();
+      const correctText = ans.input.trim().toLowerCase();
 
-  let correctCount = 0;
-  const wrong = [];
+      if (userText === correctText) correctCount++;
+      else wrong.push(ans.num);
+    });
 
-  correctMatches.forEach((ans) => {
-    const userText = getWordTextById(answersMap[ans.num]).trim().toLowerCase();
-    const correctText = ans.input.trim().toLowerCase();
+    setWrongWords(wrong);
+    setLocked(true);
 
-    if (userText === correctText) correctCount++;
-    else wrong.push(ans.num);
-  });
-
-  setWrongWords(wrong);
-  setLocked(true);
-
-   console.log(correctCount);
+    console.log(correctCount);
     console.log(wrongWords);
     const total = correctMatches.length;
     // تحديد اللون حسب النتيجة
@@ -142,8 +142,7 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-};
-
+  };
 
   const startAgain = () => {
     setAnswersMap({
@@ -166,15 +165,17 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="answer-input-wb-unit6-p4-q2"
+          className={`answer-input-wb-unit6-p4-q2  ${
+            snapshot.isDraggingOver ? "drag-over-cell" : ""
+          }`}
           style={{
-            minHeight: 36,
+            height: 36,
+            width:"80%",
             borderBottom: "2px solid black",
             fontSize: "22px",
             display: "flex",
             alignItems: "flex-end",
             background: snapshot.isDraggingOver ? "#e3f2fd" : "transparent",
-         
           }}
         >
           {getWordTextById(answersMap[id])}
@@ -223,9 +224,10 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                     gap: "12px",
                     flexWrap: "wrap",
                     padding: "12px",
-                  height:"70px",
-                    border: "2px dashed #cfcfcf",
+                    height: "70px",
+                    border: "2px dashed #ccc",
                     borderRadius: 10,
+                    justifyContent: "center",
                   }}
                 >
                   {wordBank.map((item, index) => (
@@ -241,12 +243,13 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={{
-                            padding: "8px 12px",
-                            borderRadius: 10,
-                            border: "1px solid #ddd",
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
                             background: "white",
-                            fontSize: 18,
-                         
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            alignSelf: "center",
                             ...provided.draggableProps.style,
                           }}
                         >
@@ -304,7 +307,8 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                       style={{
                         display: "flex",
                         alignItems: "flex-end",
-                        gap: 6, width: "100%",
+                        gap: 6,
+                        width: "100%",
                       }}
                     >
                       <DropInput id="input1" />.
@@ -355,7 +359,8 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                       style={{
                         display: "flex",
                         alignItems: "flex-end",
-                        gap: 6, width: "100%",
+                        gap: 6,
+                        width: "100%",
                       }}
                     >
                       <DropInput id="input2" />.
@@ -380,7 +385,7 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                     3
                   </span>{" "}
                   <div
-                    style={{ position: "relative", display: "flex", gap: 8 }}
+                    style={{ position: "relative", display: "flex" }}
                   >
                     <input
                       type="text"
@@ -389,7 +394,7 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                       style={{
                         pointerEvents: "none",
                         borderBottom: "2px solid black",
-                        width: "50%",
+                        width: "30%",
                         fontSize: "22px",
                       }}
                     />
@@ -399,7 +404,12 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                 <div className="content-input-unit5-p6-q1">
                   <img src={img3} className="img-wb-unit6-p4-q2" />
                   <div
-                    style={{ display: "flex", alignItems: "flex-end", gap: 6 ,width: "100%",}}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      gap: 6,
+                      width: "100%",
+                    }}
                   >
                     <DropInput id="input4" />.
                   </div>
@@ -419,7 +429,12 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                     4
                   </span>{" "}
                   <div
-                    style={{ display: "flex", alignItems: "flex-end", gap: 6,width: "100%", }}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      gap: 6,
+                      width: "100%",
+                    }}
                   >
                     <DropInput id="input5" />?
                   </div>
@@ -427,7 +442,12 @@ const getWordTextById = (id) => wordBank.find((w) => w.id === id)?.text || "";
                 <div className="content-input-unit5-p6-q1">
                   <img src={img4} className="img-wb-unit6-p4-q2" />
                   <div
-                    style={{ display: "flex", alignItems: "flex-end", gap: 6,width: "100%", }}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      gap: 6,
+                      width: "100%",
+                    }}
                   >
                     <DropInput id="input6" />.
                   </div>

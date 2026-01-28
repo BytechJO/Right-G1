@@ -130,8 +130,16 @@ export default function WB_Unit4_Page6_Q2() {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                style={{ display: "flex", gap: 10, marginTop: 20 }}
-                className="word-bank-wb-unit3-p6-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent:"center"
+                }}
               >
                 {correctWords.map((word, i) => (
                   <Draggable draggableId={word} index={i} key={word}>
@@ -142,7 +150,11 @@ export default function WB_Unit4_Page6_Q2() {
                         {...provided.dragHandleProps}
                         className="word-box-wb-unit4-p4-q1"
                         style={{
-                          textAlign: "center",
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
                           cursor: "grab",
                           ...provided.draggableProps.style,
                         }}
@@ -188,7 +200,9 @@ export default function WB_Unit4_Page6_Q2() {
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="input-cell-wb-unit4-p6-q2"
+                              className={`input-cell-wb-unit4-p6-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 position: "relative",
                                 background: snapshot.isDraggingOver
@@ -202,19 +216,16 @@ export default function WB_Unit4_Page6_Q2() {
                                   ✕
                                 </span>
                               )}
-                            {provided.placeholder && (
-  <div style={{ display: "none" }}>{provided.placeholder}</div>
-)}
+                              {provided.placeholder && (
+                                <div style={{ display: "none" }}>
+                                  {provided.placeholder}
+                                </div>
+                              )}
                             </div>
                           )}
                         </Droppable>
 
-                        {wrong.includes(columnD[i]) &&
-                          columnD[i].trim() !== "" && (
-                            <span className="wrong-x-circle-wb-u1-p8-q2">
-                              ✕
-                            </span>
-                          )}
+                       
                       </td>
 
                       <td style={{ position: "relative" }}>
@@ -223,7 +234,9 @@ export default function WB_Unit4_Page6_Q2() {
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="input-cell-wb-unit4-p6-q2"
+                             className={`input-cell-wb-unit4-p6-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 position: "relative",
                                 background: snapshot.isDraggingOver
@@ -237,19 +250,16 @@ export default function WB_Unit4_Page6_Q2() {
                                   ✕
                                 </span>
                               )}
-                             {provided.placeholder && (
-  <div style={{ display: "none" }}>{provided.placeholder}</div>
-)}
+                              {provided.placeholder && (
+                                <div style={{ display: "none" }}>
+                                  {provided.placeholder}
+                                </div>
+                              )}
                             </div>
                           )}
                         </Droppable>
 
-                        {wrong.includes(columnT[i]) &&
-                          columnT[i].trim() !== "" && (
-                            <span className="wrong-x-circle-wb-u1-p8-q2">
-                              ✕
-                            </span>
-                          )}
+                      
                       </td>
                     </tr>
                   ))}

@@ -38,7 +38,7 @@ const WB_Unit9_Page6_Q1 = () => {
     const index = Number(result.destination.droppableId);
 
     setInputs((prev) => {
-      const copy = [...prev]
+      const copy = [...prev];
 
       copy[index] = letter;
       return copy;
@@ -151,7 +151,7 @@ const WB_Unit9_Page6_Q1 = () => {
                     borderRadius: "10px",
                     justifyContent: "center",
                     marginBottom: "20px",
-                    width:"100%",
+                    width: "100%",
                   }}
                 >
                   {letterBank.map((l, i) => (
@@ -206,7 +206,9 @@ const WB_Unit9_Page6_Q1 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="text-input"
+                            className={`text-input ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"

@@ -172,13 +172,15 @@ const WB_Unit6_Page3_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
-                style={{
-                  display: "flex",
-                  gap: 20,
-                  justifyContent: "center",
-                  margin: "20px 0",
-                }}
+               style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",justifyContent:"center"
+                        }}
               >
                 {allSentences.map((sentence, i) => {
                   const isUsed = answers.flat().includes(sentence);
@@ -195,12 +197,15 @@ const WB_Unit6_Page3_Q2 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                             className="word-box-wb-unit4-p4-q1"
-                        style={{
-                          textAlign: "center",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
+                              style={{
+                                  padding: "2px 5px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                         >
                           {sentence}
                         </div>
@@ -243,7 +248,9 @@ const WB_Unit6_Page3_Q2 = () => {
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit6-p3-q2"
+                              className={`inline-input-wb-unit6-p3-q2  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                               style={{
                                 width: "100%",
                                 background: snapshot.isDraggingOver

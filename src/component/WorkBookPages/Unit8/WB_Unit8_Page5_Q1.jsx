@@ -135,7 +135,9 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="number-input"
+                   className={`number-input ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       top: "14%",
                       left: "14%",
@@ -156,7 +158,9 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="number-input"
+                   className={`number-input ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       top: "15%",
                       left: "77%",
@@ -177,7 +181,9 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="number-input"
+                    className={`number-input ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       top: "61%",
                       left: "18%",
@@ -201,7 +207,9 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="number-input"
+                 className={`number-input ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       top: "5%",
                       left: "82%",
@@ -222,7 +230,9 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="number-input"
+                    className={`number-input ${
+                      snapshot.isDraggingOver ? "drag-over-cell" : ""
+                    }`}
                     style={{
                       top: "36%",
                       left: "82%",

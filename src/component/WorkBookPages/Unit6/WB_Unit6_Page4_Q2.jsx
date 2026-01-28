@@ -21,40 +21,39 @@ const WB_Unit6_Page4_Q2 = () => {
     { input: "Can he ride a bike", num: "input6", id: "w6" },
     { input: "No, he can't", num: "input7", id: "w7" },
   ];
- const onDragEnd = (result) => {
-  if (!result.destination || locked) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || locked) return;
 
-  const wordIndex = Number(result.draggableId.replace("word-", ""));
-  const sentence = [
-    "can't",
-    "she fly a kite",
-    "she can",
-    "Can he sail a boat",
-    "No, he can't",
-    "Can he ride a bike",
-  ][wordIndex];
+    const wordIndex = Number(result.draggableId.replace("word-", ""));
+    const sentence = [
+      "can't",
+      "she fly a kite",
+      "she can",
+      "Can he sail a boat",
+      "No, he can't",
+      "Can he ride a bike",
+    ][wordIndex];
 
-  const dest = result.destination.droppableId;
-  if (!dest.startsWith("drop-")) return;
+    const dest = result.destination.droppableId;
+    if (!dest.startsWith("drop-")) return;
 
-  const inputId = dest.replace("drop-", "");
+    const inputId = dest.replace("drop-", "");
 
-  setAnswers((prev) => {
-    const updated = [...prev];
-    const existingIndex = updated.findIndex((a) => a.num === inputId);
+    setAnswers((prev) => {
+      const updated = [...prev];
+      const existingIndex = updated.findIndex((a) => a.num === inputId);
 
-    if (existingIndex !== -1) {
-      updated[existingIndex] = { input: sentence, num: inputId };
-    } else {
-      updated.push({ input: sentence, num: inputId });
-    }
+      if (existingIndex !== -1) {
+        updated[existingIndex] = { input: sentence, num: inputId };
+      } else {
+        updated.push({ input: sentence, num: inputId });
+      }
 
-    return updated;
-  });
+      return updated;
+    });
 
-  setWrongWords([]);
-};
-
+    setWrongWords([]);
+  };
 
   const showAnswers = () => {
     const filled = correctMatches.map((item) => ({
@@ -82,19 +81,18 @@ const WB_Unit6_Page4_Q2 = () => {
       return;
     }
 
-   correctMatches.forEach((ans) => {
-  const userAnswer = answers.find((a) => a.num === ans.num);
+    correctMatches.forEach((ans) => {
+      const userAnswer = answers.find((a) => a.num === ans.num);
 
-  if (
-    userAnswer &&
-    userAnswer.input.toLowerCase() === ans.input.toLowerCase()
-  ) {
-    correctCount++;
-  } else {
-    wrong.push(ans.num);
-  }
-});
-
+      if (
+        userAnswer &&
+        userAnswer.input.toLowerCase() === ans.input.toLowerCase()
+      ) {
+        correctCount++;
+      } else {
+        wrong.push(ans.num);
+      }
+    });
 
     setWrongWords(wrong);
     setLocked(true);
@@ -150,49 +148,61 @@ const WB_Unit6_Page4_Q2 = () => {
             <h4 className="header-title-page8">
               <span className="ex-A"> H</span> Look and write.
             </h4>
-    <Droppable droppableId="word-bank" direction="vertical">
-  {(provided) => (
-    <div
-      ref={provided.innerRef}
-      {...provided.droppableProps}
-      className="word-bank-wb-unit6-p4-q2"
-    >
-      {[
-        "can't",
-        "she fly a kite",
-        "she can",
-        "Can he sail a boat",
-        "No, he can't",
-        "Can he ride a bike",
-      ].map((text, i) => (
-        <Draggable
-          key={`word-${i}`}
-          draggableId={`word-${i}`}
-          index={i}
-          isDragDisabled={locked}
-        >
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              className="word-box-wb-unit6-p4-q2"
-              style={{
-                cursor: "grab",
-                ...provided.draggableProps.style,
-              }}
-            >
-              {text}
-            </div>
-          )}
-        </Draggable>
-      ))}
+            <Droppable droppableId="word-bank" direction="vertical">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {[
+                    "can't",
+                    "she fly a kite",
+                    "she can",
+                    "Can he sail a boat",
+                    "No, he can't",
+                    "Can he ride a bike",
+                  ].map((text, i) => (
+                    <Draggable
+                      key={`word-${i}`}
+                      draggableId={`word-${i}`}
+                      index={i}
+                      isDragDisabled={locked}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            padding: "2px 5px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {text}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
 
-      {provided.placeholder}
-    </div>
-  )}
-</Droppable>
-
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
 
             <div className="content-container-wb-unit6-p4-q2">
               <div className="section-one-wb-unit6-p4-q2">
@@ -237,7 +247,8 @@ const WB_Unit6_Page4_Q2 = () => {
                       style={{
                         position: "relative",
                         display: "flex",
-                        alignItems: "flex-end",width:"100%"
+                        alignItems: "flex-end",
+                        width: "100%",
                       }}
                     >
                       <Droppable droppableId={`drop-input1`}>
@@ -245,12 +256,13 @@ const WB_Unit6_Page4_Q2 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
                                 : "",
-                          
                             }}
                           >
                             {answers.find((a) => a.num === "input1")?.input ||
@@ -299,7 +311,8 @@ const WB_Unit6_Page4_Q2 = () => {
                       style={{
                         position: "relative",
                         display: "flex",
-                        alignItems: "flex-end",width:"100%"
+                        alignItems: "flex-end",
+                        width: "100%",
                       }}
                     >
                       <Droppable droppableId={`drop-input2`}>
@@ -307,7 +320,9 @@ const WB_Unit6_Page4_Q2 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -344,7 +359,8 @@ const WB_Unit6_Page4_Q2 = () => {
                       style={{
                         position: "relative",
                         display: "flex",
-                        alignItems: "flex-end",width:"100%"
+                        alignItems: "flex-end",
+                        width: "100%",
                       }}
                     >
                       <Droppable droppableId={`drop-input3`}>
@@ -352,7 +368,9 @@ const WB_Unit6_Page4_Q2 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -396,7 +414,9 @@ const WB_Unit6_Page4_Q2 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-wb-unit6-p4-q2"
+                          className={`answer-input-wb-unit6-p4-q2  ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"
@@ -419,7 +439,8 @@ const WB_Unit6_Page4_Q2 = () => {
                       style={{
                         position: "relative",
                         display: "flex",
-                        alignItems: "flex-end",width:"100%"
+                        alignItems: "flex-end",
+                        width: "100%",
                       }}
                     >
                       <Droppable droppableId={`drop-input5`}>
@@ -427,7 +448,9 @@ const WB_Unit6_Page4_Q2 = () => {
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-wb-unit6-p4-q2"
+                            className={`answer-input-wb-unit6-p4-q2  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"
@@ -468,7 +491,8 @@ const WB_Unit6_Page4_Q2 = () => {
                     style={{
                       position: "relative",
                       display: "flex",
-                      alignItems: "flex-end",width:"100%"
+                      alignItems: "flex-end",
+                      width: "100%",
                     }}
                   >
                     <Droppable droppableId={`drop-input6`}>
@@ -476,7 +500,9 @@ const WB_Unit6_Page4_Q2 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-wb-unit6-p4-q2"
+                          className={`answer-input-wb-unit6-p4-q2  ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"
@@ -500,7 +526,7 @@ const WB_Unit6_Page4_Q2 = () => {
                       position: "relative",
                       display: "flex",
                       alignItems: "flex-end",
-                      width:"100%"
+                      width: "100%",
                     }}
                   >
                     <Droppable droppableId={`drop-input7`}>
@@ -508,7 +534,9 @@ const WB_Unit6_Page4_Q2 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-wb-unit6-p4-q2"
+                          className={`answer-input-wb-unit6-p4-q2  ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

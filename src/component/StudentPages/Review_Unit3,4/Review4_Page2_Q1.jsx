@@ -103,8 +103,6 @@ const Review4_Page2_Q1 = () => {
     setAnswers((prev) => {
       const updated = prev.map((row) => [...row]);
 
-  
-
       updated[qIndex][blankIndex] = letter;
       return updated;
     });
@@ -187,7 +185,6 @@ const Review4_Page2_Q1 = () => {
     return () => clearInterval(timer);
   }, [activeIndex]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
-
 
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
@@ -411,7 +408,15 @@ const Review4_Page2_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-review4-p2-q1"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",width:"100%",justifyContent:"center"
+                }}
               >
                 {["f", "b", "v"].map((l, i) => (
                   <Draggable
@@ -425,7 +430,16 @@ const Review4_Page2_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          fontSize:"20px",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {l}
                       </span>
@@ -450,13 +464,17 @@ const Review4_Page2_Q1 = () => {
                   >
                     {p.before}
 
-                    <div className="input-wrapper">
+                    <div
+                      className={`input-wrapper-review4-p2-q1`}
+                    >
                       <Droppable droppableId={`slot-${qIndex}-${blankIndex}`}>
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="missing-input-review4-p2-q1"
+                            className={`missing-input-review4-p2-q1  ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
                           >
                             {answers[qIndex][blankIndex] && (
                               <Draggable

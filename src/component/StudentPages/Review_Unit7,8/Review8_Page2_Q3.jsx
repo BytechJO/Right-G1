@@ -123,7 +123,16 @@ const Review8_Page2_Q3 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-review8-p2-q3"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {correctAnswers.map((word, index) => (
                   <Draggable
@@ -137,7 +146,15 @@ const Review8_Page2_Q3 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -350,7 +367,7 @@ const Review8_Page2_Q3 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(3) &&  (
+                {wrongInputs.includes(3) && (
                   <span className="error-mark-input-review8-p1-q2">✕</span>
                 )}
               </div>

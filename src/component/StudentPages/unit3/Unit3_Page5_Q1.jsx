@@ -18,31 +18,28 @@ const Unit3_Page5_Q1 = () => {
 
   // 🧲 Drag & Drop logic (يسمح بالتكرار)
   const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showAnswer || checked) return;
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer || checked) return;
 
-  if (destination.droppableId.startsWith("slot-")) {
-    const index = Number(destination.droppableId.split("-")[1]);
-    const word = draggableId
-      .replace("bank-", "")
-      .replace(/^slot-.*?-/, "");
+    if (destination.droppableId.startsWith("slot-")) {
+      const index = Number(destination.droppableId.split("-")[1]);
+      const word = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
 
-    const updated = [...answers];
+      const updated = [...answers];
 
-    // 🔒 منع التكرار: شيل الكلمة من أي مكان سابق
-    const oldIndex = updated.findIndex((a) => a === word);
-    if (oldIndex !== -1) {
-      updated[oldIndex] = "";
+      // 🔒 منع التكرار: شيل الكلمة من أي مكان سابق
+      const oldIndex = updated.findIndex((a) => a === word);
+      if (oldIndex !== -1) {
+        updated[oldIndex] = "";
+      }
+
+      // حطها بالمكان الجديد
+      updated[index] = word;
+
+      setAnswers(updated);
+      setWrongInputs([]);
     }
-
-    // حطها بالمكان الجديد
-    updated[index] = word;
-
-    setAnswers(updated);
-    setWrongInputs([]);
-  }
-};
-
+  };
 
   const checkAnswers = () => {
     if (showAnswer) return;
@@ -64,8 +61,7 @@ const Unit3_Page5_Q1 = () => {
     setChecked(true);
 
     const total = correctAnswers.length;
-    const color =
-      score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
     ValidationAlert[
       score === total ? "success" : score === 0 ? "error" : "warning"
@@ -125,9 +121,18 @@ const Unit3_Page5_Q1 = () => {
           <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
             {(provided) => (
               <div
-                className="word-bank-unit2-p8-q2"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 {wordBank.map((word, index) => (
                   <Draggable
@@ -141,7 +146,15 @@ const Unit3_Page5_Q1 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -168,12 +181,14 @@ const Unit3_Page5_Q1 = () => {
                 <span style={{ position: "relative", display: "flex" }}>
                   <div className="input-wrapper-unit3-page6-q1">
                     <Droppable droppableId={`slot-${i}`}>
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`q-input-unit3-page6-q1 ${
                             showAnswer ? "show-answer-red" : ""
+                          }  ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
                           }`}
                         >
                           {value && (

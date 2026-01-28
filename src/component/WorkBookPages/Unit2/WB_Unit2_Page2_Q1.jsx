@@ -28,43 +28,41 @@ const WB_Unit2_Page2_Q1 = () => {
     4: ["seven", "I'm", "years", "old", "."],
   };
 
-const onDragEnd = (result) => {
-  if (!result.destination || locked || showAnswer) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || locked || showAnswer) return;
 
-  const { draggableId, destination } = result;
+    const { draggableId, destination } = result;
 
-  // ✅ نسمح بالدروب فقط على الإنبت
-  if (!destination.droppableId.startsWith("blank-")) return;
+    // ✅ نسمح بالدروب فقط على الإنبت
+    if (!destination.droppableId.startsWith("blank-")) return;
 
-  const draggedSentence = draggableId.split("-")[0];
-  const targetSentence = destination.droppableId.replace("blank-", "");
+    const draggedSentence = draggableId.split("-")[0];
+    const targetSentence = destination.droppableId.replace("blank-", "");
 
-  // ❌ منع النقل بين جمل مختلفة
-  if (draggedSentence !== targetSentence) return;
+    // ❌ منع النقل بين جمل مختلفة
+    if (draggedSentence !== targetSentence) return;
 
-  const word = draggableId.split("-").slice(1, -1).join("-");
+    const word = draggableId.split("-").slice(1, -1).join("-");
 
-  setUserInputs((prev) => {
-    const updated = { ...prev };
+    setUserInputs((prev) => {
+      const updated = { ...prev };
 
-    const wordsInSentence = updated[targetSentence]
-      ? updated[targetSentence].split(" ")
-      : [];
+      const wordsInSentence = updated[targetSentence]
+        ? updated[targetSentence].split(" ")
+        : [];
 
-    // ❌ منع تكرار الكلمة بنفس الجملة
-    if (wordsInSentence.includes(word)) return prev;
+      // ❌ منع تكرار الكلمة بنفس الجملة
+      if (wordsInSentence.includes(word)) return prev;
 
-    updated[targetSentence] = wordsInSentence.length
-      ? `${updated[targetSentence]} ${word}`
-      : word;
+      updated[targetSentence] = wordsInSentence.length
+        ? `${updated[targetSentence]} ${word}`
+        : word;
 
-    return updated;
-  });
+      return updated;
+    });
 
-  setWrongInputs([]);
-};
-
-
+    setWrongInputs([]);
+  };
 
   const correctSentences = {
     1: "Happy birthday",
@@ -86,18 +84,17 @@ const onDragEnd = (result) => {
 
     let wrongInputsTemp = [];
 
-  Object.keys(correctSentences).forEach((key) => {
-  const userAnswer = userInputs[key].trim().toLowerCase();
-  const correctAnswer = correctSentences[key].toLowerCase();
+    Object.keys(correctSentences).forEach((key) => {
+      const userAnswer = userInputs[key].trim().toLowerCase();
+      const correctAnswer = correctSentences[key].toLowerCase();
 
-  if (userAnswer === correctAnswer) sentenceCorrect++;
-  else wrongInputsTemp.push(key);
-});
-
+      if (userAnswer === correctAnswer) sentenceCorrect++;
+      else wrongInputsTemp.push(key);
+    });
 
     setWrongInputs(wrongInputsTemp);
 
-const totalScore = Object.keys(correctSentences).length;
+    const totalScore = Object.keys(correctSentences).length;
 
     const userScore = sentenceCorrect;
 
@@ -171,62 +168,69 @@ const totalScore = Object.keys(correctSentences).length;
                     />
                   </div>
                   <div className="word-with-dot2-wb-u2-p2-q1">
-                    <span className="word-text2-wb-u2-p2-q1">
-                      birthday Happy !
-                    </span>
+                    <div className="word-bank-container-wb-u2-p2-q1">
+                      <span className="word-text2-wb-u2-p2-q1">
+                        birthday Happy !
+                      </span>
 
-                    <Droppable droppableId="bank-1" direction="horizontal">
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="word-bank-wb-u2-p2-q1"
-                          style={{
-                            display: "flex",
-                            gap: "6px",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {scrambledWords[1].map((word, i) => (
-                            <Draggable
-                              key={`1-${word}-${i}`}
-                              draggableId={`1-${word}-${i}`}
-                              index={i}
-                              isDragDisabled={showAnswer ||locked}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-wb-u1-p2-q1"
-                                  style={{
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </span>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                      <Droppable droppableId="bank-1" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              padding: "10px",
+                              border: "2px dashed #ccc",
+                              borderRadius: "10px",
+                              // margin: "10px 0",
+                              alignItems: "center", width:"300px",
+                              justifyContent:"center"
+                            }}
+                          >
+                            {scrambledWords[1].map((word, i) => (
+                              <Draggable
+                                key={`1-${word}-${i}`}
+                                draggableId={`1-${word}-${i}`}
+                                index={i}
+                                isDragDisabled={showAnswer || locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      padding: "2px 5px",
+                                      border: "2px solid #2c5287",
+                                      borderRadius: "8px",
+                                      background: "white",
+                                      fontWeight: "bold",
+                                      cursor: "grab",
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    {word}
+                                  </span>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
                     <Droppable droppableId="blank-1">
                       {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="unscramble-input"
+                          className={`unscramble-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           value={userInputs[1]}
-                          style={{
-                            background: snapshot.isDraggingOver
-                              ? "#e3f2fd"
-                              : "white",
-                          }}
-                          disabled={showAnswer ||locked}
+                          disabled={showAnswer || locked}
                         />
                       )}
                     </Droppable>
@@ -261,64 +265,71 @@ const totalScore = Object.keys(correctSentences).length;
                     />
                   </div>
                   <div className="word-with-dot2-wb-u2-p2-q1">
-                    <span
-                      className="word-text2-wb-u2-p2-q1"
-                      style={{ cursor: "pointer" }}
-                    >
-                      a hat party It’s .
-                    </span>{" "}
-                    <Droppable droppableId="bank-2" direction="horizontal">
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="word-bank-wb-u2-p2-q1"
-                          style={{
-                            display: "flex",
-                            gap: "6px",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {scrambledWords[2].map((word, i) => (
-                            <Draggable
-                              key={`2-${word}-${i}`}
-                              draggableId={`2-${word}-${i}`}
-                              index={i}
-                              isDragDisabled={showAnswer ||locked}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-wb-u1-p2-q1"
-                                  style={{
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </span>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                    <div className="word-bank-container-wb-u2-p2-q1">
+                      <span
+                        className="word-text2-wb-u2-p2-q1"
+                        style={{ cursor: "pointer" }}
+                      >
+                        a hat party It’s .
+                      </span>{" "}
+                      <Droppable droppableId="bank-2" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              padding: "10px",
+                              border: "2px dashed #ccc",
+                              borderRadius: "10px",
+                              // margin: "10px 0",
+                              alignItems: "center", width:"300px",
+                              justifyContent:"center"
+                            }}
+                          >
+                            {scrambledWords[2].map((word, i) => (
+                              <Draggable
+                                key={`2-${word}-${i}`}
+                                draggableId={`2-${word}-${i}`}
+                                index={i}
+                                isDragDisabled={showAnswer || locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      padding: "2px 5px",
+                                      border: "2px solid #2c5287",
+                                      borderRadius: "8px",
+                                      background: "white",
+                                      fontWeight: "bold",
+                                      cursor: "grab",
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    {word}
+                                  </span>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
                     <Droppable droppableId="blank-2">
                       {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="unscramble-input"
+                          className={`unscramble-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           value={userInputs[2]}
-                          style={{
-                            background: snapshot.isDraggingOver
-                              ? "#e3f2fd"
-                              : "white",
-                          }}
-                          disabled={showAnswer ||locked}
+                          disabled={showAnswer || locked}
                         />
                       )}
                     </Droppable>
@@ -351,65 +362,72 @@ const totalScore = Object.keys(correctSentences).length;
                   </div>
 
                   <div className="word-with-dot2-wb-u2-p2-q1">
-                    <span
-                      className="word-text2-wb-u2-p2-q1"
-                      style={{ cursor: "pointer" }}
-                    >
-                      are How you old ?
-                    </span>
+                    <div className="word-bank-container-wb-u2-p2-q1">
+                      <span
+                        className="word-text2-wb-u2-p2-q1"
+                        style={{ cursor: "pointer" }}
+                      >
+                        are How you old ?
+                      </span>
 
-                    <Droppable droppableId="bank-3" direction="horizontal">
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="word-bank-wb-u2-p2-q1"
-                          style={{
-                            display: "flex",
-                            gap: "6px",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {scrambledWords[3].map((word, i) => (
-                            <Draggable
-                              key={`3-${word}-${i}`}
-                              draggableId={`3-${word}-${i}`}
-                              index={i}
-                              isDragDisabled={showAnswer ||locked}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-wb-u1-p2-q1"
-                                  style={{
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </span>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                      <Droppable droppableId="bank-3" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              padding: "10px",
+                              border: "2px dashed #ccc",
+                              borderRadius: "10px",
+                              // margin: "10px 0",
+                              alignItems: "center", width:"300px",
+                              justifyContent:"center"
+                            }}
+                          >
+                            {scrambledWords[3].map((word, i) => (
+                              <Draggable
+                                key={`3-${word}-${i}`}
+                                draggableId={`3-${word}-${i}`}
+                                index={i}
+                                isDragDisabled={showAnswer || locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      padding: "2px 5px",
+                                      border: "2px solid #2c5287",
+                                      borderRadius: "8px",
+                                      background: "white",
+                                      fontWeight: "bold",
+                                      cursor: "grab",
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    {word}
+                                  </span>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
                     <Droppable droppableId="blank-3">
                       {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="unscramble-input"
+                          className={`unscramble-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           value={userInputs[3]}
-                          style={{
-                            background: snapshot.isDraggingOver
-                              ? "#e3f2fd"
-                              : "white",
-                          }}
-                          disabled={showAnswer ||locked}
+                          disabled={showAnswer || locked}
                         />
                       )}
                     </Droppable>
@@ -443,65 +461,78 @@ const totalScore = Object.keys(correctSentences).length;
                     />
                   </div>
                   <div className="word-with-dot2-wb-u2-p2-q1">
-                    <span
-                      className="word-text2-wb-u2-p2-q1"
-                      style={{ cursor: "pointer" }}
-                    >
-                      seven I’m old years .
-                    </span>
+                    <div className="word-bank-container-wb-u2-p2-q1">
+                      <span
+                        className="word-text2-wb-u2-p2-q1"
+                        style={{ cursor: "pointer" }}
+                      >
+                        seven I’m old years .
+                      </span>
 
-                    <Droppable droppableId="bank-4" direction="horizontal">
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className="word-bank-wb-u2-p2-q1"
-                          style={{
-                            display: "flex",
-                            gap: "6px",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {scrambledWords[4].map((word, i) => (
-                            <Draggable
-                              key={`4-${word}-${i}`}
-                              draggableId={`4-${word}-${i}`}
-                              index={i}
-                              isDragDisabled={showAnswer ||locked}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-wb-u1-p2-q1"
-                                  style={{
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </span>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
+                      <Droppable droppableId="bank-4" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            style={{
+                              display: "flex",
+                              gap: "10px",
+                              padding: "10px",
+                              border: "2px dashed #ccc",
+                              borderRadius: "10px",
+                              // margin: "10px 0",
+                              alignItems: "center",
+                              width:"300px",
+                              justifyContent:"center"
+                            }}
+                          >
+                            {scrambledWords[4].map((word, i) => (
+                              <Draggable
+                                key={`4-${word}-${i}`}
+                                draggableId={`4-${word}-${i}`}
+                                index={i}
+                                isDragDisabled={showAnswer || locked}
+                              >
+                                {(provided) => (
+                                  <span
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      padding: "2px 5px",
+                                      border: "2px solid #2c5287",
+                                      borderRadius: "8px",
+                                      background: "white",
+                                      fontWeight: "bold",
+                                      cursor: "grab",
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    {word}
+                                  </span>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
                     <Droppable droppableId="blank-4">
                       {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="unscramble-input"
+                          className={`unscramble-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           value={userInputs[4]}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"
                               : "white",
                           }}
-                          disabled={showAnswer ||locked}
+                          disabled={showAnswer || locked}
                         />
                       )}
                     </Droppable>

@@ -113,7 +113,15 @@ const Unit6_Page5_Q3 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center"
+                }}
               >
                 {words.map((word, index) => (
                   <Draggable
@@ -127,9 +135,19 @@ const Unit6_Page5_Q3 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
-                         <strong style={{ marginRight: "6px" }}>{index + 1}.</strong>
+                        <strong style={{ marginRight: "6px" }}>
+                          {index + 1}.
+                        </strong>
                         {word}
                       </span>
                     )}
@@ -145,16 +163,17 @@ const Unit6_Page5_Q3 = () => {
             style={{ alignItems: "flex-start" }}
           >
             <div className="row2-unit3-page6-q1">
-             
               <img src={bat} alt="" className="q-img-unit6-page5-q3" />
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-0">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="q-input-unit3-page6-q1"
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[0] && (
                           <Draggable
@@ -188,16 +207,17 @@ const Unit6_Page5_Q3 = () => {
               className="row2-unit3-page6-q1"
               style={{ alignItems: "flex-start" }}
             >
-            
               <img src={cap} alt="" className="q-img-unit6-page5-q3" />
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-1">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="q-input-unit3-page6-q1"
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[1] && (
                           <Draggable
@@ -231,16 +251,17 @@ const Unit6_Page5_Q3 = () => {
               className="row2-unit3-page6-q1"
               style={{ alignItems: "flex-start" }}
             >
-           
               <img src={ant} alt="" className="q-img-unit6-page5-q3" />
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-2">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="q-input-unit3-page6-q1"
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[2] && (
                           <Draggable
@@ -274,16 +295,17 @@ const Unit6_Page5_Q3 = () => {
               className="row2-unit3-page6-q1"
               style={{ alignItems: "flex-start" }}
             >
-            
               <img src={dad} alt="" className="q-img-unit6-page5-q3" />
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-3">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="q-input-unit3-page6-q1"
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[3] && (
                           <Draggable

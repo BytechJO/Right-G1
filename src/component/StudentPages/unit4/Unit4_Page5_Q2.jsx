@@ -16,7 +16,7 @@ const Unit4_Page5_Q2 = () => {
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const stopAtSecond = 11.13;
-const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
   const audioRef = useRef(null);
 
   // إعدادات الصوت
@@ -125,7 +125,7 @@ const [checked, setChecked] = useState(false);
     setAnswers([...correctAnswers]); // املي الأجوبة الصحيحة
     setWrongInputs([]); // ما في غلط عند عرض الحل
     setShowAnswer(true); // حتى نغير لون النص
-      setChecked(true); // 🔒
+    setChecked(true); // 🔒
   };
 
   const checkAnswers = () => {
@@ -145,7 +145,7 @@ const [checked, setChecked] = useState(false);
       }
     });
     setWrongInputs(wrong);
-  setChecked(true); // 🔒
+    setChecked(true); // 🔒
     const total = correctAnswers.length;
     const color =
       tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
@@ -171,7 +171,7 @@ const [checked, setChecked] = useState(false);
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
     setShowAnswer(false);
-     setChecked(false); // 🔓
+    setChecked(false); // 🔓
   };
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -333,20 +333,40 @@ const [checked, setChecked] = useState(false);
 
           <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
             {(provided) => (
-              <div   className="word-bank-unit2-p8-q2" ref={provided.innerRef} {...provided.droppableProps}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center"
+                }}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
                 {["f", "v"].map((letter, index) => (
                   <Draggable
                     key={letter}
                     draggableId={`bank-${letter}`}
                     index={index}
-                     isDragDisabled={showAnswer || checked}
+                    isDragDisabled={showAnswer || checked}
                   >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",fontSize:"22px",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {letter}
                       </span>
@@ -367,17 +387,19 @@ const [checked, setChecked] = useState(false);
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-0">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`q-input-unit3-page6-q1 ${showAnswer ? "red-text" : ""}`}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[0] && (
                           <Draggable
                             draggableId={`slot-0-${answers[0]}`}
                             index={0}
-                 isDragDisabled={showAnswer || checked}
+                            isDragDisabled={showAnswer || checked}
                           >
                             {(provided) => (
                               <span
@@ -410,17 +432,19 @@ const [checked, setChecked] = useState(false);
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-1">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`q-input-unit3-page6-q1 ${showAnswer ? "red-text" : ""}`}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[1] && (
                           <Draggable
                             draggableId={`slot-1-${answers[1]}`}
                             index={1}
-                         isDragDisabled={showAnswer || checked}
+                            isDragDisabled={showAnswer || checked}
                           >
                             {(provided) => (
                               <span
@@ -453,17 +477,19 @@ const [checked, setChecked] = useState(false);
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-2">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`q-input-unit3-page6-q1 ${showAnswer ? "red-text" : ""}`}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[2] && (
                           <Draggable
                             draggableId={`slot-2-${answers[2]}`}
                             index={2}
-                             isDragDisabled={showAnswer || checked}
+                            isDragDisabled={showAnswer || checked}
                           >
                             {(provided) => (
                               <span
@@ -496,11 +522,13 @@ const [checked, setChecked] = useState(false);
               <span style={{ position: "relative", display: "flex" }}>
                 <div className="input-wrapper-unit3-page6-q1">
                   <Droppable droppableId="slot-3">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className={`q-input-unit3-page6-q1 ${showAnswer ? "red-text" : ""}`}
+                        className={`q-input-unit3-page6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                       >
                         {answers[3] && (
                           <Draggable

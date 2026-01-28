@@ -6,7 +6,7 @@
 }
 .sentence-container-wb-unit8-p1-q1 {
     display: flex;
-    width: 40%;
+    width: 100%;
     /* gap: 20px; */
 }
 .sentence-wb-unit8-p1-q1 {
@@ -20,6 +20,33 @@
     width: 60%;
     text-align: start;
 }
+.draggable-fixed-wrapper {
+  width: 260px;           /* ثابتي العرض */
+  height: 60px;           /* ثابتي الارتفاع */
+  box-sizing: border-box;
+}
+
+.sentence-container-wb-unit8-p1-q1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.drag-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #2c5287;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: white;
+  flex-shrink: 0; /* مهم جداً */
+}
+
 .word-container-wb-unit8-p1-q1 {
   display: grid;
   grid-template-columns: 1fr 1fr;

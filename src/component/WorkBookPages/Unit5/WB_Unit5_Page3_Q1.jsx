@@ -167,8 +167,17 @@ const WB_Unit5_Page3_Q1 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-wb-unit3-p6-q1"
-                style={{ display: "flex", gap: 10, marginBottom: 20 }}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
               >
                 {allWords.map((word, i) => (
                   <Draggable
@@ -183,8 +192,12 @@ const WB_Unit5_Page3_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-box-wb-unit4-p4-q1"
                           style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
                             cursor: "grab",
                             ...provided.draggableProps.style,
                           }}
@@ -238,7 +251,9 @@ const WB_Unit5_Page3_Q1 = () => {
                             <span
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit5-page2-q2"
+                              className={`inline-input-wb-unit5-page2-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 display: "inline-flex",
                                 alignItems: "center",

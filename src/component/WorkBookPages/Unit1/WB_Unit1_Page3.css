@@ -13,7 +13,7 @@
 }
 .missing-input-wb-unit1-p3-q1 {
     width: 100%;
-    border: none;
+    /* border: none; */
     border-bottom: 2px solid black;
     margin: 0 6px;
     font-size: 25px;
@@ -22,13 +22,16 @@
     /* outline: none; */
 }
 .scrambled-wb-unit1-p3-q1 {
-  font-size: 20px;
-  margin-bottom: 5px;
-  width: 25%;
+    font-size: 20px;
+    /* margin-bottom: 5px; */
+    /* width: 25%; */
+    display: flex;
+    justify-content: space-between;
+        align-items: center;
 }
 .wrong-icon-wb-unit1-p3-q1 {
   position: absolute;
-  top: -8px;
+  top: 104px;
   right: -8px;
   width: 20px;
   height: 20px;

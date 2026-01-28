@@ -17,7 +17,7 @@
 
   overflow: hidden; /* 🔴 مهم */
   box-sizing: border-box;
-  border: none;
+  /* border: none; */
   border-bottom: 2px solid rgba(0, 0, 0, 0.411);
   outline: none;
   text-align: center;

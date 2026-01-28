@@ -27,7 +27,11 @@
     left: 24.5%;
     cursor: pointer;
 }
-
+.question-text-unit8-page6-q1 {
+    font-size: 20px;
+    font-weight: 400;
+    width: 100%;
+}
 .q-input-unit8-page6-q1 {
     border-bottom: 2px solid #000000;
     padding: 5px 8px;

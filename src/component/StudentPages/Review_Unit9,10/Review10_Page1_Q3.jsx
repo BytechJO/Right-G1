@@ -81,7 +81,7 @@ const Review10_Page1_Q3 = () => {
     });
 
     setWrong(wrongTemp);
-setShowAnswers(true)
+    setShowAnswers(true);
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
     const msg = `
     <div style="font-size:20px;text-align:center;">
@@ -138,7 +138,17 @@ setShowAnswers(true)
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
               >
                 {buildGlobalWordBank().map((word, i) => (
                   <Draggable
@@ -152,7 +162,15 @@ setShowAnswers(true)
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-review10-p1-q3"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </div>
@@ -180,14 +198,19 @@ setShowAnswers(true)
 
                     {/* Unscramble input */}
                     <div style={{ position: "relative" }}>
-                      <Droppable droppableId={`${q.id}_question`} isDropDisabled={showAnswers}>
-                        {(provided) => (
+                      <Droppable
+                        droppableId={`${q.id}_question`}
+                        isDropDisabled={showAnswers}
+                      >
+                        {(provided, snapshot) => (
                           <input
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             readOnly
                             value={inputs[`${q.id}_question`] || ""}
-                            className="answer-input33-review10-p1-q3"
+                            className={`answer-input33-review10-p1-q3 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           />
                         )}
                       </Droppable>
@@ -209,13 +232,15 @@ setShowAnswers(true)
                   {/* Answer input */}
                   <div style={{ position: "relative", width: "100%" }}>
                     <Droppable droppableId={`${q.id}_answer`}>
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           readOnly
                           value={inputs[`${q.id}_answer`] || ""}
-                          className="answer-input3-review10-p1-q3"
+                          className={`answer-input3-review10-p1-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                         />
                       )}
                     </Droppable>

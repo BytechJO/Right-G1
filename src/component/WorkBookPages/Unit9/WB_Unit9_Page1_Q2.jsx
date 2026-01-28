@@ -257,7 +257,9 @@ const WB_Unit9_Page1_Q2 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="wb-unit9-p1-q2-input"
+                          className={`wb-unit9-p1-q2-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"
@@ -287,7 +289,9 @@ const WB_Unit9_Page1_Q2 = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="wb-unit9-p1-q2-input"
+                           className={`wb-unit9-p1-q2-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

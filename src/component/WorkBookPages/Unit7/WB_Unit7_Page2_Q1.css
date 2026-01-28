@@ -83,6 +83,6 @@
     font-size: 20px;
     width: 240px;
     text-align: start;
-    margin-bottom: 6px;
+    /* margin-bottom: 6px; */
     border: 2px solid transparent;
 }

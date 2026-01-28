@@ -145,47 +145,47 @@ const WB_Unit3_Page1_Q1 = () => {
       return;
     }
 
-    let correctCount = 0;
+    let correctNumbersCount = 0;
+    let correctLinesCount = 0;
     let wrongImgs = [];
     let wrongNums = [];
-
-    // ✅ فحص الأرقام
     Object.keys(correctNumbers).forEach((img) => {
       if (numbers[img] === correctNumbers[img]) {
-        correctCount++;
+        correctNumbersCount++;
       } else {
-        wrongNums.push(img); // ❌ خطأ رقم
+        wrongNums.push(img);
       }
     });
 
-    // ✅ فحص التوصيل
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
         (pair) => pair.word === line.word && pair.image === line.image,
       );
 
-      if (!isCorrect && !wrongImgs.includes(line.image)) {
-        wrongImgs.push(line.image); // ❌ خطأ توصيل
+      if (isCorrect) {
+        correctLinesCount++;
+      } else if (!wrongImgs.includes(line.image)) {
+        wrongImgs.push(line.image);
       }
     });
+const total = correctMatches.length * 2; // 3 أرقام + 3 توصيل
+const score = correctNumbersCount + correctLinesCount;
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+
+    const scoreMessage = `
+  <div style="font-size: 20px; text-align:center;">
+    <span style="color:${color}; font-weight:bold;">
+      Score: ${score} / ${total}
+    </span>
+  </div>
+`;
+
     setWrongImages(wrongImgs);
     setWrongNumbers(wrongNums);
     setLocked(true);
 
-    const total = correctMatches.length;
-    const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
-
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
+    if (score === total) ValidationAlert.success(scoreMessage);
+    else if (score === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
 
@@ -248,7 +248,17 @@ const WB_Unit3_Page1_Q1 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="word-bank-wb-unit3-p1-q1"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    width: "100%",
+                    justifyContent: "center",
+                  }}
                 >
                   {["2", "4", "6"].map((num, i) => (
                     <Draggable key={num} draggableId={`num-${num}`} index={i}>
@@ -257,7 +267,16 @@ const WB_Unit3_Page1_Q1 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-box-wb-u1-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            fontSize: "20px",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {num}
                         </span>
@@ -330,7 +349,9 @@ const WB_Unit3_Page1_Q1 = () => {
                           <input
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="unscramble-input-wb-unit3-p1-q1"
+                            className={`unscramble-input-wb-unit3-p1-q1  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             value={numbers.img1}
                             readOnly
                             style={{
@@ -401,7 +422,9 @@ const WB_Unit3_Page1_Q1 = () => {
                           <input
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="unscramble-input-wb-unit3-p1-q1"
+                            className={`unscramble-input-wb-unit3-p1-q1  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             value={numbers.img2}
                             readOnly
                             style={{
@@ -482,7 +505,9 @@ const WB_Unit3_Page1_Q1 = () => {
                           <input
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="unscramble-input-wb-unit3-p1-q1"
+                            className={`unscramble-input-wb-unit3-p1-q1  ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             value={numbers.img3}
                             readOnly
                             style={{

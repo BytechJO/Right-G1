@@ -15,34 +15,31 @@ const Unit2_Page8_Q2 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   // 🧲 Drag logic
-const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showAnswer) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer) return;
 
-  if (destination.droppableId.startsWith("slot-")) {
-    const newIndex = Number(destination.droppableId.split("-")[1]);
-    const word = draggableId.replace("word-", "");
+    if (destination.droppableId.startsWith("slot-")) {
+      const newIndex = Number(destination.droppableId.split("-")[1]);
+      const word = draggableId.replace("word-", "");
 
-    const updated = [...answers];
+      const updated = [...answers];
 
-    // 🔍 نشوف إذا الكلمة موجودة بخانة ثانية
-    const oldIndex = updated.findIndex((ans) => ans === word);
+      // 🔍 نشوف إذا الكلمة موجودة بخانة ثانية
+      const oldIndex = updated.findIndex((ans) => ans === word);
 
-    // إذا كانت موجودة → نفرغ مكانها القديم
-    if (oldIndex !== -1) {
-      updated[oldIndex] = "";
+      // إذا كانت موجودة → نفرغ مكانها القديم
+      if (oldIndex !== -1) {
+        updated[oldIndex] = "";
+      }
+
+      // 🔁 نحطها بالمكان الجديد
+      updated[newIndex] = word;
+
+      setAnswers(updated);
+      setWrongInputs([]);
     }
-
-    // 🔁 نحطها بالمكان الجديد
-    updated[newIndex] = word;
-
-    setAnswers(updated);
-    setWrongInputs([]);
-  }
-};
-
-
-
+  };
 
   const checkAnswers = () => {
     if (showAnswer) return;
@@ -61,7 +58,7 @@ const onDragEnd = (result) => {
     });
 
     setWrongInputs(wrong);
-setUsedWords(correctAnswers);
+    setUsedWords(correctAnswers);
 
     const color = score === 4 ? "green" : score === 0 ? "red" : "orange";
 
@@ -113,9 +110,19 @@ setUsedWords(correctAnswers);
             >
               {(provided) => (
                 <div
-                  className="word-bank-unit2-p8-q2"
+                  // className="word-bank-unit2-p8-q2"
                   ref={provided.innerRef}
                   {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent:"center"
+                  }}
                 >
                   {correctAnswers.map((word, index) => (
                     <Draggable
@@ -132,6 +139,15 @@ setUsedWords(correctAnswers);
                           className={`word-item-unit2-p8-q2 ${
                             usedWords.includes(word) ? "used" : ""
                           }`}
+                          style={{
+                            padding: "2px 5px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {word}
                         </span>
@@ -150,14 +166,14 @@ setUsedWords(correctAnswers);
                 <span>
                   <span className="num-span">1</span> The{" "}
                   <Droppable droppableId="slot-0">
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <span className="drop-slot-wrapper-unit2-p8-q2">
                         <span
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`drop-slot-inline-unit2-p8-q2 ${
                             wrongInput.includes(answers[0]) ? "wrong" : ""
-                          }`}
+                          } ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                         >
                           {answers[0]}
                           {provided.placeholder}
@@ -179,14 +195,14 @@ setUsedWords(correctAnswers);
                 <span>
                   <span className="num-span">2</span> My brother takes a{" "}
                   <Droppable droppableId="slot-1">
-                    {(provided) => (
-                       <span className="drop-slot-wrapper-unit2-p8-q2">
+                    {(provided ,snapshot) => (
+                      <span className="drop-slot-wrapper-unit2-p8-q2">
                         <span
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`drop-slot-inline-unit2-p8-q2 ${
-                            wrongInput.includes(answers[1]) ? "wrong" : ""
-                          }`}
+                            wrongInput.includes(answers[0]) ? "wrong" : ""
+                          } ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                         >
                           {answers[1]}
                           {provided.placeholder}
@@ -208,14 +224,14 @@ setUsedWords(correctAnswers);
                 <span>
                   <span className="num-span">3</span> The{" "}
                   <Droppable droppableId="slot-2">
-                    {(provided) => (
+                    {(provided ,snapshot) => (
                       <span className="drop-slot-wrapper-unit2-p8-q2">
                         <span
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`drop-slot-inline-unit2-p8-q2 ${
-                            wrongInput.includes(answers[2]) ? "wrong" : ""
-                          }`}
+                            wrongInput.includes(answers[0]) ? "wrong" : ""
+                          } ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                         >
                           {answers[2]}
                           {provided.placeholder}
@@ -237,14 +253,14 @@ setUsedWords(correctAnswers);
                 <span>
                   <span className="num-span">4</span> The{" "}
                   <Droppable droppableId="slot-3">
-                    {(provided) => (
+                    {(provided ,snapshot) => (
                       <span className="drop-slot-wrapper-unit2-p8-q2">
                         <span
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                           className={`drop-slot-inline-unit2-p8-q2 ${
-                            wrongInput.includes(answers[3]) ? "wrong" : ""
-                          }`}
+                            wrongInput.includes(answers[0]) ? "wrong" : ""
+                          } ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                         >
                           {answers[3]}
                           {provided.placeholder}

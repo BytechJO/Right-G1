@@ -69,6 +69,7 @@ const Review9_Page1_Q2 = () => {
     setQuestionInputs(items.map((item) => item.questionAnswers || []));
     setAnswers(items.map((item) => item.answer));
     setShowCorrect(true);
+     setWrongMarks([])
   };
 
   // =========================
@@ -78,6 +79,7 @@ const Review9_Page1_Q2 = () => {
     setQuestionInputs(items.map((item) => Array(item.blanksCount).fill("")));
     setAnswers(items.map(() => ""));
     setShowCorrect(false);
+    setWrongMarks([])
   };
 
   // =========================
@@ -85,6 +87,29 @@ const Review9_Page1_Q2 = () => {
   // =========================
   const checkAnswers = () => {
     if (showCorrect) return;
+
+
+  // 🔴 1) فحص الفراغات في السؤال
+  for (let i = 0; i < items.length; i++) {
+    for (let j = 0; j < items[i].blanksCount; j++) {
+      if (!questionInputs[i][j] || questionInputs[i][j].trim() === "") {
+        ValidationAlert.info(
+          "Oops!",
+          "Please complete all question blanks before checking."
+        );
+        return;
+      }
+    }
+
+    // 🔴 2) فحص جواب الجملة
+    if (!answers[i] || answers[i].trim() === "") {
+      ValidationAlert.info(
+        "Oops!",
+        "Please complete all answers before checking."
+      );
+      return;
+    }
+  }
     let score = 0;
     let total = 0;
 
@@ -168,7 +193,15 @@ const Review9_Page1_Q2 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit2-p8-q2"
+              style={{
+                          display: "flex",
+                          gap: "10px",
+                          padding: "10px",
+                          border: "2px dashed #ccc",
+                          borderRadius: "10px",
+                          // margin: "10px 0",
+                          alignItems:"center",justifyContent:"center"
+                        }}
               >
                 {wordBank.map((word, index) => (
                   <Draggable
@@ -182,7 +215,15 @@ const Review9_Page1_Q2 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                       style={{
+                                  padding: "7px 14px",
+                                  border: "2px solid #2c5287",
+                                  borderRadius: "8px",
+                                  background: "white",
+                                  fontWeight: "bold",
+                                  cursor: "grab",
+                                  ...provided.draggableProps.style,
+                                }}
                       >
                         {word}
                       </span>

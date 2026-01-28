@@ -13,7 +13,6 @@ const WB_Unit8_Page4_Q1 = () => {
       id: 1,
       img: bat,
       parts: [
-        
         { type: "text", value: "This" },
         { type: "input", answer: "is my arm" },
         { type: "text", value: "." },
@@ -85,8 +84,6 @@ const WB_Unit8_Page4_Q1 = () => {
 
     setWrongInputs([]);
   };
-
- 
 
   const checkAnswers = () => {
     if (locked) return;
@@ -266,18 +263,23 @@ const WB_Unit8_Page4_Q1 = () => {
                   padding: 12,
                   border: "2px dashed #ccc",
                   borderRadius: 10,
-                  justifyContent:"center"
+                  justifyContent: "center",
                 }}
               >
                 {wordBank.map((w, i) => (
-                  <Draggable key={w.id} draggableId={w.id} index={i} isDragDisabled={locked}>
+                  <Draggable
+                    key={w.id}
+                    draggableId={w.id}
+                    index={i}
+                    isDragDisabled={locked}
+                  >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                       style={{
-                         borderRadius: "8px",
+                        style={{
+                          borderRadius: "8px",
                           border: "2px solid #2c5287",
                           display: "flex",
                           alignItems: "center",
@@ -285,7 +287,7 @@ const WB_Unit8_Page4_Q1 = () => {
                           fontWeight: "bold",
                           cursor: "grab",
                           background: "white",
-                          padding:"8px",
+                          padding: "8px",
                           ...provided.draggableProps.style,
                         }}
                       >
@@ -343,12 +345,17 @@ const WB_Unit8_Page4_Q1 = () => {
                         key={pIndex}
                         style={{ position: "relative", width: "90%" }}
                       >
-                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`} isDropDisabled={locked}>
+                        <Droppable
+                          droppableId={`drop-${qIndex}-${pIndex}`}
+                          isDropDisabled={locked}
+                        >
                           {(provided, snapshot) => (
                             <span
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="inline-input-wb-unit4-p1-q2"
+                              className={`inline-input-wb-unit4-p1-q2 ${
+                                snapshot.isDraggingOver ? "drag-over-cell" : ""
+                              }`}
                               style={{
                                 background: snapshot.isDraggingOver
                                   ? "#e3f2fd"

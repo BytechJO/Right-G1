@@ -34,48 +34,45 @@ const WB_Unit3_Page2_Q1 = () => {
       questionCorrect: "Open your book",
     },
   ];
-const onDragEnd = (result) => {
-  if (!result.destination || locked || showAnswers) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || locked || showAnswers) return;
 
-  const { draggableId, destination } = result;
+    const { draggableId, destination } = result;
 
-  // draggableId مثال: q1-your-0
-  const draggedQuestionId = draggableId.split("-")[0]; // q1
+    // draggableId مثال: q1-your-0
+    const draggedQuestionId = draggableId.split("-")[0]; // q1
 
-  // droppableId مثال: blank-q1_question
-  const targetQuestionId = destination.droppableId
-    .replace("blank-", "")
-    .split("_")[0]; // q1
+    // droppableId مثال: blank-q1_question
+    const targetQuestionId = destination.droppableId
+      .replace("blank-", "")
+      .split("_")[0]; // q1
 
-  // ❌ منع إسقاط الكلمة في غير جملتها
-  if (draggedQuestionId !== targetQuestionId) return;
+    // ❌ منع إسقاط الكلمة في غير جملتها
+    if (draggedQuestionId !== targetQuestionId) return;
 
-  const parts = draggableId.split("-");
-  const word = parts.slice(1, parts.length - 1).join("-");
+    const parts = draggableId.split("-");
+    const word = parts.slice(1, parts.length - 1).join("-");
 
-  const inputKey = `${targetQuestionId}_question`; // ⭐⭐ المفتاح الصح
+    const inputKey = `${targetQuestionId}_question`; // ⭐⭐ المفتاح الصح
 
-  setInputs((prev) => {
-    const updated = { ...prev };
+    setInputs((prev) => {
+      const updated = { ...prev };
 
-    // ❌ منع تكرار نفس الكلمة في نفس الجملة
-    if (updated[inputKey]?.split(" ").includes(word)) {
-      return prev;
-    }
+      // ❌ منع تكرار نفس الكلمة في نفس الجملة
+      if (updated[inputKey]?.split(" ").includes(word)) {
+        return prev;
+      }
 
-    // ➕ إضافة الكلمة
-    updated[inputKey] = updated[inputKey]
-      ? `${updated[inputKey]} ${word}`
-      : word;
+      // ➕ إضافة الكلمة
+      updated[inputKey] = updated[inputKey]
+        ? `${updated[inputKey]} ${word}`
+        : word;
 
-    return updated;
-  });
+      return updated;
+    });
 
-  setWrong({});
-};
-
-
-
+    setWrong({});
+  };
 
   const checkAnswers = () => {
     if (showAnswers || locked) return;
@@ -152,7 +149,13 @@ const onDragEnd = (result) => {
             {questions.map((q, index) => (
               <div style={{ display: "flex", width: "100%" }}>
                 <div className="input-container-wb-unit3-p2-q1">
-                  <div style={{ display: "flex"  ,flexDirection:"column" , width: "50%" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "50%",
+                    }}
+                  >
                     <div style={{ display: "flex" }}>
                       <span className="num2">{index + 1}</span>
                       <div className="answer-input-review10-p1-q3 scramble-text">
@@ -167,7 +170,17 @@ const onDragEnd = (result) => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="word-bank-wb-unit3-p2-q1"
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            padding: "10px",
+                            border: "2px dashed #ccc",
+                            borderRadius: "10px",
+                            // margin: "10px 0",
+                            alignItems: "center",
+                            width:"70%",
+                            justifyContent:"center"
+                          }}
                         >
                           {getScrambledWords(q.scramble).map((word, i) => (
                             <Draggable
@@ -180,9 +193,14 @@ const onDragEnd = (result) => {
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
-                                  className="word-item-wb-unit3-p2-q1 "
                                   style={{
-                                    ...provided.draggableProps.style, // ⭐⭐ هذا ضروري
+                                    padding: "2px 5px",
+                                    border: "2px solid #2c5287",
+                                    borderRadius: "8px",
+                                    background: "white",
+                                    fontWeight: "bold",
+                                    cursor: "grab",
+                                    ...provided.draggableProps.style,
                                   }}
                                 >
                                   {word}
@@ -196,7 +214,14 @@ const onDragEnd = (result) => {
                     </Droppable>
                   </div>
                   {/* Unscramble input */}
-                  <div style={{ position: "relative" }}>
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      width: "45%",
+                    }}
+                  >
                     <Droppable droppableId={`blank-${q.id}_question`}>
                       {(provided, snapshot) => (
                         <input
@@ -204,7 +229,9 @@ const onDragEnd = (result) => {
                           {...provided.droppableProps}
                           value={inputs[`${q.id}_question`] || ""}
                           readOnly
-                          className="answer-input33-review10-p1-q3"
+                          className={`answer-input33-review10-p1-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#e3f2fd"

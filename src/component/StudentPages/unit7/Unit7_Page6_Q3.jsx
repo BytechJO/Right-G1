@@ -161,7 +161,15 @@ const Unit7_Page6_Q3 = () => {
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="word-bank-unit7-p2-q3 "
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",justifyContent:"center",width:"100%"
+                }}
               >
                 {Object.values(correctAnswers).map((word, index) => (
                   <Draggable
@@ -175,7 +183,15 @@ const Unit7_Page6_Q3 = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="word-item-unit2-p8-q2"
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         {word}
                       </span>
@@ -200,11 +216,13 @@ const Unit7_Page6_Q3 = () => {
                 <div className="sentence-box-unit7-p2-q3">
                   {q.type === "full" && (
                     <Droppable droppableId="q1" isDropDisabled={showAnswer}>
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className="answer-input-unit7-p2-q3"
+                          className={`answer-input-unit7-p2-q3 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
                         >
                           {answers.q1 && (
                             <Draggable
@@ -233,11 +251,13 @@ const Unit7_Page6_Q3 = () => {
                     <p className="answer-line-unit7-p2-q3">
                       {q.prefix}
                       <Droppable droppableId="q2" isDropDisabled={showAnswer}>
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <span
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="answer-input-unit7-p2-q3 small"
+                            className={`answer-input-unit7-p2-q3 small ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               display: "inline-flex",
                               minWidth: "80px",
