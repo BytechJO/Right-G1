@@ -56,15 +56,16 @@
   border-radius: 50%;
   font-size: 14px;
   position: absolute;
-  top: -8px;
-  right: -12px;
+  top: -17px;
+  right: -27px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   border: 2px solid white;
+  z-index: 99;
 }
-.main-img-review6-p2-q1{
+.main-img-review6-p2-q1 {
   height: 150px;
 }
 .options-review6-p2-q1 {
@@ -98,9 +99,8 @@
   flex-direction: column;
 }
 
-
 @media screen and (max-width: 1024px) and (max-height: 600px) {
-  .main-img-review6-p2-q1{
+  .main-img-review6-p2-q1 {
     height: 120px;
   }
 }

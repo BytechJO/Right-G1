@@ -29,13 +29,13 @@ const WB_Unit7_Page4_Q2 = () => {
       img: img3,
       text: "",
       options: ["crawl", "cold"],
-      correctIndex: 1,
+      correctIndex: 0,
     },
     {
       img: img4,
       text: "",
       options: ["bored", "broken"],
-      correctIndex: 0,
+      correctIndex: 1,
     },
   ];
 

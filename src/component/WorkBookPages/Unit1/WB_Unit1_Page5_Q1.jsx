@@ -161,7 +161,7 @@ const WB_Unit1_Page5_Q1 = () => {
                         key={optIndex}
                         className={`
                     option-word-unit7-p5-q1
-                    ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
+                    ${isSelected ? "selected3" : ""}
                     ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                     ${showResult && isCorrect ? "correct" : ""}
                   `}

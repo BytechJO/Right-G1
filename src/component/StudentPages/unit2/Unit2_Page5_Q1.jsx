@@ -174,8 +174,8 @@ const Unit2_Page5_Q1 = () => {
                     style={{
                       border: "2px solid #38bdf8",
                       borderRadius: "7px",
-                      height: "30px",
-                      width: "30px",
+                      height: "40px",
+                      width: "40px",
                       fontSize: "25px",
                       fontWeight: "500",
                       marginTop: "10px",

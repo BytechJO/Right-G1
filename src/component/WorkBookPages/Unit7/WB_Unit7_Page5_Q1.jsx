@@ -136,7 +136,7 @@ const WB_Unit7_Page5_Q1 = () => {
             className="word-container-wb-unit7-p5-q1"
             style={{
               display: "flex",
-              gap: "5px",
+              // gap: "5px",
               padding: "5px",
               border: "2px dashed #ccc",
               borderRadius: "10px",
@@ -144,6 +144,57 @@ const WB_Unit7_Page5_Q1 = () => {
               flexDirection: "column",
             }}
           >
+            <Droppable droppableId="number-bank" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    justifyContent: "center",
+                    // marginBottom: "20px",
+                  }}
+                >
+                  {numberBank.map((num, index) => (
+                    <Draggable
+                      key={num}
+                      draggableId={`num-${num}`}
+                      index={index}
+                      isDragDisabled={showAnswer}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            background: "white",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
+                        >
+                          {num}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
             {[
               "Are you happy? Yes, I am.",
               "What’s the matter? I’m bored.",
@@ -153,7 +204,7 @@ const WB_Unit7_Page5_Q1 = () => {
             ].map((item, index) => {
               return (
                 <div className="sentence-container-wb-unit7-p5-q1">
-                  <Droppable droppableId="number-bank" direction="horizontal">
+                  {/* <Droppable droppableId="number-bank" direction="horizontal">
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
                         <Draggable
@@ -187,9 +238,10 @@ const WB_Unit7_Page5_Q1 = () => {
                         {provided.placeholder}
                       </div>
                     )}
-                  </Droppable>
+                  </Droppable> */}
 
-                  <p className="sentence-wb-unit7-p5-q1">{item}</p>
+                  <span className="num">{index + 1}</span>
+                  <p>{item}</p>
                 </div>
               );
             })}
@@ -207,7 +259,9 @@ const WB_Unit7_Page5_Q1 = () => {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="wb-unit7-p5-q1-input"
+                        className={`wb-unit7-p5-q1-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                         style={{
                           background: snapshot.isDraggingOver
                             ? "#e3f2fd"

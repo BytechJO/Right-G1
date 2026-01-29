@@ -21,6 +21,22 @@
   height: 100px;
   /* object-fit: contain; */
 }
+.wrong-mark-Unit5_Page5_Q1 {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
 
 .gk-options {
   display: flex;
@@ -36,10 +52,19 @@
   padding: 4px 10px;
   border-radius: 6px;
   transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
   border: 2px solid transparent;
   border-radius: 50%;
 }
-
+.gk-option.selected3 {
+  border: 2px solid #1d4f7b;
+  font-weight: bold;
+  border-color: #1d4f7b;
+}
 .gk-option:hover {
   transform: scale(1.2);
 }

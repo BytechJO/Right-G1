@@ -63,14 +63,28 @@ const Unit2_Page7_Q1 = () => {
     const { destination, draggableId } = result;
     if (!destination || showAnswer) return;
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const [, key, index] = destination.droppableId.split("-");
-      const num = Number(draggableId.replace("num-", ""));
+    // نتأكد إنه drop على slot
+    if (!destination.droppableId.startsWith("slot-")) return;
 
-      const draggedWord = words.find((w) => w.num === num)?.word || "";
+    const [, key, index] = destination.droppableId.split("-");
+    const num = Number(draggableId.replace("num-", ""));
 
-      handleChange(key, Number(index), draggedWord);
-    }
+    // 🧠 نجيب الكلمة المرتبطة بالرقم
+    const draggedWord = words.find((w) => w.num === num)?.word;
+    if (!draggedWord) return;
+
+    // نحط الكلمة بالجواب
+    setUserAnswers((prev) => {
+      const updated = { ...prev };
+      if (!updated[key]) updated[key] = [];
+      updated[key][Number(index)] = draggedWord;
+      return updated;
+    });
+
+    // 🔒 نعتبر الرقم مستخدم
+    // setUsedNumbers((prev) => [...prev, num]);
+
+    setWrongInputs({});
   };
 
   // نفس checkAnswers
@@ -112,7 +126,7 @@ const Unit2_Page7_Q1 = () => {
 
     setWrongInputs(newWrongInputs);
     setChecked(true);
-    setUsedNumbers(words.map((w) => w.num));
+    // setUsedNumbers(words.map((w) => w.num));
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
@@ -138,7 +152,7 @@ const Unit2_Page7_Q1 = () => {
     setShowAnswer(true);
     setChecked(false);
     setWrongInputs({});
-    setUsedNumbers(words.map((w) => w.num)); // 🔒 كل الأرقام تُعتبر مستخدمة
+    // setUsedNumbers(words.map((w) => w.num)); // 🔒 كل الأرقام تُعتبر مستخدمة
   };
 
   const reset = () => {
@@ -146,7 +160,7 @@ const Unit2_Page7_Q1 = () => {
     setChecked(false);
     setShowAnswer(false);
     setWrongInputs({});
-    setUsedNumbers([]); // ⭐ مهم
+    // setUsedNumbers([]); // ⭐ مهم
   };
 
   return (
@@ -186,28 +200,29 @@ const Unit2_Page7_Q1 = () => {
                       key={item.num}
                       draggableId={`num-${item.num}`}
                       index={index}
-                      isDragDisabled={usedNumbers.includes(item.num)}
+                      isDragDisabled={showAnswer}
                     >
                       {(provided) => (
-                        <div className="word-number-unit2-p7-q1">
-                          {/* 🔢 الرقم ثابت */}
-                          <span className="num-word">{item.num}</span>
-
-                          {/* 🔤 فقط الكلمة draggable */}
+                        <div
+                          className={`word-number-unit2-p7-q1`}
+                        >
+                          {/* 🔢 الرقم هو اللي ينسحب */}
                           <span
+                            className="num-word"
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className={`word-num ${
-                              usedNumbers.includes(item.num) ? "used" : ""
-                            }`}
                           >
-                            {item.word}
+                            {item.num}
                           </span>
+
+                          {/* 🔤 الكلمة بس للعرض */}
+                          <span className="word-label">{item.word}</span>
                         </div>
                       )}
                     </Draggable>
                   ))}
+
                   {provided.placeholder}
                 </div>
               )}

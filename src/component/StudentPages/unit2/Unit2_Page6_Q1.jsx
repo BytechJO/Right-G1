@@ -74,7 +74,7 @@ const Unit2_Page6_Q1 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -87,7 +87,7 @@ const Unit2_Page6_Q1 = () => {
     const newDropped = { ...droppedLetters };
 
     const previousDrop = Object.keys(newDropped).find(
-      (key) => newDropped[key] === draggableId
+      (key) => newDropped[key] === draggableId,
     );
     if (previousDrop) newDropped[previousDrop] = null;
 
@@ -180,6 +180,7 @@ const Unit2_Page6_Q1 = () => {
       }
     });
     setWrongDrops(wrongTemp); // ✅ تخزين الأخطاء لعرض الـ X
+    setShowAnswer(true)
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
@@ -231,7 +232,7 @@ const Unit2_Page6_Q1 = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        padding:"30px"
+          padding: "30px",
         }}
       >
         <div
@@ -372,11 +373,11 @@ const Unit2_Page6_Q1 = () => {
                   {exerciseData.images.map((img, index) => {
                     const droppedId = droppedLetters[`drop-${index + 1}`];
                     const droppedPair = exerciseData.pairs.find(
-                      (p) => p.id === droppedId
+                      (p) => p.id === droppedId,
                     );
 
                     return (
-                      <Droppable key={index} droppableId={`drop-${index + 1}`}>
+                      <Droppable key={index} droppableId={`drop-${index + 1}`} isDropDisabled={showAnswer}>
                         {(provided, snapshot) => (
                           <div className="image-row">
                             <img
@@ -425,38 +426,38 @@ const Unit2_Page6_Q1 = () => {
                   })}
                 </div>
 
-              <Droppable droppableId="letters">
-  {(provided) => (
-    <div
-      className="right-side"
-      ref={provided.innerRef}
-      {...provided.droppableProps}
-    >
-      {exerciseData.pairs
-        .filter((p) => !Object.values(droppedLetters).includes(p.id))
-        .map((pair, index) => (
-          <div className="option-box" key={pair.id}>
-            <Draggable draggableId={pair.id} index={index}>
-              {(providedDraggable) => (
-                <span
-                  ref={providedDraggable.innerRef}
-                  {...providedDraggable.draggableProps}
-                  {...providedDraggable.dragHandleProps}
-                  className="number-tag draggable-number"
-                >
-                  {pair.letter}
-                </span>
-              )}
-            </Draggable>
+                <Droppable droppableId="letters">
+                  {(provided) => (
+                    <div
+                      className="right-side"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {exerciseData.pairs
+                      
+                        .map((pair, index) => (
+                          <div className="option-box" key={pair.id}>
+                            <Draggable draggableId={pair.id} index={index} isDragDisabled={showAnswer}>
+                              {(providedDraggable) => (
+                                <span
+                                  ref={providedDraggable.innerRef}
+                                  {...providedDraggable.draggableProps}
+                                  {...providedDraggable.dragHandleProps}
+                                  className="number-tag draggable-number"
+                                >
+                                  {pair.letter}
+                                </span>
+                              )}
+                            </Draggable>
 
-            <span className="month-label">{pair.content}</span>
-          </div>
-        ))}
+                            <span className="month-label">{pair.content}</span>
+                          </div>
+                        ))}
 
-      {provided.placeholder}
-    </div>
-  )}
-</Droppable>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
               </div>
             </DragDropContext>
           </div>

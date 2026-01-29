@@ -389,14 +389,15 @@ const WB_Unit8_Page6_Q2 = () => {
                       onClick={() => handleSelect(question.id, index)}
                     >
                       {/* X عند الغلط */}
-                      {showResult &&
-                        !locked &&
-                        selected[question.id] === index &&
-                        opt.answer === false && (
-                          <span className="wrong-x-circle-wb-unit8-p6-q2">
-                            ✕
-                          </span>
-                        )}
+                      {
+  showResult &&
+  selected[question.id] === index &&
+  opt.answer === false && (
+    <span className="wrong-x-circle-wb-unit8-p6-q2">
+      ✕
+    </span>
+  )
+}
 
                       <span className="check-box-review6-p2-q1">
                         {selected[question.id] === index ? "✕" : ""}

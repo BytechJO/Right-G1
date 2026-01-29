@@ -35,7 +35,7 @@ const WB_Unit7_Page3_Q1 = () => {
       img: img4,
       text: "Are you happy?",
       options: ["a Yes, I am.", "b No, I’m not. I’m scared."],
-      correctIndex: 0,
+      correctIndex: 1,
     },
   ];
 

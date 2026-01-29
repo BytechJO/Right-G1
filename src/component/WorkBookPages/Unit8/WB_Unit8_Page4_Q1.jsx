@@ -57,33 +57,52 @@ const WB_Unit8_Page4_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || locked) return;
+ const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || locked) return;
 
-    const wordId = result.draggableId;
-
-    const [qIndex, pIndex] = result.destination.droppableId
-      .replace("drop-", "")
-      .split("-")
-      .map(Number);
-
+  // ✅ إذا انرمَت على البنك: بس فضّي مكانها القديم
+  if (destination.droppableId === "word-bank") {
     setAnswers((prev) => {
       const copy = prev.map((row) => [...row]);
-
-      // إزالة الكلمة من أي مكان سابق (منع التكرار)
       copy.forEach((row, qi) =>
         row.forEach((val, pi) => {
-          if (val === wordId) copy[qi][pi] = "";
+          if (val === draggableId) copy[qi][pi] = "";
         }),
       );
-
-      // وضعها بالمكان الجديد
-      copy[qIndex][pIndex] = wordId;
       return copy;
     });
 
     setWrongInputs([]);
-  };
+    return;
+  }
+
+  // ✅ فقط اسمح بالدروب على الخانات
+  if (!destination.droppableId.startsWith("drop-")) return;
+
+  const [qIndex, pIndex] = destination.droppableId
+    .replace("drop-", "")
+    .split("-")
+    .map(Number);
+
+  setAnswers((prev) => {
+    const copy = prev.map((row) => [...row]);
+
+    // إزالة الكلمة من أي مكان سابق (منع التكرار)
+    copy.forEach((row, qi) =>
+      row.forEach((val, pi) => {
+        if (val === draggableId) copy[qi][pi] = "";
+      }),
+    );
+
+    // وضعها بالمكان الجديد
+    copy[qIndex][pIndex] = draggableId;
+    return copy;
+  });
+
+  setWrongInputs([]);
+};
+
 
   const checkAnswers = () => {
     if (locked) return;

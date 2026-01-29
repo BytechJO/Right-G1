@@ -383,7 +383,7 @@ const WB_Unit1_Page8_Q1 = () => {
                             fontSize: "20px",
                           }}
                           className={`option-word-unit7-p5-q1 
-                ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
+                ${isSelected ? "selected3" : ""}
                 ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                 ${showResult && isCorrect ? "correct" : ""}
             `}
@@ -436,7 +436,7 @@ const WB_Unit1_Page8_Q1 = () => {
                             fontSize: "20px",
                           }}
                           className={`option-word-unit7-p5-q1 
-                ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
+                ${isSelected ? "selected3" : ""}
                 ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                 ${showResult && isCorrect ? "correct" : ""}
             `}

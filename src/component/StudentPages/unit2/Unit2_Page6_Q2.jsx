@@ -49,12 +49,12 @@ const Unit2_Page6_Q2 = () => {
   };
 
   const handleCheckAnswers = () => {
-    if(showAnswer)return
+    if (showAnswer) return;
     const allFilled = Object.values(droppedLetters).every((v) => v !== null);
     if (!allFilled)
       return ValidationAlert.info(
         "Incomplete!",
-        "Please complete all drop zones."
+        "Please complete all drop zones.",
       );
 
     let correctCount = 0;
@@ -65,6 +65,7 @@ const Unit2_Page6_Q2 = () => {
       else wrongTemp.push(dropId); // ✅ خزنا الـ drop الخطأ
     });
     setWrongDrops(wrongTemp);
+    setShowAnswer(true);
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
@@ -82,7 +83,7 @@ const Unit2_Page6_Q2 = () => {
   const handleReset = () => {
     setDroppedLetters(initialDroppedState);
     setWrongDrops([]);
-    setShowAnswer(false)
+    setShowAnswer(false);
   };
 
   return (
@@ -93,10 +94,11 @@ const Unit2_Page6_Q2 = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        padding:"30px"
+          padding: "30px",
         }}
       >
-        <div  className="div-forall"
+        <div
+          className="div-forall"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -122,7 +124,7 @@ const Unit2_Page6_Q2 = () => {
                       ? correctAnswers[dropId]
                       : droppedLetters[dropId];
                     const droppedPair = exerciseData.pairs.find(
-                      (p) => p.id === droppedId
+                      (p) => p.id === droppedId,
                     );
 
                     return (
@@ -164,36 +166,30 @@ const Unit2_Page6_Q2 = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {exerciseData.pairs
-                        .filter((p) =>
-                          showAnswer
-                            ? false
-                            : !Object.values(droppedLetters).includes(p.id)
-                        )
-                        .map((pair, index) => (
-                          <Draggable
-                            key={pair.id}
-                            draggableId={pair.id}
-                            index={index}
-                            isDragDisabled={showAnswer}
-                          >
-                            {(providedDraggable) => (
-                              <div className="option-box2">
-                                <span
-                                  ref={providedDraggable.innerRef}
-                                  {...providedDraggable.draggableProps}
-                                  {...providedDraggable.dragHandleProps}
-                                  className="number-tag2 draggable-number"
-                                >
-                                  {pair.letter}
-                                </span>
-                                <span className="option-text2">
-                                  {pair.content}
-                                </span>
-                              </div>
-                            )}
-                          </Draggable>
-                        ))}
+                      {exerciseData.pairs.map((pair, index) => (
+                        <Draggable
+                          key={pair.id}
+                          draggableId={pair.id}
+                          index={index}
+                          isDragDisabled={showAnswer}
+                        >
+                          {(providedDraggable) => (
+                            <div className="option-box2">
+                              <span
+                                ref={providedDraggable.innerRef}
+                                {...providedDraggable.draggableProps}
+                                {...providedDraggable.dragHandleProps}
+                                className="number-tag2 draggable-number"
+                              >
+                                {pair.letter}
+                              </span>
+                              <span className="option-text2">
+                                {pair.content}
+                              </span>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
 
                       {provided.placeholder}
                     </div>

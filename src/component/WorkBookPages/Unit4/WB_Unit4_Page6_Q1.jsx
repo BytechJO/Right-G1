@@ -18,8 +18,8 @@ const WB_Unit4_Page6_Q1 = () => {
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
   const items = [
     { img: bat, correct: "f" },
-    { img: box, correct: "f" },
-    { img: bucket, correct: "v" },
+    { img: box, correct: "v" },
+    { img: bucket, correct: "f" },
     { img: boat, correct: "v" },
   ];
   const stopAtSecond = 9.02;

@@ -1,7 +1,7 @@
 .wb-unit7-p5-q1-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  /* gap: 25px; */
   justify-items: center;
 }
 

@@ -54,21 +54,47 @@ const Review9_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || locked) return;
+const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || locked) return;
 
-    const value = draggableId.replace("char-", "");
-    const [, qIndex, blankIndex] = destination.droppableId.split("-");
+  const value = draggableId.replace("char-", "");
+
+  // 🟢 1) إذا رجع الحرف على الـ bank
+  if (destination.droppableId === "char-bank") {
+    setAnswers((prev) => {
+      const updated = prev.map((row) => [...row]);
+
+      updated.forEach((row, q) =>
+        row.forEach((cell, b) => {
+          if (cell === value) updated[q][b] = "";
+        }),
+      );
+
+      return updated;
+    });
+
+    setWrongInputs([]);
+    return;
+  }
+
+  // 🟢 2) إذا drop على خانة
+  if (destination.droppableId.startsWith("slot-")) {
+    const [, qIndex, blankIndex] =
+      destination.droppableId.split("-").map(Number);
 
     setAnswers((prev) => {
       const updated = prev.map((row) => [...row]);
+
+   
       updated[qIndex][blankIndex] = value;
       return updated;
     });
 
     setWrongInputs([]);
-  };
+  }
+};
+
 
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer

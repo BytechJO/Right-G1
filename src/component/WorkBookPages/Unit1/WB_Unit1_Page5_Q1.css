@@ -5,7 +5,20 @@
   align-items: flex-start;
   gap: 10px;
 }
-
+.option-word-wb-u1-p5-q1{
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 15px;
+    border-radius: 25px;
+    border: 2px solid transparent;
+    transition: 0.2s;
+    position: relative;
+    user-select: none;
+}
+.option-word-wb-u1-p5-q1.selected3-wb-u1-p5-q1{
+  border-color:#4b74ff ;
+}
 .container-wb-u1-p5-q1 {
   display: grid;
   width: 100%;

@@ -392,7 +392,7 @@ const WB_Unit9_Page6_Q2 = () => {
                     >
                       {/* X عند الغلط */}
                       {showResult &&
-                        !locked &&
+                        
                         selected[question.id] === index &&
                         opt.answer === false && (
                           <span className="wrong-x-circle-wb-unit8-p6-q2">

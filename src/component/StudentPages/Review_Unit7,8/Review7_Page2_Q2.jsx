@@ -196,7 +196,7 @@ const Review7_Page2_Q2 = () => {
                     </span>
 
                     <div
-                      className="question-text"
+                      className="question-text-review7-p2-q2"
                       style={{ position: "relative" }}
                     >
                       <Droppable

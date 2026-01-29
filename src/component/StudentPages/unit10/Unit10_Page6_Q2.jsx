@@ -49,10 +49,31 @@ const Unit10_Page6_Q2 = () => {
     setShowResult(false);
   };
   const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showResult) return;
+  const { destination, draggableId } = result;
+  if (!destination || showResult) return;
 
-    const value = draggableId.replace("word-", "");
+  const value = draggableId.replace("word-", "");
+
+  // 🟢 1) إذا رجعت الكلمة للـ word bank
+  if (destination.droppableId === "word-bank") {
+    setAnswers((prev) => {
+      const updated = prev.map((row) => [...row]);
+
+      updated.forEach((row, r) =>
+        row.forEach((cell, c) => {
+          if (cell === value) updated[r][c] = "";
+        }),
+      );
+
+      return updated;
+    });
+
+    setShowResult(false);
+    return;
+  }
+
+  // 🟢 2) إذا drop على input
+  if (destination.droppableId.startsWith("slot-")) {
     const [qIndex, inputIndex] = destination.droppableId
       .replace("slot-", "")
       .split("-")
@@ -73,7 +94,8 @@ const Unit10_Page6_Q2 = () => {
     });
 
     setShowResult(false);
-  };
+  }
+};
 
   const showAnswers = () => {
     // اختيار الصور الصحيحة

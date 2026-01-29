@@ -62,36 +62,31 @@ const WB_Unit7_Page6_Q3 = () => {
   const onDragEnd = (result) => {
     if (!result.destination || locked) return;
 
-    const wordId = result.draggableId;
-
-    // destination: drop-qIndex-blankIndex
-    const [qIndex, blankIndex] = result.destination.droppableId
-      .replace("drop-", "")
-      .split("-")
-      .map(Number);
+    const { draggableId, destination } = result;
 
     setAnswers((prev) => {
-      // نسخة عميقة
       const copy = prev.map((row) => [...row]);
 
-      // 1️⃣ دورّي على الكلمة إذا مستخدمة بمكان ثاني
-      let oldPos = null;
+      // 1️⃣ شيل الكلمة من أي مكان قديم
       copy.forEach((row, qi) => {
         row.forEach((val, bi) => {
-          if (val === wordId) {
-            oldPos = { qi, bi };
+          if (val === draggableId) {
+            copy[qi][bi] = "";
           }
         });
       });
 
-      // 2️⃣ إذا كانت مستخدمة → فضّي مكانها القديم
-      if (oldPos) {
-        copy[oldPos.qi][oldPos.bi] = "";
+      // 2️⃣ إذا نزلت على خانة
+      if (destination.droppableId.startsWith("drop-")) {
+        const [qIndex, blankIndex] = destination.droppableId
+          .replace("drop-", "")
+          .split("-")
+          .map(Number);
+
+        copy[qIndex][blankIndex] = draggableId;
       }
 
-      // 3️⃣ حطيها بالمكان الجديد (استبدال تلقائي)
-      copy[qIndex][blankIndex] = wordId;
-
+      // 3️⃣ إذا رجعت للـ word-bank → ما نعمل شي (بس تنشال من الخانة)
       return copy;
     });
 

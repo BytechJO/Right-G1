@@ -55,21 +55,26 @@ const Unit2_Page5_Q4 = () => {
   // ========================
   // Drag Logic
   // ========================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+const onDragEnd = (result) => {
+  const { destination, draggableId } = result;
+  if (!destination || showAnswer || isChecked) return;
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const [g, l] = destination.droppableId.split("-").slice(1);
+  if (destination.droppableId.startsWith("slot-")) {
+    const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
 
-      if (slots[g][l]) return;
+    const letter = draggableId.replace("letter-", "");
 
-      const letter = draggableId.replace("letter-", "");
-      const updated = [...slots];
+    setSlots((prev) => {
+      const updated = prev.map((group) => [...group]);
+
+      // ✅ استبدال الحرف مباشرة
       updated[g][l] = letter;
-      setSlots(updated);
-    }
-  };
+
+      return updated;
+    });
+  }
+};
+
 
   // ========================
   // Show Answer

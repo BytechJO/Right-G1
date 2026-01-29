@@ -258,7 +258,7 @@ const WB_Unit4_Page5_Q1 = () => {
                         }`}
                         onClick={() => handleSelect(row.id, s.key)}
                       >
-                        {selected && <span className="correct-mark">✓</span>}
+                        {selected && <span className="correct-mark-wb-unit4-p5-q1">✓</span>}
                         {wrong && <span className="wrong-badge">✕</span>}
                       </td>
                     );

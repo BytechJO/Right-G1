@@ -287,7 +287,7 @@ const WB_Unit9_Page2_Q2 = () => {
                   </Droppable>
 
                   {wrongInputs.includes("1") && (
-                    <span className="input-error-x">✕</span>
+                    <span className="input-error-x-wb-unit9-p2-q1">✕</span>
                   )}
                 </div>
 
@@ -409,7 +409,7 @@ const WB_Unit9_Page2_Q2 = () => {
                   </Droppable>
 
                   {wrongInputs.includes("2") && (
-                    <span className="input-error-x">✕</span>
+                    <span className="input-error-x-wb-unit9-p2-q1">✕</span>
                   )}
                 </div>
 

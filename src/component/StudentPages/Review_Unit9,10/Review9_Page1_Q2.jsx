@@ -91,7 +91,7 @@ const Review9_Page1_Q2 = () => {
 
   // 🔴 1) فحص الفراغات في السؤال
   for (let i = 0; i < items.length; i++) {
-    for (let j = 0; j < items[i].blanksCount; j++) {
+   for (let j = 0; j < items[i].questionAnswers.length; j++) {
       if (!questionInputs[i][j] || questionInputs[i][j].trim() === "") {
         ValidationAlert.info(
           "Oops!",

@@ -58,40 +58,40 @@ const WB_Unit10_Page5_Q1 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || locked) return;
+const onDragEnd = (result) => {
+  if (!result.destination || locked) return;
 
-    const word = result.draggableId;
-    const [qIndex, pIndex] = result.destination.droppableId
-      .replace("drop-", "")
-      .split("-")
-      .map(Number);
+  const { draggableId, destination } = result;
+  const word = draggableId;
 
-    setAnswers((prev) => {
-      const copy = prev.map((row) => [...row]);
+  setAnswers((prev) => {
+    const copy = prev.map((row) => [...row]);
 
-      // منع التكرار (الكلمة ما تنحط بأكتر من مكان)
-      copy.forEach((r, qi) =>
-        r.forEach((v, pi) => {
-          if (v === word) copy[qi][pi] = "";
-        }),
-      );
-
-      copy[qIndex][pIndex] = word;
-      return copy;
+    // 1️⃣ شيل الكلمة من أي مكان قديم
+    copy.forEach((row, qi) => {
+      row.forEach((val, pi) => {
+        if (val === word) {
+          copy[qi][pi] = "";
+        }
+      });
     });
 
-    setWrongInputs([]);
-  };
+    // 2️⃣ إذا نزلت على input
+    if (destination.droppableId.startsWith("drop-")) {
+      const [qIndex, pIndex] = destination.droppableId
+        .replace("drop-", "")
+        .split("-")
+        .map(Number);
 
-  const handleChange = (value, qIndex, pIndex) => {
-    if (locked) return;
+      copy[qIndex][pIndex] = word;
+    }
 
-    const copy = [...answers];
-    copy[qIndex][pIndex] = value;
-    setAnswers(copy);
-    setWrongInputs([]);
-  };
+    // 3️⃣ إذا نزلت على word-bank → بس تنشال من الجملة
+    return copy;
+  });
+
+  setWrongInputs([]);
+};
 
   const checkAnswers = () => {
     if (locked) return;

@@ -97,7 +97,7 @@ const WB_Unit5_Page4_Q2 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -107,7 +107,7 @@ const WB_Unit5_Page4_Q2 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) {
@@ -159,9 +159,9 @@ const WB_Unit5_Page4_Q2 = () => {
           <h5 className="header-title-page8">
             <span className="ex-A">H</span>Read, look, and match. Color.
           </h5>
-  <span style={{ fontSize: "14px", color: "gray" }}>
-          Hint: Double Click to Color Word
-        </span>
+          <span style={{ fontSize: "14px", color: "gray" }}>
+            Hint: Double Click to Color Word
+          </span>
           <div className="match-wrapper2" ref={containerRef}>
             <div className="match-words-row2">
               <div className="word-box2">
@@ -256,7 +256,7 @@ const WB_Unit5_Page4_Q2 = () => {
                 /> */}
                 {svgImages.img1 && (
                   <div
-                     className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
                     style={{ color: imageColors.img1 || "#ffffffff" }}
@@ -344,7 +344,7 @@ const WB_Unit5_Page4_Q2 = () => {
                 /> */}
                 {svgImages.img2 && (
                   <div
-                     className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
                     style={{ color: imageColors.img3 || "#ffffffff" }}
@@ -389,7 +389,7 @@ const WB_Unit5_Page4_Q2 = () => {
 
                 {svgImages.img4 && (
                   <div
-                     className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
                     style={{ color: imageColors.img4 || "#ffffffff" }}

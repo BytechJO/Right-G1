@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./Review7_Page1_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import imgDown1 from "../../../assets/unit8/imgs/U8P70EXEA-01.svg";
-import imgDown2 from "../../../assets/unit8/imgs/U8P70EXEA-02.svg";
-import imgDown3 from "../../../assets/unit8/imgs/U8P70EXEA-03.svg";
-import imgAcross1 from "../../../assets/unit8/imgs/U8P70EXEA-04.svg";
-import imgAcross2 from "../../../assets/unit8/imgs/U8P70EXEA-05.svg";
+import imgAcross1 from "../../../assets/unit8/imgs/U8P70EXEA-02.svg";
+import imgDown2 from "../../../assets/unit8/imgs/U8P70EXEA-03.svg";
+import imgAcross2 from "../../../assets/unit8/imgs/U8P70EXEA-04.svg";
+import imgDown3 from "../../../assets/unit8/imgs/U8P70EXEA-05.svg";
 import imgAcross3 from "../../../assets/unit8/imgs/U8P70EXEA-06.svg";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
@@ -335,23 +335,11 @@ export default function Review7_Page1_Q1() {
                                     {...provided.droppableProps}
                                     className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                                   >
-                                    {userGrid[r][c] && (
-                                      <Draggable
-                                        draggableId={`filled-${r}-${c}-${userGrid[r][c]}`}
-                                        index={0}
-                                        isDragDisabled={showAnswers}
-                                      >
-                                        {(provided) => (
-                                          <span
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                          >
-                                            {userGrid[r][c]}
-                                          </span>
-                                        )}
-                                      </Draggable>
-                                    )}
+                                   {userGrid[r][c] && (
+  <span className="filled-letter">
+    {userGrid[r][c]}
+  </span>
+)}
                                     {provided.placeholder}
                                   </div>
                                 )}
@@ -375,23 +363,11 @@ export default function Review7_Page1_Q1() {
                                     {...provided.droppableProps}
                                     className={`letter22 ${snapshot.isDraggingOver ? "drag-over-cell" : ""}`}
                                   >
-                                    {userGrid[r][c] && (
-                                      <Draggable
-                                        draggableId={`filled-${r}-${c}-${userGrid[r][c]}`}
-                                        index={0}
-                                        isDragDisabled={showAnswers}
-                                      >
-                                        {(provided) => (
-                                          <span
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                          >
-                                            {userGrid[r][c]}
-                                          </span>
-                                        )}
-                                      </Draggable>
-                                    )}
+                                   {userGrid[r][c] && (
+  <span className="filled-letter">
+    {userGrid[r][c]}
+  </span>
+)}
                                     {provided.placeholder}
                                   </div>
                                 )}

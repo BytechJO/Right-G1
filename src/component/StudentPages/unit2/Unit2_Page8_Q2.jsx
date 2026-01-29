@@ -140,7 +140,7 @@ const Unit2_Page8_Q2 = () => {
                             usedWords.includes(word) ? "used" : ""
                           }`}
                           style={{
-                            padding: "2px 5px",
+                            padding: "7px 14px",
                             border: "2px solid #2c5287",
                             borderRadius: "8px",
                             background: "white",

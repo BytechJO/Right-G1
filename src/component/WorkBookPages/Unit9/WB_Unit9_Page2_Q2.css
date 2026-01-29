@@ -18,3 +18,22 @@
     font-size: 20px;
     height: 30px;
 }
+
+.input-error-x-wb-unit9-p2-q1 {
+    position: absolute;
+    right: 99%;
+    top: 70%;
+    border: 2px solid white;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+}

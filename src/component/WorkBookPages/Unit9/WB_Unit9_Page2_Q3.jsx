@@ -4,7 +4,9 @@ import img1 from "../../../assets/U1 WB/U9/U9P52EXEE-01.svg";
 import img2 from "../../../assets/U1 WB/U9/U9P52EXEE-02.svg";
 import img3 from "../../../assets/U1 WB/U9/U9P52EXEE-03.svg";
 import img4 from "../../../assets/unit3/imgs3/P26exeB-04.svg";
-import "./WB_Unit9_Page2_Q3.css"
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+import "./WB_Unit9_Page2_Q3.css";
 const WB_Unit9_Page2_Q3 = () => {
   // الإجابات المدخلة من الطالب
   const [answers, setAnswers] = useState(["", "", ""]);
@@ -15,20 +17,52 @@ const WB_Unit9_Page2_Q3 = () => {
 
   // الإجابات الصحيحة
   const correctData = ["2", "3", "1"];
+  const numberBank = [
+    { id: "n1", text: "1" },
+    { id: "n2", text: "2" },
+    { id: "n3", text: "3" },
+  ];
 
   // البيانات
   const options = [{ img: img1 }, { img: img2 }, { img: img3 }];
+  const getNumberText = (id) => numberBank.find((n) => n.id === id)?.text || "";
+
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswer) return;
+
+    const { draggableId, destination } = result;
+
+    setAnswers((prev) => {
+      const copy = [...prev];
+
+      // شيل الرقم من أي مكان قديم
+      copy.forEach((val, i) => {
+        if (val === draggableId) copy[i] = "";
+      });
+
+      // إذا نزل على صورة
+      if (destination.droppableId.startsWith("drop-")) {
+        const index = Number(destination.droppableId.replace("drop-", ""));
+        copy[index] = draggableId;
+      }
+
+      return copy;
+    });
+
+    setShowResult([]);
+  };
 
   // تحديث خانة الإدخال
-  const handleChange = (index, value) => {
-    setAnswers((prev) => prev.map((a, i) => (i === index ? value : a)));
-    setShowResult([]);
-    setShowAnswer(false);
-  };
+
   const handleShowAnswer = () => {
-    setShowAnswer(true); // تفعيل وضع إظهار الإجابات
-    setShowResult([]); // إخفاء إكسات
-    setAnswers(correctData); // تعبئة كل الخانات بالإجابات الصحيحة
+    setShowAnswer(true);
+    setShowResult([]);
+
+    setAnswers(
+      correctData.map(
+        (num) => numberBank.find((n) => n.text === num)?.id || "",
+      ),
+    );
   };
 
   const checkAnswers = () => {
@@ -41,7 +75,8 @@ const WB_Unit9_Page2_Q3 = () => {
 
     // ❗ الخطوة 2: مقارنة كل خانة
     const results = answers.map((value, index) => {
-      return value === correctData[index] ? "correct" : "wrong";
+      const userValue = getNumberText(answers[index]);
+      return userValue === correctData[index] ? "correct" : "wrong";
     });
 
     setShowResult(results);
@@ -74,84 +109,153 @@ const WB_Unit9_Page2_Q3 = () => {
   };
 
   return (
-    <div
-      className="unit3-q3-wrapper"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <div
-        className="div-forall"
+        className="unit3-q3-wrapper"
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
-          width: "60%",
-          justifyContent: "flex-start",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">E</span>Read and number the pictures.
-        </h5>
-        <div style={{ display: "flex" }}>
-          <div className="word-container-wb-unit9-p2-q3">
-            {[
-              "How many horses are there? There are two horses.",
-              "How many chickens are there? There are five chickens.",
-              "How many cats are there? There is one cat.",
-            ].map((item, index) => {
-              return (
-                <div className="sentence-container-wb-unit7-p5-q1">
-                  <span className="number-wb-unit7-p5-q1">{index + 1}</span>{" "}
-                  <p className="sentence-wb-unit8-p1-q1">{item}</p>
-                </div>
-              );
-            })}
-          </div>
-          {/* الصور */}
-          <div className="wb-unit9-p2-q3-grid">
-            {options.map((item, index) => (
-              <div key={index} className="wb-unit9-p2-q3-box">
-                <img src={item.img} alt="" />
+        <div
+          className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            width: "60%",
+            justifyContent: "flex-start",
+          }}
+        >
+          <h5 className="header-title-page8">
+            <span className="ex-A">E</span>Read and number the pictures.
+          </h5>
 
-                {/* إدخال الإجابة */}
-                <div className="wb-unit9-p2-q3-input-wrapper">
-                  <input
-                    type="text"
-                    maxLength="1"
-                    value={answers[index]}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    className={`wb-unit9-p2-q3-input `}
-                    readOnly={showAnswer} // ← new 👈 منع التعديل بعد Show Answer
-                  />
-
-                  {/* إشارة X */}
-                  {showResult[index] === "wrong" && (
-                    <div className="unit3-q3-wrong">✕</div>
-                  )}
-                </div>
+          <Droppable droppableId="number-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  padding: 12,
+                  border: "2px dashed #ccc",
+                  borderRadius: 10,
+                  marginBottom: 20,
+                  justifyContent: "center",
+                }}
+              >
+                {numberBank.map((num, index) => (
+                  <Draggable
+                    key={num.id}
+                    draggableId={num.id}
+                    index={index}
+                    isDragDisabled={showAnswer}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "50%",
+                          border: "2px solid #2c5287",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontWeight: "bold",
+                          background: "#fff",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {num.text}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            ))}
+            )}
+          </Droppable>
+
+          <div style={{ display: "flex" }}>
+            <div className="word-container-wb-unit9-p2-q3">
+              {[
+                "How many horses are there? There are two horses.",
+                "How many chickens are there? There are five chickens.",
+                "How many cats are there? There is one cat.",
+              ].map((item, index) => {
+                return (
+                  <div className="sentence-container-wb-unit7-p5-q1">
+                    <span className="number-wb-unit7-p5-q1">{index + 1}</span>{" "}
+                    <p className="sentence-wb-unit8-p1-q1">{item}</p>
+                  </div>
+                );
+              })}
+            </div>
+            {/* الصور */}
+            <div className="wb-unit9-p2-q3-grid">
+              {options.map((item, index) => (
+                <div key={index} className="wb-unit9-p2-q3-box">
+                  <img src={item.img} alt="" />
+
+                  {/* إدخال الإجابة */}
+                  <div className="wb-unit9-p2-q3-input-wrapper">
+                    <Droppable droppableId={`drop-${index}`}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`wb-unit9-p2-q3-input ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? "#e3f2fd"
+                              : "transparent",
+                          }}
+                        >
+                          {getNumberText(answers[index])}
+
+                          {showResult[index] === "wrong" && (
+                            <div className="unit3-q3-wrong">✕</div>
+                          )}
+
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+
+                    {/* إشارة X */}
+                    {showResult[index] === "wrong" && (
+                      <div className="unit3-q3-wrong">✕</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="action-buttons-container">
-        <button onClick={resetAnswers} className="try-again-button">
-          Start Again ↻
-        </button>
-        <button onClick={handleShowAnswer} className="show-answer-btn">
-          Show Answer
-        </button>
+        <div className="action-buttons-container">
+          <button onClick={resetAnswers} className="try-again-button">
+            Start Again ↻
+          </button>
+          <button onClick={handleShowAnswer} className="show-answer-btn">
+            Show Answer
+          </button>
 
-        <button onClick={checkAnswers} className="check-button2">
-          Check Answer ✓
-        </button>
+          <button onClick={checkAnswers} className="check-button2">
+            Check Answer ✓
+          </button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

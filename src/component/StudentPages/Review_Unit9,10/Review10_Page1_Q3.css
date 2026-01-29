@@ -26,13 +26,20 @@
   font-weight: 500;
 }
 
+.content-container-review10-p1-q3 {
+    display: flex;
+    flex-direction: column;
+    /* gap: 10px; */
+    margin-top: 20px;
+}
+
 .input-container-review10-p1-q3 {
 width: 90%;
     /* height: 100%; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-top: 90px;
+    /* padding-top: 90px; */
 }
 .answer-input33-review10-p1-q3 {
   border-bottom: 2px solid;

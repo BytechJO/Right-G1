@@ -14,30 +14,26 @@ const Unit2_Page10_Q4 = () => {
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   // 🧲 Drag & Drop logic (مع swap)
   const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showAnswer || checked) return;
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer || checked) return;
 
+    if (destination.droppableId.startsWith("slot-")) {
+      const index = Number(destination.droppableId.split("-")[1]);
+      const letter = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
 
-  if (destination.droppableId.startsWith("slot-")) {
-    const index = Number(destination.droppableId.split("-")[1]);
-    const letter = draggableId
-      .replace("bank-", "")
-      .replace(/^slot-.*?-/, "");
+      const updated = [...answers];
 
-    const updated = [...answers];
+      // 🔹 نسمح بتكرار نفس الحرف
+      updated[index] = letter;
 
-    // 🔹 نسمح بتكرار نفس الحرف
-    updated[index] = letter;
-
-    setAnswers(updated);
-    setWrongInputs([]);
-  }
-};
-
+      setAnswers(updated);
+      setWrongInputs([]);
+    }
+  };
 
   const checkAnswers = () => {
     if (showAnswer) return;
@@ -56,11 +52,10 @@ const [checked, setChecked] = useState(false);
     });
 
     setWrongInputs(wrong);
-setChecked(true);
+    setChecked(true);
 
     const total = correctAnswers.length;
-    const color =
-      score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
     ValidationAlert[
       score === total ? "success" : score === 0 ? "error" : "warning"
@@ -79,12 +74,12 @@ setChecked(true);
     setShowAnswer(true);
     setChecked(true); // 🔓
   };
-const reset = () => {
-  setAnswers(["", "", "", ""]);
-  setWrongInputs([]);
-  setShowAnswer(false);
-  setChecked(false); // 🔓
-};
+  const reset = () => {
+    setAnswers(["", "", "", ""]);
+    setWrongInputs([]);
+    setShowAnswer(false);
+    setChecked(false); // 🔓
+  };
 
   const images = [paint, boy, pizza2, pincle];
 
@@ -116,7 +111,16 @@ const reset = () => {
             <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
               {(provided) => (
                 <div
-                  className="word-bank-unit2-p8-q2"
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -132,7 +136,15 @@ const reset = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="word-item-unit2-p8-q2"
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {letter}
                         </span>
@@ -147,23 +159,32 @@ const reset = () => {
             <div className="row-content10-1">
               {answers.map((value, index) => (
                 <div key={index} className="row2">
-                  <span style={{ position: "relative", display: "flex" ,alignItems:"center" ,gap:"5px"}}>
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
                     <span className="num-span">{index + 1}</span>
                     <div className="input-wrapper">
                       <Droppable droppableId={`slot-${index}`}>
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className={`q-input ${
+                            className={`q-input10-unit2-p10-q4 ${
                               showAnswer ? "show-answer-red1" : ""
+                            } ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
                             }`}
                           >
                             {value && (
                               <Draggable
                                 draggableId={`slot-${index}-${value}`}
                                 index={0}
-                                  isDragDisabled={checked || showAnswer}
+                                isDragDisabled={checked || showAnswer}
                               >
                                 {(provided) => (
                                   <span

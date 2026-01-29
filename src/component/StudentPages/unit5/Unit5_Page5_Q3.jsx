@@ -217,7 +217,7 @@ const Unit5_Page5_Q3 = () => {
                     </span>
 
                     <div
-                      className="question-text"
+                      className="question-text-unit5-p5-q3"
                       style={{
                         display: "flex",
                         alignItems: "center",

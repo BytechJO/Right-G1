@@ -350,7 +350,7 @@ const Unit5_Page5_Q1 = () => {
                   {/* B OPTION */}
                   <span
                     className={`gk-option 
-                    ${answers[index] === "g" ? "selected" : ""}
+                    ${answers[index] === "g" ? "selected3" : ""}
                     ${
                       showResult &&
                       answers[index] === "g" &&
@@ -364,14 +364,14 @@ const Unit5_Page5_Q1 = () => {
                     {showResult &&
                       answers[index] === "g" &&
                       answers[index] !== item.correct && (
-                        <span className="wrong-x">✕</span>
+                        <span className="wrong-mark-Unit5_Page5_Q1">✕</span>
                       )}
                   </span>
 
                   {/* P OPTION */}
                   <span
                     className={`gk-option 
-                    ${answers[index] === "k" ? "selected" : ""}
+                    ${answers[index] === "k" ? "selected3" : ""}
                     ${
                       showResult &&
                       answers[index] === "k" &&
@@ -385,7 +385,7 @@ const Unit5_Page5_Q1 = () => {
                     {showResult &&
                       answers[index] === "k" &&
                       answers[index] !== item.correct && (
-                        <span className="wrong-x">✕</span>
+                        <span className="wrong-mark-Unit5_Page5_Q1">✕</span>
                       )}
                   </span>
                 </div>

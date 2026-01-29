@@ -75,64 +75,74 @@ const WB_Unit10_Page1_Q1 = () => {
     setWrong({});
   };
 
-  const checkAnswers = () => {
-    if (showAnswers || locked) return;
+ const checkAnswers = () => {
+  if (showAnswers || locked) return;
 
-    // ❌ فحص إذا في input فاضي
-    const hasEmptyInput = questions.some(
-      (q) =>
-        !inputs[`${q.id}_question`] || inputs[`${q.id}_question`].trim() === "",
+  // 1️⃣ التأكد إنه كل سؤال متعبّي
+  const hasEmptyInput = questions.some((q) => {
+    const arr = inputs[`${q.id}_question`];
+    return !arr || arr.length === 0;
+  });
+
+  if (hasEmptyInput) {
+    ValidationAlert.info(
+      "Oops!",
+      "Please answer all the questions before checking."
     );
+    return;
+  }
 
-    if (hasEmptyInput) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please answer all the questions before checking.",
-      );
-      return;
+  let wrongTemp = {};
+  let score = 0;
+  const total = questions.length;
+
+  // 2️⃣ مقارنة الإجابات
+  questions.forEach((q) => {
+    const userAnswer = (inputs[`${q.id}_question`] || []).join(" ");
+
+    if (userAnswer !== q.questionCorrect) {
+      wrongTemp[`${q.id}_question`] = true;
+    } else {
+      score++;
     }
-    let wrongTemp = {};
-    let score = 0;
-    const total = questions.length;
+  });
 
-    questions.forEach((q) => {
-      if (inputs[`${q.id}_question`] !== q.questionCorrect) {
-        wrongTemp[`${q.id}_question`] = true;
-      } else {
-        score++;
-      }
-    });
+  setWrong(wrongTemp);
+  setLocked(true);
 
-    setWrong(wrongTemp);
-    setLocked(true);
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
-    const msg = `
+  // 3️⃣ عرض النتيجة
+  const color =
+    score === total ? "green" : score === 0 ? "red" : "orange";
+
+  const msg = `
     <div style="font-size:20px;text-align:center;">
       <span style="color:${color};font-weight:bold">
         Score: ${score} / ${total}
       </span>
     </div>
   `;
-    if (total === score) {
-      return ValidationAlert.success(msg);
-    } else if (score === 0) {
-      return ValidationAlert.error(msg);
-    } else {
-      return ValidationAlert.warning(msg);
-    }
-  };
+
+  if (score === total) {
+    ValidationAlert.success(msg);
+  } else if (score === 0) {
+    ValidationAlert.error(msg);
+  } else {
+    ValidationAlert.warning(msg);
+  }
+};
 
   // ⭐ Show Correct Answers
   const showCorrectAnswers = () => {
     let filled = {};
 
     questions.forEach((q) => {
-      filled[`${q.id}_question`] = q.questionCorrect;
+      filled[`${q.id}_question`] = q.questionCorrect.split(" ");
     });
 
     setInputs(filled);
     setWrong({});
     setShowAnswers(true);
+    setLocked(true);
   };
 
   return (

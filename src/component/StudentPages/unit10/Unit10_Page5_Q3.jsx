@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import deer from "../../../assets/unit10/imgs/U10P86EXEB.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import "./Unit10_Page5_Q3.css"
+import "./Unit10_Page5_Q3.css";
 const data = [
   { question: "", correct: "bread" },
   { question: "", correct: "chicken" },
@@ -53,13 +53,13 @@ const Unit10_Page5_Q3 = () => {
     });
 
     setWrongInputs(wrong);
-
+    setShowAnswer(true);
     let color =
       correctCount === data.length
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const scoreMessage = `
       <div style="font-size:20px; text-align:center;">
@@ -118,15 +118,16 @@ const Unit10_Page5_Q3 = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                style={{
-                          display: "flex",
-                          gap: "10px",
-                          padding: "10px",
-                          border: "2px dashed #ccc",
-                          borderRadius: "10px",
-                          // margin: "10px 0",
-                          alignItems:"center",justifyContent:"center"
-                        }}
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    padding: "10px",
+                    border: "2px dashed #ccc",
+                    borderRadius: "10px",
+                    // margin: "10px 0",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {data.map((item, index) => (
                     <Draggable
@@ -140,15 +141,15 @@ const Unit10_Page5_Q3 = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                           style={{
-                                  padding: "7px 14px",
-                                  border: "2px solid #2c5287",
-                                  borderRadius: "8px",
-                                  background: "white",
-                                  fontWeight: "bold",
-                                  cursor: "grab",
-                                  ...provided.draggableProps.style,
-                                }}
+                          style={{
+                            padding: "7px 14px",
+                            border: "2px solid #2c5287",
+                            borderRadius: "8px",
+                            background: "white",
+                            fontWeight: "bold",
+                            cursor: "grab",
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           {item.correct}
                         </span>
@@ -195,6 +196,7 @@ const Unit10_Page5_Q3 = () => {
                           className={`q-input-unit10-p5-q3 ${
                             snapshot.isDraggingOver ? "drag-over-cell" : ""
                           }`}
+                          style={{ position: "relative" }}
                         >
                           {answers[index] && (
                             <Draggable
@@ -207,6 +209,7 @@ const Unit10_Page5_Q3 = () => {
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
+                                  style={{ position: "relative" }}
                                 >
                                   {answers[index]}
                                 </span>

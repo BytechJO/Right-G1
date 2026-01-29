@@ -55,25 +55,40 @@ const WB_Unit10_Page1_Q2 = () => {
 
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
-  const onDragEnd = (result) => {
-    if (!result.destination || locked) return;
+ const onDragEnd = (result) => {
+  if (!result.destination || locked) return;
 
-    const { draggableId, destination } = result;
-    const word = draggableId.split("|")[1];
+  const { draggableId, destination } = result;
+  const word = draggableId.split("|")[1];
 
-    const [qIndex, pIndex] = destination.droppableId
-      .replace("drop-", "")
-      .split("-")
-      .map(Number);
+  setAnswers((prev) => {
+    const copy = prev.map((row) => [...row]);
 
-    setAnswers((prev) => {
-      const copy = prev.map((row) => [...row]);
-      copy[qIndex][pIndex] = word.toLowerCase();
-      return copy;
+    // 1️⃣ شيل الكلمة من أي مكان قديم
+    copy.forEach((row, qi) => {
+      row.forEach((val, pi) => {
+        if (val === word.toLowerCase()) {
+          copy[qi][pi] = "";
+        }
+      });
     });
 
-    setWrongInputs([]);
-  };
+    // 2️⃣ إذا نزلت على خانة
+    if (destination.droppableId.startsWith("drop-")) {
+      const [qIndex, pIndex] = destination.droppableId
+        .replace("drop-", "")
+        .split("-")
+        .map(Number);
+
+      copy[qIndex][pIndex] = word.toLowerCase();
+    }
+
+    // 3️⃣ إذا رجعت على البنك → بس تنشال من الجملة
+    return copy;
+  });
+
+  setWrongInputs([]);
+};
 
   const checkAnswers = () => {
     if (locked) return;

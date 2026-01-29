@@ -11,12 +11,12 @@ export default function LessonNavigator({ startIndex = 0 }) {
   const CurrentLesson = lessons[index].component;
   const handleNext = () => {
     const lesson = lessons[index];
-    
+
     if (lesson.lastOfUnit && lesson.unit % 2 === 0 && lesson.isReview) {
       Swal.fire({
         html: `
           <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit-1} exercises?</h2>
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit+1} exercises?</h2>
           </div>
         `,
         imageWidth: 200,
@@ -78,7 +78,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
       Swal.fire({
         html: `
           <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit-1} exercises?</h2>
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit +1} exercises?</h2>
           </div>
         `,
         imageWidth: 200,

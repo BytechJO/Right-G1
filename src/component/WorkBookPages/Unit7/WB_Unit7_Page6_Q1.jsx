@@ -430,7 +430,9 @@ const WB_Unit7_Page6_Q1 = () => {
                       <div
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        className="wb-unit7-p5-q1-input"
+                        className={`wb-unit7-p5-q1-input ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
                         style={{
                           background: snapshot.isDraggingOver
                             ? "#e3f2fd"
@@ -445,7 +447,7 @@ const WB_Unit7_Page6_Q1 = () => {
 
                   {/* إشارة X */}
                   {showResult[index] === "wrong" && (
-                    <div className="unit3-q3-wrong">X</div>
+                    <div className="unit3-q3-wrong">✕</div>
                   )}
                 </div>
               </div>

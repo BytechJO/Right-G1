@@ -77,8 +77,8 @@ const Page9_Q1 = () => {
         width: `${area.w}%`,
         height: `${area.h}%`,
         fontSize: "1.3vw",
-        border:"2px solid black",
-        borderRadius:"8px"
+        borderBottom:"2px solid black",
+        // borderRadius:"8px"
       }}
     />
   ))}

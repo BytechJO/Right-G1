@@ -15,23 +15,23 @@ const WB_Unit3_Page2_Q1 = () => {
   const questions = [
     {
       id: "q1",
-      scramble: "your/book/close.",
-      questionCorrect: "Close your book",
+      scramble: "your/book/close",
+      questionCorrect: "close your book",
     },
     {
       id: "q2",
       scramble: "pencil/take/your/out",
-      questionCorrect: "Take out your pencil",
+      questionCorrect: "take out your pencil",
     },
     {
       id: "q3",
-      scramble: "line/a/make.",
-      questionCorrect: "Make a line",
+      scramble: "line/a/make",
+      questionCorrect: "make a line",
     },
     {
       id: "q4",
-      scramble: "open/book/your.",
-      questionCorrect: "Open your book",
+      scramble: "open/book/your",
+      questionCorrect: "open your book",
     },
   ];
   const onDragEnd = (result) => {

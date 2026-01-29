@@ -19,8 +19,8 @@ const WB_Unit3_Page5_Q2 = () => {
 
   const correctMatches = [
     { word: "Quiet!", image: "img2" },
-    { word: "Open your book.", image: "img4" },
-    { word: "Close your book.", image: "img3" },
+    { word: "Open your book.", image: "img3" },
+    { word: "Close your book.", image: "img4" },
     { word: "Take out your pencil.", image: "img1" },
   ];
 

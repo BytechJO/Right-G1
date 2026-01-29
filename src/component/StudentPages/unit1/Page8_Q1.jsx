@@ -74,12 +74,10 @@ const Page8_Q1 = () => {
   const [showCaption, setShowCaption] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const lettersBank = [
-    { id: "l-d-0", value: "d" },
-    { id: "l-d-1", value: "d" },
-    { id: "l-t-0", value: "t" },
-    { id: "l-t-1", value: "t" },
-  ];
+const lettersBank = [
+  { id: "l-d", value: "d" },
+  { id: "l-t", value: "t" },
+];
 
   const numbersBank = [
     { id: "n-1", value: "1" },
@@ -180,6 +178,8 @@ const Page8_Q1 = () => {
     clickAudioRef.current.currentTime = 0;
     clickAudioRef.current.play();
   };
+  const isLetterUsed = (id) => answers.letters.includes(id);
+
   const onDragEnd = (result) => {
     if (!result.destination || showAnswer) return;
 
@@ -187,25 +187,22 @@ const Page8_Q1 = () => {
 
     // 1) Letter drop zones
     if (
-      draggableId.startsWith("l-") &&
-      destination.droppableId.startsWith("letter-drop-")
-    ) {
-      const index = Number(destination.droppableId.replace("letter-drop-", ""));
+  draggableId.startsWith("l-") &&
+  destination.droppableId.startsWith("letter-drop-")
+) {
+  const index = Number(destination.droppableId.replace("letter-drop-", ""));
+  const value = draggableId.replace("l-", ""); // d أو t
 
-      setAnswers((prev) => {
-        const letters = [...prev.letters];
+  setAnswers((prev) => {
+    const letters = [...prev.letters];
+    letters[index] = value;
+    return { ...prev, letters };
+  });
 
-        // شيل الحرف من مكانه القديم لو كان مستخدم
-        const oldIndex = letters.findIndex((v) => v === draggableId);
-        if (oldIndex !== -1) letters[oldIndex] = null;
+  setWrongLetters(data.map(() => false));
+  return;
+}
 
-        letters[index] = draggableId;
-        return { ...prev, letters };
-      });
-
-      setWrongLetters(data.map(() => false));
-      return;
-    }
 
     // 2) Number drop zones
     if (
@@ -260,7 +257,8 @@ const reset = () => {
 
   // 2️⃣ الحساب
   data.forEach((item, i) => {
-    const pickedLetter = answers.letters[i]?.split("-")[1];
+ const pickedLetter = answers.letters[i];
+
     const pickedNumber = answers.numbers[i]?.split("-")[1];
 
     if (pickedLetter === item.missing) correctLetters++;
@@ -545,7 +543,8 @@ const reset = () => {
                           color: isAutoAnswer ? "red" : "black",
                         }}
                       >
-                        {answers.letters[dataIndex]?.split("-")[1] || ""}
+                       {answers.letters[dataIndex] || ""}
+
                         {provided.placeholder}
                       </div>
                     )}
@@ -731,7 +730,8 @@ const reset = () => {
               setIsAutoAnswer(true);
 
               setAnswers({
-                letters: data.map((item, i) => `l-${item.missing}-${i}`),
+               letters: data.map((item) => item.missing),
+
                 numbers: data.map((item) => `n-${item.num}`),
               });
 
