@@ -374,7 +374,7 @@ const showAnswer = () => {
                         }}
               >
                 {bank.map((word, i) => (
-                  <Draggable key={word} draggableId={word} index={i}>
+                  <Draggable key={word} draggableId={word} index={i} isDragDisabled={locked}>
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
@@ -407,7 +407,7 @@ const showAnswer = () => {
 
                 <span style={{ position: "relative", display: "flex" }}>
                   <div className="input-wrapper-unit3-page6-q1">
-                    <Droppable droppableId={`slot-${index}`}>
+                    <Droppable droppableId={`slot-${index}`} isDropDisabled={locked}>
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}

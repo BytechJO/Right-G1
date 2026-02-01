@@ -261,7 +261,7 @@ const score = correctNumbersCount + correctLinesCount;
                   }}
                 >
                   {["2", "4", "6"].map((num, i) => (
-                    <Draggable key={num} draggableId={`num-${num}`} index={i}>
+                    <Draggable key={num} draggableId={`num-${num}`} index={i} isDragDisabled={locked}>
                       {(provided) => (
                         <span
                           ref={provided.innerRef}
@@ -344,7 +344,7 @@ const score = correctNumbersCount + correctLinesCount;
                       <span className="error-mark-img-unit7-p6-q2">✕</span>
                     )}
                     <div style={{ position: "relative" }}>
-                      <Droppable droppableId="num-img1">
+                      <Droppable droppableId="num-img1" isDropDisabled={locked}>
                         {(provided, snapshot) => (
                           <input
                             ref={provided.innerRef}

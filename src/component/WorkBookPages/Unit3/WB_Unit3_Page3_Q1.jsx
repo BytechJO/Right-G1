@@ -186,7 +186,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 }}
               >
                 {bank.map((w, i) => (
-                  <Draggable draggableId={`bank-${i}`} index={i} key={w}>
+                  <Draggable draggableId={`bank-${i}`} index={i} key={w} isDragDisabled={locked}>
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
@@ -222,7 +222,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={bat} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-0">
+              <Droppable droppableId="slot-0" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -235,7 +235,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[0] && (
-                      <Draggable draggableId={`slot-0`} index={0}>
+                      <Draggable draggableId={`slot-0`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -266,7 +266,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={cap} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-1">
+              <Droppable droppableId="slot-1" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -279,7 +279,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[1] && (
-                      <Draggable draggableId={`slot-1`} index={0}>
+                      <Draggable draggableId={`slot-1`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -310,7 +310,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={ant} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-2">
+              <Droppable droppableId="slot-2" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -323,7 +323,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[2] && (
-                      <Draggable draggableId={`slot-2`} index={0}>
+                      <Draggable draggableId={`slot-2`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -355,7 +355,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={dad} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-3">
+              <Droppable droppableId="slot-3" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -368,7 +368,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[3] && (
-                      <Draggable draggableId={`slot-3`} index={0}>
+                      <Draggable draggableId={`slot-3`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -400,7 +400,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={dad2} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-4">
+              <Droppable droppableId="slot-4" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -413,7 +413,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[4] && (
-                      <Draggable draggableId={`slot-4`} index={0}>
+                      <Draggable draggableId={`slot-4`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -445,7 +445,7 @@ const WB_Unit3_Page3_Q1 = () => {
                 <img src={dad3} alt="" className="q-img-wb-unit3-page3-q2" />
               </div>
 
-              <Droppable droppableId="slot-5">
+              <Droppable droppableId="slot-5" isDropDisabled={locked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -458,7 +458,7 @@ const WB_Unit3_Page3_Q1 = () => {
                     }}
                   >
                     {slots[5] && (
-                      <Draggable draggableId={`slot-5`} index={0}>
+                      <Draggable draggableId={`slot-5`} index={0} isDragDisabled={true}>
                         {(provided) => (
                           <div
                             ref={provided.innerRef}

@@ -50,7 +50,7 @@ const Unit6_Page5_Q3 = () => {
       }
     });
     setWrongInputs(wrong);
-
+setLocked(true)
     const total = correctAnswers.length;
     const color =
       tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
@@ -193,7 +193,7 @@ const Unit6_Page5_Q3 = () => {
                           </Draggable>
                         )}
                         {provided.placeholder}
-                        {!locked && wrongInputs.includes(0) && (
+                        { wrongInputs.includes(0) && (
                           <span className="error-mark-input">✕</span>
                         )}
                       </div>
@@ -237,7 +237,7 @@ const Unit6_Page5_Q3 = () => {
                           </Draggable>
                         )}
                         {provided.placeholder}
-                        {!locked && wrongInputs.includes(1) && (
+                        { wrongInputs.includes(1) && (
                           <span className="error-mark-input">✕</span>
                         )}
                       </div>
@@ -281,7 +281,7 @@ const Unit6_Page5_Q3 = () => {
                           </Draggable>
                         )}
                         {provided.placeholder}
-                        {!locked && wrongInputs.includes(2) && (
+                        {wrongInputs.includes(2) && (
                           <span className="error-mark-input">✕</span>
                         )}
                       </div>
@@ -325,7 +325,7 @@ const Unit6_Page5_Q3 = () => {
                           </Draggable>
                         )}
                         {provided.placeholder}
-                        {!locked && wrongInputs.includes(3) && (
+                        {wrongInputs.includes(3) && (
                           <span className="error-mark-input">✕</span>
                         )}
                       </div>

@@ -62,7 +62,7 @@ const WB_Unit10_Page2_Q1 = () => {
     });
 
     setWrongInputs(wrong);
-
+   setLocked(true)
     const total = Object.keys(correctAnswers).length;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
@@ -137,7 +137,7 @@ const WB_Unit10_Page2_Q1 = () => {
                   }}
                 >
                   {wordBank.map((w, i) => (
-                    <Draggable key={w} draggableId={w} index={i}>
+                    <Draggable key={w} draggableId={w} index={i} isDragDisabled={locked}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
@@ -192,7 +192,7 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble question-bubble-wb-unit10-p2-q1">
                 Do{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                  <Droppable droppableId="q2_question">
+                  <Droppable droppableId="q2_question" isDropDisabled={locked}>
                     {(provided, snapshot) => (
                       <span
                         ref={provided.innerRef}
@@ -230,7 +230,7 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble answer-bubble-wb-unit10-p2-q1">
                 Yes,{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                  <Droppable droppableId="q2_answer">
+                  <Droppable droppableId="q2_answer" isDropDisabled={locked}>
                     {(provided, snapshot) => (
                       <span
                         ref={provided.innerRef}
@@ -266,7 +266,7 @@ const WB_Unit10_Page2_Q1 = () => {
 
               <div className="bubble question-bubble-wb-unit10-p2-q1">
                 <div style={{ position: "relative", display: "inline-block" }}>
-                  <Droppable droppableId="q3_question">
+                  <Droppable droppableId="q3_question" isDropDisabled={locked}>
                     {(provided, snapshot) => (
                       <span
                         ref={provided.innerRef}
@@ -304,7 +304,7 @@ const WB_Unit10_Page2_Q1 = () => {
               <div className="bubble answer-bubble-wb-unit10-p2-q1">
                 No,{" "}
                 <div style={{ position: "relative", display: "inline-block" }}>
-                  <Droppable droppableId="q3_answer">
+                  <Droppable droppableId="q3_answer" isDropDisabled={locked}>
                     {(provided, snapshot) => (
                       <span
                         ref={provided.innerRef}

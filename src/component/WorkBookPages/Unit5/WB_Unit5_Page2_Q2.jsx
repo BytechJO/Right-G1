@@ -180,7 +180,7 @@ const WB_Unit5_Page2_Q2 = () => {
                 }}
               >
                 {allWords.map((word, i) => (
-                  <Draggable draggableId={word} index={i} key={word}>
+                  <Draggable draggableId={word} index={i} key={word} isDragDisabled={locked}>
                     {(provided) => {
                       return (
                         <div
@@ -238,7 +238,7 @@ const WB_Unit5_Page2_Q2 = () => {
                         key={pIndex}
                         style={{ position: "relative", width: "100%" }}
                       >
-                        <Droppable droppableId={`blank-${qIndex}-${pIndex}`}>
+                        <Droppable droppableId={`blank-${qIndex}-${pIndex}`} isDropDisabled={locked}>
                           {(provided, snapshot) => (
                             <span
                               ref={provided.innerRef}

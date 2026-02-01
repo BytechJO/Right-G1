@@ -79,7 +79,7 @@ const WB_Unit7_Page5_Q1 = () => {
     });
 
     setShowResult(results);
-
+    setShowAnswer(true);
     // ❗ الخطوة 3: حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;

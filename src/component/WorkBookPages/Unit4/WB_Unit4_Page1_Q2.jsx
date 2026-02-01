@@ -112,14 +112,6 @@ const WB_Unit4_Page1_Q2 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
 
-  const handleChange = (value, qIndex, pIndex) => {
-    if (locked) return;
-
-    const copy = [...answers];
-    copy[qIndex][pIndex] = value.toLowerCase();
-    setAnswers(copy);
-    setWrongInputs([]);
-  };
 
   const checkAnswers = () => {
     if (locked) return;
@@ -243,6 +235,7 @@ const WB_Unit4_Page1_Q2 = () => {
                     draggableId={`word-${word}-${i}`}
                     index={i}
                     key={i}
+                    isDragDisabled={locked}
                   >
                     {(provided) => (
                       <span
@@ -316,7 +309,7 @@ const WB_Unit4_Page1_Q2 = () => {
 
                     return (
                       <span key={pIndex} style={{ position: "relative" }}>
-                        <Droppable droppableId={`blank-${qIndex}-${pIndex}`}>
+                        <Droppable droppableId={`blank-${qIndex}-${pIndex}`} isDropDisabled={locked}>
                           {(provided, snapshot) => (
                             <span
                               ref={provided.innerRef}

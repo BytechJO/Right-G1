@@ -215,6 +215,7 @@ const WB_Unit4_Page4_Q1 = () => {
                     key={word}
                     draggableId={`word-${word}`}
                     index={index}
+                    isDragDisabled={checked}
                   >
                     {(provided) => (
                       <div
@@ -306,7 +307,7 @@ const WB_Unit4_Page4_Q1 = () => {
             <div
               style={{ position: "absolute", top: 120, left: 90, width: 120 }}
             >
-              <Droppable droppableId="shape-triangle">
+              <Droppable droppableId="shape-triangle" isDropDisabled={checked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -346,7 +347,7 @@ const WB_Unit4_Page4_Q1 = () => {
             <div
               style={{ position: "absolute", top: 305, left: 90, width: 120 }}
             >
-              <Droppable droppableId="shape-house">
+              <Droppable droppableId="shape-house" isDropDisabled={checked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -386,7 +387,7 @@ const WB_Unit4_Page4_Q1 = () => {
             <div
               style={{ position: "absolute", top: 240, left: 185, width: 80 }}
             >
-              <Droppable droppableId="shape-circle1">
+              <Droppable droppableId="shape-circle1" isDropDisabled={checked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -425,7 +426,7 @@ const WB_Unit4_Page4_Q1 = () => {
             <div
               style={{ position: "absolute", top: 240, left: 35, width: 80 }}
             >
-              <Droppable droppableId="shape-circle2">
+              <Droppable droppableId="shape-circle2" isDropDisabled={checked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -470,7 +471,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 width: 100,
               }}
             >
-              <Droppable droppableId="shape-door">
+              <Droppable droppableId="shape-door" isDropDisabled={checked}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}

@@ -60,21 +60,7 @@ const WB_Unit6_Page2_Q1 = () => {
     });
   };
 
-  /* ================= HANDLE CHANGE ================= */
 
-  const handleChange = (qId, word, value) => {
-    if (locked || checked) return;
-
-    if (!/^[1-5]?$/.test(value)) return;
-
-    setAnswers((prev) => ({
-      ...prev,
-      [qId]: {
-        ...prev[qId],
-        [word]: value,
-      },
-    }));
-  };
   const TOTAL_WORDS = questions.reduce((sum, q) => sum + q.words.length, 0);
   /* ================= CHECK ANSWER ================= */
   const checkAnswer = () => {
@@ -213,7 +199,7 @@ const WB_Unit6_Page2_Q1 = () => {
                 }}
               >
                 {[1, 2, 3, 4, 5].map((num, i) => (
-                  <Draggable draggableId={`num-${num}`} index={i} key={num}>
+                  <Draggable draggableId={`num-${num}`} index={i} key={num}  isDragDisabled={locked}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
@@ -249,7 +235,7 @@ const WB_Unit6_Page2_Q1 = () => {
                   {q.words.map((word) => (
                     <div key={word} className="wb-unit6-p2-q1-word-box">
                       <span className="wb-unit6-p2-q1-word-text">{word}</span>
-                      <Droppable droppableId={`q-${q.id}-${word}`}>
+                      <Droppable droppableId={`q-${q.id}-${word}`} isDropDisabled={locked}>
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}

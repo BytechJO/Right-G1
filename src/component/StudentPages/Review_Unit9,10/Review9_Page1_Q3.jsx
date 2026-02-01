@@ -68,7 +68,7 @@ const Review9_Page1_Q3 = () => {
     });
 
     setResults(temp);
-
+    setShowAnswer(true);
     if (Object.values(temp).includes("empty")) {
       ValidationAlert.info("Please answer all questions!");
       return;
@@ -98,7 +98,7 @@ const Review9_Page1_Q3 = () => {
 
     questions.forEach((q) => {
       const correctIndex = q.items.findIndex(
-        (item) => item.correct.toLowerCase() === "✓"
+        (item) => item.correct.toLowerCase() === "✓",
       );
       correctAnswers[q.id] = correctIndex;
     });
@@ -144,7 +144,6 @@ const Review9_Page1_Q3 = () => {
                       justifyContent: "space-between",
                       alignItems: "center",
                       // width:"100%",
-
                     }}
                   >
                     <div
@@ -165,54 +164,58 @@ const Review9_Page1_Q3 = () => {
                         <input
                           className="input-text-field"
                           style={{
-                          
                             border: "2px solid black",
                             fontSize: "18px",
-                            borderRadius:"8px"
-                         
+                            borderRadius: "8px",
                           }}
                           value={q.text}
                         />
                       </div>{" "}
                     </div>
-                   
+
                     {/* <span className="Unit5-P6-Q3-text">{q.text}</span> */}
                   </div>
-                  <div style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "center",
-                      }}> 
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <img src={q.image} alt="" className="review9-p1-q3-img" />
                     <div>
-                    {q.items.map((item, idx) => {
-                      const isSelected = answers[q.id] === idx;
-                      const isWrong = results[q.id] === "wrong" && isSelected;
+                      {q.items.map((item, idx) => {
+                        const isSelected = answers[q.id] === idx;
+                        const isWrong = results[q.id] === "wrong" && isSelected;
 
-                      return (
-                        <div key={idx} className="review3-p1-q3-row">
-                          <span className="review9-p1-q3-text">{item.text}</span>
+                        return (
+                          <div key={idx} className="review3-p1-q3-row">
+                            <span className="review9-p1-q3-text">
+                              {item.text}
+                            </span>
 
-                          <div className="review3-p1-q3-input-box">
-                            <input
-                              type="text"
-                              readOnly
-                              value={isSelected ? "✓" : ""}
-                              onFocus={() => handleSelect(q.id, idx)}
-                              className={`review3-p1-q3-input`}
-                              disabled={showAnswer}
-                              style={{
-                                cursor: showAnswer ? "not-allowed" : "pointer",
-                              }}
-                            />
+                            <div className="review3-p1-q3-input-box">
+                              <input
+                                type="text"
+                                readOnly
+                                value={isSelected ? "✓" : ""}
+                                onFocus={() => handleSelect(q.id, idx)}
+                                className={`review3-p1-q3-input`}
+                                disabled={showAnswer}
+                                style={{
+                                  cursor: showAnswer
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                              />
 
-                            {!showAnswer && isWrong && (
-                              <span className="review3-p1-q3-x">✕</span>
-                            )}
+                              { isWrong && (
+                                <span className="review3-p1-q3-x">✕</span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

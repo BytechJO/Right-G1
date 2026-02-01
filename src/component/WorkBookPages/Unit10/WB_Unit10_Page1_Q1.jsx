@@ -193,6 +193,7 @@ const WB_Unit10_Page1_Q1 = () => {
                               key={`${q.id}-${word}-${i}`}
                               draggableId={`${q.id}-${word}-${i}`}
                               index={i}
+                              isDragDisabled={locked}
                             >
                               {(provided) => (
                                 <div
@@ -224,6 +225,7 @@ const WB_Unit10_Page1_Q1 = () => {
                     <Droppable
                       droppableId={`drop-${q.id}`}
                       direction="horizontal"
+                      isDropDisabled={locked}
                     >
                       {(provided, snapshot) => (
                         <div

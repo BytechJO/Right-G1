@@ -76,9 +76,7 @@ const Unit5_Page6_Q1 = () => {
     });
 
     setWrongWords(wrong);
-
-    console.log(correctCount);
-    console.log(wrongWords);
+   setShowAnswer(true)
     const total = correctMatches.length;
     // تحديد اللون حسب النتيجة
     const color =

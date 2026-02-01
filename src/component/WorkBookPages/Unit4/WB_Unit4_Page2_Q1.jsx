@@ -97,7 +97,7 @@ const WB_Unit4_Page2_Q1 = () => {
       .filter((v) => v !== null);
 
     setWrongInputs(wrong);
-
+setShowAnswer(true)
     const correctCount = results.filter(Boolean).length;
     const wrongCount = results.length - correctCount;
 
@@ -245,7 +245,7 @@ const WB_Unit4_Page2_Q1 = () => {
                 }}
               >
                 {wordBank.map((word, i) => (
-                  <Draggable draggableId={`word-${word}`} index={i} key={word}>
+                  <Draggable draggableId={`word-${word}`} index={i} key={word} isDragDisabled={showAnswer}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
@@ -361,7 +361,7 @@ const WB_Unit4_Page2_Q1 = () => {
                 </div>
                 <div className="sentence-box-wb-unit4-p2-q1">
                   {q.type === "full" && (
-                    <Droppable droppableId={`blank-q${q.id}`}>
+                    <Droppable droppableId={`blank-q${q.id}`} isDropDisabled={showAnswer}>
                       {(provided, snapshot) => (
                         <span
                           ref={provided.innerRef}
@@ -401,7 +401,7 @@ const WB_Unit4_Page2_Q1 = () => {
 
                   {q.type === "word" && (
                     <p className="answer-line-unit7-p2-q3">
-                      <Droppable droppableId={`blank-q${q.id}`}>
+                      <Droppable droppableId={`blank-q${q.id}`} isDropDisabled={showAnswer}>
                         {(provided, snapshot) => (
                           <span
                             ref={provided.innerRef}

@@ -184,7 +184,7 @@ const WB_Unit3_Page6_Q3 = () => {
                 }}
               >
                 {wordBank.map((word, i) => (
-                  <Draggable key={word} draggableId={word} index={i}>
+                  <Draggable key={word} draggableId={word} index={i} isDragDisabled={locked}>
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
@@ -223,7 +223,7 @@ const WB_Unit3_Page6_Q3 = () => {
                     <img src={p.middleImg} className="middle-img" alt="" />
                     {p.before}
                     <div className="input-wrapper-wb-unit3-p6-q3">
-                      <Droppable droppableId={`blank-${blankIndex}`}>
+                      <Droppable droppableId={`blank-${blankIndex}`} isDropDisabled={locked}>
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}

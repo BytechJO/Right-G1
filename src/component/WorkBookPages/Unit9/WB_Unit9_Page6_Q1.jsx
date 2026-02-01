@@ -71,7 +71,7 @@ const WB_Unit9_Page6_Q1 = () => {
     });
 
     setWrongInputs(wrongFlags);
-
+    setShowAnswer(true);
     const total = data.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -87,15 +87,6 @@ const WB_Unit9_Page6_Q1 = () => {
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
-  };
-
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-
-    const updated = [...inputs];
-    updated[index] = value;
-    setInputs(updated);
-    setWrongInputs(Array(data.length).fill(false));
   };
 
   const handleShowAnswer = () => {
@@ -155,7 +146,12 @@ const WB_Unit9_Page6_Q1 = () => {
                   }}
                 >
                   {letterBank.map((l, i) => (
-                    <Draggable key={l} draggableId={l} index={i}>
+                    <Draggable
+                      key={l}
+                      draggableId={l}
+                      index={i}
+                      isDragDisabled={showAnswer}
+                    >
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
@@ -201,7 +197,10 @@ const WB_Unit9_Page6_Q1 = () => {
                     </span>
 
                     <div className="input-wrapper">
-                      <Droppable droppableId={`${index}`}>
+                      <Droppable
+                        droppableId={`${index}`}
+                        isDropDisabled={showAnswer}
+                      >
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
@@ -223,7 +222,7 @@ const WB_Unit9_Page6_Q1 = () => {
                             {inputs[index]}
                             {provided.placeholder}
 
-                            {wrongInputs[index] && !showAnswer && (
+                            {wrongInputs[index] && (
                               <div className="error-icon">✕</div>
                             )}
                           </div>

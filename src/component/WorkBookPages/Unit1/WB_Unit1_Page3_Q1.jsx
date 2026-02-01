@@ -28,19 +28,19 @@ const WB_Unit1_Page3_Q1 = () => {
 
     const word = draggableId.split("-").slice(1, -1).join("-");
 
-  setInputs((prev) =>
-  prev.map((v, i) => {
-    if (i !== destIndex) return v;
+    setInputs((prev) =>
+      prev.map((v, i) => {
+        if (i !== destIndex) return v;
 
-    // تقسيم الجملة الحالية لكلمات
-    const currentWords = v.trim() ? v.trim().split(/\s+/) : [];
+        // تقسيم الجملة الحالية لكلمات
+        const currentWords = v.trim() ? v.trim().split(/\s+/) : [];
 
-    // ❌ منع تكرار نفس الكلمة
-    if (currentWords.includes(word)) return v;
+        // ❌ منع تكرار نفس الكلمة
+        if (currentWords.includes(word)) return v;
 
-    return currentWords.length ? `${v} ${word}` : word;
-  }),
-);
+        return currentWords.length ? `${v} ${word}` : word;
+      }),
+    );
 
     setWrong(data.map(() => false));
   };
@@ -48,7 +48,17 @@ const WB_Unit1_Page3_Q1 = () => {
   const checkAnswers = () => {
     if (showAnswer) return;
 
-    // تجاهل أول إنبوت (index === 0) عند التحقق من المدخلات الفارغة
+    let correct = 0;
+
+    const wrongStatus = inputs.map((v, i) => {
+      if (v.trim() === "") return false; // تجاهل الفارغ
+      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
+      if (ok) correct++;
+      return !ok;
+    });
+
+    setWrong(wrongStatus);
+
     if (inputs.some((v) => v.trim() === "")) {
       ValidationAlert.info(
         "Oops!",
@@ -57,21 +67,11 @@ const WB_Unit1_Page3_Q1 = () => {
       return;
     }
 
-    let correct = 0;
+    const total = data.length;
+    const color =
+      correct === total ? "green" : correct === 0 ? "red" : "orange";
 
-    const wrongStatus = inputs.map((v, i) => {
-      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
-      if (ok) correct++;
-      return !ok;
-    });
-
-    setWrong(wrongStatus);
-
-    const total = data.length; // لأننا حذفنا السؤال الأول من السكور
-
-    let color = correct === total ? "green" : correct === 0 ? "red" : "orange";
-
-    let msg = `
+    const msg = `
     <div style="font-size:20px; text-align:center;">
       <span style="color:${color}; font-weight:bold;">
         Score: ${correct} / ${total}
@@ -136,7 +136,7 @@ const WB_Unit1_Page3_Q1 = () => {
                           border: "2px dashed #ccc",
                           borderRadius: "10px",
                           // margin: "10px 0",
-                          alignItems:"center"
+                          alignItems: "center",
                         }}
                       >
                         {words.map((word, index) => (
@@ -174,19 +174,23 @@ const WB_Unit1_Page3_Q1 = () => {
                 {/* مكان الجواب */}
                 <Droppable droppableId={`blank-${i}`}>
                   {(provided, snapshot) => (
-                    <input
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`missing-input-wb-unit1-p3-q1 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
-                      value={showAnswer ? item.answer : inputs[i]}
-                      readOnly
-                    />
+                    <div style={{position:"relative"}}>
+                      <input
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`missing-input-wb-unit1-p3-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                        value={showAnswer ? item.answer : inputs[i]}
+                        readOnly
+                      />
+
+                      {wrong[i] && (
+                        <div className="wrong-icon-wb-unit1-p3-q1">✕</div>
+                      )}
+                    </div>
                   )}
                 </Droppable>
-
-                {wrong[i] && <div className="wrong-icon-wb-unit1-p3-q1">✕</div>}
               </div>
             );
           })}

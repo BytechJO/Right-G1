@@ -52,7 +52,7 @@ const WB_Unit8_Page1_Q1 = () => {
     });
 
     setShowResult(results);
-
+setShowAnswer(true)
     // ❗ الخطوة 3: حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;
@@ -146,7 +146,7 @@ const WB_Unit8_Page1_Q1 = () => {
                 }}
               >
                 {["1", "2", "3", "4"].map((num, index) => (
-                  <Draggable draggableId={num} index={index} key={num}>
+                  <Draggable draggableId={num} index={index} key={num} isDragDisabled={showAnswer}>
                     {(provided) => (
                       <div className="sentence-container-wb-unit8-p1-q1">
                         <div
@@ -189,7 +189,7 @@ const WB_Unit8_Page1_Q1 = () => {
 
                 {/* إدخال الإجابة */}
                 <div className="wb-unit8-p1-q1-input-wrapper">
-                  <Droppable droppableId={`drop-${index}`}>
+                  <Droppable droppableId={`drop-${index}`} isDropDisabled={showAnswer}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}

@@ -71,7 +71,7 @@ const WB_Unit8_Page5_Q1 = () => {
     });
 
     setShowResult(results);
-
+    setShowAnswer(true);
     // ❗ الخطوة 3: حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;
@@ -130,12 +130,12 @@ const WB_Unit8_Page5_Q1 = () => {
               <img src={img1} alt="boy" style={{ height: "300px" }} />
 
               {/* inputs فوق الصورة */}
-              <Droppable droppableId="0">
+              <Droppable droppableId="0" isDropDisabled={showAnswer}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                   className={`number-input ${
+                    className={`number-input ${
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
@@ -153,12 +153,12 @@ const WB_Unit8_Page5_Q1 = () => {
                 )}
               </Droppable>
 
-              <Droppable droppableId="1">
+              <Droppable droppableId="1" isDropDisabled={showAnswer}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                   className={`number-input ${
+                    className={`number-input ${
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
@@ -176,7 +176,7 @@ const WB_Unit8_Page5_Q1 = () => {
                 )}
               </Droppable>
 
-              <Droppable droppableId="2">
+              <Droppable droppableId="2" isDropDisabled={showAnswer}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -207,7 +207,7 @@ const WB_Unit8_Page5_Q1 = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                 className={`number-input ${
+                    className={`number-input ${
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
@@ -225,7 +225,7 @@ const WB_Unit8_Page5_Q1 = () => {
                 )}
               </Droppable>
 
-              <Droppable droppableId="4">
+              <Droppable droppableId="4" isDropDisabled={showAnswer}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -257,7 +257,12 @@ const WB_Unit8_Page5_Q1 = () => {
                 className="word-container-wb-unit8-p5-q1"
               >
                 {numberBank.map((n, i) => (
-                  <Draggable key={n} draggableId={n} index={i}>
+                  <Draggable
+                    key={n}
+                    draggableId={n}
+                    index={i}
+                    isDragDisabled={showAnswer}
+                  >
                     {(provided) => (
                       <div className="sentence-container-wb-unit8-p5-q1">
                         <div

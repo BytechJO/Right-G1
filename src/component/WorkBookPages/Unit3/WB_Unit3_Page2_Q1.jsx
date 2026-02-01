@@ -187,6 +187,7 @@ const WB_Unit3_Page2_Q1 = () => {
                               key={`${q.id}-${word}-${i}`}
                               draggableId={`${q.id}-${word}-${i}`}
                               index={i}
+                              isDragDisabled={locked}
                             >
                               {(provided) => (
                                 <span
@@ -222,7 +223,7 @@ const WB_Unit3_Page2_Q1 = () => {
                       width: "45%",
                     }}
                   >
-                    <Droppable droppableId={`blank-${q.id}_question`}>
+                    <Droppable droppableId={`blank-${q.id}_question`} isDropDisabled={locked}>
                       {(provided, snapshot) => (
                         <input
                           ref={provided.innerRef}

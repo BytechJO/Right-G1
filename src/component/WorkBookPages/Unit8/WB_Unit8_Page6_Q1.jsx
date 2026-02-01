@@ -72,7 +72,7 @@ const WB_Unit8_Page6_Q1 = () => {
     });
 
     setWrongInputs(wrongFlags);
-
+    setShowAnswer(true)
     const total = data.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -148,7 +148,7 @@ const WB_Unit8_Page6_Q1 = () => {
                   }}
                 >
                   {lettersBank.map((l, i) => (
-                    <Draggable key={l.id} draggableId={l.value} index={i}>
+                    <Draggable key={l.id} draggableId={l.value} index={i} isDragDisabled={showAnswer}>
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
@@ -190,7 +190,7 @@ const WB_Unit8_Page6_Q1 = () => {
                     </span>
 
                     <div className="input-wrapper">
-                      <Droppable droppableId={String(index)}>
+                      <Droppable droppableId={String(index)} isDropDisabled={showAnswer}>
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
@@ -213,7 +213,7 @@ const WB_Unit8_Page6_Q1 = () => {
                       </Droppable>
 
                       {/* ❌ علامة الخطأ */}
-                      {wrongInputs[index] && !showAnswer && (
+                      {wrongInputs[index] &&(
                         <div className="error-icon">✕</div>
                       )}
                     </div>

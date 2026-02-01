@@ -68,7 +68,7 @@ const WB_Unit9_Page4_Q2 = () => {
     });
 
     setWrongInputs(wrong);
-
+    setShowAnswer(true);
     let color =
       correctCount === data.length
         ? "green"
@@ -143,7 +143,12 @@ const WB_Unit9_Page4_Q2 = () => {
                   }}
                 >
                   {wordBank.map((w, i) => (
-                    <Draggable key={w.id} draggableId={w.text} index={i} isDragDisabled={showAnswer}>
+                    <Draggable
+                      key={w.id}
+                      draggableId={w.text}
+                      index={i}
+                      isDragDisabled={showAnswer}
+                    >
                       {(provided) => (
                         <div
                           ref={provided.innerRef}
@@ -196,16 +201,19 @@ const WB_Unit9_Page4_Q2 = () => {
 
                     <div
                       className="question-text"
-                      style={{ position: "relative",width:"100%"}}
+                      style={{ position: "relative", width: "100%" }}
                     >
-                      <Droppable droppableId={`${index}`} isDropDisabled={showAnswer}>
+                      <Droppable
+                        droppableId={`${index}`}
+                        isDropDisabled={showAnswer}
+                      >
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             className={`q-input-wb-unit9-p4-q2 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                             style={{
                               background: snapshot.isDraggingOver
                                 ? "#e3f2fd"

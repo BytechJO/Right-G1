@@ -187,6 +187,7 @@ const Review6_Page2_Q1 = () => {
       ValidationAlert.warning(scoreMessage);
     }
     setShowResult(true);
+     setLocked(true);
   };
   const handleSelect = (qId, index) => {
     if (locked) return; // 🔒 منع التعديل بعد رؤية الحل
@@ -385,7 +386,7 @@ const Review6_Page2_Q1 = () => {
                     >
                       {/* X عند الغلط */}
                       {showResult &&
-                        !locked &&
+                     
                         selected[question.id] === index &&
                         opt.answer === false && (
                           <span className="wrong-x-circle-review6-p2-q1">

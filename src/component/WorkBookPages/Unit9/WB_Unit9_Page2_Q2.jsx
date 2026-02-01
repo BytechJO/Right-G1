@@ -232,7 +232,7 @@ const WB_Unit9_Page2_Q2 = () => {
                             }}
                           >
                             {scrambledWords[1].map((w, i) => (
-                              <Draggable key={w} draggableId={w} index={i}>
+                              <Draggable key={w} draggableId={w} index={i} isDragDisabled={locked}>
                                 {(provided) => (
                                   <span
                                     ref={provided.innerRef}
@@ -271,7 +271,7 @@ const WB_Unit9_Page2_Q2 = () => {
                     </div>
                   </div>
 
-                  <Droppable droppableId="drop-1" direction="horizontal">
+                  <Droppable droppableId="drop-1" direction="horizontal" isDropDisabled={locked}>
                     {(provided ,snapshot) => (
                       <div
                         ref={provided.innerRef}
@@ -338,7 +338,7 @@ const WB_Unit9_Page2_Q2 = () => {
                         <span className="error-mark-review3-p1-q2">✕</span>
                       )}
 
-                      <Droppable droppableId="bank-2" direction="horizontal">
+                      <Droppable droppableId="bank-2" direction="horizontal" isDropDisabled={locked}>
                         {(provided ,snapshot) => (
                           <div
                             ref={provided.innerRef}

@@ -74,18 +74,10 @@ const WB_Unit8_Page6_Q3 = () => {
   };
 
   const handleSelect = (value, index) => {
-    if (locked) return; // 🔒 لا تعديل بعد show answer
+      if (locked || showResult) return;
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
-    setShowResult(false);
-  };
-
-  const handleInput = (value, index) => {
-    if (locked || showResult) return; // 🔒 لا تعديل بعد show answer
-    const newAns = [...answers];
-    newAns[index] = value;
-    setAnswers(newAns);
     setShowResult(false);
   };
 
@@ -203,7 +195,7 @@ const WB_Unit8_Page6_Q3 = () => {
                     key={w.id}
                     draggableId={w.id}
                     index={i}
-                    isDragDisabled={locked}
+                    isDragDisabled={locked ||showResult}
                   >
                     {(provided) => (
                       <div
@@ -274,7 +266,7 @@ const WB_Unit8_Page6_Q3 = () => {
                 {/* writing input */}
                 <div className="input-wrapper-unit6-p6-q2">
                   {item.input}
-                  <Droppable droppableId={`${i}`} isDropDisabled={locked}>
+                  <Droppable droppableId={`${i}`} isDropDisabled={locked||showResult}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}

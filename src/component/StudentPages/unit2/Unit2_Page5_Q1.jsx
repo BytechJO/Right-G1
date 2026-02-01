@@ -82,7 +82,7 @@ const Unit2_Page5_Q1 = () => {
   const handleShowAnswer = () => {
     let correctAnswers = exerciseData.map((row) => {
       return row.options.findIndex((opt) =>
-        opt.word.toLowerCase().startsWith(row.letter)
+        opt.word.toLowerCase().startsWith(row.letter),
       );
     });
 
@@ -98,10 +98,11 @@ const Unit2_Page5_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
-      <div   className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -145,15 +146,13 @@ const Unit2_Page5_Q1 = () => {
                     cursor: "pointer",
                   }}
                   onClick={() => {
-                    if (showAnswer) return; // ❌ يمنع التعديل بعد Show Answer
+                    if (showAnswer || results[rowIndex] !== null) return;
 
                     setAnswers((prev) => {
                       const updated = [...prev];
                       updated[rowIndex] = optIndex;
                       return updated;
                     });
-
-                    setResults(Array(exerciseData.length).fill(null));
                   }}
                 >
                   <img

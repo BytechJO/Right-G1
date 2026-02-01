@@ -145,7 +145,7 @@ const Review7_Page2_Q1 = () => {
             D Does it begin with <span style={{ color: "red" }}>h </span>or{" "}
             <span style={{ color: "red" }}>w</span>? Look, circle, and write.
           </h5>
-          <Droppable droppableId="bank" isDropDisabled={showCorrect}>
+          <Droppable droppableId="bank" isDropDisabled={showResult}>
             {(provided) => (
               <div
                 ref={provided.innerRef}
@@ -165,7 +165,7 @@ const Review7_Page2_Q1 = () => {
                     key={item.correctInput}
                     draggableId={`word-${item.correctInput}`}
                     index={index}
-                    isDragDisabled={showCorrect}
+                    isDragDisabled={showResult}
                   >
                     {(provided) => (
                       <span
@@ -240,7 +240,7 @@ const Review7_Page2_Q1 = () => {
                 <div className="input-wrapper">
                   <Droppable
                     droppableId={`slot-${i}`}
-                    isDropDisabled={showCorrect}
+                    isDropDisabled={showResult}
                   >
                     {(provided, snapshot) => (
                       <div

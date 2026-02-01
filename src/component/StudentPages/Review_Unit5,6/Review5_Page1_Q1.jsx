@@ -90,9 +90,8 @@ const Review5_Page1_Q1 = () => {
     });
 
     setWrongWords(wrong);
+    setLocked(true)
 
-    console.log(correctCount);
-    console.log(wrongWords);
     const total = correctMatches.length;
     // تحديد اللون حسب النتيجة
     const color =

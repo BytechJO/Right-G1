@@ -16,7 +16,8 @@ const Review5_Page2_Q1 = () => {
   ];
 
   const [selected, setSelected] = useState(["", "", "", ""]);
-  const [answers, setAnswers] = useState([null, null, null, null]);
+const [answers, setAnswers] = useState(["", "", "", ""]);
+
 
   const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
@@ -48,7 +49,8 @@ const Review5_Page2_Q1 = () => {
 
   const resetAll = () => {
     setSelected(["", "", "", ""]);
-    setAnswers([null, null, null, null]);
+setAnswers(["", "", "", ""]);
+
     setWrongInputs([]);
     setShowResult(false);
     setLocked(false); // ← مهم جدًا
@@ -77,7 +79,7 @@ const Review5_Page2_Q1 = () => {
     }
 
     // 2) التشييك إذا في input فاضي
-    if (answers.some((a) => a.trim() === "")) {
+    if (answers.some((a) => a === "")) {
       ValidationAlert.info("Please fill in all the writing boxes!");
       return;
     }
@@ -100,7 +102,7 @@ const Review5_Page2_Q1 = () => {
 
     setWrongInputs(wrong);
     setShowResult(true);
-
+    setLocked(true);
     const total = items.length * 2; // 8 نقاط
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
@@ -223,8 +225,8 @@ const Review5_Page2_Q1 = () => {
                     </div>
 
                     {/* X فوق دائرة f إذا كانت غلط */}
-                    {!locked &&
-                      showResult &&
+                    {
+                      locked && showResult &&
                       selected[i] === "g" &&
                       selected[i] !== item.correct && (
                         <div className="wrong-mark">✕</div>
@@ -242,8 +244,8 @@ const Review5_Page2_Q1 = () => {
                     </div>
 
                     {/* X فوق دائرة v إذا كانت غلط */}
-                    {!locked &&
-                      showResult &&
+                    {
+                       locked && showResult &&
                       selected[i] === "k" &&
                       selected[i] !== item.correct && (
                         <div className="wrong-mark">✕</div>
@@ -284,9 +286,10 @@ const Review5_Page2_Q1 = () => {
                     )}
                   </Droppable>
 
-                  {!locked && showResult && (
-                    <div className="wrong-mark-review5-p2-q1">✕</div>
-                  )}
+                 {locked && showResult && wrongInputs.includes(i) && (
+  <div className="wrong-mark-review5-p2-q1">✕</div>
+)}
+
                   <span className="rest-word">
                     {item.correctInput.slice(1)}
                   </span>

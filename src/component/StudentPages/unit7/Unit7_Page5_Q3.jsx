@@ -35,14 +35,6 @@ const Unit7_Page5_Q3 = () => {
     setWrongInputs([]);
   };
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
-
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
 
   const checkAnswers = () => {
     if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
@@ -64,7 +56,7 @@ const Unit7_Page5_Q3 = () => {
     });
 
     setWrongInputs(wrong);
-
+setShowAnswer(true)
     const total = correctAnswers.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -207,7 +199,7 @@ const Unit7_Page5_Q3 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(0) && !showAnswer && (
+                {wrongInputs.includes(0) && (
                   <span className="error-mark-input">✕</span>
                 )}
               </div>
@@ -248,7 +240,7 @@ const Unit7_Page5_Q3 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(1) && !showAnswer && (
+                {wrongInputs.includes(1)  && (
                   <span className="error-mark-input">✕</span>
                 )}
               </div>
@@ -289,7 +281,7 @@ const Unit7_Page5_Q3 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(2) && !showAnswer && (
+                {wrongInputs.includes(2)  && (
                   <span className="error-mark-input">✕</span>
                 )}
               </div>

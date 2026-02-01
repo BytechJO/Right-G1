@@ -84,7 +84,7 @@ const Unit7_Page6_Q3 = () => {
       .filter((v) => v !== null);
 
     setWrongInputs(wrong);
-
+    setShowAnswer(true);
     const correctCount = results.filter(Boolean).length;
     const wrongCount = results.length - correctCount;
 
@@ -168,7 +168,9 @@ const Unit7_Page6_Q3 = () => {
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   // margin: "10px 0",
-                  alignItems: "center",justifyContent:"center",width:"100%"
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
                 }}
               >
                 {Object.values(correctAnswers).map((word, index) => (

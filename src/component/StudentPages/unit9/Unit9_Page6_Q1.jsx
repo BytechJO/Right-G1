@@ -59,7 +59,7 @@ const Unit9_Page6_Q1 = () => {
     });
 
     setWrongInputs(wrong);
-
+    setShowAnswer(true);
     const total = correctAnswers.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -231,7 +231,7 @@ const Unit9_Page6_Q1 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(0) && !showAnswer && (
+                {wrongInputs.includes(0) &&  (
                   <span className="error-mark-input-review8-p1-q2">✕</span>
                 )}
               </div>
@@ -300,7 +300,7 @@ const Unit9_Page6_Q1 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(1) && !showAnswer && (
+                {wrongInputs.includes(1) && (
                   <span className="error-mark-input-review8-p1-q2">✕</span>
                 )}
               </div>
@@ -369,7 +369,7 @@ const Unit9_Page6_Q1 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(2) && !showAnswer && (
+                {wrongInputs.includes(2) && (
                   <span className="error-mark-input-review8-p1-q2">✕</span>
                 )}
               </div>
@@ -427,7 +427,7 @@ const Unit9_Page6_Q1 = () => {
                   )}
                 </Droppable>
 
-                {wrongInputs.includes(3) && !showAnswer && (
+                {wrongInputs.includes(3) &&(
                   <span className="error-mark-input-review8-p1-q2">✕</span>
                 )}
               </div>

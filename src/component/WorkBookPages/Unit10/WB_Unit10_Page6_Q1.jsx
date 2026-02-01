@@ -185,6 +185,7 @@ const handleShowAnswer = () => {
                                 key={`${index}-${ch}-${i}`}
                                 draggableId={`${index}-${ch}-${i}`}
                                 index={i}
+                                isDragDisabled={showAnswer}
                               >
                                 {(provided) => (
                                   <div
@@ -219,6 +220,7 @@ const handleShowAnswer = () => {
                       <Droppable
                         droppableId={`drop-${index}`}
                         direction="horizontal"
+                        isDropDisabled={showAnswer}
                       >
                         {(provided, snapshot) => (
                           <div

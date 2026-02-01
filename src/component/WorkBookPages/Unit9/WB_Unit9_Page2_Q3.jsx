@@ -80,7 +80,7 @@ const WB_Unit9_Page2_Q3 = () => {
     });
 
     setShowResult(results);
-
+setShowAnswer(true)
     // ❗ الخطوة 3: حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;
@@ -207,7 +207,7 @@ const WB_Unit9_Page2_Q3 = () => {
 
                   {/* إدخال الإجابة */}
                   <div className="wb-unit9-p2-q3-input-wrapper">
-                    <Droppable droppableId={`drop-${index}`}>
+                    <Droppable droppableId={`drop-${index}`} isDropDisabled={showAnswer}>
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}

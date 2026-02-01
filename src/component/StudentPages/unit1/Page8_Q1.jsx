@@ -269,9 +269,10 @@ const reset = () => {
   const score = correctLetters + correctNumbers;
 
   // 3️⃣ تحديد الغلط
-  const letterWrongs = data.map(
-    (item, i) => answers.letters[i]?.split("-")[1] !== item.missing,
-  );
+const letterWrongs = data.map(
+  (item, i) => answers.letters[i] !== item.missing
+);
+
 
   const numberWrongs = data.map(
     (item, i) => answers.numbers[i]?.split("-")[1] !== item.num,

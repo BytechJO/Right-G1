@@ -41,23 +41,6 @@ export default function WB_Unit4_Page6_Q2() {
     setWrong((prev) => prev.filter((w) => w !== word));
   };
 
-  const handleInputChange = (col, index, value) => {
-    if (showAnswer) return;
-
-    const cleaned = value.toLowerCase();
-
-    if (col === "f") {
-      const updated = [...columnD];
-      updated[index] = cleaned;
-      setColumnD(updated);
-    } else {
-      const updated = [...columnT];
-      updated[index] = cleaned;
-      setColumnT(updated);
-    }
-
-    setWrong((prev) => prev.filter((w) => w !== cleaned));
-  };
 
   const checkAnswers = () => {
     if (showAnswer) return;
@@ -83,7 +66,7 @@ export default function WB_Unit4_Page6_Q2() {
     });
 
     setWrong(wrongWords);
-
+setShowAnswer(true)
     const total = correctWords.length;
     const correctCount = total - wrongWords.length;
 
@@ -142,7 +125,7 @@ export default function WB_Unit4_Page6_Q2() {
                 }}
               >
                 {correctWords.map((word, i) => (
-                  <Draggable draggableId={word} index={i} key={word}>
+                  <Draggable draggableId={word} index={i} key={word} isDragDisabled={showAnswer}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
@@ -195,7 +178,7 @@ export default function WB_Unit4_Page6_Q2() {
                   {[0, 1, 2].map((row, i) => (
                     <tr key={i}>
                       <td style={{ position: "relative" }}>
-                        <Droppable droppableId={`f-${i}`}>
+                        <Droppable droppableId={`f-${i}`} isDropDisabled={showAnswer}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
@@ -229,7 +212,7 @@ export default function WB_Unit4_Page6_Q2() {
                       </td>
 
                       <td style={{ position: "relative" }}>
-                        <Droppable droppableId={`v-${i}`}>
+                        <Droppable droppableId={`v-${i}`} isDropDisabled={showAnswer}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}

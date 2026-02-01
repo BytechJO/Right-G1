@@ -199,6 +199,7 @@ const WB_Unit10_Page1_Q2 = () => {
                     key={w.id}
                     draggableId={`${w.id}|${w.value}`}
                     index={i}
+                    isDragDisabled={locked}
                   >
                     {(provided) => (
                       <div
@@ -245,7 +246,7 @@ const WB_Unit10_Page1_Q2 = () => {
 
                     return (
                       <span key={pIndex} style={{ position: "relative" }}>
-                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`}>
+                        <Droppable droppableId={`drop-${qIndex}-${pIndex}`} isDropDisabled={locked}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}

@@ -86,22 +86,22 @@ width: 38px;
 }
 
 .error-circle {
-  width: 25px;
-  height: 25px;
-  border: 2px solid white;
-  background-color: red;
-  border-radius: 50%;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 8px;
-  vertical-align: middle;
-  position: absolute;
-  left: 28%;
-  top: 28%;
+    width: 25px;
+    height: 25px;
+    border: 2px solid white;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 8px;
+    vertical-align: middle;
+    position: absolute;
+    left: 50%;
+    top: -41%;
 }
 @media (max-width: 1024px) {
   .exercise-image-div-review3-p1-q1 {
