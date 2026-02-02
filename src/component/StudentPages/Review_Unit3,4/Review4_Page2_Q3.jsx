@@ -168,7 +168,7 @@ const Review4_Page2_Q3 = () => {
                     >
                       {word}
                       {showResult && isSelected && !isCorrect && (
-                        <span className="wrong-x-review4-p2-q3">X</span>
+                        <span className="wrong-x-review4-p2-q3">✕</span>
                       )}
                     </p>
                   );

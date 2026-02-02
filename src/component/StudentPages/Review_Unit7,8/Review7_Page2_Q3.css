@@ -5,6 +5,10 @@
   margin-top: 20px;
 }
 
+.gk-option.selected{
+  border-color: #4b74ff;
+  border-radius: 50%;
+}
 .wrong-x {
   color: white;
   background: red;

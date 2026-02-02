@@ -7,7 +7,7 @@
   font-size: 14px;
   position: absolute;
   top: -8px;
-  right: -12px;
+    right:10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +24,7 @@
     padding: 5px 8px;
     /* border-radius: 6px; */
     font-size: 18px;
-    width: 200px;
+    width: 100%;
     text-align: center;
     vertical-align: middle;
     line-height: normal;

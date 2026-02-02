@@ -34,7 +34,7 @@ const WB_Unit5_Page6_Q3 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
@@ -42,7 +42,7 @@ const WB_Unit5_Page6_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;

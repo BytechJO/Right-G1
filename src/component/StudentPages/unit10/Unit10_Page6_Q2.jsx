@@ -345,7 +345,7 @@ const Unit10_Page6_Q2 = () => {
                               <Draggable
                                 draggableId={`filled-${answers[i][0]}-${i}-${0}`}
                                 index={0}
-                                isDragDisabled={showResult}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span
@@ -403,7 +403,7 @@ const Unit10_Page6_Q2 = () => {
                                 <Draggable
                                   draggableId={`filled-${answers[i][inputIndex]}-${i}-${inputIndex}`}
                                   index={0}
-                                  isDragDisabled={showResult}
+                                  isDragDisabled={true}
                                 >
                                   {(provided) => (
                                     <span

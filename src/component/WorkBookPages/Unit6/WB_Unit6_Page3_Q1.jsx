@@ -71,7 +71,7 @@ const WB_Unit6_Page3_Q1 = () => {
   /* ================= HANDLERS ================= */
 
   const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked) return;
+    if (locked ||showResult) return;
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -79,7 +79,7 @@ const WB_Unit6_Page3_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked ||showResult) return;
 
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {

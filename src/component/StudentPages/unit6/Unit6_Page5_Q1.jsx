@@ -378,7 +378,7 @@ const Unit6_Page5_Q1 = () => {
                     {!locked &&
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✓" && (
-                        <div className="unit6-p1-q1-wrong-icon">X</div>
+                        <div className="unit6-p1-q1-wrong-icon">✕</div>
                       )}
                   </div>
 
@@ -396,7 +396,7 @@ const Unit6_Page5_Q1 = () => {
                     {!locked &&
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✗" && (
-                        <div className="unit6-p1-q1-wrong-icon">X</div>
+                        <div className="unit6-p1-q1-wrong-icon">✕</div>
                       )}
                   </div>
                 </div>

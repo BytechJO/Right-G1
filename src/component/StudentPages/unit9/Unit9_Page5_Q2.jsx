@@ -340,7 +340,7 @@ const Unit9_Page5_Q2 = () => {
                         {...provided.droppableProps}
                         className={`q-input-unit3-page6-q1 ${
                           snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        } ${showAnswer ? "red-text" : ""}`}
+                        } `}
                       >
                         {answers[0] && (
                           <Draggable
@@ -385,7 +385,7 @@ const Unit9_Page5_Q2 = () => {
                         {...provided.droppableProps}
                         className={`q-input-unit3-page6-q1 ${
                           snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        } ${showAnswer ? "red-text" : ""}`}
+                        } `}
                       >
                         {answers[1] && (
                           <Draggable
@@ -430,7 +430,7 @@ const Unit9_Page5_Q2 = () => {
                         {...provided.droppableProps}
                         className={`q-input-unit3-page6-q1 ${
                           snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        } ${showAnswer ? "red-text" : ""}`}
+                        }`}
                       >
                         {answers[2] && (
                           <Draggable
@@ -475,7 +475,7 @@ const Unit9_Page5_Q2 = () => {
                         {...provided.droppableProps}
                         className={`q-input-unit3-page6-q1 ${
                           snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        } ${showAnswer ? "red-text" : ""}`}
+                        } `}
                       >
                         {answers[3] && (
                           <Draggable

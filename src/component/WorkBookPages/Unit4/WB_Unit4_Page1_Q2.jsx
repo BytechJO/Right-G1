@@ -83,9 +83,6 @@ const WB_Unit4_Page1_Q2 = () => {
   const [activePaletteIndex, setActivePaletteIndex] = useState(null);
 
   const [svgContent, setSvgContent] = useState({});
-  // const [svgImages, setSvgImages] = useState({});
-  // const [imageColors, setImageColors] = useState({});
-  // const [activePalette, setActivePalette] = useState(null);
 
   useEffect(() => {
     const loadSvgs = async () => {

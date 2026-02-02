@@ -83,7 +83,6 @@ const Review3_Page2_Q3 = () => {
     { start: 10.05, end: 12.19, text: "2. Lake. Hat." },
     { start: 12.21, end: 15.24, text: "3. Flag. Shape." },
     { start: 15.26, end: 19.09, text: "4. Cape. Fan." },
-
   ];
 
   // ================================
@@ -91,7 +90,7 @@ const Review3_Page2_Q3 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -159,7 +158,7 @@ const Review3_Page2_Q3 = () => {
     }
 
     const correctCount = answers.filter(
-      (selected, i) => items[i].items[selected]?.isShortA
+      (selected, i) => items[i].items[selected]?.isShortA,
     ).length;
     const total = items.length;
     const color =
@@ -189,7 +188,7 @@ const Review3_Page2_Q3 = () => {
   // ⭐⭐⭐ NEW — Show Answer
   const showAnswer = () => {
     const correctSelections = items.map((item) =>
-      item.items.findIndex((choice) => choice.isShortA)
+      item.items.findIndex((choice) => choice.isShortA),
     );
 
     setAnswers(correctSelections); // تحديد الإجابات الصحيحة
@@ -218,7 +217,8 @@ const Review3_Page2_Q3 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
@@ -386,9 +386,7 @@ const Review3_Page2_Q3 = () => {
                       onClick={() => handleSelect(index, chIndex)}
                     >
                       {choice.word}{" "}
-                      {showResult &&
-                      answers[index] === chIndex &&
-                      !choice.isShortA ? (
+                      {answers[index] === chIndex && !choice.isShortA ? (
                         <span className="review3-p2-q3-wrong-x">✕</span>
                       ) : (
                         ""

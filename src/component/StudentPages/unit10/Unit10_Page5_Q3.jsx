@@ -202,7 +202,7 @@ const Unit10_Page5_Q3 = () => {
                             <Draggable
                               draggableId={`filled-${answers[index]}-${index}`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span

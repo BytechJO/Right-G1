@@ -55,7 +55,7 @@ const WB_Unit5_Page1_Q2 = () => {
   // 🔵 3) الضغط على خيار
   // ===============================
   const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -66,7 +66,7 @@ const WB_Unit5_Page1_Q2 = () => {
   // 🔵 4) فحص الإجابات
   // ===============================
   const checkAnswers = () => {
-    if (locked) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     // تحقق إذا الطالب ما اختار ولا شيء
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {

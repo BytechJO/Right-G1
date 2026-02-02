@@ -37,7 +37,7 @@ const WB_Unit1_Page5_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer) return;
+    if (showAnswer ||showResult) return;
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -46,7 +46,7 @@ const WB_Unit1_Page5_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer||showResult) return;
 
     // تجاهل السؤال الأول عند التحقق من اكتمال الإجابات
     if (answers.includes(null)) {

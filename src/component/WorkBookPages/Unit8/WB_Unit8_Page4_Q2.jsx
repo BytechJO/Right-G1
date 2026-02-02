@@ -55,7 +55,7 @@ export default function WB_Unit8_Page4_Q2() {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleSelect = (qId, value) => {
-    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    if (showAnswer ||submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
     setAnswers((prev) => {
       const current = prev[qId] || [];
 
@@ -75,7 +75,7 @@ export default function WB_Unit8_Page4_Q2() {
   };
 
   const handleCheck = () => {
-    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    if (showAnswer||submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
     // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
     if (!answers[data[0].id] || answers[data[0].id].length === 0) {
       ValidationAlert.info("Please select at least one picture in question 1.");
