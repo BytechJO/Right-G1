@@ -1,0 +1,9 @@
+{
+  "name": "G1 Class Book",
+  "short_name": "ClassBook",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2"
+}
+

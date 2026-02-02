@@ -1,17 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import './App.css'
-import Book from './component/Book'
+import "./App.css";
+import Book from "./component/Book";
 
 function App() {
 
-
-
   return (
     <>
-      <Book/>
+      <Book />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
