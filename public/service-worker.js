@@ -75,3 +75,39 @@ self.addEventListener("message", async (event) => {
     });
   }
 });
+
+self.addEventListener("message", async (event) => {
+  if (event.data?.type === "PRELOAD_ALL") {
+    const assets = event.data.assets;
+    const cache = await caches.open(CACHE_NAME);
+
+    let loaded = 0;
+    const total = assets.length;
+
+    for (const url of assets) {
+      try {
+        const response = await fetch(url);
+        await cache.put(url, response.clone());
+        loaded++;
+
+        // ابعتي progress للواجهة
+        const clients = await self.clients.matchAll();
+        clients.forEach((client) => {
+          client.postMessage({
+            type: "PRELOAD_PROGRESS",
+            loaded,
+            total
+          });
+        });
+      } catch (e) {
+        console.error("Failed:", url);
+      }
+    }
+
+    // خلصنا
+    const clients = await self.clients.matchAll();
+    clients.forEach((client) => {
+      client.postMessage({ type: "PRELOAD_DONE" });
+    });
+  }
+});
