@@ -173,7 +173,7 @@ const WB_Unit9_Page6_Q3 = () => {
     );
 
     setShowResult(results);
-
+setLocked(true)
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -375,7 +375,7 @@ const WB_Unit9_Page6_Q3 = () => {
                       ✓
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✓" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>
@@ -393,7 +393,7 @@ const WB_Unit9_Page6_Q3 = () => {
                       ✗
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✗" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>

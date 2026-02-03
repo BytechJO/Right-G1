@@ -131,7 +131,7 @@ const WB_Unit1_Page8_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const selectOption = (qIndex, optIndex) => {
-    if (showAnswer) return;
+    if (showAnswer ||showResult) return;
     const updated = [...answers];
     updated[qIndex] = optIndex;
     setAnswers(updated);
@@ -139,7 +139,7 @@ const WB_Unit1_Page8_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer ||showResult) return;
     if (answers.includes(null)) {
       return ValidationAlert.info("Oops!", "Please circle all the words!");
     }

@@ -19,7 +19,7 @@ const Unit7_Page5_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer ||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -28,7 +28,7 @@ const Unit7_Page5_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");

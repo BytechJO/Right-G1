@@ -101,9 +101,10 @@ export default function WB_Unit10_Page5_Q2() {
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const handleCellClick = (r, c) => {
+    if (showAnswer) return;
     // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
     if (isFoundCell(r, c)) return;
-    if (showAnswer) return;
+
     setSelected((prev) => {
       // منع اختيار الخلية مرتين
       const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
@@ -114,10 +115,11 @@ export default function WB_Unit10_Page5_Q2() {
   };
 
   const isHighlighted = (r, c) => {
+    if (showAnswer) return false;
     return (
       selected.some((coord) => coord[0] === r && coord[1] === c) ||
       allSelections.some((sel) =>
-        sel.some((coord) => coord[0] === r && coord[1] === c)
+        sel.some((coord) => coord[0] === r && coord[1] === c),
       )
     );
   };
@@ -126,7 +128,7 @@ export default function WB_Unit10_Page5_Q2() {
     return words.some(
       (w) =>
         foundWords.includes(w.text) &&
-        w.coords.some((coord) => coord[0] === r && coord[1] === c)
+        w.coords.some((coord) => coord[0] === r && coord[1] === c),
     );
   };
 
@@ -136,16 +138,17 @@ export default function WB_Unit10_Page5_Q2() {
     if (selected.length === 0) {
       return ValidationAlert.info("");
     }
+          setShowAnswer(true);
     words.forEach((word) => {
       const isCorrect =
         word.coords.length > 0 &&
         word.coords.every(([r, c]) =>
-          selected.some((sel) => sel[0] === r && sel[1] === c)
+          selected.some((sel) => sel[0] === r && sel[1] === c),
         );
 
       if (isCorrect) foundList.push(word.text);
     });
-
+    
     setFoundWords(foundList);
 
     // الكلمات الخاطئة = التي لم يجدها الطالب
@@ -159,8 +162,8 @@ export default function WB_Unit10_Page5_Q2() {
       foundList.length === total
         ? "green"
         : foundList.length === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const msg = `
       <div style="font-size:20px; text-align:center;">
@@ -177,6 +180,7 @@ export default function WB_Unit10_Page5_Q2() {
     } else {
       ValidationAlert.warning(msg);
     }
+
   };
 
   const showAnswers = () => {

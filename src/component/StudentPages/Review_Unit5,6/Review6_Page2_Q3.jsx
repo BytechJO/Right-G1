@@ -28,7 +28,7 @@ const Review6_Page2_Q3 = () => {
   const [showAnswerMode, setShowAnswerMode] = useState(false);
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (showAnswerMode) return; // ⛔ منع النقر أثناء الشو أنسر
+    if (showAnswerMode ||checked) return; // ⛔ منع النقر أثناء الشو أنسر
 
     setCircledWords((prev) => {
       const existing = prev[sIndex] || [];
@@ -56,7 +56,7 @@ const Review6_Page2_Q3 = () => {
   };
 
   const checkAnswers = () => {
-        if (showAnswerMode) return; // ⛔ منع النقر أثناء الشو أنسر
+        if (showAnswerMode||checked) return; // ⛔ منع النقر أثناء الشو أنسر
 
     if (
       Object.keys(circledWords).length < sentences.length ||

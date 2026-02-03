@@ -67,7 +67,7 @@ export default function Unit7_Page5_Q2() {
   // -----------------------------------------------------------------------
 
   const handleSelect = (qId, value) => {
-    if (showAnswer) return; // ❌ ممنوع تعديل الإجابات بعد Show Answer
+    if (showAnswer||submitted) return; // ❌ ممنوع تعديل الإجابات بعد Show Answer
 
     setAnswers((prev) => {
       const current = prev[qId] || [];
@@ -85,7 +85,7 @@ export default function Unit7_Page5_Q2() {
   };
 
   const handleCheck = () => {
-    if (showAnswer) return;
+    if (showAnswer ||submitted) return;
     if (!answers[data[0].id] || answers[data[0].id].length === 0) {
       ValidationAlert.info("Please select at least one picture in question 1.");
       return;

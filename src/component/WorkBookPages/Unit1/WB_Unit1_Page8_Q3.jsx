@@ -117,7 +117,7 @@ const WB_Unit1_Page8_Q3 = () => {
   }, [activeIndex]);
 
   const handleSelect = (index, value) => {
-    if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
+    if (showAnswer||showResult) return; // ❌ يمنع التغيير بعد Show Answer
 
     const newAnswers = [...answers];
     newAnswers[index] = value;
@@ -126,7 +126,7 @@ const WB_Unit1_Page8_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
+    if (showAnswer||showResult) return; // ❌ يمنع التغيير بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
       return;

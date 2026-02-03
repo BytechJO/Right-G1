@@ -375,22 +375,17 @@ const Review3_Page2_Q3 = () => {
                     <img src={choice.img} className="shortA-img" />
                     <p
                       className={`shortA-word
-          ${answers[index] === chIndex ? "selected" : ""}
-          ${showResult && choice.isShortA ? "correct" : ""}
-          ${
-            showResult && answers[index] === chIndex && !choice.isShortA
-              ? "wrong"
-              : ""
-          }
-        `}
+                           ${answers[index] === chIndex ? "selected" : ""}
+                           ${showResult && choice.isShortA ? "correct" : ""}
+                           ${showResult && answers[index] === chIndex && !choice.isShortA ? "wrong" : ""}`}
                       onClick={() => handleSelect(index, chIndex)}
                     >
                       {choice.word}{" "}
-                      {answers[index] === chIndex && !choice.isShortA ? (
+                      {showResult &&
+                      answers[index] === chIndex &&
+                      !choice.isShortA ? (
                         <span className="review3-p2-q3-wrong-x">✕</span>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                     </p>
                   </div>
                 ))}

@@ -30,7 +30,7 @@ const Review7_Page1_Q3 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -39,7 +39,7 @@ const Review7_Page1_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");

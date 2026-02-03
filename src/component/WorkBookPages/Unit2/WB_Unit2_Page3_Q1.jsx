@@ -55,7 +55,7 @@ const WB_Unit2_Page3_Q1 = () => {
 
 
   const checkAnswers = () => {
-    if (locked) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (locked ||showResult) return; // 🔒 منع التعديل بعد رؤية الحل
 
     const totalQuestions = data.length;
     let correct = 0;
@@ -96,7 +96,7 @@ const WB_Unit2_Page3_Q1 = () => {
     setShowResult(true);
   };
   const handleSelect = (qId, index) => {
-    if (locked) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (locked||showResult) return; // 🔒 منع التعديل بعد رؤية الحل
     setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
   };

@@ -46,7 +46,7 @@ const Unit2_Page10_Q1 = () => {
   const [checked, setChecked] = useState(false);
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (isShowMode) return; // 🚫 ممنوع التغيير بعد show answer
+    if (isShowMode || checked) return; // 🚫 ممنوع التغيير بعد show answer
 
     setCircledWords((prev) => ({
       ...prev,
@@ -75,18 +75,17 @@ const Unit2_Page10_Q1 = () => {
     { start: 4.28, end: 7.02, text: "1-pencil." },
     { start: 7.04, end: 9.01, text: "2-boy." },
     { start: 9.03, end: 10.21, text: "3-bird." },
-    { start: 10.23, end: 13.10, text: "4-pizza. " },
+    { start: 10.23, end: 13.1, text: "4-pizza. " },
     { start: 13.12, end: 14.29, text: "5-pink." },
     { start: 14.31, end: 17.06, text: "6-ball." },
   ];
 
- 
   // ================================
   // ✔ Update caption highlight
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -137,7 +136,7 @@ const Unit2_Page10_Q1 = () => {
     return () => clearInterval(timer);
   }, [activeIndex]);
   const checkAnswers = () => {
-    if (isShowMode) return;
+    if (isShowMode || checked) return;
     if (Object.keys(circledWords).length < 6) {
       ValidationAlert.info("Oops!", "Please circle at least one mistake.");
       return;
@@ -183,7 +182,7 @@ const Unit2_Page10_Q1 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div

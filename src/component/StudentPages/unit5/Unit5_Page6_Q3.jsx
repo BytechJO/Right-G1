@@ -65,7 +65,7 @@ const Unit5_Page6_Q3 = () => {
     });
 
     setResults(temp);
-
+    setShowAnswer(true);
     if (Object.values(temp).includes("empty")) {
       ValidationAlert.info("Please answer all questions!");
       return;
@@ -95,7 +95,7 @@ const Unit5_Page6_Q3 = () => {
 
     questions.forEach((q) => {
       const correctIndex = q.items.findIndex(
-        (item) => item.correct.toLowerCase() === "✓"
+        (item) => item.correct.toLowerCase() === "✓",
       );
       correctAnswers[q.id] = correctIndex;
     });
@@ -190,7 +190,7 @@ const Unit5_Page6_Q3 = () => {
         <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-         {/* ⭐⭐⭐ NEW — زر Show Answer */}
+        {/* ⭐⭐⭐ NEW — زر Show Answer */}
         <button
           onClick={handleShowAnswer}
           className="show-answer-btn swal-continue"

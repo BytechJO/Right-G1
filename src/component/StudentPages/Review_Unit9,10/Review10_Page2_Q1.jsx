@@ -193,7 +193,7 @@ const Review10_Page2_Q1 = () => {
     );
 
     setShowResult(results);
-
+ setLocked(true); // 🔒 قفل التعديل
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -393,7 +393,7 @@ const Review10_Page2_Q1 = () => {
                       ✓
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✓" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>
@@ -411,7 +411,7 @@ const Review10_Page2_Q1 = () => {
                       ✗
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✗" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>

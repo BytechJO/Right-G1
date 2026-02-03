@@ -21,7 +21,7 @@ const Review8_Page1_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -30,7 +30,7 @@ const Review8_Page1_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");

@@ -44,7 +44,7 @@ const Unit2_Page10_Q3 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -114,12 +114,13 @@ const Unit2_Page10_Q3 = () => {
   //   const [checked, setChecked] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const handleSelect = (qId, option) => {
+    if (showResult ||showAnswer) return;
     setAnswers((prev) => ({ ...prev, [qId]: option }));
     setShowResult(false);
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer ||showResult) return;
     // 🔸 تحقق إذا الطالب جاوب على الكل
     if (Object.keys(answers).length < questions.length) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
@@ -149,8 +150,7 @@ const Unit2_Page10_Q3 = () => {
     if (correctCount === total) ValidationAlert.success(scoreMessage);
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
-
-    setTimeout(() => setShowResult(true), 200);
+    setShowResult(true);
   };
 
   const togglePlay = () => {
@@ -186,7 +186,7 @@ const Unit2_Page10_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div

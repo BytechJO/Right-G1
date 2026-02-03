@@ -53,7 +53,7 @@ const Unit6_Page5_Q1 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -169,11 +169,11 @@ const Unit6_Page5_Q1 = () => {
 
     // 2) مقارنة الإجابات
     const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong"
+      answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
     setShowResult(results);
-
+    setLocked(true);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -393,7 +393,7 @@ const Unit6_Page5_Q1 = () => {
                       ✗
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✗" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>

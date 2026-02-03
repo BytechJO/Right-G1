@@ -124,6 +124,7 @@ const Unit3_Page5_Q2 = () => {
   }, [activeIndex]);
 
   const handleSelect = (index) => {
+        if (showAnswer ||checked) return;
     setSelected((prev) => {
       if (prev.includes(index)) {
         // إذا الضغط على خيار مُختار → نشيله
@@ -143,7 +144,7 @@ const Unit3_Page5_Q2 = () => {
 
   // ✅ الفحص فقط إذا الطالب اختار أو لا
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer ||checked) return;
     if (selected.length === 0) {
       ValidationAlert.info("Oops!", "Please select at least one answer.");
       return;
