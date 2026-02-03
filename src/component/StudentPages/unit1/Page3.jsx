@@ -36,7 +36,7 @@ const Page3 = ({ goToUnit }) => {
     },
     {
       title: "Unit 10",
-      startIndex: 83,
+      startIndex: 82,
       top: "77%",
       left: "14%",
       width: "20%",
