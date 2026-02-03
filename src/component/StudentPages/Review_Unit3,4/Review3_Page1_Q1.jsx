@@ -56,7 +56,7 @@ const Review3_Page1_Q1 = () => {
 
     const numberWrongs = answers.map((val, i) => val !== data[i].num);
 
-    const correctNumbers = answers.filter(
+    let correctNumbers = answers.filter(
       (val, i) => val === data[i].num,
     ).length;
 
