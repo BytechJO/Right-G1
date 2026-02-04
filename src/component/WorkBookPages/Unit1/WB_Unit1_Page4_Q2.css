@@ -17,14 +17,18 @@
   top: -15%;
 }
 
-.word-text-unit1-p4-q2{
+.word-text-unit1-p4-q2 {
   width: 240px !important;
 }
 
-
 @media (max-width: 1024px) {
-.word-text-unit1-p4-q2{
-  width: 170px!important;
+  .word-text-unit1-p4-q2 {
+    width: 170px !important;
+  }
 }
 
+@media (max-width: 820px) {
+  .word-text-unit1-p4-q2 {
+    width: 219px !important;
+  }
 }

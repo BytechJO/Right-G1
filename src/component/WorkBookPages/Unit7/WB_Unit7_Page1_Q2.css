@@ -20,3 +20,9 @@
   flex-direction: column;
   align-items: center;
 }
+
+@media (max-width: 1024px) {
+  .word-section1-wb-u7-p1-q2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}

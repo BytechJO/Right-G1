@@ -51,3 +51,10 @@
   z-index: 5;
   border:  2px white solid;
 }
+
+@media screen and (max-width: 1024px){
+  .content-review9-p1-q2 {
+    
+    flex-direction: column;
+}
+}

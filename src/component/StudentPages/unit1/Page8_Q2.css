@@ -91,7 +91,9 @@
   justify-content: center;
   align-items: center;
   background-color: #eaf2ff;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 }
 
 .drop-box.is-over {
@@ -121,6 +123,7 @@
   border-radius: 100px;
   margin-bottom: 27px;
   height: 70px;
+  width: 100%;
   border: solid #5acbf4 3px;
 }
 .letter-sentence-pair {

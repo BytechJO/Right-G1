@@ -222,7 +222,7 @@ const WB_Unit7_Page3_Q2 = () => {
                   style={{
                     display: "flex",
                     gap: "12px",
-                    flexWrap: "wrap",
+                    // flexWrap: "wrap",
                     padding: "12px",
                     height: "70px",
                     border: "2px dashed #ccc",

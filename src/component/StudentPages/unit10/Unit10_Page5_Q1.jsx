@@ -121,8 +121,16 @@ setShowAnswer(true)
   };
 
   return (
-    <div style={{ padding: "30px" }}>
-      <div className="exercise-container2">
+    <div className="page8-wrapper" style={{ padding: "30px" }}>
+      <div  className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
+          }}>
         <h5 className="header-title-page8">
            <span className="ex-A">A</span>
           <span className="number-of-q">1</span>Look, read, and write. Use the words below.

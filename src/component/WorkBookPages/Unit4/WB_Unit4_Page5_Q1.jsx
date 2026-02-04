@@ -37,6 +37,7 @@ const ShapeSVG = ({ type, color, onDoubleClick }) => {
           width={size}
           height={size}
           onDoubleClick={onDoubleClick}
+          onTouchEnd={onDoubleClick}
           className="shape-svg"
         >
           <rect
@@ -56,6 +57,7 @@ const ShapeSVG = ({ type, color, onDoubleClick }) => {
           width={size}
           height={size}
           onDoubleClick={onDoubleClick}
+          onTouchEnd={onDoubleClick}
           className="shape-svg"
         >
           <polygon points="45,10 80,80 10,80" fill={color} stroke="gray" />
@@ -68,6 +70,7 @@ const ShapeSVG = ({ type, color, onDoubleClick }) => {
           width={size}
           height={size}
           onDoubleClick={onDoubleClick}
+          onTouchEnd={onDoubleClick}
           className="shape-svg"
         >
           <circle cx="45" cy="45" r="35" fill={color} stroke="gray" />
@@ -80,6 +83,7 @@ const ShapeSVG = ({ type, color, onDoubleClick }) => {
           width={size}
           height={size}
           onDoubleClick={onDoubleClick}
+          onTouchEnd={onDoubleClick}
           className="shape-svg"
         >
           <rect
@@ -258,7 +262,9 @@ const WB_Unit4_Page5_Q1 = () => {
                         }`}
                         onClick={() => handleSelect(row.id, s.key)}
                       >
-                        {selected && <span className="correct-mark-wb-unit4-p5-q1">✓</span>}
+                        {selected && (
+                          <span className="correct-mark-wb-unit4-p5-q1">✓</span>
+                        )}
                         {wrong && <span className="wrong-badge">✕</span>}
                       </td>
                     );

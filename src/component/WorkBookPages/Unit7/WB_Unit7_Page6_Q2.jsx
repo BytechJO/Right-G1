@@ -121,7 +121,7 @@ const WB_Unit7_Page6_Q2 = () => {
           {items.map((q, i) => (
             <div
               key={i}
-              className="question-box-wb-unit6-p6-q2 "
+              className="question-box-wb-unit7-p6-q2"
               style={{ width: "100%" }}
             >
               <div
@@ -149,7 +149,7 @@ const WB_Unit7_Page6_Q2 = () => {
               </div>
 
               <div style={{ display: "flex", gap: "10px" }}>
-                <div className="options-row-wb-unit5-p6-q3">
+                <div className="options-row-wb-unit7-p6-q2">
                   {q.options.map((word, optIndex) => {
                     const isSelected = answers[i] === optIndex;
                     const isCorrect = optIndex === q.correctIndex;

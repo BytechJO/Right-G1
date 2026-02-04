@@ -57,7 +57,7 @@ export default function Book() {
     return localStorage.getItem("activeTab") || "student";
   });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
-
+  const touchStart = useRef({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [viewMode, setViewMode] = useState("spread");
 
@@ -68,36 +68,12 @@ export default function Book() {
   const [rightBarOpen, setRightBarOpen] = useState(false);
 
   //------------------ swipe function -----------------------------
-  // const touchStartX = useRef(0);
-  // const touchEndX = useRef(0);
-  // function handleTouchStart(e) {
-  //   if (!isMobile) return;
-  //   touchStartX.current = e.touches[0].clientX;
-  // }
-
-  // function handleTouchMove(e) {
-  //   if (!isMobile) return;
-  //   touchEndX.current = e.touches[0].clientX;
-  // }
-
-  // function handleTouchEnd() {
-  //   if (!isMobile) return;
-
-  //   const diff = touchStartX.current - touchEndX.current;
-
-  //   if (Math.abs(diff) < 50) return; // تجاهل السحب الخفيف
-
-  //   if (diff > 0) {
-  //     nextPage(); // 👉 Swipe Left
-  //   } else {
-  //     prevPage(); // 👈 Swipe Right
-  //   }
-  // }
 
   // Popup
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [mobileTabsOpen, setMobileTabsOpen] = useState(false);
+
   // ===========================================================
   //                 📌 PAGE LIST SELECTOR
   // ===========================================================
@@ -301,6 +277,30 @@ export default function Book() {
   }
 
   const start = useRef({ x: 0, y: 0 });
+  function handleTouchStart(e) {
+    if (zoom === 1) return;
+
+    const touch = e.touches[0];
+    setIsDragging(true);
+    touchStart.current = {
+      x: touch.clientX - offset.x,
+      y: touch.clientY - offset.y,
+    };
+  }
+
+  function handleTouchMove(e) {
+    if (!isDragging) return;
+
+    const touch = e.touches[0];
+    setOffset({
+      x: touch.clientX - touchStart.current.x,
+      y: touch.clientY - touchStart.current.y,
+    });
+  }
+
+  function handleTouchEnd() {
+    setIsDragging(false);
+  }
 
   // ===========================================================
   //                 📌 UNITS LIST
@@ -533,9 +533,9 @@ export default function Book() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         //-----------swipe function---------------------
-        // onTouchStart={handleTouchStart}
-        // onTouchMove={handleTouchMove}
-        // onTouchEnd={handleTouchEnd}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* ==== NAVIGATION ARROWS (Next / Prev) ==== */}
         {pageIndex > 0 && (
@@ -651,27 +651,7 @@ export default function Book() {
           { key: "next", label: "Next Button", icon: next },
         ]}
       />
-      {/* {mobileTabsOpen && (
-        <div className="lg:hidden bg-white shadow-md border-b px-4 py-3 absolute w-full z-[9999]">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setMobileTabsOpen(false);
-              }}
-              className={`block w-full text-left px-3 py-2 rounded-lg mb-1 
-          ${
-            activeTab === tab.id
-              ? "bg-[#f6f0ff] text-[#430f68]"
-              : "text-[#430f68] hover:bg-purple-50"
-          }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      )} */}
+
       {/* ===================== POPUP ===================== */}
       <Popup isOpen={popupOpen} onClose={closePopup} type={popupContent?.type}>
         {/* ========== WORKBOOK ========== */}

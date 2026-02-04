@@ -32,4 +32,13 @@
   height:90px;
 }
 
+
+}
+
+@media screen and (max-width: 1024px) {
+  .wb-unit2-p6-q1-grid {
+  
+    grid-template-columns: repeat(2, 1fr);
+
+}
 }

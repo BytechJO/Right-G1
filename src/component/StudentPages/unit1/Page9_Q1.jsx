@@ -30,15 +30,20 @@ const Page9_Q1 = () => {
   };
 
   return (
-    <div
+    <div className="page8-wrapper"
       style={{
-        display: "flex",
-        // marginTop: "30px",
-        justifyContent: "center",
         padding:"30px"
       }}
     >
-      <div className="div-all"
+      <div  className="div-forall"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            position: "relative",
+            width: "60%",
+          }}
       
       >
         <h5 className="header-title-page8" id="ex-d">

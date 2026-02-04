@@ -262,6 +262,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 fill={colors.triangle}
                 stroke="black"
                 onDoubleClick={() => openColorPicker("triangle")}
+                onTouchEnd={() => openColorPicker("triangle")}
               />
 
               {/* House */}
@@ -273,6 +274,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 fill={colors.house}
                 stroke="black"
                 onDoubleClick={() => openColorPicker("house")}
+                onTouchEnd={() => openColorPicker("house")}
               />
 
               {/* Circles */}
@@ -283,6 +285,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 fill={colors.circle1}
                 stroke="black"
                 onDoubleClick={() => openColorPicker("circle1")}
+                onTouchEnd={() => openColorPicker("circle1")}
               />
               <circle
                 cx="200"
@@ -291,6 +294,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 fill={colors.circle2}
                 stroke="black"
                 onDoubleClick={() => openColorPicker("circle2")}
+                onTouchEnd={() => openColorPicker("circle2")}
               />
 
               {/* Door */}
@@ -302,6 +306,7 @@ const WB_Unit4_Page4_Q1 = () => {
                 fill={colors.door}
                 stroke="black"
                 onDoubleClick={() => openColorPicker("door")}
+                onTouchEnd={() => openColorPicker("door")}
               />
             </svg>
             <div

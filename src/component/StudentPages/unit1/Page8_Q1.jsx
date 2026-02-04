@@ -162,15 +162,7 @@ const lettersBank = [
     return () => clearInterval(timer);
   }, [activeIndex]);
 
-  const updateAnswer = (index, field, value) => {
-    setAnswers((prev) =>
-      prev.map((a, i) =>
-        i === index ? { ...a, [field]: value.toLowerCase() } : a,
-      ),
-    );
-    setWrongLetters(data.map(() => false));
-    setWrongNumbers(data.map(() => false));
-  };
+
 
   const playSound = (src) => {
     if (!clickAudioRef.current) return;
@@ -178,7 +170,7 @@ const lettersBank = [
     clickAudioRef.current.currentTime = 0;
     clickAudioRef.current.play();
   };
-  const isLetterUsed = (id) => answers.letters.includes(id);
+
 
   const onDragEnd = (result) => {
     if (!result.destination || showAnswer) return;
