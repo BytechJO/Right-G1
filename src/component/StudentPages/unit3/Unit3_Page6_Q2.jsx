@@ -63,7 +63,7 @@ const Unit3_Page6_Q2 = () => {
     );
 
     setShowResult(results);
-
+setShowCorrectAnswers(true);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;

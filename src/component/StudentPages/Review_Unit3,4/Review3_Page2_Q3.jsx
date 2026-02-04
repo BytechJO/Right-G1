@@ -381,7 +381,7 @@ const Review3_Page2_Q3 = () => {
                       onClick={() => handleSelect(index, chIndex)}
                     >
                       {choice.word}{" "}
-                      {showResult &&
+                      {
                       answers[index] === chIndex &&
                       !choice.isShortA ? (
                         <span className="review3-p2-q3-wrong-x">✕</span>

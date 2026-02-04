@@ -293,7 +293,7 @@ const Review3_Page1_Q2 = () => {
                             <Draggable
                               draggableId={`input-1-${userInputs[1]}`}
                               index={0}
-                              isDragDisabled={locked || showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -383,7 +383,7 @@ const Review3_Page1_Q2 = () => {
                             <Draggable
                               draggableId={`input-2-${userInputs[2]}`}
                               index={0}
-                              isDragDisabled={locked || showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -478,7 +478,7 @@ const Review3_Page1_Q2 = () => {
                             <Draggable
                               draggableId={`input-3-${userInputs[3]}`}
                               index={0}
-                              isDragDisabled={locked || showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -573,7 +573,7 @@ const Review3_Page1_Q2 = () => {
                             <Draggable
                               draggableId={`input-4-${userInputs[4]}`}
                               index={0}
-                              isDragDisabled={locked || showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span

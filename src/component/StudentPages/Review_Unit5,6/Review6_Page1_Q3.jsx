@@ -46,14 +46,7 @@ const Review6_Page1_Q3 = () => {
     setWrongInputs([]);
   };
 
-  const handleChange = (value, index) => {
-    if (locked) return; // 🔒 منع التعديل بعد إظهار الإجابات
 
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
   const showAnswers = () => {
     const correctOnly = data.map((d) => d.correct);
     setAnswers(correctOnly);
@@ -236,7 +229,7 @@ const Review6_Page1_Q3 = () => {
                               <Draggable
                                 draggableId={`filled-${answers[index]}-${index}`}
                                 index={0}
-                                isDragDisabled={locked}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span

@@ -207,7 +207,7 @@ const Review4_Page1_Q4 = () => {
                           <Draggable
                             draggableId={`slot-${index}-${answers[index]}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span

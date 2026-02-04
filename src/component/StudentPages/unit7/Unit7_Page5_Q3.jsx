@@ -181,7 +181,7 @@ setShowAnswer(true)
                         <Draggable
                           draggableId={`filled-${answers[0]}-0`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -222,7 +222,7 @@ setShowAnswer(true)
                         <Draggable
                           draggableId={`filled-${answers[1]}-0`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -263,7 +263,7 @@ setShowAnswer(true)
                         <Draggable
                           draggableId={`filled-${answers[2]}-0`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span

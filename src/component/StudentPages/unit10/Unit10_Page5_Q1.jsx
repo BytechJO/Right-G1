@@ -206,7 +206,7 @@ setShowAnswer(true)
                           <Draggable
                             draggableId={droppedLetters[`drop-${index + 1}`]}
                             index={0}
-                              isDragDisabled={showAnswer} // 🔥 هذا السطر المهم
+                              isDragDisabled={true} // 🔥 هذا السطر المهم
                           >
                             {(providedDraggable) => (
                               <div

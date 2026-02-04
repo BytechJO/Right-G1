@@ -159,7 +159,7 @@ setLocked(true)
           </Droppable>
 
           <div
-            className="row-content10-unit3-page6-q1"
+            className="row-content10-unit6-page5-q3"
             style={{ alignItems: "flex-start" }}
           >
             <div className="row2-unit3-page6-q1">
@@ -179,7 +179,7 @@ setLocked(true)
                           <Draggable
                             draggableId={`filled-${answers[0]}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span
@@ -223,7 +223,7 @@ setLocked(true)
                           <Draggable
                             draggableId={`filled-${answers[1]}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span
@@ -267,7 +267,7 @@ setLocked(true)
                           <Draggable
                             draggableId={`filled-${answers[2]}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span
@@ -311,7 +311,7 @@ setLocked(true)
                           <Draggable
                             draggableId={`filled-${answers[3]}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span

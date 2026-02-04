@@ -375,7 +375,7 @@ const Unit6_Page5_Q1 = () => {
                       ✓
                     </div>
 
-                    {!locked &&
+                    {
                       showResult[index] === "wrong" &&
                       answers[q.id] === "✓" && (
                         <div className="unit6-p1-q1-wrong-icon">✕</div>

@@ -286,7 +286,7 @@ const Review5_Page1_Q1 = () => {
                               <Draggable
                                 draggableId={`filled-${answers.find((a) => a.num === "input1").wordId}`}
                                 index={0}
-                                isDragDisabled={locked}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span
@@ -346,7 +346,7 @@ const Review5_Page1_Q1 = () => {
                             <Draggable
                               draggableId={`filled-${answers.find((a) => a.num === "input2").wordId}`}
                               index={0}
-                              isDragDisabled={locked}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -391,7 +391,7 @@ const Review5_Page1_Q1 = () => {
                               <Draggable
                                 draggableId={`filled-${answers.find((a) => a.num === "input3").wordId}`}
                                 index={0}
-                                isDragDisabled={locked}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span
@@ -452,7 +452,7 @@ const Review5_Page1_Q1 = () => {
                             <Draggable
                               draggableId={`filled-${answers.find((a) => a.num === "input4").wordId}`}
                               index={0}
-                              isDragDisabled={locked}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -498,7 +498,7 @@ const Review5_Page1_Q1 = () => {
                             <Draggable
                               draggableId={`filled-${answers.find((a) => a.num === "input5").wordId}`}
                               index={0}
-                              isDragDisabled={locked}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span

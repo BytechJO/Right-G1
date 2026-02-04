@@ -268,7 +268,7 @@ setAnswers(["", "", "", ""]);
                           <Draggable
                             draggableId={`filled-${answers[i]}-${i}`}
                             index={0}
-                            isDragDisabled={locked}
+                            isDragDisabled={true}
                           >
                             {(provided) => (
                               <span

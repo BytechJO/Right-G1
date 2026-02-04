@@ -229,7 +229,7 @@ const Unit5_Page6_Q1 = () => {
                                   answers.find((a) => a.num === "input1").input
                                 }`}
                                 index={0}
-                                isDragDisabled={showAnswer}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span
@@ -291,7 +291,7 @@ const Unit5_Page6_Q1 = () => {
                                 answers.find((a) => a.num === "input2").input
                               }`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -332,7 +332,7 @@ const Unit5_Page6_Q1 = () => {
                                 answers.find((a) => a.num === "input3").input
                               }`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -400,7 +400,7 @@ const Unit5_Page6_Q1 = () => {
                                 answers.find((a) => a.num === "input4").input
                               }`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -454,7 +454,7 @@ const Unit5_Page6_Q1 = () => {
                                 answers.find((a) => a.num === "input5").input
                               }`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span
@@ -507,7 +507,7 @@ const Unit5_Page6_Q1 = () => {
                                 answers.find((a) => a.num === "input6").input
                               }`}
                               index={0}
-                              isDragDisabled={showAnswer}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span

@@ -135,7 +135,7 @@ const Review5_Page2_Q2 = () => {
     }
   };
   const handleSelect = (groupIndex, imageIndex) => {
-    if (locked) return; // 🔒 منع التعديل بعد Show Answer
+    if (locked || showResult2) return; // 🔒 منع التعديل بعد Show Answer
     const updated = [...selected];
     updated[groupIndex] = imageIndex;
     setSelected(updated);
@@ -150,7 +150,7 @@ const Review5_Page2_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked) return; // 🔒 منع التعديل بعد Show Answer
+    if (locked || showResult2) return; // 🔒 منع التعديل بعد Show Answer
     if (selected.some((val) => val === null)) {
       ValidationAlert.info("Please choose a circle (f or v) for all items!");
       return;

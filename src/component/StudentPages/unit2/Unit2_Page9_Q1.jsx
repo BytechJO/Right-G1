@@ -187,7 +187,7 @@ const Unit2_Page9_Q1 = () => {
                           <Draggable
                             draggableId={`slot-input1-${getValue("input1")}`}
                             index={0}
-                            isDragDisabled={checked || showAnswer}
+                            isDragDisabled={true}
                           >
                             {(provided, snapshot) => (
                               <span
@@ -233,7 +233,7 @@ const Unit2_Page9_Q1 = () => {
                               <Draggable
                                 draggableId={`slot-${id}-${getValue(id)}`}
                                 index={0}
-                                isDragDisabled={checked || showAnswer}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span

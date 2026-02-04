@@ -250,7 +250,7 @@ const Review5_Page1_Q2 = () => {
                               <Draggable
                                 draggableId={`filled-${answers[index]}`}
                                 index={0}
-                                isDragDisabled={locked}
+                                isDragDisabled={true}
                               >
                                 {(provided) => (
                                   <span

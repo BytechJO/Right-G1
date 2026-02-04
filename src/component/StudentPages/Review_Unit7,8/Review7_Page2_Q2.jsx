@@ -16,14 +16,6 @@ const Review7_Page2_Q2 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
-
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
     if (!destination || showAnswer) return;
@@ -48,10 +40,10 @@ const Review7_Page2_Q2 = () => {
   const checkAnswers = () => {
     if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
 
-    if (answers.some((a) => a.trim() === "")) {
-      ValidationAlert.info("Please fill in all blanks before checking!");
-      return;
-    }
+    if (answers.some((a) => !a || a.trim() === "")) {
+  ValidationAlert.info("Please fill in all blanks before checking!");
+  return;
+}
 
     let correctCount = 0;
     let wrong = [];

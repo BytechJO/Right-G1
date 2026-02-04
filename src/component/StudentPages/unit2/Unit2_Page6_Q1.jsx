@@ -404,6 +404,7 @@ const Unit2_Page6_Q1 = () => {
                                 <Draggable
                                   draggableId={droppedPair.id}
                                   index={index}
+                                  isDragDisabled={true}
                                 >
                                   {(providedDraggable) => (
                                     <div

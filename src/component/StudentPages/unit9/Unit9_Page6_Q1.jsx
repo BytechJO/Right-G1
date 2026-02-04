@@ -213,7 +213,7 @@ const Unit9_Page6_Q1 = () => {
                         <Draggable
                           draggableId={`filled-${answers[0]}-slot-0`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -282,7 +282,7 @@ const Unit9_Page6_Q1 = () => {
                         <Draggable
                           draggableId={`filled-${answers[1]}-slot-1`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -351,7 +351,7 @@ const Unit9_Page6_Q1 = () => {
                         <Draggable
                           draggableId={`filled-${answers[2]}-slot-2`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -409,7 +409,7 @@ const Unit9_Page6_Q1 = () => {
                         <Draggable
                           draggableId={`filled-${answers[3]}-slot-3`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span

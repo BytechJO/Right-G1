@@ -195,7 +195,7 @@ const Unit3_Page5_Q1 = () => {
                             <Draggable
                               draggableId={`slot-${i}-${value}`}
                               index={0}
-                              isDragDisabled={showAnswer || checked}
+                              isDragDisabled={true}
                             >
                               {(provided) => (
                                 <span

@@ -40,7 +40,7 @@ const Review7_Page2_Q1 = () => {
   };
 
   const handleSelect = (value, index) => {
-    if (showCorrect) return;
+    if (showCorrect ||showResult) return;
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
@@ -67,7 +67,7 @@ const Review7_Page2_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showCorrect) return;
+    if (showCorrect ||showResult) return;
     // 1) التشييك إذا في دائرة مش مختارة
     if (selected.some((s) => s === "")) {
       ValidationAlert.info("Please choose a circle (w or h) for all items!");

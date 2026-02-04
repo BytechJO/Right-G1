@@ -197,7 +197,7 @@ const Review8_Page2_Q3 = () => {
                         <Draggable
                           draggableId={`filled-${answers[0]}-0`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -248,7 +248,7 @@ const Review8_Page2_Q3 = () => {
                         <Draggable
                           draggableId={`filled-${answers[1]}-1`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -299,7 +299,7 @@ const Review8_Page2_Q3 = () => {
                         <Draggable
                           draggableId={`filled-${answers[2]}-2`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
@@ -349,7 +349,7 @@ const Review8_Page2_Q3 = () => {
                         <Draggable
                           draggableId={`filled-${answers[3]}-3`}
                           index={0}
-                          isDragDisabled={showAnswer}
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <span
