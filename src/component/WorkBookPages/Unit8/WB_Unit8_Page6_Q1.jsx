@@ -144,7 +144,7 @@ const WB_Unit8_Page6_Q1 = () => {
                     // marginBottom: "20px",
                     justifyContent: "center",
                     width: "100%",
-                    justifyContent: "center",
+                    // justifyContent: "center",
                   }}
                 >
                   {lettersBank.map((l, i) => (
