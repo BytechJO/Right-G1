@@ -162,7 +162,7 @@ const WB_Unit4_Page1_Q1 = () => {
                  What shape is it?
                 </span>
                 {wrongWords.includes("It’s a triangle.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
+                  <span className="error-mark8-wb-unit4-p1-q1">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -218,7 +218,7 @@ const WB_Unit4_Page1_Q1 = () => {
                   What shape is it?
                 </span>
                 {wrongWords.includes("It’s a circle.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
+                  <span className="error-mark8-wb-unit4-p1-q1">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div
@@ -273,7 +273,7 @@ const WB_Unit4_Page1_Q1 = () => {
                  What shape is it?
                 </span>
                 {wrongWords.includes("It’s a square.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
+                  <span className="error-mark8-wb-unit4-p1-q1">✕</span>
                 )}{" "}
                 <div className="dot-wrapper2">
                   <div

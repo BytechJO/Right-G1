@@ -35,7 +35,23 @@
     font-size: 25px;
     border-radius: 8px;
 }
-
+.wrong-x-circle-wb-u2-p3-q1 {
+    color: white;
+    background: red;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid white;
+    z-index: 99;
+}
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .wb-unit2-p3-q1 {
   position: absolute;

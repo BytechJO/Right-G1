@@ -87,6 +87,22 @@
 .word-text2-wb-unit3-p5-q2:active {
   transform: scale(0.98);
 }
+.wrong-x-circle-wb-unit3-p5-q1 {
+    color: white;
+    background: red;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+    position: absolute;
+    top: 3%;
+    right: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid white;
+}
 .error-mark8-wb-unit2-p5-q1 {
   width: 25px;
   height: 25px;

@@ -175,7 +175,7 @@ const WB_Unit3_Page5_Q1 = () => {
                         !showAnswerState &&
                         selected[question.id] === index &&
                         img.answer === false && (
-                          <span className="wrong-x-circle-wb-u1-p3-q2">✕</span>
+                          <span className="wrong-x-circle-wb-unit3-p5-q1">✕</span>
                         )}
 
                       <img src={img.src} alt="TEST" />

@@ -164,7 +164,7 @@ const WB_Unit2_Page3_Q1 = () => {
                       !locked && // 🔒 لا تظهر X عند تفعيل Show Answer
                       selected[question.id] === index &&
                       img.answer === false && (
-                        <span className="wrong-x-circle-review6-p2-q1">✕</span>
+                        <span className="wrong-x-circle-wb-u2-p3-q1">✕</span>
                       )}
                     <img src={img.src} alt="" style={{height:"150px",width:"auto"}} />
                     <div className="check-box-wb-u2-p3-q1  ">
