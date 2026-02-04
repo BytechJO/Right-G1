@@ -10,6 +10,7 @@
   border: 3px solid #4caf50;
   width: 100%;
   margin-top: 20px;
+    box-shadow: #4caf50 7px 7px;
 }
 
 .shapes-table-wrapper-review4-p1-q3 th,
@@ -42,7 +43,7 @@
 
 .correct-mark {
   color: red;
-  font-size: 22px;
+  font-size: 33px;
   font-weight: bold;
 }
 
@@ -86,4 +87,5 @@
   color: green;
   font-size: 24px;
   font-weight: bold;
+
 }
