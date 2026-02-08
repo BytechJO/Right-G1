@@ -192,7 +192,7 @@ const WB_Unit8_Page4_Q1 = () => {
     } else {
       ctx.globalCompositeOperation = "source-over";
       ctx.strokeStyle = "purple";
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2;
     }
     const rect = canvas.getBoundingClientRect();
     ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;

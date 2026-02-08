@@ -184,7 +184,7 @@ setShowAnswer(true)
             )}
           </Droppable>
 
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex" ,justifyContent:"space-between"}}>
             <div className="word-container-wb-unit9-p2-q3">
               {[
                 "How many horses are there? There are two horses.",
