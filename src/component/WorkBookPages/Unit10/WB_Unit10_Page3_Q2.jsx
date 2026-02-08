@@ -1,9 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect,useState } from "react";
 import "./WB_Unit10_Page3_Q2.css";
 import bookImg from "../../../assets/U1 WB/U10/U10P59EXEF-01.svg";
 import bookImg2 from "../../../assets/U1 WB/U10/U10P59EXEF-02.svg";
 import bookImg3 from "../../../assets/U1 WB/U10/U10P59EXEF-03.svg";
 import bookImg4 from "../../../assets/U1 WB/U10/U10P59EXEF-04.svg";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
 
 const WB_Unit10_Page3_Q2 = () => {
   const questions = [
@@ -12,26 +14,10 @@ const WB_Unit10_Page3_Q2 = () => {
     { id: 3, text: "I want a sweet.", img: bookImg3 },
     { id: 4, text: "I want an apple.", img: bookImg4 },
   ];
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   // نخزن Ref لكل Canvas
   const canvasRefs = useRef({});
-  useEffect(() => {
-    questions.forEach((q) => {
-      const canvas = canvasRefs.current[q.id];
-      if (!canvas) return;
-
-      const ctx = canvas.getContext("2d");
-
-      const img = new Image();
-      img.src = q.img; // أو صورة حسب السؤال
-
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
-    });
-  }, []);
 
   // دوال الرسم
   const startDrawing = (e, id) => {
@@ -39,9 +25,16 @@ const WB_Unit10_Page3_Q2 = () => {
     const ctx = canvas.getContext("2d");
 
     ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
 
     const rect = canvas.getBoundingClientRect();
     ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
@@ -71,20 +64,11 @@ const WB_Unit10_Page3_Q2 = () => {
     const ctx = canvas.getContext("2d");
     ctx.isDrawing = false;
   };
-
   const resetCanvas = () => {
     questions.forEach((q) => {
       const canvas = canvasRefs.current[q.id];
       const ctx = canvas.getContext("2d");
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const img = new Image();
-      img.src = q.img || bookImg;
-
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
     });
   };
 
@@ -100,7 +84,7 @@ const WB_Unit10_Page3_Q2 = () => {
       }}
     >
       <div
-         className="div-forall"
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -112,7 +96,21 @@ const WB_Unit10_Page3_Q2 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">F</span>Read and draw.
         </h5>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <div className="wb-unit5-p4-q1-table">
           {questions.map((q) => (
             <div key={q.id} className="wb-unit5-p4-q1-row ">
@@ -129,6 +127,16 @@ const WB_Unit10_Page3_Q2 = () => {
                 width={270}
                 height={190}
                 className="wb-unit10-p3-q2-canvas"
+                style={{
+                  backgroundImage: `url(${q.img})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  cursor:
+                    tool === "eraser"
+                      ? `url(${eraserCursor}) 12 12, auto`
+                      : `url(${pencilCursor}) 4 28, auto`,
+                }}
                 onMouseDown={(e) => startDrawing(e, q.id)}
                 onMouseMove={(e) => draw(e, q.id)}
                 onMouseUp={() => stopDrawing(q.id)}

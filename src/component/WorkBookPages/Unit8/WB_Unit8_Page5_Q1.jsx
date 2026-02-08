@@ -139,8 +139,8 @@ const WB_Unit8_Page5_Q1 = () => {
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
-                      top: "14%",
-                      left: "14%",
+                      top: "17%",
+                      left: "19%",
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
                   >
@@ -162,8 +162,8 @@ const WB_Unit8_Page5_Q1 = () => {
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
-                      top: "15%",
-                      left: "77%",
+                      top: "19%",
+                      left: "75%",
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
                   >
@@ -185,8 +185,8 @@ const WB_Unit8_Page5_Q1 = () => {
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
-                      top: "61%",
-                      left: "18%",
+                      top: "69%",
+                      left: "22%",
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
                   >
@@ -211,8 +211,8 @@ const WB_Unit8_Page5_Q1 = () => {
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
-                      top: "5%",
-                      left: "82%",
+                      top: "8%",
+                      left: "80%",
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
                   >
@@ -234,8 +234,8 @@ const WB_Unit8_Page5_Q1 = () => {
                       snapshot.isDraggingOver ? "drag-over-cell" : ""
                     }`}
                     style={{
-                      top: "36%",
-                      left: "82%",
+                      top: "42%",
+                      left: "79%",
                       background: snapshot.isDraggingOver ? "#e3f2fd" : "white",
                     }}
                   >

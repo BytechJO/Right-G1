@@ -1,5 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./WB_Unit5_Page4_Q1.css";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
 
 const WB_Unit5_Page4_Q1 = () => {
   const questions = [
@@ -8,6 +10,7 @@ const WB_Unit5_Page4_Q1 = () => {
     { id: 3, text: "This is my ruler." },
     { id: 4, text: "This is my eraser." },
   ];
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   // نخزن Ref لكل Canvas
   const canvasRefs = useRef({});
@@ -18,9 +21,16 @@ const WB_Unit5_Page4_Q1 = () => {
     const ctx = canvas.getContext("2d");
 
     ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
 
     const rect = canvas.getBoundingClientRect();
     ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
@@ -66,11 +76,12 @@ const WB_Unit5_Page4_Q1 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
-      className="div-forall"
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -82,7 +93,21 @@ const WB_Unit5_Page4_Q1 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">G</span>Read and draw.
         </h5>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <div className="wb-unit5-p4-q1-table">
           {questions.map((q) => (
             <div key={q.id} className="wb-unit5-p4-q1-row ">
@@ -99,6 +124,12 @@ const WB_Unit5_Page4_Q1 = () => {
                 width={270}
                 height={150}
                 className="wb-unit5-p4-q1-canvas"
+                style={{
+                  cursor:
+                    tool === "eraser"
+                      ? `url(${eraserCursor}) 12 12, auto`
+                      : `url(${pencilCursor}) 4 28, auto`,
+                }}
                 onMouseDown={(e) => startDrawing(e, q.id)}
                 onMouseMove={(e) => draw(e, q.id)}
                 onMouseUp={() => stopDrawing(q.id)}

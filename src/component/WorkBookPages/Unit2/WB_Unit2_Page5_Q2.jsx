@@ -95,18 +95,32 @@ export default function WB_Unit2_Page5_Q2() {
   const [allSelections, setAllSelections] = useState([]);
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-  const handleCellClick = (r, c) => {
-    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
-    if (isFoundCell(r, c)) return;
-    if (showAnswer) return;
-    setSelected((prev) => {
-      // منع اختيار الخلية مرتين
-      const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
-      if (exists) return prev;
+  const [locked, setLocked] = useState(false);
 
-      return [...prev, [r, c]];
-    });
-  };
+ const handleCellClick = (r, c) => {
+  // ⛔ منع التفاعل بعد التشيك أو الشو
+  if (showAnswer) return;
+  if (locked) return;
+
+  // ⛔ منع الكبس على خلايا كلمات صحيحة
+  if (isFoundCell(r, c)) return;
+
+  setSelected((prev) => {
+    const exists = prev.some(
+      (coord) => coord[0] === r && coord[1] === c
+    );
+
+    // 🔁 toggle
+    if (exists) {
+      return prev.filter(
+        (coord) => !(coord[0] === r && coord[1] === c)
+      );
+    }
+
+    return [...prev, [r, c]];
+  });
+};
+
 
   const isHighlighted = (r, c) => {
     return (
@@ -126,7 +140,7 @@ export default function WB_Unit2_Page5_Q2() {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer ||locked) return;
     let foundList = [];
     if (selected.length === 0) {
       return ValidationAlert.info("");
@@ -142,6 +156,7 @@ export default function WB_Unit2_Page5_Q2() {
     });
 
     setFoundWords(foundList);
+setLocked(true);
 
     // الكلمات الخاطئة = التي لم يجدها الطالب
     const wrong = words
@@ -178,7 +193,7 @@ export default function WB_Unit2_Page5_Q2() {
     setShowAnswer(true);
     // 1) جميع الكلمات تعتبر صحيحة
     setFoundWords(words.map((w) => w.text));
-
+  setLocked(true); // 🔒
     // 2) ضع كل الإحداثيات داخل allSelections لتسليط الضوء عليها
     const allCoords = words.map((w) => w.coords);
     setAllSelections(allCoords);
@@ -196,6 +211,7 @@ export default function WB_Unit2_Page5_Q2() {
     setWrongTry(false);
     setWrongWords([]);
     setShowAnswer(false);
+    setLocked(false)
     setAllSelections([]); // ⭐️ هذه كانت ناقصة
   };
 

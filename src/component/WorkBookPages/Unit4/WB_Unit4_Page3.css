@@ -11,8 +11,8 @@
     left: 75%;
 }
 
-.draw-canvas {
-  width: 600px;
+.wb-unit4-p3-q2-draw-canvas {
+  width: 100%;
   height: 300px;   /* كبير متل ما بدك */
   border: 2px solid #ccc;
   touch-action: none;

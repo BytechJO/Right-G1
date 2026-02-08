@@ -60,18 +60,29 @@ export default function WB_Unit1_Page6_Q2() {
   const [allSelections, setAllSelections] = useState([]);
   const [wrongWords, setWrongWords] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-  const handleCellClick = (r, c) => {
-    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
-    if (isFoundCell(r, c)) return;
-    if (showAnswer) return;
-    setSelected((prev) => {
-      // منع اختيار الخلية مرتين
-      const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
-      if (exists) return prev;
+  const [locked, setLocked] = useState(false);
 
-      return [...prev, [r, c]];
-    });
-  };
+const handleCellClick = (r, c) => {
+  if (locked) return;        // ⛔ بعد التشيك أو الشو
+  if (isFoundCell(r, c)) return;
+
+  setSelected((prev) => {
+    const exists = prev.some(
+      (coord) => coord[0] === r && coord[1] === c
+    );
+
+    // toggle
+    if (exists) {
+      return prev.filter(
+        (coord) => !(coord[0] === r && coord[1] === c)
+      );
+    }
+
+    return [...prev, [r, c]];
+  });
+};
+
+
 
   const isHighlighted = (r, c) => {
     return (
@@ -114,6 +125,8 @@ export default function WB_Unit1_Page6_Q2() {
       .filter((txt) => !foundList.includes(txt));
 
     setWrongWords(wrong);
+    setLocked(true);
+
     let total = words.length;
     let color =
       foundList.length === total
@@ -160,6 +173,7 @@ export default function WB_Unit1_Page6_Q2() {
     setFoundWords([]);
     setWrongTry(false);
     setWrongWords([]);
+    setLocked(false)
     setShowAnswer(false);
     setAllSelections([]); // ⭐️ هذه كانت ناقصة
   };

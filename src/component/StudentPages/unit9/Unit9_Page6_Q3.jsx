@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
 import img1 from "../../../assets/unit9/imgs/U9P81EXEE-01.svg";
 import img2 from "../../../assets/unit9/imgs/U9P81EXEE-02.svg";
 import "./Unit9_Page6_Q3.css";
@@ -8,36 +9,28 @@ const Unit9_Page6_Q3 = () => {
     { id: 1, text: "I want chicken.", img: img2 },
     { id: 2, text: "I want bread.", img: img1 },
   ];
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   // نخزن Ref لكل Canvas
   const canvasRefs = useRef({});
 
-  useEffect(() => {
-    questions.forEach((q) => {
-      const canvas = canvasRefs.current[q.id];
-      if (!canvas) return;
-
-      const ctx = canvas.getContext("2d");
-
-      const img = new Image();
-      img.src = q.img;
-
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
-    });
-  }, []);
+ 
 
   // دوال الرسم
   const startDrawing = (e, id) => {
     const canvas = canvasRefs.current[id];
     const ctx = canvas.getContext("2d");
-
-    ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+    ctx.isDrawing = true;
+
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
 
     const rect = canvas.getBoundingClientRect();
     ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
@@ -69,20 +62,13 @@ const Unit9_Page6_Q3 = () => {
   };
 
   const resetCanvas = () => {
-    questions.forEach((q) => {
-      const canvas = canvasRefs.current[q.id];
-      const ctx = canvas.getContext("2d");
+  questions.forEach((q) => {
+    const canvas = canvasRefs.current[q.id];
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+};
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const img = new Image();
-      img.src = q.img;
-
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
-    });
-  };
   return (
     <div
       className="unit4-q2-p6-container"
@@ -107,7 +93,21 @@ const Unit9_Page6_Q3 = () => {
         <h5 className="header-title-page8">
           <span className="ex-A">E</span>Trace and color.
         </h5>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <div className="wb-unit5-p4-q1-table">
           {questions.map((q) => (
             <div key={q.id} className="wb-unit5-p4-q1-row ">
@@ -117,6 +117,16 @@ const Unit9_Page6_Q3 = () => {
                 width={270}
                 height={260}
                 className="unit9-p3-q2-canvas"
+                style={{
+                  backgroundImage: `url(${q.img})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  cursor:
+                    tool === "eraser"
+                      ? `url(${eraserCursor}) 12 12, auto`
+                      : `url(${pencilCursor}) 4 28, auto`,
+                }}
                 onMouseDown={(e) => startDrawing(e, q.id)}
                 onMouseMove={(e) => draw(e, q.id)}
                 onMouseUp={() => stopDrawing(q.id)}

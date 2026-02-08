@@ -99,23 +99,29 @@ export default function WB_Unit10_Page5_Q2() {
   const [wrongTry, setWrongTry] = useState(false);
   const [allSelections, setAllSelections] = useState([]);
   const [wrongWords, setWrongWords] = useState([]);
+  const [locked, setLocked] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+
   const handleCellClick = (r, c) => {
-    if (showAnswer) return;
-    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
+    // ⛔ منع أي تفاعل بعد التشيك أو الشو
+    if (locked || showAnswer) return;
+
+    // ⛔ منع الكبس على خلايا كلمات صحيحة
     if (isFoundCell(r, c)) return;
 
     setSelected((prev) => {
-      // منع اختيار الخلية مرتين
       const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
-      if (exists) return prev;
+
+      // 🔁 toggle
+      if (exists) {
+        return prev.filter((coord) => !(coord[0] === r && coord[1] === c));
+      }
 
       return [...prev, [r, c]];
     });
   };
 
   const isHighlighted = (r, c) => {
-    if (showAnswer) return false;
     return (
       selected.some((coord) => coord[0] === r && coord[1] === c) ||
       allSelections.some((sel) =>
@@ -133,12 +139,12 @@ export default function WB_Unit10_Page5_Q2() {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return;
     let foundList = [];
     if (selected.length === 0) {
       return ValidationAlert.info("");
     }
-          setShowAnswer(true);
+    setShowAnswer(true);
     words.forEach((word) => {
       const isCorrect =
         word.coords.length > 0 &&
@@ -148,9 +154,9 @@ export default function WB_Unit10_Page5_Q2() {
 
       if (isCorrect) foundList.push(word.text);
     });
-    
-    setFoundWords(foundList);
 
+    setFoundWords(foundList);
+    setLocked(true); // 🔒 قفل
     // الكلمات الخاطئة = التي لم يجدها الطالب
     const wrong = words
       .map((w) => w.text)
@@ -180,14 +186,13 @@ export default function WB_Unit10_Page5_Q2() {
     } else {
       ValidationAlert.warning(msg);
     }
-
   };
 
   const showAnswers = () => {
     setShowAnswer(true);
     // 1) جميع الكلمات تعتبر صحيحة
     setFoundWords(words.map((w) => w.text));
-
+    setLocked(true); // 🔒 قفل
     // 2) ضع كل الإحداثيات داخل allSelections لتسليط الضوء عليها
     const allCoords = words.map((w) => w.coords);
     setAllSelections(allCoords);
@@ -205,6 +210,7 @@ export default function WB_Unit10_Page5_Q2() {
     setWrongTry(false);
     setWrongWords([]);
     setShowAnswer(false);
+    setLocked(false); // 🔒 قفل
     setAllSelections([]); // ⭐️ هذه كانت ناقصة
   };
 

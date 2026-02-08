@@ -1,29 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit9_Page2_Q1.css";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
 
 const WB_Unit9_Page2_Q1 = () => {
   const [answers, setAnswers] = useState(["", "", ""]);
   const [checked, setChecked] = useState(false);
-
+  const [tool, setTool] = useState("pen");
   const canvasRefs = useRef([]);
 
   /* ================= CANVAS SETUP ================= */
-
-  // useEffect(() => {
-  //   canvasRefs.current.forEach((canvas) => {
-  //     if (!canvas) return;
-
-  //     const ctx = canvas.getContext("2d");
-  //     const rect = canvas.getBoundingClientRect();
-  //     const dpr = window.devicePixelRatio || 1;
-
-  //     canvas.width = rect.width * dpr;
-  //     canvas.height = rect.height * dpr;
-
-  //     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 🔥 الحل
-  //   });
-  // }, []);
 
   const getPos = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
@@ -49,10 +36,17 @@ const WB_Unit9_Page2_Q1 = () => {
 
     isDrawing.current[index] = true;
 
-    ctx.lineWidth = 3;
+    ctx.isDrawing = true;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
 
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
     ctx.beginPath();
     ctx.moveTo(x, y);
   };
@@ -81,21 +75,6 @@ const WB_Unit9_Page2_Q1 = () => {
   };
 
   /* ================= CHECK ================= */
-
-  const checkAnswer = () => {
-    if (answers.some((a) => a.trim() === "")) {
-      ValidationAlert.info("Please complete all sentences!");
-      return;
-    }
-
-    setChecked(true);
-
-    ValidationAlert.success(`
-      <div style="font-size:20px;text-align:center;">
-        <b style="color:green">Score: 3 / 3</b>
-      </div>
-    `);
-  };
 
   const reset = () => {
     setAnswers(["", "", ""]);
@@ -128,7 +107,21 @@ const WB_Unit9_Page2_Q1 = () => {
         <h4 className="header-title-page8">
           <span className="ex-A">C</span> Read and draw.
         </h4>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <div className="exercise-container-wb-unit6-p5-q1">
           {[
             "How many horses are there? There are two horses.",
@@ -148,6 +141,12 @@ const WB_Unit9_Page2_Q1 = () => {
                 className="draw-box-wb-unit9-p2-q1"
                 height={120}
                 width={300}
+                style={{
+                  cursor:
+                    tool === "eraser"
+                      ? `url(${eraserCursor}) 12 12, auto`
+                      : `url(${pencilCursor}) 4 28, auto`,
+                }}
                 onMouseDown={(e) => startDrawing(e, i)}
                 onMouseMove={(e) => draw(e, i)}
                 onMouseUp={() => stopDrawing(i)}

@@ -43,7 +43,8 @@
 .unit4-q2-p6-tools {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
+  justify-content: center;
 }
 
 /* زر الأداة */

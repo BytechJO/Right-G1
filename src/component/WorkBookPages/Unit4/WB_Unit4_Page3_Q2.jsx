@@ -1,22 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
 
 const WB_Unit4_Page3_Q2 = () => {
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(true); // مؤقت حتى ما يكسر التحقق
   const [isCorrect, setIsCorrect] = useState(null);
-  // useEffect(() => {
-  //   const canvas = canvasRef.current;
-  //   const rect = canvas.getBoundingClientRect();
-  //   const dpr = window.devicePixelRatio || 1;
-
-  //   canvas.width = rect.width * dpr;
-  //   canvas.height = rect.height * dpr;
-
-  //   const ctx = canvas.getContext("2d");
-  //   ctx.scale(dpr, dpr);
-  // }, []);
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -35,67 +26,54 @@ const WB_Unit4_Page3_Q2 = () => {
   };
 
   // 🖌️ Start Drawing
- const startDrawing = (e) => {
-  e.preventDefault();
+  const startDrawing = (e) => {
+    e.preventDefault();
 
-  const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
 
-  const { x, y } = getPos(e, canvas);
+    const { x, y } = getPos(e, canvas);
 
-  ctx.isDrawing = true;
-  ctx.lineWidth = 3;
-  ctx.lineCap = "round";
-  ctx.strokeStyle = "purple";
+    ctx.isDrawing = true;
+    ctx.lineCap = "round";
 
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-};
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
 
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
 
   // ✏️ Drawing
   const draw = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
-  if (!ctx.isDrawing) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx.isDrawing) return;
 
-  const { x, y } = getPos(e, canvas);
+    const { x, y } = getPos(e, canvas);
 
-  ctx.lineTo(x, y);
-  ctx.stroke();
-};
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  };
 
- const stopDrawing = () => {
-  const ctx = canvasRef.current.getContext("2d");
-  ctx.isDrawing = false;
-  ctx.closePath();
-};
-
+  const stopDrawing = () => {
+    const ctx = canvasRef.current.getContext("2d");
+    ctx.isDrawing = false;
+    ctx.closePath();
+  };
 
   const resetCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  };
-
-  const checkAnswer = () => {
-    if (answer.trim() === "") {
-      ValidationAlert.info("Please write an answer!");
-      return;
-    }
-
-    setChecked(true);
-    setIsCorrect(true);
-
-    ValidationAlert.success(`
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:green;font-weight:bold">
-          Score: 1 / 1
-        </span>
-      </div>
-    `);
   };
 
   const reset = () => {
@@ -115,7 +93,8 @@ const WB_Unit4_Page3_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -131,7 +110,9 @@ const WB_Unit4_Page3_Q2 = () => {
           </h5>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <p style={{width:"10%",fontSize:"25px",fontWeight:"500"}}>I like</p>
+          <p style={{ width: "10%", fontSize: "25px", fontWeight: "500" }}>
+            I like
+          </p>
 
           <input
             type="text"
@@ -143,12 +124,32 @@ const WB_Unit4_Page3_Q2 = () => {
 
           <span>.</span>
         </div>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <canvas
           ref={canvasRef}
           height={300}
           width={600}
-          className="draw-canvas"
+          className="wb-unit4-p3-q2-draw-canvas"
+          style={{
+            cursor:
+              tool === "eraser"
+                ? `url(${eraserCursor}) 12 12, auto`
+                : `url(${pencilCursor}) 4 28, auto`,
+          }}
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}

@@ -7,3 +7,20 @@
     box-sizing: border-box;
     cursor: crosshair;
 }
+
+.canvas-wrapper {
+  position: relative;
+  width: 500px;
+  height: 80px;
+}
+
+.bg-canvas,
+.draw-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.bg-canvas {
+  pointer-events: none; /* مهم */
+}

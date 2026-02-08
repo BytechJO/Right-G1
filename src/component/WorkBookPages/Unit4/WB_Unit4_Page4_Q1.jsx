@@ -192,7 +192,9 @@ const WB_Unit4_Page4_Q1 = () => {
             <span className="ex-A">G</span> Look and label the shapes. Then
             color.
           </h5>
-
+          <span style={{ fontSize: "14px", color: "gray" }}>
+            Hint: Double Click to Color Word
+          </span>
           {/* ===== Word Bank ===== */}
           <Droppable droppableId="word-bank" direction="horizontal">
             {(provided) => (

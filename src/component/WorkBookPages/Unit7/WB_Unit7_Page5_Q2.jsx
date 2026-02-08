@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./WB_Unit7_Page5_Q2.css"
+import "./WB_Unit7_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const grid = [
@@ -16,10 +16,9 @@ const words = [
   {
     text: "sad",
     coords: [
-      [1,4 ],
-      [1,5 ],
-      [1,6 ],
-    
+      [1, 4],
+      [1, 5],
+      [1, 6],
     ],
   },
   {
@@ -40,10 +39,9 @@ const words = [
       [3, 2],
       [3, 3],
       [3, 4],
-    
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
-    {
+  {
     text: "hungry",
     coords: [
       [4, 0],
@@ -52,20 +50,18 @@ const words = [
       [4, 3],
       [4, 4],
       [4, 5],
- 
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
-   {
+  {
     text: "cold",
     coords: [
-      [2 ,1],
+      [2, 1],
       [2, 2],
       [2, 3],
       [2, 4],
-   
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
-   {
+  {
     text: "scared",
     coords: [
       [0, 0],
@@ -74,7 +70,6 @@ const words = [
       [0, 3],
       [0, 4],
       [0, 5],
-    
     ], // لو بدك بحطلك الإحداثيات لاحقاً
   },
 ];
@@ -85,15 +80,23 @@ export default function WB_Unit7_Page5_Q2() {
   const [wrongTry, setWrongTry] = useState(false);
   const [allSelections, setAllSelections] = useState([]);
   const [wrongWords, setWrongWords] = useState([]);
+  const [locked, setLocked] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+
   const handleCellClick = (r, c) => {
-    // منع اختيار الخلايا التي هي جزء من كلمة مكتشفة Found
+    // ⛔ منع التفاعل بعد التشيك أو الشو
+    if (locked || showAnswer) return;
+
+    // ⛔ منع الكبس على خلايا كلمات صحيحة
     if (isFoundCell(r, c)) return;
-    if (showAnswer) return;
+
     setSelected((prev) => {
-      // منع اختيار الخلية مرتين
       const exists = prev.some((coord) => coord[0] === r && coord[1] === c);
-      if (exists) return prev;
+
+      // 🔁 toggle
+      if (exists) {
+        return prev.filter((coord) => !(coord[0] === r && coord[1] === c));
+      }
 
       return [...prev, [r, c]];
     });
@@ -103,7 +106,7 @@ export default function WB_Unit7_Page5_Q2() {
     return (
       selected.some((coord) => coord[0] === r && coord[1] === c) ||
       allSelections.some((sel) =>
-        sel.some((coord) => coord[0] === r && coord[1] === c)
+        sel.some((coord) => coord[0] === r && coord[1] === c),
       )
     );
   };
@@ -112,12 +115,12 @@ export default function WB_Unit7_Page5_Q2() {
     return words.some(
       (w) =>
         foundWords.includes(w.text) &&
-        w.coords.some((coord) => coord[0] === r && coord[1] === c)
+        w.coords.some((coord) => coord[0] === r && coord[1] === c),
     );
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || locked) return;
     let foundList = [];
     if (selected.length === 0) {
       return ValidationAlert.info("");
@@ -126,7 +129,7 @@ export default function WB_Unit7_Page5_Q2() {
       const isCorrect =
         word.coords.length > 0 &&
         word.coords.every(([r, c]) =>
-          selected.some((sel) => sel[0] === r && sel[1] === c)
+          selected.some((sel) => sel[0] === r && sel[1] === c),
         );
 
       if (isCorrect) foundList.push(word.text);
@@ -140,13 +143,15 @@ export default function WB_Unit7_Page5_Q2() {
       .filter((txt) => !foundList.includes(txt));
 
     setWrongWords(wrong);
+    setLocked(true);
+
     let total = words.length;
     let color =
       foundList.length === total
         ? "green"
         : foundList.length === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const msg = `
       <div style="font-size:20px; text-align:center;">
@@ -173,6 +178,7 @@ export default function WB_Unit7_Page5_Q2() {
     // 2) ضع كل الإحداثيات داخل allSelections لتسليط الضوء عليها
     const allCoords = words.map((w) => w.coords);
     setAllSelections(allCoords);
+    setLocked(true);
 
     // 3) إزالة أي اختيار يدوي
     setSelected([]);
@@ -187,6 +193,8 @@ export default function WB_Unit7_Page5_Q2() {
     setWrongTry(false);
     setWrongWords([]);
     setShowAnswer(false);
+    setLocked(false);
+
     setAllSelections([]); // ⭐️ هذه كانت ناقصة
   };
 

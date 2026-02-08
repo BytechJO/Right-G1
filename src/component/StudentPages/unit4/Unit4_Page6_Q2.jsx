@@ -24,7 +24,7 @@ const Unit4_Page6_Q2 = () => {
 
     if (tool === "eraser") {
       ctx.globalCompositeOperation = "destination-out";
-      ctx.lineWidth = 15; // حجم الممحاة
+      ctx.lineWidth = 20; // حجم الممحاة
     } else {
       ctx.globalCompositeOperation = "source-over";
       ctx.strokeStyle = "purple";
@@ -93,7 +93,6 @@ const Unit4_Page6_Q2 = () => {
           <span className="ex-A">E</span>Read and draw.
         </h5>
 
-
         <div className="unit4-q2-p6-table">
           <div className="unit4-q2-p6-tools">
             <button
@@ -129,7 +128,7 @@ const Unit4_Page6_Q2 = () => {
                   cursor:
                     tool === "eraser"
                       ? `url(${eraserCursor}) 12 12, auto`
-                      : `url(${pencilCursor}) 12 12, auto`,
+                      : `url(${pencilCursor}) 4 28, auto`,
                 }}
                 onMouseDown={(e) => startDrawing(e, q.id)}
                 onMouseMove={(e) => draw(e, q.id)}

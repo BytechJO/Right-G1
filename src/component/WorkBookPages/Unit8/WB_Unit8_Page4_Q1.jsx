@@ -3,6 +3,9 @@ import bat from "../../../assets/U1 WB/U8/U8P48EXEG-01.svg";
 import cap from "../../../assets/U1 WB/U8/U8P48EXEG-02.svg";
 import ant from "../../../assets/U1 WB/U8/U8P48EXEG-03.svg";
 import dad from "../../../assets/U1 WB/U8/U8P48EXEG-04.svg";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
@@ -56,53 +59,53 @@ const WB_Unit8_Page4_Q1 = () => {
   );
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
- const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || locked) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
 
-  // ✅ إذا انرمَت على البنك: بس فضّي مكانها القديم
-  if (destination.droppableId === "word-bank") {
+    // ✅ إذا انرمَت على البنك: بس فضّي مكانها القديم
+    if (destination.droppableId === "word-bank") {
+      setAnswers((prev) => {
+        const copy = prev.map((row) => [...row]);
+        copy.forEach((row, qi) =>
+          row.forEach((val, pi) => {
+            if (val === draggableId) copy[qi][pi] = "";
+          }),
+        );
+        return copy;
+      });
+
+      setWrongInputs([]);
+      return;
+    }
+
+    // ✅ فقط اسمح بالدروب على الخانات
+    if (!destination.droppableId.startsWith("drop-")) return;
+
+    const [qIndex, pIndex] = destination.droppableId
+      .replace("drop-", "")
+      .split("-")
+      .map(Number);
+
     setAnswers((prev) => {
       const copy = prev.map((row) => [...row]);
+
+      // إزالة الكلمة من أي مكان سابق (منع التكرار)
       copy.forEach((row, qi) =>
         row.forEach((val, pi) => {
           if (val === draggableId) copy[qi][pi] = "";
         }),
       );
+
+      // وضعها بالمكان الجديد
+      copy[qIndex][pIndex] = draggableId;
       return copy;
     });
 
     setWrongInputs([]);
-    return;
-  }
-
-  // ✅ فقط اسمح بالدروب على الخانات
-  if (!destination.droppableId.startsWith("drop-")) return;
-
-  const [qIndex, pIndex] = destination.droppableId
-    .replace("drop-", "")
-    .split("-")
-    .map(Number);
-
-  setAnswers((prev) => {
-    const copy = prev.map((row) => [...row]);
-
-    // إزالة الكلمة من أي مكان سابق (منع التكرار)
-    copy.forEach((row, qi) =>
-      row.forEach((val, pi) => {
-        if (val === draggableId) copy[qi][pi] = "";
-      }),
-    );
-
-    // وضعها بالمكان الجديد
-    copy[qIndex][pIndex] = draggableId;
-    return copy;
-  });
-
-  setWrongInputs([]);
-};
-
+  };
 
   const checkAnswers = () => {
     if (locked) return;
@@ -174,22 +177,6 @@ const WB_Unit8_Page4_Q1 = () => {
   // نخزن Ref لكل Canvas
   const canvasRefs = useRef({});
 
-  useEffect(() => {
-    questions.forEach((q) => {
-      const canvas = canvasRefs.current[q.id];
-      if (!canvas) return;
-
-      const ctx = canvas.getContext("2d");
-
-      const img = new Image();
-      img.src = q.img;
-
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
-    });
-  }, []);
 
   // دوال الرسم
   const startDrawing = (e, id) => {
@@ -197,10 +184,16 @@ const WB_Unit8_Page4_Q1 = () => {
     const ctx = canvas.getContext("2d");
 
     ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
 
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 3;
+    }
     const rect = canvas.getBoundingClientRect();
     ctx.lastX = (e.clientX || e.touches[0].clientX) - rect.left;
     ctx.lastY = (e.clientY || e.touches[0].clientY) - rect.top;
@@ -234,17 +227,10 @@ const WB_Unit8_Page4_Q1 = () => {
     questions.forEach((q) => {
       const canvas = canvasRefs.current[q.id];
       const ctx = canvas.getContext("2d");
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const img = new Image();
-      img.src = q.img;
-
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
     });
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div
@@ -319,7 +305,21 @@ const WB_Unit8_Page4_Q1 = () => {
               </div>
             )}
           </Droppable>
+          <div className="unit4-q2-p6-tools">
+            <button
+              onClick={() => setTool("pen")}
+              className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+            >
+              ✏️ Pen
+            </button>
 
+            <button
+              onClick={() => setTool("eraser")}
+              className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+            >
+              🧽 Eraser
+            </button>
+          </div>
           <div className="content-container-wb-unit8-p4-q1">
             {questions.map((q, qIndex) => (
               <div key={qIndex} className="row2-wb-unit8-p4-q1">
@@ -333,9 +333,19 @@ const WB_Unit8_Page4_Q1 = () => {
                   <span className="num-span">{qIndex + 1}</span>
                   <canvas
                     ref={(el) => (canvasRefs.current[q.id] = el)}
-                    width={290}
+                    width={220}
                     height={160}
                     className="wb-unit8-p4-q1-canvas"
+                    style={{
+                      backgroundImage: `url(${q.img})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      cursor:
+                        tool === "eraser"
+                          ? `url(${eraserCursor}) 12 12, auto`
+                          : `url(${pencilCursor}) 4 28, auto`,
+                    }}
                     onMouseDown={(e) => startDrawing(e, q.id)}
                     onMouseMove={(e) => draw(e, q.id)}
                     onMouseUp={() => stopDrawing(q.id)}

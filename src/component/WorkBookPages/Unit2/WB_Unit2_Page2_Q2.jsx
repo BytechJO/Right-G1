@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import cake from "../../../assets/U1 WB/U2/U2P10EXED.svg";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
+
 const WB_Unit2_Page2_Q2 = () => {
   const [answer, setAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(true); // مؤقت حتى ما يكسر التحقق
   const [isCorrect, setIsCorrect] = useState(null);
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -22,18 +26,7 @@ const WB_Unit2_Page2_Q2 = () => {
       y: (clientY - rect.top) * scaleY,
     };
   };
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const image = new Image();
-    image.src = cake;
-
-    image.onload = () => {
-      ctx.drawImage(image, 0,10, canvas.width, canvas.height);
-    };
-  }, []);
-
+ 
   // 🖌️ Start Drawing
   const startDrawing = (e) => {
     e.preventDefault();
@@ -44,10 +37,16 @@ const WB_Unit2_Page2_Q2 = () => {
     const { x, y } = getPos(e, canvas);
 
     ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "red";
 
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "red";
+    }
     ctx.beginPath();
     ctx.moveTo(x, y);
   };
@@ -75,32 +74,7 @@ const WB_Unit2_Page2_Q2 = () => {
   const resetCanvas = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const image = new Image();
-    image.src = cake;
-    image.onload = () => {
-      ctx.drawImage(image, 0, 10, canvas.width, canvas.height);
-    };
-  };
-
-  const checkAnswer = () => {
-    if (answer.trim() === "") {
-      ValidationAlert.info("Please write an answer!");
-      return;
-    }
-
-    setChecked(true);
-    setIsCorrect(true);
-
-    ValidationAlert.success(`
-      <div style="font-size:20px;text-align:center;">
-        <span style="color:green;font-weight:bold">
-          Score: 1 / 1
-        </span>
-      </div>
-    `);
   };
 
   const reset = () => {
@@ -147,13 +121,43 @@ const WB_Unit2_Page2_Q2 = () => {
 
           {/* <span>.</span> */}
         </div>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
-   <div style={{display:"flex",justifyContent:"center",alignContent:"center"}}>
-     <canvas
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <canvas
             ref={canvasRef}
             height={150}
             width={500}
             className="draw-canvas-wb-unit2-p2-q2"
+            style={{
+              backgroundImage: `url(${cake})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              cursor:
+                tool === "eraser"
+                  ? `url(${eraserCursor}) 12 12, auto`
+                  : `url(${pencilCursor}) 4 28, auto`,
+            }}
             onMouseDown={startDrawing}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
@@ -162,9 +166,7 @@ const WB_Unit2_Page2_Q2 = () => {
             onTouchMove={draw}
             onTouchEnd={stopDrawing}
           />
-   </div>
-         
-    
+        </div>
       </div>
 
       <div className="action-buttons-container">

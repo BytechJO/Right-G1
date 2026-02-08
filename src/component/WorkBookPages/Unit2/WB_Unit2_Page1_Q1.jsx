@@ -1,19 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import img from "../../../assets/U1 WB/U2/U2P9EXEA.svg"
+import img from "../../../assets/U1 WB/U2/U2P9EXEA.svg";
+import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
+import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
+
 const WB_Unit2_Page1_Q1 = () => {
-
-useEffect(() => {
-  const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
-
-  const image = new Image();
-  image.src = img;
-
-  image.onload = () => {
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  };
-}, []);
+  const [tool, setTool] = useState("pen"); // pen | eraser
 
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
@@ -39,11 +31,17 @@ useEffect(() => {
     const ctx = canvas.getContext("2d");
 
     const { x, y } = getPos(e, canvas);
-
-    ctx.isDrawing = true;
-    ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.strokeStyle = "purple";
+    ctx.isDrawing = true;
+
+    if (tool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 20; // حجم الممحاة
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = "purple";
+      ctx.lineWidth = 2;
+    }
 
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -69,19 +67,13 @@ useEffect(() => {
     ctx.closePath();
   };
 
- const resetCanvas = () => {
-  const canvas = canvasRef.current;
-  const ctx = canvas.getContext("2d");
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const image = new Image();
-  image.src = img;
-  image.onload = () => {
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  };
+   const resetCanvas = () => {
+  
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
 };
-
   return (
     <div
       style={{
@@ -92,7 +84,8 @@ useEffect(() => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -106,12 +99,36 @@ useEffect(() => {
             <span className="ex-A">A</span> Read and trace.
           </h5>
         </div>
+        <div className="unit4-q2-p6-tools">
+          <button
+            onClick={() => setTool("pen")}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
 
+          <button
+            onClick={() => setTool("eraser")}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+        </div>
         <canvas
           ref={canvasRef}
-          height={500}
+          height={300}
           width={600}
           className="draw-canvas-wb-u2-q1"
+          style={{
+            backgroundImage: `url(${img})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            cursor:
+              tool === "eraser"
+                ? `url(${eraserCursor}) 12 12, auto`
+                : `url(${pencilCursor}) 4 28, auto`,
+          }}
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={stopDrawing}
