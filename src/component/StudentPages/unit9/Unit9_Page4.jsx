@@ -12,7 +12,7 @@ import sound7 from "../../../assets/unit9/sound/Pg79_3.1_John .mp3";
 import sound8 from "../../../assets/unit9/sound/Pg79_3.2_Hansel.mp3";
 import sound9 from "../../../assets/unit9/sound/Pg79_4.1_Adult Lady.mp3";
 import sound10 from "../../../assets/unit9/sound/Pg79_5.1_Adult Lady.mp3";
-import video from "../../../assets/unit5/sounds/P43.mp4";
+import video from "../../../assets/unit1/sounds/p79.mp4";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
