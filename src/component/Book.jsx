@@ -18,7 +18,7 @@ import PosterViewer from "./PosterGrammerPages/PosterGrammerPages";
 // === POPUP ===
 import Popup from "./Popup/Popup";
 import LessonNavigator from "./StudentPages/LessonNavigator";
-import teacherPdf from "../assets/Feedback Right- Interactive estudentbook G1.pdf";
+import teacherPdf from "../assets/Right TB G1.pdf";
 
 // === ASSETS ===
 import logo from "../assets/unit1/imgs/Page 01/PMAAlogo.svg";
