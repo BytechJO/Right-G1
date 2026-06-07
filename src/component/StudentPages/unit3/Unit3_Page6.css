@@ -27,7 +27,7 @@
   left: 24.5%;
   cursor: pointer;
 }
-@media screen and (max-width: 1024px) and (max-height: 600px) {
+/* @media screen and (max-width: 1024px) and (max-height: 600px) {
   .click-icon-unit3-page6-2 {
     top: 14.5% !important;
     left: 49.8% !important;
@@ -46,4 +46,4 @@
     bottom: 31%;
     left: 24.5%;
   }
-}
+} */

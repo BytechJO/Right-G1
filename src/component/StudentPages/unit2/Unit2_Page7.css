@@ -21,7 +21,7 @@
 }
 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
-  .click-icon-unit2-page7-1 {
+  /* .click-icon-unit2-page7-1 {
     top: 9.9% !important;
   }
   .click-icon-unit2-page7-2 {
@@ -30,15 +30,15 @@
   }
   .click-icon-unit2-page7-3 {
     bottom: 6.5%;
-  }
+  } */
 }
 @media (max-width: 1024px) {
-  .click-icon-unit2-page7-3 {
+  /* .click-icon-unit2-page7-3 {
     bottom: 6.5% !important;
-  }
+  } */
 }
 @media (max-width: 820px) {
-  .click-icon-unit2-page7-1 {
+  /* .click-icon-unit2-page7-1 {
     top: 11.5%;
   }
   .click-icon-unit2-page7-2 {
@@ -47,5 +47,5 @@
   .click-icon-unit2-page7-3 {
     bottom: 8.5%;
     left: 48.5%;
-  }
+  } */
 }

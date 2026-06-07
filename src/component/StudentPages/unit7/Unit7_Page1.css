@@ -88,7 +88,7 @@
   height: 24%;
   pointer-events: none;
 }
-
+/* 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .headset-icon-CD-unit7-page1-1 {
     top: 7% !important;
@@ -146,4 +146,4 @@
     bottom: 13%;
     right: 41%;
   }
-}
+} */
