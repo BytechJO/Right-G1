@@ -16,7 +16,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
       Swal.fire({
         html: `
           <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit+1} exercises?</h2>
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit + 1} exercises?</h2>
           </div>
         `,
         imageWidth: 200,
@@ -78,7 +78,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
       Swal.fire({
         html: `
           <div class="custom-popup-content">
-            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit +1} exercises?</h2>
+            <h2 style="font-size:25px;color=black">Congratulations! You've finished all the exercises of Unit🎉</br> Do you want to continue to Unit ${lesson.unit + 1} exercises?</h2>
           </div>
         `,
         imageWidth: 200,
@@ -141,6 +141,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
     // انتقال عادي
     setIndex(index + 1);
   };
+  const isFirst = index === 0;
 
   return (
     <div>
@@ -164,7 +165,7 @@ export default function LessonNavigator({ startIndex = 0 }) {
               fontSize: "14px",
               cursor: "pointer",
             }}
-          >
+         >
             <svg
               width="15"
               height="15"
@@ -187,6 +188,9 @@ export default function LessonNavigator({ startIndex = 0 }) {
               fontSize: "14px",
               cursor: "pointer",
             }}
+                 disabled={isFirst}
+            className={`prev-btn ${isFirst ? "disabled" : ""}`}
+      
           >
             <svg
               width="15"
