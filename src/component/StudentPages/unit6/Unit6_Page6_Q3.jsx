@@ -14,6 +14,8 @@ const Unit6_Page6_Q3 = () => {
   const [locked, setLocked] = useState(false); //  ← إضافة جديدة
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedWord, setSelectedWord] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const correctMatches = [
     { word: "Can it climb a tree? Yes, it can.", image: "img3" },
     { word: "Can she fly a kite? Yes, she can.", image: "img1" },
@@ -28,9 +30,10 @@ const Unit6_Page6_Q3 = () => {
 
     const rect = containerRef.current.getBoundingClientRect();
 
-    const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
+    const word = e.target.dataset.word || null;
 
+    setSelectedWord(word);
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return; // ← إضافة جديدة
@@ -66,6 +69,14 @@ const Unit6_Page6_Q3 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+
+    setSelectedImage(newLine.image);
+
+    setTimeout(() => {
+      setSelectedWord(null);
+      setSelectedImage(null);
+    }, 300);
+
     setFirstDot(null);
   };
   const checkAnswers2 = () => {
@@ -73,7 +84,7 @@ const Unit6_Page6_Q3 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -83,7 +94,7 @@ const Unit6_Page6_Q3 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) {
@@ -131,167 +142,172 @@ const Unit6_Page6_Q3 = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">
-            <span className="ex-A"> F</span> Read, look, and match.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="ex-A"> F</span> Read and match.
+        </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <div style={{ position: "relative" }}>
-                  <h5
-                    className={`clickable-word-unit2-p7-q2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    onClick={() => document.getElementById("climb-dot").click()}
-                  >
-                    <span style={{ color: "darkblue", fontWeight: "700" }}>
-                      1{" "}
-                    </span>
-                    Can it climb a tree?
-                    <br /> Yes, it can.
-                  </h5>{" "}
-                  {wrongImages.includes(
-                    "Can it climb a tree? Yes, it can."
-                  ) && <span className="error-mark-img">✕</span>}
-                </div>
-                <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can it climb a tree? Yes, it can."
-                  id="climb-dot"
-                  onClick={handleStartDotClick}
-                ></div>
+        <div className="match-wrapper2" ref={containerRef}>
+          <div className="match-words-row2">
+            <div className="word-box2">
+              <div style={{ position: "relative" }}>
+                <h5
+                  className={`clickable-word-unit2-p7-q2 text-[18px] ${
+                    selectedWord === "Can it climb a tree? Yes, it can."
+                      ? "selected-item"
+                      : ""
+                  } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                  onClick={() => document.getElementById("climb-dot").click()}
+                >
+                  <span style={{ color: "darkblue", fontWeight: "700" }}>
+                    1{" "}
+                  </span>
+                  Can it climb a tree?
+                  <br /> Yes, it can.
+                </h5>{" "}
+                {wrongImages.includes("Can it climb a tree? Yes, it can.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
               </div>
-
-              <div className="word-box2">
-                <div style={{ position: "relative" }}>
-                  <h5
-                    className={`clickable-word-unit2-p7-q2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    onClick={() => document.getElementById("fly-dot").click()}
-                  >
-                    <span style={{ color: "darkblue", fontWeight: "700" }}>
-                      2
-                    </span>
-                    Can she fly a kite?
-                    <br />
-                    Yes, she can.
-                  </h5>
-                  {wrongImages.includes(
-                    "Can she fly a kite? Yes, she can."
-                  ) && <span className="error-mark-img">✕</span>}
-                </div>
-                <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can she fly a kite? Yes, she can."
-                  id="fly-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <div style={{ position: "relative" }}>
-                  <h5
-                    className={`clickable-word-unit2-p7-q2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    onClick={() => document.getElementById("ride-dot").click()}
-                  >
-                    <span style={{ color: "darkblue", fontWeight: "700" }}>
-                      3
-                    </span>
-                    Can he ride a bike?
-                    <br />
-                    Yes, he can.
-                  </h5>
-                  {wrongImages.includes("Can he ride a bike? Yes, he can.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </div>
-                <div
-                  className="dot22-unit6-q7 start-dot22-unit6-q7"
-                  data-word="Can he ride a bike? Yes, he can."
-                  id="ride-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-            </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img
-                  src={img1}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3  ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img1-dot").click()}
-                />
-
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img
-                  src={img2}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3  ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img
-                  src={img3}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3  ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
+              <div
+                className="dot22-unit6-q7 start-dot22-unit6-q7"
+                data-word="Can it climb a tree? Yes, it can."
+                id="climb-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
 
-            {/* الجمل */}
+            <div className="word-box2">
+              <div style={{ position: "relative" }}>
+                <h5
+                  className={`clickable-word-unit2-p7-q2 text-[18px] ${
+                    selectedWord === "Can she fly a kite? Yes, she can."
+                      ? "selected-item"
+                      : ""
+                  } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                  onClick={() => document.getElementById("fly-dot").click()}
+                >
+                  <span style={{ color: "darkblue", fontWeight: "700" }}>
+                    2
+                  </span>
+                  Can she fly a kite?
+                  <br />
+                  Yes, she can.
+                </h5>
+                {wrongImages.includes("Can she fly a kite? Yes, she can.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </div>
+              <div
+                className="dot22-unit6-q7 start-dot22-unit6-q7"
+                data-word="Can she fly a kite? Yes, she can."
+                id="fly-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
 
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+            <div className="word-box2">
+              <div style={{ position: "relative" }}>
+                <h5
+                  className={`clickable-word-unit2-p7-q2 text-[18px] ${
+                    selectedWord === "Can he ride a bike? Yes, he can."
+                      ? "selected-item"
+                      : ""
+                  } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                  onClick={() => document.getElementById("ride-dot").click()}
+                >
+                  <span style={{ color: "darkblue", fontWeight: "700" }}>
+                    3
+                  </span>
+                  Can he ride a bike?
+                  <br />
+                  Yes, he can.
+                </h5>
+                {wrongImages.includes("Can he ride a bike? Yes, he can.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </div>
+              <div
+                className="dot22-unit6-q7 start-dot22-unit6-q7"
+                data-word="Can he ride a bike? Yes, he can."
+                id="ride-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
           </div>
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div className="img-box2">
+              <img
+                src={img1}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  selectedImage === "img1" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img1-dot").click()}
+              />
+
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+
+            <div className="img-box2">
+              <img
+                src={img2}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  selectedImage === "img2" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img2-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+
+            <div className="img-box2">
+              <img
+                src={img3}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  selectedImage === "img3" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img3-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+          </div>
+
+          {/* الجمل */}
+
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {
@@ -299,7 +315,10 @@ const Unit6_Page6_Q3 = () => {
             setWrongImages([]);
             setFirstDot(null);
             setShowAnswer(false);
-            setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
+            setLocked(false);
+
+            setSelectedWord(null);
+            setSelectedImage(null);
           }}
           className="try-again-button"
         >
@@ -328,10 +347,13 @@ const Unit6_Page6_Q3 = () => {
               y2: getDotPosition(`[data-image="${line.image}"]`).y,
             }));
 
+            setSelectedWord(null);
+            setSelectedImage(null);
+
             setLines(finalLines);
             setWrongImages([]);
             setShowAnswer(true);
-            setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
+            setLocked(true);
           }}
           className="show-answer-btn swal-continue"
         >

@@ -1,7 +1,74 @@
 import React, { useState } from "react";
 import "./Unit2_Page7_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+import {
+  DndContext,
+  DragOverlay,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+  TouchSensor,
+  KeyboardSensor,
+} from "@dnd-kit/core";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
+
+// ─────────────────────────────────────────────
+// Sub-components
+// ─────────────────────────────────────────────
+
+/** Single draggable number chip */
+function DraggableNumber({ item, isDragDisabled }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `num-${item.num}`,
+    disabled: isDragDisabled,
+  });
+
+  return (
+    <div className="word-number-unit2-p7-q1">
+      <span
+        ref={setNodeRef}
+        className="num-word"
+        style={{
+          opacity: isDragging ? 0.4 : 1,
+          cursor: isDragDisabled ? "default" : "grab",
+        }}
+        {...listeners}
+        {...attributes}
+      >
+        {item.num}
+      </span>
+      <span className="word-label">{item.word}</span>
+    </div>
+  );
+}
+
+/** A single droppable slot cell */
+function DroppableSlot({ id, value, isWrong, isChecked }) {
+  const { setNodeRef, isOver } = useDroppable({ id });
+
+  return (
+    <div ref={setNodeRef} className="input-wrapper1">
+      <div
+        className={[
+          "input-sentence",
+          isChecked && isWrong ? "wrong-input1" : "",
+          isOver ? "drag-over-cell" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {value || ""}
+      </div>
+      {isChecked && isWrong && <span className="wrong-icon">✕</span>}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Main component
+// ─────────────────────────────────────────────
 
 const Unit2_Page7_Q1 = () => {
   const words = [
@@ -45,49 +112,47 @@ const Unit2_Page7_Q1 = () => {
   const [checked, setChecked] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const [wrongInputs, setWrongInputs] = useState({});
-  const [usedNumbers, setUsedNumbers] = useState([]); // ⭐ الجديد
+  const [activeId, setActiveId] = useState(null); // for DragOverlay
 
-  // نفس handleChange
-  const handleChange = (key, index, value) => {
-    setUserAnswers((prev) => {
-      const updated = { ...prev };
-      if (!updated[key]) updated[key] = [];
-      updated[key][index] = value;
-      return updated;
-    });
-    setWrongInputs({});
+  // ── Sensors: pointer (mouse) + touch (tablet/mobile) + keyboard ──
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 }, // small threshold avoids accidental drags
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 8 }, // feels natural on tablet
+    }),
+    useSensor(KeyboardSensor),
+  );
+
+  // ── Drag handlers ──
+  const handleDragStart = ({ active }) => {
+    setActiveId(active.id);
   };
 
-  // 🧲 Drag logic مع تعطيل الرقم بعد الاستخدام
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+  const handleDragEnd = ({ active, over }) => {
+    setActiveId(null);
+    if (!over || showAnswer) return;
 
-    // نتأكد إنه drop على slot
-    if (!destination.droppableId.startsWith("slot-")) return;
+    const overId = over.id;
+    if (!overId.startsWith("slot-")) return;
 
-    const [, key, index] = destination.droppableId.split("-");
-    const num = Number(draggableId.replace("num-", ""));
-
-    // 🧠 نجيب الكلمة المرتبطة بالرقم
+    const [, key, indexStr] = overId.split("-");
+    const num = Number(active.id.replace("num-", ""));
     const draggedWord = words.find((w) => w.num === num)?.word;
     if (!draggedWord) return;
 
-    // نحط الكلمة بالجواب
     setUserAnswers((prev) => {
       const updated = { ...prev };
       if (!updated[key]) updated[key] = [];
-      updated[key][Number(index)] = draggedWord;
+      updated[key][Number(indexStr)] = draggedWord;
       return updated;
     });
-
-    // 🔒 نعتبر الرقم مستخدم
-    // setUsedNumbers((prev) => [...prev, num]);
 
     setWrongInputs({});
   };
 
-  // نفس checkAnswers
+  // ── Check / Show Answer / Reset ──
   const checkAnswers = () => {
     if (showAnswer) return;
 
@@ -106,6 +171,7 @@ const Unit2_Page7_Q1 = () => {
           "Oops!",
           "Please fill all fields before checking.",
         );
+        // alert("Please fill all fields before checking.");
         return;
       }
 
@@ -126,33 +192,25 @@ const Unit2_Page7_Q1 = () => {
 
     setWrongInputs(newWrongInputs);
     setChecked(true);
-    // setUsedNumbers(words.map((w) => w.num));
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
 
-    ValidationAlert[
-      tempScore === totalInputs
-        ? "success"
-        : tempScore === 0
-          ? "error"
-          : "warning"
-    ](`
+    const msg = `
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold;">
-          Score: ${tempScore} / ${totalInputs}
-        </span>
-      </div>
-    `);
+        <span style="color:${color};font-weight:bold;">Score: ${tempScore} / ${total}</span>
+      </div>`;
+
+    if (tempScore === totalInputs) ValidationAlert.success(msg);
+    else if (tempScore === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
   };
 
-  // نفس Show Answer
   const handleShowAnswer = () => {
     setUserAnswers(correctAnswers2);
     setShowAnswer(true);
     setChecked(false);
     setWrongInputs({});
-    // setUsedNumbers(words.map((w) => w.num)); // 🔒 كل الأرقام تُعتبر مستخدمة
   };
 
   const reset = () => {
@@ -160,11 +218,20 @@ const Unit2_Page7_Q1 = () => {
     setChecked(false);
     setShowAnswer(false);
     setWrongInputs({});
-    // setUsedNumbers([]); // ⭐ مهم
   };
 
+  // Word shown in the drag overlay (floating ghost while dragging)
+  const activeWord = activeId
+    ? words.find((w) => w.num === Number(activeId.replace("num-", "")))?.word
+    : null;
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         style={{
           display: "flex",
@@ -174,116 +241,58 @@ const Unit2_Page7_Q1 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="unit7-container">
-            <h5 className="header-title-page8">A Read and write.</h5>
+        <div className="div-forall" style={{ gap: "20px" }}>
+          <h5 className="header-title-page8">
+            <span className="mr-2">A</span> Match the numbers and find the
+            hidden words!
+          </h5>
 
-            {/* 🔤 الأرقام (Draggable + تعطيل بعد الاستخدام) */}
-            <Droppable droppableId="words" isDropDisabled>
-              {(provided) => (
-                <div
-                  className="number-word-section"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {words.map((item, index) => (
-                    <Draggable
-                      key={item.num}
-                      draggableId={`num-${item.num}`}
-                      index={index}
-                      isDragDisabled={showAnswer}
-                    >
-                      {(provided) => (
-                        <div
-                          className={`word-number-unit2-p7-q1`}
-                        >
-                          {/* 🔢 الرقم هو اللي ينسحب */}
-                          <span
-                            className="num-word"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {item.num}
-                          </span>
+          {/* ── Word chips (draggable source) ── */}
+          {/* 
+            dnd-kit لا يحتاج Droppable wrapper هنا.
+            الأرقام قابلة للسحب مباشرة بدون container خاص.
+          */}
+          <div className="number-word-section">
+            {words.map((item) => (
+              <DraggableNumber
+                key={item.num}
+                item={item}
+                isDragDisabled={showAnswer}
+              />
+            ))}
+          </div>
 
-                          {/* 🔤 الكلمة بس للعرض */}
-                          <span className="word-label">{item.word}</span>
-                        </div>
-                      )}
-                    </Draggable>
+          {/* ── Drop slots ── */}
+          <div className="num-input-section">
+            {Object.entries(sentences).map(([key, correctArray]) => (
+              <div key={key} className="sentence-row">
+                <span className="sentence-label">{key}</span>
+
+                <div className="num-container">
+                  {correctArray.map((num, i) => (
+                    <span key={i} className="sentence-preview">
+                      {num}
+                    </span>
                   ))}
-
-                  {provided.placeholder}
                 </div>
-              )}
-            </Droppable>
 
-            {/* 🧩 الدروب للكلمة فقط */}
-            <div className="num-input-section">
-              {Object.entries(sentences).map(([key, correctArray]) => (
-                <div key={key} className="sentence-row">
-                  <span className="sentence-label">{key}</span>
-
-                  <div className="num-container">
-                    {correctArray.map((num, i) => (
-                      <span key={i} className="sentence-preview">
-                        {num}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="sentence-line">
-                    {correctArray.map((_, index) => (
-                      <Droppable
-                        key={index}
-                        droppableId={`slot-${key}-${index}`}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="input-wrapper1"
-                          >
-                            <div
-                              className={`input-sentence
-                                ${
-                                  checked && wrongInputs[key]?.[index]
-                                    ? "wrong-input1"
-                                    : ""
-                                }
-                              ${snapshot.isDraggingOver ? "drag-over-cell" : ""}
-                              `}
-                            >
-                              {userAnswers[key]?.[index] || ""}
-                            </div>
-
-                            {checked && wrongInputs[key]?.[index] && (
-                              <span className="wrong-icon">✕</span>
-                            )}
-
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    ))}
-                  </div>
+                <div className="sentence-line">
+                  {correctArray.map((_, index) => (
+                    <DroppableSlot
+                      key={index}
+                      id={`slot-${key}-${index}`}
+                      value={userAnswers[key]?.[index]}
+                      isWrong={!!wrongInputs[key]?.[index]}
+                      isChecked={checked}
+                    />
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* 🔘 الأزرار نفسها */}
+        {/* ── Buttons ── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
@@ -296,7 +305,30 @@ const Unit2_Page7_Q1 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag Overlay: ghost chip that follows the finger/cursor ── */}
+      <DragOverlay>
+        {activeWord ? (
+          <div
+            style={{
+              padding: "6px 14px",
+              background: "#fff",
+              border: "2px solid #4a90e2",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              fontSize: "16px",
+              width: "110px",
+              textAlign: "center",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
+              pointerEvents: "none",
+              userSelect: "none",
+            }}
+          >
+            {activeWord}
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

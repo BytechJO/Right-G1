@@ -1,15 +1,16 @@
 .content-container-P90-Q1 {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  /* flex-direction: column; */
+  gap: 40px;
+  width: 100%;
   /* margin: 55px 0px; */
   /* flex-wrap: wrap; */
   /* align-items: center; */
 }
 
 .p9-q1-img {
-  height: auto;
-  width: 170px;
+  height: 120px;
+  width: auto;
 }
 
 .answer-input {
@@ -17,17 +18,28 @@
   text-align: center; /* توسيط أفقي */
   vertical-align: middle; /* توسيط عمودي */
   line-height: normal;
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 18px;
+  /* font-weight: 500; */
   width: 95%;
 }
-/* خلي المربع position relative */
-.drop-slot-inline-unit2-p8-q2 {
-  position: relative;
- width:300px;
-  min-height: 36px;
+.drop-slot-inline-unit2-p9-q1 {
+    position: relative;
+    width: 200px;
+    min-height: 30px;
 }
 
+.drop-slot-inline-unit2-p9-q1 {
+    display: inline-block;
+    min-width: 120px;
+    height: 28px;
+    border-bottom: 2px solid #000;
+    margin: 0 6px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 28px;
+}
 /* دائرة حمرا + X أبيض */
 .error-badge {
   position: absolute;
@@ -61,19 +73,19 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  font-size: 21px;
+  font-size: 18px;
 }
 
 .error-mark-input1 {
   position: absolute;
   top: -13px;
   right: 9px;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   background: red;
   color: white;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   display: flex;
   align-items: center;

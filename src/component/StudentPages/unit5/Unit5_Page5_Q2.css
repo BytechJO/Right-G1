@@ -54,17 +54,17 @@
   font-size: 18px;
 }
 
-.wrong-mark-Unit5_Page5_Q2 {
+.wrong-mark-Unit5_Page5_Q2-1 {
   position: absolute;
   top: -8px;
   right: -8px;
   background-color: red;
   color: white;
   font-weight: bold;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;

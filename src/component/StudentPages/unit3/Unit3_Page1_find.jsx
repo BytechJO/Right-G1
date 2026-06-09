@@ -37,7 +37,7 @@ const Unit3_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -69,6 +69,7 @@ const Unit3_Page1_find = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
+          gap: "20px",
           alignItems: "center",
         }}
       >
@@ -77,8 +78,7 @@ const Unit3_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the boy shutting the window
-            in the picture?
+            I need your help! Can you tap or click the boy shutting the window?
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -89,6 +89,7 @@ const Unit3_Page1_find = () => {
               width: "auto",
               height: "75vh",
               cursor: "pointer",
+              borderRadius: "8px",
               display: "block",
             }}
             onClick={handleImageClick}
@@ -117,7 +118,6 @@ const Unit3_Page1_find = () => {
               src={MySVG}
               className="highlight-svg-unit3"
               alt="answer highlight"
-           
             />
           )}
         </div>

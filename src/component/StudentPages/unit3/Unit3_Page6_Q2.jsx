@@ -59,11 +59,11 @@ const Unit3_Page6_Q2 = () => {
 
     // 2) مقارنة الإجابات
     const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong"
+      answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
     setShowResult(results);
-setShowCorrectAnswers(true);
+    setShowCorrectAnswers(true);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -97,21 +97,19 @@ setShowCorrectAnswers(true);
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">E</span> Read, look, and choose
+          <span className="ex-A">E</span> Does the picture match the sentence?
+          Tap or click
           <span style={{ color: "red" }}> ✓ </span> or
           <span style={{ color: "red" }}> ✗</span>.
         </h5>

@@ -28,7 +28,15 @@
   margin-bottom: 50px;
 }
 
-
+.sentence-container2-unit2-pg10-q1{
+   display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 120px;
+  row-gap: 80px;
+  /* width: 100%; */
+      margin-top: 20px;
+  margin-bottom: 50px;
+}
 /* رقم الجملة */
 .num2 {
   color: #2c5287;
@@ -67,7 +75,7 @@
   right: -10px;
   background: red;
   color: white;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   border: 2px solid white;
   width: 22px;

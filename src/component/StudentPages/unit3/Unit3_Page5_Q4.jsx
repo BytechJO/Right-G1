@@ -54,25 +54,25 @@ const Unit3_Page5_Q4 = () => {
   // ========================
   // Drag Logic
   // ========================
-const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showAnswer || isChecked) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || showAnswer || isChecked) return;
 
-  if (destination.droppableId.startsWith("slot-")) {
-    const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
+    if (destination.droppableId.startsWith("slot-")) {
+      const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
 
-    const letter = draggableId.replace("letter-", "");
+      const letter = draggableId.replace("letter-", "");
 
-    setSlots((prev) => {
-      const updated = prev.map((group) => [...group]);
+      setSlots((prev) => {
+        const updated = prev.map((group) => [...group]);
 
-      // ✅ استبدال الحرف مباشرة
-      updated[g][l] = letter;
+        // ✅ استبدال الحرف مباشرة
+        updated[g][l] = letter;
 
-      return updated;
-    });
-  }
-};
+        return updated;
+      });
+    }
+  };
 
   // ========================
   // Show Answer
@@ -138,10 +138,11 @@ const onDragEnd = (result) => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
-        <div className="container8">
+      <div className="div-forall mb-10" style={{  }}>
+        
           <h5 className="header-title-page8">
-            <span className="ex-A">C</span> Answer the question.
+            <span className="ex-A">C</span> Drag the letters into the boxes to
+            make the secret sentence.
           </h5>
 
           <div className="alphabet-box">
@@ -154,7 +155,7 @@ const onDragEnd = (result) => {
               >
                 {(provided) => (
                   <div
-                    className="row1"
+                    className="row1-unit3-q4"
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
@@ -221,10 +222,9 @@ const onDragEnd = (result) => {
                         )}
                       </Droppable>
                     ))}
-                
                   </div>
                 ))}
-                    <img src={img} style={{height:"150px" ,width:"185px"}}/>
+                <img src={img} style={{ height: "150px", width: "185px" }} />
               </div>
               <div className="sentence-box">
                 <span className="sentence-text">{sentence}</span>
@@ -232,7 +232,7 @@ const onDragEnd = (result) => {
             </DragDropContext>
           </div>
         </div>
-      </div>
+  
 
       {/* 🔘 Buttons */}
       <div className="action-buttons-container">

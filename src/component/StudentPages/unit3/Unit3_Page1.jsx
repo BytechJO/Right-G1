@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef } from "react";
 import page_1 from "../../../assets/unit3/imgs3/right1-unit3-page1.jpg";
 import "./Unit3_Page1.css";
 import Pg22_U3_Intro_AdultLady from "../../../assets/unit3/sound3/U3 Page 22-23.mp3";
@@ -12,12 +12,12 @@ import sound1 from "../../../assets/unit3/sound3/U3P22VOC-01.mp3";
 import sound2 from "../../../assets/unit3/sound3/U3P22VOC-02.mp3";
 import sound3 from "../../../assets/unit3/sound3/U3P22VOC-03.mp3";
 import sound7 from "../../../assets/unit3/sound3/U3P22VOC-07.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit3_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+
   const captionsExample = [
     { start: 0, end: 4.02, text: "Page 22, unit 3. Let's go to school. " },
     { start: 4.05, end: 7.11, text: "Page 22, unit 3 vocabulary. " },
@@ -48,7 +48,7 @@ const Unit3_Page1 = ({ openPopup }) => {
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 24.0, y1: 18.66, sound: 1, isPrimary: true },
+    { x1: 24.2, y1: 18.8, sound: 1, isPrimary: true },
 
     // // // الصوت الأول – منطقة إضافية
     { x1: 23.5, y1: 12.23, x2: 70.9, y2: 33.4, sound: 1, isPrimary: false },
@@ -60,14 +60,14 @@ const Unit3_Page1 = ({ openPopup }) => {
     { x1: 50.23, y1: 42.8, x2: 71.8, y2: 57.9, sound: 2, isPrimary: false },
 
     // // // الصوت الثالث – الأساسية
-    { x1: 75.3, y1: 43.0, sound: 3, isPrimary: true },
+    { x1: 75.6, y1: 42.8, sound: 3, isPrimary: true },
 
     // // // الصوت الثالث – الإضافية
     { x1: 84, y1: 34.06, x2: 98, y2: 44.9, sound: 3, isPrimary: false },
     // // // الصوت الرابع – الأساسية
-    { x1: 70.5, y1: 62.6, sound: 4, isPrimary: true },
+    { x1: 70.8, y1: 62.6, sound: 4, isPrimary: true },
 
-     // // الصوت الرابع – الإضافية
+    // // الصوت الرابع – الإضافية
     { x1: 78, y1: 54.3, x2: 99.4, y2: 65.03, sound: 4, isPrimary: false },
   ];
   const sounds = {
@@ -83,19 +83,21 @@ const Unit3_Page1 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -105,8 +107,7 @@ const Unit3_Page1 = ({ openPopup }) => {
     >
       <audio ref={audioRef} style={{ display: "none" }} />
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
+        const isActive = activeId === `p22-${area.sound}`;
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
         // ============================
@@ -120,8 +121,7 @@ const Unit3_Page1 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p22-${area.sound}`);
               }}
             ></div>
           );
@@ -143,8 +143,7 @@ const Unit3_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+              playSound(sounds[area.sound], `p22-${area.sound}`);
             }}
           ></div>
         );
@@ -171,7 +170,7 @@ const Unit3_Page1 = ({ openPopup }) => {
                   src={Pg22_U3_Intro_AdultLady}
                   captions={captionsExample}
                 />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -200,7 +199,7 @@ const Unit3_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit3_Page1_find />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -228,7 +227,7 @@ const Unit3_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit3_Page1_Vocab />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -256,7 +255,7 @@ const Unit3_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit3_Page1_Read />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}

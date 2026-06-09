@@ -13,6 +13,8 @@ export default function Page8_Q3() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [locked, setLocked] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const [selectedWord, setSelectedWord] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const correctMatches = [
     { word: "Hello! I’m John.", image: "img1" },
@@ -27,11 +29,12 @@ export default function Page8_Q3() {
 
     const word = e.target.dataset.letter;
 
-    // ❌ منع خروج خط جديد من كلمة لها خط سابق
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
 
     const rect = containerRef.current.getBoundingClientRect();
+
+    setSelectedWord(word);
 
     setFirstDot({
       word,
@@ -46,7 +49,9 @@ export default function Page8_Q3() {
   const handleEndDotClick = (e) => {
     if (showAnswer || locked) return;
     if (!firstDot) return;
+
     const rect = containerRef.current.getBoundingClientRect();
+    const image = e.target.dataset.image;
 
     const newLine = {
       x1: firstDot.x,
@@ -54,13 +59,20 @@ export default function Page8_Q3() {
       x2: e.target.getBoundingClientRect().left - rect.left + 8,
       y2: e.target.getBoundingClientRect().top - rect.top + 8,
       word: firstDot.word,
-      image: e.target.dataset.image,
+      image,
     };
 
     setLines((prev) => [...prev, newLine]);
+
+    setSelectedImage(image);
+
+    setTimeout(() => {
+      setSelectedWord(null);
+      setSelectedImage(null);
+    }, 300);
+
     setFirstDot(null);
   };
-
   // ============================
   // 3️⃣ Check Answers
   // ============================
@@ -70,7 +82,7 @@ export default function Page8_Q3() {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -80,7 +92,7 @@ export default function Page8_Q3() {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
       if (isCorrect) correctCount++;
       else wrong.push(line.word);
@@ -113,7 +125,7 @@ export default function Page8_Q3() {
           <span className="ex-A">B</span>Read and match.
         </h5>
 
-        <div key={resetKey} className="container1" ref={containerRef}>
+        <div key={resetKey} className="container-unit1-p8-exb" ref={containerRef}>
           {/* Row 1 */}
           <div className="matching-row">
             <div className="word-with-dot">
@@ -122,8 +134,8 @@ export default function Page8_Q3() {
                 {/* الكلمة تشغّل كليك على الدوت */}
                 <span
                   className={`word-text ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
+                    selectedWord === "Hello! I’m John." ? "selected-item" : ""
+                  } ${locked || showAnswer ? "disabled-word" : ""}`}
                   onClick={() => document.getElementById("dot-hello").click()}
                   style={{ cursor: "pointer", width: "190px" }}
                 >
@@ -156,9 +168,9 @@ export default function Page8_Q3() {
               {/* الصورة تشغّل كليك على الدوت */}
               <img
                 src={img2}
-                 className={`matched-img ${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                className={`matched-img ${
+                  selectedImage === "img2" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
                 alt=""
                 onClick={() => document.getElementById("img2-dot").click()}
                 style={{ cursor: "pointer" }}
@@ -173,8 +185,8 @@ export default function Page8_Q3() {
               <div style={{ position: "relative" }}>
                 <span
                   className={`word-text ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
+                    selectedWord === "Goodbye!" ? "selected-item" : ""
+                  } ${locked || showAnswer ? "disabled-word" : ""}`}
                   onClick={() => document.getElementById("dot-goodbye").click()}
                   style={{ cursor: "pointer", width: "190px" }}
                 >
@@ -206,9 +218,9 @@ export default function Page8_Q3() {
 
               <img
                 src={img1}
-                 className={`matched-img ${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                className={`matched-img ${
+                  selectedImage === "img1" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
                 alt=""
                 onClick={() => document.getElementById("img1-dot").click()}
                 style={{ cursor: "pointer" }}
@@ -241,8 +253,8 @@ export default function Page8_Q3() {
             setFirstDot(null);
             setShowAnswer(false);
             setLocked(false);
-
-            // إعادة الرندر بالكامل
+            setSelectedWord(null);
+            setSelectedImage(null);
             setResetKey((k) => k + 1);
           }}
           className="try-again-button"
@@ -286,10 +298,10 @@ export default function Page8_Q3() {
 
             setLines(finalLines);
             setWrongWords([]);
+            setSelectedWord(null);
+            setSelectedImage(null);
             setShowAnswer(true);
             setLocked(false);
-
-            // 🔥 أجبر React يرندر كل شيء من البداية
             setResetKey((k) => k + 1);
           }}
           className="show-answer-btn swal-continue"

@@ -20,14 +20,14 @@
   background: white;
   padding: 10px;
   border-radius: 8px;
-  width: 260px;
+  /* width: 260px; */
 }
 
 .review3-p1-q3-img {
-  width: 100%;
+  width: auto;
   border-radius: 8px;
-  margin-bottom: 12px;
-  height: auto;
+  margin-bottom: 60px;
+  height: 150px;
 }
 
 .review3-p1-q3-row {
@@ -70,12 +70,12 @@
   align-items: center;
   margin-left: 8px;
   vertical-align: middle;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   position: absolute;
   top: -10px;
   right: -12px;
-  font-size: 18px;
+  font-size: 12px;
 }
 
 .review3-p1-q3-buttons {
@@ -83,7 +83,6 @@
   display: flex;
   gap: 15px;
 }
-
 
 /* ⭐ ترتيب الكروت على شكل Grid بدل Flex */
 .review3-p1-q3-grid {
@@ -102,15 +101,6 @@
   box-sizing: border-box;
 }
 
-/* ⭐ الصورة ريسبونسيف */
-.review3-p1-q3-img {
-  width: 200px;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 12px;
-}
-
-
 /* 🔻 شاشة تابلت (من 991px وتحت) */
 @media (max-width: 1024px) {
   .review3-p1-q3-grid {
@@ -119,16 +109,13 @@
     width: auto;
   }
   .review3-p1-q3-img {
-  width: 150px;
-  height: auto;
-  
-}
+    width: 150px;
+    height: auto;
+  }
 }
 
 /* 🔻 شاشة موبايل (من 600px وتحت) */
 @media (max-width: 600px) {
-  
-
   .review3-p1-q3-box {
     width: 100px;
   }

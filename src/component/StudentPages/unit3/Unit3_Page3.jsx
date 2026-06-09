@@ -13,8 +13,10 @@ import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import video from "../../../assets/unit3/sound3/p24.mp4";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit3_Page3 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -49,20 +51,23 @@ const Unit3_Page3 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
+
   return (
     <div
       className="page1-img-wrapper"
@@ -77,10 +82,8 @@ const Unit3_Page3 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
-              ? "highlight"
-              : ""
+            className={`clickable-area ${
+            activeId === `p24-${area.sound}`||  hoveredAreaIndex === index   ? "highlight" : ""
           }`}
           style={{
             position: "absolute",
@@ -90,8 +93,7 @@ const Unit3_Page3 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
+            playSound(area.sound, `p24-${area.sound}`)
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -124,7 +126,7 @@ const Unit3_Page3 = ({ openPopup }) => {
                   src={CD22_pg24_Grammar1_AdultLady}
                   captions={captionsExample}
                 />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -173,7 +175,7 @@ const Unit3_Page3 = ({ openPopup }) => {
                 >
                   <source src={video} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}

@@ -1,7 +1,8 @@
 .row-content10-unit4-page5-q2 {
   display: flex;
   margin-bottom: 55px;
-  gap: 22px;
+  justify-content: space-between;
+  width: 100%;
   margin-top: 20px;
 }
 

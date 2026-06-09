@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-// import "./Unit5_Page6_Q1.css";
+import "./Review5_Page1_Q1.css";
 import img1 from "../../../assets/unit6/imgs/U6P52EXEA-01.svg";
 import img2 from "../../../assets/unit6/imgs/U6P52EXEA-02.svg";
 import img3 from "../../../assets/unit6/imgs/U6P52EXEA-03.svg";
@@ -90,7 +90,7 @@ const Review5_Page1_Q1 = () => {
     });
 
     setWrongWords(wrong);
-    setLocked(true)
+    setLocked(true);
 
     const total = correctMatches.length;
     // تحديد اللون حسب النتيجة
@@ -131,75 +131,115 @@ const Review5_Page1_Q1 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
+            gap: "50px",
           }}
         >
-          <div className="unit2-page9-q1-container">
-            <h5 className="header-title-page8">A Look, read, and write.</h5>
-            <Droppable droppableId="bank" isDropDisabled>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+          <h5 className="header-title-page8">
+            <span className="mr-2">A</span> Drag and drop the words to complete
+            the sentences.
+          </h5>
+          <Droppable droppableId="bank" isDropDisabled>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  width: "100%",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {correctMatches.map((item, index) => (
+                  <Draggable
+                    key={item.input}
+                    draggableId={`word-${item.id}`}
+                    index={index}
+                    isDragDisabled={locked}
+                  >
+                    {(provided) => (
+                      <span
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
+                      >
+                        {item.input}
+                      </span>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div className="content-container-unit5-p6-q1">
+            <div className="section-one-unit5-p6-q1">
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                1
+              </span>{" "}
+              <img src={img1} className="img-review5-p1-q1 " />
+              <div className="content-input-unit5-p6-q1">
+                <input
+                  type="text"
+                  value={"What’s this?"}
+                  readOnly
                   style={{
-                    display: "flex",
-                    gap: "10px",
-                    padding: "10px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    // margin: "10px 0",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    pointerEvents: "none",
+                    borderBottom: "2px solid black",
+                    width: "200px",
+                    fontSize: "18px",
                   }}
-                >
-                  {correctMatches.map((item, index) => (
-                    <Draggable
-                      key={item.input}
-                      draggableId={`word-${item.id}`}
-                      index={index}
-                      isDragDisabled={locked}
-                    >
-                      {(provided) => (
-                        <span
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {item.input}
-                        </span>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+                />
+
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="text"
+                    value={"This is an eraser."}
+                    readOnly
+                    style={{
+                      pointerEvents: "none",
+                      borderBottom: "2px solid black",
+                      width: "200px",
+                      fontSize: "18px",
+                    }}
+                  />
                 </div>
-              )}
-            </Droppable>
-            <div className="content-container-unit5-p6-q1">
-              <div className="section-one-unit5-p6-q1">
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  1
-                </span>{" "}
-                <img src={img1} className="img-unit5-p6-q1" />
-                <div className="content-input-unit5-p6-q1">
+              </div>
+            </div>
+
+            <div className="section-two-unit5-p6-q1">
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                2
+              </span>{" "}
+              <img src={img2} className="img-review5-p1-q1 " />
+              <div className="content-input-unit5-p6-q1">
+                <div style={{ position: "relative", display: "flex" }}>
                   <input
                     type="text"
                     value={"What’s this?"}
@@ -208,249 +248,43 @@ const Review5_Page1_Q1 = () => {
                       pointerEvents: "none",
                       borderBottom: "2px solid black",
                       width: "200px",
-                      fontSize: "22px",
+                      fontSize: "18px",
                     }}
                   />
-
-                  <div style={{ position: "relative" }}>
-                    <input
-                      type="text"
-                      value={"This is an eraser."}
-                      readOnly
-                      style={{
-                        pointerEvents: "none",
-                        borderBottom: "2px solid black",
-                        width: "200px",
-                        fontSize: "22px",
-                      }}
-                    />
-                  </div>
                 </div>
-              </div>
-
-              <div className="section-two-unit5-p6-q1">
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  2
-                </span>{" "}
-                <img src={img2} className="img-unit5-p6-q1" />
-                <div className="content-input-unit5-p6-q1">
-                  <div style={{ position: "relative", display: "flex" }}>
-                    <input
-                      type="text"
-                      value={"What’s this?"}
-                      readOnly
-                      style={{
-                        pointerEvents: "none",
-                        borderBottom: "2px solid black",
-                        width: "200px",
-                        fontSize: "22px",
-                      }}
-                    />
-                  </div>
-                  <div style={{ position: "relative", display: "flex" }}>
-                    <input
-                      type="text"
-                      value={"This is a"}
-                      readOnly
-                      style={{
-                        pointerEvents: "none",
-                        borderBottom: "2px solid black",
-                        width: "90px",
-                        fontSize: "22px",
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "flex-end",
-                        fontSize: "22px",
-                      }}
-                    >
-                      <Droppable droppableId="input1">
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`answer-input-unit5-p6-q1 ${
-                              snapshot.isDraggingOver ? "drag-over-cell" : ""
-                            }`}
-                          >
-                            {answers.find((a) => a.num === "input1") && (
-                              <Draggable
-                                draggableId={`filled-${answers.find((a) => a.num === "input1").wordId}`}
-                                index={0}
-                                isDragDisabled={true}
-                              >
-                                {(provided) => (
-                                  <span
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    {
-                                      answers.find((a) => a.num === "input1")
-                                        .input
-                                    }
-                                  </span>
-                                )}
-                              </Draggable>
-                            )}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                      .
-                      {!locked && wrongWords.includes(answers[0]?.num) && (
-                        <span className="error-mark-input1">✕</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="section-three-unit5-p6-q1">
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  3
-                </span>{" "}
-                <img src={img3} className="img-unit5-p6-q1" />
-                <div className="content-input-unit5-p6-q1">
-                  <div
+                <div style={{ position: "relative", display: "flex" }}>
+                  <input
+                    type="text"
+                    value={"This is a"}
+                    readOnly
                     style={{
-                      position: "relative",
-                      fontSize: "22px",
+                      pointerEvents: "none",
+                      borderBottom: "2px solid black",
+                      width: "90px",
+                      fontSize: "18px",
                     }}
-                  >
-                    <Droppable droppableId="input2">
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className={`answer-input-unit5-p6-q1 ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                        >
-                          {answers.find((a) => a.num === "input2") && (
-                            <Draggable
-                              draggableId={`filled-${answers.find((a) => a.num === "input2").wordId}`}
-                              index={0}
-                              isDragDisabled={true}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  {
-                                    answers.find((a) => a.num === "input2")
-                                      .input
-                                  }
-                                </span>
-                              )}
-                            </Draggable>
-                          )}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                    {!locked && wrongWords.includes(answers[1]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
-                    ?
-                    <div
-                      style={{
-                        position: "relative",
-                        display: "flex",
-                        alignItems: "flex-end",
-                        fontSize: "22px",
-                      }}
-                    >
-                      <Droppable droppableId="input3">
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`answer-input-unit5-p6-q1 ${
-                              snapshot.isDraggingOver ? "drag-over-cell" : ""
-                            }`}
-                          >
-                            {answers.find((a) => a.num === "input3") && (
-                              <Draggable
-                                draggableId={`filled-${answers.find((a) => a.num === "input3").wordId}`}
-                                index={0}
-                                isDragDisabled={true}
-                              >
-                                {(provided) => (
-                                  <span
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    {
-                                      answers.find((a) => a.num === "input3")
-                                        .input
-                                    }
-                                  </span>
-                                )}
-                              </Draggable>
-                            )}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                      .
-                      {!locked && wrongWords.includes(answers[2]?.num) && (
-                        <span className="error-mark-input1">✕</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-four-unit5-p6-q1">
-                <span
-                  style={{
-                    color: "#2c5287",
-                    fontWeight: "700",
-                    fontSize: "20px",
-                  }}
-                >
-                  4
-                </span>{" "}
-                <img src={img4} className="img-unit5-p6-q1" />
-                <div className="content-input-unit5-p6-q1">
+                  />
                   <div
                     style={{
                       position: "relative",
                       display: "flex",
+                      width: "100%",
                       alignItems: "flex-end",
-                      fontSize: "22px",
+                      fontSize: "18px",
                     }}
                   >
-                    <Droppable droppableId="input4">
+                    <Droppable droppableId="input1">
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
-                          className={`answer-input-unit5-p6-q1 ${
+                          className={`answer-input-unit5-p6-q1 w-full ${
                             snapshot.isDraggingOver ? "drag-over-cell" : ""
                           }`}
                         >
-                          {answers.find((a) => a.num === "input4") && (
+                          {answers.find((a) => a.num === "input1") && (
                             <Draggable
-                              draggableId={`filled-${answers.find((a) => a.num === "input4").wordId}`}
+                              draggableId={`filled-${answers.find((a) => a.num === "input1").wordId}`}
                               index={0}
                               isDragDisabled={true}
                             >
@@ -461,53 +295,7 @@ const Review5_Page1_Q1 = () => {
                                   {...provided.dragHandleProps}
                                 >
                                   {
-                                    answers.find((a) => a.num === "input4")
-                                      .input
-                                  }
-                                </span>
-                              )}
-                            </Draggable>
-                          )}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                    ?
-                    {!locked && wrongWords.includes(answers[3]?.num) && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
-                  </div>
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "flex-end",
-                      fontSize: "22px",
-                    }}
-                  >
-                    <Droppable droppableId="input5">
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className={`answer-input-unit5-p6-q1 ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                        >
-                          {answers.find((a) => a.num === "input5") && (
-                            <Draggable
-                              draggableId={`filled-${answers.find((a) => a.num === "input5").wordId}`}
-                              index={0}
-                              isDragDisabled={true}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  {
-                                    answers.find((a) => a.num === "input5")
+                                    answers.find((a) => a.num === "input1")
                                       .input
                                   }
                                 </span>
@@ -519,14 +307,217 @@ const Review5_Page1_Q1 = () => {
                       )}
                     </Droppable>
                     .
-                    {!locked && wrongWords.includes(answers[4]?.num) && (
+                    {!locked && wrongWords.includes(answers[0]?.num) && (
                       <span className="error-mark-input1">✕</span>
                     )}
                   </div>
                 </div>
               </div>
             </div>
+
+            <div className="section-three-unit5-p6-q1">
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                3
+              </span>{" "}
+              <img src={img3} className="img-review5-p1-q1 " />
+              <div className="content-input-unit5-p6-q1">
+                <div
+                  style={{
+                    position: "relative",
+                    fontSize: "18px",
+                  }}
+                >
+                  <Droppable droppableId="input2">
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`answer-input-unit5-p6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                      >
+                        {answers.find((a) => a.num === "input2") && (
+                          <Draggable
+                            draggableId={`filled-${answers.find((a) => a.num === "input2").wordId}`}
+                            index={0}
+                            isDragDisabled={true}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers.find((a) => a.num === "input2").input}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                  {!locked && wrongWords.includes(answers[1]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                  ?
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "flex-end",
+                      fontSize: "18px",
+                    }}
+                  >
+                    <Droppable droppableId="input3">
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className={`answer-input-unit5-p6-q1 ${
+                            snapshot.isDraggingOver ? "drag-over-cell" : ""
+                          }`}
+                        >
+                          {answers.find((a) => a.num === "input3") && (
+                            <Draggable
+                              draggableId={`filled-${answers.find((a) => a.num === "input3").wordId}`}
+                              index={0}
+                              isDragDisabled={true}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {
+                                    answers.find((a) => a.num === "input3")
+                                      .input
+                                  }
+                                </span>
+                              )}
+                            </Draggable>
+                          )}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                    .
+                    {!locked && wrongWords.includes(answers[2]?.num) && (
+                      <span className="error-mark-input1">✕</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="section-four-unit5-p6-q1">
+              <span
+                style={{
+                  color: "#2c5287",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                }}
+              >
+                4
+              </span>{" "}
+              <img src={img4} className="img-review5-p1-q1 " />
+              <div className="content-input-unit5-p6-q1">
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    fontSize: "18px",
+                  }}
+                >
+                  <Droppable droppableId="input4">
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`answer-input-unit5-p6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                      >
+                        {answers.find((a) => a.num === "input4") && (
+                          <Draggable
+                            draggableId={`filled-${answers.find((a) => a.num === "input4").wordId}`}
+                            index={0}
+                            isDragDisabled={true}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers.find((a) => a.num === "input4").input}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                  ?
+                  {!locked && wrongWords.includes(answers[3]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                </div>
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    fontSize: "22px",
+                  }}
+                >
+                  <Droppable droppableId="input5">
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className={`answer-input-unit5-p6-q1 ${
+                          snapshot.isDraggingOver ? "drag-over-cell" : ""
+                        }`}
+                      >
+                        {answers.find((a) => a.num === "input5") && (
+                          <Draggable
+                            draggableId={`filled-${answers.find((a) => a.num === "input5").wordId}`}
+                            index={0}
+                            isDragDisabled={true}
+                          >
+                            {(provided) => (
+                              <span
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                {answers.find((a) => a.num === "input5").input}
+                              </span>
+                            )}
+                          </Draggable>
+                        )}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                  .
+                  {!locked && wrongWords.includes(answers[4]?.num) && (
+                    <span className="error-mark-input1">✕</span>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
+
           <div className="action-buttons-container">
             <button
               onClick={() => {

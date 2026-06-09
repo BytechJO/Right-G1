@@ -205,11 +205,9 @@ export default function Review7_Page1_Q1() {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
+          
+            gap: "20px",
+        
           }}
         >
           <div className="crossword-container">

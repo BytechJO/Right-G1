@@ -24,13 +24,12 @@ import FourImagesWithAudio from "../../FourImagesWithAudio";
 import sound2_4 from "../../../assets/unit3/sound3/U3P22VOC-04.mp3";
 import sound2_5 from "../../../assets/unit3/sound3/U3P22VOC-05.mp3";
 import sound2_6 from "../../../assets/unit3/sound3/U3P22VOC-06.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 import "./Unit3_Page2.css";
 const Unit3_Page2 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+ 
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -70,18 +69,18 @@ const Unit3_Page2 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 23.2, y1: 18.5, sound: 1, isPrimary: true },
+    { x1: 23.0, y1: 18.4, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 8.4, y1: 5.6, x2: 32.8, y2:17.47, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 19.4, y1: 27.9, sound: 2, isPrimary: true },
+    { x1: 19.2, y1: 27.7, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 7.4, y1: 26.7, x2: 21.2, y2: 38.8, sound: 2, isPrimary: false },
     // الصوت الثاني – الأساسية
-    { x1:20.0, y1: 41.1,  sound: 3, isPrimary: true },
+    { x1:19.9, y1: 41.1,  sound: 3, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 21.4, y1: 35.07, x2: 38.3, y2: 45.7, sound: 3, isPrimary: false },
@@ -98,19 +97,21 @@ const Unit3_Page2 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+ const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -121,7 +122,7 @@ const Unit3_Page2 = ({ openPopup }) => {
       <audio ref={audioRef} style={{ display: "none" }} />
       {/* <img src={page_2} /> */}
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+        const isActive = activeId === `p23-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -136,8 +137,7 @@ const Unit3_Page2 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p23-${area.sound}`);
               }}
             ></div>
           );
@@ -159,8 +159,7 @@ const Unit3_Page2 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+             playSound(sounds[area.sound], `p23-${area.sound}`);
             }}
           ></div>
         );

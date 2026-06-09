@@ -23,8 +23,12 @@ import Pg5_1_2_Lolo from "../../../assets/unit1/sounds/Pg5_1.2_Lolo.mp3";
 import Pg5_1_1_Bebo from "../../../assets/unit1/sounds/Pg5_1.1_Bebo.mp3";
 import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
 import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Page5 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+    const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+
+
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -65,13 +69,13 @@ const Page5 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 7.25, y1: 45.8, x2: 11.4, y2: 48.8, sound: 1, isPrimary: true },
+    { x1: 7.1, y1: 46, x2: 11.4, y2: 48.8, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 4.6, y1: 34.1, x2: 15.2, y2: 67.8, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 33.9, y1: 43.1, x2: 37.7, y2: 46.1, sound: 2, isPrimary: true },
+    { x1: 33.8, y1: 43.3, x2: 37.7, y2: 46.1, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 26.9, y1: 32.8, x2: 35.8, y2: 68.9, sound: 2, isPrimary: false },
@@ -86,19 +90,21 @@ const Page5 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -114,7 +120,7 @@ const Page5 = ({ openPopup }) => {
       /> */}
 
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+               const isActive = activeId === `p5-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -123,15 +129,14 @@ const Page5 = ({ openPopup }) => {
           return (
             <div
               key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
+                 className={`circle-area ${isActive ? "active" : ""}`}
               style={{
                 left: `${area.x1}%`,
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
-              }}
+                playSound(sounds[area.sound], `p5-${area.sound}`);
+                }}
             ></div>
           );
         }
@@ -152,9 +157,8 @@ const Page5 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
-            }}
+             playSound(sounds[area.sound], `p5-${area.sound}`);
+                }}
           ></div>
         );
       })}

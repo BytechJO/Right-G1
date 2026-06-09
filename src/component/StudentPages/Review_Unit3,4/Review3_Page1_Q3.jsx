@@ -104,9 +104,7 @@ const Review3_Page1_Q3 = () => {
     const correctSelections = {};
 
     questions.forEach((q) => {
-      const correctIndex = q.items.findIndex(
-        (item) => item.correct === "✓"
-      );
+      const correctIndex = q.items.findIndex((item) => item.correct === "✓");
       correctSelections[q.id] = correctIndex;
     });
 
@@ -121,56 +119,50 @@ const Review3_Page1_Q3 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "90px",
         }}
       >
-        <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            C Read and write <span style={{ color: "red" }}>✓</span>
-          </h4>
+        <h4 className="header-title-page8">
+          <span className="mr-2">C</span> Read and tap or click the correct
+          answer. <span style={{ color: "red" }}>✓</span>
+        </h4>
 
-          <div className="review3-p1-q3-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="review3-p1-q3-box">
-                <img src={q.image} alt="" className="review3-p1-q3-img" />
+        <div className="review3-p1-q3-grid">
+          {questions.map((q) => (
+            <div key={q.id} className="review3-p1-q3-box">
+              <img src={q.image} alt="" className="review3-p1-q3-img" />
 
-                {q.items.map((item, idx) => {
-                  const isSelected = answers[q.id] === idx;
-                  const isWrong = results[q.id] === "wrong" && isSelected;
+              {q.items.map((item, idx) => {
+                const isSelected = answers[q.id] === idx;
+                const isWrong = results[q.id] === "wrong" && isSelected;
 
-                  return (
-                    <div key={idx} className="review3-p1-q3-row">
-                      <span className="review3-p1-q3-text">{item.text}</span>
+                return (
+                  <div key={idx} className="review3-p1-q3-row">
+                    <span className="review3-p1-q3-text">{item.text}</span>
 
-                      <div className="review3-p1-q3-input-box">
-                        <input
-                          type="text"
-                          readOnly
-                          value={isSelected ? "✓" : ""}
-                          onFocus={() => handleSelect(q.id, idx)}
-                          className="review3-p1-q3-input"
-                        />
+                    <div className="review3-p1-q3-input-box">
+                      <input
+                        type="text"
+                        readOnly
+                        value={isSelected ? "✓" : ""}
+                        onFocus={() => handleSelect(q.id, idx)}
+                        className="review3-p1-q3-input"
+                      />
 
-                        {isWrong && (
-                          <span className="review3-p1-q3-x">✕</span>
-                        )}
-                      </div>
+                      {isWrong && <span className="review3-p1-q3-x">✕</span>}
                     </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -181,7 +173,7 @@ const Review3_Page1_Q3 = () => {
 
         {/* ⭐⭐⭐ NEW BUTTON */}
         <button onClick={showAnswer} className="show-answer-btn swal-continue">
-          Show Answer 
+          Show Answer
         </button>
 
         <button onClick={checkAnswers} className="check-button2">

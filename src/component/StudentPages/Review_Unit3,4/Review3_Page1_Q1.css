@@ -37,17 +37,19 @@
 }
 
 .number-input-review3-p1-q1 {
-width: 38px;
-    height: 38px;
-    border: 2px solid #6ec1ff;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, font-size 0.2s ease;
+  width: 38px;
+  height: 38px;
+  border: 2px solid #6ec1ff;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    font-size 0.2s ease;
 }
 
 .sentences-col {
@@ -65,6 +67,7 @@ width: 38px;
 .exercise-item-review3-p1-q1 {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
@@ -81,27 +84,28 @@ width: 38px;
 .exercise-image-div-review3-p1-q1 {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 20px;
   margin-top: 40px;
 }
 
 .error-circle {
-    width: 25px;
-    height: 25px;
-    border: 2px solid white;
-    background-color: red;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    vertical-align: middle;
-    position: absolute;
-    left: 50%;
-    top: -41%;
+  width: 25px;
+  height: 25px;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  position: absolute;
+  left: 50%;
+  top: -41%;
 }
 @media (max-width: 1024px) {
   .exercise-image-div-review3-p1-q1 {

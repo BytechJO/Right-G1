@@ -16,6 +16,12 @@
   margin-right: 5px;
 }
 
+.img-review5-p1-q1 {
+    height: 98px;
+    width: auto;
+    margin-right: 10px;
+}
+
 .images-row {
   display: flex;
   justify-content: space-between;

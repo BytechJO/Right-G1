@@ -71,7 +71,7 @@ const Review3_Page2_Q2 = () => {
 
     setCircledWords(correctSelections);
     setChecked(false); // إزالة الأخطاء
-    setLocked(true);   // قفل التعديل
+    setLocked(true); // قفل التعديل
   };
 
   return (
@@ -80,58 +80,54 @@ const Review3_Page2_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "90px",
         }}
       >
-        <div className="review3-p2-q2-content-container">
-          <h5 className="header-title-page8">
-            E Circle the <span style={{ color: "red" }}>short a</span> words.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">E</span> Circle the{" "}
+          <span style={{ color: "red" }}>short a</span> words.
+        </h5>
 
-          <div className="review3-p2-q2-sentence-container2">
-            {sentences.map((sentence, sIndex) => (
-              <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num">{sIndex + 1}</span>
+        <div className="review3-p2-q2-sentence-container2">
+          {sentences.map((sentence, sIndex) => (
+            <div className="review3-p2-q2-sentence-row" key={sIndex}>
+              <span className="review3-p2-q2-num">{sIndex + 1}</span>
 
-                <div className="review3-p2-q2-word-box">
-                  {[sentence.word1, sentence.word2, sentence.word3].map(
-                    (word, wIndex) => {
-                      const isCircled = circledWords[sIndex]?.includes(wIndex);
-                      const isWrong =
-                        checked &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(wIndex);
+              <div className="review3-p2-q2-word-box">
+                {[sentence.word1, sentence.word2, sentence.word3].map(
+                  (word, wIndex) => {
+                    const isCircled = circledWords[sIndex]?.includes(wIndex);
+                    const isWrong =
+                      checked &&
+                      isCircled &&
+                      !correct[sIndex]?.includes(wIndex);
 
-                      return (
-                        <span
-                          key={wIndex}
-                          className={`review3-p2-q2-word ${
-                            isCircled ? "circled" : ""
-                          }`}
-                          onClick={() => handleWordClick(sIndex, wIndex)}
-                        >
-                          {word}
-                          {isWrong && (
-                            <span className="review3-p2-q2-wrong-x">✕</span>
-                          )}
-                        </span>
-                      );
-                    }
-                  )}
-                </div>
+                    return (
+                      <span
+                        key={wIndex}
+                        className={`review3-p2-q2-word ${
+                          isCircled ? "circled" : ""
+                        }`}
+                        onClick={() => handleWordClick(sIndex, wIndex)}
+                      >
+                        {word}
+                        {isWrong && (
+                          <span className="review3-p2-q2-wrong-x">✕</span>
+                        )}
+                      </span>
+                    );
+                  },
+                )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         <div className="action-buttons-container">
@@ -147,8 +143,11 @@ const Review3_Page2_Q2 = () => {
           </button>
 
           {/* ⭐⭐⭐ تمت إضافة زر Show Answer */}
-          <button onClick={showAnswer} className="show-answer-btn swal-continue">
-            Show Answer 
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
           </button>
 
           <button onClick={checkAnswers} className="check-button2">

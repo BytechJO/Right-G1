@@ -123,115 +123,115 @@ const Review4_Page1_Q4 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
             gap: "30px",
-            width: "60%",
           }}
         >
-          <div className="component-wrapper">
-            <h3 className="header-title-page8">D Look, read, and write.</h3>
+          <h3 className="header-title-page8">
+            <span className="mr-2">D</span> Drag and drop the correct words to
+            complete the sentences.
+          </h3>
 
-            {/* 🔤 Word Bank */}
-            <Droppable droppableId="bank" isDropDisabled>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    padding: "10px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    // margin: "10px 0",
-                    alignItems: "center",justifyContent:"center"
-                  }}
-                >
-                  {data.map((item, index) => (
-                    <Draggable
-                      key={item.correct}
-                      draggableId={`word-${item.correct}`}
-                      index={index}
-                      isDragDisabled={locked}
-                    >
-                      {(provided) => (
-                        <span
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {item.correct}
-                        </span>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {data.map((item, index) => (
-              <div className="question-row-review4-p1-q4" key={index}>
-                <span className="q-number">{index + 1}.</span>
-
-                <img
-                  src={item.img}
-                  className="shape-img"
-                  alt=""
-                  style={{ height: "100px", width: "100px" }}
-                />
-
-                <div className="question-text-review4-p1-q4">
-                  <h6>{item.question}</h6>
-
-                  <Droppable droppableId={`slot-${index}`}>
-                    {(provided, snapshot) => (
-                      <div
+          {/* 🔤 Word Bank */}
+          <Droppable droppableId="bank" isDropDisabled>
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {data.map((item, index) => (
+                  <Draggable
+                    key={item.correct}
+                    draggableId={`word-${item.correct}`}
+                    index={index}
+                    isDragDisabled={locked}
+                  >
+                    {(provided) => (
+                      <span
                         ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`q-input-review4-p1-q4 ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          padding: "7px 14px",
+                          border: "2px solid #2c5287",
+                          borderRadius: "8px",
+                          background: "white",
+                          fontWeight: "bold",
+                          cursor: "grab",
+                          ...provided.draggableProps.style,
+                        }}
                       >
-                        {answers[index] && (
-                          <Draggable
-                            draggableId={`slot-${index}-${answers[index]}`}
-                            index={0}
-                            isDragDisabled={true}
-                          >
-                            {(provided) => (
-                              <span
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              >
-                                {answers[index]}
-                              </span>
-                            )}
-                          </Draggable>
-                        )}
-                        {provided.placeholder}
-
-                        {wrongInputs.includes(index) && (
-                          <span className="wrong-icon-review4-p1-q4">✕</span>
-                        )}
-                      </div>
+                        {item.correct}
+                      </span>
                     )}
-                  </Droppable>
-                </div>
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            ))}
-          </div>
+            )}
+          </Droppable>
+
+          {data.map((item, index) => (
+            <div className="question-row-review4-p1-q4" key={index}>
+              <span className="q-number">{index + 1}.</span>
+
+              <img
+                src={item.img}
+                className="shape-img"
+                alt=""
+                style={{ height: "100px", width: "100px" }}
+              />
+
+              <div className="question-text-review4-p1-q4">
+                <h6>{item.question}</h6>
+
+                <Droppable droppableId={`slot-${index}`}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className={`q-input-review4-p1-q4 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
+                    >
+                      {answers[index] && (
+                        <Draggable
+                          draggableId={`slot-${index}-${answers[index]}`}
+                          index={0}
+                          isDragDisabled={true}
+                        >
+                          {(provided) => (
+                            <span
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              {answers[index]}
+                            </span>
+                          )}
+                        </Draggable>
+                      )}
+                      {provided.placeholder}
+
+                      {wrongInputs.includes(index) && (
+                        <span className="wrong-icon-review4-p1-q4">✕</span>
+                      )}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="action-buttons-container">

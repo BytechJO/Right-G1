@@ -14,15 +14,20 @@
 }
 
 .left-side2 {
-  display: flex;
-  /* gap: 35px 45px; مسافات متوازنة */
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 .image-row2 {
   display: flex;
   align-items:flex-start
 }
-
+/* في Unit2_Page6_Q2.css */
+.number-tag2,
+.draggable-number {
+  touch-action: none; /* ← أضف هاد */
+}
 .person-img2 {
   width: 120px;
   height: auto;
@@ -56,24 +61,7 @@
   cursor: grab;
   flex-shrink: 0; /* مهم */
 }
-.wrong-x3 {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  background: red;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  border: 2px solid white;
-  transition: transform 0.2s ease ;
-}
+
 
 .drop2-hover {
   background: #d8efff;

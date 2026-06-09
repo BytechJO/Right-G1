@@ -1,4 +1,4 @@
-import React, { useRef,useState } from "react";
+import React, { useRef, useState } from "react";
 import page25 from "../../../assets/img_unit2/imgs/Right 1 Unit 02 Stell Birthday12.jpg";
 import "./Unit2_Page11.css";
 import { FaHeadphones } from "react-icons/fa";
@@ -6,8 +6,10 @@ import sound1 from "../../../assets/img_unit2/sounds-unit2/Pg21_1.5_Adult Lady.m
 import sound2 from "../../../assets/img_unit2/sounds-unit2/Pg21_1.6_Adult Lady.mp3";
 import sound3 from "../../../assets/img_unit2/sounds-unit2/Pg21_1.7_Adult Lady.mp3";
 import sound4 from "../../../assets/img_unit2/sounds-unit2/Pg21_1.8_Adult Lady.mp3";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit2_Page12 = () => {
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -23,25 +25,30 @@ const Unit2_Page12 = () => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+    setHoveredAreaIndex(null);
+    audioRef.current.onended = () => {
+      setActiveId(null);
+      setHoveredAreaIndex(null);
+    };
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page25})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page25})` }}
+    >
       {/* <img
         src={page25}
         style={{ display: "block" }}
@@ -52,7 +59,7 @@ const Unit2_Page12 = () => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            activeId === `p12-${area.sound}` || hoveredAreaIndex === index
               ? "highlight"
               : ""
           }`}
@@ -64,8 +71,7 @@ const Unit2_Page12 = () => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
+           playSound(area.sound, `p12-${area.sound}`)
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);

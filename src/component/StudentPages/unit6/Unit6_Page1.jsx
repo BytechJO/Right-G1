@@ -17,11 +17,13 @@ import sound5 from "../../../assets/unit6/sounds/U6P46VOC-05.mp3";
 import sound7 from "../../../assets/unit6/sounds/U6P46VOC-07.mp3";
 import sound8 from "../../../assets/unit6/sounds/U6P46VOC-08.mp3";
 
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit6_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const captionsExample = [
     { start: 0, end: 5.02, text: "Page 46, Unit 6. Can we go to the park? " },
     { start: 5.05, end: 8.13, text: "Page 46, Unit 6, Vocabulary" },
@@ -55,12 +57,12 @@ const Unit6_Page1 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 58.84, y1: 24.1, sound: 1, isPrimary: true },
+    { x1: 59.1, y1: 24.1, sound: 1, isPrimary: true },
     // الصوت الأول – منطقة إضافية
     { x1: 49.7, y1: 24.73, x2: 55.7, y2: 39.5, sound: 1, isPrimary: false },
 
     // // الصوت الثاني – الأساسية
-    { x1: 45.6, y1: 49.1, sound: 2, isPrimary: true },
+    { x1: 45.9, y1: 49.1, sound: 2, isPrimary: true },
     // // // // // الصوت الثاني – الإضافية
     { x1: 47.0, y1: 42.71, x2: 60.5, y2: 59.6, sound: 2, isPrimary: false },
 
@@ -70,17 +72,17 @@ const Unit6_Page1 = ({ openPopup }) => {
     { x1: 68.7, y1: 37.98, x2: 82.8, y2: 46.67, sound: 3, isPrimary: false },
 
     // // // // // الصوت الرابع – الأساسية
-    { x1: 29.74, y1: 39.05, sound: 4, isPrimary: true },
+    { x1: 29.8, y1: 39.05, sound: 4, isPrimary: true },
     // // // // الصوت الرابع – الإضافية
     { x1: 32.45, y1: 30.06, x2: 42.54, y2: 37.98, sound: 4, isPrimary: false },
 
     // // // // // الصوت الخامس – الأساسية
-    { x1: 76.57, y1: 66.3, sound: 5, isPrimary: true },
+    { x1: 76.8, y1: 66.3, sound: 5, isPrimary: true },
     // // // // الصوت الخامس – الإضافية
     { x1: 68.7, y1: 64.18, x2: 81.9, y2: 68.75, sound: 5, isPrimary: false },
 
     // // // // // الصوت السادس – الأساسية
-    { x1: 81.0, y1: 69.5, sound: 6, isPrimary: true },
+    { x1: 81.2, y1: 69.5, sound: 6, isPrimary: true },
     // // // // الصوت السادس – الإضافية
     { x1: 84.23, y1: 60.37, x2: 93.54, y2: 79.87, sound: 6, isPrimary: false },
   ];
@@ -98,20 +100,23 @@ const Unit6_Page1 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+const playSound = (soundPath, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = soundPath;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 هذا المهم
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
+
   return (
     <div
       className="page1-img-wrapper"
@@ -121,7 +126,7 @@ const Unit6_Page1 = ({ openPopup }) => {
       {/* <img src={page_1} /> */}
       <audio ref={audioRef} style={{ display: "none" }} />
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+       const isActive = activeId === `p23-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -136,8 +141,7 @@ const Unit6_Page1 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p46-${area.sound}`);
               }}
             ></div>
           );
@@ -159,8 +163,7 @@ const Unit6_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+             playSound(sounds[area.sound], `p46-${area.sound}`);
             }}
           ></div>
         );

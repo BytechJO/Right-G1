@@ -24,6 +24,8 @@ const FourImagesWithAudio = ({
   const settingsRef = useRef(null);
   const [forceRender, setForceRender] = useState(0);
   // زر الكابشن
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [current, setCurrent] = useState(0);
@@ -36,30 +38,47 @@ const FourImagesWithAudio = ({
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex2(index);
   };
-
   const playImageSound = (index) => {
     const sound = audioArr[index];
-    if (sound) {
-      setClickedIndex(index); // 🔥 فعل الأنيميشن
+    const mainAudio = audioRef.current;
 
-      sound.currentTime = 0;
-      sound.play();
+    if (!sound || !mainAudio) return;
 
-      sound.onended = () => {
-        setClickedIndex(null); // 🔥 لما يخلص الصوت يشيل الأنيميشن
-      };
-    }
+    // 🔥 وقف الصوت الرئيسي
+    mainAudio.pause();
+    setIsPlaying(false);
+
+    // ✅ 🔥 وقف كل أصوات الصور الثانية
+    audioArr.forEach((audio, i) => {
+      if (audio && i !== index) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+
+    // 🔥 شغل صوت الصورة الحالية
+    sound.currentTime = 0;
+    sound.play();
+
+    setClickedIndex(index);
+
+    sound.onended = () => {
+      setClickedIndex(null);
+    };
   };
-
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // 🔥 تأكد توقف أي صوت قبل
+    audio.pause();
     audio.currentTime = 0;
+
+    audio.src = audioSrc;
     audio.play();
 
     const interval = setInterval(() => {
@@ -72,10 +91,8 @@ const FourImagesWithAudio = ({
       }
     }, 100);
 
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
     const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
+      audio.currentTime = 0;
       setActiveIndex(null);
       setActiveIndex2(null);
       setPaused(true);
@@ -123,16 +140,26 @@ const FourImagesWithAudio = ({
           justifyContent: "flex-start",
           width: "60%",
           alignItems: "flex-start",
+          marginTop: "25px",
         }}
       >
-        <h5 className="header-title-page8" style={{ fontSize: "25px" }}>
+        <h5
+          className="header-title-page8"
+          style={{
+            fontSize: "25px",
+            display: "flex",
+            gap: "5px",
+            alignItems: "center",
+          }}
+        >
           {images[0] && (
             <img src={images[0]} className="main-image" alt="main" />
           )}
           {titleQ}
         </h5>
       </div>
-      <div className="audio-popup-read-container"
+      <div
+        className="audio-popup-read-container"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -152,7 +179,7 @@ const FourImagesWithAudio = ({
                 setCurrent(time);
 
                 const idx = checkpoints.findIndex(
-                  (cp) => time >= cp && time < cp + 0.8
+                  (cp) => time >= cp && time < cp + 0.8,
                 );
                 setActiveIndex(idx !== -1 ? idx : null);
                 updateCaption(time);
@@ -196,8 +223,10 @@ const FourImagesWithAudio = ({
                 onClick={() => setShowCaption(!showCaption)}
               >
                 <TbMessageCircle size={36} />
-                <div className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                     style={{ top: "100%", left: "10%" }}>
+                <div
+                  className={`caption-inPopup ${showCaption ? "show" : ""}`}
+                  style={{ top: "100%", left: "10%" }}
+                >
                   {captions.map((cap, i) => (
                     <p
                       key={i}
@@ -214,7 +243,7 @@ const FourImagesWithAudio = ({
 
               {/* Play */}
               <button className="play-btn2" onClick={togglePlay}>
-                {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
+                {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
               </button>
 
               {/* Settings */}
@@ -240,6 +269,25 @@ const FourImagesWithAudio = ({
                         audioRef.current.volume = e.target.value;
                       }}
                     />
+
+                    <label style={{ marginRight: "10px", marginTop: "10px" }}>
+                      Speed :
+                    </label>
+                    <select
+                      value={playbackRate}
+                      onChange={(e) => {
+                        const rate = Number(e.target.value);
+                        setPlaybackRate(rate);
+                        audioRef.current.playbackRate = rate;
+                      }}
+                    >
+                      <option value="0.5">0.5x</option>
+                      <option value="0.75">0.75x</option>
+                      <option value="1">1x</option>
+                      <option value="1.25">1.25x</option>
+                      <option value="1.5">1.5x</option>
+                      <option value="2">2x</option>
+                    </select>
                   </div>
                 )}
               </div>

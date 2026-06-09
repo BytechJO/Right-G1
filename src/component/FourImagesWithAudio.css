@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 77px;
   /* margin-top: 20px; */
 }
 
@@ -19,7 +19,7 @@
 .audio-popup-read{
    margin-top: -20px;
   background: #ffffff;
-      padding: 0px 25px;
+      padding: 10px 25px;
   border-radius: 25px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 

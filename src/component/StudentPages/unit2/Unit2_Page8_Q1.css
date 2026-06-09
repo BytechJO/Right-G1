@@ -1,7 +1,8 @@
-.container12 {
-  margin: auto;
+.container12-review1-p17-exd{
+  /* margin: auto; */
   position: relative;
   user-select: none;
+  width: 100%;
   margin-bottom: 30px;
 }
 
@@ -9,6 +10,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
   position: relative;
 }
 
@@ -19,7 +21,25 @@
 
   gap: 10px;
 }
+.selected-item {
+  transition: all 0.25s ease;
+}
 
+.word-text2.selected-item {
+  background: white;
+  color: #72d0f6;
+  text-decoration: underline;
+  padding: 4px 8px;
+  border-radius: 8px;
+  /* box-shadow: 0 0 12px rgba(114, 208, 246, 0.7); */
+}
+
+.matched-img2.selected-item {
+  outline: 4px solid #72d0f6;
+  outline-offset: 4px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
+}
 /* النص يأخذ مساحة عشان النقطة ما تتحرك */
 .word-text2 {
   flex: 1;
@@ -49,15 +69,15 @@
   cursor: pointer;
 }
 
-.word-text2:hover {
+/* .word-text2:hover {
   transform: scale(1.05);
   background-color: rgba(67, 15, 104, 0.08);
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
+} */
 
-.word-text2:active {
+/* .word-text2:active {
   transform: scale(0.97);
-}
+} */
 
 /* =====================
    IMAGES HOVER
@@ -126,14 +146,14 @@
   pointer-events: none;
 }
 .error-mark8-u2-p19-q1 {
-    width: 25px;
-    height: 25px;
+    width: 22px;
+    height: 22px;
     border: 2px solid white;
     background-color: red;
     border-radius: 50%;
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 12px;
     display: inline-flex;
     justify-content: center;
     align-items: center;

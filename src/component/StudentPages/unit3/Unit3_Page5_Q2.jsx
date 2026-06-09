@@ -13,12 +13,12 @@ import img6 from "../../../assets/unit3/imgs3/P26exeA2-06.svg";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
-
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit3_Page5_Q2 = () => {
   const audioRef = useRef(null);
   const [answers, setAnswers] = useState([null, null, null, null]);
   const [showResult, setShowResult] = useState([]);
-  const stopAtSecond = 10.90;
+  const stopAtSecond = 10.9;
   const [checked, setChecked] = useState(false);
   // إعدادات الصوت
   const [paused, setPaused] = useState(false);
@@ -72,7 +72,7 @@ const Unit3_Page5_Q2 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -124,7 +124,7 @@ const Unit3_Page5_Q2 = () => {
   }, [activeIndex]);
 
   const handleSelect = (index) => {
-        if (showAnswer ||checked) return;
+    if (showAnswer || checked) return;
     setSelected((prev) => {
       if (prev.includes(index)) {
         // إذا الضغط على خيار مُختار → نشيله
@@ -144,7 +144,7 @@ const Unit3_Page5_Q2 = () => {
 
   // ✅ الفحص فقط إذا الطالب اختار أو لا
   const checkAnswers = () => {
-    if (showAnswer ||checked) return;
+    if (showAnswer || checked) return;
     if (selected.length === 0) {
       ValidationAlert.info("Oops!", "Please select at least one answer.");
       return;
@@ -166,7 +166,7 @@ const Unit3_Page5_Q2 = () => {
 
     // حساب الإجابات الصحيحة
     const correctCount = chosenNumbers.filter((num) =>
-      correctData.includes(num)
+      correctData.includes(num),
     ).length;
 
     // حساب السكور النهائي
@@ -176,8 +176,8 @@ const Unit3_Page5_Q2 = () => {
       correctCount === totalCorrect
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
     const resultHTML = `
     <div style="font-size: 20px; text-align:center; margin-top: 8px;">
       <span style="color:${color};
@@ -221,7 +221,7 @@ const Unit3_Page5_Q2 = () => {
   const handleShowAnswer = () => {
     setShowAnswer(true); // نعرض الإجابات الصحيحة
     setSelected(
-      correctData.map((num) => options.findIndex((o) => o.num === num))
+      correctData.map((num) => options.findIndex((o) => o.num === num)),
     );
     setChecked(false); // ما بدنا X
     setShowResult([]); // لا نتائج سابقة
@@ -248,134 +248,24 @@ const Unit3_Page5_Q2 = () => {
           width: "60%",
         }}
       >
-        <div className="unit3-q1-wrapper">
-          <h5 className="header-title-page8">
-            <span style={{ color: "purple" }}>2</span> Does it have a{" "}
-            <span style={{ color: "red" }}>short a</span> sound? Listen and
-            circle.
-          </h5>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "30px 0px",
-              width: "100%",
-            }}
-          >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
+        <div className="header-title-page8">
+          <span style={{ color: "purple" }}>2</span> Does it have a{" "}
+          <span style={{ color: "red" }}>short a </span>sound? Listen and tap or
+          click.
+        </div>
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+        />
 
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
-          </div>
-          <div className="unit3-q2-content">
-            {/* الخيارات */}
-            <div className="unit3-q2-options">
-              {options.map((item, index) => (
-                <div
-                  key={item.num}
-                  className={`unit3-q2-option-item 
+        <div className="unit3-q2-content">
+          {/* الخيارات */}
+          <div className="unit3-q2-options">
+            {options.map((item, index) => (
+              <div
+                key={item.num}
+                className={`unit3-q2-option-item 
                       ${selected.includes(index) ? "active" : ""}
                       ${
                         showAnswer && correctData.includes(item.num)
@@ -387,26 +277,24 @@ const Unit3_Page5_Q2 = () => {
                           ? "wrong-option"
                           : ""
                       }`}
-                  onClick={() => {
-                    if (!showAnswer) handleSelect(index); // إلغاء الضغط بعد Show Answer
-                  }}
-                >
-                  <div style={{ position: "relative" }}>
-                    <span className="unit3-q2-number">{item.num}</span>
-                    {checked &&
-                      !showAnswer &&
-                      showResult[index] === "wrong" && (
-                        <div className="wrong-x-unit3-q2">✕</div>
-                      )}
-                  </div>
-
-                  <img src={item.img} className="unit3-q2-option-img" alt="" />
+                onClick={() => {
+                  if (!showAnswer) handleSelect(index); // إلغاء الضغط بعد Show Answer
+                }}
+              >
+                <div style={{ position: "relative" }}>
+                  <span className="unit3-q2-number">{item.num}</span>
+                  {checked && !showAnswer && showResult[index] === "wrong" && (
+                    <div className="wrong-x-unit3-q2">✕</div>
+                  )}
                 </div>
-              ))}
-            </div>
+
+                <img src={item.img} className="unit3-q2-option-img" alt="" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button onClick={resetAnswers} className="try-again-button">
           Start Again ↻

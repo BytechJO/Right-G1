@@ -17,7 +17,7 @@ const Unit2_Page7_Q3 = () => {
     2: [0, 4, 6, 15], // جملة رقم 2، الأحرف الخاطئة
   };
   const checkAnswers = (circledWords, correctAnswers) => {
-    if(showAnswer)return
+    if (showAnswer) return;
     if (Object.keys(circledWords).length === 0) {
       ValidationAlert.info("Please circle at least one mistake.");
       return;
@@ -83,66 +83,60 @@ const Unit2_Page7_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "80px",
         }}
       >
-        <div className="content-container1">
-         
-            <h5 className="header-title-page8">
-              C Read and circle the mistakes.
-            </h5>
-      
-          <div className="sentence-container">
-            {sentences.map((sentence, sIndex) => (
-              <div
-                key={sIndex}
-                style={{
-                  margin: "14px",
-                  fontSize: "25px",
-                  fontWeight: "500",
-                }}
-              >
-                <span style={{ color: "#2c5287", fontWeight: "700" }}>
-                  {sIndex + 1}
-                </span>{" "}
-                {sentence.split("").map((char, wIndex) => {
-                  const isCircled = circledWords[sIndex]?.includes(wIndex);
-                  const isCorrect =
-                    checked && correct[sIndex]?.includes(wIndex) && isCircled;
-                  const isWrong =
-                    checked &&
-                    !showAnswer &&
-                    isCircled &&
-                    !correct[sIndex]?.includes(wIndex);
+        <h5 className="header-title-page8">
+          <span className="mr-2">C</span> Tap or click the mistakes.
+        </h5>
 
-                  return (
-                    <span
-                      key={wIndex}
-                      onClick={() => handleWordClick(sIndex, wIndex)} // 🔒 يمنع التعديل بعد الفحص
-                      className={`char-container ${
-                        isCircled ? "circled" : ""
-                      } ${isCorrect ? "correct" : ""}`}
-                    >
-                      {char}
-                      {isWrong && <span className="wrong-x-unit2-q3">✕</span>}
-                    </span>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+        <div className="sentence-container-review1-p16-exc">
+          {sentences.map((sentence, sIndex) => (
+            <div
+              key={sIndex}
+              style={{
+                margin: "14px",
+                fontSize: "25px",
+                fontWeight: "500",
+              }}
+            >
+              <span style={{ color: "#2c5287", fontWeight: "700" }}>
+                {sIndex + 1}
+              </span>{" "}
+              {sentence.split("").map((char, wIndex) => {
+                const isCircled = circledWords[sIndex]?.includes(wIndex);
+                const isCorrect =
+                  checked && correct[sIndex]?.includes(wIndex) && isCircled;
+                const isWrong =
+                  checked &&
+                  !showAnswer &&
+                  isCircled &&
+                  !correct[sIndex]?.includes(wIndex);
+
+                return (
+                  <span
+                    key={wIndex}
+                    onClick={() => handleWordClick(sIndex, wIndex)} // 🔒 يمنع التعديل بعد الفحص
+                    className={`char-container ${
+                      isCircled ? "circled" : ""
+                    } ${isCorrect ? "correct" : ""}`}
+                  >
+                    {char}
+                    {isWrong && <span className="wrong-x-unit2-q3">✕</span>}
+                  </span>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {

@@ -15,13 +15,22 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [volume, setVolume] = useState(1);
   const [showSettings, setShowSettings] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
+  const changeSpeed = () => {
+    const currentIndex = speeds.indexOf(playbackRate);
+    const nextRate = speeds[(currentIndex + 1) % speeds.length];
+
+    setPlaybackRate(nextRate);
+    audioRef.current.playbackRate = nextRate;
+  };
   // تحديث الهايلايت حسب الوقت
   const updateCaption = (time) => {
     if (!captions || captions.length === 0) return;
 
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
 
     setActiveIndex(index);
@@ -135,7 +144,6 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
             >
               <IoMdSettings size={40} />
             </button>
-
             {showSettings && (
               <div className="settings-popup">
                 <label>Volume</label>
@@ -150,6 +158,23 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
                     audioRef.current.volume = e.target.value;
                   }}
                 />
+
+                <label style={{ marginRight:"10px",marginTop: "10px" }}>Speed :</label>
+                <select
+                  value={playbackRate}
+                  onChange={(e) => {
+                    const rate = Number(e.target.value);
+                    setPlaybackRate(rate);
+                    audioRef.current.playbackRate = rate;
+                  }}
+                >
+                  <option value="0.5">0.5x</option>
+                  <option value="0.75">0.75x</option>
+                  <option value="1">1x</option>
+                  <option value="1.25">1.25x</option>
+                  <option value="1.5">1.5x</option>
+                  <option value="2">2x</option>
+                </select>
               </div>
             )}
           </div>
@@ -158,7 +183,7 @@ const AudioWithCaption = ({ src, captions, onCaptionChange }) => {
         {captions && captions.length > 0 && showCaption && (
           <>
             <h3 style={{ fontSize: "20px", fontWeight: "500" }}>
-              Audio Transcript:
+              Text to speech :
             </h3>
             <div className="caption-box" ref={captionRef}>
               {captions.map((cap, i) => (

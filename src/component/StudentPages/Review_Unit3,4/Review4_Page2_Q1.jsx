@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review4_Page2_Q1.css";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
+
 import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
 import img1 from "../../../assets/unit4/imgs/U4P37EEXEE-01-01.svg";
 import img2 from "../../../assets/unit4/imgs/U4P37EEXEE-01-02.svg";
@@ -13,7 +10,8 @@ import img4 from "../../../assets/unit4/imgs/U4P37EEXEE-02-02.svg";
 import img5 from "../../../assets/unit4/imgs/U4P37EEXEE-03-01.svg";
 import img6 from "../../../assets/unit4/imgs/U4P37EEXEE-03-02.svg";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { TbMessageCircle } from "react-icons/tb";
+
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 
 const data = [
   {
@@ -74,21 +72,8 @@ const Review4_Page2_Q1 = () => {
     data.map((d) => Array(d.correct.length).fill("")),
   );
   const [wrongInputs, setWrongInputs] = useState([]);
-  const audioRef = useRef(null);
-  const [showResult, setShowResult] = useState(false);
+
   const stopAtSecond = 5.23;
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
 
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
@@ -128,62 +113,6 @@ const Review4_Page2_Q1 = () => {
     { start: 12.22, end: 16.16, text: "3. The vest is on my feet." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
   const checkAnswers = () => {
@@ -254,154 +183,23 @@ const Review4_Page2_Q1 = () => {
     setLocked(true); // قفل الحقول
   };
 
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="page8-wrapper">
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            position: "relative",
-            width: "60%",
+            gsp: "20px",
           }}
         >
           <h3 className="header-title-page8">
-            E Listen and write the missing letters.
+            <span className="mr-2">E</span> Listen and drag the missing letters.
           </h3>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "30px",
-              width: "100%",
-            }}
-          >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
-
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
-          </div>
+          <QuestionAudioPlayer
+            src={sound1}
+            captions={captions}
+            stopAtSecond={stopAtSecond}
+          />
 
           <Droppable droppableId="letters" isDropDisabled>
             {(provided) => (
@@ -415,7 +213,9 @@ const Review4_Page2_Q1 = () => {
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   // margin: "10px 0",
-                  alignItems: "center",width:"100%",justifyContent:"center"
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "center",
                 }}
               >
                 {["f", "b", "v"].map((l, i) => (
@@ -437,7 +237,7 @@ const Review4_Page2_Q1 = () => {
                           background: "white",
                           fontWeight: "bold",
                           cursor: "grab",
-                          fontSize:"20px",
+                          fontSize: "20px",
                           ...provided.draggableProps.style,
                         }}
                       >
@@ -464,17 +264,15 @@ const Review4_Page2_Q1 = () => {
                   >
                     {p.before}
 
-                    <div
-                      className={`input-wrapper-review4-p2-q1`}
-                    >
+                    <div className={`input-wrapper-review4-p2-q1`}>
                       <Droppable droppableId={`slot-${qIndex}-${blankIndex}`}>
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             className={`missing-input-review4-p2-q1  ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
                           >
                             {answers[qIndex][blankIndex] && (
                               <Draggable

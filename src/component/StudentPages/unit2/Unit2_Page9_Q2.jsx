@@ -65,7 +65,7 @@ export default function Unit2_Page9_Q2() {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all pairs before checking."
+        "Please connect all pairs before checking.",
       );
       return;
     }
@@ -76,7 +76,7 @@ export default function Unit2_Page9_Q2() {
     let wrong = []; // ⭐ تم التعديل هون
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word1 === line.word && pair.word2 === line.image
+        (pair) => pair.word1 === line.word && pair.word2 === line.image,
       );
       if (isCorrect) correctCount++;
       else wrong.push(line.word); // ⭐ تم التعديل هون
@@ -113,10 +113,10 @@ export default function Unit2_Page9_Q2() {
     // 1️⃣ تجهيز خطوط الإجابة الصحيحة
     const correctLines = correctMatches.map((pair) => {
       const startEl = document.querySelector(
-        `.start-dot5[data-letter="${pair.word1}"]`
+        `.start-dot5[data-letter="${pair.word1}"]`,
       );
       const endEl = document.querySelector(
-        `.end-dot5[data-image="${pair.word2}"]`
+        `.end-dot5[data-image="${pair.word2}"]`,
       );
 
       return {
@@ -150,14 +150,14 @@ export default function Unit2_Page9_Q2() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
+    
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
-        <h5 className="header-title-page8">B Read and match.</h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">B</span> Match the words.
+        </h5>
 
         <div className="matching-wrapper2" ref={containerRef}>
           <div className="column2 left-column">
@@ -169,7 +169,7 @@ export default function Unit2_Page9_Q2() {
                     locked || showAnswer ? "disabled-hover" : ""
                   }`}
                   onClick={() => document.getElementById(`dot-${word}`).click()}
-                  style={{ cursor: "pointer",width:"150px" }}
+                  style={{ cursor: "pointer", width: "150px" }}
                 >
                   {word}
                 </span>

@@ -51,7 +51,7 @@ const Review4_Page2_Q3 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -95,22 +95,24 @@ const Review4_Page2_Q3 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "70px",
+
         }}
       >
         <div>
-          <h5 className="header-title-page8">G Look, read, and circle.</h5>
+          <h5 className="header-title-page8">
+            <span className="mr-2">G</span> Look and tap or click the correct
+            word.
+          </h5>
         </div>
-        <div className="container-review3-p2-q3">
+        <div className="container-review3-p2-q3 w-full gap-10">
           {items.map((q, i) => (
             <div
               key={i}
@@ -123,8 +125,8 @@ const Review4_Page2_Q3 = () => {
                   gap: "13px",
                   flexDirection: "row",
                   alignItems: "flex-start",
-                  width:"100%",
-                  justifyContent:"center"
+                  width: "100%",
+                  justifyContent: "center",
                 }}
               >
                 <span
@@ -137,11 +139,7 @@ const Review4_Page2_Q3 = () => {
                   {i + 1}
                 </span>
                 <div className="img-div-review3-p2-q3">
-                  <img
-                    src={q.img}
-                    className="q3-image-review4-p2-q3"
-              
-                  />
+                  <img src={q.img} className="q3-image-review4-p2-q3" />
                 </div>
               </div>
               <div className="options-row-review3-p2-q3">

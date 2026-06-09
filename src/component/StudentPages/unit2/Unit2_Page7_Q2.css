@@ -8,6 +8,7 @@
   margin: 20px 0px;
   display: flex;
   flex-direction: column;
+  width: 100%;
   justify-content: space-between;
   gap: 150px;
 }
@@ -38,14 +39,33 @@
   border-radius: 10px;
 }
 
-.word-box2 {
+.word-box2-unit2-p7-q2 {
   position: relative;
   font-size: 23px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: center;
+  width: 200px;
+}
+.selected-item {
+  transition: all 0.25s ease;
 }
 
+.clickable-word-unit2-p7-q2.selected-item {
+  /* background: #72d0f6; */
+  color: #72d0f6;
+  text-decoration: underline;
+  border-radius: 8px;
+  padding: 4px 8px;
+  /* box-shadow: 0 0 12px rgba(114, 208, 246, 0.7); */
+}
+
+.clickable-img-unit2-p7-q2.selected-item {
+  outline: 2px solid #72d0f6;
+  outline-offset: 4px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
+}
 .dot22-unit2-q7 {
   width: 14px;
   height: 14px;
@@ -55,32 +75,23 @@
   pointer-events: auto !important;
 }
 
-.end-dot22-unit2-q7 {
-
-  transform: translateX(-50%);
-
-  position: absolute !important;
-  top: -30px; /* عدّلي الرقم حسب مكان الجمل */
-}
-.word-box2:nth-child(1) .end-dot22-unit2-q7 { left: 50%; }
-.word-box2:nth-child(2) .end-dot22-unit2-q7 { left: 27%; }
-.word-box2:nth-child(3) .end-dot22-unit2-q7 { left: 46%; }
+/* ✅ نقطة الصورة: تحت الصورة في المنتصف تلقائياً */
 .start-dot22-unit2-q7 {
-  position: absolute !important;
-  top: 135px; /* عدّلي الرقم حسب موقعك */
-  left: 50%;
-  transform: translateX(-50%);
+  /* تحذف كل قيم top/left الثابتة */
+  position: static !important;
+  transform: none;
+  margin-top: 2px; /* مسافة صغيرة بعد الصورة */
+  align-self: center;
 }
 
-.img-box2:nth-child(1) .start-dot22-unit2-q7 {
-  left: 54%;
+/* ✅ نقطة الجملة: فوق الجملة في المنتصف تلقائياً */
+.end-dot22-unit2-q7 {
+  position: static !important;
+  transform: none;
+  margin-bottom: 6px; /* مسافة صغيرة فوق الجملة */
+  align-self: center;
 }
-.img-box2:nth-child(2) .start-dot22-unit2-q7 {
-  left: 50%;
-}
-.img-box2:nth-child(3) .start-dot22-unit2-q7 {
-  left: 56%;
-}
+
 .lines-layer2 {
   position: absolute;
   top: 0;
@@ -91,7 +102,7 @@
 }
 
 .page7-q2-container2 {
-  user-select: none; /* يمنع تحديد النص */
+  user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
@@ -114,7 +125,7 @@
 .clickable-word-unit2-p7-q2:hover {
   transform: scale(1.05);
   background-color: rgba(67, 15, 104, 0.08);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .clickable-word-unit2-p7-q2:active {
@@ -134,16 +145,13 @@
 
 .clickable-img-unit2-p7-q2:hover {
   transform: scale(1.04);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .clickable-img-unit2-p7-q2:active {
   transform: scale(0.96);
 }
 
-
-
-/* ⭐ تم إضافتها */
 .error-mark-img {
   position: absolute;
   top: -10px;

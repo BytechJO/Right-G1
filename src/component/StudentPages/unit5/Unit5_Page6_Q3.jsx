@@ -118,71 +118,65 @@ const Unit5_Page6_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
         }}
       >
-        <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            <span className="ex-A"> F</span> Look, read, and write
-            <span style={{ color: "red" }}>✓</span>.{" "}
-          </h4>
+        <h4 className="header-title-page8">
+          <span className="ex-A"> F</span> Look, read, and tap or click on the
+          correct answer.
+        </h4>
 
-          <div className="Unit5-P6-Q3-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="Unit5-P6-Q3-box">
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+        <div className="Unit5-P6-Q3-grid w-full">
+          {questions.map((q) => (
+            <div key={q.id} className="Unit5-P6-Q3-box">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  className="Unit5-P6-Q3-text"
+                  style={{ color: "darkblue" }}
                 >
-                  <span
-                    className="Unit5-P6-Q3-text"
-                    style={{ color: "darkblue" }}
-                  >
-                    {q.id}
-                  </span>
-                  <img src={q.image} alt="" className="Unit5-P6-Q3-img" />
-                  <span className="Unit5-P6-Q3-text">{q.text}</span>
-                </div>
-                <div>
-                  {q.items.map((item, idx) => {
-                    const isSelected = answers[q.id] === idx;
-                    const isWrong = results[q.id] === "wrong" && isSelected;
-
-                    return (
-                      <div key={idx} className="review3-p1-q3-row">
-                        <span className="Unit5-P6-Q3-text">{item.text}</span>
-
-                        <div className="review3-p1-q3-input-box">
-                          <input
-                            type="text"
-                            readOnly
-                            value={isSelected ? "✓" : ""}
-                            onFocus={() => handleSelect(q.id, idx)}
-                            className={`review3-p1-q3-input`}
-                            disabled={showAnswer}
-                            style={{
-                              cursor: showAnswer ? "not-allowed" : "pointer",
-                            }}
-                          />
-
-                          {!showAnswer && isWrong && (
-                            <span className="review3-p1-q3-x">✕</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                  {q.id}
+                </span>
+                <img src={q.image} alt="" className="Unit5-P6-Q3-img" />
+                <span className="Unit5-P6-Q3-text">{q.text}</span>
               </div>
-            ))}
-          </div>
+              <div>
+                {q.items.map((item, idx) => {
+                  const isSelected = answers[q.id] === idx;
+                  const isWrong = results[q.id] === "wrong" && isSelected;
+
+                  return (
+                    <div key={idx} className="review3-p1-q3-row">
+                      <span className="Unit5-P6-Q3-text">{item.text}</span>
+
+                      <div className="review3-p1-q3-input-box">
+                        <input
+                          type="text"
+                          readOnly
+                          value={isSelected ? "✓" : ""}
+                          onFocus={() => handleSelect(q.id, idx)}
+                          className={`review3-p1-q3-input`}
+                          disabled={showAnswer}
+                          style={{
+                            cursor: showAnswer ? "not-allowed" : "pointer",
+                          }}
+                        />
+
+                        {!showAnswer && isWrong && (
+                          <span className="review3-p1-q3-x">✕</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -17,8 +17,11 @@ import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import video2 from "../../../assets/unit1/sounds/p7 1920.mp4";
 import AudioWithCaption from "../../AudioWithCaption";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
+
 const Page7 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -62,26 +65,28 @@ const Page7 = ({ openPopup }) => {
 
   const checkAreaAndPlaySound = (x, y) => {
     const area = clickableAreas.find(
-      (a) => x >= a.x1 && x <= a.x2 && y >= a.y1 && y <= a.y2
+      (a) => x >= a.x1 && x <= a.x2 && y >= a.y1 && y <= a.y2,
     );
 
     console.log("Matched Area:", area);
 
     if (area) playSound(area.sound);
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (soundPath, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = soundPath;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 هذا المهم
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
 
   return (
@@ -95,7 +100,7 @@ const Page7 = ({ openPopup }) => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            activeId === `p7-${area.sound}` || hoveredAreaIndex === index
               ? "highlight"
               : ""
           }`}
@@ -107,8 +112,7 @@ const Page7 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
+            playSound(area.sound, `p7-${area.sound}`);
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -141,12 +145,13 @@ const Page7 = ({ openPopup }) => {
                   captions={captionsExample}
                 />
               </div>,
-              true
+              true,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={audioBtn}
             x="0"
             y="0"
@@ -190,12 +195,19 @@ const Page7 = ({ openPopup }) => {
                 >
                   <source src={video2} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={pauseBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={pauseBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <audio ref={audioRef} style={{ display: "none" }} />

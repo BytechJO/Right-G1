@@ -82,18 +82,14 @@ const Unit4_Page6_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <h5 className="header-title-page8">
           <span className="ex-A">E</span>Read and draw.
         </h5>
 
-        <div className="unit4-q2-p6-table">
+        <div className="unit4-q2-p6-table w-full">
           <div className="unit4-q2-p6-tools">
             <button
               onClick={() => setTool("pen")}

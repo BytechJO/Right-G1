@@ -11,6 +11,7 @@ import baby from "../../../assets/img_unit2/imgs/baby.jpg";
 import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit2_Page10_Q3 = () => {
   const audioRef = useRef(null);
   const stopAtSecond = 4.2;
@@ -114,13 +115,13 @@ const Unit2_Page10_Q3 = () => {
   //   const [checked, setChecked] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const handleSelect = (qId, option) => {
-    if (showResult ||showAnswer) return;
+    if (showResult || showAnswer) return;
     setAnswers((prev) => ({ ...prev, [qId]: option }));
     setShowResult(false);
   };
 
   const checkAnswers = () => {
-    if (showAnswer ||showResult) return;
+    if (showAnswer || showResult) return;
     // 🔸 تحقق إذا الطالب جاوب على الكل
     if (Object.keys(answers).length < questions.length) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
@@ -192,132 +193,21 @@ const Unit2_Page10_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
+        
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+         
         }}
       >
-        <div className="page10-q3-container">
-          <h5 className="header-title-page8">F Listen and circle.</h5>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "5px 0px",
-              width: "100%",
-            }}
-          >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-                marginTop: "0px",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
-
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
-          </div>
+     
+          <h5 className="header-title-page8">
+            <span className="mr-2">F</span> Listen and tap or click the starting
+            letter.
+          </h5>
+          <QuestionAudioPlayer
+            src={sound1}
+            captions={captions}
+            stopAtSecond={stopAtSecond}
+          />
 
           <div className="questions-grid">
             {questions.map((q) => (
@@ -362,7 +252,7 @@ const Unit2_Page10_Q3 = () => {
             ))}
           </div>
         </div>
-      </div>
+   
       <div className="action-buttons-container">
         <button
           onClick={() => {

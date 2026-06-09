@@ -22,9 +22,9 @@ export default function Page9_Q2() {
     "transparent",
   ]);
   const correctMatches = [
-    { word1: "Good", word2: "afternoon" },
-    { word1: "Fine,", word2: "thank you" },
-    { word1: "How", word2: "are you" },
+    { word1: "Good", word2: "afternoon." },
+    { word1: "Fine,", word2: "thank you." },
+    { word1: "How", word2: "are you?" },
   ];
 
   const handleWordClick = (index) => {
@@ -104,7 +104,7 @@ export default function Page9_Q2() {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all pairs before checking."
+        "Please connect all pairs before checking.",
       );
       return;
     }
@@ -115,7 +115,7 @@ export default function Page9_Q2() {
     let wrong = []; // ⭐ تم التعديل هون
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word1 === line.word && pair.word2 === line.image
+        (pair) => pair.word1 === line.word && pair.word2 === line.image,
       );
       if (isCorrect) correctCount++;
       else wrong.push(line.word); // ⭐ تم التعديل هون
@@ -152,10 +152,10 @@ export default function Page9_Q2() {
     // 1️⃣ تجهيز خطوط الإجابة الصحيحة
     const correctLines = correctMatches.map((pair) => {
       const startEl = document.querySelector(
-        `.start-dot1[data-letter="${pair.word1}"]`
+        `.start-dot1[data-letter="${pair.word1}"]`,
       );
       const endEl = document.querySelector(
-        `.end-dot1[data-image="${pair.word2}"]`
+        `.end-dot1[data-image="${pair.word2}"]`,
       );
 
       return {
@@ -190,19 +190,14 @@ export default function Page9_Q2() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
+          gap: "10px",
         }}
       >
         <h4 className="header-title-page8">
           <span className="ex-A">E</span>Match and color.
         </h4>
         <span style={{ fontSize: "14px", color: "gray" }}>
-          Hint: Double Click to Color Word
+          Hint: Tap or click twice to color.
         </span>
         {selectedWordIndex !== null && (
           <div className="color-palette">
@@ -264,7 +259,7 @@ export default function Page9_Q2() {
           </div>
 
           <div className="word-section2">
-            {["thank you", "are you", "afternoon"].map((word, i) => (
+            {["thank you.", "are you?", "afternoon."].map((word, i) => (
               <div
                 style={{
                   position: "relative",

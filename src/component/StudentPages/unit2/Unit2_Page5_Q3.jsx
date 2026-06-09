@@ -54,20 +54,18 @@ const Unit2_Page5_Q3 = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-        padding:"30px"
+          padding: "30px",
         }}
       >
-        <div 
+        <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "60%",
-            justifyContent: "flex-start",
+            gap: "80px",
           }}
         >
           <h5 className="header-title-page8">
-            <span className="ex-A">B</span> Ask and answer.
+            <span className="ex-A">B</span> Tap or click on a picture and
+            practice reading out loud!
           </h5>
 
           <div className="unit2-q3-content">

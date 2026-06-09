@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit2_Page5.css";
 import sound1 from "../../../assets/unit1/sounds/P14Q2.mp3";
@@ -7,29 +6,13 @@ import bat from "../../../assets/img_unit2/imgs/bat.jpg";
 import box from "../../../assets/img_unit2/imgs/box.jpg";
 import bucket from "../../../assets/img_unit2/imgs/bucket.jpg";
 import boat from "../../../assets/img_unit2/imgs/boat.jpg";
-import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit2_Page5_Q2 = () => {
   const [answers, setAnswers] = useState([null, null, null, null]);
-  const audioRef = useRef(null);
   const [showResult, setShowResult] = useState(false);
   const stopAtSecond = 11.18;
-  // إعدادات الصوت
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
+
   const items = [
     { img: bat, correct: "b" },
     { img: box, correct: "p" },
@@ -50,67 +33,11 @@ const Unit2_Page5_Q2 = () => {
       end: 11.18,
       text: "Does it begin with a B or P? Listen and circle. ",
     },
-    { start: 11.20, end: 12.28, text: "Bat." },
-    { start: 12.30, end: 13.22, text: "Pail." },
+    { start: 11.2, end: 12.28, text: "Bat." },
+    { start: 12.3, end: 13.22, text: "Pail." },
     { start: 13.24, end: 14.19, text: "Box. " },
     { start: 14.21, end: 15.13, text: "Boat." },
   ];
-
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setActiveIndex(null);
-      setPaused(false);
-      setShowContinue(true);
-      setIsPlaying(false);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
 
   const handleSelect = (index, value) => {
     if (showAnswer) return; // ❌ يمنع التغيير بعد Show Answer
@@ -129,7 +56,7 @@ const Unit2_Page5_Q2 = () => {
     }
 
     const correctCount = answers.filter(
-      (a, i) => a?.toLowerCase() === items[i].correct?.toLowerCase()
+      (a, i) => a?.toLowerCase() === items[i].correct?.toLowerCase(),
     ).length;
 
     const total = items.length;
@@ -164,21 +91,7 @@ const Unit2_Page5_Q2 = () => {
     setShowResult(false);
     setShowAnswer(false); // يمنع أي تعديل بعد هيك
   };
-  const togglePlay = () => {
-    const audio = audioRef.current;
 
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   return (
     <div
       style={{
@@ -186,17 +99,13 @@ const Unit2_Page5_Q2 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
         <div>
@@ -206,127 +115,18 @@ const Unit2_Page5_Q2 = () => {
             <span style={{ color: "red" }}>p</span>? Listen and circle.
           </h5>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "5px 0px",
-            width: "100%",
-          }}
-        >
-          <div
-            className="audio-popup-read"
-            style={{
-              width: "50%",
-            }}
-          >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound1}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+        />
 
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
-                  }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
-
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  style={{ position: "relative" }}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                  <div
-                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                    style={{ top: "100%", left: "10%" }}
-                  >
-                    {captions.map((cap, i) => (
-                      <p
-                        key={i}
-                        id={`caption-${i}`}
-                        className={`caption-inPopup-line2 ${
-                          activeIndex === i ? "active" : ""
-                        }`}
-                      >
-                        {cap.text}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <IoMdSettings size={36} />
-                  </button>
-
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>{" "}
-            </div>
-          </div>
-        </div>
         <div
           className="imgFeild"
           style={{
             display: "flex",
             gap: "13px",
+            width: "100%",
             flexDirection: "column",
           }}
         >
@@ -337,7 +137,7 @@ const Unit2_Page5_Q2 = () => {
                 <div className="bp-options">
                   {/* B OPTION */}
                   <span
-                  style={{position:"relative"}}
+                    style={{ position: "relative" }}
                     className={`bp-option 
                     ${answers[index] === "b" ? "selected" : ""}
                     ${
@@ -359,7 +159,7 @@ const Unit2_Page5_Q2 = () => {
 
                   {/* P OPTION */}
                   <span
-                   style={{position:"relative"}}
+                    style={{ position: "relative" }}
                     className={`bp-option 
                     ${answers[index] === "p" ? "selected" : ""}
                     ${

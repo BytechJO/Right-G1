@@ -5,14 +5,15 @@
 
 .u2-container {
   display: flex;
-  justify-content: flex-start;
+  width:100%
+;  justify-content: flex-start;
 }
 .layout {
   display: flex;
   justify-content: space-around;
   /* gap: 50px; */
   padding-bottom: 40px;
-  border: 4px solid #3baaf7;
+  border: 2px solid #3baaf7;
   border-radius: 10px;
   margin-bottom: 35px;
   align-items: center;
@@ -98,17 +99,22 @@
   border-radius: 6px;
   font-weight: bold;
 }
+.number-tag,
+.draggable-number {
+  touch-action: none; /* ← أضف هاد */
+}
+
 .wrong-x3 {
   position: absolute;
   top: -12px;
   right: -12px;
   background: red;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;

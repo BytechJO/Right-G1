@@ -12,7 +12,8 @@ const Unit2_Page8_Q1 = () => {
   const [wrongWords, setWrongWords] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [selectedWord, setSelectedWord] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   // -------------------------------------------
@@ -34,6 +35,9 @@ const Unit2_Page8_Q1 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
+
+    setSelectedWord(word);
+    setSelectedImage(image);
 
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الكلمة
     const alreadyUsed = lines.some((line) => line.word === word);
@@ -70,6 +74,15 @@ const Unit2_Page8_Q1 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+
+    setSelectedWord(newLine.word);
+    setSelectedImage(newLine.image);
+
+    setTimeout(() => {
+      setSelectedWord(null);
+      setSelectedImage(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -82,7 +95,7 @@ const Unit2_Page8_Q1 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -92,7 +105,7 @@ const Unit2_Page8_Q1 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) correctCount++;
@@ -133,223 +146,223 @@ const Unit2_Page8_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <div className="page8-q1-container">
-          <h5 className="header-title-page8">D Read, look, and match.</h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">D</span> Read and match.
+        </h5>
 
-          <div className="container12" ref={containerRef}>
-            {/* الصف الأول */}
-            <div className="matching-row2">
-              <div className="word-with-dot2">
-                <span className="span-num2">1</span>
-                <span
-                  className={`word-text2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-duck").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  duck
-                </span>
+        <div className="container12-review1-p17-exd" ref={containerRef}>
+          {/* الصف الأول */}
+          <div className="matching-row2">
+            <div className="word-with-dot2">
+              <span className="span-num2">1</span>
+              <span
+                className={`word-text2 ${
+                  selectedWord === "duck" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("dot-duck").click()}
+                style={{ cursor: "pointer" }}
+              >
+                duck
+              </span>
 
-                {wrongWords.includes("duck") && (
-                  <span className="error-mark8-u2-p19-q1">✕</span>
-                )}
+              {wrongWords.includes("duck") && (
+                <span className="error-mark8-u2-p19-q1">✕</span>
+              )}
 
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-duck"
-                    data-word="duck"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-duck"
+                  data-word="duck"
+                  onClick={handleStartDotClick}
+                ></div>
               </div>
+            </div>
 
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img1"
-                    id="dot-img1"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-<div style={{width:"150px"}}>
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img1"
+                  id="dot-img1"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+              <div style={{ width: "150px" }}>
                 <img
                   src={table}
-                 className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
+                  className={`matched-img2 ${
+  selectedImage === "img1" ? "selected-item" : ""
+} ${locked || showAnswer ? "disabled-hover" : ""}`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ cursor: "pointer", height: "100px" }}
-                /></div>
+                  style={{ cursor: "pointer", width: "110px", height: "100px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* الصف الثاني */}
+          <div className="matching-row2">
+            <div className="word-with-dot2">
+              <span className="span-num2">2</span>
+              <span
+                className={`word-text2 ${
+                  selectedWord === "tiger" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("dot-tiger").click()}
+                style={{ cursor: "pointer" }}
+              >
+                tiger
+              </span>
+
+              {wrongWords.includes("tiger") && (
+                <span className="error-mark8-u2-p19-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-tiger"
+                  data-word="tiger"
+                  onClick={handleStartDotClick}
+                ></div>
               </div>
             </div>
 
-            {/* الصف الثاني */}
-            <div className="matching-row2">
-              <div className="word-with-dot2">
-                <span className="span-num2">2</span>
-                <span
-                  className={`word-text2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-tiger").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  tiger
-                </span>
-
-                {wrongWords.includes("tiger") && (
-                  <span className="error-mark8-u2-p19-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-tiger"
-                    data-word="tiger"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img2"
+                  id="dot-img2"
+                  onClick={handleEndDotClick}
+                ></div>
               </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img2"
-                    id="dot-img2"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-<div style={{width:"150px"}}>
+              <div style={{ width: "150px" }}>
                 <img
                   src={dish}
-                className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
+                  className={`matched-img2 ${
+  selectedImage === "img2" ? "selected-item" : ""
+} ${locked || showAnswer ? "disabled-hover" : ""}`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
-                  style={{ cursor: "pointer", height: "110px" }}
-                /></div>
+                  style={{ cursor: "pointer", width: "110px", height: "110px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* الصف الثالث */}
+          <div className="matching-row2">
+            <div className="word-with-dot2">
+              <span className="span-num2">3</span>
+              <span
+                className={`word-text2 ${
+                  selectedWord === "dish" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("dot-dish").click()}
+                style={{ cursor: "pointer" }}
+              >
+                dish
+              </span>
+
+              {wrongWords.includes("dish") && (
+                <span className="error-mark8-u2-p19-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-dish"
+                  data-word="dish"
+                  onClick={handleStartDotClick}
+                ></div>
               </div>
             </div>
 
-            {/* الصف الثالث */}
-            <div className="matching-row2">
-              <div className="word-with-dot2">
-                <span className="span-num2">3</span>
-                <span
-                  className={`word-text2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-dish").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  dish
-                </span>
-
-                {wrongWords.includes("dish") && (
-                  <span className="error-mark8-u2-p19-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-dish"
-                    data-word="dish"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img3"
+                  id="dot-img3"
+                  onClick={handleEndDotClick}
+                ></div>
               </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img3"
-                    id="dot-img3"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-<div style={{width:"150px"}}>
+              <div style={{ width: "150px" }}>
                 <img
                   src={duck}
-                 className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
+                  className={`matched-img2 ${
+  selectedImage === "img3" ? "selected-item" : ""
+} ${locked || showAnswer ? "disabled-hover" : ""}`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ cursor: "pointer", height: "100px" }}
-                /></div>
+                  style={{ cursor: "pointer", width: "110px", height: "100px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* الصف الرابع */}
+          <div className="matching-row2">
+            <div className="word-with-dot2">
+              <span className="span-num2">4</span>
+              <span
+                className={`word-text2 ${
+                  selectedWord === "table" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("dot-table").click()}
+                style={{ cursor: "pointer" }}
+              >
+                table
+              </span>
+
+              {wrongWords.includes("table") && (
+                <span className="error-mark8-u2-p19-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-table"
+                  data-word="table"
+                  onClick={handleStartDotClick}
+                ></div>
               </div>
             </div>
 
-            {/* الصف الرابع */}
-            <div className="matching-row2">
-              <div className="word-with-dot2">
-                <span className="span-num2">4</span>
-                <span
-                  className={`word-text2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-table").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  table
-                </span>
-
-                {wrongWords.includes("table") && (
-                  <span className="error-mark8-u2-p19-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-table"
-                    data-word="table"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img4"
+                  id="dot-img4"
+                  onClick={handleEndDotClick}
+                ></div>
               </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img4"
-                    id="dot-img4"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-<div style={{width:"150px"}}>
+              <div style={{ width: "150px" }}>
                 <img
                   src={tiger}
                   className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
+  selectedImage === "img4" ? "selected-item" : ""
+} ${locked || showAnswer ? "disabled-hover" : ""}`}
                   alt=""
                   onClick={() => document.getElementById("dot-img4").click()}
-                  style={{ cursor: "pointer", height: "100px" }}
-                /></div>
+                  style={{ cursor: "pointer", width: "110px", height: "100px" }}
+                />
               </div>
             </div>
-
-            <svg className="lines-layer2">
-              {lines.map((line, i) => (
-                <line key={i} {...line} stroke="red" strokeWidth="3" />
-              ))}
-            </svg>
           </div>
+
+          <svg className="lines-layer2">
+            {lines.map((line, i) => (
+              <line key={i} {...line} stroke="red" strokeWidth="3" />
+            ))}
+          </svg>
         </div>
 
         {/* الأزرار */}
@@ -360,6 +373,8 @@ const Unit2_Page8_Q1 = () => {
               setShowAnswer(false);
               setWrongWords([]);
               setFirstDot(null);
+              setSelectedWord(null);
+setSelectedImage(null);
               setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
             }}
             className="try-again-button"
@@ -389,7 +404,8 @@ const Unit2_Page8_Q1 = () => {
                 x2: getDotPosition(`[data-image="${line.image}"]`).x,
                 y2: getDotPosition(`[data-image="${line.image}"]`).y,
               }));
-
+setSelectedWord(null);
+setSelectedImage(null);
               setShowAnswer(true);
               setLines(finalLines);
               setWrongWords([]);

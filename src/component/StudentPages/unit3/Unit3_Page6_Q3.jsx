@@ -83,17 +83,14 @@ const Unit3_Page6_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "30px",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span>Read and draw circles.
+          <span className="ex-A">F</span>Read and draw the correct number of
+          circles.
         </h5>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -108,7 +105,7 @@ const Unit3_Page6_Q3 = () => {
             🧽 Eraser
           </button>
         </div>
-        <div className="unit3-q6-table">
+        <div className="unit3-q6-table w-full">
           {questions.map((q) => (
             <div key={q.id} className="unit3-q6-row">
               <div className="unit3-q6-text">

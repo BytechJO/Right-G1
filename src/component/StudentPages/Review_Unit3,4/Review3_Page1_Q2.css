@@ -54,7 +54,7 @@
   /* background: #b7eaff; */
   border-radius: 20px;
   font-size: 20px;
-  width: 200px;
+  width: 230px;
   text-align: start;
   border: 2px solid transparent;
 }
@@ -127,8 +127,8 @@
 .unscramble-input {
   width: 90%;
   /* padding: 6px 10px; */
-  border-bottom: 2px solid #000000;
-  /* border-radius: 6px; */
+  border: 2px solid #626262;
+  border-radius: 8px;
   /* margin-top: 8px; */
   font-size: 20px;
 }

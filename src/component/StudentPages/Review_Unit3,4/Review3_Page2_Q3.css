@@ -1,7 +1,9 @@
 .container-review3-p2-q3 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  width: 100%;
+  /* justify-items: ; */
+  justify-items: center;
 }
 
 .shortA-choice {
@@ -52,25 +54,24 @@
   justify-content: center;
   background: transparent;
   color: black;
-      width: 60px;
-    height: 60px;
+  width: 60px;
+  height: 60px;
 }
 
 /* الغلط */
 .review3-p2-q3-wrong-x {
-       position: absolute;
-    right: -12px;
-    top: -3px;
-    background: red;
-    color: white;
-    /* font-weight: bold; */
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid white;
+  position: absolute;
+  right: -12px;
+  top: -3px;
+  background: red;
+  color: white;
+  /* font-weight: bold; */
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid white;
 }
-
-

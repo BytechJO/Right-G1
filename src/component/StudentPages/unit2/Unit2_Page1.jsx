@@ -14,12 +14,11 @@ import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
 import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
 import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
 import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-05.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit2_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+
   const captionsExample = [
     { start: 0, end: 4.0, text: " Page 10, Unit 2, Stella's Birthday. " },
     { start: 4.05, end: 7.09, text: "Page 10, Unit 2, Vocabulary." },
@@ -50,13 +49,13 @@ const Unit2_Page1 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 72.8, y1: 26.6, x2: 77.0, y2: 30.0, sound: 1, isPrimary: true },
+    { x1: 72.8, y1: 26.7, x2: 77.0, y2: 30.0, sound: 1, isPrimary: true },
 
     // // الصوت الأول – منطقة إضافية
     { x1: 69.5, y1: 25.8, x2: 75.9, y2: 33.4, sound: 1, isPrimary: false },
 
     // // الصوت الثاني – الأساسية
-    { x1: 63.2, y1: 56.35, x2: 67.2, y2: 59.3, sound: 2, isPrimary: true },
+    { x1: 63.1, y1: 56.7, x2: 67.2, y2: 59.3, sound: 2, isPrimary: true },
 
     // // الصوت الثاني – الإضافية
     { x1: 62.9, y1: 53.5, x2: 74.8, y2: 59.9, sound: 2, isPrimary: false },
@@ -73,7 +72,7 @@ const Unit2_Page1 = ({ openPopup }) => {
     { x1: 23.17, y1: 11.5, x2: 99.4, y2: 20.5, sound: 4, isPrimary: false },
 
     // // الصوت الخامس – الأساسية
-    { x1: 13.4, y1: 23.7, x2: 17.3, y2: 26.7, sound: 5, isPrimary: true },
+    { x1: 13.5, y1: 23.7, x2: 17.3, y2: 26.7, sound: 5, isPrimary: true },
 
     // // الصوت الخامس – الإضافية
     { x1: 1.0, y1: 11.06, x2: 16.9, y2: 28.5, sound: 5, isPrimary: false },
@@ -92,19 +91,21 @@ const Unit2_Page1 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -119,8 +120,7 @@ const Unit2_Page1 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
-
+        const isActive = activeId === `p11-${area.sound}`;
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
         // ============================
@@ -134,8 +134,7 @@ const Unit2_Page1 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p11-${area.sound}`);
               }}
             ></div>
           );
@@ -157,8 +156,7 @@ const Unit2_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+              playSound(sounds[area.sound], `p11-${area.sound}`);
             }}
           ></div>
         );
@@ -183,7 +181,7 @@ const Unit2_Page1 = ({ openPopup }) => {
                 }}
               >
                 <AudioWithCaption src={allUnit2} captions={captionsExample} />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -212,7 +210,7 @@ const Unit2_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit2_Page1_find />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -240,7 +238,7 @@ const Unit2_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit2_Page1_Vocab />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -268,7 +266,7 @@ const Unit2_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit2_Page1_Read />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}

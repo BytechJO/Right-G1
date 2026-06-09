@@ -113,8 +113,8 @@ const Unit2_Page5_Q1 = () => {
       >
         <h5 className="header-title-page8">
           <span className="ex-A">A</span>{" "}
-          <span style={{ color: "purple" }}>1</span> Which picture begins with
-          the letter? Write <span style={{ color: "red" }}>✓</span>.
+          <span style={{ color: "purple" }}>1</span> Which picture starts with
+          the letter? Tap or click the correct box.
         </h5>
 
         <div
@@ -157,11 +157,13 @@ const Unit2_Page5_Q1 = () => {
                 >
                   <img
                     src={opt.src}
-                    className="exercise-image"
+                    // className="exercise-image"
                     style={{
                       width: "130px",
                       height: "130px",
                       objectFit: "contain",
+                      border: "1px solid #72d0f6",
+                      borderRadius: "8px",
                       marginLeft: "0px",
                     }}
                   />
@@ -171,7 +173,7 @@ const Unit2_Page5_Q1 = () => {
                       answers[rowIndex] === optIndex ? "selected1" : ""
                     }`}
                     style={{
-                      border: "2px solid #38bdf8",
+                      border: "1px solid #72d0f6",
                       borderRadius: "7px",
                       height: "40px",
                       width: "40px",

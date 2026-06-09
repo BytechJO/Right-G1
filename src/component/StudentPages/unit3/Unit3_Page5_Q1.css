@@ -12,15 +12,18 @@
 
 .q-img-unit3-page6-q1 {
   width: auto;
-  height: 170px;
+  height: 120px;
 }
 
 .q-input-unit3-page6-q1 {
-  border-bottom: 2px solid #000000;
+  border: 2px solid #878787;
   padding: 5px 8px;
+  border-radius: 8px;
+   width: 120px;
+  height: 30px;
   /* border-radius: 6px; */
   font-size: 25px;
-  width: 170px;
+
   text-align: center; /* توسيط أفقي */
   vertical-align: middle; /* توسيط عمودي */
   line-height: normal;
@@ -46,13 +49,13 @@
 .error-mark-input {
   position: absolute;
   top: -10px;
-  right: 5px;
-  width: 26px;
-  height: 26px;
+  right: -5px;
+  width: 22px;
+  height: 22px;
   background: red;
   color: white;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -63,10 +66,13 @@
 }
 
 .row-content10-unit3-page6-q1 {
-  display: flex;
-  margin-bottom: 55px;
-  gap: 22px;
-  margin-top: 20px;
+     display: flex;
+    margin-bottom: 55px;
+    gap:10px;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .q-input:focus {

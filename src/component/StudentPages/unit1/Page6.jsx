@@ -15,11 +15,15 @@ import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import video from "../../../assets/unit1/sounds/Grammer P6 Video.mp4";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
+
 const Page6 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+    const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+
+
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
     { start: 0, end: 4.05, text: "Page 6, exercise 1. Right grammar. " },
     { start: 4.09, end: 7.17, text: "Hello, I'm Stella. This is John." },
@@ -51,21 +55,22 @@ const Page6 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+const playSound = (soundPath, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = soundPath;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 هذا المهم
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
-
   return (
     <div className="page1-img-wrapper"
           onClick={handleImageClick}
@@ -81,10 +86,8 @@ const Page6 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-          className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
-              ? "highlight"
-              : ""
+            className={`clickable-area ${
+            activeId === `p6-${area.sound}`||  hoveredAreaIndex === index   ? "highlight" : ""
           }`}
           style={{
             position: "absolute",
@@ -94,9 +97,8 @@ const Page6 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
-          }}
+             playSound(area.sound, `p6-${area.sound}`);
+           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
           }}

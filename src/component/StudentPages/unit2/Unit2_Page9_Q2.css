@@ -23,14 +23,14 @@
   align-items: flex-start;
   margin-bottom: 66px;
   /* margin: 40px auto; */
-  /* width: 50vw; */
+  width: 100%;
 }
 
 .column2 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 200px;
+  height: 60vh;
   align-items: flex-start;
 }
 

@@ -8,6 +8,8 @@ export default function Unit4_Page5_Q3() {
   const [wrongWords, setWrongWords] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
   // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   const correctMatches = [
@@ -24,7 +26,7 @@ export default function Unit4_Page5_Q3() {
 
     const rect = containerRef.current.getBoundingClientRect();
     const word = e.target.dataset.letter;
-
+    setSelectedLeftWord(word);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
@@ -53,6 +55,13 @@ export default function Unit4_Page5_Q3() {
 
     setLines((prev) => [...prev, newLine]);
 
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -62,7 +71,7 @@ export default function Unit4_Page5_Q3() {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all pairs before checking."
+        "Please connect all pairs before checking.",
       );
       return;
     }
@@ -73,7 +82,7 @@ export default function Unit4_Page5_Q3() {
     let wrong = []; // ⭐ تم التعديل هون
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word1 === line.word && pair.word2 === line.image
+        (pair) => pair.word1 === line.word && pair.word2 === line.image,
       );
       if (isCorrect) correctCount++;
       else wrong.push(line.word); // ⭐ تم التعديل هون
@@ -111,10 +120,10 @@ export default function Unit4_Page5_Q3() {
     // 1️⃣ تجهيز خطوط الإجابة الصحيحة
     const correctLines = correctMatches.map((pair) => {
       const startEl = document.querySelector(
-        `.start-dot5[data-letter="${pair.word1}"]`
+        `.start-dot5[data-letter="${pair.word1}"]`,
       );
       const endEl = document.querySelector(
-        `.end-dot5[data-image="${pair.word2}"]`
+        `.end-dot5[data-image="${pair.word2}"]`,
       );
 
       return {
@@ -127,11 +136,12 @@ export default function Unit4_Page5_Q3() {
       };
     });
 
-    // 2️⃣ وضع الخطوط
+    setSelectedLeftWord(null);
+    setSelectedRightWord(null);
+
     setLines(correctLines);
     setShowAnswer(true);
-    setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
-    // 3️⃣ إخفاء علامات الإكس
+    setLocked(true);
     setWrongWords([]);
   };
 
@@ -148,16 +158,12 @@ export default function Unit4_Page5_Q3() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <h5 className="header-title-page8">
           {" "}
-          <span className="ex-A">B</span> Read, look, and match.
+          <span className="ex-A">B</span> Read and match
         </h5>
 
         <div className="matching-wrapper2-unit4-p5-q3" ref={containerRef}>
@@ -169,14 +175,14 @@ export default function Unit4_Page5_Q3() {
               justifyContent: "space-between",
             }}
           >
-            <div className="column2 left-column">
+            <div className="column2-unit4-p5-q3 left-column">
               {["It’s a red", "It’s a blue", "It’s a brown"].map((word, i) => (
                 <div className="word-row2" key={i}>
                   <span className="num2">{i + 1}</span>
                   <span
                     className={`word-text3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                      selectedLeftWord === word ? "selected-item" : ""
+                    } ${locked || showAnswer ? "disabled-hover" : ""}`}
                     onClick={() =>
                       document.getElementById(`dot-${word}`).click()
                     }
@@ -197,7 +203,7 @@ export default function Unit4_Page5_Q3() {
               ))}
             </div>
 
-            <div className="column2 right-column">
+            <div className="column2-unit4-p5-q3 right-column">
               {["circle.", "square.", "triangle."].map((word, i) => (
                 <div className="word-row2" key={i}>
                   <div
@@ -208,8 +214,8 @@ export default function Unit4_Page5_Q3() {
                   ></div>
                   <span
                     className={`word-text3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                      selectedRightWord === word ? "selected-item" : ""
+                    } ${locked || showAnswer ? "disabled-hover" : ""}`}
                     onClick={() =>
                       document.getElementById(`dot-${word}`).click()
                     }
@@ -239,9 +245,12 @@ export default function Unit4_Page5_Q3() {
       <div className="action-buttons-container">
         <button
           onClick={() => {
+            setSelectedLeftWord(null);
+            setSelectedRightWord(null);
             setLines([]);
             setWrongWords([]);
-            setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
+            setShowAnswer(false);
+            setLocked(false);
           }}
           className="try-again-button"
         >

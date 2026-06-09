@@ -5,12 +5,13 @@
 .row2 {
   display: flex;
   align-items: center;
+  height: 110px;
   gap: 1rem;
 }
 
 .q-img {
-  width: 160px;
-  height: auto;
+  width: 100px;
+  height: 100px;
 }
 /* ⭐ مكان الدروب داخل الجملة */
 .drop-slot-inline-unit2-p8-q2 {
@@ -21,6 +22,7 @@
   margin: 0 6px;
   text-align: center;
   vertical-align: middle;
+  cursor: pointer;
   font-weight: bold;
   line-height: 28px;
 }
@@ -34,6 +36,7 @@
 .drop-slot-wrapper-unit2-p8-q2 {
   position: relative;
   display: inline-block;
+ 
 }
 
 .q-input {
@@ -69,7 +72,7 @@
   background-color: #f2f6ff;
   border: 2px solid #2c5287;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 18px;
   /* font-weight: bold; */
   /* color: #1f3cff; */
   cursor: grab;

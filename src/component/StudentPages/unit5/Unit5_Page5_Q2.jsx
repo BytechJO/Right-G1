@@ -35,7 +35,7 @@ export default function Unit5_Page5_Q2() {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleSelect = (qId, value) => {
-    if (showAnswer ||submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    if (showAnswer || submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
     setAnswers((prev) => {
       const current = prev[qId] || [];
 
@@ -55,7 +55,7 @@ export default function Unit5_Page5_Q2() {
   };
 
   const handleCheck = () => {
-    if (showAnswer||submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
+    if (showAnswer || submitted) return; // 🔥 يمنع الضغط بعد إظهار الحل
     // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
     if (!answers[data[0].id] || answers[data[0].id].length === 0) {
       ValidationAlert.info("Please select at least one picture in question 1.");
@@ -115,8 +115,6 @@ export default function Unit5_Page5_Q2() {
 
     setAnswers(correctAnswersObj);
     setShowAnswer(true);
-
-
   };
 
   const handleReset = () => {
@@ -136,62 +134,60 @@ export default function Unit5_Page5_Q2() {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
         }}
       >
-        <div className="circle-wrapper-Unit5_Page5_Q2">
-          <h5 className="header-title-page8">
-            <span style={{ color: "purple" }}>2</span> Which pictures begin with
-            the same sound? Circle.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2" style={{ color: "purple" }}>
+            2
+          </span>{" "}
+          Look and tap or click on the pictures that start with the same sound.
+        </h5>
 
-          {data.map((q) => (
-            <div key={q.id} className="question-row-Unit5_Page5_Q2">
-              <span
-                className="q-number"
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                {q.id}.
-              </span>
+        {data.map((q) => (
+          <div key={q.id} className="question-row-Unit5_Page5_Q2">
+            <span
+              className="q-number"
+              style={{
+                color: "#2c5287",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              {q.id}.
+            </span>
 
-              <div className="images-row-Unit5_Page5_Q2">
-                {q.images.map((img) => {
-                  const isSelected = answers[q.id]?.includes(img.value);
-                  const isWrong =
-                    submitted && isSelected && !q.correct.includes(img.value);
+            <div className="images-row-Unit5_Page5_Q2">
+              {q.images.map((img) => {
+                const isSelected = answers[q.id]?.includes(img.value);
+                const isWrong =
+                  submitted && isSelected && !q.correct.includes(img.value);
 
-                  return (
-                    <div
-                      key={img.id}
-                      className={`img-box-Unit5_Page5_Q2 
+                return (
+                  <div
+                    key={img.id}
+                    className={`img-box-Unit5_Page5_Q2 
                     ${isSelected ? "selected-Unit5_Page5_Q2" : ""} 
                 
                     ${isWrong ? "wrong" : ""}`}
-                      onClick={() => handleSelect(q.id, img.value)}
-                    >
-                      <img src={img.src} alt="" />
-                      {/* علامة X تظهر فقط عند الغلط */}
-                      {!showAnswer && isWrong && (
-                        <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                    onClick={() => handleSelect(q.id, img.value)}
+                  >
+                    <img src={img.src} alt="" />
+                    {/* علامة X تظهر فقط عند الغلط */}
+                    {!showAnswer && isWrong && (
+                      <div className="wrong-mark-Unit5_Page5_Q2-1 ">✕</div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={handleReset}>
           Start Again ↻

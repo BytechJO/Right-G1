@@ -8,14 +8,12 @@ import deer from "../../../assets/unit1/imgs/deer flip.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";
 import taxi from "../../../assets/unit1/imgs/taxi_1.svg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
+
 const Page8_Q1 = () => {
-  const audioRef = useRef(null);
   const clickAudioRef = useRef(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isAutoAnswer, setIsAutoAnswer] = useState(false);
@@ -54,36 +52,15 @@ const Page8_Q1 = () => {
 
   const [answers, setAnswers] = useState({
     letters: Array(data.length).fill(null), // لكل كلمة حرف
-    numbers: Array(data.length).fill(null), // لكل صورة رقم
   });
 
   const [wrongLetters, setWrongLetters] = useState(data.map(() => false));
-  const [wrongNumbers, setWrongNumbers] = useState(data.map(() => false));
 
   const stopAtSecond = 9;
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
 
-const lettersBank = [
-  { id: "l-d", value: "d" },
-  { id: "l-t", value: "t" },
-];
-
-  const numbersBank = [
-    { id: "n-1", value: "1" },
-    { id: "n-2", value: "2" },
-    { id: "n-3", value: "3" },
-    { id: "n-4", value: "4" },
+  const lettersBank = [
+    { id: "l-d", value: "d" },
+    { id: "l-t", value: "t" },
   ];
 
   // ================================
@@ -106,72 +83,6 @@ const lettersBank = [
     { start: 15.16, end: 17.13, text: "4-deer." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
-
-
-  const playSound = (src) => {
-    if (!clickAudioRef.current) return;
-    clickAudioRef.current.src = src;
-    clickAudioRef.current.currentTime = 0;
-    clickAudioRef.current.play();
-  };
-
-
   const onDragEnd = (result) => {
     if (!result.destination || showAnswer) return;
 
@@ -179,106 +90,75 @@ const lettersBank = [
 
     // 1) Letter drop zones
     if (
-  draggableId.startsWith("l-") &&
-  destination.droppableId.startsWith("letter-drop-")
-) {
-  const index = Number(destination.droppableId.replace("letter-drop-", ""));
-  const value = draggableId.replace("l-", ""); // d أو t
-
-  setAnswers((prev) => {
-    const letters = [...prev.letters];
-    letters[index] = value;
-    return { ...prev, letters };
-  });
-
-  setWrongLetters(data.map(() => false));
-  return;
-}
-
-
-    // 2) Number drop zones
-    if (
-      draggableId.startsWith("n-") &&
-      destination.droppableId.startsWith("number-drop-")
+      draggableId.startsWith("l-") &&
+      destination.droppableId.startsWith("letter-drop-")
     ) {
-      const index = Number(destination.droppableId.replace("number-drop-", ""));
+      const index = Number(destination.droppableId.replace("letter-drop-", ""));
+      const value = draggableId.replace("l-", ""); // d أو t
 
       setAnswers((prev) => {
-        const numbers = [...prev.numbers];
-
-        const oldIndex = numbers.findIndex((v) => v === draggableId);
-        if (oldIndex !== -1) numbers[oldIndex] = null;
-
-        numbers[index] = draggableId;
-        return { ...prev, numbers };
+        const letters = [...prev.letters];
+        letters[index] = value;
+        return { ...prev, letters };
       });
 
-      setWrongNumbers(data.map(() => false));
+      setWrongLetters(data.map(() => false));
       return;
     }
+
+    // 2) Number drop zones
   };
 
-const reset = () => {
-  setAnswers({
-    letters: Array(data.length).fill(null),
-    numbers: Array(data.length).fill(null),
-  });
+  const reset = () => {
+    setAnswers({
+      letters: Array(data.length).fill(null),
+    });
 
-  setWrongLetters(data.map(() => false));
-  setWrongNumbers(data.map(() => false));
+    setWrongLetters(data.map(() => false));
 
-  setShowAnswer(false);
-  setIsAutoAnswer(false);
-};
+    setShowAnswer(false);
+    setIsAutoAnswer(false);
+  };
 
+  const checkAnswers = () => {
+    if (showAnswer) return;
 
- const checkAnswers = () => {
-  if (showAnswer) return;
+    // 1️⃣ فحص الفراغ
+    if (answers.letters.some((v) => !v)) {
+      ValidationAlert.info(
+        "Oops!",
+        "Please complete all answers before checking.",
+      );
+      return;
+    }
 
-  // 1️⃣ فحص الفراغ
-  if (answers.letters.some((v) => !v) || answers.numbers.some((v) => !v)) {
-    ValidationAlert.info(
-      "Oops!",
-      "Please complete all answers before checking.",
+    let correctLetters = 0;
+    let correctNumbers = 0;
+
+    // 2️⃣ الحساب
+    data.forEach((item, i) => {
+      const pickedLetter = answers.letters[i];
+
+      if (pickedLetter === item.missing) correctLetters++;
+    });
+
+    const totalPoints = data.length;
+    const score = correctLetters;
+
+    // 3️⃣ تحديد الغلط
+    const letterWrongs = data.map(
+      (item, i) => answers.letters[i] !== item.missing,
     );
-    return;
-  }
 
-  let correctLetters = 0;
-  let correctNumbers = 0;
+    setWrongLetters(letterWrongs);
 
-  // 2️⃣ الحساب
-  data.forEach((item, i) => {
- const pickedLetter = answers.letters[i];
+    setShowAnswer(true);
 
-    const pickedNumber = answers.numbers[i]?.split("-")[1];
+    // 4️⃣ الرسالة
+    const color =
+      score === totalPoints ? "green" : score === 0 ? "red" : "orange";
 
-    if (pickedLetter === item.missing) correctLetters++;
-    if (pickedNumber === item.num) correctNumbers++;
-  });
-
-  const totalPoints = data.length * 2;
-  const score = correctLetters + correctNumbers;
-
-  // 3️⃣ تحديد الغلط
-const letterWrongs = data.map(
-  (item, i) => answers.letters[i] !== item.missing
-);
-
-
-  const numberWrongs = data.map(
-    (item, i) => answers.numbers[i]?.split("-")[1] !== item.num,
-  );
-
-  setWrongLetters(letterWrongs);
-  setWrongNumbers(numberWrongs);
-  setShowAnswer(true);
-
-  // 4️⃣ الرسالة
-  const color =
-    score === totalPoints ? "green" : score === 0 ? "red" : "orange";
-
-  const scoreMessage = `
+    const scoreMessage = `
     <div style="font-size: 20px; margin-top: 10px; text-align:center;">
       <span style="color:${color}; font-weight:bold;">
         Score: ${score} / ${totalPoints}
@@ -286,26 +166,11 @@ const letterWrongs = data.map(
     </div>
   `;
 
-  if (score === totalPoints) ValidationAlert.success(scoreMessage);
-  else if (score === 0) ValidationAlert.error(scoreMessage);
-  else ValidationAlert.warning(scoreMessage);
-};
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
+    if (score === totalPoints) ValidationAlert.success(scoreMessage);
+    else if (score === 0) ValidationAlert.error(scoreMessage);
+    else ValidationAlert.warning(scoreMessage);
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="page8-wrapper" style={{ padding: "30px" }}>
@@ -317,198 +182,101 @@ const letterWrongs = data.map(
             justifyContent: "flex-start",
             alignItems: "flex-start",
             position: "relative",
+            gap: "30px",
             width: "60%",
           }}
         >
-          <div className="page8-content">
-            <header className="header-title-page8">
-              <span className="ex-A">A</span>{" "}
-              <span className="number-of-q">1</span> Listen and write the
-              missing letters. Number the pictures.
-            </header>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "30px 0px",
-                width: "100%",
-              }}
-            >
+          <header className="header-title-page8">
+            <span className="ex-A">A</span>{" "}
+            <span className="number-of-q">1</span> Listen and drag the missing letter. the missing
+            letters. Number the pictures.
+          </header>
+
+          <audio ref={clickAudioRef} style={{ display: "none" }} />
+          <QuestionAudioPlayer
+            src={CD6_Pg8_Instruction1_AdultLady}
+            captions={captions}
+            stopAtSecond={stopAtSecond}
+          />
+          <Droppable droppableId="letters-bank" direction="horizontal">
+            {(provided) => (
               <div
-                className="audio-popup-read"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
                 style={{
-                  width: "50%",
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  width: "100%",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <div className="audio-inner player-ui">
-                  <audio
-                    ref={audioRef}
-                    src={CD6_Pg8_Instruction1_AdultLady}
-                    onTimeUpdate={(e) => {
-                      const time = e.target.currentTime;
-                      setCurrent(time);
-                      updateCaption(time);
-                    }}
-                    onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                  ></audio>
-                  {/* Play / Pause */}
-                  {/* الوقت - السلايدر - الوقت */}
-                  <div className="top-row">
-                    <span className="audio-time">
-                      {new Date(current * 1000).toISOString().substring(14, 19)}
-                    </span>
-
-                    <input
-                      type="range"
-                      className="audio-slider"
-                      min="0"
-                      max={duration}
-                      value={current}
-                      onChange={(e) => {
-                        audioRef.current.currentTime = e.target.value;
-                        updateCaption(Number(e.target.value));
-                      }}
-                      style={{
-                        background: `linear-gradient(to right, #430f68 ${
-                          (current / duration) * 100
-                        }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                      }}
-                    />
-
-                    <span className="audio-time">
-                      {new Date(duration * 1000)
-                        .toISOString()
-                        .substring(14, 19)}
-                    </span>
-                  </div>
-                  {/* الأزرار 3 أزرار بنفس السطر */}
-                  <div className="bottom-row">
-                    {/* فقاعة */}
-                    <div
-                      className={`round-btn ${showCaption ? "active" : ""}`}
-                      style={{ position: "relative" }}
-                      onClick={() => setShowCaption(!showCaption)}
-                    >
-                      <TbMessageCircle size={36} />
+                {lettersBank.map((l, i) => (
+                  <Draggable
+                    key={l.id}
+                    draggableId={l.id}
+                    index={i}
+                    isDragDisabled={showAnswer}
+                  >
+                    {(provided) => (
                       <div
-                        className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                        style={{ top: "100%", left: "10%" }}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="bank-item"
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "50%",
+                          border: "2px solid #2c5287",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: "bold",
+                          background: "white",
+                          ...provided.draggableProps.style,
+                        }}
                       >
-                        {captions.map((cap, i) => (
-                          <p
-                            key={i}
-                            id={`caption-${i}`}
-                            className={`caption-inPopup-line2 ${
-                              activeIndex === i ? "active" : ""
-                            }`}
-                          >
-                            {cap.text}
-                          </p>
-                        ))}
+                        {l.value}
                       </div>
-                    </div>
-
-                    {/* Play */}
-                    <button className="play-btn2" onClick={togglePlay}>
-                      {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                    </button>
-
-                    {/* Settings */}
-                    <div className="settings-wrapper" ref={settingsRef}>
-                      <button
-                        className={`round-btn ${showSettings ? "active" : ""}`}
-                        onClick={() => setShowSettings(!showSettings)}
-                      >
-                        <IoMdSettings size={36} />
-                      </button>
-
-                      {showSettings && (
-                        <div className="settings-popup">
-                          <label>Volume</label>
-                          <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={volume}
-                            onChange={(e) => {
-                              setVolume(e.target.value);
-                              audioRef.current.volume = e.target.value;
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </div>{" "}
-                </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
               </div>
-            </div>
-            <audio ref={clickAudioRef} style={{ display: "none" }} />
+            )}
+          </Droppable>
 
-            <Droppable droppableId="letters-bank" direction="horizontal">
-              {(provided) => (
+          {/* ✅ الكلمات */}
+          <div
+            className="div-input"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "30px",
+              // marginLeft:"40px",
+              width: "100%",
+            }}
+          >
+            {displayOrder.map((dataIndex, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  gap: "40px",
+                  position: "relative",
+                }}
+              >
                 <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
                   style={{
                     display: "flex",
-                    gap: "10px",
-                    padding: "10px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    // margin: "10px 0",
                     alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {lettersBank.map((l, i) => (
-                    <Draggable key={l.id} draggableId={l.id} index={i}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="bank-item"
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "50%",
-                            border: "2px solid #2c5287",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            background: "white",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {l.value}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            {/* ✅ الكلمات */}
-            <div
-              className="div-input"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "30px",
-                // marginLeft:"40px",
-                width: "100%",
-              }}
-            >
-              {displayOrder.map((dataIndex, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-end",
                     position: "relative",
                   }}
                 >
@@ -536,7 +304,7 @@ const letterWrongs = data.map(
                           color: isAutoAnswer ? "red" : "black",
                         }}
                       >
-                       {answers.letters[dataIndex] || ""}
+                        {answers.letters[dataIndex] || ""}
 
                         {provided.placeholder}
                       </div>
@@ -551,44 +319,7 @@ const letterWrongs = data.map(
                   >
                     {data[dataIndex].word.slice(1)}
                   </span>
-                  {wrongLetters[dataIndex] && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        left: "56%",
-                        top: "19%",
-                        transform: "translateY(-50%)",
-                        width: "25px",
-                        height: "25px",
-                        background: "red",
-                        color: "white",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        border: "2px solid white",
-                      }}
-                    >
-                      ✕
-                    </div>
-                  )}
                 </div>
-              ))}
-            </div>
-
-            {/* ✅ الصور */}
-            <div
-              className="exercise-image-div"
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                marginBottom: "20px",
-              }}
-            >
-              {data.map((item, index) => (
                 <div
                   style={{
                     display: "flex",
@@ -597,120 +328,40 @@ const letterWrongs = data.map(
                   }}
                 >
                   <img
-                    key={item.num}
-                    src={item.src}
+                    key={data[dataIndex].num}
+                    src={data[dataIndex].src}
                     className="exercise-image"
-                    onClick={() => playSound(item.sound)}
+                    // onClick={() => playSound(item.sound)}
                   />
+                </div>
+                {wrongLetters[dataIndex] && (
                   <div
-                    key={index + 1}
-                    className="exercise-item"
-                    style={{ position: "relative" }}
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: "0%",
+                      transform: "translateY(-50%)",
+                      width: "22px",
+                      height: "22px",
+                      background: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      border: "2px solid white",
+                    }}
                   >
-                    <Droppable droppableId={`number-drop-${index}`}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className={`number-drop ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "24px",
-                            background: snapshot.isDraggingOver
-                              ? "#c4e5fcff"
-                              : "white",
-                            color: isAutoAnswer ? "red" : "black",
-                          }}
-                        >
-                          {answers.numbers[index]?.split("-")[1] || ""}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-
-                    {wrongNumbers[index] && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          right: "58px",
-                          top: "5%",
-                          transform: "translateY(-50%)",
-                          width: "25px",
-                          height: "25px",
-                          background: "red",
-                          color: "white",
-                          borderRadius: "50%",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          border: "2px solid white",
-                        }}
-                      >
-                        ✕
-                      </div>
-                    )}
-                  </div>{" "}
-                </div>
-              ))}
-            </div>
-            <Droppable droppableId="letters-bank" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    padding: "10px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    // margin: "10px 0",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {numbersBank.map((l, i) => (
-                    <Draggable key={l.id} draggableId={l.id} index={i}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="bank-item"
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "50%",
-                            border: "2px solid #2c5287",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: "bold",
-                            background: "white",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {l.value}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
+                    ✕
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
+
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
@@ -723,13 +374,12 @@ const letterWrongs = data.map(
               setIsAutoAnswer(true);
 
               setAnswers({
-               letters: data.map((item) => item.missing),
+                letters: data.map((item) => item.missing),
 
                 numbers: data.map((item) => `n-${item.num}`),
               });
 
               setWrongLetters(data.map(() => false));
-              setWrongNumbers(data.map(() => false));
             }}
           >
             Show Answer

@@ -37,7 +37,7 @@ const Unit5_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -67,6 +67,7 @@ const Unit5_Page1_find = () => {
         style={{
           textAlign: "center",
           display: "flex",
+          gap: "20px",
           flexDirection: "column",
           alignItems: "center",
         }}
@@ -76,7 +77,8 @@ const Unit5_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the bookshelf in the picture?
+            I need your help. Can you help me find the bookshelf by clicking on
+            it?{" "}
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -86,6 +88,7 @@ const Unit5_Page1_find = () => {
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}
@@ -116,7 +119,6 @@ const Unit5_Page1_find = () => {
               src={MySVG}
               alt="answer highlight"
               className="highlight-svg-unit5"
-             
             />
           )}
         </div>

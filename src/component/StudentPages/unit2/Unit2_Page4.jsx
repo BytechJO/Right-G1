@@ -18,12 +18,13 @@ import video from "../../../assets/img_unit2/sounds-unit2/p13.mp4";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit2_Page4 = ({ openPopup }) => {
-  const audioRef = useRef(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+
+  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const captionsExample = [
     { start: 0, end: 4.07, text: " Page 13, exercise 2. Right Grammar. " },
     { start: 4.1, end: 5.12, text: " What is it? " },
@@ -61,25 +62,29 @@ const Unit2_Page4 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (soundPath, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = soundPath;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 هذا المهم
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page_4})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_4})` }}
+    >
       {/* <img
         src={page_4}
         style={{ display: "block" }}
@@ -89,7 +94,7 @@ const Unit2_Page4 = ({ openPopup }) => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            activeId === `p14-${area.sound}` || hoveredAreaIndex === index
               ? "highlight"
               : ""
           }`}
@@ -101,8 +106,7 @@ const Unit2_Page4 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
+            playSound(area.sound, `p14-${area.sound}`);
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -122,7 +126,8 @@ const Unit2_Page4 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "audio", <div
+              "audio",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -133,12 +138,19 @@ const Unit2_Page4 = ({ openPopup }) => {
                   src={CD12_Pg13_Grammar2_AdultLady}
                   captions={captionsExample}
                 />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -151,7 +163,8 @@ const Unit2_Page4 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "video", <div
+              "video",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -159,7 +172,6 @@ const Unit2_Page4 = ({ openPopup }) => {
                   alignItems: "center",
                   height: "100%",
                   width: "100%",
-                
                 }}
               >
                 <video
@@ -174,12 +186,19 @@ const Unit2_Page4 = ({ openPopup }) => {
                 >
                   <source src={video} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={pauseBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={pauseBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <audio ref={audioRef} style={{ display: "none" }} />

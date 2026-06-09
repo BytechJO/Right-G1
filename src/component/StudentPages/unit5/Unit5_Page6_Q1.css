@@ -5,12 +5,12 @@
 }
 .answer-input-unit5-p6-q1 {
   border-bottom: 2px solid black;
-  width: 160px;
-  height: 40px;
+  width: 120px;
+  height: 30px;
   position: relative;
 }
 .img-unit5-p6-q1 {
-  height: 150px;
+  height: 120px;
   width: auto;
 }
 
@@ -41,7 +41,24 @@
   grid-template-columns: 1fr 1fr;
   gap: 43px;
 }
-
+.error-mark-input1-unit5-p6-q1  {
+    position: absolute;
+    top: 0px;
+    right: 9px;
+    width: 22px;
+    height: 22px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 999999;
+    border: 2px solid white;
+}
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .content-container-unit5-p6-q1 {
     display: grid;

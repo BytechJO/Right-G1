@@ -30,7 +30,7 @@ const Review4_Page1_Q3 = () => {
   };
 
   const checkAnswers = () => {
-     if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
+    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
     if (Object.keys(answers).length < shapesData.length) {
       ValidationAlert.info("Please choose an answer for each shape.");
       return;
@@ -86,70 +86,66 @@ const Review4_Page1_Q3 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
         }}
       >
-        <div className="table-wrapper-review4-p1-q3">
-          <h4 className="header-title-page8">
-            C Look and write <span style={{ color: "red" }}>✓</span>.
-          </h4>
+        <h4 className="header-title-page8">
+          <span className="mr-2">C</span> Look and tap or click on the box with
+          the correct shape.
+        </h4>
 
-          <table className="shapes-table-wrapper-review4-p1-q3">
-            <thead>
-              <tr>
-                <th>What shape is it?</th>
-                {options.map((opt, i) => (
-                  <th key={i}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {shapesData.map((row) => (
-                <tr key={row.id}>
-                  <td className="img-cell-wrapper-review4-p1-q3">
-                    <img
-                      src={row.img}
-                      alt=""
-                      className="shape-img-wrapper-review4-p1-q3"
-                      style={{ height: "50px", width: "auto" }}
-                    />
-                  </td>
-
-                  {options.map((opt, index) => {
-                    const selected = answers[row.id] === opt;
-                    const isCorrect = checked && opt === row.shape && selected;
-                    const isWrong = checked && opt !== row.shape && selected;
-
-                    return (
-                      <td
-                        key={index}
-                        className={`cell-wrapper-review4-p1-q3 ${
-                          selected ? "selected" : ""
-                        }`}
-                        onClick={() => handleSelect(row.id, opt)}
-                      >
-                        {selected && <span className="correct-mark">✓</span>}
-
-                        {isWrong && <div className="wrong-badge">✕</div>}
-                      </td>
-                    );
-                  })}
-                </tr>
+        <table className="shapes-table-wrapper-review4-p1-q3 w-full">
+          <thead>
+            <tr>
+              <th>What shape is it?</th>
+              {options.map((opt, i) => (
+                <th key={i}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</th>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </tr>
+          </thead>
+
+          <tbody>
+            {shapesData.map((row) => (
+              <tr key={row.id}>
+                <td className="img-cell-wrapper-review4-p1-q3">
+                  <img
+                    src={row.img}
+                    alt=""
+                    className="shape-img-wrapper-review4-p1-q3"
+                    style={{ height: "50px", width: "auto" }}
+                  />
+                </td>
+
+                {options.map((opt, index) => {
+                  const selected = answers[row.id] === opt;
+                  const isCorrect = checked && opt === row.shape && selected;
+                  const isWrong = checked && opt !== row.shape && selected;
+
+                  return (
+                    <td
+                      key={index}
+                      className={`cell-wrapper-review4-p1-q3 ${
+                        selected ? "selected" : ""
+                      }`}
+                      onClick={() => handleSelect(row.id, opt)}
+                    >
+                      {selected && <span className="correct-mark">✓</span>}
+
+                      {isWrong && <div className="wrong-badge">✕</div>}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       <div className="action-buttons-container">
@@ -159,7 +155,7 @@ const Review4_Page1_Q3 = () => {
 
         {/* ⭐⭐⭐ NEW BUTTON */}
         <button onClick={showAnswer} className="show-answer-btn swal-continue">
-          Show Answer 
+          Show Answer
         </button>
 
         <button className="check-button2" onClick={checkAnswers}>

@@ -6,10 +6,9 @@ import img4 from "../../../assets/img_unit2/imgs/36.jpg";
 import img5 from "../../../assets/img_unit2/imgs/37.jpg";
 import sound1 from "../../../assets/unit1/sounds/P17QF.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import "./Unit2_Page8_Q3.css";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { TbMessageCircle } from "react-icons/tb";
+
 const Unit2_Page8_Q3 = () => {
   const [lines, setLines] = useState([]);
   const containerRef = useRef(null);
@@ -19,21 +18,11 @@ const Unit2_Page8_Q3 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
-  const audioRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedWord, setSelectedWord] = useState(null);
   // إعدادات الصوت
   const stopAtSecond = 7.3;
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
+
   // زر الكابشن
 
   const correctMatches = [
@@ -56,62 +45,6 @@ const Unit2_Page8_Q3 = () => {
     { start: 15.18, end: 17.22, text: "5-dates." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setActiveIndex(null);
-      setPaused(false);
-      setIsPlaying(false);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
   // ============================
   // 1️⃣ الضغط على النقطة الأولى (start-dot)
   // ============================
@@ -120,7 +53,7 @@ const Unit2_Page8_Q3 = () => {
 
     const rect = containerRef.current.getBoundingClientRect();
     const imgId = e.target.dataset.image;
-
+    setSelectedImage(imgId);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
     const alreadyUsed = lines.some((line) => line.image === imgId);
     if (alreadyUsed) return;
@@ -152,8 +85,15 @@ const Unit2_Page8_Q3 = () => {
       word: e.target.dataset.word, // حرف d أو t
       image: firstDot.image, // الصورة المختارة
     };
-
     setLines((prev) => [...prev, newLine]);
+
+    setSelectedWord(newLine.word);
+
+    setTimeout(() => {
+      setSelectedImage(null);
+      setSelectedWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -165,13 +105,13 @@ const Unit2_Page8_Q3 = () => {
 
     const total = correctMatches.reduce(
       (acc, pair) => acc + pair.image.length,
-      0
+      0,
     );
 
     if (lines.length < total) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -181,7 +121,7 @@ const Unit2_Page8_Q3 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image.includes(line.image)
+        (pair) => pair.word === line.word && pair.image.includes(line.image),
       );
 
       if (isCorrect) correctCount++;
@@ -208,26 +148,12 @@ const Unit2_Page8_Q3 = () => {
     else ValidationAlert.warning(scoreMessage);
   };
 
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   const handleShowAnswer = () => {
     // امنعي التعديل
     setShowAnswer(true);
     setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
-
+    setSelectedImage(null);
+    setSelectedWord(null);
     // امسحي الخطوط القديمة + الغلط
     setLines([]);
     setWrongImages([]);
@@ -266,336 +192,218 @@ const Unit2_Page8_Q3 = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        padding:"30px"
+        padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">
-            F Does it begin with <span style={{ color: "red" }}>d</span>or{" "}
-            <span style={{ color: "red" }}>t</span>? Listen and match.
-          </h5>
+      <div className="div-forall" style={{}}>
+        <h5 className="header-title-page8">
+          <span className="mr-2">F</span> Does it begin with{" "}
+          <span style={{ color: "red" }}>d</span>or{" "}
+          <span style={{ color: "red" }}>t</span>? Listen and match.
+        </h5>
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+        />
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-                marginTop: "0px",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
+        <div className="match-wrapper2-review1-p2-q3" ref={containerRef}>
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div className="img-box2">
+              <img
+                src={img1}
+                alt=""
+                className={`clickable-img-unit2-p7-q2 ${
+                  selectedImage === "img1" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img1-dot").click()}
+                style={{ cursor: "pointer" }}
+              />
+              {wrongImages.includes("img1") && (
+                <span className="error-mark-img">✕</span>
+              )}
 
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
+              <div
+                className="dot2-unit2 start-dot2-unit2"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
 
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
+            <div className="img-box2">
+              <img
+                src={img2}
+                alt="img"
+                className={`clickable-img-unit2-p7-q2 ${
+                  selectedImage === "img2" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img2-dot").click()}
+                style={{ cursor: "pointer" }}
+              />
+              {wrongImages.includes("img2") && (
+                <span className="error-mark-img">✕</span>
+              )}
+              <div
+                className="dot2-unit2 start-dot2-unit2"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
 
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
+            <div className="img-box2">
+              <img
+                src={img3}
+                className={`clickable-img-unit2-p7-q2 ${
+                  selectedImage === "img3" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img3-dot").click()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+              {!locked && wrongImages.includes("img3") && (
+                <span className="error-mark-img">✕</span>
+              )}
+              <div
+                className="dot2-unit2 start-dot2-unit2"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              <img
+                src={img4}
+                className={`clickable-img-unit2-p7-q2 ${
+                  selectedImage === "img4" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img4-dot").click()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+              {wrongImages.includes("img4") && (
+                <span className="error-mark-img">✕</span>
+              )}
+              <div
+                className="dot2-unit2 start-dot2-unit2"
+                data-image="img4"
+                id="img4-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              <img
+                src={img5}
+                alt=""
+                className={`clickable-img-unit2-p7-q2 ${
+                  selectedImage === "img5" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img5-dot").click()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+              {wrongImages.includes("img5") && (
+                <span className="error-mark-img">✕</span>
+              )}
+              <div
+                className="dot2-unit2 start-dot2-unit2"
+                data-image="img5"
+                id="img5-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
           </div>
 
-          <div className="match-wrapper2-review1-p2-q3" ref={containerRef}>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img
-                  src={img1}
-                  alt=""
-                      className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img1-dot").click()}
-                  style={{ cursor: "pointer" }}
-                />
-                {wrongImages.includes("img1") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img
-                  src={img2}
-                  alt="img"
-                      className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img2-dot").click()}
-                  style={{ cursor: "pointer" }}
-                />
-                {wrongImages.includes("img2") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="img-box2">
-                <img
-                  src={img3}
-                      className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img3-dot").click()}
-                  style={{ cursor: "pointer" }}
-                />{" "}
-                {!locked &&  wrongImages.includes("img3") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img4}
-                      className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img4-dot").click()}
-                  style={{ cursor: "pointer" }}
-                />{" "}
-                {wrongImages.includes("img4") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img5}
-                  alt=""
-                      className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img5-dot").click()}
-                  style={{ cursor: "pointer" }}
-                />{" "}
-                {wrongImages.includes("img5") && (
-                  <span className="error-mark-img">✕</span>
-                )}
-                <div
-                  className="dot2-unit2 start-dot2-unit2"
-                  data-image="img5"
-                  id="img5-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+          {/* الجمل */}
+          <div className="match-words-row2">
+            <div className="word-box2">
+              <h5
+                onClick={() => document.getElementById("d-dot").click()}
+                id="d-char"
+                style={{
+                  border: "2px solid #2effeaff",
+                  borderRadius: "8px",
+                  background: "#b7fff8ff",
+                  height: "30px",
+                  width: "60px",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                className={`clickable-word-unit2-p7-q2 ${
+                  selectedWord === "d" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+              >
+                d
+              </h5>
+              <div
+                className="dot2-unit2 end-dot2-unit2"
+                data-word="d"
+                id="d-dot"
+                onClick={handleEndDotClick}
+              ></div>
             </div>
 
-            {/* الجمل */}
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <h5
-                  onClick={() => document.getElementById("d-dot").click()}
-                  id="d-char"
-                  style={{
-                    border: "2px solid #2effeaff",
-                    borderRadius: "8px",
-                    background: "#b7fff8ff",
-                    height: "30px",
-                    width: "60px",
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
-                   className={`clickable-word-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                >
-                  d
-                </h5>
-                <div
-                  className="dot2-unit2 end-dot2-unit2"
-                  data-word="d"
-                  id="d-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  onClick={() => document.getElementById("t-dot").click()}
-                  id="t-char"
-                  style={{
-                    border: "2px solid green",
-                    borderRadius: "8px",
-                    background: "#92e992",
-                    height: "30px",
-                    width: "60px",
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "10px",
-                    cursor: "pointer",
-                    alignItems: "center",
-                  }}
-                   className={`clickable-word-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                >
-                  t
-                </h5>
-                <div
-                  className="dot2-unit2 end-dot2-unit2"
-                  data-word="t"
-                  id="t-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
+            <div className="word-box2">
+              <h5
+                onClick={() => document.getElementById("t-dot").click()}
+                id="t-char"
+                style={{
+                  border: "2px solid green",
+                  borderRadius: "8px",
+                  background: "#92e992",
+                  height: "30px",
+                  width: "60px",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                  cursor: "pointer",
+                  alignItems: "center",
+                }}
+                className={`clickable-word-unit2-p7-q2 ${
+                  selectedWord === "t" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+              >
+                t
+              </h5>
+              <div
+                className="dot2-unit2 end-dot2-unit2"
+                data-word="t"
+                id="t-dot"
+                onClick={handleEndDotClick}
+              ></div>
             </div>
-
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
           </div>
+
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
+
         <div className="action-buttons-container">
           <button
             onClick={() => {
               setLines([]);
               setWrongImages([]);
-              setShowAnswer(false); // ← رجع التعديل
-              setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
+              setShowAnswer(false);
+              setLocked(false);
+
+              setSelectedImage(null);
+              setSelectedWord(null);
             }}
             className="try-again-button"
           >

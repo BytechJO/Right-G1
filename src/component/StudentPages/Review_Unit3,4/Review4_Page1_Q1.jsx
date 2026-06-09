@@ -7,9 +7,9 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Review4_Page1_Q1 = () => {
   const clickableAreas = [
-    { x: 73, y: 10.5, w: 24.8, h: 11 },
-    { x: 72, y: 52.5, w: 25.8, h: 11 },
-    { x: 45, y: 52.5, w: 13.8, h: 11 },
+    { x: 73, y: 10.5, w: 23.8, h: 11 },
+    { x: 72, y: 52.5, w: 24.8, h: 11 },
+    { x: 45, y: 52.5, w: 15.0, h: 11 },
   ];
 
   const correctAnswers = ["blue", "red", "is this"];
@@ -114,16 +114,12 @@ const Review4_Page1_Q1 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            position: "relative",
-            width: "60%",
+            gap: "60px",
           }}
         >
           <h5 className="header-title-page8" id="ex-d">
-            A Look, read, and write.
+            <span className="mr-2">A</span> Drag and drop the correct words to
+            complete the sentences.
           </h5>
           <Droppable droppableId="word-bank" direction="horizontal">
             {(provided) => (
@@ -132,7 +128,7 @@ const Review4_Page1_Q1 = () => {
                 {...provided.droppableProps}
                 style={{
                   display: "flex",
-                  gap: "12px",
+                  gap: "40px",
                   padding: "10px",
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
@@ -214,7 +210,8 @@ const Review4_Page1_Q1 = () => {
                         width: `${area.w}%`,
                         height: `${area.h}%`,
                         fontSize: "1.3vw",
-                        borderBottom: "2px solid black",
+                        borderRadius: "8px",
+                        border: "2px solid black",
                         background: snapshot.isDraggingOver
                           ? "#e3f2fd"
                           : "transparent",

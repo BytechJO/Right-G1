@@ -40,7 +40,7 @@ const Page4_Interactive1 = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay Attention!",
-        "Please click on a spot in the image before checking."
+        "Please click on a spot in the image before checking.",
       );
       return;
     }
@@ -92,16 +92,20 @@ const Page4_Interactive1 = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
+          gap:"50px",
           alignItems: "center",
         }}
       >
         <div
           style={{ display: "flex", justifyContent: "center", width: "100%" }}
         >
-          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
+          <img
+            src={Rabbit}
+            style={{ height: "50px",  width: "auto" }}
+          />{" "}
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the restaurant in the
-            picture?
+            I need your help. Can you help me find the restaurant by tapping or
+            clicking on it?
           </h5>
         </div>
         <div style={{ position: "relative" }}>
@@ -113,6 +117,7 @@ const Page4_Interactive1 = () => {
               width: "auto",
               height: "70vh",
               cursor: "pointer",
+              borderRadius: "8px",
               display: "block",
             }}
           />

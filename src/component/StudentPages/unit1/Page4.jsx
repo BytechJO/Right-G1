@@ -20,12 +20,10 @@ import longAudio from "../../../assets/unit1/sounds/pg4-instruction1-adult-lady_
 import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
 import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
 import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Page4 = ({ openPopup }) => {
-  const audioRef = useRef(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -59,13 +57,13 @@ const Page4 = ({ openPopup }) => {
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 45, y1: 44.3, x2: 49, y2: 47.8, sound: 1, isPrimary: true },
+    { x1: 44.9, y1: 44.6, x2: 48.03, y2: 49, sound: 1, isPrimary: true },
 
     // الصوت الأول – منطقة إضافية
     { x1: 49.2, y1: 37.3, x2: 74.4, y2: 79.8, sound: 1, isPrimary: false },
 
     // الصوت الثاني – الأساسية
-    { x1: 86.6, y1: 24.2, x2: 90.4, y2: 27.2, sound: 2, isPrimary: true },
+    { x1: 86.5, y1: 24.2, x2: 90.4, y2: 27.2, sound: 2, isPrimary: true },
 
     // الصوت الثاني – الإضافية
     { x1: 83.7, y1: 28.4, x2: 97.4, y2: 48.9, sound: 2, isPrimary: false },
@@ -91,19 +89,21 @@ const Page4 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <>
@@ -121,7 +121,7 @@ const Page4 = ({ openPopup }) => {
         /> */}
 
         {areas.map((area, index) => {
-          const isActive = activeAreaIndex === area.sound;
+          const isActive = activeId === `p4-${area.sound}`;
 
           // ============================
           // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -136,8 +136,7 @@ const Page4 = ({ openPopup }) => {
                   top: `${area.y1}%`,
                 }}
                 onClick={() => {
-                  setActiveAreaIndex(area.sound);
-                  playSound(sounds[area.sound]);
+                  playSound(sounds[area.sound], `p4-${area.sound}`);
                 }}
               ></div>
             );
@@ -159,8 +158,7 @@ const Page4 = ({ openPopup }) => {
                 height: `${area.y2 - area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p4-${area.sound}`);
               }}
             ></div>
           );
@@ -188,12 +186,13 @@ const Page4 = ({ openPopup }) => {
                     src={allUnitSound}
                     captions={captionsExample}
                   />
-                </div>
+                </div>,
               )
             }
             style={{ overflow: "visible" }}
           >
-            <image className="svg-img"
+            <image
+              className="svg-img"
               href={audioBtn}
               x="0"
               y="0"
@@ -215,7 +214,8 @@ const Page4 = ({ openPopup }) => {
             onClick={() => openPopup("html", <Page4_Interactive1 />)}
             style={{ overflow: "visible" }}
           >
-            <image className="svg-img"
+            <image
+              className="svg-img"
               href={arrowBtn}
               x="0"
               y="0"
@@ -237,7 +237,8 @@ const Page4 = ({ openPopup }) => {
             onClick={() => openPopup("html", <Page4_vocabulary />)}
             style={{ overflow: "visible" }}
           >
-            <image className="svg-img"
+            <image
+              className="svg-img"
               href={audioBtn}
               x="0"
               y="0"
@@ -266,12 +267,13 @@ const Page4 = ({ openPopup }) => {
                   titleQ={"Listen and read along."}
                   audioArr={imageSounds}
                   captions={captions}
-                />
+                />,
               )
             }
             style={{ overflow: "visible" }}
           >
-            <image className="svg-img"
+            <image
+              className="svg-img"
               href={arrowBtn}
               x="0"
               y="0"

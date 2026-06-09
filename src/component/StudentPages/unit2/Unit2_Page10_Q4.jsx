@@ -4,9 +4,79 @@ import boy from "../../../assets/img_unit2/imgs/boy 02.png";
 import paint from "../../../assets/img_unit2/imgs/Paint.jpg";
 import pincle from "../../../assets/img_unit2/imgs/Pencel.jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import "./Unit2_Page10_Q4.css";
 
+// ─── Draggable Letter (Word Bank) ─────────────────────────────────────────────
+// هون الحروف ممكن تتكرر (p, b) فما في مفهوم "used" مثل الكلمات
+// لأن نفس الحرف ممكن يستخدم في أكثر من سلوت بنفس الوقت
+const DraggableWord = ({ id, letter, disabled }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled,
+  });
+
+  return (
+    <span
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "7px 14px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: "white",
+        fontWeight: "bold",
+        cursor: disabled ? "default" : "grab",
+        opacity: isDragging ? 0.4 : 1,
+        display: "inline-block",
+        userSelect: "none",
+        transition: "opacity 0.2s ease",
+      }}
+    >
+      {letter}
+    </span>
+  );
+};
+
+// ─── Droppable Slot ────────────────────────────────────────────────────────────
+const DropSlot = ({ index, value, isWrong, showAnswer, onRemove }) => {
+  const { setNodeRef, isOver } = useDroppable({ id: `slot-${index}` });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`q-input10-unit2-p10-q4 ${showAnswer ? "show-answer-red1" : ""} ${isOver ? "drag-over-cell" : ""}`}
+    >
+      {value && (
+        <span
+          className="word-item"
+          onClick={!showAnswer ? onRemove : undefined}
+          style={{
+            cursor: showAnswer ? "default" : "pointer",
+            userSelect: "none",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "3px",
+          }}
+          title={showAnswer ? "" : "Click to remove"}
+        >
+          {value}
+        </span>
+      )}
+    </div>
+  );
+};
+
+// ─── Main Component ────────────────────────────────────────────────────────────
 const Unit2_Page10_Q4 = () => {
   const correctAnswers = ["p", "b", "p", "p"];
   const wordBank = ["p", "b"];
@@ -15,26 +85,47 @@ const Unit2_Page10_Q4 = () => {
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [activeLetter, setActiveLetter] = useState(null);
 
-  // 🧲 Drag & Drop logic (مع swap)
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer || checked) return;
+  const images = [paint, boy, pizza2, pincle];
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const index = Number(destination.droppableId.split("-")[1]);
-      const letter = draggableId.replace("bank-", "").replace(/^slot-.*?-/, "");
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
+  // ─── Drag handlers ──────────────────────────────────────────────────────────
+  const onDragStart = ({ active }) => {
+    // active.id = "bank-p" or "bank-b"
+    setActiveLetter(active.id.replace("bank-", ""));
+  };
+
+  const onDragEnd = ({ active, over }) => {
+    setActiveLetter(null);
+    if (!over || showAnswer || checked) return;
+
+    const letter = active.id.replace("bank-", "");
+
+    if (over.id.startsWith("slot-")) {
+      const index = Number(over.id.split("-")[1]);
       const updated = [...answers];
-
-      // 🔹 نسمح بتكرار نفس الحرف
       updated[index] = letter;
-
       setAnswers(updated);
       setWrongInputs([]);
     }
   };
 
+  const onDragCancel = () => setActiveLetter(null);
+
+  // Click on placed letter → remove it
+  const removeAnswer = (index) => {
+    if (checked || showAnswer) return;
+    const updated = [...answers];
+    updated[index] = "";
+    setAnswers(updated);
+    setWrongInputs([]);
+  };
+
+  // ─── Buttons ────────────────────────────────────────────────────────────────
   const checkAnswers = () => {
     if (showAnswer) return;
 
@@ -72,19 +163,23 @@ const Unit2_Page10_Q4 = () => {
     setAnswers(correctAnswers);
     setWrongInputs([]);
     setShowAnswer(true);
-    setChecked(true); // 🔓
+    setChecked(true);
   };
+
   const reset = () => {
     setAnswers(["", "", "", ""]);
     setWrongInputs([]);
     setShowAnswer(false);
-    setChecked(false); // 🔓
+    setChecked(false);
   };
 
-  const images = [paint, boy, pizza2, pincle];
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragCancel={onDragCancel}
+    >
       <div
         style={{
           display: "flex",
@@ -94,128 +189,67 @@ const Unit2_Page10_Q4 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="question-wrapper10">
-            <h5 className="header-title-page8">G Look and write.</h5>
+        <div className="div-forall" style={{ gap: "50px" }}>
+          <h5 className="header-title-page8">
+            <span className="mr-2">G</span> Look and drag the starting letter.
+          </h5>
 
-            {/* 🔤 Word Bank */}
-            <Droppable droppableId="bank" direction="horizontal" isDropDisabled>
-              {(provided) => (
-                <div
+          {/* ── Word Bank ──────────────────────────────────────────────────── */}
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              padding: "10px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              width: "90%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {wordBank.map((letter, index) => (
+              <DraggableWord
+                key={`${letter}-${index}`}
+                id={`bank-${letter}`}
+                letter={letter}
+                disabled={checked || showAnswer}
+              />
+            ))}
+          </div>
+
+          {/* ── Slots + Images ─────────────────────────────────────────────── */}
+          <div className="row-content10-1">
+            {answers.map((value, index) => (
+              <div key={index} className="row2">
+                <span
                   style={{
+                    position: "relative",
                     display: "flex",
-                    gap: "10px",
-                    padding: "10px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    // margin: "10px 0",
                     alignItems: "center",
-                    justifyContent: "center",
+                    gap: "5px",
                   }}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
                 >
-                  {wordBank.map((letter, index) => (
-                    <Draggable
-                      key={`${letter}-${index}`}
-                      draggableId={`bank-${letter}`}
+                  <span className="num-span">{index + 1}</span>
+                  <div className="input-wrapper">
+                    <DropSlot
                       index={index}
-                      isDragDisabled={checked || showAnswer}
-                    >
-                      {(provided) => (
-                        <span
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "7px 14px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {letter}
-                        </span>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            <div className="row-content10-1">
-              {answers.map((value, index) => (
-                <div key={index} className="row2">
-                  <span
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <span className="num-span">{index + 1}</span>
-                    <div className="input-wrapper">
-                      <Droppable droppableId={`slot-${index}`}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`q-input10-unit2-p10-q4 ${
-                              showAnswer ? "show-answer-red1" : ""
-                            } ${
-                              snapshot.isDraggingOver ? "drag-over-cell" : ""
-                            }`}
-                          >
-                            {value && (
-                              <Draggable
-                                draggableId={`slot-${index}-${value}`}
-                                index={0}
-                                isDragDisabled={true}
-                              >
-                                {(provided) => (
-                                  <span
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className="word-item"
-                                  >
-                                    {value}
-                                  </span>
-                                )}
-                              </Draggable>
-                            )}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-
-                      {wrongInputs.includes(index) && (
-                        <span className="error-mark-input">✕</span>
-                      )}
-                    </div>
-                  </span>
-                  <img src={images[index]} alt="" className="q-img10" />
-                </div>
-              ))}
-            </div>
+                      value={value}
+                      isWrong={wrongInputs.includes(index)}
+                      showAnswer={showAnswer}
+                      onRemove={() => removeAnswer(index)}
+                    />
+                    {wrongInputs.includes(index) && !showAnswer && (
+                      <span className="error-mark-input">✕</span>
+                    )}
+                  </div>
+                </span>
+                <img src={images[index]} alt="" className="q-img10" />
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* 🔘 Buttons */}
+        {/* ── Buttons ────────────────────────────────────────────────────────── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
@@ -231,7 +265,26 @@ const Unit2_Page10_Q4 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag Overlay ───────────────────────────────────────────────────── */}
+      <DragOverlay>
+        {activeLetter ? (
+          <span
+            style={{
+              padding: "7px 14px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "#fff",
+              fontWeight: "bold",
+              boxShadow: "0 5px 15px rgba(0,0,0,.2)",
+              display: "inline-block",
+            }}
+          >
+            {activeLetter}
+          </span>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

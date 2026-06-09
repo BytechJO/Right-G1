@@ -37,7 +37,7 @@ const Unit2_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -69,12 +69,18 @@ const Unit2_Page1_find = () => {
         style={{
           textAlign: "center",
           display: "flex",
+           gap:"40px",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
         <div
-          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          style={{
+            display: "flex",
+
+            justifyContent: "center",
+            width: "100%",
+          }}
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
           <h5 className="header-title-page8">
@@ -88,6 +94,7 @@ const Unit2_Page1_find = () => {
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}
@@ -123,7 +130,7 @@ const Unit2_Page1_find = () => {
                 height: `7%`,
                 pointerEvents: "none",
               }}
-            /> 
+            />
           )}
         </div>
       </div>
