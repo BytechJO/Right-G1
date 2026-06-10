@@ -70,7 +70,7 @@ const Review5_Page2_Q2 = () => {
   // ================================
   const updateCaption = (time) => {
     const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
+      (cap) => time >= cap.start && time <= cap.end,
     );
     setActiveIndex(index);
   };
@@ -160,7 +160,7 @@ const Review5_Page2_Q2 = () => {
     groups.forEach((group, index) => {
       if (selected[index] === null)
         return ValidationAlert.info(
-          "Please choose a circle (f or v) for all items!"
+          "Please choose a circle (f or v) for all items!",
         );
 
       if (selected[index] === group.different) {
@@ -219,9 +219,8 @@ const Review5_Page2_Q2 = () => {
         }}
       >
         <h3 className="header-title-page8">
-          E Which picture begins with a
-          <span className="ds-diff">different sound?</span> Listen and write{" "}
-          <span style={{ color: "red" }}>✗</span>.
+          <span className="mr-2"> E</span> Listen and tap the pictures that
+          start with a different sound.
         </h3>
         <div
           style={{

@@ -16,8 +16,7 @@ const Review5_Page2_Q1 = () => {
   ];
 
   const [selected, setSelected] = useState(["", "", "", ""]);
-const [answers, setAnswers] = useState(["", "", "", ""]);
-
+  const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const [locked, setLocked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
@@ -49,7 +48,7 @@ const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const resetAll = () => {
     setSelected(["", "", "", ""]);
-setAnswers(["", "", "", ""]);
+    setAnswers(["", "", "", ""]);
 
     setWrongInputs([]);
     setShowResult(false);
@@ -136,17 +135,17 @@ setAnswers(["", "", "", ""]);
       >
         <div
           className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
+          style={
+            {
+              gap: "50px",
+            }
+          }
         >
           <h5 className="header-title-page8">
-            D Does it begin with <span style={{ color: "red" }}>g </span>or
-            <span style={{ color: "red" }}>k </span> ? Circle and write.
+            <span className="mr-2">D</span> Does it begin with{" "}
+            <span style={{ color: "red" }}>g </span>or
+            <span style={{ color: "red" }}>k </span> ? Tap or click the
+            beginning letter.
           </h5>
 
           <Droppable droppableId="letters-bank" isDropDisabled={locked}>
@@ -156,8 +155,9 @@ setAnswers(["", "", "", ""]);
                 {...provided.droppableProps}
                 style={{
                   display: "flex",
-                  gap: "10px",
+                  gap: "40px",
                   padding: "10px",
+                  width: "100%",
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   // margin: "10px 0",
@@ -197,10 +197,10 @@ setAnswers(["", "", "", ""]);
             )}
           </Droppable>
 
-          <div className="question-grid-unit4-page5-q1">
+          <div className="question-grid-unit4-page5-q1 w-full">
             {items.map((item, i) => (
               <div className="question-box-unit4-page5-q1" key={i}>
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex" ,gap:"5px"}}>
                   <span
                     style={{
                       color: "#2c5287",
@@ -210,7 +210,7 @@ setAnswers(["", "", "", ""]);
                   >
                     {i + 1}
                   </span>
-                  <img src={item.img} className="q-img-unit4-page5-q1" />
+                  <img src={item.img} className="q-img-review5-p2-q1" />
                 </div>
                 {/* g/ v choices */}
                 <div className="choices-unit4-page5-q1">
@@ -225,8 +225,8 @@ setAnswers(["", "", "", ""]);
                     </div>
 
                     {/* X فوق دائرة f إذا كانت غلط */}
-                    {
-                      locked && showResult &&
+                    {locked &&
+                      showResult &&
                       selected[i] === "g" &&
                       selected[i] !== item.correct && (
                         <div className="wrong-mark">✕</div>
@@ -244,8 +244,8 @@ setAnswers(["", "", "", ""]);
                     </div>
 
                     {/* X فوق دائرة v إذا كانت غلط */}
-                    {
-                       locked && showResult &&
+                    {locked &&
+                      showResult &&
                       selected[i] === "k" &&
                       selected[i] !== item.correct && (
                         <div className="wrong-mark">✕</div>
@@ -286,9 +286,9 @@ setAnswers(["", "", "", ""]);
                     )}
                   </Droppable>
 
-                 {locked && showResult && wrongInputs.includes(i) && (
-  <div className="wrong-mark-review5-p2-q1">✕</div>
-)}
+                  {locked && showResult && wrongInputs.includes(i) && (
+                    <div className="wrong-mark-review5-p2-q1">✕</div>
+                  )}
 
                   <span className="rest-word">
                     {item.correctInput.slice(1)}

@@ -4,3 +4,16 @@
     flex-direction: column-reverse;
     align-items: center;
 }
+
+.selected-item {
+  background: white;
+  color: white !important;
+  box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
+  transition: all 0.25s ease;
+}
+
+.clickable-img-unit2-p7-q2.selected-item {
+  outline: 2px solid #72d0f6;
+  outline-offset: 4px;
+  border-radius: 10px;
+}
