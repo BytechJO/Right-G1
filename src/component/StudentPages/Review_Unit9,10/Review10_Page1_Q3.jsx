@@ -14,53 +14,51 @@ const Review10_Page1_Q3 = () => {
   const [wrong, setWrong] = useState({});
   const [showAnswers, setShowAnswers] = useState(false);
   const buildQuestionWordBank = (q) => {
-  const text = `${q.questionCorrect} ${q.answerCorrect}`;
+    const text = `${q.questionCorrect} ${q.answerCorrect}`;
 
-  return Array.from(
-    new Set(
-      text
-        .replace(/[?.!,]/g, "")
-        .split(/\s+/)
-        .filter(Boolean),
-    ),
-  );
-};
+    return Array.from(
+      new Set(
+        text
+          .replace(/[?.!,]/g, "")
+          .split(/\s+/)
+          .filter(Boolean),
+      ),
+    );
+  };
 
- const onDragEnd = (result) => {
-  if (!result.destination || showAnswers) return;
+  const onDragEnd = (result) => {
+    if (!result.destination || showAnswers) return;
 
-  const { draggableId, destination } = result;
+    const { draggableId, destination } = result;
 
-  // 🧠 qId تبع الكلمة
-  const draggedQId = draggableId.split("-")[0]; // q1 أو q2
+    // 🧠 qId تبع الكلمة
+    const draggedQId = draggableId.split("-")[0]; // q1 أو q2
 
-  // 🧠 qId تبع الانبوت
-  const targetQId = destination.droppableId.split("_")[0];
+    // 🧠 qId تبع الانبوت
+    const targetQId = destination.droppableId.split("_")[0];
 
-  // ❌ منع الإسقاط إذا مش نفس السؤال
-  if (draggedQId !== targetQId) return;
+    // ❌ منع الإسقاط إذا مش نفس السؤال
+    if (draggedQId !== targetQId) return;
 
-  const key = destination.droppableId;
-  const draggedWord = draggableId.split("-").slice(1, -1).join(" ");
+    const key = destination.droppableId;
+    const draggedWord = draggableId.split("-").slice(1, -1).join(" ");
 
-  // 🧠 اجمع كل الكلمات المستخدمة بهالسؤال
-  const usedWords = [
-    ...(inputs[`${draggedQId}_question`] || "").split(" "),
-    ...(inputs[`${draggedQId}_answer`] || "").split(" "),
-  ].filter(Boolean);
+    // 🧠 اجمع كل الكلمات المستخدمة بهالسؤال
+    const usedWords = [
+      ...(inputs[`${draggedQId}_question`] || "").split(" "),
+      ...(inputs[`${draggedQId}_answer`] || "").split(" "),
+    ].filter(Boolean);
 
-  // // ❌ إذا الكلمة مستخدمة → امنعي التكرار
-  // if (usedWords.includes(draggedWord)) return;
+    // // ❌ إذا الكلمة مستخدمة → امنعي التكرار
+    // if (usedWords.includes(draggedWord)) return;
 
-  const current = inputs[key] || "";
+    const current = inputs[key] || "";
 
-  setInputs({
-    ...inputs,
-    [key]: current ? `${current} ${draggedWord}` : draggedWord,
-  });
-};
-
-
+    setInputs({
+      ...inputs,
+      [key]: current ? `${current} ${draggedWord}` : draggedWord,
+    });
+  };
 
   const questions = [
     {
@@ -151,8 +149,11 @@ const Review10_Page1_Q3 = () => {
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div style={{ width: "60%" ,gap:"20px" }} className="div-forall">
-          <h5 className="header-title-page8">C Unscramble and write.</h5>
+        <div style={{ width: "60%", gap: "20px" }} className="div-forall">
+          <h5 className="header-title-page8">
+            <span className="mr-2">C</span> Drag and drop the words to make the
+            sentences.
+          </h5>
           {/* <Droppable droppableId="global-bank" direction="horizontal">
             {(provided) => (
               <div
@@ -215,53 +216,56 @@ const Review10_Page1_Q3 = () => {
                         className="answer-input-review10-p1-q3"
                       />
                     </div>
-{/* 🔹 Word Bank خاص بالسؤال */}
-<Droppable droppableId={`bank-${q.id}`} direction="horizontal">
-  {(provided) => (
-    <div
-      ref={provided.innerRef}
-      {...provided.droppableProps}
-      style={{
-        display: "flex",
-        gap: "10px",
-        padding: "10px",
-        border: "2px dashed #ccc",
-        borderRadius: "10px",
-        marginBottom: "10px",
-        flexWrap: "wrap",
-      }}
-    >
-      {buildQuestionWordBank(q).map((word, i) => (
-        <Draggable
-          key={`${q.id}-${word}-${i}`}
-          draggableId={`${q.id}-${word}-${i}`}
-          index={i}
-          isDragDisabled={showAnswers}
-        >
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              style={{
-                padding: "7px 14px",
-                border: "2px solid #2c5287",
-                borderRadius: "8px",
-                background: "white",
-                fontWeight: "bold",
-                cursor: "grab",
-                ...provided.draggableProps.style,
-              }}
-            >
-              {word}
-            </div>
-          )}
-        </Draggable>
-      ))}
-      {provided.placeholder}
-    </div>
-  )}
-</Droppable>
+                    {/* 🔹 Word Bank خاص بالسؤال */}
+                    <Droppable
+                      droppableId={`bank-${q.id}`}
+                      direction="horizontal"
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            padding: "10px",
+                            border: "2px dashed #ccc",
+                            borderRadius: "10px",
+                            marginBottom: "10px",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {buildQuestionWordBank(q).map((word, i) => (
+                            <Draggable
+                              key={`${q.id}-${word}-${i}`}
+                              draggableId={`${q.id}-${word}-${i}`}
+                              index={i}
+                              isDragDisabled={showAnswers}
+                            >
+                              {(provided) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    padding: "7px 14px",
+                                    border: "2px solid #2c5287",
+                                    borderRadius: "8px",
+                                    background: "white",
+                                    fontWeight: "bold",
+                                    cursor: "grab",
+                                    ...provided.draggableProps.style,
+                                  }}
+                                >
+                                  {word}
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
 
                     {/* Unscramble input */}
                     <div style={{ position: "relative" }}>

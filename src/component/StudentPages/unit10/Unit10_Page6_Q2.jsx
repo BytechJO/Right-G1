@@ -49,53 +49,53 @@ const Unit10_Page6_Q2 = () => {
     setShowResult(false);
   };
   const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || showResult) return;
+    const { destination, draggableId } = result;
+    if (!destination || showResult) return;
 
-  const value = draggableId.replace("word-", "");
+    const value = draggableId.replace("word-", "");
 
-  // 🟢 1) إذا رجعت الكلمة للـ word bank
-  if (destination.droppableId === "word-bank") {
-    setAnswers((prev) => {
-      const updated = prev.map((row) => [...row]);
+    // 🟢 1) إذا رجعت الكلمة للـ word bank
+    if (destination.droppableId === "word-bank") {
+      setAnswers((prev) => {
+        const updated = prev.map((row) => [...row]);
 
-      updated.forEach((row, r) =>
-        row.forEach((cell, c) => {
-          if (cell === value) updated[r][c] = "";
-        }),
-      );
+        updated.forEach((row, r) =>
+          row.forEach((cell, c) => {
+            if (cell === value) updated[r][c] = "";
+          }),
+        );
 
-      return updated;
-    });
+        return updated;
+      });
 
-    setShowResult(false);
-    return;
-  }
+      setShowResult(false);
+      return;
+    }
 
-  // 🟢 2) إذا drop على input
-  if (destination.droppableId.startsWith("slot-")) {
-    const [qIndex, inputIndex] = destination.droppableId
-      .replace("slot-", "")
-      .split("-")
-      .map(Number);
+    // 🟢 2) إذا drop على input
+    if (destination.droppableId.startsWith("slot-")) {
+      const [qIndex, inputIndex] = destination.droppableId
+        .replace("slot-", "")
+        .split("-")
+        .map(Number);
 
-    setAnswers((prev) => {
-      const updated = prev.map((row) => [...row]);
+      setAnswers((prev) => {
+        const updated = prev.map((row) => [...row]);
 
-      // منع التكرار
-      updated.forEach((row, r) =>
-        row.forEach((cell, c) => {
-          if (cell === value) updated[r][c] = "";
-        }),
-      );
+        // منع التكرار
+        updated.forEach((row, r) =>
+          row.forEach((cell, c) => {
+            if (cell === value) updated[r][c] = "";
+          }),
+        );
 
-      updated[qIndex][inputIndex] = value;
-      return updated;
-    });
+        updated[qIndex][inputIndex] = value;
+        return updated;
+      });
 
-    setShowResult(false);
-  }
-};
+      setShowResult(false);
+    }
+  };
 
   const showAnswers = () => {
     // اختيار الصور الصحيحة
@@ -238,14 +238,12 @@ const Unit10_Page6_Q2 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
+            gap: "40px",
           }}
         >
           <h5 className="header-title-page8">
-            <span className="ex-A">E</span> Look, read, circle, and write.
+            <span className="ex-A">E</span> Read and drag the correct words to
+            complete the sentences.
           </h5>
           <Droppable droppableId="word-bank" isDropDisabled={showResult}>
             {(provided) => (
@@ -256,10 +254,12 @@ const Unit10_Page6_Q2 = () => {
                   display: "flex",
                   gap: "10px",
                   padding: "10px",
+                  width: "100%",
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   // margin: "10px 0",
-                  alignItems: "center",justifyContent:"center"
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 {wordBank.map((word, index) => (

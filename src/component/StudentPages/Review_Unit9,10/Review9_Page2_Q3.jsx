@@ -236,8 +236,10 @@ export default function Review9_Page2_Q3() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="matching-wrapper" style={{ padding: "30px" }}>
-        <div className="matching-scale">
-          <h5 className="header-title-page8">F Read, write, and match.</h5>
+        <div className="div-forall">
+          <h5 className="header-title-page8">
+            <span className="mr-2">F</span> Match the letters to the pictures.
+          </h5>
           <Droppable
             droppableId="letters-bank"
             isDropDisabled={locked || showAnswer}
@@ -250,6 +252,7 @@ export default function Review9_Page2_Q3() {
                   display: "flex",
                   gap: "10px",
                   padding: "10px",
+                  width:"100%",
                   border: "2px dashed #ccc",
                   borderRadius: "10px",
                   // margin: "10px 0",
@@ -276,7 +279,7 @@ export default function Review9_Page2_Q3() {
                           background: "white",
                           fontWeight: "bold",
                           cursor: "grab",
-                          fontSize:"22px",
+                          fontSize: "22px",
                           ...provided.draggableProps.style,
                         }}
                       >
@@ -290,17 +293,20 @@ export default function Review9_Page2_Q3() {
             )}
           </Droppable>
 
-          <div key={resetKey} className="container1" ref={containerRef}>
-            {correctMatches.map((item, index) => (
+          <div key={resetKey} className="container1 w-full" ref={containerRef}>
+            {correctMatches.map((item, index) => {
+              const isSelectedWord = firstDot?.word === item.word;
+              const isSelectedImage = firstDot?.image === `img${index + 1}`;
+              return(
               <div className="matching-row-review9-p2-q3" key={item.word}>
                 <div className={`word-with-dot `}>
                   <div
                     onClick={() =>
                       document.getElementById(`${item.word}-dot`).click()
                     }
-                    className={`word-with-dot-review9-p2-q3  ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                    className={`word-with-dot-review9-p2-q3 ${
+  locked || showAnswer ? "disabled-hover" : ""
+} ${isSelectedWord ? "selected-match-item" : ""}`}
                     style={{
                       position: "relative",
                       width: "90px",
@@ -394,7 +400,9 @@ export default function Review9_Page2_Q3() {
                   </div>
                   <img
                     src={imagesMap[index]}
-                    className="matched-img"
+                    className={`matched-img ${
+    isSelectedImage ? "selected-match-item" : ""
+  }`}
                     style={{ height: "100px" }}
                     alt=""
                     onClick={() =>
@@ -403,7 +411,7 @@ export default function Review9_Page2_Q3() {
                   />
                 </div>
               </div>
-            ))}
+            )})}
 
             <svg className="lines-layer">
               {lines.map((l, i) => (

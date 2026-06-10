@@ -11,7 +11,7 @@ const Unit8_Page1_find = () => {
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
     x1: 34.58,
-    y1: 23.20,
+    y1: 23.2,
     x2: 36.64,
     y2: 26.92,
   };
@@ -38,7 +38,7 @@ const Unit8_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -70,6 +70,7 @@ const Unit8_Page1_find = () => {
         style={{
           textAlign: "center",
           display: "flex",
+          gap: "20px",
           flexDirection: "column",
           alignItems: "center",
         }}
@@ -79,7 +80,7 @@ const Unit8_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
           <h5 className="header-title-page8">
-            I need your help. Can you help me f ind Jack’s ear in the picture?
+            Can you find Jack’s ear? Tap or click on it.
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -89,6 +90,7 @@ const Unit8_Page1_find = () => {
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}

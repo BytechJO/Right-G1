@@ -5,7 +5,6 @@ import img1 from "../../../assets/unit8/imgs/U8P70EXEC-01.svg";
 import img2 from "../../../assets/unit8/imgs/U8P70EXEC-02.svg";
 import img3 from "../../../assets/unit8/imgs/U8P70EXEC-03.svg";
 
-
 const Review7_Page1_Q3 = () => {
   const [answers, setAnswers] = useState(Array(3).fill(null));
   const [showResult, setShowResult] = useState(false);
@@ -30,7 +29,7 @@ const Review7_Page1_Q3 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer || showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -39,7 +38,7 @@ const Review7_Page1_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer || showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -47,7 +46,7 @@ const Review7_Page1_Q3 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -92,16 +91,17 @@ const Review7_Page1_Q3 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "80px",
+    
         }}
       >
-        <h5 className="header-title-page8">C Look, read, and choose.</h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">C</span> Look, read, and tap or click the
+          correct question.
+        </h5>
 
         <div className="container-unit7-p5-q1">
           {items.map((q, i) => (
@@ -124,11 +124,7 @@ const Review7_Page1_Q3 = () => {
                 }}
               >
                 <div className="img-div-unit7-p5-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-review7-p1-q3"
-                    
-                  />
+                  <img src={q.img} className="q3-image-review7-p1-q3" />
                 </div>
 
                 <div className="options-row-review7-p1-q3">
@@ -157,8 +153,16 @@ const Review7_Page1_Q3 = () => {
                           position: "relative",
                         }}
                       >
-                       <span style={{fontWeight:"900",fontSize:"20px",marginRight:"7px"}}>{word[0]}</span> {word.slice(1)}
-
+                        <span
+                          style={{
+                            fontWeight: "900",
+                            fontSize: "20px",
+                            marginRight: "7px",
+                          }}
+                        >
+                          {word[0]}
+                        </span>{" "}
+                        {word.slice(1)}
                         {showResult &&
                           isSelected &&
                           !isCorrect &&

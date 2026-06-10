@@ -26,7 +26,7 @@
 }
 
 .matched-img2.selected-item {
-  outline: 4px solid #72d0f6;
+  outline: 2px solid #72d0f6;
   outline-offset: 4px;
   border-radius: 10px;
   box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);

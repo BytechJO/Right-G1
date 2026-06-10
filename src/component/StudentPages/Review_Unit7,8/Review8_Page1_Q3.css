@@ -5,3 +5,9 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+
+.selected-match {
+  outline: 2px solid #4da6ff;
+  background: #e8f3ff;
+}

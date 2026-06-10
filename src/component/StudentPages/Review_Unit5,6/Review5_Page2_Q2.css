@@ -65,7 +65,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f7fbff;
+  /* background: #f7fbff; */
   transition: 0.2s ease-in-out;
 }
 
@@ -91,12 +91,13 @@
   position: absolute;
   top: -10px;
   right: -10px;
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   background-color: red;
   border-radius: 50%;
   color: white;
-  font-size: 18px;
+  font-size: 12px;
+  border: 2px solid white;
   font-weight: bold;
   display: flex;
   align-items: center;

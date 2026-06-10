@@ -27,11 +27,14 @@ import sound8 from "../../../assets/unit7/sound/U7VOC-08.mp3";
 import sound9 from "../../../assets/unit7/sound/U7VOC-09.mp3";
 import sound10 from "../../../assets/unit7/sound/U7VOC-10.mp3";
 import "./Unit7_Page2.css";
+
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit7_Page2 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -49,7 +52,7 @@ const Unit7_Page2 = ({ openPopup }) => {
     { start: 0, end: 2.58, text: "Page 59. I'm happy. " },
     { start: 2.6, end: 4.86, text: "I like to go to the park. " },
     {
-      start: 5.00,
+      start: 5.0,
       end: 13.94,
       text: "I go with my grandparents. We talk about school. I am happy. Are you happy too?",
     },
@@ -69,31 +72,31 @@ const Unit7_Page2 = ({ openPopup }) => {
     },
   ];
   const captions2 = [
-    { start: 0, end:3.33, text: "Page 59. Listen and read along. " },
+    { start: 0, end: 3.33, text: "Page 59. Listen and read along. " },
     { start: 3.5, end: 7.65, text: "W. Water, window, woman." },
   ];
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
-    { x1: 33.4, y1: 25.7, sound: 1, isPrimary: true },
+    { x1: 33.3, y1: 25.7, sound: 1, isPrimary: true },
 
     // // // // الصوت الأول – منطقة إضافية
     { x1: 22.86, y1: 18.64, x2: 38.18, y2: 32.81, sound: 1, isPrimary: false },
 
     // // // // الصوت الثاني – الأساسية
-    { x1: 9.6, y1: 34, sound: 2, isPrimary: true },
+    { x1: 9.5, y1: 34, sound: 2, isPrimary: true },
 
     // // // // الصوت الثاني – الإضافية
     { x1: 8.51, y1: 27.78, x2: 21.11, y2: 33.72, sound: 2, isPrimary: false },
 
     //     // الصوت الأول – المنطقة الأساسية
-    { x1: 32.4, y1: 58.4, sound: 3, isPrimary: true },
+    { x1: 32.2, y1: 58.5, sound: 3, isPrimary: true },
 
     // // // // الصوت الأول – منطقة إضافية
     { x1: 35.8, y1: 53.9, x2: 45.74, y2: 75.76, sound: 3, isPrimary: false },
 
     // // // // الصوت الثاني – الأساسية
-    { x1: 15.6, y1: 78.1, sound: 4, isPrimary: true },
+    { x1: 15.4, y1: 78.0, sound: 4, isPrimary: true },
 
     // // // // الصوت الثاني – الإضافية
     { x1: 18.01, y1: 81.54, x2: 34.11, y2: 77.74, sound: 4, isPrimary: false },
@@ -117,19 +120,21 @@ const Unit7_Page2 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -144,7 +149,7 @@ const Unit7_Page2 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+        const isActive = activeId === `p59-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -159,8 +164,7 @@ const Unit7_Page2 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p59-${area.sound}`);
               }}
             ></div>
           );
@@ -182,8 +186,7 @@ const Unit7_Page2 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+              playSound(sounds[area.sound], `p59-${area.sound}`);
             }}
           ></div>
         );
@@ -203,7 +206,7 @@ const Unit7_Page2 = ({ openPopup }) => {
               <AudioWithCaption
                 src={Pg11_1_1_Stella}
                 captions={captionsExample}
-              />
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -237,7 +240,7 @@ const Unit7_Page2 = ({ openPopup }) => {
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}
                 captions={captions}
-              />
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -271,7 +274,7 @@ const Unit7_Page2 = ({ openPopup }) => {
                 titleQ={"Listen and read along."}
                 audioArr={imageSounds}
                 captions={captions2}
-              />
+              />,
             )
           }
           style={{ overflow: "visible" }}

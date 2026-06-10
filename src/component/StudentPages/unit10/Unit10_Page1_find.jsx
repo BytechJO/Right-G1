@@ -6,13 +6,13 @@ import MySVG from "../../../assets/unit10/imgs/U9P82Highlight.svg";
 const Unit10_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
- const [showAnswer, setShowAnswer] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   // ✅ منطقة المطعم (بالنسب المئوية)
   const targetArea = {
     x1: 21.96,
     y1: 45.26,
     x2: 28.41,
-    y2: 50.50,
+    y2: 50.5,
   };
 
   const handleImageClick = (e) => {
@@ -36,7 +36,7 @@ const Unit10_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -49,7 +49,7 @@ const Unit10_Page1_find = () => {
       ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
     }
   };
- const handleShowAnswer = () => {
+  const handleShowAnswer = () => {
     setShowAnswer(true);
     setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
     setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
@@ -58,7 +58,7 @@ const Unit10_Page1_find = () => {
   const handleStartAgain = () => {
     setClickedPoint(null);
     setCheckResult(null);
-     setShowAnswer(false);
+    setShowAnswer(false);
   };
 
   return (
@@ -68,6 +68,7 @@ const Unit10_Page1_find = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
+          gap: "20px",
           alignItems: "center",
         }}
       >
@@ -76,7 +77,7 @@ const Unit10_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the cupcakes in the picture?
+            Can you find the cupcakes? Tap on them.
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -86,6 +87,7 @@ const Unit10_Page1_find = () => {
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}
@@ -110,28 +112,28 @@ const Unit10_Page1_find = () => {
           )}
 
           {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-         
-                   {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-                   {(checkResult === "success" || showAnswer) && (
-                     <img
-                       src={MySVG}
-                       alt="answer highlight"
-                       style={{
-                         position: "absolute",
-                         top: `41%`,
-                         left: `21%`,
-                         height: `13%`,
-                         pointerEvents: "none",
-                       }}
-                     />
-                   )}
+
+          {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
+          {(checkResult === "success" || showAnswer) && (
+            <img
+              src={MySVG}
+              alt="answer highlight"
+              style={{
+                position: "absolute",
+                top: `41%`,
+                left: `21%`,
+                height: `13%`,
+                pointerEvents: "none",
+              }}
+            />
+          )}
         </div>
       </div>
       <div className="action-buttons-container ">
         <button className="try-again-button" onClick={handleStartAgain}>
           Start Again ↻
         </button>
-            <button className="show-answer-btn" onClick={handleShowAnswer}>
+        <button className="show-answer-btn" onClick={handleShowAnswer}>
           Show Answer
         </button>
         <button className="check-button2" onClick={handleCheck}>

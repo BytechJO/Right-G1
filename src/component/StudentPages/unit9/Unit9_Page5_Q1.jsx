@@ -48,12 +48,20 @@ const Unit9_Page5_Q1 = () => {
   // 2️⃣ الضغط على النقطة الثانية (end-dot)
   // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
+    if (showAnswer || locked) return;
     if (!firstDot) return;
+
+    const endWord = e.target.dataset.word || null;
+
+    const wordAlreadyUsed = lines.some((line) => line.word === endWord);
+
+    if (wordAlreadyUsed) {
+      setFirstDot(null);
+      return;
+    }
 
     const rect = containerRef.current.getBoundingClientRect();
 
-    const endWord = e.target.dataset.word || null;
     const endImage = e.target.dataset.image || null;
 
     const newLine = {
@@ -75,7 +83,7 @@ const Unit9_Page5_Q1 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -85,7 +93,7 @@ const Unit9_Page5_Q1 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) {
@@ -124,252 +132,246 @@ const Unit9_Page5_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div 
+      <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
         }}
       >
-        <div className="container2-unit7-p6-q2">
-          <h5 className="header-title-page8">
-            <span className="ex-A">A</span>
-            <span style={{ color: "purple" }}>1</span> Look, read, and match.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="ex-A">A</span>
+          <span className="mr-2" style={{ color: "purple" }}>
+            1
+          </span>{" "}
+          Look and match.
+        </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الجمل */}
+        <div className="match-wrapper2" ref={containerRef}>
+          {/* الجمل */}
 
-            {/* الصور */}
-            <div className="match-images-row2">
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
+              <img
+                src={img1}
+                className={`clickable-img-unit2-p7-q2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }${firstDot?.image === "img1" ? "selected-match" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img1-dot").click()}
+              />
+              {wrongImages.includes("img1") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
               <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
-                <img
-                  src={img1} 
-                   className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img1-dot").click()}
-                />
-                {wrongImages.includes("img1") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
-                <img
-                  src={img2}
-                   className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                {wrongImages.includes("img2") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
-                <img
-                 className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  src={img3}
-                  alt=""
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                {wrongImages.includes("img3") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
-                <img
-                  src={img4}
-                   className={`clickable-img-unit2-p7-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img4-dot").click()}
-                />{" "}
-                {wrongImages.includes("img4") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
-            <div className="match-words-row2">
+
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
+              <img
+                src={img2}
+                className={`clickable-img-unit2-p7-q2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }${firstDot?.image === "img2" ? "selected-match" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img2-dot").click()}
+              />{" "}
+              {wrongImages.includes("img2") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
               <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() => document.getElementById("bored-dot").click()}
-                  >
-                    night
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="night"
-                    id="bored-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="word-box2">
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() => document.getElementById("cold-dot").click()}
-                  >
-                    nurse
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="nurse"
-                    id="cold-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="word-box2">
-                {" "}
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() =>
-                      document.getElementById("scared-dot").click()
-                    }
-                  >
-                    mom
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="mom"
-                    id="scared-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-              <div className="word-box2">
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() =>
-                      document.getElementById("hungry-dot").click()
-                    }
-                  >
-                    milk
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="milk"
-                    id="hungry-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
+              <img
+                className={`clickable-img-unit2-p7-q2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }${firstDot?.image === "img3" ? "selected-match" : ""}`}
+                src={img3}
+                alt=""
+                onClick={() => document.getElementById("img3-dot").click()}
+              />{" "}
+              {wrongImages.includes("img3") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
+              <div
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
+              <img
+                src={img4}
+                className={`clickable-img-unit2-p7-q2 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }${firstDot?.image === "img4" ? "selected-match" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img4-dot").click()}
+              />{" "}
+              {wrongImages.includes("img4") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
+              <div
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img4"
+                id="img4-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
           </div>
+          <div className="match-words-row2">
+            <div
+              className="word-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+              }}
+            >
+              <div>
+                <h5
+                  className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  } ${firstDot?.word === "night" ? "selected-match" : ""}`}
+                  onClick={() => document.getElementById("bored-dot").click()}
+                >
+                  night
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
+                  data-word="night"
+                  id="bored-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="word-box2">
+              <div>
+                <h5
+                  className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  } ${firstDot?.word === "nurse" ? "selected-match" : ""}`}
+                  onClick={() => document.getElementById("cold-dot").click()}
+                >
+                  nurse
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
+                  data-word="nurse"
+                  id="cold-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="word-box2">
+              {" "}
+              <div>
+                <h5
+                  className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  } ${firstDot?.word === "mom" ? "selected-match" : ""}`}
+                  onClick={() => document.getElementById("scared-dot").click()}
+                >
+                  mom
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
+                  data-word="mom"
+                  id="scared-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+            <div className="word-box2">
+              <div>
+                <h5
+                  className={`h5-unit6-p5-q2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  } ${firstDot?.word === "milk" ? "selected-match" : ""}`}
+                  onClick={() => document.getElementById("hungry-dot").click()}
+                >
+                  milk
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
+                  data-word="milk"
+                  id="hungry-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+          </div>
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {

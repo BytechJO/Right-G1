@@ -28,7 +28,7 @@ const Review6_Page2_Q3 = () => {
   const [showAnswerMode, setShowAnswerMode] = useState(false);
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (showAnswerMode ||checked) return; // ⛔ منع النقر أثناء الشو أنسر
+    if (showAnswerMode || checked) return; // ⛔ منع النقر أثناء الشو أنسر
 
     setCircledWords((prev) => {
       const existing = prev[sIndex] || [];
@@ -56,13 +56,16 @@ const Review6_Page2_Q3 = () => {
   };
 
   const checkAnswers = () => {
-        if (showAnswerMode||checked) return; // ⛔ منع النقر أثناء الشو أنسر
+    if (showAnswerMode || checked) return; // ⛔ منع النقر أثناء الشو أنسر
 
     if (
       Object.keys(circledWords).length < sentences.length ||
       Object.values(circledWords).some((arr) => arr.length < 2)
     ) {
-      ValidationAlert.info("Oops!", "Please circle two words in each sentence!");
+      ValidationAlert.info(
+        "Oops!",
+        "Please circle two words in each sentence!",
+      );
       return;
     }
 
@@ -107,63 +110,58 @@ const Review6_Page2_Q3 = () => {
         alignItems: "center",
         padding: "30px",
       }}
-    > 
-      <div 
+    >
+      <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "120px",
         }}
       >
-        <div className="review3-p2-q2-content-container">
-          <h5 className="header-title-page8">
-            F Circle <span style={{ color: "red" }}>the short i</span> words.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">F</span> Circle{" "}
+          <span style={{ color: "red" }}>the short i</span> words.
+        </h5>
 
-          <div className="review6-p2-q3-sentence-container2">
-            {sentences.map((sentence, sIndex) => (
-              <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span
-                  className="review3-p2-q2-num"
-                  style={{ color: "#2c5287", fontWeight: "700" }}
-                >
-                  {sIndex + 1}
-                </span>
+        <div className="review6-p2-q3-sentence-container2 w-full">
+          {sentences.map((sentence, sIndex) => (
+            <div className="review3-p2-q2-sentence-row" key={sIndex}>
+              <span
+                className="review3-p2-q2-num"
+                style={{ color: "#2c5287", fontWeight: "700" }}
+              >
+                {sIndex + 1}
+              </span>
 
-                <div className="review3-p2-q2-word-box">
-                  {[sentence.word1, sentence.word2, sentence.word3].map(
-                    (word, wIndex) => {
-                      const isCircled = circledWords[sIndex]?.includes(wIndex);
+              <div className="review3-p2-q2-word-box">
+                {[sentence.word1, sentence.word2, sentence.word3].map(
+                  (word, wIndex) => {
+                    const isCircled = circledWords[sIndex]?.includes(wIndex);
 
-                      const isWrong =
-                        checked &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(wIndex);
+                    const isWrong =
+                      checked &&
+                      isCircled &&
+                      !correct[sIndex]?.includes(wIndex);
 
-                      return (
-                        <span
-                          key={wIndex}
-                          className={`review3-p2-q2-word ${
-                            isCircled ? "circled" : ""
-                          }`}
-                          onClick={() => handleWordClick(sIndex, wIndex)}
-                        >
-                          {word}
+                    return (
+                      <span
+                        key={wIndex}
+                        className={`review3-p2-q2-word ${
+                          isCircled ? "circled" : ""
+                        }`}
+                        onClick={() => handleWordClick(sIndex, wIndex)}
+                      >
+                        {word}
 
-                          {isWrong && !showAnswerMode && (
-                            <span className="review3-p2-q2-wrong-x">✕</span>
-                          )}
-                        </span>
-                      );
-                    }
-                  )}
-                </div>
+                        {isWrong && !showAnswerMode && (
+                          <span className="review3-p2-q2-wrong-x">✕</span>
+                        )}
+                      </span>
+                    );
+                  },
+                )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
         <div className="action-buttons-container">

@@ -6,6 +6,13 @@
   text-align: center;
 }
 
+.selected-match-item {
+  transform: scale(1.05);
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px #72d0f6;
+  transition: all 0.2s ease;
+}
+
 .error-mark-review9-p2-q3 {
 
     width: 20px;

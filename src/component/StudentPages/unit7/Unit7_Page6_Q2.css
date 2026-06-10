@@ -23,7 +23,25 @@
   justify-content: space-around;
   margin-bottom: 25px;
 }
+.selected-match-item {
+  animation: matchPulse 0.4s ease;
+  box-shadow: 0 0 0 4px rgba(46, 255, 234, 0.45);
+  border-radius: 12px;
+}
 
+@keyframes matchPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
 .img-box2 {
   display: flex;
   position: relative;

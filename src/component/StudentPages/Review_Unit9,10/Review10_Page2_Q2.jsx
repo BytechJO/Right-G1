@@ -23,7 +23,7 @@ const Review10_Page2_Q2 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -32,7 +32,7 @@ const Review10_Page2_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -40,7 +40,7 @@ const Review10_Page2_Q2 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -88,22 +88,21 @@ const Review10_Page2_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
+         
         }}
       >
-        <h5 className="header-title-page8">E Look, read, and circle.</h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">E</span> Look and tap or click the correct
+          word.{" "}
+        </h5>
 
         <div className="container-review10-p2-q2">
           {items.map((q, i) => (
             <div key={i} className="question-box-unit8-p5-q3">
-             
-
               <div
                 style={{
                   display: "flex",
@@ -111,32 +110,31 @@ const Review10_Page2_Q2 = () => {
                   flexDirection: "column",
                 }}
               >
-                 <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  width: "80%",
-                }}
-              >
-                <span
+                <div
                   style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
-                    fontWeight: "700",
+                    display: "flex",
+                    gap: "10px",
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+                    width: "80%",
                   }}
                 >
-                  {i + 1}
-                </span>
-                <img
-                  src={q.img}
-                  className="q3-image-review6-p1-q1"
-                  style={{ height: "130px", width: "auto" }}
-                />
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
+                  <img
+                    src={q.img}
+                    className="q3-image-review6-p1-q1"
+                    style={{ height: "130px", width: "auto" }}
+                  />
+                </div>
 
-              </div>
-                
                 <div className="options-row-unit8-p5-q3">
                   {q.options.map((word, optIndex) => {
                     const isSelected = answers[i] === optIndex;

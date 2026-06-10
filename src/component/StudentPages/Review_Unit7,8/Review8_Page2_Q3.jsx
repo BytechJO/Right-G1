@@ -4,51 +4,149 @@ import cap from "../../../assets/unit8/imgs/U8P73EXEF-02.svg";
 import ant from "../../../assets/unit8/imgs/U8P73EXEF-03.svg";
 import img3 from "../../../assets/unit8/imgs/U8P73EXEF-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+  pointerWithin,
+} from "@dnd-kit/core";
 import "./Review8_Page2_Q3.css";
 
+// ── Draggable word chip ───────────────────────────────────────────────────────
+function DraggableWord({ word, disabled, isFaded }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `word-${word}`,
+    disabled,
+  });
+
+  return (
+    <span
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "7px 14px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: "white",
+        fontWeight: "bold",
+        cursor: disabled ? "default" : "grab",
+        touchAction: "none",
+        opacity: isDragging || isFaded ? 0.35 : disabled ? 0.4 : 1,
+        pointerEvents: disabled ? "none" : "auto",
+      }}
+    >
+      {word}
+    </span>
+  );
+}
+
+// ── Droppable slot ────────────────────────────────────────────────────────────
+function DroppableSlot({ slotId, children, isDropDisabled }) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: slotId,
+    disabled: isDropDisabled,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`q-input-review8-p2-q3  ${isOver ? "drag-over-cell" : ""}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ── Droppable bank ────────────────────────────────────────────────────────────
+function DroppableBank({ children, isDropDisabled }) {
+  const { isOver, setNodeRef } = useDroppable({
+    id: "bank",
+    disabled: isDropDisabled,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        display: "flex",
+        gap: "10px",
+        padding: "10px",
+        border: `2px dashed ${isOver ? "#2c5287" : "#ccc"}`,
+        borderRadius: "10px",
+        alignItems: "center",
+        width: "100%",
+        justifyContent: "center",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ── المكوّن الرئيسي ───────────────────────────────────────────────────────────
 const Review8_Page2_Q3 = () => {
   const correctAnswers = ["sun", "sock", "zebra", "zipper"];
+
+  const rows = [{ img: bat }, { img: cap }, { img: ant }, { img: img3 }];
+
   const [answers, setAnswers] = useState([null, null, null, null]);
-
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 100, tolerance: 8 },
+    }),
+  );
 
-    const value = draggableId.replace("word-", "");
-    const index = Number(destination.droppableId.split("-")[1]);
+  const handleDragStart = ({ active }) => setActiveId(active.id);
 
-    setAnswers((prev) => {
-      const updated = [...prev];
+  const handleDragEnd = ({ active, over }) => {
+    setActiveId(null);
+    if (!over || showAnswer) return;
 
-      // منع تكرار الكلمة
-      const oldIndex = updated.findIndex((a) => a === value);
-      if (oldIndex !== -1) updated[oldIndex] = null;
+    const word = active.id.replace("word-", "");
 
-      updated[index] = value;
-      return updated;
-    });
+    if (over.id === "bank") {
+      setAnswers((prev) => prev.map((a) => (a === word ? null : a)));
+      return;
+    }
 
-    setWrongInputs([]);
+    if (over.id.startsWith("slot-")) {
+      const index = Number(over.id.split("-")[1]);
+      setAnswers((prev) => {
+        const updated = [...prev];
+        const oldIndex = updated.findIndex((a) => a === word);
+        if (oldIndex !== -1) updated[oldIndex] = null;
+        updated[index] = word;
+        return updated;
+      });
+      setWrongInputs([]);
+    }
   };
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
-
-    const newAnswers = [...answers];
-    newAnswers[index] = value.toLowerCase();
-    setAnswers(newAnswers);
-    setWrongInputs([]);
+  // كبس على الكلمة داخل الـ slot → ترجع للبنك
+  const handleRemoveFromSlot = (index) => {
+    if (showAnswer) return;
+    setAnswers((prev) => {
+      const updated = [...prev];
+      updated[index] = null;
+      return updated;
+    });
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ❌ ممنوع التعديل أثناء Show Answer
+    if (showAnswer) return;
 
-    if (answers.some((ans) => ans.trim() === "")) {
+    if (answers.some((ans) => !ans || ans.trim() === "")) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
@@ -66,6 +164,7 @@ const Review8_Page2_Q3 = () => {
 
     setWrongInputs(wrong);
     setShowAnswer(true);
+
     const total = correctAnswers.length;
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -84,19 +183,27 @@ const Review8_Page2_Q3 = () => {
   };
 
   const reset = () => {
-    setAnswers(["", "", "", ""]);
+    setAnswers([null, null, null, null]);
     setWrongInputs([]);
-    setShowAnswer(false); // ⭐ NEW → يرجع الحالة لطبيعية
+    setShowAnswer(false);
+    setActiveId(null);
   };
 
   const handleShowAnswer = () => {
-    setAnswers([...correctAnswers]); // ⭐ عرض الإجابات الصحيحة
+    setAnswers([...correctAnswers]);
     setWrongInputs([]);
-    setShowAnswer(true); // ⭐ منع التعديل
+    setShowAnswer(true);
   };
 
+  const dragWord = activeId ? activeId.replace("word-", "") : null;
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={pointerWithin}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         className="question-wrapper-unit3-page6-q1"
         style={{
@@ -110,290 +217,106 @@ const Review8_Page2_Q3 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
+            gap: "60px",
           }}
         >
-          <h5 className="header-title-page8">F Look and write.</h5>
-          <Droppable droppableId="bank" isDropDisabled={showAnswer}>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  // margin: "10px 0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {correctAnswers.map((word, index) => (
-                  <Draggable
-                    key={word}
-                    draggableId={`word-${word}`}
-                    index={index}
-                    isDragDisabled={showAnswer}
-                  >
-                    {(provided) => (
-                      <span
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          padding: "7px 14px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          background: "white",
-                          fontWeight: "bold",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {word}
-                      </span>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          <h5 className="header-title-page8">
+            <span className="mr-2">F</span> Drag and drop the correct words to
+            match the numbers.{" "}
+          </h5>
+
+          {/* ── Word bank: كل الكلمات دايماً موجودة، المستخدمة disabled ── */}
+          <DroppableBank isDropDisabled={showAnswer}>
+            {correctAnswers.map((word) => {
+              const isUsed = answers.includes(word);
+              return (
+                <DraggableWord
+                  key={word}
+                  word={word}
+                  disabled={showAnswer || isUsed}
+                  isFaded={activeId === `word-${word}`}
+                />
+              );
+            })}
+          </DroppableBank>
 
           <div
-            className="row-content10-unit3-page6-q1"
+            className="row-content10-unit3-page6-q1 w-full"
             style={{ alignItems: "center", justifyContent: "space-between" }}
           >
-            {/* 🔵 1 */}
-            <div className="row2-review8-p1-q2">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                1
-              </span>
-              <img src={bat} alt="" className="q-img-unit3-page6-q1" />
+            {rows.map((row, index) => (
+              <div className="row2-review8-p1-q2" key={index}>
+                <span
+                  style={{
+                    color: "#2c5287",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  {index + 1}
+                </span>
+                <img src={row.img} alt="" className="q-img-unit3-page6-q1" />
 
-              <div className="input-wrapper-review8-p1-q2">
-                <Droppable droppableId="slot-0" isDropDisabled={showAnswer}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`q-input-unit3-page6-q1 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
-                    >
-                      {answers[0] && (
-                        <Draggable
-                          draggableId={`filled-${answers[0]}-0`}
-                          index={0}
-                          isDragDisabled={true}
-                        >
-                          {(provided) => (
-                            <span
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              {answers[0]}
-                            </span>
-                          )}
-                        </Draggable>
-                      )}
-                      {provided.placeholder}
-                    </div>
+                <div className="input-wrapper-review8-p1-q2">
+                  <DroppableSlot
+                    slotId={`slot-${index}`}
+                    isDropDisabled={showAnswer}
+                  >
+                    {answers[index] && (
+                      <span
+                        onClick={() => handleRemoveFromSlot(index)}
+                        style={{ cursor: showAnswer ? "default" : "pointer" }}
+                      >
+                        {answers[index]}
+                      </span>
+                    )}
+                  </DroppableSlot>
+
+                  {wrongInputs.includes(index) && (
+                    <span className="error-mark-input-review8-p1-q2">✕</span>
                   )}
-                </Droppable>
-
-                {wrongInputs.includes(0) && (
-                  <span className="error-mark-input-review8-p1-q2">✕</span>
-                )}
+                </div>
               </div>
-            </div>
-
-            {/* 🔵 2 */}
-            <div className="row2-review8-p1-q2">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                2
-              </span>
-              <img src={cap} alt="" className="q-img-unit3-page6-q1" />
-
-              <div className="input-wrapper-review8-p1-q2">
-                <Droppable droppableId="slot-1" isDropDisabled={showAnswer}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`q-input-unit3-page6-q1 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
-                    >
-                      {answers[1] && (
-                        <Draggable
-                          draggableId={`filled-${answers[1]}-1`}
-                          index={0}
-                          isDragDisabled={true}
-                        >
-                          {(provided) => (
-                            <span
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              {answers[1]}
-                            </span>
-                          )}
-                        </Draggable>
-                      )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-
-                {wrongInputs.includes(1) && (
-                  <span className="error-mark-input-review8-p1-q2">✕</span>
-                )}
-              </div>
-            </div>
-
-            {/* 🔵 3 */}
-            <div className="row2-review8-p1-q2">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                3
-              </span>
-              <img src={ant} alt="" className="q-img-unit3-page6-q1" />
-
-              <div className="input-wrapper-review8-p1-q2">
-                <Droppable droppableId="slot-2" isDropDisabled={showAnswer}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`q-input-unit3-page6-q1 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
-                    >
-                      {answers[2] && (
-                        <Draggable
-                          draggableId={`filled-${answers[2]}-2`}
-                          index={0}
-                          isDragDisabled={true}
-                        >
-                          {(provided) => (
-                            <span
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              {answers[2]}
-                            </span>
-                          )}
-                        </Draggable>
-                      )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-
-                {wrongInputs.includes(2) && (
-                  <span className="error-mark-input-review8-p1-q2">✕</span>
-                )}
-              </div>
-            </div>
-            {/* 🔵 4 */}
-            <div className="row2-review8-p1-q2">
-              <span
-                style={{
-                  color: "#2c5287",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                4
-              </span>
-              <img src={img3} alt="" className="q-img-unit3-page6-q1" />
-
-              <div className="input-wrapper-review8-p1-q2">
-                <Droppable droppableId="slot-3" isDropDisabled={showAnswer}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`q-input-unit3-page6-q1 ${
-                        snapshot.isDraggingOver ? "drag-over-cell" : ""
-                      }`}
-                    >
-                      {answers[3] && (
-                        <Draggable
-                          draggableId={`filled-${answers[3]}-3`}
-                          index={0}
-                          isDragDisabled={true}
-                        >
-                          {(provided) => (
-                            <span
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              {answers[3]}
-                            </span>
-                          )}
-                        </Draggable>
-                      )}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-
-                {wrongInputs.includes(3) && (
-                  <span className="error-mark-input-review8-p1-q2">✕</span>
-                )}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* ⭐ BUTTONS */}
+        {/* ── Buttons ── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
-
           <button
             onClick={handleShowAnswer}
             className="show-answer-btn swal-continue"
           >
             Show Answer
           </button>
-
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag overlay ── */}
+      <DragOverlay>
+        {dragWord && (
+          <span
+            style={{
+              padding: "7px 14px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              cursor: "grabbing",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            }}
+          >
+            {dragWord}
+          </span>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

@@ -85,18 +85,16 @@ const Unit10_Page6_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
+          gap: "60px",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span> What do you want? Circle and write.
+          <span className="ex-A">F</span> What do you want? Listen and tap or
+          click.
         </h5>
 
         {/* الصور */}
-        <div className="images-row-unit10-page6-q3">
+        <div className="images-row-unit10-page6-q3 w-full">
           {items.map((item, i) => (
             <div
               key={i}
@@ -104,11 +102,10 @@ const Unit10_Page6_Q3 = () => {
                 selectedImage === item.value ? "selected-unit10-page6-q3" : ""
               }`}
               onClick={() => {
-  if (checked) return;
-  setSelectedImage(item.value);
-  setAnswer(item.value); // ⭐ يكتب الكلمة مباشرة
-}}
-
+                if (checked) return;
+                setSelectedImage(item.value);
+                setAnswer(item.value); // ⭐ يكتب الكلمة مباشرة
+              }}
             >
               <img
                 src={item.img}
@@ -121,15 +118,12 @@ const Unit10_Page6_Q3 = () => {
 
         {/* الجملة */}
         <div
-          className="sentence-wrapper-unit10-page6-q3"
+          className="sentence-wrapper-unit10-page6-q3 w-full"
           style={{ position: "relative" }}
         >
           <span>I want</span>
 
-       <span className="auto-answer-unit10-page6-q3">
-  {answer || ""}
-</span>
-
+          <span className="auto-answer-unit10-page6-q3">{answer || ""}</span>
 
           {checked && isCorrect === false && (
             <div className="wrong-mark-unit10-p6-q3">✕</div>

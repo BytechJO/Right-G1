@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import img1 from "../../../assets/unit7/img/U7P63EXEE-01.svg";
 import img2 from "../../../assets/unit7/img/U7P63EXEE-02.svg";
 import img3 from "../../../assets/unit7/img/U7P63EXEE-03.svg";
@@ -6,114 +6,169 @@ import img4 from "../../../assets/unit7/img/U7P63EXEE-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit7_Page6_Q2.css";
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const IMAGES = [
+  { id: "img1", src: img1, label: "1" },
+  { id: "img2", src: img2, label: "2" },
+  { id: "img3", src: img3, label: "3" },
+  { id: "img4", src: img4, label: "4" },
+];
+
+const WORDS = ["I'm bored.", "I'm cold.", "I'm scared.", "I'm hungry."];
+
+const CORRECT_MATCHES = [
+  { image: "img1", word: "I'm cold."   },
+  { image: "img2", word: "I'm hungry." },
+  { image: "img3", word: "I'm bored."  },
+  { image: "img4", word: "I'm scared." },
+];
+
+// ─── Helper: get center of element relative to container ──────────────────────
+const getCenter = (el, container) => {
+  const er = el.getBoundingClientRect();
+  const cr = container.getBoundingClientRect();
+  return {
+    x: er.left - cr.left + er.width  / 2,
+    y: er.top  - cr.top  + er.height / 2,
+  };
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
 const Unit7_Page6_Q2 = () => {
-  const [lines, setLines] = useState([]);
+  // lines: [{ image, word }]
+  const [lines,         setLines]         = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null); // imgId | null
+  const [wrongImages,   setWrongImages]   = useState([]);   // imgId[]
+  const [locked,        setLocked]        = useState(false);
   const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongImages, setWrongImages] = useState([]);
-  // ⭐⭐ NEW: قفل الرسم بعد Check Answer
-  const [locked, setLocked] = useState(false); //  ← إضافة جديدة
-  const [firstDot, setFirstDot] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const correctMatches = [
-    { word: "I’m bored.", image: "img3" },
-    { word: "I’m cold.", image: "img1" },
-    { word: "I’m scared.", image: "img4" },
-    { word: "I’m hungry.", image: "img2" },
-  ];
+  const dotRefs      = useRef({});         // "img-img1", "word-I'm cold."
 
-  // ============================
-  // 1️⃣ الضغط على النقطة الأولى (start-dot)
-  // ============================
-  const handleStartDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
+  const registerDot = (key, el) => { if (el) dotRefs.current[key] = el; };
 
-    const rect = containerRef.current.getBoundingClientRect();
+  // Derived lookups
+  const imageToWord = Object.fromEntries(lines.map((l) => [l.image, l.word]));
+  const wordToImage = Object.fromEntries(lines.map((l) => [l.word,  l.image]));
 
-    const word = e.target.dataset.word || null;
-    const image = e.target.dataset.image || null;
+  // ── Click an image dot (left side = start) ────────────────────────────────
+  const handleImageClick = (imgId) => {
+    if (locked) return;
 
-    // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
-    const alreadyUsed = lines.some((line) => line.image === image);
-    if (alreadyUsed) return; // ← إضافة جديدة
+    if (imageToWord[imgId]) {
+      // Already connected → remove and re-select for re-matching
+      setLines((prev) => prev.filter((l) => l.image !== imgId));
+      setSelectedImage(imgId);
+      setWrongImages([]);
+      return;
+    }
 
-    setFirstDot({
-      image,
-      x: e.target.getBoundingClientRect().left - rect.left + 8,
-      y: e.target.getBoundingClientRect().top - rect.top + 8,
-    });
+    setSelectedImage((prev) => (prev === imgId ? null : imgId));
   };
 
-  // ============================
-  // 2️⃣ الضغط على النقطة الثانية (end-dot)
-  // ============================
-  const handleEndDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل إذا مغلق
-    if (!firstDot) return;
+  // ── Click a word dot (right side = end) ───────────────────────────────────
+  const handleWordClick = (word) => {
+    if (locked) return;
 
-    const rect = containerRef.current.getBoundingClientRect();
+    if (wordToImage[word]) {
+      // Already connected → remove it; if image selected, connect immediately
+      setLines((prev) => prev.filter((l) => l.word !== word));
+      if (selectedImage) {
+        setLines((prev) => [...prev, { image: selectedImage, word }]);
+        setSelectedImage(null);
+      }
+      setWrongImages([]);
+      return;
+    }
 
-    const endWord = e.target.dataset.word || null;
-    const endImage = e.target.dataset.image || null;
+    if (!selectedImage) return; // must click image first
 
-    const newLine = {
-      x1: firstDot.x,
-      y1: firstDot.y,
-      x2: e.target.getBoundingClientRect().left - rect.left + 8,
-      y2: e.target.getBoundingClientRect().top - rect.top + 8,
-
-      word: firstDot.word || endWord,
-      image: firstDot.image || endImage,
-    };
-
-    setLines((prev) => [...prev, newLine]);
-    setFirstDot(null);
+    // Connect
+    setLines((prev) => [
+      ...prev.filter((l) => l.image !== selectedImage),
+      { image: selectedImage, word },
+    ]);
+    setSelectedImage(null);
+    setWrongImages([]);
   };
-  const checkAnswers2 = () => {
-    if (showAnswer || locked) return; // ⭐⭐ NEW: منع التوصيل بعد القفل
 
-    if (lines.length < correctMatches.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please connect all the pairs before checking."
-      );
+  // ── Check ─────────────────────────────────────────────────────────────────
+  const checkAnswers = () => {
+    if (locked) return;
+
+    if (lines.length < CORRECT_MATCHES.length) {
+      ValidationAlert.info("Oops!", "Please connect all the pairs before checking.");
       return;
     }
 
     let correctCount = 0;
-    let wrong = [];
+    const wrong = [];
 
     lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+      const ok = CORRECT_MATCHES.some(
+        (p) => p.image === line.image && p.word === line.word
       );
-
-      if (isCorrect) {
-        correctCount++;
-      } else {
-        wrong.push(line.image); // ✅ خزّني اسم صورة الخطأ فقط
-      }
+      if (ok) correctCount++;
+      else wrong.push(line.image);
     });
 
-    setWrongImages(wrong); // ✅ حفظ الصور الغلط
-    setLocked(true); // ⭐⭐ NEW: إغلاق الرسم بعد Check Answer
+    setWrongImages(wrong);
+    setLocked(true);
 
-    const total = correctMatches.length;
-    const color =
-      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correctCount} / ${total}
-      </span>
-    </div>
-  `;
+    const total = CORRECT_MATCHES.length;
+    const color = correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    const msg = `
+      <div style="font-size:20px;margin-top:10px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">Score: ${correctCount} / ${total}</span>
+      </div>`;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    if (correctCount === total) ValidationAlert.success(msg);
+    else if (correctCount === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
   };
 
+  // ── Show Answer ───────────────────────────────────────────────────────────
+  const showAnswers = () => {
+    setLines(CORRECT_MATCHES.map((m) => ({ ...m })));
+    setWrongImages([]);
+    setSelectedImage(null);
+    setLocked(true);
+  };
+
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  const reset = () => {
+    setLines([]);
+    setWrongImages([]);
+    setSelectedImage(null);
+    setLocked(false);
+  };
+
+  // ── Recompute SVG lines from dot refs ─────────────────────────────────────
+  const [svgLines, setSvgLines] = useState([]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const computed = lines.map((l) => {
+      const imgEl  = dotRefs.current[`img-${l.image}`];
+      const wordEl = dotRefs.current[`word-${l.word}`];
+      if (!imgEl || !wordEl) return null;
+
+      const p1 = getCenter(imgEl,  containerRef.current);
+      const p2 = getCenter(wordEl, containerRef.current);
+      const isWrong = wrongImages.includes(l.image);
+      return { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, isWrong };
+    }).filter(Boolean);
+
+    setSvgLines(computed);
+  }, [lines, wrongImages]);
+
+  useEffect(() => {
+    const handler = () => setLines((l) => [...l]);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  // ─────────────────────────────────────────────────────────────────────────
   return (
     <div
       style={{
@@ -124,296 +179,147 @@ const Unit7_Page6_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="container2-unit7-p6-q2">
+      <div className="div-forall" style={{ gap: "60px" }}>
+   
           <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">E</span>Look, read, and match..
+            <span className="ex-A">E</span>Look, read, and match.
           </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الجمل */}
-
-            {/* الصور */}
+          {/* ── Match area ── */}
+          <div
+            className="match-wrapper2"
+            ref={containerRef}
+            style={{ position: "relative" }}
+          >
+            {/* LEFT: Images */}
             <div className="match-images-row2">
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
-                <img
-                  src={img1}
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img1-dot").click()}
-                />
-                {wrongImages.includes("img1") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+              {IMAGES.map((item) => {
+                const isSelected  = selectedImage === item.id;
+                const isConnected = !!imageToWord[item.id];
+                const isWrong     = wrongImages.includes(item.id);
 
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
-                <img
-                  src={img2}
-                  alt=""
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                {wrongImages.includes("img2") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+                return (
+                  <div
+                    key={item.id}
+                    className="img-box2"
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      position: "relative",
+                    }}
+                  >
+                    <span style={{ color: "darkblue", fontWeight: "700" }}>
+                      {item.label}
+                    </span>
 
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
-                <img
-                  src={img3}
-                  alt=""
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                {wrongImages.includes("img3") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>4 </span>
-                <img
-                  src={img4}
-                  alt=""
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img4-dot").click()}
-                />{" "}
-                {wrongImages.includes("img4") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+                    <img
+                      src={item.src}
+                      alt={item.id}
+                      className={[
+                        "matched-img2",
+                        isSelected  ? "selected-match-item"  : "",
+                        isConnected ? "connected-match-item" : "",
+                        locked      ? "disabled-hover"       : "",
+                      ].join(" ")}
+                      style={{ cursor: locked ? "default" : "pointer" }}
+                      onClick={() => handleImageClick(item.id)}
+                    />
+
+                    {isWrong && (
+                      <span className="error-mark-img-unit7-p6-q2">✕</span>
+                    )}
+
+                    {/* RIGHT-SIDE dot of the image (faces words) */}
+                    <div
+                      ref={(el) => registerDot(`img-${item.id}`, el)}
+                      className={[
+                        "dot22-unit7-p6-q2",
+                        "start-dot22-unit7-p6-q2",
+                        isSelected  ? "dot-active"     : "",
+                        isConnected ? "dot-connected"   : "",
+                      ].join(" ")}
+                      style={{ cursor: locked ? "default" : "pointer" }}
+                      onClick={() => handleImageClick(item.id)}
+                    />
+                  </div>
+                );
+              })}
             </div>
+
+            {/* RIGHT: Words */}
             <div className="match-words-row2">
-              <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() => document.getElementById("bored-dot").click()}
-                  >
-                    I’m bored.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="I’m bored."
-                    id="bored-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
+              {WORDS.map((word) => {
+                const isConnected = !!wordToImage[word];
+               
+                return (
+                  <div key={word} className="word-box2">
+                    {/* LEFT-SIDE dot of the word (faces images) */}
+                    <div
+                      ref={(el) => registerDot(`word-${word}`, el)}
+                      className={[
+                        "dot22-unit7-p6-q2",
+                        "end-dot22-unit7-p6-q2",
+                        isConnected ? "dot-connected" : "",
+                      ].join(" ")}
+                      style={{ cursor: locked ? "default" : "pointer" }}
+                      onClick={() => handleWordClick(word)}
+                    />
 
-              <div className="word-box2">
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() => document.getElementById("cold-dot").click()}
-                  >
-                    I’m cold.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="I’m cold."
-                    id="cold-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="word-box2">
-                {" "}
-                <div>
-                  <h5
-                   className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() =>
-                      document.getElementById("scared-dot").click()
-                    }
-                  >
-                    I’m scared.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="I’m scared."
-                    id="scared-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-              <div className="word-box2">
-                <div>
-                  <h5
-                    className={`h5-unit6-p5-q2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                    onClick={() =>
-                      document.getElementById("hungry-dot").click()
-                    }
-                  >
-                    I’m hungry.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-unit7-p6-q2"
-                    data-word="I’m hungry."
-                    id="hungry-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
+                    <h5
+                      className={[
+                        "h5-unit6-p5-q2",
+                        isConnected ? "connected-match-item" : "",
+                        locked      ? "disabled-hover"       : "",
+                      ].join(" ")}
+                      style={{ cursor: locked ? "default" : "pointer" }}
+                      onClick={() => handleWordClick(word)}
+                    >
+                      {word}
+                    </h5>
+                  </div>
+                );
+              })}
             </div>
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
+
+            {/* SVG lines */}
+            <svg
+              className="lines-layer2"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+                overflow: "visible",
+              }}
+            >
+              {svgLines.map((l, i) => (
                 <line
                   key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
+                  x1={l.x1} y1={l.y1}
+                  x2={l.x2} y2={l.y2}
+                  stroke={ "red" }
                   strokeWidth="3"
+                  strokeLinecap="round"
                 />
               ))}
             </svg>
           </div>
         </div>
-      </div>
+  
+
+      {/* Buttons */}
       <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLines([]);
-            setWrongImages([]);
-            setShowAnswer(false);
-            setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
-          }}
-          className="try-again-button"
-        >
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-        <button
-          onClick={() => {
-            const rect = containerRef.current.getBoundingClientRect();
-
-            const getDotPosition = (selector) => {
-              const el = document.querySelector(selector);
-              if (!el) return { x: 0, y: 0 };
-              const r = el.getBoundingClientRect();
-              return {
-                x: r.left - rect.left + 8,
-                y: r.top - rect.top + 8,
-              };
-            };
-
-            const finalLines = correctMatches.map((line) => ({
-              ...line,
-              x1: getDotPosition(`[data-word="${line.word}"]`).x,
-              y1: getDotPosition(`[data-word="${line.word}"]`).y,
-              x2: getDotPosition(`[data-image="${line.image}"]`).x,
-              y2: getDotPosition(`[data-image="${line.image}"]`).y,
-            }));
-
-            setLines(finalLines);
-            setWrongImages([]);
-            setShowAnswer(true);
-            setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
-          }}
-          className="show-answer-btn swal-continue"
-        >
+        <button onClick={showAnswers} className="show-answer-btn swal-continue">
           Show Answer
         </button>
-        <button onClick={checkAnswers2} className="check-button2">
+        <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>
       </div>

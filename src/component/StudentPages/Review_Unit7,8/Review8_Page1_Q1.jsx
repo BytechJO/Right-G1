@@ -21,7 +21,7 @@ const Review8_Page1_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -30,7 +30,7 @@ const Review8_Page1_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer ||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -38,7 +38,7 @@ const Review8_Page1_Q1 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -86,20 +86,18 @@ const Review8_Page1_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+  
         }}
       >
         <h5 className="header-title-page8">
-         A Look, read, and circle.
+          <span className="mr-2">A</span> Look and tap the correct word.
         </h5>
 
-        <div className="container-review8-p1-q1">
+        <div className="container-review8-p1-q1 w-full" >
           {items.map((q, i) => (
             <div key={i} className="question-box-review8-p1-q1">
               <div
@@ -132,11 +130,7 @@ const Review8_Page1_Q1 = () => {
                   flexDirection: "column",
                 }}
               >
-                <img
-                  src={q.img}
-                  className="q3-image-review8-p1-q1"
-                 
-                />
+                <img src={q.img} className="q3-image-review8-p1-q1" />
 
                 <div className="options-row-review8-p1-q1">
                   {q.options.map((word, optIndex) => {

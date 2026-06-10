@@ -4,29 +4,12 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/unit10/imgs/U10P86EXEA2-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P86EXEA2-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P86EXEA2-03.svg";
-import img4 from "../../../assets/unit6/imgs/U6P50EXEA1-04.svg";
 import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
+
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit10_Page5_Q2 = () => {
-  const audioRef = useRef(null);
-  const [showContinue, setShowContinue] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
   const stopAtSecond = 3.5;
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
-
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
 
   // ================================
   // ✔ Captions Array
@@ -48,78 +31,6 @@ const Unit10_Page5_Q2 = () => {
     { start: 15.16, end: 17.13, text: "4-deer." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   const questions = [
     {
       id: 1,
@@ -164,11 +75,11 @@ const Unit10_Page5_Q2 = () => {
 
     // 2) مقارنة الإجابات
     const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong"
+      answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
     setShowResult(results);
- setLocked(true);
+    setLocked(true);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -209,135 +120,21 @@ const Unit10_Page5_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
         <h5 className="header-title-page8">
           <span style={{ color: "purple" }}> 2 </span> Do they both have
-          <span style={{ color: "red" }}> short e </span>? Listen and write{" "}
+          <span style={{ color: "red" }}> short e </span>? Listen and choose
           <span style={{ color: "red" }}> ✓ </span> or
           <span style={{ color: "red" }}> ✗</span>.
         </h5>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "30px 0px",
-            width: "100%",
-          }}
-        >
-          <div
-            className="audio-popup-read"
-            style={{
-              width: "50%",
-            }}
-          >
-            <div className="audio-inner player-ui">
-              <audio
-                ref={audioRef}
-                src={sound1}
-                onTimeUpdate={(e) => {
-                  const time = e.target.currentTime;
-                  setCurrent(time);
-                  updateCaption(time);
-                }}
-                onLoadedMetadata={(e) => setDuration(e.target.duration)}
-              ></audio>
-              {/* Play / Pause */}
-              {/* Play / Pause */}
-              {/* الوقت - السلايدر - الوقت */}
-              <div className="top-row">
-                <span className="audio-time">
-                  {new Date(current * 1000).toISOString().substring(14, 19)}
-                </span>
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+        />
 
-                <input
-                  type="range"
-                  className="audio-slider"
-                  min="0"
-                  max={duration}
-                  value={current}
-                  onChange={(e) => {
-                    audioRef.current.currentTime = e.target.value;
-                    updateCaption(Number(e.target.value));
-                  }}
-                  style={{
-                    background: `linear-gradient(to right, #430f68 ${
-                      (current / duration) * 100
-                    }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                  }}
-                />
-
-                <span className="audio-time">
-                  {new Date(duration * 1000).toISOString().substring(14, 19)}
-                </span>
-              </div>
-              {/* الأزرار 3 أزرار بنفس السطر */}
-              <div className="bottom-row">
-                {/* فقاعة */}
-                <div
-                  className={`round-btn ${showCaption ? "active" : ""}`}
-                  style={{ position: "relative" }}
-                  onClick={() => setShowCaption(!showCaption)}
-                >
-                  <TbMessageCircle size={36} />
-                  <div
-                    className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                    style={{ top: "100%", left: "10%" }}
-                  >
-                    {captions.map((cap, i) => (
-                      <p
-                        key={i}
-                        id={`caption-${i}`}
-                        className={`caption-inPopup-line2 ${
-                          activeIndex === i ? "active" : ""
-                        }`}
-                      >
-                        {cap.text}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Play */}
-                <button className="play-btn2" onClick={togglePlay}>
-                  {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                </button>
-
-                {/* Settings */}
-                <div className="settings-wrapper" ref={settingsRef}>
-                  <button
-                    className={`round-btn ${showSettings ? "active" : ""}`}
-                    onClick={() => setShowSettings(!showSettings)}
-                  >
-                    <IoMdSettings size={36} />
-                  </button>
-
-                  {showSettings && (
-                    <div className="settings-popup">
-                      <label>Volume</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={volume}
-                        onChange={(e) => {
-                          setVolume(e.target.value);
-                          audioRef.current.volume = e.target.value;
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>{" "}
-            </div>
-          </div>
-        </div>
         <div className="unit10-p1-q2-container">
           {questions.map((q, index) => (
             <div key={q.id} className="unit10-p1-q2-question-box">
@@ -351,13 +148,12 @@ const Unit10_Page5_Q2 = () => {
               </p>
 
               <div className="unit10-p1-q2-flex">
-                <div style={{display:"flex"}}>
-                  <img 
+                <div style={{ display: "flex" }}>
+                  <img
                     src={q.image}
                     alt=""
                     className="unit10-p5-q2-question-img"
                   />
-                
                 </div>
 
                 <div className="unit10-p1-q2-options-box">
@@ -372,11 +168,9 @@ const Unit10_Page5_Q2 = () => {
                       ✓
                     </div>
 
-                    {
-                      showResult[index] === "wrong" &&
-                      answers[q.id] === "✓" && (
-                        <div className="unit6-p1-q1-wrong-icon">✕</div>
-                      )}
+                    {showResult[index] === "wrong" && answers[q.id] === "✓" && (
+                      <div className="unit6-p1-q1-wrong-icon">✕</div>
+                    )}
                   </div>
 
                   {/* خيار الخطأ */}
@@ -390,11 +184,9 @@ const Unit10_Page5_Q2 = () => {
                       ✗
                     </div>
 
-                    {
-                      showResult[index] === "wrong" &&
-                      answers[q.id] === "✗" && (
-                        <div className="unit6-p1-q1-wrong-icon">✕</div>
-                      )}
+                    {showResult[index] === "wrong" && answers[q.id] === "✗" && (
+                      <div className="unit6-p1-q1-wrong-icon">✕</div>
+                    )}
                   </div>
                 </div>
               </div>

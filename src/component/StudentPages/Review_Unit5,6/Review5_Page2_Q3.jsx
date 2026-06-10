@@ -39,7 +39,9 @@ const Review5_Page2_Q3 = () => {
   // 🔵 2) حفظ اختيارات الطالب
   // ===============================
   const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "blank" ? null : null)))
+    questions.map((q) =>
+      q.parts.map((p) => (p.type === "blank" ? null : null)),
+    ),
   );
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -48,7 +50,7 @@ const Review5_Page2_Q3 = () => {
   // 🔵 3) الضغط على خيار
   // ===============================
   const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -59,7 +61,7 @@ const Review5_Page2_Q3 = () => {
   // 🔵 4) فحص الإجابات
   // ===============================
   const checkAnswers = () => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     // تحقق إذا الطالب ما اختار ولا شيء
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {
@@ -121,15 +123,14 @@ const Review5_Page2_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <h3 className="header-title-page8">F Look, read, and circle.</h3>
-        <div>
+        <h3 className="header-title-page8">
+          <span className="mr-2">F</span> Read and tap or click the correct
+          words.{" "}
+        </h3>
+        <div className="w-full">
           {questions.map((q, qIndex) => (
             <div className="question-row-review5-p2-q3" key={q.id}>
               <div className="sentence-review5-p2-q3">
@@ -210,8 +211,8 @@ const Review5_Page2_Q3 = () => {
           onClick={() => {
             setAnswers(
               questions.map((q) =>
-                q.parts.map((p) => (p.type === "blank" ? null : null))
-              )
+                q.parts.map((p) => (p.type === "blank" ? null : null)),
+              ),
             );
             setShowResult(false);
             setLocked(false);

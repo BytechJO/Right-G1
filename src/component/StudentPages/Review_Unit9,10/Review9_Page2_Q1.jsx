@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page2_Q1.css";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { CgPlayPauseO } from "react-icons/cg";
 import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
 import img2 from "../../../assets/unit10/imgs/U10P89EXED-01.svg";
 import img3 from "../../../assets/unit10/imgs/U10P89EXED-02.svg";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { TbMessageCircle } from "react-icons/tb";
+
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 
 const data = [
   {
@@ -54,47 +51,46 @@ const Review9_Page2_Q1 = () => {
 
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
-const onDragEnd = (result) => {
-  const { destination, draggableId } = result;
-  if (!destination || locked) return;
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+    if (!destination || locked) return;
 
-  const value = draggableId.replace("char-", "");
+    const value = draggableId.replace("char-", "");
 
-  // 🟢 1) إذا رجع الحرف على الـ bank
-  if (destination.droppableId === "char-bank") {
-    setAnswers((prev) => {
-      const updated = prev.map((row) => [...row]);
+    // 🟢 1) إذا رجع الحرف على الـ bank
+    if (destination.droppableId === "char-bank") {
+      setAnswers((prev) => {
+        const updated = prev.map((row) => [...row]);
 
-      updated.forEach((row, q) =>
-        row.forEach((cell, b) => {
-          if (cell === value) updated[q][b] = "";
-        }),
-      );
+        updated.forEach((row, q) =>
+          row.forEach((cell, b) => {
+            if (cell === value) updated[q][b] = "";
+          }),
+        );
 
-      return updated;
-    });
+        return updated;
+      });
 
-    setWrongInputs([]);
-    return;
-  }
+      setWrongInputs([]);
+      return;
+    }
 
-  // 🟢 2) إذا drop على خانة
-  if (destination.droppableId.startsWith("slot-")) {
-    const [, qIndex, blankIndex] =
-      destination.droppableId.split("-").map(Number);
+    // 🟢 2) إذا drop على خانة
+    if (destination.droppableId.startsWith("slot-")) {
+      const [, qIndex, blankIndex] = destination.droppableId
+        .split("-")
+        .map(Number);
 
-    setAnswers((prev) => {
-      const updated = prev.map((row) => [...row]);
+      setAnswers((prev) => {
+        const updated = prev.map((row) => [...row]);
 
-   
-      updated[qIndex][blankIndex] = value;
-      return updated;
-    });
+        updated[qIndex][blankIndex] = value;
+        return updated;
+      });
 
-    setWrongInputs([]);
-  }
-};
-
+      setWrongInputs([]);
+    }
+  };
 
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
@@ -163,20 +159,8 @@ const onDragEnd = (result) => {
     setWrongInputs([]); // إزالة الأخطاء
     setLocked(true); // قفل الحقول
   };
-  const audioRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [showContinue, setShowContinue] = useState(false);
-  const [paused, setPaused] = useState(false);
   const stopAtSecond = 3.5;
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
+
 
   // ================================
   // ✔ Captions Array
@@ -198,209 +182,26 @@ const onDragEnd = (result) => {
     { start: 15.16, end: 17.13, text: "4-deer." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
 
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="page8-wrapper">
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            position: "relative",
-            width: "60%",
+            gap: "30px",
           }}
         >
-          <h3 className="header-title-page8">D Listen and write.</h3>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "30px 0px",
-              width: "100%",
-            }}
-          >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
+          <h3 className="header-title-page8">
+            <span className="mr-2">D</span> Listen and drag the correct letters.
+          </h3>
 
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
-          </div>
+          <QuestionAudioPlayer
+            src={sound1}
+            captions={captions}
+            stopAtSecond={stopAtSecond}
+          />
+      
 
           <Droppable droppableId="char-bank" isDropDisabled={locked}>
             {(provided) => (
@@ -437,7 +238,7 @@ const onDragEnd = (result) => {
                           borderRadius: "8px",
                           background: "white",
                           fontWeight: "bold",
-                          fontSize:"22px",
+                          fontSize: "22px",
                           cursor: "grab",
                           ...provided.draggableProps.style,
                         }}

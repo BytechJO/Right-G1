@@ -65,36 +65,35 @@ const Review10_Page2_Q3 = () => {
   const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
 
   const onDragEnd = (result) => {
-  if (!result.destination || locked) return;
+    if (!result.destination || locked) return;
 
-  const { draggableId, destination } = result;
+    const { draggableId, destination } = result;
 
-  const [newQ, newBlank] = destination.droppableId
-    .replace("blank-", "")
-    .split("-")
-    .map(Number);
+    const [newQ, newBlank] = destination.droppableId
+      .replace("blank-", "")
+      .split("-")
+      .map(Number);
 
-  const draggedWord = draggableId.split("-").slice(1, -1).join("-");
+    const draggedWord = draggableId.split("-").slice(1, -1).join("-");
 
-  const newAnswers = answers.map((row) => [...row]);
+    const newAnswers = answers.map((row) => [...row]);
 
-  // ⭐⭐ دور على الكلمة القديمة واحذفها
-  newAnswers.forEach((row, qIndex) => {
-    row.forEach((val, bIndex) => {
-      if (val === draggedWord) {
-        newAnswers[qIndex][bIndex] = "";
-      }
+    // ⭐⭐ دور على الكلمة القديمة واحذفها
+    newAnswers.forEach((row, qIndex) => {
+      row.forEach((val, bIndex) => {
+        if (val === draggedWord) {
+          newAnswers[qIndex][bIndex] = "";
+        }
+      });
     });
-  });
 
-  // ⭐⭐ حط الكلمة بالمكان الجديد
-  newAnswers[newQ][newBlank] = draggedWord;
+    // ⭐⭐ حط الكلمة بالمكان الجديد
+    newAnswers[newQ][newBlank] = draggedWord;
 
-  setAnswers(newAnswers);
-  setWrongInputs([]);
-};
+    setAnswers(newAnswers);
+    setWrongInputs([]);
+  };
 
- 
   const checkAnswers = () => {
     if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
     // 1) افحص إذا في أي خانة فاضية
@@ -110,7 +109,7 @@ const Review10_Page2_Q3 = () => {
     // 2) اجمع كل الأخطاء
     let wrong = [];
     let correctCount = 0;
-setLocked(true)
+    setLocked(true);
     answers.forEach((arr, qIndex) => {
       arr.forEach((val, blankIndex) => {
         if (val.trim() === data[qIndex].correct[blankIndex]) {
@@ -162,136 +161,166 @@ setLocked(true)
     setWrongInputs([]); // إزالة الأخطاء
     setLocked(true); // قفل الحقول
   };
+  const removeWordFromBlank = (qIndex, blankIndex) => {
+    if (locked) return;
 
+    const newAnswers = answers.map((row) => [...row]);
+    newAnswers[qIndex][blankIndex] = "";
+    setAnswers(newAnswers);
+  };
+
+  const usedWords = answers.flat().filter(Boolean);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-    <div className="page8-wrapper">
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
-        }}
-      >
-        <h3 className="header-title-page8">
-          F Read, look, and write. Then, say.
-        </h3>
-        <Droppable droppableId="word-bank" direction="horizontal">
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-             style={{
-                          display: "flex",
-                          gap: "10px",
-                          padding: "10px",
-                          border: "2px dashed #ccc",
-                          borderRadius: "10px",
-                          // margin: "10px 0",
-                          alignItems:"center",justifyContent:"center",width:"100%"
-                        }}
-            >
-              {Array.from(new Set(data.flatMap((d) => d.correct))).map(
-                (word, i) => (
-                  <Draggable
-                    key={`bank-${word}-${i}`}
-                    draggableId={`bank-${word}-${i}`}
-                    index={i}
-                    isDragDisabled={locked}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                          style={{
-                                  padding: "7px 14px",
-                                  border: "2px solid #2c5287",
-                                  borderRadius: "8px",
-                                  background: "white",
-                                  fontWeight: "bold",
-                                  cursor: "grab",
-                                  ...provided.draggableProps.style,
-                                }}
-                      >
-                        {word}
-                      </div>
-                    )}
-                  </Draggable>
-                ),
-              )}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-
-        {data.map((item, qIndex) => (
-          <div className="row-missing" key={qIndex}>
-            <span className="num">{qIndex + 1}.</span>
-
-            <div className="sentence-review10-p2-q3">
-              {item.parts.map((p, blankIndex) => (
-                <span
-                  key={blankIndex}
-                  className="sentence-part"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  {p.before}
-
-                  <div className="input-wrapper-review10-p2-q3">
-                    <Droppable droppableId={`blank-${qIndex}-${blankIndex}`} isDropDisabled={locked}>
-                      {(provided ,snapshot) => (
-                        <input
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                       className={`letter-input-review10-p2-q3 ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                          value={answers[qIndex][blankIndex]}
-                          readOnly
-                        />
-                      )}
-                    </Droppable>
-
-                    {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
-                      <span className="wrong-icon-review4-p2-q1">✕</span>
-                    )}
-                  </div>
-
-                  {p.after}
-                  <img src={p.middleImg} className="middle-img-review10-p2-q3 " alt="" />
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setAnswers(data.map((d) => Array(d.correct.length).fill("")));
-            setWrongInputs([]);
-            setLocked(false); // ⭐ NEW — فتح التعديل من جديد
+      <div className="page8-wrapper">
+        <div
+          className="div-forall"
+          style={{
+            gap: "20px",
           }}
         >
-          Start Again ↻
-        </button>
+          <h3 className="header-title-page8">
+            <span className="mr-2">F</span> Drag and drop the words to make
+            sentences.
+          </h3>
+          <Droppable droppableId="word-bank" direction="horizontal">
+            {(provided) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  padding: "10px",
+                  border: "2px dashed #ccc",
+                  borderRadius: "10px",
+                  // margin: "10px 0",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                {Array.from(new Set(data.flatMap((d) => d.correct))).map(
+                  (word, i) => {
+                    const isUsed = usedWords.includes(word);
+                    return (
+                      <Draggable
+                        key={`bank-${word}-${i}`}
+                        draggableId={`bank-${word}-${i}`}
+                        index={i}
+                        isDragDisabled={locked || isUsed}
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={{
+                              padding: "7px 14px",
+                              border: "2px solid #2c5287",
+                              borderRadius: "8px",
+                              background: "white",
+                              fontWeight: "bold",
+                              cursor: isUsed ? "not-allowed" : "grab",
+                              opacity: isUsed ? 0.4 : 1,
+                              pointerEvents: isUsed ? "none" : "auto",
+                              ...provided.draggableProps.style,
+                            }}
+                          >
+                            {word}
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  },
+                )}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-        {/* ⭐⭐⭐ NEW BUTTON */}
-        <button onClick={showAnswer} className="show-answer-btn swal-continue">
-          Show Answer
-        </button>
+          {data.map((item, qIndex) => (
+            <div className="row-missing" key={qIndex}>
+              <span className="num">{qIndex + 1}.</span>
 
-        <button className="check-button2" onClick={checkAnswers}>
-          Check Answers ✓
-        </button>
+              <div className="sentence-review10-p2-q3">
+                {item.parts.map((p, blankIndex) => (
+                  <span
+                    key={blankIndex}
+                    className="sentence-part"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    {p.before}
+
+                    <div className="input-wrapper-review10-p2-q3">
+                      <Droppable
+                        droppableId={`blank-${qIndex}-${blankIndex}`}
+                        isDropDisabled={locked}
+                      >
+                        {(provided, snapshot) => (
+                          <input
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className={`letter-input-review10-p2-q3 ${
+                              snapshot.isDraggingOver ? "drag-over-cell" : ""
+                            }`}
+                            value={answers[qIndex][blankIndex]}
+                            readOnly
+                            onClick={() =>
+                              removeWordFromBlank(qIndex, blankIndex)
+                            }
+                            style={{
+                              cursor: answers[qIndex][blankIndex]
+                                ? "pointer"
+                                : "default",
+                            }}
+                          />
+                        )}
+                      </Droppable>
+
+                      {wrongInputs.includes(`${qIndex}-${blankIndex}`) && (
+                        <span className="wrong-icon-review4-p2-q1">✕</span>
+                      )}
+                    </div>
+
+                    {p.after}
+                    <img
+                      src={p.middleImg}
+                      className="middle-img-review10-p2-q3 "
+                      alt=""
+                    />
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="action-buttons-container">
+          <button
+            className="try-again-button"
+            onClick={() => {
+              setAnswers(data.map((d) => Array(d.correct.length).fill("")));
+              setWrongInputs([]);
+              setLocked(false); // ⭐ NEW — فتح التعديل من جديد
+            }}
+          >
+            Start Again ↻
+          </button>
+
+          {/* ⭐⭐⭐ NEW BUTTON */}
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
+            Show Answer
+          </button>
+
+          <button className="check-button2" onClick={checkAnswers}>
+            Check Answers ✓
+          </button>
+        </div>
       </div>
-    </div></DragDropContext>
+    </DragDropContext>
   );
 };
 

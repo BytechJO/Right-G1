@@ -107,18 +107,15 @@ const Unit8_Page5_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "90px",
+         
         }}
       >
         <h5 className="header-title-page8">
           <span className="ex-A"> B</span> Read, look, and circle.
         </h5>
 
-        <div className="container-review6-unit8-p5-q3">
+        <div className="container-review6-unit8-p5-q3 w-full">
           {items.map((q, i) => (
             <div key={i} className="question-box-unit8-p5-q3">
               <div

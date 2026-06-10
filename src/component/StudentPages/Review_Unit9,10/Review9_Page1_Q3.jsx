@@ -121,21 +121,18 @@ const Review9_Page1_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
+     
         }}
       >
         <div className="review3-p1-q3-wrapper">
           <h4 className="header-title-page8">
-            C Look, read, and write
-            <span style={{ color: "red" }}>✓</span>.{" "}
+            <span className="mr-2">C</span> Look, read, and tap the correct answer. 
+          
           </h4>
 
           <div className="review9-p1-q3-grid">
-            <div>
+            <div className="flex flex-col gap-20">
               {questions.map((q) => (
                 <div key={q.id} className="review9-p1-q3-box">
                   <div

@@ -20,7 +20,7 @@ const Unit7_Page1_find = () => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-console.log(xPercent,yPercent);
+    console.log(xPercent, yPercent);
 
     setClickedPoint({
       x: xPercent,
@@ -38,7 +38,7 @@ console.log(xPercent,yPercent);
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -71,6 +71,7 @@ console.log(xPercent,yPercent);
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
+          gap: "20px",
           alignItems: "center",
         }}
       >
@@ -79,8 +80,7 @@ console.log(xPercent,yPercent);
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the thirsty cat in the
-            picture?
+            Can you find the thirsty cat? Tap or click on it.
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -90,6 +90,7 @@ console.log(xPercent,yPercent);
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}
@@ -119,7 +120,6 @@ console.log(xPercent,yPercent);
               src={MySVG}
               alt="answer highlight"
               className="highlight-svg-unit7"
-           
             />
           )}
         </div>

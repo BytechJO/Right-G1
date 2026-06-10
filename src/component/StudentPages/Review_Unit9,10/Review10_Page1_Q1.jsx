@@ -113,13 +113,13 @@ export default function Review10_Page1_Q1() {
     let wrongC = [];
 
     correctMatches.forEach((item) => {
-      const line = lines.find((l) => l.word === (item.word+item.word2));
+      const line = lines.find((l) => l.word === item.word + item.word2);
 
       const imageCorrect = line && line.image === item.image;
 
       if (imageCorrect) score += 1;
 
-      if (!imageCorrect) wrongC.push((item.word+item.word2));
+      if (!imageCorrect) wrongC.push(item.word + item.word2);
     });
 
     // setWrongLetters(wrongL);
@@ -142,8 +142,8 @@ export default function Review10_Page1_Q1() {
     score === totalScore
       ? ValidationAlert.success(msg)
       : score === 0
-      ? ValidationAlert.error(msg)
-      : ValidationAlert.warning(msg);
+        ? ValidationAlert.error(msg)
+        : ValidationAlert.warning(msg);
   };
 
   // ============================
@@ -195,21 +195,27 @@ export default function Review10_Page1_Q1() {
   // ============================
   // 🔹 JSX
   // ============================
+  const selectedWord = firstDot?.word;
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
       <div className="matching-scale">
-        <h5 className="header-title-page8">A Read, look, and match.</h5>
-        <div key={resetKey} className="container1" ref={containerRef}>
-          {correctMatches.map((item, index) => (
+        <h5 className="header-title-page8">
+          <span className="mr-2">A</span> Look, read, and match.
+        </h5>
+        <div key={resetKey} className="container1 w-full" ref={containerRef}>
+          {correctMatches.map((item, index) => {
+            const isSelected =
+  selectedWord === item.word + item.word2;
+            return(
             <div className="matching-row-review10-p1-q1" key={item.word}>
               <div className="word-with-dot-review10-p1-q1">
                 <span className="span-num">{index + 1}</span>
                 <div style={{ position: "relative" }}>
                   <span
                     id="width-span-review10-p1-q1"
-                    className={`clickable-word-unit2-p7-q2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                   className={`clickable-word-unit2-p7-q2 ${
+  locked || showAnswer ? "disabled-hover" : ""
+} ${isSelected ? "selected-match-item" : ""}`}
                     onClick={() =>
                       document
                         .getElementById(`${item.word}-${index + 1}-dot`)
@@ -256,7 +262,7 @@ export default function Review10_Page1_Q1() {
                 />
               </div>
             </div>
-          ))}
+          )})}
 
           <svg className="lines-layer">
             {lines.map((l, i) => (

@@ -19,7 +19,7 @@ const Unit7_Page5_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer ||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer || showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -28,7 +28,7 @@ const Unit7_Page5_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer||showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
+    if (showAnswer || showResult) return; // 🔒 ممنوع يغير لما تظهر الإجابات
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -36,7 +36,7 @@ const Unit7_Page5_Q1 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -84,17 +84,15 @@ const Unit7_Page5_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "120px",
         }}
       >
         <h5 className="header-title-page8">
           <span className="ex-A">A</span>
-          <span style={{ color: "purple" }}>1</span>
-          Look, read, and circle.
+          <span className="mr-2" style={{ color: "purple" }}>
+            1
+          </span>
+          Look and tap or click the correct word.
         </h5>
 
         <div className="container-unit7-p5-q1">
@@ -118,11 +116,7 @@ const Unit7_Page5_Q1 = () => {
                 }}
               >
                 <div className="img-div-unit7-p5-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-unit7-p5-q1"
-   
-                  />
+                  <img src={q.img} className="q3-image-unit7-p5-q1" />
                 </div>
 
                 <div className="options-row-unit7-p5-q1">

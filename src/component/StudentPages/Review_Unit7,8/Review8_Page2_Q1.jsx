@@ -35,14 +35,14 @@ const Review8_Page2_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -89,19 +89,20 @@ const Review8_Page2_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "90px",
+      
         }}
       >
         <div>
-          <h5 className="header-title-page8">D Look, read, and circle.</h5>
+          <h5 className="header-title-page8">
+            <span className="mr-2">D</span> Look, read, and tap or click the
+            correct sentence.
+          </h5>
         </div>
-        <div className="container-review8-p2-q1">
+        <div className="container-review8-p2-q1 w-full">
           {items.map((q, i) => (
             <div
               key={i}
@@ -116,9 +117,7 @@ const Review8_Page2_Q1 = () => {
                   alignItems: "center",
                   width: "80%",
                 }}
-              >
-                
-              </div>
+              ></div>
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <span

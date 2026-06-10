@@ -15,12 +15,13 @@ import sound3 from "../../../assets/unit8/sound/U8P64VOC03.mp3";
 import sound4 from "../../../assets/unit8/sound/U8P64VOC04.mp3";
 import sound5 from "../../../assets/unit8/sound/U8P64VOC05.mp3";
 import sound6 from "../../../assets/unit8/sound/U8P64VOC06.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit8_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const captionsExample = [
     { start: 0, end: 4.12, text: "Page 64, Unit 8: At The Soccer Game." },
     { start: 4.15, end: 7.27, text: "Page 64, Unit 8 Vocabulary." },
@@ -75,7 +76,7 @@ const Unit8_Page1 = ({ openPopup }) => {
     // // // الصوت الثالث – الإضافية
     { x1: 54.37, y1: 37.68, x2: 58.24, y2: 38, sound: 3, isPrimary: false },
     // // // الصوت الرابع – الأساسية
-    { x1: 61.2, y1: 26.45, sound: 4, isPrimary: true },
+    { x1: 61.2, y1: 26.3, sound: 4, isPrimary: true },
 
     // // // الصوت الرابع – الإضافية
     { x1: 49.13, y1: 30.83, x2: 61.73, y2: 30.06, sound: 4, isPrimary: false },
@@ -106,19 +107,21 @@ const Unit8_Page1 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -133,7 +136,7 @@ const Unit8_Page1 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+        const isActive = activeId === `p64-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -148,8 +151,7 @@ const Unit8_Page1 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p64-${area.sound}`);
               }}
             ></div>
           );
@@ -171,8 +173,7 @@ const Unit8_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+              playSound(sounds[area.sound], `p64-${area.sound}`);
             }}
           ></div>
         );
@@ -197,7 +198,7 @@ const Unit8_Page1 = ({ openPopup }) => {
                 }}
               >
                 <AudioWithCaption src={allUnit2} captions={captionsExample} />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -226,7 +227,7 @@ const Unit8_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit8_Page1_find />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -254,7 +255,7 @@ const Unit8_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit8_Page1_Vocab />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -282,7 +283,7 @@ const Unit8_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit8_Page1_Read />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}

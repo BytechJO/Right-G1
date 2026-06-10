@@ -3,6 +3,7 @@
   justify-content: space-around;
   width: 100%;
   flex-direction: row-reverse;
+  align-items: center;
 }
 .question-text-review7-p2-q2 {
     font-size: 20px;

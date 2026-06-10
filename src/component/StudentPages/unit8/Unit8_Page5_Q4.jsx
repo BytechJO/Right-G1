@@ -141,10 +141,10 @@ const onDragEnd = (result) => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
+      <div className="div-forall  mb-10" style={{ width: "60%" }}>
         <div className="container8">
           <h5 className="header-title-page8">
-            <span className="ex-A">C</span> Answer the question.
+            <span className="ex-A">C</span> Drag the letters into the boxes to make the secret sentence.
           </h5>
 
           <div className="alphabet-box">
@@ -157,7 +157,7 @@ const onDragEnd = (result) => {
               >
                 {(provided) => (
                   <div
-                    className="row1"
+                    className="row1-unit3-q4"
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >

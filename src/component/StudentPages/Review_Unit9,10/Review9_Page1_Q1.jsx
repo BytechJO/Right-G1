@@ -19,7 +19,7 @@ const Review9_Page1_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
@@ -28,7 +28,7 @@ const Review9_Page1_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer||showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
@@ -36,7 +36,7 @@ const Review9_Page1_Q1 = () => {
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -87,14 +87,13 @@ const Review9_Page1_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
-        <h5 className="header-title-page8">A Look, read, and circle.</h5>
+        <h5 className="header-title-page8">
+          <span className="mr-2">A</span> Look and tap or click the correct
+          word.{" "}
+        </h5>
 
         <div className="container-review9-p1-q1">
           {items.map((q, i) => (

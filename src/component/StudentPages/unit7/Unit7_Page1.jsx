@@ -13,12 +13,13 @@ import sound2 from "../../../assets/unit7/sound/U7VOC-02.mp3";
 import sound3 from "../../../assets/unit7/sound/U7VOC-03.mp3";
 import sound4 from "../../../assets/unit7/sound/U7VOC-04.mp3";
 import sound7 from "../../../assets/unit7/sound/U7VOC-07.mp3";
-
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 const Unit7_Page1 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const captionsExample = [
     { start: 0, end: 4.0, text: "Page 58, Unit 7, What's the Matter. " },
     { start: 4.05, end: 9.0, text: "Page 58, Unit 7 Vocabulary. " },
@@ -54,7 +55,7 @@ const Unit7_Page1 = ({ openPopup }) => {
       text: "I go with my grandparents. We talk about school. I am happy. Are you happy too? ",
     },
     { start: 58.02, end: 62.0, text: "Page 59. Listen, read, and repeat.  " },
-    { start: 50.18, end:64.0, text: "I'm happy. " },
+    { start: 50.18, end: 64.0, text: "I'm happy. " },
     {
       start: 64.02,
       end: 66.0,
@@ -89,7 +90,7 @@ const Unit7_Page1 = ({ openPopup }) => {
     { x1: 28.38, y1: 29.91, x2: 41.76, y2: 52.91, sound: 4, isPrimary: false },
 
     // // // الصوت الخامس – الأساسية
-    { x1: 70.3, y1: 54.7, sound: 5, isPrimary: true },
+    { x1: 70.4, y1: 54.5, sound: 5, isPrimary: true },
 
     // // // الصوت الخامس – الإضافية
     { x1: 52.62, y1: 44.53, x2: 75.89, y2: 83.52, sound: 5, isPrimary: false },
@@ -108,19 +109,21 @@ const Unit7_Page1 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (path) => {
-    if (audioRef.current) {
-      audioRef.current.src = path;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (path, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = path;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 مهم للهايلايت
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
   return (
     <div
@@ -135,7 +138,7 @@ const Unit7_Page1 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeAreaIndex === area.sound;
+        const isActive = activeId === `p58-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -150,8 +153,7 @@ const Unit7_Page1 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                setActiveAreaIndex(area.sound);
-                playSound(sounds[area.sound]);
+                playSound(sounds[area.sound], `p58-${area.sound}`);
               }}
             ></div>
           );
@@ -173,8 +175,7 @@ const Unit7_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              setActiveAreaIndex(area.sound); // 👈 يفعل الدائرة فوق الرقم
-              playSound(sounds[area.sound]);
+              playSound(sounds[area.sound], `p58-${area.sound}`);
             }}
           ></div>
         );
@@ -199,7 +200,7 @@ const Unit7_Page1 = ({ openPopup }) => {
                 }}
               >
                 <AudioWithCaption src={allUnit2} captions={captionsExample} />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -228,7 +229,7 @@ const Unit7_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit7_Page1_find />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -256,7 +257,7 @@ const Unit7_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit7_Page1_Vocab />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}
@@ -284,7 +285,7 @@ const Unit7_Page1 = ({ openPopup }) => {
               "html",
               <>
                 <Unit7_Page1_Read />
-              </>
+              </>,
             )
           }
           style={{ overflow: "visible" }}

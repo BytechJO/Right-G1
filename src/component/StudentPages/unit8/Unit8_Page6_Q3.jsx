@@ -108,12 +108,12 @@ export default function Unit8_Page6_Q3() {
 
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
-      <div className="matching-scale">
+      <div className="div-forall">
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span>Read and match.
+          <span className="ex-A">F</span>Read and match. 
         </h5>
 
-        <div key={resetKey} className="container1" ref={containerRef}>
+        <div key={resetKey} className="container1  w-full" ref={containerRef}>
           {/* Row 1 */}
           <div className="matching-row">
             <div className="word-with-dot">
@@ -121,9 +121,10 @@ export default function Unit8_Page6_Q3() {
               <div style={{ position: "relative" }}>
                 {/* الكلمة تشغّل كليك على الدوت */}
                 <span
-                  className={`word-text ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
+                   className={`word-text
+    ${firstDot?.word === "Touch your arm." ? "selected-item" : ""}
+    ${locked || showAnswer ? "disabled-word" : ""}
+  `}
                   onClick={() => document.getElementById("dot-hello").click()}
                   style={{ cursor: "pointer", width: "200px" }}
                 >
@@ -172,9 +173,10 @@ export default function Unit8_Page6_Q3() {
               <span className="span-num">2</span>
               <div style={{ position: "relative" }}>
                 <span
-                  className={`word-text ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
+                 className={`word-text
+    ${firstDot?.word === "Open your eye." ? "selected-item" : ""}
+    ${locked || showAnswer ? "disabled-word" : ""}
+  `}
                   onClick={() => document.getElementById("dot-goodbye").click()}
                   style={{ cursor: "pointer", width: "200px" }}
                 >

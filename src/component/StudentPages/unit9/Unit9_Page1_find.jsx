@@ -38,7 +38,7 @@ const Unit9_Page1_find = () => {
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay attention!",
-        "Please click on the image first."
+        "Please click on the image first.",
       );
       return;
     }
@@ -55,7 +55,7 @@ const Unit9_Page1_find = () => {
   const handleStartAgain = () => {
     setClickedPoint(null);
     setCheckResult(null);
-        setShowAnswer(false);
+    setShowAnswer(false);
   };
   const handleShowAnswer = () => {
     setShowAnswer(true);
@@ -70,6 +70,7 @@ const Unit9_Page1_find = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
+          gap: "20px",
           alignItems: "center",
         }}
       >
@@ -78,7 +79,7 @@ const Unit9_Page1_find = () => {
         >
           <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
           <h5 className="header-title-page8">
-            I need your help. Can you help me find the carrots in the picture?
+            Can you find the carrots? Tap or click on them.
           </h5>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
@@ -88,6 +89,7 @@ const Unit9_Page1_find = () => {
             style={{
               width: "auto",
               height: "75vh",
+              borderRadius: "8px",
               cursor: "pointer",
               display: "block",
             }}

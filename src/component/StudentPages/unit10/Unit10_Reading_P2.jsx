@@ -4,8 +4,11 @@ import sound1 from "../../../assets/unit8/sound/Pg74_1.5_Adult Lady.mp3";
 import sound2 from "../../../assets/unit8/sound/Pg74_1.6_Adult Lady.mp3";
 import sound3 from "../../../assets/unit8/sound/Pg74_1.7_Adult Lady.mp3";
 import sound4 from "../../../assets/unit8/sound/Pg74_1.8_Adult Lady.mp3";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
+
 const Unit10_Reading_P2 = () => {
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);

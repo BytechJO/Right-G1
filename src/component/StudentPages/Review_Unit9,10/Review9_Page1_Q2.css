@@ -1,6 +1,7 @@
 .content-review9-p1-q2 {
   display: flex;
   width: 100%;
+  align-items: center;
   /* justify-content: space-between; */
 }
 
@@ -19,20 +20,17 @@
   height: 30px;
 }
 
-.answer-input-review9-p1-q2{
- 
-    border-bottom: 2px solid;
-    text-align: center;
-    vertical-align: middle;
-    line-height: normal;
-    font-size: 22px;
-    font-weight: 500;
-    width: 95%;
-    height: 30px;
-    position: relative;
-
+.answer-input-review9-p1-q2 {
+  border-bottom: 2px solid;
+  text-align: center;
+  vertical-align: middle;
+  line-height: normal;
+  font-size: 22px;
+  font-weight: 500;
+  width: 95%;
+  height: 30px;
+  position: relative;
 }
-
 
 .wrong-x-circle-review9-p1-q2 {
   position: absolute;
@@ -49,12 +47,11 @@
   align-items: center;
   justify-content: center;
   z-index: 5;
-  border:  2px white solid;
+  border: 2px white solid;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
   .content-review9-p1-q2 {
-    
     flex-direction: column;
-}
+  }
 }

@@ -12,21 +12,22 @@ import Pg13_4_1_Hansel from "../../../assets/unit7/sound/Pg61_4.1_Harley.mp3";
 import Pg13_4_2_Harley from "../../../assets/unit7/sound/Pg61_4.2_Tom.mp3";
 import Pg13_5_1_Tom from "../../../assets/unit7/sound/Pg61_5.1_Jack.mp3";
 import Pg13_5_2_Sarah from "../../../assets/unit7/sound/Pg61_5.2_Sarah.mp3";
-
 import video from "../../../assets/img_unit2/sounds-unit2/p13.mp4";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
+import { useContext } from "react";
+import { AudioContext } from "../../../AudioContext";
 
 const Unit7_Page4 = ({ openPopup }) => {
-  const audioRef = useRef(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const captionsExample = [
     { start: 0, end: 3.93, text: "Page 61, exercise 2. Right grammar. " },
     { start: 4.0, end: 8.24, text: " Are you happy? Yes, I am. Are you sad? " },
-    { start:8.3, end: 12.64, text: "No, I'm not. I'm bored. Are you happy? " },
+    { start: 8.3, end: 12.64, text: "No, I'm not. I'm bored. Are you happy? " },
     { start: 12.7, end: 16.16, text: "Yes, I am. Are you sad?" },
     {
       start: 16.2,
@@ -34,7 +35,7 @@ const Unit7_Page4 = ({ openPopup }) => {
       text: "No, I'm not. I'm bored. Are you sad? Yes, I am.",
     },
   ];
- 
+
   const clickableAreas = [
     { x1: 8.53, y1: 10.4, x2: 27.13, y2: 15, sound: Pg13_2_1_AdultLady },
     { x1: 68.2, y1: 10.4, x2: 79.68, y2: 15, sound: Pg13_2_2_AdultLady },
@@ -54,21 +55,22 @@ const Unit7_Page4 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
-      setIsPlaying(true);
-      setHoveredAreaIndex(null); // إزالة الهايلايت عند بدء الصوت
+  const playSound = (soundPath, id) => {
+    if (!audioRef.current) return;
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-        setHoveredAreaIndex(null);
-        setActiveAreaIndex(null); // مسح الهايلايت بعد انتهاء الصوت
-      };
-    }
+    // 🔥 وقف أي صوت شغال بأي صفحة
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.src = soundPath;
+    audioRef.current.play();
+
+    setActiveId(id); // 🔥 هذا المهم
+
+    audioRef.current.onended = () => {
+      setActiveId(null);
+    };
   };
-
   return (
     <div
       className="page1-img-wrapper"
@@ -84,7 +86,7 @@ const Unit7_Page4 = ({ openPopup }) => {
         <div
           key={index}
           className={`clickable-area ${
-            hoveredAreaIndex === index || activeAreaIndex === index
+            activeId === `p61-${area.sound}` || hoveredAreaIndex === index
               ? "highlight"
               : ""
           }`}
@@ -96,8 +98,7 @@ const Unit7_Page4 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-            setActiveAreaIndex(index); // لتثبيت الهايلايت أثناء الصوت
-            playSound(area.sound);
+            playSound(area.sound, `p61-${area.sound}`);
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -129,7 +130,7 @@ const Unit7_Page4 = ({ openPopup }) => {
                   src={CD12_Pg13_Grammar2_AdultLady}
                   captions={captionsExample}
                 />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
@@ -177,7 +178,7 @@ const Unit7_Page4 = ({ openPopup }) => {
                 >
                   <source src={video} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}

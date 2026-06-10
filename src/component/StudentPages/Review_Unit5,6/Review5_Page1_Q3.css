@@ -7,7 +7,7 @@
 
 .selected-item {
   background: white;
-  color: white !important;
+  /* color: white !important; */
   box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
   transition: all 0.25s ease;
 }

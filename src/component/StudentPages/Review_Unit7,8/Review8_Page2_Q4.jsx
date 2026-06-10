@@ -39,7 +39,9 @@ const Review8_Page2_Q4 = () => {
   // 🔵 2) حفظ اختيارات الطالب
   // ===============================
   const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "blank" ? null : null)))
+    questions.map((q) =>
+      q.parts.map((p) => (p.type === "blank" ? null : null)),
+    ),
   );
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -48,7 +50,7 @@ const Review8_Page2_Q4 = () => {
   // 🔵 3) الضغط على خيار
   // ===============================
   const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -59,7 +61,7 @@ const Review8_Page2_Q4 = () => {
   // 🔵 4) فحص الإجابات
   // ===============================
   const checkAnswers = () => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     // تحقق إذا الطالب ما اختار ولا شيء
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {
@@ -121,21 +123,32 @@ const Review8_Page2_Q4 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "80px",
+          
         }}
       >
-        <h3 className="header-title-page8">G Read, look, and circle.</h3>
-        <div className="all-content-review8-p2-q4" style={{ display: "flex", width: "100%" }}>
+        <h3 className="header-title-page8">
+          <span className="mr-2">G</span> Look, read, and tap or click the
+          correct words.{" "}
+        </h3>
+        <div
+          className="all-content-review8-p2-q4"
+          style={{ display: "flex", width: "100%" }}
+        >
           {questions.map((q, qIndex) => (
-            <div className="question-row-review8-p2-q4" key={q.id}>
+            <div className="question-row-review8-p2-q4 w-full" key={q.id}>
               <div className="sentence-review8-p2-q4">
-                <div style={{ display: "flex", width: "100%" ,justifyContent:"center",alignItems:"flex-start",gap:"30px"}}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    gap: "30px",
+                  }}
+                >
                   <span
-                    className="header-title-page8"
+                   
                     style={{
                       color: "#2c5287",
                       fontWeight: "700",
@@ -144,9 +157,16 @@ const Review8_Page2_Q4 = () => {
                   >
                     {q.id}
                   </span>
-                  <img src={q.image} className="question-img-review8-p2-q4"  />
+                  <img src={q.image} className="question-img-review8-p2-q4" />
                 </div>
-                <div style={{ display: "flex", width: "100%" ,justifyContent:"space-around",alignItems:"center"}}>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
                   {q.parts.map((part, pIndex) => {
                     if (part.type === "text") {
                       return (
@@ -213,8 +233,8 @@ const Review8_Page2_Q4 = () => {
           onClick={() => {
             setAnswers(
               questions.map((q) =>
-                q.parts.map((p) => (p.type === "blank" ? null : null))
-              )
+                q.parts.map((p) => (p.type === "blank" ? null : null)),
+              ),
             );
             setShowResult(false);
             setLocked(false);

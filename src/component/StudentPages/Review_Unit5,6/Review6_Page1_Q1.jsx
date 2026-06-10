@@ -40,7 +40,7 @@ const Review6_Page1_Q1 = () => {
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
@@ -48,14 +48,14 @@ const Review6_Page1_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
     let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
+      (ans, i) => ans === items[i].correctIndex,
     ).length;
 
     const total = items.length;
@@ -102,17 +102,17 @@ const Review6_Page1_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
         }}
       >
         <div>
-          <h5 className="header-title-page8">A Look, read, and choose.</h5>
+          <h5 className="header-title-page8">
+            <span className="mr-2">A</span> Look, read, and tap or click the
+            correct sentence.
+          </h5>
         </div>
         <div className="container-review6-p1-q1">
           {items.map((q, i) => (
