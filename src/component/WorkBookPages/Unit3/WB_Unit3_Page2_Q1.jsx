@@ -1,95 +1,194 @@
 import React, { useState } from "react";
 import "./WB_Unit3_Page2_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const questions = [
+  { id: "q1", scramble: "your/book/close", questionCorrect: "close your book" },
+  {
+    id: "q2",
+    scramble: "pencil/take/your/out",
+    questionCorrect: "take out your pencil",
+  },
+  { id: "q3", scramble: "line/a/make", questionCorrect: "make a line" },
+  { id: "q4", scramble: "open/book/your", questionCorrect: "open your book" },
+];
+
+const getScrambledWords = (scramble) => scramble.split("/");
+
+// ─── DraggableWord ────────────────────────────────────────────────────────────
+function DraggableWord({ id, word, isUsed, disabled }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled: isUsed || disabled,
+  });
+  return (
+    <span
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "2px 5px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: "white",
+        fontWeight: "bold",
+        cursor: isUsed || disabled ? "default" : "grab",
+        opacity: isDragging ? 0.4 : isUsed ? 0.5 : 1,
+        userSelect: "none",
+        touchAction: "none",
+        pointerEvents: isUsed ? "none" : "auto",
+        ...(isUsed ? { borderColor: "#ccc", color: "#aaa" } : {}),
+      }}
+    >
+      {word}
+    </span>
+  );
+}
+
+// ─── DroppableInput ───────────────────────────────────────────────────────────
+function DroppableInput({ id, value, isWrong, locked, onClear }) {
+  const { isOver, setNodeRef } = useDroppable({ id, disabled: locked });
+  const words = value ? value.split(" ") : [];
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        width: "45%",
+      }}
+    >
+      <div
+        ref={setNodeRef}
+        className={`answer-input33-review10-p1-q3 ${isOver ? "drag-over-cell" : ""}`}
+        style={{
+          background: isOver ? "#e3f2fd" : "white",
+          display: "flex",
+          flexWrap: "wrap",
+          height:"30px",
+          gap: "4px",
+          alignItems: "center",
+          cursor: "default",
+        }}
+      >
+        {words.map((word, i) => (
+          <span
+            key={i}
+            onClick={() => {
+              if (!locked) onClear(id, word);
+            }}
+            style={{
+              cursor: !locked ? "pointer" : "default",
+              // padding: "1px 4px",
+              borderRadius: "4px",
+              // background: !locked ? "#f0f4ff" : "transparent",
+              // border: !locked ? "1px solid #2c5287" : "none",
+            }}
+          >
+            {word}
+          </span>
+        ))}
+      </div>
+      {isWrong && <span className="error-mark-input1">✕</span>}
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 const WB_Unit3_Page2_Q1 = () => {
-  const [answers, setAnswers] = useState([]);
-  const [wrongWords, setWrongWords] = useState([]);
-
-  const [disableInputs, setDisableInputs] = useState(false);
   const [inputs, setInputs] = useState({});
   const [wrong, setWrong] = useState({});
   const [showAnswers, setShowAnswers] = useState(false);
   const [locked, setLocked] = useState(false);
-  const questions = [
-    {
-      id: "q1",
-      scramble: "your/book/close",
-      questionCorrect: "close your book",
-    },
-    {
-      id: "q2",
-      scramble: "pencil/take/your/out",
-      questionCorrect: "take out your pencil",
-    },
-    {
-      id: "q3",
-      scramble: "line/a/make",
-      questionCorrect: "make a line",
-    },
-    {
-      id: "q4",
-      scramble: "open/book/your",
-      questionCorrect: "open your book",
-    },
-  ];
-  const onDragEnd = (result) => {
-    if (!result.destination || locked || showAnswers) return;
+  const [activeId, setActiveId] = useState(null);
 
-    const { draggableId, destination } = result;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    }),
+  );
 
-    // draggableId مثال: q1-your-0
-    const draggedQuestionId = draggableId.split("-")[0]; // q1
+  // الكلمات المستخدمة لكل جملة
+  const usedWordsPerQ = (qId) => {
+    const val = inputs[`${qId}_question`];
+    return val ? val.split(" ") : [];
+  };
 
-    // droppableId مثال: blank-q1_question
-    const targetQuestionId = destination.droppableId
-      .replace("blank-", "")
-      .split("_")[0]; // q1
+  const parseId = (id) => {
+    const parts = id.split("-");
+    return {
+      qId: parts[0],
+      word: parts.slice(1, parts.length - 1).join("-"),
+    };
+  };
 
-    // ❌ منع إسقاط الكلمة في غير جملتها
-    if (draggedQuestionId !== targetQuestionId) return;
+  const handleDragStart = (event) => setActiveId(event.active.id);
 
-    const parts = draggableId.split("-");
-    const word = parts.slice(1, parts.length - 1).join("-");
+  const handleDragEnd = (event) => {
+    setActiveId(null);
+    const { active, over } = event;
+    if (!over || locked || showAnswers) return;
+    if (!over.id.startsWith("blank-")) return;
 
-    const inputKey = `${targetQuestionId}_question`; // ⭐⭐ المفتاح الصح
+    const { qId: draggedQId, word } = parseId(active.id);
+    const targetQId = over.id.replace("blank-", "").split("_")[0];
+
+    if (draggedQId !== targetQId) return;
+
+    const inputKey = `${targetQId}_question`;
 
     setInputs((prev) => {
-      const updated = { ...prev };
-
-      // ❌ منع تكرار نفس الكلمة في نفس الجملة
-      if (updated[inputKey]?.split(" ").includes(word)) {
-        return prev;
-      }
-
-      // ➕ إضافة الكلمة
-      updated[inputKey] = updated[inputKey]
-        ? `${updated[inputKey]} ${word}`
-        : word;
-
-      return updated;
+      const existing = prev[inputKey] ? prev[inputKey].split(" ") : [];
+      if (existing.includes(word)) return prev;
+      return {
+        ...prev,
+        [inputKey]: existing.length ? `${prev[inputKey]} ${word}` : word,
+      };
     });
 
     setWrong({});
   };
 
+  const handleClear = (cellId, word) => {
+    const inputKey = cellId.replace("blank-", "");
+    setInputs((prev) => {
+      const words = prev[inputKey] ? prev[inputKey].split(" ") : [];
+      const idx = words.lastIndexOf(word);
+      if (idx === -1) return prev;
+      words.splice(idx, 1);
+      return { ...prev, [inputKey]: words.join(" ") };
+    });
+    setWrong((prev) => ({ ...prev, [inputKey]: false }));
+  };
+
   const checkAnswers = () => {
     if (showAnswers || locked) return;
 
-    // ❌ فحص إذا في input فاضي
-    const hasEmptyInput = questions.some(
+    const hasEmpty = questions.some(
       (q) =>
         !inputs[`${q.id}_question`] || inputs[`${q.id}_question`].trim() === "",
     );
-
-    if (hasEmptyInput) {
+    if (hasEmpty) {
       ValidationAlert.info(
         "Oops!",
         "Please answer all the questions before checking.",
       );
       return;
     }
+
     let wrongTemp = {};
     let score = 0;
     const total = questions.length;
@@ -104,50 +203,55 @@ const WB_Unit3_Page2_Q1 = () => {
 
     setWrong(wrongTemp);
     setLocked(true);
+
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
     const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
-    if (total === score) {
-      return ValidationAlert.success(msg);
-    } else if (score === 0) {
-      return ValidationAlert.error(msg);
-    } else {
-      return ValidationAlert.warning(msg);
-    }
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold">Score: ${score} / ${total}</span>
+      </div>
+    `;
+    if (score === total) ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else ValidationAlert.warning(msg);
   };
-  const getScrambledWords = (scramble) => scramble.split("/");
 
-  // ⭐ Show Correct Answers
   const showCorrectAnswers = () => {
-    let filled = {};
-
+    const filled = {};
     questions.forEach((q) => {
       filled[`${q.id}_question`] = q.questionCorrect;
     });
-
     setInputs(filled);
     setWrong({});
     setShowAnswers(true);
   };
 
+  const handleReset = () => {
+    setInputs({});
+    setWrong({});
+    setShowAnswers(false);
+    setLocked(false);
+  };
+
+  const activeWord = activeId ? parseId(activeId).word : null;
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div style={{ width: "60%" }} className="div-forall">
+        <div style={{ }} className="div-forall">
           <h5 className="header-title-page8">
-            <span className="ex-A">C</span>Unscramble and write.
+            <span className="ex-A">C</span>Drag and drop the words to make
+            sentences.
           </h5>
 
-          <div className="content-container-wb-unit3-p2-q1">
+          <div className="content-container-wb-unit3-p2-q1 w-full">
             {questions.map((q, index) => (
-              <div style={{ display: "flex", width: "100%" }}>
+              <div key={q.id} style={{ display: "flex", width: "100%" }}>
                 <div className="input-container-wb-unit3-p2-q1">
                   <div
                     style={{
@@ -162,126 +266,79 @@ const WB_Unit3_Page2_Q1 = () => {
                         {q.scramble}
                       </div>
                     </div>
-                    <Droppable
-                      droppableId={`bank-${q.id}`}
-                      direction="horizontal"
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          style={{
-                            display: "flex",
-                            gap: "10px",
-                            padding: "10px",
-                            border: "2px dashed #ccc",
-                            borderRadius: "10px",
-                            // margin: "10px 0",
-                            alignItems: "center",
-                            width:"70%",
-                            justifyContent:"center"
-                          }}
-                        >
-                          {getScrambledWords(q.scramble).map((word, i) => (
-                            <Draggable
-                              key={`${q.id}-${word}-${i}`}
-                              draggableId={`${q.id}-${word}-${i}`}
-                              index={i}
-                              isDragDisabled={locked}
-                            >
-                              {(provided) => (
-                                <span
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={{
-                                    padding: "2px 5px",
-                                    border: "2px solid #2c5287",
-                                    borderRadius: "8px",
-                                    background: "white",
-                                    fontWeight: "bold",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </span>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                  {/* Unscramble input */}
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      width: "45%",
-                    }}
-                  >
-                    <Droppable droppableId={`blank-${q.id}_question`} isDropDisabled={locked}>
-                      {(provided, snapshot) => (
-                        <input
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          value={inputs[`${q.id}_question`] || ""}
-                          readOnly
-                          className={`answer-input33-review10-p1-q3 ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                          style={{
-                            background: snapshot.isDraggingOver
-                              ? "#e3f2fd"
-                              : "white",
-                          }}
-                        />
-                      )}
-                    </Droppable>
 
-                    {wrong[`${q.id}_question`] && (
-                      <span className="error-mark-input1">✕</span>
-                    )}
+                    {/* Word Bank */}
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        padding: "10px",
+                        border: "2px dashed #ccc",
+                        borderRadius: "10px",
+                        alignItems: "center",
+                        width: "70%",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {getScrambledWords(q.scramble).map((word, i) => (
+                        <DraggableWord
+                          key={`${q.id}-${word}-${i}`}
+                          id={`${q.id}-${word}-${i}`}
+                          word={word}
+                          isUsed={usedWordsPerQ(q.id).includes(word)}
+                          disabled={locked || showAnswers}
+                        />
+                      ))}
+                    </div>
                   </div>
+
+                  <DroppableInput
+                    id={`blank-${q.id}_question`}
+                    value={inputs[`${q.id}_question`] || ""}
+                    isWrong={!!wrong[`${q.id}_question`]}
+                    locked={locked || showAnswers}
+                    onClear={handleClear}
+                  />
                 </div>
               </div>
             ))}
           </div>
 
-          {/* ⭐ Buttons */}
           <div className="action-buttons-container">
-            <button
-              className="try-again-button"
-              onClick={() => {
-                setAnswers([]);
-                setInputs({});
-                setWrong({});
-                setWrongWords([]);
-                setShowAnswers(false);
-                setDisableInputs(false);
-                setLocked(false);
-              }}
-            >
+            <button className="try-again-button" onClick={handleReset}>
               Start Again ↻
             </button>
-
             <button
               className="show-answer-btn swal-continue"
               onClick={showCorrectAnswers}
             >
               Show Answer
             </button>
-
             <button className="check-button2" onClick={checkAnswers}>
               Check Answer ✓
             </button>
           </div>
         </div>
       </div>
-    </DragDropContext>
+
+      <DragOverlay>
+        {activeWord && (
+          <span
+            style={{
+              padding: "2px 5px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              cursor: "grabbing",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            }}
+          >
+            {activeWord}
+          </span>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

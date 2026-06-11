@@ -87,11 +87,8 @@ const WB_Unit2_Page1_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
         <div>
@@ -99,7 +96,7 @@ const WB_Unit2_Page1_Q1 = () => {
             <span className="ex-A">A</span> Read and trace.
           </h5>
         </div>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -118,7 +115,7 @@ const WB_Unit2_Page1_Q1 = () => {
           ref={canvasRef}
           height={300}
           width={600}
-          className="draw-canvas-wb-u2-q1"
+          className="draw-canvas-wb-u2-q1 w-full"
           style={{
             backgroundImage: `url(${img})`,
             backgroundRepeat: "no-repeat",

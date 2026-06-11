@@ -92,18 +92,15 @@ const WB_Unit2_Page4_Q1 = () => {
     >
       <div  className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "90px",
+      
         }}
       >
-        <div>
+       
           <h5 className="header-title-page8">
-            <span className="ex-A">G</span>Read, look, and circle.
+            <span className="ex-A">G</span>Tap or click the correct response.
           </h5>
-        </div>
+       
         <div className="container-review6-p1-q1">
           {items.map((q, i) => (
             <div

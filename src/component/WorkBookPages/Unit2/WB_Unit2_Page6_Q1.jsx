@@ -154,20 +154,16 @@ const WB_Unit2_Page6_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "10px",
+      
         }}
       >
-        <div className="review3-p1-q3-wrapper">
+    
           <h4 className="header-title-page8">
-            <span className="ex-A">A</span> Look, read, and write{" "}
-            <span style={{ color: "red" }}>✓</span>
+            <span className="ex-A">A</span> Tap or click the correct word.
           </h4>
 
-          <div className="wb-unit2-p6-q1-grid">
+          <div className="wb-unit2-p6-q1-grid w-full">
             {questions.map((q) => (
               <div key={q.id} className="review3-p1-q3-box">
                 <img src={q.image} alt="" className="wb-unit2-p6-q1-img" />
@@ -198,7 +194,7 @@ const WB_Unit2_Page6_Q1 = () => {
             ))}
           </div>
         </div>
-      </div>
+    
 
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">

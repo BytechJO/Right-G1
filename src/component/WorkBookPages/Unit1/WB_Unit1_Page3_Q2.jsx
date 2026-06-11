@@ -127,19 +127,18 @@ const WB_Unit1_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">B</span> Read and write{" "}
-          <span style={{ color: "red" }}>✓</span> .
+          <span className="ex-A">B</span> Tap or click the correct box.
         </h5>
 
-        <div className="shorti1-container-wb-u1-q2">
+        <div className="shorti1-container-wb-u1-q2"  style={{
+                  gap: "50px",
+                
+                }}>
           {data.map((question) => (
             <div key={question.id} className="question-box-wb-u1-q2">
               <div

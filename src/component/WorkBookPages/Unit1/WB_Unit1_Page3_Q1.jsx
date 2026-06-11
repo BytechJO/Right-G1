@@ -1,63 +1,245 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const data = [
+  { scrambled: "morning Good !", answer: "Good morning!" },
+  { scrambled: "you How are ?", answer: "How are you?" },
+  { scrambled: "you Fine , thank .", answer: "Fine, thank you." },
+  { scrambled: "evening Good !", answer: "Good evening!" },
+  { scrambled: "I'm John . Hello !", answer: "Hello! I'm John ." },
+];
+
+// علامات الترقيم اللي لازم تلتصق بالكلمة اللي قبلها
+const PUNCTUATION = new Set([".", ",", "!", "?", ";", ":"]);
+
+// دالة تجمع الكلمات بشكل ذكي
+const joinWords = (words) => {
+  if (!words.length) return "";
+  return words.reduce((acc, word) => {
+    if (!acc) return word;
+    if (PUNCTUATION.has(word)) return `${acc}${word}`;
+    return `${acc} ${word}`;
+  });
+};
+
+// ─── Word Chip (Draggable) ─────────────────────────────────────────────────────
+
+const WordChip = ({ id, word, disabled }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled,
+  });
+
+  return (
+    <span
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "2px 5px",
+        border: `2px solid ${disabled ? "#b0b0b0" : "#2c5287"}`,
+        borderRadius: "8px",
+        background: disabled ? "#e0e0e0" : "white",
+        fontWeight: "bold",
+        color: disabled ? "#999" : undefined,
+        cursor: disabled ? "not-allowed" : isDragging ? "grabbing" : "grab",
+        opacity: isDragging ? 0.35 : 1,
+        transition:
+          "opacity 0.2s, background 0.2s, border-color 0.2s, color 0.2s",
+        userSelect: "none",
+        touchAction: "none",
+        display: "inline-block",
+        pointerEvents: disabled ? "none" : undefined,
+      }}
+    >
+      {word}
+    </span>
+  );
+};
+
+// ─── Answer Drop Zone (Droppable) ─────────────────────────────────────────────
+
+const AnswerDropZone = ({
+  id,
+  wordList,
+  isWrong,
+  showAnswer,
+  answerText,
+  locked,
+  onRemove,
+}) => {
+  const { setNodeRef, isOver } = useDroppable({ id });
+
+  // لما Show Answer → نعرض النص الصح كـ plain text
+  if (showAnswer) {
+    return (
+      <div style={{ position: "relative" }}>
+        <div
+          className="missing-input-wb-unit1-p3-q1"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0px",
+          }}
+        >
+          {answerText}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ position: "relative" }}>
+      <div
+        ref={setNodeRef}
+        className={`missing-input-wb-unit1-p3-q1${isOver ? " drag-over-cell" : ""}${isWrong ? " wrong-drop" : ""}`}
+        style={{
+          background: isOver ? "#e3f2fd" : undefined,
+          transition: "background 0.15s",
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "4px",
+          minHeight: "38px",
+          cursor: "default",
+        }}
+      >
+        {wordList.map((entry, idx) => {
+          const isPunct = PUNCTUATION.has(entry.word);
+          return (
+            <span
+              key={`${entry.wordIndex}-${idx}`}
+              onClick={() => {
+                if (!locked) onRemove(id, entry.wordIndex);
+              }}
+              title={!locked ? "Click to remove" : ""}
+              style={{
+                // padding: "1px 5px",
+                // border: "2px solid #2c5287",
+                borderRadius: "6px",
+                // background: "white",
+                // fontWeight: "bold",
+                fontSize: "18px",
+                cursor: locked ? "default" : "pointer",
+                userSelect: "none",
+                // علامات الترقيم تلتصق بـ margin سالب يساري
+                marginLeft: isPunct ? "-4px" : "0px",
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                if (!locked) e.currentTarget.style.background = "#ffe0e0";
+              }}
+              onMouseLeave={(e) => {
+                if (!locked) e.currentTarget.style.background = "white";
+              }}
+            >
+              {entry.word}
+            </span>
+          );
+        })}
+      </div>
+      {isWrong && <div className="wrong-icon-wb-unit1-p3-q1">✕</div>}
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const WB_Unit1_Page3_Q1 = () => {
-  const data = [
-    { scrambled: "morning Good !", answer: "Good morning !" },
-    { scrambled: "you How are ?", answer: "How are you ?" },
-    { scrambled: "you Fine , thank .", answer: "Fine, thank you ." },
-    { scrambled: "evening Good !", answer: "Good evening !" },
-    { scrambled: "I'm John . Hello !", answer: "Hello ! I'm John ." },
-  ];
-
-  const [inputs, setInputs] = useState(data.map(() => ""));
+  // كل جملة عندها مصفوفة من الكلمات المرتبة حسب الترتيب اللي حطها الطالب
+  const [wordLists, setWordLists] = useState(data.map(() => []));
   const [showAnswer, setShowAnswer] = useState(false);
   const [wrong, setWrong] = useState(data.map(() => false));
-  const onDragEnd = (result) => {
-    if (!result.destination || showAnswer) return;
+  const [activeId, setActiveId] = useState(null);
 
-    const { draggableId, source, destination } = result;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-    // source: bank-0 | destination: blank-0
-    const sourceIndex = Number(source.droppableId.replace("bank-", ""));
-    const destIndex = Number(destination.droppableId.replace("blank-", ""));
+  // استخرج الكلمة من الـ id (format: "sentenceIndex-word-wordIndex")
+  const parseId = (id) => {
+    const parts = id.split("-");
+    const sentenceIndex = Number(parts[0]);
+    const wordIndex = Number(parts[parts.length - 1]);
+    const word = parts.slice(1, -1).join("-");
+    return { sentenceIndex, word, wordIndex };
+  };
 
-    // ❌ منع وضع كلمة بجملة غيرها
-    if (sourceIndex !== destIndex) return;
+  const activeWord = activeId ? parseId(activeId).word : null;
 
-    const word = draggableId.split("-").slice(1, -1).join("-");
+  // الكلمات المستخدمة لكل جملة
+  const usedWordsPerSentence = data.map((item, i) => {
+    const words = item.scrambled.split(/\s+/);
+    // نشوف أي كلمات بنفس الـ index اتحطت
+    return wordLists[i].map((entry) => entry.wordIndex);
+  });
 
-    setInputs((prev) =>
-      prev.map((v, i) => {
-        if (i !== destIndex) return v;
+  const isWordUsed = (sentenceIndex, wordIndex) =>
+    usedWordsPerSentence[sentenceIndex].includes(wordIndex);
 
-        // تقسيم الجملة الحالية لكلمات
-        const currentWords = v.trim() ? v.trim().split(/\s+/) : [];
+  // ─── Drag Handlers ──────────────────────────────────────────────────────
 
-        // ❌ منع تكرار نفس الكلمة
-        if (currentWords.includes(word)) return v;
+  const handleDragStart = ({ active }) => setActiveId(active.id);
 
-        return currentWords.length ? `${v} ${word}` : word;
-      }),
-    );
+  const handleDragEnd = ({ active, over }) => {
+    setActiveId(null);
+    if (!over || showAnswer) return;
+
+    const { sentenceIndex, word, wordIndex } = parseId(active.id);
+    const destId = over.id; // "blank-0"
+
+    if (!destId.startsWith("blank-")) return;
+    const destSentence = Number(destId.replace("blank-", ""));
+
+    // منع وضع كلمة بجملة غيرها
+    if (sentenceIndex !== destSentence) return;
+
+    // منع تكرار نفس الكلمة (بنفس الـ wordIndex)
+    if (isWordUsed(sentenceIndex, wordIndex)) return;
+
+    setWordLists((prev) => {
+      const updated = prev.map((list) => [...list]);
+      updated[sentenceIndex] = [...updated[sentenceIndex], { word, wordIndex }];
+      return updated;
+    });
 
     setWrong(data.map(() => false));
   };
 
-  const checkAnswers = () => {
-    if (showAnswer) return;
+  // ─── Remove word from answer (click to return to bank) ───────────────────
 
-    let correct = 0;
-
-    const wrongStatus = inputs.map((v, i) => {
-      if (v.trim() === "") return false; // تجاهل الفارغ
-      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
-      if (ok) correct++;
-      return !ok;
+  const handleRemove = (blankId, wordIndex) => {
+    const i = Number(blankId.replace("blank-", ""));
+    setWordLists((prev) => {
+      const updated = prev.map((list) => [...list]);
+      updated[i] = updated[i].filter((entry) => entry.wordIndex !== wordIndex);
+      return updated;
     });
+    setWrong(data.map(() => false));
+  };
 
-    setWrong(wrongStatus);
+  // ─── Check ──────────────────────────────────────────────────────────────
+
+  const [locked, setLocked] = useState(false);
+
+  const checkAnswers = () => {
+    if (showAnswer || locked) return;
+
+    const inputs = wordLists.map((list) => joinWords(list.map((e) => e.word)));
 
     if (inputs.some((v) => v.trim() === "")) {
       ValidationAlert.info(
@@ -67,55 +249,64 @@ const WB_Unit1_Page3_Q1 = () => {
       return;
     }
 
+    let correct = 0;
+    const wrongStatus = inputs.map((v, i) => {
+      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
+      if (ok) correct++;
+      return !ok;
+    });
+
+    setWrong(wrongStatus);
+    setLocked(true);
+
     const total = data.length;
     const color =
       correct === total ? "green" : correct === 0 ? "red" : "orange";
-
     const msg = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correct} / ${total}
-      </span>
-    </div>
-  `;
+      <div style="font-size:20px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${correct} / ${total}
+        </span>
+      </div>`;
 
     if (correct === total) ValidationAlert.success(msg);
     else if (correct === 0) ValidationAlert.error(msg);
     else ValidationAlert.warning(msg);
   };
 
+  // ─── Reset ───────────────────────────────────────────────────────────────
+
   const reset = () => {
-    setInputs(data.map(() => ""));
+    setWordLists(data.map(() => []));
     setWrong(data.map(() => false));
     setShowAnswer(false);
+    setLocked(false);
   };
 
+  // ─── Render ───────────────────────────────────────────────────────────────
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="page8-wrapper" style={{ padding: "30px" }}>
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            position: "relative",
-            width: "60%",
-          }}
-        >
+        <div className="div-forall mb-10" style={{ gap: "20px" }}>
           <div className="page8-content">
             <header className="header-title-page8">
               <span className="ex-A">A</span>
-              Unscramble and write.
+            Drag and drop the words to make sentences.
             </header>
-          </div>{" "}
+          </div>
+
           {data.map((item, i) => {
-            const words = item.scrambled.replace(/[]/g, "").split(/\s+/);
+            const words = item.scrambled.split(/\s+/);
 
             return (
               <div key={i} style={{ marginBottom: "5px", width: "100%" }}>
-                {/* الجملة المبعثرة */}
+                {/* ── Scrambled sentence + word bank ── */}
                 <div className="scrambled-wb-unit1-p3-q1">
                   <div>
                     <span style={{ fontWeight: "600", marginRight: "8px" }}>
@@ -123,97 +314,86 @@ const WB_Unit1_Page3_Q1 = () => {
                     </span>
                     {item.scrambled}
                   </div>
-                  {/* word bank الخاص بالجملة */}
-                  <Droppable droppableId={`bank-${i}`} direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        style={{
-                          display: "flex",
-                          gap: "10px",
-                          padding: "10px",
-                          border: "2px dashed #ccc",
-                          borderRadius: "10px",
-                          // margin: "10px 0",
-                          alignItems: "center",
-                        }}
-                      >
-                        {words.map((word, index) => (
-                          <Draggable
-                            key={`${i}-${word}-${index}`}
-                            draggableId={`${i}-${word}-${index}`}
-                            index={index}
-                          >
-                            {(provided) => (
-                              <span
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={{
-                                  padding: "2px 5px",
-                                  border: "2px solid #2c5287",
-                                  borderRadius: "8px",
-                                  background: "white",
-                                  fontWeight: "bold",
-                                  cursor: "grab",
-                                  ...provided.draggableProps.style,
-                                }}
-                              >
-                                {word}
-                              </span>
-                            )}
-                          </Draggable>
-                        ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
+
+                  {/* Word bank لكل جملة */}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      padding: "10px",
+                      border: "2px dashed #ccc",
+                      borderRadius: "10px",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {words.map((word, index) => {
+                      const id = `${i}-${word}-${index}`;
+                      const used = isWordUsed(i, index);
+                      return (
+                        <WordChip
+                          key={id}
+                          id={id}
+                          word={word}
+                          disabled={used || showAnswer || locked}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
 
-                {/* مكان الجواب */}
-                <Droppable droppableId={`blank-${i}`}>
-                  {(provided, snapshot) => (
-                    <div style={{position:"relative"}}>
-                      <input
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`missing-input-wb-unit1-p3-q1 ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
-                        value={showAnswer ? item.answer : inputs[i]}
-                        readOnly
-                      />
-
-                      {wrong[i] && (
-                        <div className="wrong-icon-wb-unit1-p3-q1">✕</div>
-                      )}
-                    </div>
-                  )}
-                </Droppable>
+                {/* ── Answer drop zone ── */}
+                <AnswerDropZone
+                  id={`blank-${i}`}
+                  wordList={wordLists[i]}
+                  isWrong={wrong[i]}
+                  showAnswer={showAnswer}
+                  answerText={item.answer}
+                  locked={locked}
+                  onRemove={handleRemove}
+                />
               </div>
             );
           })}
         </div>
 
+        {/* ── Buttons ── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
-
           <button
             className="show-answer-btn swal-continue"
             onClick={() => setShowAnswer(true)}
           >
             Show Answer
           </button>
-
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag Overlay ── */}
+      <DragOverlay>
+        {activeWord ? (
+          <span
+            style={{
+              padding: "2px 5px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              cursor: "grabbing",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              display: "inline-block",
+            }}
+          >
+            {activeWord}
+          </span>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

@@ -106,17 +106,14 @@ const WB_Unit1_Page5_Q1 = () => {
     >
       <div   className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+      
         }}
       >
         
           <h5 className="header-title-page8">
             <span className="ex-A">E</span>
-            Look, read, and circle.
+            Tap or click the correct greeting.
           </h5>
       
         <div className="container-wb-u1-p5-q1">
@@ -160,8 +157,8 @@ const WB_Unit1_Page5_Q1 = () => {
                       <p
                         key={optIndex}
                         className={`
-                    option-word-unit7-p5-q1
-                    ${isSelected ? "selected3" : ""}
+                    option-word-wb-u1-p5-q1
+                    ${isSelected ? "selected3-wb-u1-p5-q1" : ""}
                     ${showResult && isSelected && !isCorrect ? "wrong" : ""}
                     ${showResult && isCorrect ? "correct" : ""}
                   `}

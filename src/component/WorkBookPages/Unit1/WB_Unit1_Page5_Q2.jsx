@@ -88,22 +88,20 @@ const WB_Unit1_Page5_Q2 = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",padding:"30px"
+        alignItems: "center",
+        padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
-        <div className="content-container1">
+     
           <h5 className="header-title-page8">
-            <span className="ex-A">F</span> Read and circle the mistakes.
+            <span className="ex-A">F</span>Tap or click the mistakes in the
+            sentences.
           </h5>
 
           <div className="sentence-container-wb-u1-p5-q2">
@@ -149,13 +147,11 @@ const WB_Unit1_Page5_Q2 = () => {
             <img src={img1} style={{ width: "auto", height: "260px" }} />
           </div>
         </div>
-      </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {
-            setCircledWords({
-             
-            });
+            setCircledWords({});
             setChecked(false);
             setShowAnswer(false);
           }}

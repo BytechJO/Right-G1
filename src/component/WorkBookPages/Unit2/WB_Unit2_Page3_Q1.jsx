@@ -8,10 +8,10 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/U1 WB/U2/U2P11EXEE-01.svg";
 import img2 from "../../../assets/U1 WB/U2/U2P11EXEE-02.svg";
 import img3 from "../../../assets/U1 WB/U2/U2P11EXEE-03.svg";
-import img4  from "../../../assets/U1 WB/U2/U2P11EXEE-04.svg";
+import img4 from "../../../assets/U1 WB/U2/U2P11EXEE-04.svg";
 import img5 from "../../../assets/U1 WB/U2/U2P11EXEE-05.svg";
-import img6 from "../../../assets/U1 WB/U2/U2P11EXEE-06.svg"
-import img7 from "../../../assets/U1 WB/U2/U2P11EXEE-07.svg"
+import img6 from "../../../assets/U1 WB/U2/U2P11EXEE-06.svg";
+import img7 from "../../../assets/U1 WB/U2/U2P11EXEE-07.svg";
 
 const data = [
   {
@@ -53,9 +53,8 @@ const WB_Unit2_Page3_Q1 = () => {
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
 
-
   const checkAnswers = () => {
-    if (locked ||showResult) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (locked || showResult) return; // 🔒 منع التعديل بعد رؤية الحل
 
     const totalQuestions = data.length;
     let correct = 0;
@@ -96,7 +95,7 @@ const WB_Unit2_Page3_Q1 = () => {
     setShowResult(true);
   };
   const handleSelect = (qId, index) => {
-    if (locked||showResult) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (locked || showResult) return; // 🔒 منع التعديل بعد رؤية الحل
     setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
   };
@@ -126,53 +125,62 @@ const WB_Unit2_Page3_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
         }}
       >
         <h5 className="header-title-page8">
-         <span className="ex-A">E</span> Read and write<span style={{ color: "red" }}>✓</span> .
+          <span className="ex-A">E</span>Tap or click the correct box.
         </h5>
 
-        <div className="shorti-container-review6-p2-q1 ">
+        <div
+          className="shorti-container-review6-p2-q1 "
+          style={{ gap: "45px" }}
+        >
           {data.map((question) => (
-            <div key={question.id} className="question-box-review6-p2-q1 ">
-              <span
-                style={{
-                  color: "darkblue",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                }}
-              >
-                {question.id}
-              </span>
-              {question.imgs.map((img, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={`img-box-wb-u2-p3-q1  ${
-                      selected[question.id] === index
-                        ? "selected-review6-p2-q1"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(question.id, index)}
-                  >
-                    {showResult &&
-                      !locked && // 🔒 لا تظهر X عند تفعيل Show Answer
-                      selected[question.id] === index &&
-                      img.answer === false && (
-                        <span className="wrong-x-circle-wb-u2-p3-q1">✕</span>
-                      )}
-                    <img src={img.src} alt="" style={{height:"150px",width:"auto"}} />
-                    <div className="check-box-wb-u2-p3-q1  ">
-                      {selected[question.id] === index ? "✓" : ""}
+            <div key={question.id} className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                {" "}
+                <span
+                  style={{
+                    color: "darkblue",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                  }}
+                >
+                  {question.id}
+                </span>
+                <span className="text-[18px]"> {question.text}</span>
+              </div>
+              <div className="question-box-review6-p2-q1 ">
+                {question.imgs.map((img, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`img-box-wb-u2-p3-q1  ${
+                        selected[question.id] === index
+                          ? "selected-review6-p2-q1"
+                          : ""
+                      }`}
+                      onClick={() => handleSelect(question.id, index)}
+                    >
+                      {showResult &&
+                        !locked && // 🔒 لا تظهر X عند تفعيل Show Answer
+                        selected[question.id] === index &&
+                        img.answer === false && (
+                          <span className="wrong-x-circle-wb-u2-p3-q1">✕</span>
+                        )}
+                      <img
+                        src={img.src}
+                        alt=""
+                        style={{ height: "150px", width: "auto" }}
+                      />
+                      <div className="check-box-wb-u2-p3-q1  ">
+                        {selected[question.id] === index ? "✓" : ""}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>

@@ -10,6 +10,8 @@ export default function WB_Unit1_Page4_Q2() {
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [locked, setLocked] = useState(false);
+    const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+    const [selectedRightWord, setSelectedRightWord] = useState(null);
   const correctMatches = [
     { word1: "Stella I’m. Hello!", word2: "Hello! I’m Stella." },
     { word1: "thank Fine, you.", word2: "Fine, thank you." },
@@ -23,7 +25,7 @@ export default function WB_Unit1_Page4_Q2() {
   const handleStartDotClick = (e) => {
     if (locked || showAnswer) return;
     const word = e.target.dataset.letter;
-
+ setSelectedLeftWord(word);
     // ❌ منع رسم أكثر من خط من نفس الكلمة
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
@@ -52,6 +54,13 @@ export default function WB_Unit1_Page4_Q2() {
     };
 
     setLines((prev) => [...prev, newLine]);
+
+     setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
 
     setFirstDot(null);
   };
@@ -125,6 +134,8 @@ export default function WB_Unit1_Page4_Q2() {
         image: pair.word2,
       };
     });
+   setSelectedLeftWord(null);
+    setSelectedRightWord(null);
 
     // 2️⃣ وضع الخطوط
     setLines(correctLines);
@@ -169,7 +180,9 @@ export default function WB_Unit1_Page4_Q2() {
               <div className="word-row2" key={i}>
                 <span className="num2">{i + 1}</span>
                 <span
-                  className="word-text3  word-text-unit1-p4-q2"
+                   className={`word-text3 ${
+                      selectedLeftWord === word ? "selected-item" : ""
+                    } ${locked || showAnswer ? "disabled-hover" : ""}`}
                   onClick={() => document.getElementById(`dot-${word}`).click()}
                   style={{ cursor: "pointer", width: "230px" }}
                 >

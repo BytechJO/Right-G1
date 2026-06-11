@@ -139,17 +139,14 @@ setLocked(true); // 🔒 قفل الإجابات
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "35px",
+         
         }}
       >
        <h5 className="header-title-page8">
-            <span className="ex-A">H</span>Look, read, and circle.
+            <span className="ex-A">H</span>Tap or click the correct word.
           </h5>
-        <div className="content-container-wb-unit3-p4-q2">
+        <div className="content-container-wb-unit3-p4-q2 w-full">
           {questions.map((q, qIndex) => (
             <div className="question-row-review8-p2-q4" key={q.id}>
               <div className="sentence-wb-unit3-p4-q2">

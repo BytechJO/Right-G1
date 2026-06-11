@@ -8,8 +8,8 @@
 }
 
 .q-img-wb-unit2-page3-q2 {
-  width: auto;
-  height: 170px;
+  width: 170px;
+  height:auto;
 }
 /* .word-bank-wb-unit2-page3-q2 {
   display: flex;
@@ -41,12 +41,12 @@
   position: absolute;
   top: 3px;
   right: -10px;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   background: red;
   color: white;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
     border-bottom: 2px solid #000000;
     padding: 5px 8px;
     /* border-radius: 6px; */
-    font-size: 25px;
+    font-size: 20px;
     width: 170px;
     text-align: center;
     vertical-align: middle;

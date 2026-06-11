@@ -1,12 +1,13 @@
-.word-box2-review6-p1-q3{
+.word-box2-review6-p1-q3 {
   font-size: 18px;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
 }
 
 .selected-item {
   background: white;
+  border: 2px solid #72d0f6;
   /* color: white !important; */
   box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
   transition: all 0.25s ease;

@@ -37,20 +37,19 @@ export default function WB_Unit1_Page7_Q1() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
+          gap:"20px"
+       
         }}
       >
+        <div className="w-full flex flex-col gap-1">
         <h4 className="header-title-page8">
-          <span className="ex-A">I</span>Read, color, and say.
+          <span className="ex-A">I</span>Tap or click to color and say the words.
+           
         </h4>
-        <span style={{ fontSize: "14px", color: "gray" }}>
+       <span style={{ fontSize: "14px", color: "gray" }}>
           Hint: Double Click to Color Word
         </span>
+        </div>
         {selectedWordIndex !== null && (
           <div className="color-palette-wb-u1-p7-q1">
             {colors.map((c) => (

@@ -26,7 +26,7 @@ const WB_Unit2_Page2_Q2 = () => {
       y: (clientY - rect.top) * scaleY,
     };
   };
- 
+
   // 🖌️ Start Drawing
   const startDrawing = (e) => {
     e.preventDefault();
@@ -97,20 +97,22 @@ const WB_Unit2_Page2_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <div>
-          <h5 className="header-title-page8">
-            <span className="ex-A">D</span> How old are you? Write and draw
-            candles on the cake. and draw.
-          </h5>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <h5 className="header-title-page8">
+          <span className="ex-A">D</span> How old are you? Type and draw candles
+          on the cake.
+        </h5>
+
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
           <input
             type="text"
             value={answer}
@@ -121,7 +123,7 @@ const WB_Unit2_Page2_Q2 = () => {
 
           {/* <span>.</span> */}
         </div>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -147,7 +149,7 @@ const WB_Unit2_Page2_Q2 = () => {
             ref={canvasRef}
             height={150}
             width={500}
-            className="draw-canvas-wb-unit2-p2-q2"
+            className="draw-canvas-wb-unit2-p2-q2 w-full"
             style={{
               backgroundImage: `url(${cake})`,
               backgroundRepeat: "no-repeat",

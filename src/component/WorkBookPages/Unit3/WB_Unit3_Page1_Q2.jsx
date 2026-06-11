@@ -97,15 +97,12 @@ export default function WB_Unit3_Page1_Q2() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+      
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">B</span> Look, count, and color.
+          <span className="ex-A">B</span> Color the correct number.
         </h4>
 
         {/* 🎨 Color Palette */}
@@ -131,7 +128,7 @@ export default function WB_Unit3_Page1_Q2() {
           </div>
         )}
 
-        <div className="word-section1-wb-u3-p1-q2">
+        <div className="word-section1-wb-u3-p1-q2 w-full">
           {questions.map((q, qIndex) => (
             <div key={q.id} className="question-box-wb-u3-p1-q2">
               <img

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 // import "./Unit2_Page8_Q1.css";
-import table from "../../../assets/U1 WB/U2/U2P13EXEI-01.svg";
-import dish from "../../../assets/U1 WB/U2/U2P13EXEI-02.svg";
-import tiger from "../../../assets/U1 WB/U2/U2P13EXEI-03.svg";
-import duck from "../../../assets/U1 WB/U2/U2P13EXEI-04.svg";
+import img1 from "../../../assets/U1 WB/U2/U2P13EXEI-01.svg";
+import img2 from "../../../assets/U1 WB/U2/U2P13EXEI-02.svg";
+import img3 from "../../../assets/U1 WB/U2/U2P13EXEI-03.svg";
+import img4 from "../../../assets/U1 WB/U2/U2P13EXEI-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit2_Page5_Q1 = () => {
@@ -12,7 +12,9 @@ const WB_Unit2_Page5_Q1 = () => {
   const [wrongWords, setWrongWords] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
+ 
   // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   // -------------------------------------------
@@ -34,7 +36,7 @@ const WB_Unit2_Page5_Q1 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
-
+ setSelectedLeftWord(word);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الكلمة
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
@@ -69,7 +71,15 @@ const WB_Unit2_Page5_Q1 = () => {
       image: firstDot.image || endImage,
     };
 
-    setLines((prev) => [...prev, newLine]);
+  setLines((prev) => [...prev, newLine]);
+
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -133,26 +143,25 @@ const WB_Unit2_Page5_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+ 
         }}
       >
-        <div className="page8-q1-container">
+        
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">I</span> Read and match.
           </h5>
 
-          <div className="container12" ref={containerRef}>
+          <div className="container12 w-full" ref={containerRef}>
             {/* الصف الأول */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="word-with-dot2">
                 <span className="span-num2">1</span>
                 <span
                   className={`word-text2-wb-unit2-p5-q1 ${
+                      selectedLeftWord === "My birthday is in October." ? "selected-item" : ""
+                    }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-duck").click()}
@@ -186,7 +195,7 @@ const WB_Unit2_Page5_Q1 = () => {
                 </div>
                 <div style={{ width: "150px" }}>
                   <img
-                    src={table}
+                    src={img1}
                     className={`matched-img2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
@@ -199,11 +208,13 @@ const WB_Unit2_Page5_Q1 = () => {
             </div>
 
             {/* الصف الثاني */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="word-with-dot2">
                 <span className="span-num2">2</span>
                 <span
                   className={`word-text2-wb-unit2-p5-q1 ${
+                      selectedLeftWord === "My birthday is in December." ? "selected-item" : ""
+                    } ${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
@@ -237,7 +248,7 @@ const WB_Unit2_Page5_Q1 = () => {
                 </div>
                 <div style={{ width: "150px" }}>
                   <img
-                    src={dish}
+                    src={img2}
                     className={`matched-img2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
@@ -250,11 +261,13 @@ const WB_Unit2_Page5_Q1 = () => {
             </div>
 
             {/* الصف الثالث */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="word-with-dot2">
                 <span className="span-num2">3</span>
                 <span
                   className={`word-text2-wb-unit2-p5-q1 ${
+                      selectedLeftWord === "My birthday is in May." ? "selected-item" : ""
+                    }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-dish").click()}
@@ -288,7 +301,7 @@ const WB_Unit2_Page5_Q1 = () => {
                 </div>
                 <div style={{ width: "150px" }}>
                   <img
-                    src={duck}
+                    src={img3}
                     className={`matched-img2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
@@ -301,11 +314,13 @@ const WB_Unit2_Page5_Q1 = () => {
             </div>
 
             {/* الصف الرابع */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="word-with-dot2">
                 <span className="span-num2">4</span>
                 <span
                   className={`word-text2-wb-unit2-p5-q1 ${
+                      selectedLeftWord === "My birthday is in February." ? "selected-item" : ""
+                    }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-table").click()}
@@ -339,7 +354,7 @@ const WB_Unit2_Page5_Q1 = () => {
                 </div>
                 <div style={{ width: "150px" }}>
                   <img
-                    src={tiger}
+                    src={img4}
                     className={`matched-img2 ${
                       locked || showAnswer ? "disabled-hover" : ""
                     }`}
@@ -357,7 +372,7 @@ const WB_Unit2_Page5_Q1 = () => {
               ))}
             </svg>
           </div>
-        </div>
+ 
 
         {/* الأزرار */}
         <div className="action-buttons-container">

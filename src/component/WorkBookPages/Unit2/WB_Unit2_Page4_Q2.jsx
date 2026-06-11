@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import boy from "../../../assets/U1 WB/U2/U2P12EXEH-01.svg";
-import fotball from "../../../assets/U1 WB/U2/U2P12EXEH-02.svg";
-import bird from "../../../assets/U1 WB/U2/U2P12EXEH-03.svg";
-import pizza2 from "../../../assets/U1 WB/U2/U2P12EXEH-04.svg";
+import img1 from "../../../assets/U1 WB/U2/U2P12EXEH-01.svg";
+import img2 from "../../../assets/U1 WB/U2/U2P12EXEH-02.svg";
+import img3 from "../../../assets/U1 WB/U2/U2P12EXEH-03.svg";
+import img4 from "../../../assets/U1 WB/U2/U2P12EXEH-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page4_Q2.css";
 // import { faFootball } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +13,9 @@ const WB_Unit2_Page4_Q2 = () => {
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+   const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+    const [selectedRightWord, setSelectedRightWord] = useState(null);
+   
   // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   const correctMatches = [
@@ -30,7 +33,7 @@ const WB_Unit2_Page4_Q2 = () => {
 
     const rect = containerRef.current.getBoundingClientRect();
     const imgId = e.target.dataset.image;
-
+  setSelectedLeftWord(imgId);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
     const alreadyUsed = lines.some((line) => line.image === imgId);
     if (alreadyUsed) return;
@@ -66,6 +69,15 @@ const WB_Unit2_Page4_Q2 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+   
+
+    setSelectedRightWord(newLine.word);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -124,27 +136,28 @@ const WB_Unit2_Page4_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "10px",
+   
         }}
       >
-        <div className="page8-q1-container">
+        
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">H</span> Look, read, and match.
           </h5>
 
-          <div className="container12" ref={containerRef}>
+          <div className="container12 w-full" ref={containerRef}>
             {/* الصف الأول */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="img-with-dot2">
                 <span className="span-num2">1</span>{" "}
                 <img
-                  src={bird}
-                   className={`matched-img2 ${
+                  src={img1}
+                   className={`matched-img2 
+                    ${
+                      selectedLeftWord === "img1" ? "selected-item" : ""
+                    }
+                    ${
                   locked || showAnswer ? "disabled-hover" : ""
                 }`}
                   alt=""
@@ -186,12 +199,14 @@ const WB_Unit2_Page4_Q2 = () => {
             </div>
 
             {/* الصف الثاني */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="img-with-dot2">
                 <span className="span-num2">2</span>{" "}
                 <img
-                  src={boy}
+                  src={img2}
                   className={`matched-img2 ${
+                      selectedLeftWord === "img2" ? "selected-item" : ""
+                    }${
                   locked || showAnswer ? "disabled-hover" : ""
                 }`}
                   alt=""
@@ -232,12 +247,14 @@ const WB_Unit2_Page4_Q2 = () => {
               </div>
             </div>
             {/* الصف الثالث */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="img-with-dot2">
                 <span className="span-num2">3</span>{" "}
                 <img
-                  src={pizza2}
+                  src={img3}
                    className={`matched-img2 ${
+                      selectedLeftWord === "img3" ? "selected-item" : ""
+                    }${
                   locked || showAnswer ? "disabled-hover" : ""
                 }`}
                   alt=""
@@ -279,12 +296,14 @@ const WB_Unit2_Page4_Q2 = () => {
             </div>
 
             {/* الصف الرابع */}
-            <div className="matching-row2">
+            <div className="matching-row2-wb-unit2-p4-q2">
               <div className="img-with-dot2">
                 <span className="span-num2">4</span>{" "}
                 <img
-                  src={fotball}
+                  src={img4}
                   className={`matched-img2 ${
+                      selectedLeftWord === "img4" ? "selected-item" : ""
+                    }${
                   locked || showAnswer ? "disabled-hover" : ""
                 }`}
                   alt=""
@@ -332,7 +351,7 @@ const WB_Unit2_Page4_Q2 = () => {
             </svg>
           </div>
         </div>
-      </div>
+      
       <div className="action-buttons-container">
         <button
           onClick={() => {

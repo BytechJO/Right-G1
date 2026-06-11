@@ -11,6 +11,13 @@
     width: 200px;
       
 }
+
+.matching-row2-wb-unit2-p4-q2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
 .word-text2-wb-unit2-p4-q2 {
   display: inline-block; /* مهم للـ transform */
   transition: 

@@ -5,11 +5,11 @@
   flex-direction: row;
   align-items: flex-start;
   gap: 10px;
-  width: 60%;
+  width: 100%;
   margin-bottom: 75px;
-  position: absolute;
+  /* position: absolute;
   top: 15%;
-  left: 27%;
+  left: 27%; */
   flex-wrap: wrap;
   justify-content: space-between;
 }

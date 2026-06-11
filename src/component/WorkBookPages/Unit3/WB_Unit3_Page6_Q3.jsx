@@ -150,20 +150,9 @@ const WB_Unit3_Page6_Q3 = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="page8-wrapper">
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-            position: "relative",
-            width: "60%",
-          }}
-        >
+        <div className="div-forall" style={{}}>
           <h3 className="header-title-page8">
-            <span className="ex-A">C</span> Listen and write the missing
-            letters.
+            <span className="ex-A">C</span> Fill in the blanks. letters.
           </h3>
 
           <Droppable droppableId="bank" direction="horizontal">
@@ -184,7 +173,12 @@ const WB_Unit3_Page6_Q3 = () => {
                 }}
               >
                 {wordBank.map((word, i) => (
-                  <Draggable key={word} draggableId={word} index={i} isDragDisabled={locked}>
+                  <Draggable
+                    key={word}
+                    draggableId={word}
+                    index={i}
+                    isDragDisabled={locked}
+                  >
                     {(provided) => (
                       <span
                         ref={provided.innerRef}
@@ -223,7 +217,10 @@ const WB_Unit3_Page6_Q3 = () => {
                     <img src={p.middleImg} className="middle-img" alt="" />
                     {p.before}
                     <div className="input-wrapper-wb-unit3-p6-q3">
-                      <Droppable droppableId={`blank-${blankIndex}`} isDropDisabled={locked}>
+                      <Droppable
+                        droppableId={`blank-${blankIndex}`}
+                        isDropDisabled={locked}
+                      >
                         {(provided, snapshot) => (
                           <div
                             ref={provided.innerRef}

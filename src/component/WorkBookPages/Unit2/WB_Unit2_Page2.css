@@ -13,7 +13,7 @@
 }
 
 .draw-canvas-wb-unit2-p2-q2 {
-  width: 500px;
+  width: 100%;
   height: 300px; /* كبير متل ما بدك */
   border: 2px solid #ccc;
   touch-action: none;

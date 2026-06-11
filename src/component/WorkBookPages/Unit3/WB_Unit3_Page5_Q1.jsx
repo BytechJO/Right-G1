@@ -9,7 +9,6 @@ import img7 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-01.svg";
 import img8 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
-
 const WB_Unit3_Page5_Q1 = () => {
   const data = [
     {
@@ -51,7 +50,7 @@ const WB_Unit3_Page5_Q1 = () => {
   const [showResult, setShowResult] = useState(false);
   const [showAnswerState, setShowAnswerState] = useState(false);
   const handleSelect = (qId, index) => {
-     if (showAnswerState || showResult) return;
+    if (showAnswerState || showResult) return;
 
     setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
@@ -126,19 +125,15 @@ const WB_Unit3_Page5_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "40px",
+        
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">I</span> Read and write
-          <span style={{ color: "red" }}>✓</span> .
+          <span className="ex-A">I</span> Tap or click the correct box.
         </h5>
 
-        <div className="shorti-container-wb-unit3-p5-q1">
+        <div className="shorti-container-wb-unit3-p5-q1 ">
           {data.map((question) => (
             <div key={question.id} className="question-box-wb-unit3-p5-q1">
               <div
@@ -167,7 +162,9 @@ const WB_Unit3_Page5_Q1 = () => {
                     <div
                       key={index}
                       className={`img-box-wb-unit3-p5-q1  ${
-                        selected[question.id] === index ? "selected-wb-u1-q2" : ""
+                        selected[question.id] === index
+                          ? "selected-wb-u1-q2"
+                          : ""
                       }`}
                       onClick={() => handleSelect(question.id, index)}
                     >
@@ -175,7 +172,9 @@ const WB_Unit3_Page5_Q1 = () => {
                         !showAnswerState &&
                         selected[question.id] === index &&
                         img.answer === false && (
-                          <span className="wrong-x-circle-wb-unit3-p5-q1">✕</span>
+                          <span className="wrong-x-circle-wb-unit3-p5-q1">
+                            ✕
+                          </span>
                         )}
 
                       <img src={img.src} alt="TEST" />

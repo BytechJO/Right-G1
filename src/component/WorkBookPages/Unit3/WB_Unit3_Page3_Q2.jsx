@@ -17,6 +17,9 @@ const WB_Unit3_Page3_Q2 = () => {
   const [locked, setLocked] = useState(false); //  ← إضافة جديدة
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
+
   const correctMatches = [
     { word: "six chairs", image: "img3" },
     { word: "five desks", image: "img4" },
@@ -35,7 +38,7 @@ const WB_Unit3_Page3_Q2 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
-
+    setSelectedLeftWord(word);
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return; // ← إضافة جديدة
@@ -71,6 +74,13 @@ const WB_Unit3_Page3_Q2 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
   const checkAnswers2 = () => {
@@ -78,7 +88,7 @@ const WB_Unit3_Page3_Q2 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -88,7 +98,7 @@ const WB_Unit3_Page3_Q2 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) {
@@ -129,222 +139,225 @@ const WB_Unit3_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <div className="page7-q2-container2">
-          <h5 className="header-title-page8">
-            <span className="ex-A">F</span>Read, count, and match.
-          </h5>
+        <h5 className="header-title-page8">
+          <span className="ex-A">F</span>Read, count, and match.
+        </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit3-p3-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("climb-dot").click()}
-                >
-                  six chairs
-                  {wrongImages.includes("six chairs") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="six chairs"
-                  id="climb-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit3-p3-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("fly-dot").click()}
-                >
-                  five desks
-                  {wrongImages.includes("five desks") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="five desks"
-                  id="fly-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit3-p3-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("ride-dot").click()}
-                >
-                  two balls
-                  {wrongImages.includes("two balls") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="two balls"
-                  id="ride-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit3-p3-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("forks-dot").click()}
-                >
-                  four forks
-                  {wrongImages.includes("four forks") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="four forks"
-                  id="forks-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit3-p3-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("birds-dot").click()}
-                >
-                  nine birds
-                  {wrongImages.includes("nine birds") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="nine birds"
-                  id="birds-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-            </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                <img
-                  src={img1}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img1-dot").click()}
-                />
-
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img2}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img3}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                <img
-                  src={img4}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img4-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>{" "}
-              <div className="img-box2">
-                <img
-                  src={img5}
-                  alt=""
-                  className={`img-box2-unit6-p6-q3 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img5-dot").click()}
-                />{" "}
-                <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img5"
-                  id="img5-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
+        <div className="match-wrapper2" ref={containerRef}>
+          <div className="match-words-row2">
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit3-p3-q2 ${
+                  selectedLeftWord === "six chairs" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("climb-dot").click()}
+              >
+                six chairs
+                {wrongImages.includes("six chairs") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="six chairs"
+                id="climb-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
 
-            {/* الجمل */}
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit3-p3-q2 ${
+                  selectedLeftWord === "five desks" ? "selected-item" : ""
+                }${
+                  locked || showAnswer ? "disabled-word" : ""
+                }`}
+                onClick={() => document.getElementById("fly-dot").click()}
+              >
+                five desks
+                {wrongImages.includes("five desks") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="five desks"
+                id="fly-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
 
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit3-p3-q2 ${
+                  selectedLeftWord === "two balls" ? "selected-item" : ""
+                } ${
+                  locked || showAnswer ? "disabled-word" : ""
+                }`}
+                onClick={() => document.getElementById("ride-dot").click()}
+              >
+                two balls
+                {wrongImages.includes("two balls") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="two balls"
+                id="ride-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit3-p3-q2 ${
+                  selectedLeftWord === "four forks" ? "selected-item" : ""
+                } ${
+                  locked || showAnswer ? "disabled-word" : ""
+                }`}
+                onClick={() => document.getElementById("forks-dot").click()}
+              >
+                four forks
+                {wrongImages.includes("four forks") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="four forks"
+                id="forks-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit3-p3-q2 ${
+                  selectedLeftWord === "nine birds" ? "selected-item" : ""
+                }${
+                  locked || showAnswer ? "disabled-word" : ""
+                }`}
+                onClick={() => document.getElementById("birds-dot").click()}
+              >
+                nine birds
+                {wrongImages.includes("nine birds") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="nine birds"
+                id="birds-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
           </div>
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div className="img-box2">
+              <img
+                src={img1}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+                onClick={() => document.getElementById("img1-dot").click()}
+              />
+
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              <img
+                src={img2}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+                onClick={() => document.getElementById("img2-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              <img
+                src={img3}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+                onClick={() => document.getElementById("img3-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              <img
+                src={img4}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+                onClick={() => document.getElementById("img4-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img4"
+                id="img4-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>{" "}
+            <div className="img-box2">
+              <img
+                src={img5}
+                alt=""
+                className={`img-box2-unit6-p6-q3 ${
+                  locked || showAnswer ? "disabled-hover" : ""
+                }`}
+                onClick={() => document.getElementById("img5-dot").click()}
+              />{" "}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img5"
+                id="img5-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+          </div>
+
+          {/* الجمل */}
+
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {
