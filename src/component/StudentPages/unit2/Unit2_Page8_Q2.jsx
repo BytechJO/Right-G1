@@ -42,6 +42,7 @@ function DraggableWord({ word, isUsed }) {
         cursor: isUsed ? "default" : "grab",
         opacity: isDragging ? 0.4 : 1,
         display: "inline-block",
+          touchAction:"none"
       }}
     >
       {word}

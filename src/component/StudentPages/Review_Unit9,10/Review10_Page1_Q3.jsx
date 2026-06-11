@@ -149,7 +149,7 @@ const Review10_Page1_Q3 = () => {
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div style={{ width: "60%", gap: "20px" }} className="div-forall">
+        <div style={{ gap: "20px" }} className="div-forall">
           <h5 className="header-title-page8">
             <span className="mr-2">C</span> Drag and drop the words to make the
             sentences.

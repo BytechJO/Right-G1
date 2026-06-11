@@ -42,6 +42,7 @@ const DraggableNum = ({ id, num, disabled, isUsed }) => {
         color: isUsed ? "#9aa3b0" : "inherit",
         transition: "all 0.2s ease",
         userSelect: "none",
+          touchAction:"none"
       }}
     >
       {num}

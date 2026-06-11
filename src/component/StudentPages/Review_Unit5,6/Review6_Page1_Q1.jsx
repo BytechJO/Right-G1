@@ -108,12 +108,12 @@ const Review6_Page1_Q1 = () => {
           gap: "50px",
         }}
       >
-        <div>
+
           <h5 className="header-title-page8">
             <span className="mr-2">A</span> Look, read, and tap or click the
             correct sentence.
           </h5>
-        </div>
+
         <div className="container-review6-p1-q1">
           {items.map((q, i) => (
             <div

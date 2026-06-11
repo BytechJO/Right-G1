@@ -39,6 +39,7 @@ const DraggableSentence = ({ id, sentence, disabled, isUsed }) => {
         transition: "all 0.2s ease",
         userSelect: "none",
         whiteSpace: "nowrap",
+          touchAction:"none"
       }}
     >
       {sentence}

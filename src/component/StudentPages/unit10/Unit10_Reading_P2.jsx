@@ -1,9 +1,9 @@
-import React, { useRef ,useState} from "react";
+import React, { useRef, useState } from "react";
 import page25 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream12.jpg";
-import sound1 from "../../../assets/unit8/sound/Pg74_1.5_Adult Lady.mp3";
-import sound2 from "../../../assets/unit8/sound/Pg74_1.6_Adult Lady.mp3";
-import sound3 from "../../../assets/unit8/sound/Pg74_1.7_Adult Lady.mp3";
-import sound4 from "../../../assets/unit8/sound/Pg74_1.8_Adult Lady.mp3";
+import sound1 from "../../../assets/unit10/sound/Pg92_1.5_Adult Lady.mp3";
+import sound2 from "../../../assets/unit10/sound/Pg92_1.6_Adult Lady.mp3";
+import sound3 from "../../../assets/unit10/sound/Pg92_1.7_Adult Lady.mp3";
+import sound4 from "../../../assets/unit10/sound/Pg92_1.8_Adult Lady.mp3";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 
@@ -15,7 +15,7 @@ const Unit10_Reading_P2 = () => {
   const clickableAreas = [
     { x1: 9.0, y1: 39.0, x2: 45.8, y2: 45.3, sound: sound1 },
     { x1: 49.0, y1: 39.2, x2: 85.4, y2: 45.3, sound: sound2 },
-    { x1: 9.0, y1: 86.0, x2: 45.0, y2:92.78, sound: sound3 },
+    { x1: 9.0, y1: 86.0, x2: 45.0, y2: 92.78, sound: sound3 },
     { x1: 49.0, y1: 86.0, x2: 86.5, y2: 92.78, sound: sound4 },
   ];
   const handleImageClick = (e) => {

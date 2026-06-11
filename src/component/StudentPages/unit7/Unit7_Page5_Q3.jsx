@@ -235,7 +235,7 @@ const Unit7_Page5_Q3 = () => {
                 className={
                   index === 0
                     ? "row2-unit3-page6-q1 gap-10"
-                    : "row2-unit3-page6-q1"
+                    : "row2-unit3-page6-q1 gap-10"
                 }
               >
                 <img src={img} alt="" className="q-img-unit3-page6-q1" />

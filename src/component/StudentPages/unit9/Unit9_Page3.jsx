@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm3.png";
 import "./Unit9_Page3.css";
-import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit5/sounds/U5P42Grammar.mp3";
+import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit9/sound/cd71pg78-grammar1-adult-lady_bwQRoSsv.mp3";
 import sound1 from "../../../assets/unit9/sound/Pg78_1.1_Adult Lady.mp3";
 import sound2 from "../../../assets/unit9/sound/Pg78_1.2_Adult Lady.mp3";
 import sound3 from "../../../assets/unit9/sound/Pg78_1.3_Adult Lady.mp3";
@@ -25,27 +25,63 @@ const Unit9_Page3 = ({ openPopup }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const captionsExample = [
-    { start: 0, end: 4.12, text: "Page 42. Exercise one. Right Grammar. " },
-    { start: 4.15, end: 5.28, text: "What's this? " },
-    {
-      start: 5.31,
-      end: 7.22,
-      text: "This is my book. ",
-    },
-    {
-      start: 7.25,
-      end: 9.19,
-      text: "This is your book. ",
-    },
-    { start: 9.22, end: 11.05, text: "What's this? " },
-    { start: 11.08, end: 12.29, text: "This is a desk." },
-    { start: 12.32, end: 14.13, text: "What's this? " },
-    { start: 14.18, end: 16.09, text: "This is a chair." },
-    { start: 16.12, end: 18.01, text: "This is my book. " },
-    { start: 18.04, end: 19.21, text: "This is your book." },
-  ];
-
+ const captionsExample = [
+  {
+    start: 0.579,
+    end: 4.619,
+    text: "Page 78, exercise 1, Right grammar.",
+  },
+  {
+    start: 5.359,
+    end: 6.739,
+    text: "How many birds are there?",
+  },
+  {
+    start: 7.119,
+    end: 8.439,
+    text: "There is one bird.",
+  },
+  {
+    start: 8.859,
+    end: 10.539,
+    text: "How many chickens are there?",
+  },
+  {
+    start: 11.139,
+    end: 12.88,
+    text: "There are seven chickens.",
+  },
+  {
+    start: 13.439,
+    end: 14.799,
+    text: "How many chickens are there?",
+  },
+  {
+    start: 15.319,
+    end: 16.579,
+    text: "There are four chickens.",
+  },
+  {
+    start: 17.139,
+    end: 18.52,
+    text: "How many goats are there?",
+  },
+  {
+    start: 18.979,
+    end: 20.379,
+    text: "There are two goats.",
+  },
+  {
+    start: 21.1,
+    end: 22.599,
+    text: "How many dogs are there?",
+  },
+  {
+    start: 23.479,
+    end: 24.659,
+    text: "There is one dog.",
+  },
+];
   const clickableAreas = [
     { x1: 6.49, y1: 11.21, x2: 37.30, y2: 14.8, sound: sound1 },
     { x1: 72.42, y1: 10.21, x2: 92.24, y2: 13.8, sound: sound2 },

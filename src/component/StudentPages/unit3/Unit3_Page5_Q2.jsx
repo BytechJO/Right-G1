@@ -1,7 +1,6 @@
 import "./Unit3_Page5_Q2.css";
 
 import React, { useState, useEffect, useRef } from "react";
-import CD24_Pg26_Instructions1_AdultLady from "../../../assets/unit3/sound3/CD24.Pg26_Instructions1_Adult Lady.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import sound1 from "../../../assets/unit3/sound3/U3P26EXEA2.mp3";
 import img1 from "../../../assets/unit3/imgs3/P26exeA2-01.svg";
@@ -10,30 +9,13 @@ import img3 from "../../../assets/unit3/imgs3/P26exeA2-03.svg";
 import img4 from "../../../assets/unit3/imgs3/P26exeA2-04.svg";
 import img5 from "../../../assets/unit3/imgs3/P26exeA2-05.svg";
 import img6 from "../../../assets/unit3/imgs3/P26exeA2-06.svg";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { TbMessageCircle } from "react-icons/tb";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit3_Page5_Q2 = () => {
-  const audioRef = useRef(null);
-  const [answers, setAnswers] = useState([null, null, null, null]);
   const [showResult, setShowResult] = useState([]);
   const stopAtSecond = 10.9;
   const [checked, setChecked] = useState(false);
-  // إعدادات الصوت
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
+
   // ✅ نسمح فقط باختيار إجابة واحدة
   const [selected, setSelected] = useState([]);
   const correctData = ["1", "2", "4"];
@@ -67,61 +49,6 @@ const Unit3_Page5_Q2 = () => {
     { start: 21.29, end: 24.01, text: "6. Shoes." },
   ];
 
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
 
   const handleSelect = (index) => {
     if (showAnswer || checked) return;
@@ -203,21 +130,7 @@ const Unit3_Page5_Q2 = () => {
     setSelected([]);
     setShowAnswer(false);
   };
-  const togglePlay = () => {
-    const audio = audioRef.current;
 
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
   const handleShowAnswer = () => {
     setShowAnswer(true); // نعرض الإجابات الصحيحة
     setSelected(
@@ -240,12 +153,7 @@ const Unit3_Page5_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          position: "relative",
-          width: "60%",
+     
         }}
       >
         <div className="header-title-page8">

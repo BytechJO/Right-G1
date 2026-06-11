@@ -141,11 +141,7 @@ const Review10_Page2_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          // gap: "20px",
-          width: "60%",
-          justifyContent: "flex-start",
+     
         }}
       >
         <h5 className="header-title-page8">

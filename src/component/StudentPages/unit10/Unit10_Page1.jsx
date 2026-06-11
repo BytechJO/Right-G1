@@ -1,22 +1,22 @@
 import page_1 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream.jpg";
 import "./Unit10_Page1.css";
 import { useState, useRef } from "react";
-import Pg22_U3_Intro_AdultLady from "../../../assets/unit5/sounds/U5P40-41.mp3";
+import Pg22_U3_Intro_AdultLady from "../../../assets/unit10/sound/cd75pg82-u10intro-adult-lady_N8Bgs17b.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import Unit10_Page1_find from "./Unit10_Page1_find";
 import Unit10_Page1_Vocab from "./Unit10_Page1_Vocab";
 import Unit10_Page1_Read from "./Unit10_Pag1_Read";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound3 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound5 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound6 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound10 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound1 from "../../../assets/unit10/sound/unit10-sound1.mp3";
+import sound2 from "../../../assets/unit10/sound/unit10-sound2.mp3";
+import sound3 from "../../../assets/unit10/sound/unit10-sound3.mp3";
+import sound4 from "../../../assets/unit10/sound/unit10-sound4.mp3";
+import sound5 from "../../../assets/unit10/sound/unit10-sound5.mp3";
+import sound6 from "../../../assets/unit10/sound/unit10-sound6.mp3";
+import sound7 from "../../../assets/unit10/sound/unit10-sound7.mp3";
+import sound8 from "../../../assets/unit10/sound/unit10-sound8.mp3";
+import sound10 from "../../../assets/unit10/sound/unit10-sound10.mp3";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 
@@ -25,39 +25,50 @@ const Unit10_Page1 = ({ openPopup }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
-  const captionsExample = [
-    { start: 0, end: 4.09, text: "Page 40, Unit 5: Welcome to My Class." },
-    { start: 4.12, end: 7.26, text: "Page 40, Unit 5 Vocabulary: " },
-    { start: 7.29, end: 10.13, text: "1.	Board." },
-    { start: 10.17, end: 12.11, text: "2.	Map." },
-    { start: 12.14, end: 14.21, text: "3.	Book." },
-    { start: 14.24, end: 17.22, text: "4.	Globe. " },
-    { start: 17.25, end: 20.02, text: "5.	Poster." },
-    { start: 20.05, end: 22.17, text: "6.	trash bin." },
-    { start: 22.2, end: 24.24, text: "7.	Desk." },
-    { start: 24.27, end: 27.07, text: "8.	Chair." },
-    { start: 27.1, end: 30.09, text: "Page 40. Listen and read along" },
-    { start: 30.12, end: 34.24, text: "G, girl, green, garden. " },
-    {
-      start: 34.27,
-      end: 49.8,
-      text: "Page 41. The things on my desk. ",
-    },
-    {
-      start: 49.83,
-      end: 51.05,
-      text: "Welcome to my class. This is my desk, this is my book, my eraser, and my pencil. My teacher's desk is there. There's a globe on it. I love my class. ",
-    },
-    {
-      start: 51.08,
-      end: 56.06,
-      text: "Page 41. Listen, read, and repeat. ",
-    },
-    { start: 56.09, end: 57.29, text: "Do you like your class? " },
-    { start: 57.32, end: 60.06, text: "I like my class. " },
-    { start: 60.09, end: 64.16, text: "Page 41. Listen and read along. " },
-    { start: 64.19, end: 68.18, text: "K, key, kite, kitchen..." },
-  ];
+ const captionsExample = [
+  { start: 0.479, end: 2.579, text: "Page 82, unit 10." },
+  { start: 3.159, end: 4.759, text: "We want ice cream." },
+
+  { start: 5.559, end: 8.3, text: "Page 82, unit 10 vocabulary." },
+  { start: 9.0, end: 9.619, text: "Ice cream" },
+  { start: 10.219, end: 10.659, text: "milk" },
+  { start: 11.3, end: 11.779, text: "bread" },
+  { start: 12.5, end: 13.019, text: "sweet" },
+  { start: 13.799, end: 14.179, text: "apple" },
+  { start: 14.92, end: 15.359, text: "fruit" },
+  { start: 16.18, end: 16.639, text: "chicken" },
+  { start: 17.539, end: 17.959, text: "order" },
+  { start: 18.739, end: 19.18, text: "wait" },
+  { start: 19.84, end: 20.68, text: "cafeteria" },
+
+  { start: 21.199, end: 22.219, text: "Page 82." },
+  { start: 22.659, end: 23.979, text: "Listen and read along." },
+  { start: 24.579, end: 25.559, text: "Short E" },
+  { start: 25.959, end: 26.299, text: "bed" },
+  { start: 26.859, end: 27.219, text: "egg" },
+  { start: 27.599, end: 28.0, text: "hen" },
+
+  { start: 28.719, end: 29.76, text: "Page 83." },
+  { start: 30.34, end: 31.099, text: "Lunchtime." },
+
+  { start: 32.059, end: 32.599, text: "Welcome." },
+  { start: 32.759, end: 33.799, text: "It's time for lunch." },
+  { start: 34.279, end: 35.54, text: "We eat different foods." },
+  { start: 35.979, end: 36.759, text: "I want chicken." },
+  { start: 37.079, end: 38.039, text: "Harley wants bread." },
+  { start: 38.479, end: 39.54, text: "Hansel wants milk." },
+  { start: 39.86, end: 41.119, text: "We all want fruit." },
+
+  { start: 41.759, end: 43.039, text: "Welcome to my house." },
+  { start: 43.819, end: 44.399, text: "Thank you." },
+
+  { start: 45.239, end: 46.299, text: "Page 83." },
+  { start: 46.979, end: 48.419, text: "Listen and read along." },
+  { start: 49.36, end: 50.259, text: "Short E" },
+  { start: 50.659, end: 51.099, text: "ten" },
+  { start: 51.759, end: 52.18, text: "net" },
+  { start: 52.899, end: 53.379, text: "jet" },
+];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 45.9, y1: 48.3, sound: 1, isPrimary: true },

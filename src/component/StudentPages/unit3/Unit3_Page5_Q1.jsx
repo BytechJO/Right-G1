@@ -41,7 +41,7 @@ const DraggableWord = ({ id, word, disabled, isUsed }) => {
         cursor: disabled || isUsed ? "default" : "grab",
         opacity: isDragging ? 0.4 : isUsed ? 0.45 : 1,
         color: isUsed ? "#9aa3b0" : "inherit",
-   
+     touchAction:"none",
         transition: "all 0.2s ease",
         userSelect: "none",
       }}

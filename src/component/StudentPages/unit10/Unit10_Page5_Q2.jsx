@@ -4,7 +4,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/unit10/imgs/U10P86EXEA2-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P86EXEA2-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P86EXEA2-03.svg";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit10/sound/cd80pg86-instruction1-adult-lady_uiAasTyt.mp3";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 const Unit10_Page5_Q2 = () => {
@@ -14,23 +14,51 @@ const Unit10_Page5_Q2 = () => {
   // ================================
   // ✔ Captions Array
   // ================================
-  const captions = [
-    {
-      start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
-    },
-    {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
-    },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
-  ];
+const captions = [
+  {
+    start: 0.519,
+    end: 5.799,
+    text: "Page 85, Right Activities. Exercise A, Number 2."
+  },
+  {
+    start: 6.759,
+    end: 11.819,
+    text: "Do they both have a short E? Listen and write check or X."
+  },
 
+  {
+    start: 12.539,
+    end: 13.819,
+    text: "1."
+  },
+  {
+    start: 13.819,
+    end: 15.839,
+    text: "Sled, cup."
+  },
+
+  {
+    start: 15.839,
+    end: 17.02,
+    text: "2."
+  },
+  {
+    start: 17.02,
+    end: 19.299,
+    text: "Nest, bee."
+  },
+
+  {
+    start: 19.299,
+    end: 20.379,
+    text: "3."
+  },
+  {
+    start: 20.379,
+    end: 22.18,
+    text: "Ten, jet."
+  }
+];
   const questions = [
     {
       id: 1,

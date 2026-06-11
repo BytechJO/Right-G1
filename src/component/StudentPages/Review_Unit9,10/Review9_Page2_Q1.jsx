@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page2_Q1.css";
-import sound1 from "../../../assets/unit4/sounds/U4P37EXEE.mp3";
+import sound1 from "../../../assets/unit10/sound/cd82pg89-instruction1-adult-lady_HJ6dZOlG.mp3";
 import img2 from "../../../assets/unit10/imgs/U10P89EXED-01.svg";
 import img3 from "../../../assets/unit10/imgs/U10P89EXED-02.svg";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -165,23 +165,25 @@ const Review9_Page2_Q1 = () => {
   // ================================
   // ✔ Captions Array
   // ================================
-  const captions = [
-    {
-      start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
-    },
-    {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
-    },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
-  ];
+const captions = [
+  {
+    start: 0.479,
+    end: 4.639,
+    text: "Page 89, exercise D. Listen and write."
+  },
 
+  {
+    start: 5.44,
+    end: 8.019,
+    text: "1, the man walks at night."
+  },
+
+  {
+    start: 8.72,
+    end: 11.1,
+    text: "2, my mom is a nurse."
+  }
+];
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

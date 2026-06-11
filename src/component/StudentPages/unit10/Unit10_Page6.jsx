@@ -1,28 +1,24 @@
 import page_6 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream6.jpg";
 import "./Unit10_Page6.css";
 
-import CD25_Pg27_Song_AdultLady from "../../../assets/unit5/sounds/U5P45Sing.mp3";
+import CD25_Pg27_Song_AdultLady from "../../../assets/unit10/sound/Pg87_Song_Adult Lady.mp3";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 
 const Unit10_Page6 = ({ openPopup }) => {
-  const captionsExample = [
-    { start: 0, end: 5.0, text: "Page 45, exercise G. Let's sing. " },
-    {
-      start: 5.03,
-      end: 7.44,
-      text: "This is my book, look at my book.",
-    },
-    { start: 7.47, end: 10.21, text: " This is your book, look at your book." },
-    {
-      start: 10.24,
-      end: 16.11,
-      text: " Is this your pen? Yes, it is. Look at your pen.",
-    },
-  ];
+const captionsExample = [
+  { start: 0.459, end: 3.679, text: "I want ice cream." },
 
+  { start: 4.239, end: 5.46, text: "Do I want milk?" },
+  { start: 5.699, end: 7.599, text: "No, I don't." },
+
+  { start: 8.279, end: 9.979, text: "Do I want bread?" },
+  { start: 10.239, end: 13.699, text: "Yes, I do." },
+
+  { start: 14.099, end: 15.759, text: "How about you?" }
+];
   return (
     <div
       className="page1-img-wrapper"

@@ -16,7 +16,7 @@ import {
   pointerWithin,
 } from "@dnd-kit/core";
 import "./Unit9_Page5_Q2.css";
-import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
+import sound from "../../../assets/unit9/sound/cd73pg80-instruction1-adult-lady_f0VzTUFD.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 
 // ── Draggable letter chip ─────────────────────────────────────────────────────
@@ -103,29 +103,55 @@ const Unit9_Page5_Q2 = () => {
     { img: ant },
     { img: dad },
   ];
- const captions = [
-    {
-      start: 0,
-      end: 6.22,
-      text: "Page 68. Right activities. Exercise A, number two.",
-    },
-    {
-      start: 6.25,
-      end: 12.15,
-      text: "Does it begin with S or Z? Listen and match.",
-    },
-    { start: 12.17, end: 14.23, text: "1-sandwich " },
-    { start: 14.25, end: 17.0, text: "2-sponge" },
-    { start: 17.03, end: 19.07, text: "3-zero" },
-    { start: 19.1, end: 21.24, text: "4-soup" },
-  ];
+const captions = [
+  {
+    start: 0.219,
+    end: 2.44,
+    text: "Page 80, Right Activities.",
+  },
+  {
+    start: 2.779,
+    end: 4.88,
+    text: "Exercise A, number 2.",
+  },
+  {
+    start: 5.639,
+    end: 8.059,
+    text: "Does it begin with M or N?",
+  },
+  {
+    start: 8.72,
+    end: 9.979,
+    text: "Listen and write.",
+  },
+  {
+    start: 10.899,
+    end: 12.34,
+    text: "One, mouse.",
+  },
+  {
+    start: 12.92,
+    end: 14.5,
+    text: "Two, net.",
+  },
+  {
+    start: 14.979,
+    end: 16.639,
+    text: "Three, nail.",
+  },
+  {
+    start: 17.359,
+    end: 19.179,
+    text: "Four, men.",
+  },
+];
 
   const [answers, setAnswers] = useState([null, null, null, null]);
   const [wrongInputs, setWrongInputs] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const [activeId, setActiveId] = useState(null);
 
-  const stopAtSecond = 11;
+  const stopAtSecond = 9.979;
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),

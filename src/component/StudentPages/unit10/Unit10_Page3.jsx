@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import page_3 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream3.jpg";
 import "./Unit10_Page3.css";
-import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit5/sounds/U5P42Grammar.mp3";
+import CD22_pg24_Grammar1_AdultLady from "../../../assets/unit10/sound/cd78pg84-grammar1-adult-lady_NHS0JA7i.mp3";
 import sound1 from "../../../assets/unit10/sound/Pg84_1.1_Adult Lady.mp3";
 import sound2 from "../../../assets/unit10/sound/Pg84_1.2_Adult Lady.mp3";
 import sound3 from "../../../assets/unit10/sound/Pg84_2.1_Jack .mp3";
@@ -25,27 +25,15 @@ const Unit10_Page3 = ({ openPopup }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const captionsExample = [
-    { start: 0, end: 4.12, text: "Page 42. Exercise one. Right Grammar. " },
-    { start: 4.15, end: 5.28, text: "What's this? " },
-    {
-      start: 5.31,
-      end: 7.22,
-      text: "This is my book. ",
-    },
-    {
-      start: 7.25,
-      end: 9.19,
-      text: "This is your book. ",
-    },
-    { start: 9.22, end: 11.05, text: "What's this? " },
-    { start: 11.08, end: 12.29, text: "This is a desk." },
-    { start: 12.32, end: 14.13, text: "What's this? " },
-    { start: 14.18, end: 16.09, text: "This is a chair." },
-    { start: 16.12, end: 18.01, text: "This is my book. " },
-    { start: 18.04, end: 19.21, text: "This is your book." },
-  ];
-
+[
+  { start: 0.219, end: 8.34, text: "Page 84, exercise 1, Right grammar. What do you want? I want milk." },
+  { start: 8.34, end: 10.099, text: "What do you want?" },
+  { start: 10.099, end: 11.719, text: "I want milk." },
+  { start: 11.719, end: 13.799, text: "What do you want?" },
+  { start: 13.799, end: 15.559, text: "I want an apple." },
+  { start: 15.559, end: 17.039, text: "What do you want?" },
+  { start: 17.039, end: 17.76, text: "I want bread." }
+]
   const clickableAreas = [
     { x1: 7.78, y1: 13.41, x2: 30.62, y2: 17.2, sound: sound1 },
     { x1: 67.03, y1: 13.41, x2: 81.26, y2: 17.2, sound: sound2 },

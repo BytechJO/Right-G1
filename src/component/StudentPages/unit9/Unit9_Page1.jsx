@@ -1,18 +1,18 @@
 import page_1 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm.png";
 import "./Unit9_Page1.css";
 import { useState, useRef } from "react";
-import Pg22_U3_Intro_AdultLady from "../../../assets/unit5/sounds/U5P40-41.mp3";
+import Pg22_U3_Intro_AdultLady from "../../../assets/unit9/sound/cd68pg76-u9intro-adult-lady_VJ2J9KK4.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import Unit9_Page1_find from "./Unit9_Page1_find";
 import Unit9_Page1_Vocab from "./Unit9_Page1_Vocab";
 import Unit9_Page1_Read from "./Unit9_Pag1_Read";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import sound1 from "../../../assets/img_unit2/sounds-unit2/U2-01.mp3";
-import sound2 from "../../../assets/img_unit2/sounds-unit2/U2-02.mp3";
-import sound4 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
-import sound7 from "../../../assets/img_unit2/sounds-unit2/U2-04.mp3";
-import sound8 from "../../../assets/img_unit2/sounds-unit2/U2-03.mp3";
+import sound1 from "../../../assets/unit9/sound/unit9-sound1.mp3";
+import sound2 from "../../../assets/unit9/sound/unit9-sound2.mp3";
+import sound4 from "../../../assets/unit9/sound/unit9-sound3.mp3";
+import sound7 from "../../../assets/unit9/sound/unit9-sound4.mp3";
+import sound8 from "../../../assets/unit9/sound/unit9-sound5.mp3";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 
@@ -21,39 +21,128 @@ const Unit9_Page1 = ({ openPopup }) => {
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
-  const captionsExample = [
-    { start: 0, end: 4.09, text: "Page 40, Unit 5: Welcome to My Class." },
-    { start: 4.12, end: 7.26, text: "Page 40, Unit 5 Vocabulary: " },
-    { start: 7.29, end: 10.13, text: "1.	Board." },
-    { start: 10.17, end: 12.11, text: "2.	Map." },
-    { start: 12.14, end: 14.21, text: "3.	Book." },
-    { start: 14.24, end: 17.22, text: "4.	Globe. " },
-    { start: 17.25, end: 20.02, text: "5.	Poster." },
-    { start: 20.05, end: 22.17, text: "6.	trash bin." },
-    { start: 22.2, end: 24.24, text: "7.	Desk." },
-    { start: 24.27, end: 27.07, text: "8.	Chair." },
-    { start: 27.1, end: 30.09, text: "Page 40. Listen and read along" },
-    { start: 30.12, end: 34.24, text: "G, girl, green, garden. " },
-    {
-      start: 34.27,
-      end: 49.8,
-      text: "Page 41. The things on my desk. ",
-    },
-    {
-      start: 49.83,
-      end: 51.05,
-      text: "Welcome to my class. This is my desk, this is my book, my eraser, and my pencil. My teacher's desk is there. There's a globe on it. I love my class. ",
-    },
-    {
-      start: 51.08,
-      end: 56.06,
-      text: "Page 41. Listen, read, and repeat. ",
-    },
-    { start: 56.09, end: 57.29, text: "Do you like your class? " },
-    { start: 57.32, end: 60.06, text: "I like my class. " },
-    { start: 60.09, end: 64.16, text: "Page 41. Listen and read along. " },
-    { start: 64.19, end: 68.18, text: "K, key, kite, kitchen..." },
-  ];
+const captionsExample = [
+  {
+    start: 0.539,
+    end: 4.639,
+    text: "Page 76, Unit 9. A day on the farm.",
+  },
+  {
+    start: 5.099,
+    end: 8.34,
+    text: "Page 76, Unit 9, vocabulary.",
+  },
+  {
+    start: 9.139,
+    end: 10.679,
+    text: "One, horse.",
+  },
+  {
+    start: 11.139,
+    end: 12.859,
+    text: "Two, stable.",
+  },
+  {
+    start: 13.439,
+    end: 15.279,
+    text: "Three, barn.",
+  },
+  {
+    start: 15.979,
+    end: 17.739,
+    text: "Four, chicken.",
+  },
+  {
+    start: 18.619,
+    end: 20.319,
+    text: "Five, goat.",
+  },
+  {
+    start: 21.059,
+    end: 22.899,
+    text: "Six, cow.",
+  },
+  {
+    start: 23.659,
+    end: 25.479,
+    text: "Seven, grass.",
+  },
+  {
+    start: 26.0,
+    end: 27.659,
+    text: "Eight, cat.",
+  },
+  {
+    start: 28.439,
+    end: 31.579,
+    text: "Page 76, listen and read along.",
+  },
+  {
+    start: 32.239,
+    end: 35.7,
+    text: "M, milk, man, mom.",
+  },
+  {
+    start: 36.459,
+    end: 37.959,
+    text: "Page 77.",
+  },
+  {
+    start: 38.719,
+    end: 40.059,
+    text: "I like horses.",
+  },
+  {
+    start: 40.819,
+    end: 43.599,
+    text: "Hansel, Harley, and I like to go to the farm.",
+  },
+  {
+    start: 44.18,
+    end: 45.899,
+    text: "There are many animals to see.",
+  },
+  {
+    start: 46.659,
+    end: 48.699,
+    text: "Hansel likes cows and horses.",
+  },
+  {
+    start: 49.259,
+    end: 50.419,
+    text: "Harley likes goats.",
+  },
+  {
+    start: 50.879,
+    end: 51.919,
+    text: "I like horses.",
+  },
+  {
+    start: 52.719,
+    end: 57.319,
+    text: "Page 77. Listen, read, and repeat.",
+  },
+  {
+    start: 58.5,
+    end: 59.539,
+    text: "I like horses.",
+  },
+  {
+    start: 60.259,
+    end: 61.239,
+    text: "I like cats.",
+  },
+  {
+    start: 62.02,
+    end: 65.479,
+    text: "Page 77. Listen and read along.",
+  },
+  {
+    start: 66.599,
+    end: 69.899,
+    text: "N, nest, night, nurse.",
+  },
+];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 42.5, y1: 28, sound: 1, isPrimary: true },

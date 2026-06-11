@@ -39,6 +39,7 @@ const DraggableWord = ({ id, word, disabled, isUsed }) => {
         display: "inline-block",
         transition: "all 0.2s ease",
         userSelect: "none",
+          touchAction:"none"
       }}
     >
       {word}

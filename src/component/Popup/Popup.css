@@ -154,7 +154,7 @@
   position: absolute !important;
   top: 7%;
   right: 4%;
-  background: none;
+  background: white;
   border: none;
   font-size: 16px;
   cursor: pointer;
@@ -163,8 +163,9 @@
 .popup-close-btn.type-video {
   position: absolute;
   top: 12%;
+   background: white;
   right: 2.5%;
-  font-size: 24px;
+  font-size: 22px;
   border-radius: 50%;
   padding: 6px;
   z-index: 99999;

@@ -1,27 +1,60 @@
 import page_6 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm6.png";
 import "./Unit9_Page6.css";
 
-import CD25_Pg27_Song_AdultLady from "../../../assets/unit9/sound/CD74.Pg81_Song_Adult Lady.mp3";
+import CD25_Pg27_Song_AdultLady from "../../../assets/unit9/sound/cd74pg81-song-adult-lady_stCYa8RR.mp3";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 
 const Unit9_Page6 = ({ openPopup }) => {
-  const captionsExample = [
-    { start: 0, end: 5.0, text: "Page 45, exercise G. Let's sing. " },
-    {
-      start: 5.03,
-      end: 7.44,
-      text: "This is my book, look at my book.",
-    },
-    { start: 7.47, end: 10.21, text: " This is your book, look at your book." },
-    {
-      start: 10.24,
-      end: 16.11,
-      text: " Is this your pen? Yes, it is. Look at your pen.",
-    },
-  ];
+const captionsExample = [
+  {
+    start: 0.34,
+    end: 4.239,
+    text: "Page 81, exercise F. Let's sing.",
+  },
+  {
+    start: 5.279,
+    end: 6.019,
+    text: "I like cows.",
+  },
+  {
+    start: 6.119,
+    end: 7.079,
+    text: "How many cows are there?",
+  },
+  {
+    start: 7.379,
+    end: 9.319,
+    text: "There are seven cows.",
+  },
+  {
+    start: 9.639,
+    end: 10.579,
+    text: "He likes horses.",
+  },
+  {
+    start: 10.719,
+    end: 12.039,
+    text: "How many horses are there?",
+  },
+  {
+    start: 12.42,
+    end: 14.639,
+    text: "There are four horses.",
+  },
+  {
+    start: 15.38,
+    end: 16.479,
+    text: "We like them all.",
+  },
+  {
+    start: 17.02,
+    end: 18.02,
+    text: "What do you like?",
+  },
+];
 
   return (
     <div

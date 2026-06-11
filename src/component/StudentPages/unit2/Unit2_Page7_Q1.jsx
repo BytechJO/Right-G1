@@ -33,6 +33,7 @@ function DraggableNumber({ item, isDragDisabled }) {
         style={{
           opacity: isDragging ? 0.4 : 1,
           cursor: isDragDisabled ? "default" : "grab",
+          touchAction:"none"
         }}
         {...listeners}
         {...attributes}

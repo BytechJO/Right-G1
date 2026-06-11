@@ -1,11 +1,11 @@
 import page24 from "../../../assets/unit10/imgs/Right 1 Unit 10 We Want Ice Cream11.jpg";
 import React, { useState, useRef } from "react";
 // import "./Unit2_Page11.css";
-import sound1 from "../../../assets/unit4/sounds/U4ReadingP38-39.mp3";
-import sound2 from "../../../assets/unit8/sound/Pg74_1.1_Adult Lady.mp3";
-import sound3 from "../../../assets/unit8/sound/Pg74_1.2_Adult Lady.mp3";
-import sound4 from "../../../assets/unit8/sound/Pg74_1.3_Adult Lady.mp3";
-import sound5 from "../../../assets/unit8/sound/Pg74_1.4_Adult Lady.mp3";
+import sound1 from "../../../assets/unit10/sound/cd5pg92-reading-adult-lady_Dn8UIlbB.mp3";
+import sound2 from "../../../assets/unit10/sound/Pg92_1.1_Adult Lady.mp3";
+import sound3 from "../../../assets/unit10/sound/Pg92_1.2_Adult Lady.mp3";
+import sound4 from "../../../assets/unit10/sound/Pg92_1.3_Adult Lady.mp3";
+import sound5 from "../../../assets/unit10/sound/Pg92_1.4_Adult Lady.mp3";
 import AudioWithCaption from "../../AudioWithCaption";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
@@ -19,49 +19,73 @@ const Unit10_Reading_P1 = ({ openPopup }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
 
-  const captionsExample = [
-    { start: 0, end: 5.04, text: "Page 38 Reading. Hey, that's my pen! " },
-    {
-      start: 5.07,
-      end: 16.03,
-      text: "It is a good morning. Jack is at the park.He sees Hansel and Tilly.",
-    },
-    {
-      start: 16.07,
-      end: 22.17,
-      text: "Hansel shows Jack the bunny. Jack likes Tilly. She is soft and friendly.",
-    },
-    {
-      start: 22.2,
-      end: 27.11,
-      text: "It is a sunny day! Jack tells Hansel that he likes the park. Hansel tells Jack about Tilly.",
-    },
-    {
-      start: 27.14,
-      end: 38.11,
-      text: "Tilly is cute. Jack asks to play with her. Tilly can play games. She is a fun bunny.",
-    },
-    {
-      start: 38.14,
-      end: 45.17,
-      text: "Jack and Tilly play a game. What can Tilly do? Jack can touch his nose. Tilly can’t touch her nose.",
-    },
-    {
-      start: 45.2,
-      end: 48.26,
-      text: "Jack can touch his head. Tilly can touch her head. Tilly is good at games.",
-    },
-    {
-      start: 48.29,
-      end: 58.07,
-      text: "Tilly is bored. Can she do other things? Jack wants to play more games.",
-    },
-    {
-      start: 58.1,
-      end: 65.11,
-      text: "Tilly wants to play in the park. She likes to hop on Jack’s feet! Ouch! Tilly hops fast!",
-    },
-  ];
+ const captionsExample = [
+  {
+    start: 0.699,
+    end: 5.4,
+    text: "Page 92. Reading. Tilly and Lolo Play Together."
+  },
+
+  {
+    start: 6.519,
+    end: 11.699,
+    text: "It is time for dinner. Tilly and Lolo are hungry. What can they eat?"
+  },
+
+  {
+    start: 11.699,
+    end: 17.119,
+    text: "Lolo sees some milk. She likes milk. She drinks the milk."
+  },
+
+  {
+    start: 17.119,
+    end: 21.359,
+    text: "Tilly likes carrots. She wants to eat some."
+  },
+
+  {
+    start: 21.92,
+    end: 26.859,
+    text: "Mom comes in. Oh no! What can Tilly and Lolo do?"
+  },
+
+  {
+    start: 26.859,
+    end: 33.439,
+    text: "They jump off the table and run. They go outside. They want to play."
+  },
+
+  {
+    start: 37.7,
+    end: 43.899,
+    text: "Lolo can climb a tree. Tilly cannot climb a tree."
+  },
+
+  {
+    start: 44.919,
+    end: 50.459,
+    text: "Lolo can swim. Tilly cannot swim."
+  },
+
+  {
+    start: 50.459,
+    end: 55.239,
+    text: "They see Sara. What can Sara do?"
+  },
+
+  {
+    start: 55.239,
+    end: 58.079,
+    text: "Wow, she can paint."
+  },
+
+  {
+    start: 58.079,
+    end: 60.88,
+    text: "Tilly and Lolo can play together."
+  }
+];
   const clickableAreas = [
     { x1: 15.9, y1: 39.1, x2: 51.5, y2: 45.5, sound: sound2 },
     { x1: 56.0, y1: 39.1, x2: 93.9, y2: 45.5, sound: sound3 },

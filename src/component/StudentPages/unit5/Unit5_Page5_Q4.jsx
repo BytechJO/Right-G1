@@ -136,7 +136,7 @@ const Unit5_Page5_Q4 = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
+      <div className="div-forall">
         <div className="container8">
           <h5 className="header-title-page8">
             <span className="ex-A">C</span> Drag the letters into the boxes to

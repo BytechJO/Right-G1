@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import page_2 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm2.png";
-import soundSong from "../../../assets/unit5/sounds/U5P41 Welcome to my class.mp3";
+import soundSong from "../../../assets/unit9/sound/cd69pg77-intro-adult-lady_rzvvDHXe.mp3";
 import sound1 from "../../../assets/unit9/sound/Pg77_1.1_Bebo.mp3";
 import sound2_2 from "../../../assets/unit9/sound/Pg77_1.2_Lolo.mp3";
 import sound3 from "../../../assets/unit9/sound/Pg77_2.1_Adult Lady.mp3";
 import sound4 from "../../../assets/unit9/sound/Pg77_2.2_Adult Lady.mp3";
 import sound5 from "../../../assets/unit9/sound/Pg77_2.3_Adult Lady.mp3";
 import sound6 from "../../../assets/unit9/sound/Pg77_2.4_Adult Lady.mp3";
-import sound7 from "../../../assets/unit5/sounds/U5P41 Listen and read along.mp3";
+import sound7 from "../../../assets/unit9/sound/pg77-instruction2-adult-lady_I8q3rOba.mp3";
 import img1 from "../../../assets/unit9/imgs/N.svg";
 import img2 from "../../../assets/unit9/imgs/nest.svg";
 import img3 from "../../../assets/unit9/imgs/night.svg";
 import img4 from "../../../assets/unit9/imgs/nurse.svg";
-import CD21_Pg23_Instruction1_AdultLady from "../../../assets/unit5/sounds/U5P41 listen and repeat (1).mp3";
+import CD21_Pg23_Instruction1_AdultLady from "../../../assets/unit9/sound/cd70pg77-instruction1-adult-lady_FHpgFnb2.mp3";
 import repeat1 from "../../../assets/unit9/imgs/listen and repeat 02.svg";
 import repeat2 from "../../../assets/unit9/imgs/listen and repeat 03.svg";
 import read from "../../../assets/unit1/imgs/P1 listen and repeat 01.svg";
@@ -22,9 +22,9 @@ import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import FourImagesWithAudio from "../../FourImagesWithAudio";
 import "./Unit9_Page2.css";
-import sound2_3 from "../../../assets/img_unit2/sounds-unit2/U2-06.mp3";
-import sound2_5 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
-import sound2_6 from "../../../assets/img_unit2/sounds-unit2/U2-07.mp3";
+import sound2_3 from "../../../assets/unit9/sound/unit9-sound6.mp3";
+import sound2_5 from "../../../assets/unit9/sound/unit9-sound7.mp3";
+import sound2_6 from "../../../assets/unit9/sound/unit9-sound8.mp3";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 
@@ -32,8 +32,8 @@ const Unit9_Page2 = ({ openPopup }) => {
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-const { audioRef, activeId, setActiveId } = useContext(AudioContext);
-   // أصوات الصور
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+  // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
     new Audio(sound3),
@@ -47,49 +47,88 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
     new Audio(sound2_2),
   ];
   const captionsExample = [
-    { start: 0, end: 3.23, text: "Page 41. The things on my desk." },
-    { start: 3.26, end: 7.02, text: "Welcome to my class. This is my desk," },
     {
-      start: 7.05,
-      end: 10.2,
-      text: " this is my book, my eraser and my pencil.",
+      start: 0.259,
+      end: 1.799,
+      text: "Page 77.",
     },
-    { start: 10.23, end: 13.15, text: " My teacher's desk is there." },
     {
-      start: 13.18,
-      end: 17.03,
-      text: " There's a globe on it. I love my class.",
+      start: 2.399,
+      end: 3.879,
+      text: "I like horses.",
+    },
+    {
+      start: 4.599,
+      end: 7.419,
+      text: "Hansel, Harley, and I like to go to the farm.",
+    },
+    {
+      start: 8.0,
+      end: 9.719,
+      text: "There are many animals to see.",
+    },
+    {
+      start: 10.46,
+      end: 12.5,
+      text: "Hansel likes cows and horses.",
+    },
+    {
+      start: 13.059,
+      end: 14.559,
+      text: "Harley likes goats.",
+    },
+    {
+      start: 14.679,
+      end: 15.72,
+      text: "I like horses.",
     },
   ];
   const captions = [
-    { start: 0, end: 3.17, text: "Page 23. Listen, read, and repeat." },
     {
-      start: 3.19,
-      end: 4.29,
-      text: "My favorite subject is science. ",
+      start: 0.319,
+      end: 4.94,
+      text: "Page 77, listen, read, and repeat.",
     },
     {
-      start: 4.31,
-      end: 7.03,
-      text: "My favorite subject is art.",
+      start: 5.92,
+      end: 7.179,
+      text: "I like horses.",
+    },
+    {
+      start: 7.899,
+      end: 8.88,
+      text: "I like cats.",
     },
   ];
   const captions2 = [
-    { start: 0, end: 3.18, text: "Page 23. Listen and read along." },
-    { start: 3.2, end: 7.01, text: "Short A. Bat, cap, dad." },
+    {
+      start: 0.239,
+      end: 3.72,
+      text: "Page 77. Listen and read along.",
+    },
+    {
+      start: 4.659,
+      end: 4.92,
+      text: "N.",
+    },
+    {
+      start: 5.599,
+      end: 8.199,
+      text: "Nest, night, nurse.",
+    },
   ];
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 28.4, y1: 31.86, sound: 1, isPrimary: true },
 
     // // // الصوت الأول – منطقة إضافية
-    { x1: 13.44, y1: 29.15, x2: 40.59, y2:47.49, sound: 1, isPrimary: false },
+    { x1: 13.44, y1: 29.15, x2: 40.59, y2: 47.49, sound: 1, isPrimary: false },
 
     // // // الصوت الثاني – الأساسية
     { x1: 29.4, y1: 63, sound: 2, isPrimary: true },
 
     // // // الصوت الثاني – الإضافية
-    { x1: 25.94, y1: 64.35, x2: 42.10, y2: 75.01, sound: 2, isPrimary: false },
+    { x1: 25.94, y1: 64.35, x2: 42.1, y2: 75.01, sound: 2, isPrimary: false },
     // // // الصوت الثاني – الأساسية
     { x1: 33.2, y1: 49.5, sound: 3, isPrimary: true },
 
@@ -108,7 +147,7 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
- const playSound = (path, id) => {
+  const playSound = (path, id) => {
     if (!audioRef.current) return;
 
     // 🔥 وقف أي صوت شغال بأي صفحة
@@ -131,9 +170,9 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
       style={{ backgroundImage: `url(${page_2})` }}
     >
       {/* <img src={page_2} /> */}
-        <audio ref={audioRef} style={{ display: "none" }} />
+      <audio ref={audioRef} style={{ display: "none" }} />
       {areas.map((area, index) => {
- const isActive = activeId === `p77-${area.sound}`;
+        const isActive = activeId === `p77-${area.sound}`;
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
         // ============================
@@ -147,8 +186,8 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                 playSound(sounds[area.sound], `p77-${area.sound}`);
-               }}
+                playSound(sounds[area.sound], `p77-${area.sound}`);
+              }}
             ></div>
           );
         }
@@ -170,7 +209,7 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
             }}
             onClick={() => {
               playSound(sounds[area.sound], `p77-${area.sound}`);
-              }}
+            }}
           ></div>
         );
       })}
@@ -186,7 +225,7 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
           onClick={() =>
             openPopup(
               "audio",
-              <AudioWithCaption src={soundSong} captions={captionsExample} />
+              <AudioWithCaption src={soundSong} captions={captionsExample} />,
             )
           }
           style={{ overflow: "visible" }}
@@ -215,12 +254,12 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
               <FourImagesWithAudio
                 images={[read, repeat1, repeat2]}
                 audioSrc={CD21_Pg23_Instruction1_AdultLady}
-                checkpoints={[0, 4.6, 7.14]}
+                checkpoints={[0, 5.92, 7.899]}
                 popupOpen={true}
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}
                 captions={captions}
-              />
+              />,
             )
           }
           style={{ overflow: "visible" }}
@@ -250,12 +289,12 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
               <FourImagesWithAudio
                 images={[Rabbit, img1, img2, img3, img4]}
                 audioSrc={sound7}
-                checkpoints={[0, 4.05, 5.1, 6.05, 7.06]}
+                checkpoints={[0, 4.659, 5.6, 6.68, 7.66]}
                 popupOpen={true}
                 titleQ={"Listen and read along."}
                 audioArr={imageSounds}
                 captions={captions2}
-              />
+              />,
             )
           }
           style={{ overflow: "visible" }}

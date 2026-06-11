@@ -198,7 +198,7 @@ export default function Review10_Page1_Q1() {
   const selectedWord = firstDot?.word;
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
-      <div className="matching-scale">
+      <div className="div-forall">
         <h5 className="header-title-page8">
           <span className="mr-2">A</span> Look, read, and match.
         </h5>

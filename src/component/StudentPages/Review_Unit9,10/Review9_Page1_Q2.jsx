@@ -41,11 +41,10 @@ const items = [
 ];
 
 const wordBank = [
-  "How many",
-  "How many",
-  "There are five cows.",
-  "There are four goats.",
-  "There are three cats.",
+  { word: "How many", maxUses: 2 }, // مسموح مرتين
+  { word: "There are five cows.", maxUses: 1 },
+  { word: "There are four goats.", maxUses: 1 },
+  { word: "There are three cats.", maxUses: 1 },
 ];
 
 // ─── Bank Chip (Draggable) ─────────────────────────────────────────────────────
@@ -68,9 +67,11 @@ const BankChip = ({ word, isUsed, locked }) => {
         background: isUsed ? "#e0e0e0" : "white",
         fontWeight: "bold",
         color: isUsed ? "#999" : undefined,
-        cursor: isUsed || locked ? "not-allowed" : isDragging ? "grabbing" : "grab",
+        cursor:
+          isUsed || locked ? "not-allowed" : isDragging ? "grabbing" : "grab",
         opacity: isDragging ? 0.35 : 1,
-        transition: "opacity 0.2s, background 0.2s, border-color 0.2s, color 0.2s",
+        transition:
+          "opacity 0.2s, background 0.2s, border-color 0.2s, color 0.2s",
         userSelect: "none",
         touchAction: "none",
         display: "inline-block",
@@ -90,9 +91,9 @@ const DropZone = ({ id, value, isWrong, locked, onRemove, className }) => {
   return (
     <span
       ref={setNodeRef}
-      className={`${className || ""}${isWrong ? " wrong-drop" : ""}`}
+      className={`${className || ""} ${isOver ? "drag-over-cell" : ""}`}
       style={{
-        background: isOver ? "#e8f0fe" : undefined,
+        // background: isOver ? "#e8f0fe" : undefined,
         cursor: value && !locked ? "pointer" : "default",
         transition: "background 0.15s",
         position: "relative",
@@ -107,9 +108,7 @@ const DropZone = ({ id, value, isWrong, locked, onRemove, className }) => {
       title={value && !locked ? "Click to remove" : ""}
     >
       {value || ""}
-      {isWrong && (
-        <div className="wrong-x-circle-review9-p1-q2">✕</div>
-      )}
+      {isWrong && <div className="wrong-x-circle-review9-p1-q2">✕</div>}
     </span>
   );
 };
@@ -122,9 +121,9 @@ const AnswerDropZone = ({ id, value, isWrong, locked, onRemove }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`answer-input-review9-p1-q2${isWrong ? " wrong-drop" : ""}`}
+      className={`answer-input-review9-p1-q2 ${isOver ? "drag-over-cell" : ""}`}
       style={{
-        background: isOver ? "#e8f0fe" : undefined,
+        // background: isOver ? "#e8f0fe" : undefined,
         cursor: value && !locked ? "pointer" : "default",
         transition: "background 0.15s",
         position: "relative",
@@ -135,9 +134,7 @@ const AnswerDropZone = ({ id, value, isWrong, locked, onRemove }) => {
       title={value && !locked ? "Click to remove" : ""}
     >
       {value || ""}
-      {isWrong && (
-        <div className="wrong-x-circle-review9-p1-q2">✕</div>
-      )}
+      {isWrong && <div className="wrong-x-circle-review9-p1-q2">✕</div>}
     </div>
   );
 };
@@ -146,7 +143,7 @@ const AnswerDropZone = ({ id, value, isWrong, locked, onRemove }) => {
 
 const Review9_Page1_Q2 = () => {
   const [questionInputs, setQuestionInputs] = useState(
-    items.map((item) => Array(item.blanksCount).fill(""))
+    items.map((item) => Array(item.blanksCount).fill("")),
   );
   const [answers, setAnswers] = useState(items.map(() => ""));
   const [showCorrect, setShowCorrect] = useState(false);
@@ -154,14 +151,14 @@ const Review9_Page1_Q2 = () => {
   const [activeId, setActiveId] = useState(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
 
   const activeWord = activeId ? activeId.replace("bank-", "") : null;
 
   // كم مرة كل كلمة موجودة بالبنك الأصلي
-  const bankCount = wordBank.reduce((acc, w) => {
-    acc[w] = (acc[w] || 0) + 1;
+  const bankCount = wordBank.reduce((acc, { word, maxUses }) => {
+    acc[word] = maxUses;
     return acc;
   }, {});
 
@@ -174,7 +171,8 @@ const Review9_Page1_Q2 = () => {
     }, {});
 
   // الكلمة disabled لما استُخدمت بنفس عدد نسخها بالبنك
-  const isWordUsedUp = (word) => (usedCount[word] || 0) >= (bankCount[word] || 1);
+  const isWordUsedUp = (word) =>
+    (usedCount[word] || 0) >= (bankCount[word] || 1);
 
   // ─── Drag Handlers ────────────────────────────────────────────────────────
 
@@ -258,12 +256,18 @@ const Review9_Page1_Q2 = () => {
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < items[i].questionAnswers.length; j++) {
         if (!questionInputs[i][j] || questionInputs[i][j].trim() === "") {
-          ValidationAlert.info("Oops!", "Please complete all question blanks before checking.");
+          ValidationAlert.info(
+            "Oops!",
+            "Please complete all question blanks before checking.",
+          );
           return;
         }
       }
       if (!answers[i] || answers[i].trim() === "") {
-        ValidationAlert.info("Oops!", "Please complete all answers before checking.");
+        ValidationAlert.info(
+          "Oops!",
+          "Please complete all answers before checking.",
+        );
         return;
       }
     }
@@ -275,7 +279,10 @@ const Review9_Page1_Q2 = () => {
     items.forEach((item, i) => {
       item.questionAnswers.forEach((correctWord, idx) => {
         total++;
-        if (questionInputs[i][idx]?.trim().toLowerCase() === correctWord.toLowerCase()) {
+        if (
+          questionInputs[i][idx]?.trim().toLowerCase() ===
+          correctWord.toLowerCase()
+        ) {
           score++;
         } else {
           wrong.push({ type: "question", qIndex: i, idx });
@@ -350,7 +357,7 @@ const Review9_Page1_Q2 = () => {
               flexWrap: "wrap",
             }}
           >
-            {wordBank.map((word, index) => (
+            {wordBank.map(({ word }, index) => (
               <BankChip
                 key={`${word}-${index}`}
                 word={word}
@@ -362,12 +369,15 @@ const Review9_Page1_Q2 = () => {
 
           {/* ── Content ── */}
           <div className="content-review9-p1-q2 w-full">
-            <img src={farmImg} alt="" style={{ height: "270px", width: "auto" }} />
+            <img
+              src={farmImg}
+              alt=""
+              style={{ height: "270px", width: "auto" }}
+            />
 
             <div style={{ width: "100%" }}>
               {items.map((item, i) => (
                 <div key={i} className="question-box-review9-p1-q2">
-
                   {/* ── Question ── */}
                   <p className="question-text">
                     {item.questionParts.map((part, idx) =>
@@ -377,7 +387,10 @@ const Review9_Page1_Q2 = () => {
                           id={`q-${i}-${idx}`}
                           value={questionInputs[i][idx]}
                           isWrong={wrongMarks.some(
-                            (w) => w.type === "question" && w.qIndex === i && w.idx === idx
+                            (w) =>
+                              w.type === "question" &&
+                              w.qIndex === i &&
+                              w.idx === idx,
                           )}
                           locked={showCorrect}
                           onRemove={handleRemove}
@@ -385,9 +398,10 @@ const Review9_Page1_Q2 = () => {
                         />
                       ) : (
                         <span key={idx} style={{ width: "100%" }}>
-                          {" "}{part}{" "}
+                          {" "}
+                          {part}{" "}
                         </span>
-                      )
+                      ),
                     )}
                   </p>
 
@@ -396,7 +410,7 @@ const Review9_Page1_Q2 = () => {
                     id={`a-${i}`}
                     value={answers[i]}
                     isWrong={wrongMarks.some(
-                      (w) => w.type === "answer" && w.qIndex === i
+                      (w) => w.type === "answer" && w.qIndex === i,
                     )}
                     locked={showCorrect}
                     onRemove={handleRemove}
