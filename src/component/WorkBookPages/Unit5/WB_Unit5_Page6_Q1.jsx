@@ -128,21 +128,17 @@ export default function WB_Unit5_Page6_Q1() {
     >
       <div  className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "60%",
-          justifyContent: "flex-start",
+     
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">A</span> Which pictures begin with the letter?
-          Circle.
+          <span className="ex-A">A</span> Tap or click the pictures that start with the letter.
         </h5>
 
         {data.map((q) => (
           <div
             key={q.id}
-            className="question-row-Unit5_Page5_Q2"
+            className="question-row-Unit5_Page5_Q2 w-full"
             style={{ marginTop: "15px" }}
           >
             <span

@@ -46,7 +46,9 @@ const WB_Unit5_Page1_Q2 = () => {
   // 🔵 2) حفظ اختيارات الطالب
   // ===============================
   const [answers, setAnswers] = useState(
-    questions.map((q) => q.parts.map((p) => (p.type === "blank" ? null : null)))
+    questions.map((q) =>
+      q.parts.map((p) => (p.type === "blank" ? null : null)),
+    ),
   );
   const [showResult, setShowResult] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -55,7 +57,7 @@ const WB_Unit5_Page1_Q2 = () => {
   // 🔵 3) الضغط على خيار
   // ===============================
   const handleSelect = (qIndex, blankIndex, option) => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     const updated = [...answers];
     updated[qIndex][blankIndex] = option;
     setAnswers(updated);
@@ -66,7 +68,7 @@ const WB_Unit5_Page1_Q2 = () => {
   // 🔵 4) فحص الإجابات
   // ===============================
   const checkAnswers = () => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
+    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
     // تحقق إذا الطالب ما اختار ولا شيء
     const selectedCount = answers.flat().filter((a) => a !== null).length;
     if (selectedCount === 0) {
@@ -128,15 +130,13 @@ const WB_Unit5_Page1_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <h3 className="header-title-page8"><span className="ex-A">B</span>Look, read, and circle.</h3>
-        <div style={{ display: "flex", flexDirection:"column"}}>
+        <h3 className="header-title-page8">
+          <span className="ex-A">B</span>Tap the correct word.
+        </h3>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           {questions.map((q, qIndex) => (
             <div className="question-row-review8-p2-q4" key={q.id}>
               <div className="sentence-wb-unit5-p1-q2">
@@ -159,11 +159,7 @@ const WB_Unit5_Page1_Q2 = () => {
                   >
                     {q.id}
                   </span>
-                  <img
-                    src={q.image}
-                    className="question-img-wb-unit5-p1-q2"
-                   
-                  />
+                  <img src={q.image} className="question-img-wb-unit5-p1-q2" />
                 </div>
                 <div
                   style={{
@@ -239,8 +235,8 @@ const WB_Unit5_Page1_Q2 = () => {
           onClick={() => {
             setAnswers(
               questions.map((q) =>
-                q.parts.map((p) => (p.type === "blank" ? null : null))
-              )
+                q.parts.map((p) => (p.type === "blank" ? null : null)),
+              ),
             );
             setShowResult(false);
             setLocked(false);

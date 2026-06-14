@@ -9,9 +9,8 @@ import boat from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-04.svg";
 export default function WB_Unit7_Page1_Q2() {
   const questions = [
     { id: 1, correct: "hungry", options: ["sad", "hungry"], image: bat },
-    { id: 2, correct: "scared", options: ["scared","hungry"], image: box },
-    { id: 3, correct:"happy", options: ["happy", "bored"], image: bucket },
-   
+    { id: 2, correct: "scared", options: ["scared", "hungry"], image: box },
+    { id: 3, correct: "happy", options: ["happy", "bored"], image: bucket },
   ];
 
   const colors = ["red", "blue", "green", "orange", "purple", "yellow"];
@@ -23,13 +22,12 @@ export default function WB_Unit7_Page1_Q2() {
 
   // الإجابات (رقم + لون)
   const [answers, setAnswers] = useState({});
-// { 0: { value: "hungry", color: "red" } }
+  // { 0: { value: "hungry", color: "red" } }
 
-const handleOptionClick = (qIndex, word) => {
-  if (locked) return;
-  setSelectedNumber({ qIndex, value: word });
-};
-
+  const handleOptionClick = (qIndex, word) => {
+    if (locked) return;
+    setSelectedNumber({ qIndex, value: word });
+  };
 
   const applyColor = (color) => {
     if (!selectedNumber) return;
@@ -52,7 +50,7 @@ const handleOptionClick = (qIndex, word) => {
     if (notAnswered) {
       ValidationAlert.info(
         "Oops!",
-        "Please choose a number for all pictures before checking."
+        "Please choose a number for all pictures before checking.",
       );
       return;
     }
@@ -95,9 +93,9 @@ const handleOptionClick = (qIndex, word) => {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{ width: "60%" }}>
+      <div className="div-forall" style={{gap:"30px" }}>
         <h4 className="header-title-page8">
-          <span className="ex-A">B</span> Look, count, and color.
+          <span className="ex-A">B</span> Color the correct word.
         </h4>
 
         {/* 🎨 Color Palette */}
@@ -151,13 +149,12 @@ const handleOptionClick = (qIndex, word) => {
                             : "#333",
                       }}
                       aria-disabled={locked}
-                     onClick={() => handleOptionClick(qIndex, num)}
+                      onClick={() => handleOptionClick(qIndex, num)}
                     >
                       {num}
                     </span>
 
-                    {
-                      wrongAnswers.includes(qIndex) &&
+                    {wrongAnswers.includes(qIndex) &&
                       answers[qIndex]?.value === num && (
                         <span className="wrong-mark-circle">✕</span>
                       )}

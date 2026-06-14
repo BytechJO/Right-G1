@@ -104,20 +104,17 @@ const WB_Unit9_Page3_Q1 = () => {
     >
       <div   className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+         
         }}
       >
         <div>
           <h5 className="header-title-page8">
             {" "}
-            <span className="ex-A">F</span>Look, read, and circle.
+            <span className="ex-A">F</span>Count and tap or click the number of the animals.
           </h5>
         </div>
-        <div className="container-wb-unit6-p6-q2">
+        <div className="container-wb-unit6-p6-q2 w-full">
           {items.map((q, i) => (
             <div
               key={i}

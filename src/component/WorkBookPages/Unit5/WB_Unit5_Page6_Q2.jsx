@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import bat from "../../../assets/U1 WB/U5/U5P32EXEB-01.svg";
 import cap from "../../../assets/U1 WB/U5/U5P32EXEB-02.svg";
 import ant from "../../../assets/U1 WB/U5/U5P32EXEB-03.svg";
@@ -6,189 +6,232 @@ import dad from "../../../assets/U1 WB/U5/U5P32EXEB-04.svg";
 import dad1 from "../../../assets/U1 WB/U5/U5P32EXEB-05.svg";
 import dad2 from "../../../assets/U1 WB/U5/U5P32EXEB-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import sound from "../../../assets/unit4/sounds/U4P32EXEA2.mp3";
-import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { IoMdSettings } from "react-icons/io";
-import { TbMessageCircle } from "react-icons/tb";
-import "./WB_Unit5_Page6_Q2.css";
-const WB_Unit5_Page6_Q2 = () => {
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
+import sound1 from "../../../assets/U1 WB/U5/audio/cd7pg32-instruction1-adult-lady_PVAFxGJz.mp3";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+
+// ─── Draggable Word ───────────────────────────────────────────────
+const DraggableWord = ({ word, locked }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `word-${word}`,
+    disabled: locked,
+  });
+
+  return (
+    <span
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "7px 14px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: "white",
+        fontWeight: "bold",
+        cursor: locked ? "default" : "grab",
+        opacity: isDragging ? 0.4 : 1,
+        touchAction: "none",
+        transition: "all 0.2s ease",
+        userSelect: "none",
+      }}
+    >
+      {word}
+    </span>
+  );
+};
+
+// ─── Droppable Slot ───────────────────────────────────────────────
+const DroppableSlot = ({ index, value, isWrong, locked, onRemove }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `slot-${index}`,
+    disabled: locked,
+  });
+
+  return (
+    <div style={{ position: "relative", display: "flex" }}>
+      <div className="input-wrapper-unit3-page6-q1">
+        <div
+          ref={setNodeRef}
+          className={`${isOver ? "drag-over-cell" : ""}`}
+          onClick={() => !locked && value && onRemove(index)}
+          style={{
+            background: isOver ? "#e3f2fd" : "white",
+            minWidth: "120px",
+            minHeight: "36px",
+            display: "flex",
+            alignItems: "center",
+            borderRadius: "0px",
+            justifyContent: "center",
+            borderBottom: "1px solid #72d0f6",
+            cursor: !locked && value ? "pointer" : "default",
+            transition: "background 0.15s ease",
+          }}
+          title={!locked && value ? "Click to remove" : ""}
+        >
+          {value && <span>{value}</span>}
+        </div>
+        {isWrong && <span className="error-mark-input-review3-p2-q1">✕</span>}
+      </div>
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────
+const WB_Unit3_Page6_Q1 = () => {
   const correctAnswers = ["g", "g", "k", "k", "g", "k"];
-  const [answers, setAnswers] = useState(["", "", "", "", "", ""]);
-  const [locked, setLocked] = useState(false);
+  const wordBank = ["g", "k"];
+
+  const [slots, setSlots] = useState(Array(6).fill(null));
   const [wrongInputs, setWrongInputs] = useState([]);
-  const stopAtSecond = 11.13;
+  const [locked, setLocked] = useState(false);
+  const [activeWord, setActiveWord] = useState(null);
 
-  const audioRef = useRef(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-  // إعدادات الصوت
-  const [paused, setPaused] = useState(false);
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [showContinue, setShowContinue] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
-  // ================================
-  // ✔ Captions Array
-  // ================================
-  const captions = [
-    {
-      start: 0,
-      end: 11.13,
-      text: "page 32 Right activities exercise A number 2 does it begin with f or v listen and write ",
-    },
+  const stopAtSecond = 5.179;
 
-    { start: 11.15, end: 13.17, text: "1.	frog " },
-    { start: 13.19, end: 15.14, text: "2.	violin" },
-    { start: 15.16, end: 17.29, text: "3.	vase " },
-    { start: 17.31, end: 20.06, text: "4.	father" },
-  ];
-
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
+  // ─── Drag Handlers ─────────────────────────────────────────────
+  const handleDragStart = (event) => {
+    setActiveWord(event.active.id.replace("word-", ""));
   };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
 
-    audio.currentTime = 0;
-    audio.play();
+  const handleDragEnd = (event) => {
+    setActiveWord(null);
+    if (locked) return;
 
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
+    const { active, over } = event;
+    if (!over || !over.id.startsWith("slot-")) return;
 
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
+    const draggedWord = active.id.replace("word-", "");
+    const targetIndex = Number(over.id.replace("slot-", ""));
 
-    audio.addEventListener("ended", handleEnded);
+    setSlots((prev) => {
+      const copy = [...prev];
+      copy[targetIndex] = draggedWord;
+      return copy;
+    });
 
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-  const onDragEnd = (result) => {
-    if (!result.destination || showAnswer) return;
-
-    const letter = result.draggableId;
-    const dest = result.destination.droppableId;
-
-    // dest مثال: blank-3
-    const index = Number(dest.split("-")[1]);
-
-    const updated = [...answers];
-    updated[index] = letter;
-    setAnswers(updated);
     setWrongInputs([]);
   };
 
-  const handleShowAnswer = () => {
-    setAnswers([...correctAnswers]); // املي الأجوبة الصحيحة
-    setWrongInputs([]); // ما في غلط عند عرض الحل
-    setShowAnswer(true); // حتى نغير لون النص
+  // ─── Remove from slot (click) ──────────────────────────────────
+  const handleRemoveFromSlot = (index) => {
+    setSlots((prev) => {
+      const copy = [...prev];
+      copy[index] = null;
+      return copy;
+    });
+    setWrongInputs([]);
   };
 
+  // ─── Actions ───────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (showAnswer || locked) return;
-    if (answers.some((ans) => ans.trim() === "")) {
+    if (locked) return;
+    if (slots.some((slot) => !slot)) {
       ValidationAlert.info("Please fill in all the blanks before checking!");
       return;
     }
 
     let tempScore = 0;
     let wrong = [];
-    answers.forEach((ans, i) => {
+
+    slots.forEach((ans, i) => {
       if (ans === correctAnswers[i]) {
         tempScore++;
       } else {
-        wrong.push(i); // خزن رقم السؤال الغلط بدل الكلمة
+        wrong.push(i);
       }
     });
+
     setWrongInputs(wrong);
     setLocked(true);
+
     const total = correctAnswers.length;
     const color =
       tempScore === total ? "green" : tempScore === 0 ? "red" : "orange";
 
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${tempScore} / ${total}
-      </span>
-    </div>
-  `;
+    const msg = `
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${tempScore} / ${total}
+        </span>
+      </div>
+    `;
 
-    if (tempScore === total) {
-      ValidationAlert.success(scoreMessage);
-    } else if (tempScore === 0) {
-      ValidationAlert.error(scoreMessage);
-    } else {
-      ValidationAlert.warning(scoreMessage);
-    }
+    tempScore === total
+      ? ValidationAlert.success(msg)
+      : tempScore === 0
+        ? ValidationAlert.error(msg)
+        : ValidationAlert.warning(msg);
   };
 
   const reset = () => {
-    setAnswers(["", "", "", "", "", ""]);
+    setSlots(Array(6).fill(null));
     setWrongInputs([]);
-    setShowAnswer(false);
     setLocked(false);
   };
-  const togglePlay = () => {
-    const audio = audioRef.current;
 
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
+  const showAnswer = () => {
+    setSlots([...correctAnswers]);
+    setWrongInputs([]);
+    setLocked(true);
   };
+
+  // ─── Captions ──────────────────────────────────────────────────
+  const captions = [
+    {
+      start: 0,
+      end: 7.88,
+      text: "Phonics exercise B. Does it begin with G or K? Listen, look, and write.",
+    },
+    {
+      start: 8.68,
+      end: 9.98,
+      text: "1, goat.",
+    },
+    {
+      start: 10.5,
+      end: 12.08,
+      text: "2, glue.",
+    },
+    {
+      start: 12.6,
+      end: 14.3,
+      text: "3, kite.",
+    },
+    {
+      start: 14.78,
+      end: 16.38,
+      text: "4, kitchen.",
+    },
+    {
+      start: 16.9,
+      end: 18.52,
+      text: "5, gift.",
+    },
+    {
+      start: 19.02,
+      end: 20.62,
+      text: "6, key.",
+    },
+  ];
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         className="question-wrapper-unit3-page6-q1"
         style={{
@@ -199,235 +242,62 @@ const WB_Unit5_Page6_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
+        <div className="div-forall" style={{ gap: "15px" }}>
           <h5 className="header-title-page8">
-            <span className="ex-A">B</span> Does it begin with
-            <span style={{ color: "red" }}>g</span> or{" "}
-            <span style={{ color: "red" }}>k</span>? Listen, look, and write.
+            <span className="ex-A">A</span> Drag and drop.
           </h5>
 
+          <QuestionAudioPlayer
+            src={sound1}
+            captions={captions}
+            stopAtSecond={stopAtSecond}
+          />
+
+          {/* ─── Word Bank ─── */}
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              marginTop: "30px",
+              gap: "30px",
+              padding: "10px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              alignItems: "center",
               width: "100%",
+              justifyContent: "center",
+              flexWrap: "wrap",
             }}
           >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
-
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
+            {wordBank.map((word) => (
+              <DraggableWord key={word} word={word} locked={locked} />
+            ))}
           </div>
-          <Droppable droppableId="word-bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  // margin: "10px 0",
-                  alignItems: "center",
-                  width: "100%",
-                  justifyContent: "center",
-                }}
-              >
-                {["g", "k"].map((letter, i) => (
-                  <Draggable
-                    draggableId={letter}
-                    index={i}
-                    key={letter}
-                    isDragDisabled={locked || showAnswer}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          padding: "7px 14px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          background: "white",
-                          fontWeight: "bold",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {letter}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
 
-          <div className="row-content10-wb-unit5-p6-q2">
-            {[bat, cap, ant, dad, dad1, dad2].map((img, i) => (
-              <div className="row2-unit3-page6-q1" key={i}>
-                <div style={{ display: "flex", gap: "15px" }}>
-                  <span className="num-span">{i + 1}</span>
-                  <img src={img} alt="" className="q-img-wb-unit5-p6-q2" />
-                </div>
-
-                <span style={{ position: "relative", display: "flex" }}>
-                  <div className="input-wrapper-unit3-page6-q1">
-                    <Droppable
-                      droppableId={`blank-${i}`}
-                      isDropDisabled={locked || showAnswer}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className={`q-input-unit3-page6-q1 ${
-                            snapshot.isDraggingOver ? "drag-over-cell" : ""
-                          }`}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            background: snapshot.isDraggingOver
-                              ? "#e3f2fd"
-                              : "",
-                          }}
-                        >
-                          {answers[i]}
-                          {wrongInputs.includes(i) && (
-                            <span className="error-mark-input">✕</span>
-                          )}
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                </span>
+          {/* ─── Image + Slot Grid ─── */}
+          <div className="row-content10-review3-p2-q1">
+            {[bat, cap, ant, dad, dad1, dad2].map((item, index) => (
+              <div className="row2-review3-p2-q1" key={index}>
+                <img src={item} alt="" className="q-img-wb-unit3-p6-q1" />
+                <DroppableSlot
+                  index={index}
+                  value={slots[index]}
+                  isWrong={wrongInputs.includes(index)}
+                  locked={locked}
+                  onRemove={handleRemoveFromSlot}
+                />
               </div>
             ))}
           </div>
         </div>
+
+        {/* ─── Buttons ─── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
-          <button onClick={handleShowAnswer} className="show-answer-btn">
+          <button
+            onClick={showAnswer}
+            className="show-answer-btn swal-continue"
+          >
             Show Answer
           </button>
           <button onClick={checkAnswers} className="check-button2">
@@ -435,8 +305,27 @@ const WB_Unit5_Page6_Q2 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ─── Drag Overlay ─── */}
+      <DragOverlay>
+        {activeWord && (
+          <span
+            style={{
+              padding: "7px 14px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              cursor: "grabbing",
+            }}
+          >
+            {activeWord}
+          </span>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 
-export default WB_Unit5_Page6_Q2;
+export default WB_Unit3_Page6_Q1;

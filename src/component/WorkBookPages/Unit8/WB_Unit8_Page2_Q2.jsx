@@ -40,6 +40,7 @@ const WB_Unit8_Page2_Q2 = () => {
   const [foundWords, setFoundWords] = useState({});
   const [currentWord, setCurrentWord] = useState("");
   const [selectedIndexes, setSelectedIndexes] = useState({});
+  const [showAnswers, setShowAnswers] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState({});
   const [locked, setLocked] = useState(false);
 
@@ -64,7 +65,7 @@ const WB_Unit8_Page2_Q2 = () => {
       const startIndex = index - expectedWord.length + 1;
       const indexes = Array.from(
         { length: expectedWord.length },
-        (_, i) => startIndex + i
+        (_, i) => startIndex + i,
       );
 
       setFoundWords((prev) => ({
@@ -119,15 +120,15 @@ const WB_Unit8_Page2_Q2 = () => {
       correctCount === totalCount
         ? "green"
         : correctCount === 0
-        ? "red"
-        : "orange";
+          ? "red"
+          : "orange";
 
     const type =
       correctCount === totalCount
         ? "success"
         : correctCount === 0
-        ? "error"
-        : "warning";
+          ? "error"
+          : "warning";
 
     ValidationAlert[type](`
     <div style="font-size:20px;text-align:center;">
@@ -143,8 +144,39 @@ const WB_Unit8_Page2_Q2 = () => {
     setCurrentWord("");
     setCurrentWordIndex({});
     setLocked(false);
+    setShowAnswers(false);
   };
+  const handleShowAnswers = () => {
+    const allFoundWords = {};
+    const allSelectedIndexes = {};
+    const allCurrentIndexes = {};
 
+    questions.forEach((q) => {
+      allFoundWords[q.id] = [...q.words];
+      allCurrentIndexes[q.id] = q.words.length;
+
+      let indexes = [];
+
+      q.words.forEach((word) => {
+        const startIndex = q.letters.toLowerCase().indexOf(word.toLowerCase());
+
+        if (startIndex !== -1) {
+          indexes.push(
+            ...Array.from({ length: word.length }, (_, i) => startIndex + i),
+          );
+        }
+      });
+
+      allSelectedIndexes[q.id] = indexes;
+    });
+
+    setFoundWords(allFoundWords);
+    setSelectedIndexes(allSelectedIndexes);
+    setCurrentWordIndex(allCurrentIndexes);
+    setCurrentWord("");
+    setLocked(true);
+    setShowAnswers(true);
+  };
   return (
     <div
       style={{
@@ -158,15 +190,11 @@ const WB_Unit8_Page2_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "15px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">D</span>Look, read, find, and circle.
+          <span className="ex-A">D</span>Tap or click to find the words.
         </h4>
         <div className="content-container-all-wb-unit8-p2-q2">
           {questions.map((q) => (
@@ -178,7 +206,10 @@ const WB_Unit8_Page2_Q2 = () => {
               <div key={q.id} className="wb-unit6-p5-q2-question">
                 <p className="wb-unit6-p5-q2-sentence">{q.sentence}</p>
 
-                <div className="wb-unit6-p5-q2-letters">
+                <div
+                  className="wb-unit6-p5-q2-letters"
+                  style={{ width: "400px" }}
+                >
                   {q.letters.split("").map((l, i) => {
                     const isSelected = selectedIndexes[q.id]?.includes(i);
 
@@ -211,6 +242,12 @@ const WB_Unit8_Page2_Q2 = () => {
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
+        </button>
+        <button
+          className="show-answer-btn swal-continue"
+          onClick={handleShowAnswers}
+        >
+          Show Answer
         </button>
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓

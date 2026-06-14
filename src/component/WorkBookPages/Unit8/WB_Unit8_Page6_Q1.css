@@ -1,14 +1,14 @@
 .unscramble-row-wb-unit8-p6-q1 {
   display: grid;
-  gap: 50px;
+  gap: 20px;
   justify-content: space-around;
   width: 100%;
   /* margin-top: 20px; */
   grid-template-columns: repeat(2, 1fr);
 }
 .img-box img {
-    width: 150px;
-    height: 150px;
+    width: auto;
+    height: 130px;
     /* object-fit: fill; */
 }
 

@@ -148,18 +148,15 @@ const WB_Unit6_Page1_Q2 = () => {
     >
       <div  className="div-forall"
         style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
+ 
           gap: "20px",
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">B</span> Look and write{" "}
-          <span style={{ color: "red" }}>✓</span>.
+          <span className="ex-A">B</span>Tap or click the boxes to build your sentences.
         </h4>
 
-        <table className="grammar-table-wb-u6-p1-q2">
+        <table className="grammar-table-wb-u6-p1-q2 w-full">
           <thead>
             <tr>
               <th></th>

@@ -12,7 +12,8 @@ const WB_Unit6_Page1_Q1 = () => {
   const [wrongWords, setWrongWords] = useState([]);
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-
+const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
   // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   // -------------------------------------------
@@ -34,7 +35,7 @@ const WB_Unit6_Page1_Q1 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
-
+   setSelectedLeftWord(word);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الكلمة
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
@@ -70,6 +71,13 @@ const WB_Unit6_Page1_Q1 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -133,26 +141,27 @@ const WB_Unit6_Page1_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+         
         }}
       >
-        <div className="page8-q1-container">
+       
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">A</span>Read and match.
           </h5>
 
-          <div className="container12" ref={containerRef}>
+          <div className="container12 w-full" ref={containerRef}>
             {/* الصف الأول */}
             <div className="matching-row2">
               <div className="word-with-dot2">
                 <span className="span-num2">1</span>
                 <span
                   className={`word-text2-wb-unit3-p5-q2 ${
+                  selectedLeftWord === "I can fly a kite."
+                    ? "selected-item"
+                    : ""
+                }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-duck").click()}
@@ -204,6 +213,10 @@ const WB_Unit6_Page1_Q1 = () => {
                 <span className="span-num2">2</span>
                 <span
                   className={`word-text2-wb-unit3-p5-q2 ${
+                  selectedLeftWord === "He can’t sail a boat."
+                    ? "selected-item"
+                    : ""
+                }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-tiger").click()}
@@ -255,6 +268,10 @@ const WB_Unit6_Page1_Q1 = () => {
                 <span className="span-num2">3</span>
                 <span
                   className={`word-text2-wb-unit3-p5-q2 ${
+                  selectedLeftWord === "It can’t climb a tree."
+                    ? "selected-item"
+                    : ""
+                }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-dish").click()}
@@ -305,6 +322,10 @@ const WB_Unit6_Page1_Q1 = () => {
                 <span className="span-num2">4</span>
                 <span
                   className={`word-text2-wb-unit3-p5-q2 ${
+                  selectedLeftWord === "He can paint a picture."
+                    ? "selected-item"
+                    : ""
+                }${
                     locked || showAnswer ? "disabled-word" : ""
                   }`}
                   onClick={() => document.getElementById("dot-paint").click()}
@@ -356,7 +377,7 @@ const WB_Unit6_Page1_Q1 = () => {
               ))}
             </svg>
           </div>
-        </div>
+
 
         {/* الأزرار */}
         <div className="action-buttons-container">

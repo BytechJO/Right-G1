@@ -4,7 +4,7 @@ import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png"
 
 const WB_Unit5_Page5_Q2 = () => {
   const [tool, setTool] = useState("pen"); // pen | eraser
-
+const [strokeColor, setStrokeColor] = useState("#800080"); // purple
   const canvasRef = useRef(null);
   const getPos = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
@@ -38,7 +38,7 @@ const WB_Unit5_Page5_Q2 = () => {
       ctx.lineWidth = 20; // حجم الممحاة
     } else {
       ctx.globalCompositeOperation = "source-over";
-      ctx.strokeStyle = "purple";
+    ctx.strokeStyle = strokeColor;
       ctx.lineWidth = 3;
     }
     ctx.beginPath();
@@ -84,39 +84,58 @@ const WB_Unit5_Page5_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
         <div>
           <h5 className="header-title-page8">
-            <span className="ex-A">J</span> Look and draw your classroom. and
-            draw.
+            <span className="ex-A">J</span> Draw your classroom! Tap or click the pen to start.
           </h5>
         </div>
-        <div className="unit4-q2-p6-tools">
-          <button
-            onClick={() => setTool("pen")}
-            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
-          >
-            ✏️ Pen
-          </button>
+      <div className="unit4-q2-p6-tools w-full">
+  <button
+    onClick={() => setTool("pen")}
+    className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+  >
+    ✏️ Pen
+  </button>
 
-          <button
-            onClick={() => setTool("eraser")}
-            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
-          >
-            🧽 Eraser
-          </button>
-        </div>
+  <button
+    onClick={() => setTool("eraser")}
+    className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+  >
+    🧽 Eraser
+  </button>
+
+  <div
+  className={`unit4-q2-p6-tool-btn`}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+    }}
+  >
+    <label>🎨 Color:</label>
+    <input
+      type="color"
+      value={strokeColor}
+      onChange={(e) => setStrokeColor(e.target.value)}
+      style={{
+        width: "35px",
+        height: "35px",
+        border: "none",
+        cursor: "pointer",
+        background: "transparent",
+      }}
+    />
+  </div>
+</div>
         <canvas
           ref={canvasRef}
           height={300}
           width={600}
-          className="wb-unit4-p3-q2-draw-canvas"
+          className="wb-unit4-p3-q2-draw-canvas "
           style={{
             cursor:
               tool === "eraser"

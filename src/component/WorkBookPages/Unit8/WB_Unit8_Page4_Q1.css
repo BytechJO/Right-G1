@@ -2,6 +2,7 @@
   display: grid;
   justify-items: center;
   gap: 30px;
+    width: 100%;
   grid-template-columns: repeat(2, 1fr);
 }
 
@@ -15,7 +16,7 @@
 
 
 .wb-unit8-p4-q1-canvas {
-    border: 3px solid #6ec1ff;
+    /* border: 3px solid #6ec1ff; */
     background: #ffffff;
     border-radius: 12px;
     height: 160px;

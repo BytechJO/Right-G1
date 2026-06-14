@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/U1 WB/U6/U6P38EXEB-01.svg";
 import img2 from "../../../assets/U1 WB/U6/U6P38EXEB-02.svg";
@@ -104,17 +104,14 @@ const WB_Unit6_Page6_Q2 = () => {
     >
       <div  className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
+         
         }}
       >
         <div>
           <h5 className="header-title-page8">
             {" "}
-            <span className="ex-A">B</span>Look and circle.
+            <span className="ex-A">B</span>Tap or click the correct word for each picture.
           </h5>
         </div>
         <div className="container-wb-unit6-p6-q2">

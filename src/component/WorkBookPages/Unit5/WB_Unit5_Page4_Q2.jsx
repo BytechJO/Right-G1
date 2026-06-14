@@ -15,6 +15,8 @@ const WB_Unit5_Page4_Q2 = () => {
   const [locked, setLocked] = useState(false); //  ← إضافة جديدة
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
   const correctMatches = [
     { word: "This is a poster.", image: "img2" },
     { word: "This is a book.", image: "img4" },
@@ -54,7 +56,7 @@ const WB_Unit5_Page4_Q2 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
-
+    setSelectedLeftWord(word);
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return; // ← إضافة جديدة
@@ -90,6 +92,13 @@ const WB_Unit5_Page4_Q2 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
   const checkAnswers2 = () => {
@@ -145,108 +154,102 @@ const WB_Unit5_Page4_Q2 = () => {
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <div className="page7-q2-container2">
+      <div className="div-forall" style={{}}>
+        <div>
           <h5 className="header-title-page8">
-            <span className="ex-A">H</span>Read, look, and match. Color.
+            <span className="ex-A">H</span>Match and color
           </h5>
           <span style={{ fontSize: "14px", color: "gray" }}>
             Hint: Double Click to Color Word
           </span>
-          <div className="match-wrapper2" ref={containerRef}>
-            <div className="match-words-row2">
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit5-p4-q2   ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("climb-dot").click()}
-                >
-                  This is a poster.
-                  {wrongImages.includes("This is a poster.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a poster."
-                  id="climb-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit5-p4-q2   ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("fly-dot").click()}
-                >
-                  This is a book.
-                  {wrongImages.includes("This is a book.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a book."
-                  id="fly-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit5-p4-q2   ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("ride-dot").click()}
-                >
-                  This is a pen.
-                  {wrongImages.includes("This is a pen.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a pen."
-                  id="ride-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-              <div className="word-box2">
-                <h5
-                  className={`h5-wb-unit5-p4-q2   ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("forks-dot").click()}
-                >
-                  This is a globe.
-                  {wrongImages.includes("This is a globe.") && (
-                    <span className="error-mark-img">✕</span>
-                  )}
-                </h5>
-                <div
-                  className="dot22-unit6-q7 start-dot22-review8-p1-q3"
-                  data-word="This is a globe."
-                  id="forks-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+        </div>
+        <div className="match-wrapper2 w-full" ref={containerRef}>
+          <div className="match-words-row2">
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit5-p4-q2   ${
+                  selectedLeftWord === "This is a poster."
+                    ? "selected-item"
+                    : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("climb-dot").click()}
+              >
+                This is a poster.
+                {wrongImages.includes("This is a poster.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="This is a poster."
+                id="climb-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
-            {/* الصور */}
-            <div className="match-images-row2">
-              <div className="img-box2">
-                {/* <img
+
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit5-p4-q2  ${
+                  selectedLeftWord === "This is a book." ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("fly-dot").click()}
+              >
+                This is a book.
+                {wrongImages.includes("This is a book.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="This is a book."
+                id="fly-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit5-p4-q2   ${
+                  selectedLeftWord === "This is a pen." ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("ride-dot").click()}
+              >
+                This is a pen.
+                {wrongImages.includes("This is a pen.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="This is a pen."
+                id="ride-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+            <div className="word-box2">
+              <h5
+                className={`h5-wb-unit5-p4-q2   ${
+                  selectedLeftWord === "This is a globe." ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("forks-dot").click()}
+              >
+                This is a globe.
+                {wrongImages.includes("This is a globe.") && (
+                  <span className="error-mark-img">✕</span>
+                )}
+              </h5>
+              <div
+                className="dot22-unit6-q7 start-dot22-review8-p1-q3"
+                data-word="This is a globe."
+                id="forks-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
+          </div>
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div className="img-box2">
+              {/* <img
                   src={img1}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
@@ -254,43 +257,43 @@ const WB_Unit5_Page4_Q2 = () => {
                   }`}
                   onClick={() => document.getElementById("img1-dot").click()}
                 /> */}
-                {svgImages.img1 && (
-                  <div
-                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    style={{ color: imageColors.img1 || "#ffffffff" }}
-                    onDoubleClick={() => setActivePalette("img1")}
-                    onTouchStart={() => setActivePalette("img1")}
-                    onClick={() => document.getElementById("img1-dot").click()}
-                    dangerouslySetInnerHTML={{ __html: svgImages.img1 }}
-                  />
-                )}
-                {activePalette === "img1" && (
-                  <div className="color-palette-wb-unit5-p4-q2">
-                    {["red", "blue", "yellow", "brown"].map((color) => (
-                      <button
-                        key={color}
-                        className="color-circle"
-                        style={{ backgroundColor: color }}
-                        onClick={() => {
-                          setImageColors((prev) => ({ ...prev, img1: color }));
-                          setActivePalette(null);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-
+              {svgImages.img1 && (
                 <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                {/* <img
+                  className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  style={{ color: imageColors.img1 || "#ffffffff" }}
+                  onDoubleClick={() => setActivePalette("img1")}
+                  onTouchStart={() => setActivePalette("img1")}
+                  onClick={() => document.getElementById("img1-dot").click()}
+                  dangerouslySetInnerHTML={{ __html: svgImages.img1 }}
+                />
+              )}
+              {activePalette === "img1" && (
+                <div className="color-palette-wb-unit5-p4-q2">
+                  {["red", "blue", "yellow", "brown"].map((color) => (
+                    <button
+                      key={color}
+                      className="color-circle"
+                      style={{ backgroundColor: color }}
+                      onClick={() => {
+                        setImageColors((prev) => ({ ...prev, img1: color }));
+                        setActivePalette(null);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              {/* <img
                   src={img2}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
@@ -298,43 +301,43 @@ const WB_Unit5_Page4_Q2 = () => {
                   }`}
                   onClick={() => document.getElementById("img2-dot").click()}
                 /> */}
-                {svgImages.img2 && (
-                  <div
-                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    style={{ color: imageColors.img2 || "transparent" }}
-                    onDoubleClick={() => setActivePalette("img2")}
-                    onTouchStart={() => setActivePalette("img2")}
-                    onClick={() => document.getElementById("img2-dot").click()}
-                    dangerouslySetInnerHTML={{ __html: svgImages.img2 }}
-                  />
-                )}
-
-                {activePalette === "img2" && (
-                  <div className="color-palette-wb-unit5-p4-q2">
-                    {["red", "blue", "yellow", "brown"].map((color) => (
-                      <button
-                        key={color}
-                        className="color-circle"
-                        style={{ backgroundColor: color }}
-                        onClick={() => {
-                          setImageColors((prev) => ({ ...prev, img2: color }));
-                          setActivePalette(null);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+              {svgImages.img2 && (
                 <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                {/* <img
+                  className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  style={{ color: imageColors.img2 || "transparent" }}
+                  onDoubleClick={() => setActivePalette("img2")}
+                  onTouchStart={() => setActivePalette("img2")}
+                  onClick={() => document.getElementById("img2-dot").click()}
+                  dangerouslySetInnerHTML={{ __html: svgImages.img2 }}
+                />
+              )}
+
+              {activePalette === "img2" && (
+                <div className="color-palette-wb-unit5-p4-q2">
+                  {["red", "blue", "yellow", "brown"].map((color) => (
+                    <button
+                      key={color}
+                      className="color-circle"
+                      style={{ backgroundColor: color }}
+                      onClick={() => {
+                        setImageColors((prev) => ({ ...prev, img2: color }));
+                        setActivePalette(null);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              {/* <img
                   src={img3}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
@@ -342,43 +345,43 @@ const WB_Unit5_Page4_Q2 = () => {
                   }`}
                   onClick={() => document.getElementById("img3-dot").click()}
                 /> */}
-                {svgImages.img2 && (
-                  <div
-                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    style={{ color: imageColors.img3 || "#ffffffff" }}
-                    onDoubleClick={() => setActivePalette("img3")}
-                    onTouchStart={() => setActivePalette("img3")}
-                    onClick={() => document.getElementById("img3-dot").click()}
-                    dangerouslySetInnerHTML={{ __html: svgImages.img3 }}
-                  />
-                )}
-
-                {activePalette === "img3" && (
-                  <div className="color-palette-wb-unit5-p4-q2">
-                    {["red", "blue", "yellow", "brown"].map((color) => (
-                      <button
-                        key={color}
-                        className="color-circle"
-                        style={{ backgroundColor: color }}
-                        onClick={() => {
-                          setImageColors((prev) => ({ ...prev, img3: color }));
-                          setActivePalette(null);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+              {svgImages.img2 && (
                 <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>
-              <div className="img-box2">
-                {/* <img
+                  className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  style={{ color: imageColors.img3 || "#ffffffff" }}
+                  onDoubleClick={() => setActivePalette("img3")}
+                  onTouchStart={() => setActivePalette("img3")}
+                  onClick={() => document.getElementById("img3-dot").click()}
+                  dangerouslySetInnerHTML={{ __html: svgImages.img3 }}
+                />
+              )}
+
+              {activePalette === "img3" && (
+                <div className="color-palette-wb-unit5-p4-q2">
+                  {["red", "blue", "yellow", "brown"].map((color) => (
+                    <button
+                      key={color}
+                      className="color-circle"
+                      style={{ backgroundColor: color }}
+                      onClick={() => {
+                        setImageColors((prev) => ({ ...prev, img3: color }));
+                        setActivePalette(null);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>
+            <div className="img-box2">
+              {/* <img
                   src={img4}
                   alt=""
                   className={`img-box2-unit6-p6-q3 ${
@@ -387,62 +390,62 @@ const WB_Unit5_Page4_Q2 = () => {
                   onClick={() => document.getElementById("img4-dot").click()}
                 /> */}
 
-                {svgImages.img4 && (
-                  <div
-                    className={`svg-wrapper img-box2-unit6-p6-q3 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    style={{ color: imageColors.img4 || "#ffffffff" }}
-                    onDoubleClick={() => setActivePalette("img4")}
-                    onTouchStart={() => setActivePalette("img4")}
-                    onClick={() => document.getElementById("img4-dot").click()}
-                    dangerouslySetInnerHTML={{ __html: svgImages.img4 }}
-                  />
-                )}
-
-                {activePalette === "img4" && (
-                  <div className="color-palette-wb-unit5-p4-q2">
-                    {["red", "blue", "yellow", "brown"].map((color) => (
-                      <button
-                        key={color}
-                        className="color-circle"
-                        style={{ backgroundColor: color }}
-                        onClick={() => {
-                          setImageColors((prev) => ({ ...prev, img4: color }));
-                          setActivePalette(null);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+              {svgImages.img4 && (
                 <div
-                  className="dot22-unit6-q7 end-dot22-unit6-q7"
-                  data-image="img4"
-                  id="img4-dot"
-                  onClick={handleEndDotClick}
-                ></div>
-              </div>{" "}
-            </div>
-
-            {/* الجمل */}
-
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
+                  className={`svg-wrapper img-box2-unit6-p6-q3 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  style={{ color: imageColors.img4 || "#ffffffff" }}
+                  onDoubleClick={() => setActivePalette("img4")}
+                  onTouchStart={() => setActivePalette("img4")}
+                  onClick={() => document.getElementById("img4-dot").click()}
+                  dangerouslySetInnerHTML={{ __html: svgImages.img4 }}
                 />
-              ))}
-            </svg>
+              )}
+
+              {activePalette === "img4" && (
+                <div className="color-palette-wb-unit5-p4-q2">
+                  {["red", "blue", "yellow", "brown"].map((color) => (
+                    <button
+                      key={color}
+                      className="color-circle"
+                      style={{ backgroundColor: color }}
+                      onClick={() => {
+                        setImageColors((prev) => ({ ...prev, img4: color }));
+                        setActivePalette(null);
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+              <div
+                className="dot22-unit6-q7 end-dot22-unit6-q7"
+                data-image="img4"
+                id="img4-dot"
+                onClick={handleEndDotClick}
+              ></div>
+            </div>{" "}
           </div>
+
+          {/* الجمل */}
+
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
       </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {
@@ -450,6 +453,8 @@ const WB_Unit5_Page4_Q2 = () => {
             setWrongImages([]);
             setFirstDot(null);
             setShowAnswer(false);
+            setSelectedLeftWord(null);
+            setSelectedRightWord(null);
             setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
 
             // 🔁 إعادة الصور للونها الأساسي
@@ -486,6 +491,8 @@ const WB_Unit5_Page4_Q2 = () => {
             setLines(finalLines);
             setWrongImages([]);
             setShowAnswer(true);
+            setSelectedLeftWord(null);
+            setSelectedRightWord(null);
             setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
           }}
           className="show-answer-btn swal-continue"

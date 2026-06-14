@@ -101,16 +101,12 @@ const WB_Unit8_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <div>
           <h5 className="header-title-page8">
-            <span className="ex-A">F</span> Look, read, and circle.
+            <span className="ex-A">F</span> Tap or click the correct sentence.
           </h5>
         </div>
         <div className="container-wb-unit8-p3-q2">

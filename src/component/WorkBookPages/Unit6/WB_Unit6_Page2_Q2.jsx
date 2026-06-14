@@ -1,7 +1,15 @@
 import React, { useState, useRef } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit6_Page2_Q2.css";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
 
 // 🔹 الصور
 import img1 from "../../../assets/U1 WB/U6/U6P34EXED-01.svg";
@@ -12,9 +20,9 @@ import img4 from "../../../assets/U1 WB/U6/U6P34EXED-04.svg";
 /* ================= DATA ================= */
 
 const leftParts = [
-  { id: 1, text: "He can’t" },
-  { id: 2, text: "He can’t" },
-  { id: 3, text: "It can’t" },
+  { id: 1, text: "He can't" },
+  { id: 2, text: "He can't" },
+  { id: 3, text: "It can't" },
   { id: 4, text: "I can" },
 ];
 
@@ -40,13 +48,74 @@ const correctMatches = [
 ];
 
 const correctSentences = {
-  1: "He can’t ride a bike.",
-  2: "It can’t climb a tree.",
-  3: "He can’t sail a boat.",
+  1: "He can't ride a bike.",
+  2: "He can't sail a boat.",
+  3: "It can't climb a tree.",
   4: "I can swim.",
 };
 
-/* ================= COMPONENT ================= */
+/* ================= DraggableSentence ================= */
+
+const DraggableSentence = ({ sentence, locked, isUsed }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `sentence-${sentence}`,
+    disabled: locked || isUsed,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "2px 5px",
+        border: `2px solid ${isUsed ? "#aaa" : "#2c5287"}`,
+        borderRadius: "8px",
+        background: isUsed ? "#e0e0e0" : "white",
+        fontWeight: "bold",
+        color: isUsed ? "#999" : "",
+        cursor: locked || isUsed ? "default" : "grab",
+        opacity: isDragging ? 0.3 : 1,
+        touchAction: "none",
+        userSelect: "none",
+        transition: "all 0.2s",
+      }}
+    >
+      {sentence}
+    </div>
+  );
+};
+
+/* ================= DroppableWriteBox ================= */
+
+const DroppableWriteBox = ({ id, value, isWrong, locked, onRemove }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `write-${id}`,
+    disabled: locked,
+  });
+
+  return (
+    <div className="input-wrapper-wb-unit6-p2-q2">
+      <div
+        ref={setNodeRef}
+        className={`write-drop-wb-unit6-p2-q2 ${isOver ? "drag-over-cell" : ""}`}
+        onClick={() => !locked && value && onRemove(id)}
+        style={{
+          background: isOver ? "#e3f2fd" : "",
+          cursor: !locked && value ? "pointer" : "default",
+          transition: "background 0.15s ease",
+          position: "relative",
+        }}
+        title={!locked && value ? "Click to remove" : ""}
+      >
+        {value || ""}
+        {isWrong && <span className="wrong-input-mark-wb-unit6-p2-q2">✕</span>}
+      </div>
+    </div>
+  );
+};
+
+/* ================= MAIN COMPONENT ================= */
 
 const WB_Unit6_Page2_Q2 = () => {
   const containerRef = useRef(null);
@@ -58,22 +127,36 @@ const WB_Unit6_Page2_Q2 = () => {
   const [locked, setLocked] = useState(false);
   const [checked, setChecked] = useState(false);
   const [wrongInputs, setWrongInputs] = useState([]);
+  const [activeSentence, setActiveSentence] = useState(null);
+  const [selectedLeftId, setSelectedLeftId] = useState(null);
+  const [selectedImageId, setSelectedImageId] = useState(null);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || locked || checked) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-    const sentence = result.draggableId;
-    const dest = result.destination.droppableId;
+  const usedSentences = Object.values(written).filter(Boolean);
 
-    // dest مثال: write-2
-    if (!dest.startsWith("write-")) return;
+  /* ================= DnD Handlers ================= */
 
-    const id = dest.replace("write-", "");
+  const handleDragStart = (event) => {
+    setActiveSentence(event.active.id.replace("sentence-", ""));
+  };
+
+  const handleDragEnd = (event) => {
+    setActiveSentence(null);
+    if (locked) return;
+
+    const { active, over } = event;
+    if (!over || !over.id.startsWith("write-")) return;
+
+    const sentence = active.id.replace("sentence-", "");
+    const id = over.id.replace("write-", "");
 
     setWritten((prev) => {
       const updated = { ...prev };
 
-      // ⭐ شيل الجملة من أي مكان قديم
+      // شيل الجملة من أي مكان قديم
       Object.keys(updated).forEach((key) => {
         if (updated[key] === sentence) delete updated[key];
       });
@@ -83,53 +166,50 @@ const WB_Unit6_Page2_Q2 = () => {
     });
   };
 
-  /* ================= HELPERS ================= */
+  const handleRemoveWritten = (id) => {
+    setWritten((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+  };
+
+  /* ================= MATCHING LINE HELPERS ================= */
 
   const getDotCenter = (parent, selector) => {
     const rect = containerRef.current.getBoundingClientRect();
     const dot = parent.querySelector(selector);
     if (!dot) return null;
-
     const r = dot.getBoundingClientRect();
     return {
       x: r.left - rect.left + r.width / 2,
       y: r.top - rect.top + r.height / 2,
     };
   };
-  const getCenter = (el) => {
-    const rect = containerRef.current.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    return {
-      x: r.left - rect.left + r.width / 2,
-      y: r.top - rect.top + r.height / 2,
-    };
-  };
+
   const getDotCenterFromParent = (parent, dotSelector) => {
-    const dot = parent.querySelector(dotSelector);
-    if (!dot) return null;
-    return getCenter(dot);
+    return getDotCenter(parent, dotSelector);
   };
 
   /* ================= CLICK HANDLERS ================= */
+
   const handleStart = (e) => {
     if (locked) return;
-
     const data = e.currentTarget.dataset;
 
     let type = null;
     if (data.leftId) type = "left";
     else if (data.image) type = "image";
-    else if (data.right) type = "right";
 
     let pos = null;
-
     if (type === "left") {
       pos = getDotCenterFromParent(e.currentTarget, ".start-dot");
+      setSelectedLeftId(Number(data.leftId));
+      setSelectedImageId(null);
     } else if (type === "image") {
       pos = getDotCenterFromParent(e.currentTarget, ".start-dot");
-    } else {
-      return;
-    }
+      setSelectedImageId(data.image);
+    } else return;
 
     if (!pos) return;
 
@@ -144,7 +224,6 @@ const WB_Unit6_Page2_Q2 = () => {
 
   const handleEnd = (e) => {
     if (!firstPoint || locked) return;
-
     const data = e.currentTarget.dataset;
 
     let endType = null;
@@ -156,7 +235,6 @@ const WB_Unit6_Page2_Q2 = () => {
       setFirstPoint(null);
       return;
     }
-
     if (firstPoint.type === "image" && endType !== "right") {
       setFirstPoint(null);
       return;
@@ -166,7 +244,6 @@ const WB_Unit6_Page2_Q2 = () => {
     if (endType === "image" || endType === "right") {
       pos = getDotCenterFromParent(e.currentTarget, ".end-dot");
     }
-
     if (!pos) return;
 
     const newLine = {
@@ -179,14 +256,35 @@ const WB_Unit6_Page2_Q2 = () => {
       right: data.right || null,
     };
 
-    setLines((prev) => [...prev, newLine]);
+    setLines((prev) => {
+      let filtered = prev;
+      if (firstPoint.type === "left") {
+        // امسح أي خط قديم طالع من نفس leftId
+        // وأي خط قديم واصل لنفس الصورة من اليسار
+        filtered = filtered.filter(
+          (l) =>
+            l.leftId !== firstPoint.leftId &&
+            !(l.image === data.image && l.leftId != null),
+        );
+      } else if (firstPoint.type === "image") {
+        // امسح أي خط قديم طالع من نفس الصورة لليمين
+        // وأي خط قديم واصل لنفس right من صورة
+        filtered = filtered.filter(
+          (l) =>
+            !(l.image === firstPoint.image && l.right != null) &&
+            !(l.right === data.right && l.right != null),
+        );
+      }
+      return [...filtered, newLine];
+    });
 
     if (firstPoint.type === "left" && endType === "image") {
       const startFromImagePos = getDotCenterFromParent(
         e.currentTarget,
         ".start-dot",
       );
-
+      setSelectedLeftId(null);
+      setSelectedImageId(data.image); // ⭐ الصورة تصير selected بعد ربطها باليسار
       setFirstPoint({
         type: "image",
         image: data.image,
@@ -194,6 +292,8 @@ const WB_Unit6_Page2_Q2 = () => {
         y: startFromImagePos?.y ?? pos.y,
       });
     } else {
+      setSelectedLeftId(null);
+      setSelectedImageId(null);
       setFirstPoint(null);
     }
   };
@@ -202,11 +302,10 @@ const WB_Unit6_Page2_Q2 = () => {
 
   const checkAnswers = () => {
     if (checked || locked) return;
-    // 🔴 Check empty inputs
+
     const emptyInputs = Object.keys(correctSentences).filter(
       (id) => !written[id] || written[id].trim() === "",
     );
-
     if (emptyInputs.length > 0) {
       ValidationAlert.info(
         "Pay attention!",
@@ -240,7 +339,6 @@ const WB_Unit6_Page2_Q2 = () => {
       const leftToImg = lines.find(
         (l) => l.leftId === c.leftId && l.image === c.image,
       );
-
       const imgToRight = lines.find(
         (l) => l.image === c.image && l.right === c.right,
       );
@@ -268,9 +366,7 @@ const WB_Unit6_Page2_Q2 = () => {
     ValidationAlert[
       score === total ? "success" : score === 0 ? "error" : "warning"
     ](
-      `<div style="font-size:20px;text-align:center;color:${color}">
-        <b>Score: ${score} / ${total}</b>
-      </div>`,
+      `<div style="font-size:20px;text-align:center;color:${color}"><b>Score: ${score} / ${total}</b></div>`,
     );
   };
 
@@ -280,34 +376,29 @@ const WB_Unit6_Page2_Q2 = () => {
     const finalLines = [];
 
     correctMatches.forEach((c) => {
-      // العناصر
       const leftEl = document.querySelector(`[data-left-id="${c.leftId}"]`);
       const imgEl = document.querySelector(`[data-image="${c.image}"]`);
       const rightEl = document.querySelector(`[data-right="${c.right}"]`);
 
       if (!leftEl || !imgEl || !rightEl) return;
 
-      // 🔹 Left → Image
       const leftDot = getDotCenter(leftEl, ".start-dot");
-      const imageLeftDot = getDotCenter(imgEl, ".end-dot");
-
-      if (leftDot && imageLeftDot) {
+      const imageEndDot = getDotCenter(imgEl, ".end-dot");
+      if (leftDot && imageEndDot) {
         finalLines.push({
           x1: leftDot.x,
           y1: leftDot.y,
-          x2: imageLeftDot.x,
-          y2: imageLeftDot.y,
+          x2: imageEndDot.x,
+          y2: imageEndDot.y,
         });
       }
 
-      // 🔹 Image → Right
-      const imageRightDot = getDotCenter(imgEl, ".start-dot");
+      const imageStartDot = getDotCenter(imgEl, ".start-dot");
       const rightDot = getDotCenter(rightEl, ".end-dot");
-
-      if (imageRightDot && rightDot) {
+      if (imageStartDot && rightDot) {
         finalLines.push({
-          x1: imageRightDot.x,
-          y1: imageRightDot.y,
+          x1: imageStartDot.x,
+          y1: imageStartDot.y,
           x2: rightDot.x,
           y2: rightDot.y,
         });
@@ -318,6 +409,8 @@ const WB_Unit6_Page2_Q2 = () => {
     setWritten(correctSentences);
     setLocked(true);
     setChecked(true);
+    setWrongInputs([]);
+    setWrongLeft([]);
   };
 
   /* ================= RESET ================= */
@@ -329,12 +422,20 @@ const WB_Unit6_Page2_Q2 = () => {
     setLocked(false);
     setChecked(false);
     setFirstPoint(null);
+    setWrongInputs([]);
+    setActiveSentence(null);
+    setSelectedLeftId(null);
+    setSelectedImageId(null);
   };
 
   /* ================= RENDER ================= */
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         style={{
           display: "flex",
@@ -343,68 +444,37 @@ const WB_Unit6_Page2_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            width: "60%",
-            display: "flex",
-            flexDirection: "column",
-            // gap: "20px",
-          }}
-        >
+        <div className="div-forall" style={{ gap: "20px" }}>
           <h4 className="header-title-page8">
-            <span className="ex-A">D</span> Read, match, and write.
+            <span className="ex-A">D</span>connect the words to the images to
+            build sentences.
           </h4>
-          <Droppable droppableId="sentence-bank" direction="vertical">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  // margin: "10px 0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {Object.values(correctSentences).map((sentence, i) => {
-                  return (
-                    <Draggable
-                      key={sentence}
-                      draggableId={sentence}
-                      index={i}
-                      isDragDisabled={locked || checked}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "2px 5px",
-                            border: "2px solid #2c5287",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "bold",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {sentence}
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
 
+          {/* ─── Sentence Bank ─── */}
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              padding: "10px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              flexWrap: "wrap",
+            }}
+          >
+            {Object.values(correctSentences).map((sentence) => (
+              <DraggableSentence
+                key={sentence}
+                sentence={sentence}
+                locked={locked}
+                isUsed={usedSentences.includes(sentence)}
+              />
+            ))}
+          </div>
+
+          {/* ─── Matching Area ─── */}
           <div className="matching-area" ref={containerRef}>
             {/* LEFT */}
             <div className="left-col-wb-unit6-p2-q2">
@@ -417,9 +487,7 @@ const WB_Unit6_Page2_Q2 = () => {
                 >
                   <span className="num-wb-unit6-p2-q2">{i + 1}</span>
                   <span
-                    className={`word-text-wb-unit6-p2-q2 ${
-                      locked || checked ? "disabled-word" : ""
-                    }`}
+                    className={`word-text-wb-unit6-p2-q2 ${selectedLeftId === l.id ? "selected-item" : ""} ${locked ? "disabled-word" : ""}`}
                   >
                     {l.text}
                   </span>
@@ -444,11 +512,8 @@ const WB_Unit6_Page2_Q2 = () => {
                   <img
                     src={img.src}
                     alt=""
-                    className={`matched-img2 ${
-                      locked || checked ? "disabled-hover" : ""
-                    }`}
+                    className={`matched-img2 ${selectedImageId === img.id ? "selected-item" : ""} ${locked ? "disabled-hover" : ""}`}
                   />
-
                   <div className="dot-wb-unit6-p2-q2 start-dot" />
                 </div>
               ))}
@@ -465,11 +530,8 @@ const WB_Unit6_Page2_Q2 = () => {
                 >
                   <div className="dot-wb-unit6-p2-q2 end-dot" />
                   <span
-                    className={`word-text-wb-unit6-p2-q2 ${
-                      locked || checked ? "disabled-word" : ""
-                    }`}
+                    className={`word-text-wb-unit6-p2-q2 ${locked ? "disabled-word" : ""}`}
                   >
-                    {" "}
                     {r.text}
                   </span>
                 </div>
@@ -479,48 +541,37 @@ const WB_Unit6_Page2_Q2 = () => {
             {/* LINES */}
             <svg className="lines-layer">
               {lines.map((l, i) => (
-                <line key={i} {...l} stroke="red" strokeWidth="3" />
+                <line
+                  key={i}
+                  x1={l.x1}
+                  y1={l.y1}
+                  x2={l.x2}
+                  y2={l.y2}
+                  stroke="red"
+                  strokeWidth="3"
+                />
               ))}
             </svg>
           </div>
 
-          {/* WRITE SECTION */}
+          {/* ─── Write Section ─── */}
           <div className="write-section-wb-unit6-p2-q2">
             {Object.keys(correctSentences).map((id) => (
-              <div className="write-line-wb-unit6-p2-q2">
+              <div key={id} className="write-line-wb-unit6-p2-q2">
                 <span>{id}</span>
-
-                <div className="input-wrapper-wb-unit6-p2-q2">
-                  <Droppable droppableId={`write-${id}`}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`write-drop-wb-unit6-p2-q2  ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
-                        style={{
-                          background: snapshot.isDraggingOver ? "#e3f2fd" : "",
-                        }}
-                      >
-                        {written[id] || ""}
-
-                        {checked && wrongInputs.includes(Number(id)) && (
-                          <span className="wrong-input-mark-wb-unit6-p2-q2">
-                            ✕
-                          </span>
-                        )}
-
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
+                <DroppableWriteBox
+                  id={id}
+                  value={written[id] || ""}
+                  isWrong={checked && wrongInputs.includes(Number(id))}
+                  locked={locked}
+                  onRemove={handleRemoveWritten}
+                />
               </div>
             ))}
           </div>
         </div>
-        {/* BUTTONS */}
+
+        {/* ─── Buttons ─── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
@@ -533,7 +584,26 @@ const WB_Unit6_Page2_Q2 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ─── Drag Overlay ─── */}
+      <DragOverlay>
+        {activeSentence && (
+          <div
+            style={{
+              padding: "2px 5px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              cursor: "grabbing",
+            }}
+          >
+            {activeSentence}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

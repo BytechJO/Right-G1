@@ -1,7 +1,37 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
 import "./WB_Unit4_Page4_Q1.css";
+
+const WORDS = ["triangle", "circle", "square", "rectangle"];
+
+const BASIC_COLORS = ["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ffa200ff"];
+
+const emptyLabels = () => ({
+  triangle: "",
+  circle1: "",
+  circle2: "",
+  house: "",
+  door: "",
+});
+
+const emptyColors = () => ({
+  triangle: "#ffffff",
+  circle1: "#ffffff",
+  circle2: "#ffffff",
+  house: "#ffffff",
+  door: "#ffffff",
+});
+
+// ─── Wrong Icon ───────────────────────────────────────────────────
 const WrongIcon = () => (
   <div
     style={{
@@ -26,57 +56,138 @@ const WrongIcon = () => (
   </div>
 );
 
-const WORDS = ["triangle", "circle", "square", "rectangle"];
+// ─── Draggable Word ───────────────────────────────────────────────
+const DraggableWord = ({ word, locked, isUsed }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `word-${word}`,
+    disabled: locked || isUsed,
+  });
 
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "7px 14px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: isUsed ? "#e0e0e0" : "white",
+        fontWeight: "bold",
+        cursor: locked || isUsed ? "default" : "grab",
+        opacity: isDragging ? 0.4 : isUsed ? 0.45 : 1,
+        touchAction: "none",
+        transition: "all 0.2s ease",
+        color: isUsed ? "#999" : "inherit",
+        userSelect: "none",
+      }}
+    >
+      {word}
+    </div>
+  );
+};
+
+// ─── Droppable Label Box ──────────────────────────────────────────
+const DroppableLabelBox = ({
+  shapeKey,
+  label,
+  checked,
+  isCorrectVal,
+  locked,
+  onRemove,
+  style,
+}) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `shape-${shapeKey}`,
+    disabled: locked,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`drop-label-box ${isOver ? "drag-over-cell" : ""}`}
+      onClick={() => !locked && label && onRemove(shapeKey)}
+      style={{
+        height: 30,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "2px dashed #999",
+        borderRadius: 6,
+        position: "relative",
+        backgroundColor: isOver ? "#e3f2fd" : "#fff",
+        transform: isOver ? "scale(1.05)" : "scale(1)",
+        transition: "all 0.2s ease",
+        cursor: !locked && label ? "pointer" : "default",
+        ...style,
+      }}
+      title={!locked && label ? "Click to remove" : ""}
+    >
+      {label && <span>{label}</span>}
+      {checked && label && isCorrectVal === false && <WrongIcon />}
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────
 const WB_Unit4_Page4_Q1 = () => {
-  const [labels, setLabels] = useState({
-    triangle: "",
-    circle1: "",
-    circle2: "",
-    house: "",
-    door: "",
-  });
-
-  const [colors, setColors] = useState({
-    triangle: "#ffffff",
-    circle1: "#ffffff",
-    circle2: "#ffffff",
-    house: "#ffffff",
-    door: "#ffffff",
-  });
-
+  const [labels, setLabels] = useState(emptyLabels());
+  const [colors, setColors] = useState(emptyColors());
   const [checked, setChecked] = useState(false);
   const [activeShape, setActiveShape] = useState(null);
   const [showPalette, setShowPalette] = useState(false);
+  const [activeWord, setActiveWord] = useState(null);
 
-  const BASIC_COLORS = [
-    "#ff0000",
-    "#0000ff",
-    "#ffff00",
-    "#00aa00",
-    "#ffa200ff",
-  ];
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-  /* ================== Drag & Drop ================== */
-  const onDragEnd = (result) => {
-    if (!result.destination || checked) return;
+  // الكلمات المستخدمة
+  const usedWords = Object.values(labels).filter(Boolean);
 
-    const { draggableId, destination } = result;
-
-    if (!destination.droppableId.startsWith("shape-")) return;
-
-    const shapeKey = destination.droppableId.replace("shape-", "");
-    const word = draggableId.replace("word-", "");
-
-    setLabels((prev) => {
-      const updated = { ...prev };
-
-      updated[shapeKey] = word;
-      return updated;
-    });
+  // ─── isCorrect ───────────────────────────────────────────────
+  const isCorrect = (shape) => {
+    if (!checked) return null;
+    switch (shape) {
+      case "triangle":
+        return labels.triangle === "triangle";
+      case "circle1":
+      case "circle2":
+        return labels[shape] === "circle";
+      case "house":
+      case "door":
+        return ["square", "rectangle"].includes(labels[shape]);
+      default:
+        return null;
+    }
   };
 
-  /* ================== Color ================== */
+  // ─── Drag Handlers ───────────────────────────────────────────
+  const handleDragStart = (event) => {
+    setActiveWord(event.active.id.replace("word-", ""));
+  };
+
+  const handleDragEnd = (event) => {
+    setActiveWord(null);
+    if (checked) return;
+
+    const { active, over } = event;
+    if (!over || !over.id.startsWith("shape-")) return;
+
+    const shapeKey = over.id.replace("shape-", "");
+    const word = active.id.replace("word-", "");
+
+    setLabels((prev) => ({ ...prev, [shapeKey]: word }));
+    // ملاحظة: هاي الكومبوننت بتسمح بنفس الكلمة على أكثر من شكل
+    // (circle بتنحط على circle1 و circle2) — فما منمنع التكرار هون
+  };
+
+  // ─── Remove label on click ───────────────────────────────────
+  const handleRemove = (shapeKey) => {
+    setLabels((prev) => ({ ...prev, [shapeKey]: "" }));
+  };
+
+  // ─── Color ───────────────────────────────────────────────────
   const openColorPicker = (shape) => {
     if (checked) return;
     setActiveShape(shape);
@@ -86,17 +197,15 @@ const WB_Unit4_Page4_Q1 = () => {
   const selectColor = (color) => {
     setColors((prev) => ({ ...prev, [activeShape]: color }));
     setShowPalette(false);
+    setActiveShape(null);
   };
 
-  /* ================== Check ================== */
+  // ─── Check ───────────────────────────────────────────────────
   const checkAnswer = () => {
-    if (
-      !labels.triangle ||
-      !labels.circle1 ||
-      !labels.circle2 ||
-      !labels.house ||
-      !labels.door
-    ) {
+    if (checked) return;
+
+    const allFilled = Object.values(labels).every((v) => v);
+    if (!allFilled) {
       ValidationAlert.info("Please label all the shapes.");
       return;
     }
@@ -112,52 +221,16 @@ const WB_Unit4_Page4_Q1 = () => {
 
     const total = 5;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
-
     ValidationAlert[
       score === total ? "success" : score === 0 ? "error" : "warning"
     ](`
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold">
-          Score: ${score} / ${total}
-        </span>
+        <span style="color:${color};font-weight:bold">Score: ${score} / ${total}</span>
       </div>
     `);
   };
-  const isCorrect = (shape) => {
-    if (!checked) return null;
 
-    switch (shape) {
-      case "triangle":
-        return labels.triangle === "triangle";
-      case "circle1":
-      case "circle2":
-        return labels[shape] === "circle";
-      case "house":
-      case "door":
-        return ["square", "rectangle"].includes(labels[shape]);
-      default:
-        return null;
-    }
-  };
-
-  const reset = () => {
-    setLabels({
-      triangle: "",
-      circle1: "",
-      circle2: "",
-      house: "",
-      door: "",
-    });
-    setColors({
-      triangle: "#ffffff",
-      circle1: "#ffffff",
-      circle2: "#ffffff",
-      house: "#ffffff",
-      door: "#ffffff",
-    });
-    setChecked(false);
-  };
-
+  // ─── Show Answer ─────────────────────────────────────────────
   const showAnswers = () => {
     setLabels({
       triangle: "triangle",
@@ -176,9 +249,24 @@ const WB_Unit4_Page4_Q1 = () => {
     setChecked(true);
   };
 
-  /* ================== UI ================== */
+  // ─── Reset ───────────────────────────────────────────────────
+  const reset = () => {
+    setLabels(emptyLabels());
+    setColors(emptyColors());
+    setChecked(false);
+    setShowPalette(false);
+    setActiveShape(null);
+  };
+
+  // ─── Shared drop box style ────────────────────────────────────
+  const boxStyle = { height: 30, width: "100%" };
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         style={{
           padding: 30,
@@ -187,64 +275,42 @@ const WB_Unit4_Page4_Q1 = () => {
           alignItems: "center",
         }}
       >
-        <div className="div-forall" style={{ width: "60%" }}>
-          <h5 className="header-title-page8">
-            <span className="ex-A">G</span> Look and label the shapes. Then
-            color.
-          </h5>
-          <span style={{ fontSize: "14px", color: "gray" }}>
-            Hint: Double Click to Color Word
-          </span>
-          {/* ===== Word Bank ===== */}
-          <Droppable droppableId="word-bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  // margin: "10px 0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {WORDS.map((word, index) => (
-                  <Draggable
-                    key={word}
-                    draggableId={`word-${word}`}
-                    index={index}
-                    isDragDisabled={checked}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          padding: "7px 14px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          background: "white",
-                          fontWeight: "bold",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {word}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+        <div className="div-forall" style={{ gap: "20px" }}>
+          <div>
+            <h5 className="header-title-page8">
+              <span className="ex-A">G</span> Drag and color the house
+            </h5>
+            <span style={{ fontSize: "14px", color: "gray" }}>
+              Hint: Double Click to Color Word
+            </span>
+          </div>
 
-          {/* ===== SVG ===== */}
+          {/* ─── Word Bank ─── */}
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              padding: "10px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {WORDS.map((word) => (
+              <DraggableWord
+                key={word}
+                word={word}
+                locked={checked}
+                // circle بتنحط على مكانين فما نعملها disabled لو استُخدمت مرة
+                isUsed={false}
+              />
+            ))}
+          </div>
+
+          {/* ─── SVG + Drop Zones ─── */}
           <div
             style={{
               position: "relative",
@@ -258,7 +324,6 @@ const WB_Unit4_Page4_Q1 = () => {
               height="350"
               className="all-svg-house-wb-unit4-p4-q1"
             >
-              {/* Triangle */}
               <polygon
                 points="150,20 50,120 250,120"
                 fill={colors.triangle}
@@ -266,8 +331,6 @@ const WB_Unit4_Page4_Q1 = () => {
                 onDoubleClick={() => openColorPicker("triangle")}
                 onTouchEnd={() => openColorPicker("triangle")}
               />
-
-              {/* House */}
               <rect
                 x="50"
                 y="120"
@@ -278,8 +341,6 @@ const WB_Unit4_Page4_Q1 = () => {
                 onDoubleClick={() => openColorPicker("house")}
                 onTouchEnd={() => openColorPicker("house")}
               />
-
-              {/* Circles */}
               <circle
                 cx="100"
                 cy="170"
@@ -298,8 +359,6 @@ const WB_Unit4_Page4_Q1 = () => {
                 onDoubleClick={() => openColorPicker("circle2")}
                 onTouchEnd={() => openColorPicker("circle2")}
               />
-
-              {/* Door */}
               <rect
                 x="110"
                 y="230"
@@ -311,165 +370,68 @@ const WB_Unit4_Page4_Q1 = () => {
                 onTouchEnd={() => openColorPicker("door")}
               />
             </svg>
+
+            {/* Triangle label */}
             <div
               style={{ position: "absolute", top: 120, left: 90, width: 120 }}
             >
-              <Droppable droppableId="shape-triangle" isDropDisabled={checked}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={`drop-label-box ${
-                      snapshot.isDraggingOver ? "drag-over-cell" : ""
-                    }`}
-                    style={{
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "2px dashed #999",
-                      borderRadius: 6,
-                      position: "relative",
-                      /* ✨ الأنيميشن */
-                      backgroundColor: snapshot.isDraggingOver
-                        ? "#e3f2fd"
-                        : "#fff",
-                      transform: snapshot.isDraggingOver
-                        ? "scale(1.05)"
-                        : "scale(1)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {labels.triangle && <span>{labels.triangle}</span>}{" "}
-                    {/* ❌ Wrong answer */}
-                    {checked &&
-                      labels.triangle &&
-                      isCorrect("triangle") === false && <WrongIcon />}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <DroppableLabelBox
+                shapeKey="triangle"
+                label={labels.triangle}
+                checked={checked}
+                isCorrectVal={isCorrect("triangle")}
+                locked={checked}
+                onRemove={handleRemove}
+                style={boxStyle}
+              />
             </div>
 
+            {/* House label */}
             <div
               style={{ position: "absolute", top: 305, left: 90, width: 120 }}
             >
-              <Droppable droppableId="shape-house" isDropDisabled={checked}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={`drop-label-box ${
-                      snapshot.isDraggingOver ? "drag-over-cell" : ""
-                    }`}
-                    style={{
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "2px dashed #999",
-                      borderRadius: 6,
-                      position: "relative",
-                      /* ✨ الأنيميشن */
-                      backgroundColor: snapshot.isDraggingOver
-                        ? "#e3f2fd"
-                        : "#fff",
-                      transform: snapshot.isDraggingOver
-                        ? "scale(1.05)"
-                        : "scale(1)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {labels.house && <span>{labels.house}</span>}
-                    {/* ❌ Wrong answer */}
-                    {checked &&
-                      labels.triangle &&
-                      isCorrect("triangle") === false && <WrongIcon />}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <DroppableLabelBox
+                shapeKey="house"
+                label={labels.house}
+                checked={checked}
+                isCorrectVal={isCorrect("house")}
+                locked={checked}
+                onRemove={handleRemove}
+                style={boxStyle}
+              />
             </div>
 
+            {/* Circle1 label */}
             <div
               style={{ position: "absolute", top: 240, left: 185, width: 80 }}
             >
-              <Droppable droppableId="shape-circle1" isDropDisabled={checked}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={`drop-label-box ${
-                      snapshot.isDraggingOver ? "drag-over-cell" : ""
-                    }`}
-                    style={{
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "2px dashed #999",
-                      borderRadius: 6,
-                      position: "relative",
-                      /* ✨ الأنيميشن */
-                      backgroundColor: snapshot.isDraggingOver
-                        ? "#e3f2fd"
-                        : "#fff",
-                      transform: snapshot.isDraggingOver
-                        ? "scale(1.05)"
-                        : "scale(1)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {labels.circle1 && <span>{labels.circle1}</span>}
-                    {/* ❌ Wrong answer */}
-                    {checked &&
-                      labels.triangle &&
-                      isCorrect("circle1") === false && <WrongIcon />}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <DroppableLabelBox
+                shapeKey="circle1"
+                label={labels.circle1}
+                checked={checked}
+                isCorrectVal={isCorrect("circle1")}
+                locked={checked}
+                onRemove={handleRemove}
+                style={boxStyle}
+              />
             </div>
+
+            {/* Circle2 label */}
             <div
               style={{ position: "absolute", top: 240, left: 35, width: 80 }}
             >
-              <Droppable droppableId="shape-circle2" isDropDisabled={checked}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={`drop-label-box ${
-                      snapshot.isDraggingOver ? "drag-over-cell" : ""
-                    }`}
-                    style={{
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "2px dashed #999",
-                      borderRadius: 6,
-                      position: "relative",
-                      /* ✨ الأنيميشن */
-                      backgroundColor: snapshot.isDraggingOver
-                        ? "#e3f2fd"
-                        : "#fff",
-                      transform: snapshot.isDraggingOver
-                        ? "scale(1.05)"
-                        : "scale(1)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {labels.circle2 && <span>{labels.circle2}</span>}
-                    {/* ❌ Wrong answer */}
-                    {checked &&
-                      labels.triangle &&
-                      isCorrect("circle2") === false && <WrongIcon />}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <DroppableLabelBox
+                shapeKey="circle2"
+                label={labels.circle2}
+                checked={checked}
+                isCorrectVal={isCorrect("circle2")}
+                locked={checked}
+                onRemove={handleRemove}
+                style={boxStyle}
+              />
             </div>
 
+            {/* Door label */}
             <div
               style={{
                 position: "absolute",
@@ -478,43 +440,19 @@ const WB_Unit4_Page4_Q1 = () => {
                 width: 100,
               }}
             >
-              <Droppable droppableId="shape-door" isDropDisabled={checked}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className={`drop-label-box ${
-                      snapshot.isDraggingOver ? "drag-over-cell" : ""
-                    }`}
-                    style={{
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      border: "2px dashed #999",
-                      borderRadius: 6,
-                      position: "relative",
-                      /* ✨ الأنيميشن */
-                      backgroundColor: snapshot.isDraggingOver
-                        ? "#e3f2fd"
-                        : "#fff",
-                      transform: snapshot.isDraggingOver
-                        ? "scale(1.05)"
-                        : "scale(1)",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {labels.door && <span>{labels.door}</span>}
-                    {/* ❌ Wrong answer */}
-                    {checked &&
-                      labels.triangle &&
-                      isCorrect("door") === false && <WrongIcon />}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
+              <DroppableLabelBox
+                shapeKey="door"
+                label={labels.door}
+                checked={checked}
+                isCorrectVal={isCorrect("door")}
+                locked={checked}
+                onRemove={handleRemove}
+                style={boxStyle}
+              />
             </div>
           </div>
+
+          {/* ─── Color Palette ─── */}
           {showPalette && (
             <div className="color-palette-wb-u1-p7-q1">
               {BASIC_COLORS.map((c) => (
@@ -529,7 +467,7 @@ const WB_Unit4_Page4_Q1 = () => {
           )}
         </div>
 
-        {/* Buttons */}
+        {/* ─── Buttons ─── */}
         <div className="action-buttons-container">
           <button className="try-again-button" onClick={reset}>
             Start Again ↻
@@ -542,7 +480,26 @@ const WB_Unit4_Page4_Q1 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ─── Drag Overlay ─── */}
+      <DragOverlay>
+        {activeWord && (
+          <div
+            style={{
+              padding: "7px 14px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "bold",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              cursor: "grabbing",
+            }}
+          >
+            {activeWord}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

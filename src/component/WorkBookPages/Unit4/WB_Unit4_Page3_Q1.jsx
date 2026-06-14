@@ -109,16 +109,13 @@ const WB_Unit4_Page3_Q1 = () => {
     >
       <div  className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+      
         }}
       >
         <div>
           <h5 className="header-title-page8">
-            <span className="ex-A">E</span>Look, read, and circle.
+            <span className="ex-A">E</span>Tap or click the correct response.
           </h5>
         </div>
         <div className="container-review6-p1-q1">

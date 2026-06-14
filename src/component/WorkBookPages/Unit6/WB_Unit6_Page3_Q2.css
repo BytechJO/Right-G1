@@ -1,7 +1,8 @@
 .content-container-wb-unit6-p3-q2 {
     display: flex;
     justify-items: center;
-    gap: 30px;
+    gap: 10px;
+    width: 100%;
     flex-direction: column;
     align-items: flex-start;
 }

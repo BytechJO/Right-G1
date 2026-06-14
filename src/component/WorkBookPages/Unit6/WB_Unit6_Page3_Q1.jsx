@@ -52,10 +52,10 @@ const WB_Unit6_Page3_Q1 = () => {
         { type: "text", value: "Can" },
         { type: "blank", options: ["it", "he"] },
         { type: "blank", options: ["fly a kite?", "climb a tree?"] },
-        { type: "blank", options: ["Yes, he can.", "No, he can’t."] },
+        { type: "blank", options: ["Yes, it can.", "No, it can’t."] },
         { type: "text", value: "." },
       ],
-      correct: ["he", "climb a tree?", "No, he can’t."],
+      correct: ["it", "climb a tree?", "No, it can’t."],
       image: img4,
     },
   ];
@@ -176,21 +176,19 @@ const WB_Unit6_Page3_Q1 = () => {
     >
       <div  className="div-forall"
         style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
+      
           gap: "20px",
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">E</span>Read, look, and circle.
+          <span className="ex-A">E</span>Tap or click the correct words for each picture
         </h4>
 
         <div
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "10px",
+            gap: "50px",
           }}
         >
           {questions.map((q, qIndex) => {

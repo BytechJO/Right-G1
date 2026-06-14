@@ -14,7 +14,7 @@ const WB_Unit2_Page5_Q1 = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [selectedLeftWord, setSelectedLeftWord] = useState(null);
   const [selectedRightWord, setSelectedRightWord] = useState(null);
- 
+
   // ⭐⭐⭐ NEW: حالة قفل الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   // -------------------------------------------
@@ -36,7 +36,7 @@ const WB_Unit2_Page5_Q1 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
- setSelectedLeftWord(word);
+    setSelectedLeftWord(word);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الكلمة
     const alreadyUsed = lines.some((line) => line.word === word);
     if (alreadyUsed) return;
@@ -71,7 +71,7 @@ const WB_Unit2_Page5_Q1 = () => {
       image: firstDot.image || endImage,
     };
 
-  setLines((prev) => [...prev, newLine]);
+    setLines((prev) => [...prev, newLine]);
 
     setSelectedRightWord(newLine.image);
 
@@ -92,7 +92,7 @@ const WB_Unit2_Page5_Q1 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -102,7 +102,7 @@ const WB_Unit2_Page5_Q1 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) correctCount++;
@@ -144,235 +144,232 @@ const WB_Unit2_Page5_Q1 = () => {
         className="div-forall"
         style={{
           gap: "30px",
- 
         }}
       >
-        
-          <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">I</span> Read and match.
-          </h5>
+        <h5 className="header-title-page8">
+          {" "}
+          <span className="ex-A">I</span> Read and match.
+        </h5>
 
-          <div className="container12 w-full" ref={containerRef}>
-            {/* الصف الأول */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="word-with-dot2">
-                <span className="span-num2">1</span>
-                <span
-                  className={`word-text2-wb-unit2-p5-q1 ${
-                      selectedLeftWord === "My birthday is in October." ? "selected-item" : ""
-                    }${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-duck").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  My birthday is in October.
-                </span>
+        <div className="container12 w-full" ref={containerRef}>
+          {/* الصف الأول */}
+          <div className="matching-row2-wb-unit2-p4-q2">
+            <div className="word-with-dot2">
+              <span className="span-num2">1</span>
+              <span
+                className={`word-text2-wb-unit2-p5-q1 ${
+                  selectedLeftWord === "My birthday is in October."
+                    ? "selected-item"
+                    : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("dot-duck").click()}
+                style={{ cursor: "pointer" }}
+              >
+                My birthday is in October.
+              </span>
 
-                {wrongWords.includes("My birthday is in October.") && (
-                  <span className="error-mark8-wb-unit2-p5-q1">✕</span>
-                )}
+              {wrongWords.includes("My birthday is in October.") && (
+                <span className="error-mark8-wb-unit2-p5-q1">✕</span>
+              )}
 
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-duck"
-                    data-word="My birthday is in October."
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img1"
-                    id="dot-img1"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-                <div style={{ width: "150px" }}>
-                  <img
-                    src={img1}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img1").click()}
-                    style={{ cursor: "pointer", height: "120px" }}
-                  />
-                </div>
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-duck"
+                  data-word="My birthday is in October."
+                  onClick={handleStartDotClick}
+                ></div>
               </div>
             </div>
 
-            {/* الصف الثاني */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="word-with-dot2">
-                <span className="span-num2">2</span>
-                <span
-                  className={`word-text2-wb-unit2-p5-q1 ${
-                      selectedLeftWord === "My birthday is in December." ? "selected-item" : ""
-                    } ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-tiger").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  My birthday is in December.
-                </span>
-
-                {wrongWords.includes("My birthday is in December.") && (
-                  <span className="error-mark8-wb-unit2-p5-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-tiger"
-                    data-word="My birthday is in December."
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img1"
+                  id="dot-img1"
+                  onClick={handleEndDotClick}
+                ></div>
               </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img2"
-                    id="dot-img2"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-                <div style={{ width: "150px" }}>
-                  <img
-                    src={img2}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img2").click()}
-                    style={{ cursor: "pointer", height: "120px" }}
-                  />
-                </div>
+              <div style={{ width: "150px" }}>
+                <img
+                  src={img1}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img1").click()}
+                  style={{ cursor: "pointer", height: "120px" }}
+                />
               </div>
             </div>
-
-            {/* الصف الثالث */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="word-with-dot2">
-                <span className="span-num2">3</span>
-                <span
-                  className={`word-text2-wb-unit2-p5-q1 ${
-                      selectedLeftWord === "My birthday is in May." ? "selected-item" : ""
-                    }${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-dish").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  My birthday is in <br /> May.
-                </span>
-
-                {wrongWords.includes("My birthday is in May.") && (
-                  <span className="error-mark8-wb-unit2-p5-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-dish"
-                    data-word="My birthday is in May."
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img3"
-                    id="dot-img3"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-                <div style={{ width: "150px" }}>
-                  <img
-                    src={img3}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img3").click()}
-                    style={{ cursor: "pointer", height: "120px" }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* الصف الرابع */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="word-with-dot2">
-                <span className="span-num2">4</span>
-                <span
-                  className={`word-text2-wb-unit2-p5-q1 ${
-                      selectedLeftWord === "My birthday is in February." ? "selected-item" : ""
-                    }${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-table").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  My birthday is in February.
-                </span>
-
-                {wrongWords.includes("My birthday is in February.") && (
-                  <span className="error-mark8-wb-unit2-p5-q1">✕</span>
-                )}
-
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-table"
-                    data-word="My birthday is in February."
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="img-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-image="img4"
-                    id="dot-img4"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-                <div style={{ width: "150px" }}>
-                  <img
-                    src={img4}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img4").click()}
-                    style={{ cursor: "pointer", height: "120px" }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <svg className="lines-layer2">
-              {lines.map((line, i) => (
-                <line key={i} {...line} stroke="red" strokeWidth="3" />
-              ))}
-            </svg>
           </div>
- 
+
+          {/* الصف الثاني */}
+          <div className="matching-row2-wb-unit2-p4-q2">
+            <div className="word-with-dot2">
+              <span className="span-num2">2</span>
+              <span
+                className={`word-text2-wb-unit2-p5-q1 ${
+                  selectedLeftWord === "My birthday is in December."
+                    ? "selected-item"
+                    : ""
+                } ${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("dot-tiger").click()}
+                style={{ cursor: "pointer" }}
+              >
+                My birthday is in December.
+              </span>
+
+              {wrongWords.includes("My birthday is in December.") && (
+                <span className="error-mark8-wb-unit2-p5-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-tiger"
+                  data-word="My birthday is in December."
+                  onClick={handleStartDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img2"
+                  id="dot-img2"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+              <div style={{ width: "150px" }}>
+                <img
+                  src={img2}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img2").click()}
+                  style={{ cursor: "pointer", height: "120px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* الصف الثالث */}
+          <div className="matching-row2-wb-unit2-p4-q2">
+            <div className="word-with-dot2">
+              <span className="span-num2">3</span>
+              <span
+                className={`word-text2-wb-unit2-p5-q1 ${
+                  selectedLeftWord === "My birthday is in May."
+                    ? "selected-item"
+                    : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("dot-dish").click()}
+                style={{ cursor: "pointer" }}
+              >
+                My birthday is in <br /> May.
+              </span>
+
+              {wrongWords.includes("My birthday is in May.") && (
+                <span className="error-mark8-wb-unit2-p5-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-dish"
+                  data-word="My birthday is in May."
+                  onClick={handleStartDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img3"
+                  id="dot-img3"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+              <div style={{ width: "150px" }}>
+                <img
+                  src={img3}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img3").click()}
+                  style={{ cursor: "pointer", height: "120px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* الصف الرابع */}
+          <div className="matching-row2-wb-unit2-p4-q2">
+            <div className="word-with-dot2">
+              <span className="span-num2">4</span>
+              <span
+                className={`word-text2-wb-unit2-p5-q1 ${
+                  selectedLeftWord === "My birthday is in February."
+                    ? "selected-item"
+                    : ""
+                }${locked || showAnswer ? "disabled-word" : ""}`}
+                onClick={() => document.getElementById("dot-table").click()}
+                style={{ cursor: "pointer" }}
+              >
+                My birthday is in February.
+              </span>
+
+              {wrongWords.includes("My birthday is in February.") && (
+                <span className="error-mark8-wb-unit2-p5-q1">✕</span>
+              )}
+
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 start-dot2"
+                  id="dot-table"
+                  data-word="My birthday is in February."
+                  onClick={handleStartDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="img-with-dot2">
+              <div className="dot-wrapper2">
+                <div
+                  className="dot2 end-dot2"
+                  data-image="img4"
+                  id="dot-img4"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+              <div style={{ width: "150px" }}>
+                <img
+                  src={img4}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img4").click()}
+                  style={{ cursor: "pointer", height: "120px" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <svg className="lines-layer2">
+            {lines.map((line, i) => (
+              <line key={i} {...line} stroke="red" strokeWidth="3" />
+            ))}
+          </svg>
+        </div>
 
         {/* الأزرار */}
         <div className="action-buttons-container">
@@ -383,6 +380,8 @@ const WB_Unit2_Page5_Q1 = () => {
               setWrongWords([]);
               setFirstDot(null);
               setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
+              setSelectedLeftWord(null);
+              setSelectedRightWord(null);
             }}
             className="try-again-button"
           >
@@ -413,6 +412,8 @@ const WB_Unit2_Page5_Q1 = () => {
               }));
 
               setShowAnswer(true);
+              setSelectedLeftWord(null);
+              setSelectedRightWord(null);
               setLines(finalLines);
               setWrongWords([]);
               setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer

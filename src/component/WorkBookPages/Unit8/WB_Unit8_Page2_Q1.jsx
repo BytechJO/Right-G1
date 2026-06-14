@@ -2,19 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import pencilCursor from "../../../assets/unit1/imgs/pen_96740.png";
 import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png";
-
+import "./WB_Unit8_Page2_Q1.css"
 const WB_Unit8_Page2_Q1 = () => {
-  // useEffect(() => {
-  //   const canvas = canvasRef.current;
-  //   const rect = canvas.getBoundingClientRect();
-  //   const dpr = window.devicePixelRatio || 1;
-
-  //   canvas.width = rect.width * dpr;
-  //   canvas.height = rect.height * dpr;
-
-  //   const ctx = canvas.getContext("2d");
-  //   ctx.scale(dpr, dpr);
-  // }, []);
   const [tool, setTool] = useState("pen"); // pen | eraser
 
   const canvasRef = useRef(null);
@@ -96,21 +85,19 @@ const WB_Unit8_Page2_Q1 = () => {
     >
       <div
         className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
+        style={
+          {
+            // gap: "30px",
+          }
+        }
       >
         <div>
-          <h5 className="header-title-page8" style={{ alignItems: "baseline" }}>
+          <h5 className="header-title-page8" >
             <span className="ex-A">C</span> Draw a picture of yourself. Label
             the parts of your body. Use the words below.
           </h5>
         </div>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -125,7 +112,7 @@ const WB_Unit8_Page2_Q1 = () => {
             🧽 Eraser
           </button>
         </div>
-        <div className="word-bank-wb-u4-p5-q1">
+        <div className="word-bank-wb-u8-p2-q1 w-full">
           {["head", "nose", "leg", "eye", "arm"].map((w, i) => (
             <span
               key={i}

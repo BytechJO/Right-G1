@@ -96,20 +96,23 @@ const WB_Unit4_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <div>
           <h5 className="header-title-page8">
-            <span className="ex-A">F</span> What are your favorite shapes? Write
+            <span className="ex-A">F</span> What are your favorite shapes? Type
             and draw.
           </h5>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            gap: "10px",
+          }}
+        >
           <p style={{ width: "10%", fontSize: "25px", fontWeight: "500" }}>
             I like
           </p>
@@ -124,7 +127,7 @@ const WB_Unit4_Page3_Q2 = () => {
 
           <span>.</span>
         </div>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}

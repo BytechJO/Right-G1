@@ -15,6 +15,9 @@ const WB_Unit9_Page1_Q1 = () => {
   const [locked, setLocked] = useState(false); //  ← إضافة جديدة
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
+
   const correctMatches = [
     { word: "How many cats are there?There are three cats.", image: "img2" },
     { word: "How many horses are there?There is one horse.", image: "img3" },
@@ -31,6 +34,7 @@ const WB_Unit9_Page1_Q1 = () => {
 
     const word = e.target.dataset.word || null;
     const image = e.target.dataset.image || null;
+    setSelectedLeftWord(image);
 
     // ⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة (image)
     const alreadyUsed = lines.some((line) => line.image === image);
@@ -66,6 +70,13 @@ const WB_Unit9_Page1_Q1 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
   const checkAnswers2 = () => {
@@ -74,7 +85,7 @@ const WB_Unit9_Page1_Q1 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -84,7 +95,7 @@ const WB_Unit9_Page1_Q1 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) {
@@ -126,204 +137,196 @@ const WB_Unit9_Page1_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <div className="container2-unit7-p6-q2">
-          <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">A</span>Look and match.
-          </h5>
+        <h5 className="header-title-page8">
+          {" "}
+          <span className="ex-A">A</span>Look and match.
+        </h5>
 
-          <div className="match-wrapper2" ref={containerRef}>
-            {/* الجمل */}
+        <div className="match-wrapper2 w-full" ref={containerRef}>
+          {/* الجمل */}
 
-            {/* الصور */}
-            <div className="match-images-row2">
+          {/* الصور */}
+          <div className="match-images-row2">
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
+              <img
+                src={img1}
+                alt=""
+                style={{ height: "150px" }}
+                className={`matched-img2 ${
+                  selectedLeftWord === "img1" ? "selected-item" : ""
+                } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                onClick={() => document.getElementById("img1-dot").click()}
+              />
+              {wrongImages.includes("img1") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
               <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>1 </span>
-                <img
-                  src={img1}
-                  alt=""
-                  style={{height:"150px"}}
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  onClick={() => document.getElementById("img1-dot").click()}
-                />
-                {wrongImages.includes("img1") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img1"
-                  id="img1-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
-                <img
-                  src={img2}
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img2-dot").click()}
-                />{" "}
-                {wrongImages.includes("img2") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img2"
-                  id="img2-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
-
-              <div
-                className="img-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  position: "relative",
-                }}
-              >
-                <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
-                <img
-                  src={img3}
-                  className={`matched-img2 ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  alt=""
-                  onClick={() => document.getElementById("img3-dot").click()}
-                />{" "}
-                {wrongImages.includes("img3") && (
-                  <span className="error-mark-img-unit7-p6-q2">✕</span>
-                )}
-                <div
-                  className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
-                  data-image="img3"
-                  id="img3-dot"
-                  onClick={handleStartDotClick}
-                ></div>
-              </div>
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img1"
+                id="img1-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
-            <div className="match-words-row2">
+
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>2 </span>
+              <img
+                src={img2}
+                className={`matched-img2 ${
+                  selectedLeftWord === "img2" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img2-dot").click()}
+              />{" "}
+              {wrongImages.includes("img2") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
               <div
-                className="word-box2"
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div>
-                  <h5
-                    className={`h5-wb-unit9-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() => document.getElementById("bored-dot").click()}
-                  >
-                    How many cats are there? <br />
-                    There are three cats.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
-                    data-word="How many cats are there?There are three cats."
-                    id="bored-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="word-box2">
-                <div>
-                  <h5
-                    className={`h5-wb-unit9-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() => document.getElementById("cold-dot").click()}
-                  >
-                    How many horses are there?
-                    <br />
-                    There is one horse.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
-                    data-word="How many horses are there?There is one horse."
-                    id="cold-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="word-box2">
-                {" "}
-                <div>
-                  <h5
-                    className={`h5-wb-unit9-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() =>
-                      document.getElementById("scared-dot").click()
-                    }
-                  >
-                    How many cows are there?
-                    <br />
-                    There are two cows.
-                  </h5>
-                  <div
-                    className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
-                    data-word="How many cows are there?There are two cows."
-                    id="scared-dot"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-              </div>
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img2"
+                id="img2-dot"
+                onClick={handleStartDotClick}
+              ></div>
             </div>
-            {/* الخطوط */}
-            <svg className="lines-layer2">
-              {lines.map((l, i) => (
-                <line
-                  key={i}
-                  x1={l.x1}
-                  y1={l.y1}
-                  x2={l.x2}
-                  y2={l.y2}
-                  stroke="red"
-                  strokeWidth="3"
-                />
-              ))}
-            </svg>
+
+            <div
+              className="img-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+                position: "relative",
+              }}
+            >
+              <span style={{ color: "darkblue", fontWeight: "700" }}>3 </span>
+              <img
+                src={img3}
+                className={`matched-img2 ${
+                  selectedLeftWord === "img3" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
+                alt=""
+                onClick={() => document.getElementById("img3-dot").click()}
+              />{" "}
+              {wrongImages.includes("img3") && (
+                <span className="error-mark-img-unit7-p6-q2">✕</span>
+              )}
+              <div
+                className="dot22-unit7-p6-q2 start-dot22-unit7-p6-q2"
+                data-image="img3"
+                id="img3-dot"
+                onClick={handleStartDotClick}
+              ></div>
+            </div>
           </div>
+          <div className="match-words-row2">
+            <div
+              className="word-box2"
+              style={{
+                display: "flex",
+                gap: "10px",
+                flexDirection: "row",
+                alignItems: "flex-start",
+              }}
+            >
+              <div>
+                <h5
+                  className={`h5-wb-unit9-p1-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("bored-dot").click()}
+                >
+                  How many cats are there? <br />
+                  There are three cats.
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
+                  data-word="How many cats are there?There are three cats."
+                  id="bored-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="word-box2">
+              <div>
+                <h5
+                  className={`h5-wb-unit9-p1-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("cold-dot").click()}
+                >
+                  How many horses are there?
+                  <br />
+                  There is one horse.
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
+                  data-word="How many horses are there?There is one horse."
+                  id="cold-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+
+            <div className="word-box2">
+              {" "}
+              <div>
+                <h5
+                  className={`h5-wb-unit9-p1-q1 ${
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
+                  onClick={() => document.getElementById("scared-dot").click()}
+                >
+                  How many cows are there?
+                  <br />
+                  There are two cows.
+                </h5>
+                <div
+                  className="dot22-unit7-p6-q2 end-dot22-wb-unit9-p1-q1"
+                  data-word="How many cows are there?There are two cows."
+                  id="scared-dot"
+                  onClick={handleEndDotClick}
+                ></div>
+              </div>
+            </div>
+          </div>
+          {/* الخطوط */}
+          <svg className="lines-layer2">
+            {lines.map((l, i) => (
+              <line
+                key={i}
+                x1={l.x1}
+                y1={l.y1}
+                x2={l.x2}
+                y2={l.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
       </div>
       <div className="action-buttons-container">
@@ -333,6 +336,8 @@ const WB_Unit9_Page1_Q1 = () => {
             setWrongImages([]);
             setShowAnswer(false);
             setLocked(false); // ⭐⭐ NEW: السماح بالرسم مجدداً
+            setSelectedLeftWord(null);
+            setSelectedRightWord(null);
           }}
           className="try-again-button"
         >
@@ -363,6 +368,8 @@ const WB_Unit9_Page1_Q1 = () => {
             setLines(finalLines);
             setWrongImages([]);
             setShowAnswer(true);
+            setSelectedLeftWord(null);
+            setSelectedRightWord(null);
             setLocked(true); // ⭐⭐ NEW: منع الرسم أثناء Show Answer
           }}
           className="show-answer-btn swal-continue"

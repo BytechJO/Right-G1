@@ -1,918 +1,426 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import "./WB_Unit7_Page2_Q1.css";
-import table from "../../../assets/unit4/imgs/U4P34EXEB-01.svg";
-import dish from "../../../assets/unit4/imgs/U4P34EXEB-02.svg";
-import tiger from "../../../assets/unit4/imgs/U4P34EXEB-03.svg";
-import duck from "../../../assets/unit4/imgs/U4P34EXEB-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 
+// ─── ثوابت البيانات ──────────────────────────────────────────────────────────
+const SCRAMBLED_WORDS = {
+  1: ["you", "happy", "Are", "?"],
+  2: ["the", "matter", "What's", "?"],
+  3: ["bored", "I'm", "."],
+  4: ["sad", "you", "Are", "?"],
+  5: ["hungry", "you", "Are", "?"],
+  6: ["cold", "I'm", "."],
+};
+
+// ✅ بنفس قطع الـ word bank بالترتيب الصحيح
+const CORRECT_ORDER = {
+  1: ["Are", "you", "happy", "?"],
+  2: ["What's", "the", "matter", "?"],
+  3: ["I'm", "bored", "."],
+  4: ["Are", "you", "sad", "?"],
+  5: ["Are", "you", "hungry", "?"],
+  6: ["I'm", "cold", "."],
+};
+
+// ✅ متطابقة مع CORRECT_ORDER[k].join(" ")
+const CORRECT_SENTENCES = {
+  1: "Are you happy ?",
+  2: "What's the matter ?",
+  3: "I'm bored .",
+  4: "Are you sad ?",
+  5: "Are you hungry ?",
+  6: "I'm cold .",
+};
+
+const CORRECT_MATCHES = [
+  { word: "you/happy/Are ?",     image: "Are you happy?"      },
+  { word: "the/matter/What's ?", image: "What's the matter?"  },
+  { word: "bored/I'm .",         image: "I'm bored."          },
+  { word: "sad/you/Are ?",       image: "Are you sad?"        },
+  { word: "hungry/you/Are ?",    image: "Are you hungry?"     },
+  { word: "cold/I'm .",          image: "I'm cold."           },
+];
+
+const ROWS = [
+  { id: 1, wordKey: "you/happy/Are ?",     dotId: "dot-open",   rightText: "I'm bored.",         rightDotId: "dot-img1", rightImage: "I'm bored."         },
+  { id: 2, wordKey: "the/matter/What's ?", dotId: "dot-line",   rightText: "Are you hungry?",    rightDotId: "dot-img2", rightImage: "Are you hungry?"    },
+  { id: 3, wordKey: "bored/I'm .",         dotId: "dot-close",  rightText: "I'm cold.",          rightDotId: "dot-img3", rightImage: "I'm cold."          },
+  { id: 4, wordKey: "sad/you/Are ?",       dotId: "dot-pencil", rightText: "What's the matter?", rightDotId: "dot-img4", rightImage: "What's the matter?" },
+  { id: 5, wordKey: "hungry/you/Are ?",    dotId: "dot-hungry", rightText: "Are you happy?",     rightDotId: "dot-img5", rightImage: "Are you happy?"     },
+  { id: 6, wordKey: "cold/I'm .",          dotId: "dot-cold",   rightText: "Are you sad?",       rightDotId: "dot-img6", rightImage: "Are you sad?"       },
+];
+
+const INITIAL_INPUTS = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+
+// ─── WordChip ────────────────────────────────────────────────────────────────
+const WordChip = ({ id, text, isUsed, isDisabled }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled: isUsed || isDisabled,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="word-box-wb-unit7-p2-q1"
+      style={{
+        cursor:     isUsed || isDisabled ? "not-allowed" : "grab",
+        opacity:    isUsed ? 0.35 : isDragging ? 0.5 : 1,
+        pointerEvents: isUsed ? "none" : undefined,
+        userSelect: "none",
+        transition: "opacity .2s",
+      }}
+    >
+      {text}
+    </div>
+  );
+};
+
+// ─── SentenceDropZone ────────────────────────────────────────────────────────
+const SentenceDropZone = ({ rowId, words, onReturn, isLocked }) => {
+  const { setNodeRef, isOver } = useDroppable({ id: `sentence-${rowId}` });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`unscramble-input-wb-unit7-p2-q1 ${isOver ? "active-drop" : ""}`}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          onClick={() => !isLocked && onReturn(rowId, word)}
+          style={{
+            cursor:      isLocked ? "default" : "pointer",
+            marginRight: 4,
+            display:     "inline-block",
+          }}
+          title={isLocked ? "" : "اضغط لإرجاع الكلمة"}
+        >
+          {word}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 const WB_Unit7_Page2_Q1 = () => {
-  const [lines, setLines] = useState([]);
-  const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongWords, setWrongWords] = useState([]);
+  const [lines,       setLines]       = useState([]);
+  const [userInputs,  setUserInputs]  = useState(INITIAL_INPUTS);
+  const [wrongWords,  setWrongWords]  = useState([]);
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [locked, setLocked] = useState(false);
-  const [firstDot, setFirstDot] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [locked,      setLocked]      = useState(false);
+  const [showAnswer,  setShowAnswer]  = useState(false);
+  const [firstDot,    setFirstDot]    = useState(null);
+  const [activeInfo,  setActiveInfo]  = useState(null);
 
-  const onDragEnd = (result) => {
-    if (!result.destination || locked || showAnswer) return;
+  const containerRef = useRef(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-    const [qId, word] = result.draggableId.split("-");
-    const dest = result.destination.droppableId;
+  // ─── usedWords لكل صف ────────────────────────────────────────────────────
+  const usedWords = {};
+  ROWS.forEach(({ id }) => {
+    usedWords[id] = new Set(userInputs[id]);
+  });
 
-    if (!dest.startsWith("sentence-")) return;
+  // ─── Drag Start ──────────────────────────────────────────────────────────
+  const handleDragStart = ({ active }) => {
+    // id: "bank-{rowId}-{word}"
+    const parts = active.id.split("-");
+    const rowId = Number(parts[1]);
+    const word  = parts.slice(2).join("-");
+    setActiveInfo({ rowId, word });
+  };
 
+  // ─── Drag End ────────────────────────────────────────────────────────────
+  const handleDragEnd = useCallback(
+    ({ active, over }) => {
+      setActiveInfo(null);
+      if (!over || locked || showAnswer) return;
+
+      const parts     = active.id.split("-");
+      const rowId     = Number(parts[1]);
+      const word      = parts.slice(2).join("-");
+
+      // over.id: "sentence-{rowId}"
+      const destRowId = Number(over.id.split("-")[1]);
+
+      // لا نسمح بالسحب بين الصفوف
+      if (rowId !== destRowId) return;
+
+      setUserInputs((prev) => ({
+        ...prev,
+        [rowId]: [...prev[rowId].filter((w) => w !== word), word],
+      }));
+    },
+    [locked, showAnswer],
+  );
+
+  // ─── Return to bank ───────────────────────────────────────────────────────
+  const handleReturn = (rowId, word) => {
+    if (locked || showAnswer) return;
     setUserInputs((prev) => ({
       ...prev,
-      [qId]: [...prev[qId].filter((w) => w !== word), word],
+      [rowId]: prev[rowId].filter((w) => w !== word),
     }));
   };
 
-  const [userInputs, setUserInputs] = useState({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-  });
-  const correctMatches = [
-    { word: "you/happy/Are ?", image: "Are you happy?" },
-    { word: "the/matter/What’s ?", image: "What’s the matter?" },
-    { word: "bored/I’m .", image: "I’m bored." },
-    { word: "sad/you/Are ?", image: "Are you sad?" },
-    { word: "hungry/you/Are ?", image: "Are you hungry?" },
-    { word: "cold/I’m .", image: "I’m cold." },
-  ];
-  const correctSentences = {
-    1: "Are you happy?",
-    2: "What’s the matter?",
-    3: "I’m bored.",
-    4: "Are you sad?",
-    5: "Are you hungry?",
-    6: "I’m cold.",
+  // ─── Matching dots ────────────────────────────────────────────────────────
+  const getDotPos = (selector) => {
+    const el = containerRef.current?.querySelector(selector);
+    if (!el) return { x: 0, y: 0 };
+    const rect = containerRef.current.getBoundingClientRect();
+    const r    = el.getBoundingClientRect();
+    return { x: r.left - rect.left + 8, y: r.top - rect.top + 8 };
   };
 
-  const scrambledWords = {
-    1: ["you", "happy", "Are", "?"],
-    2: ["the", "matter", "What’s", "?"],
-    3: ["bored", "I’m", "."],
-    4: ["sad", "you", "Are", "?"],
-    5: ["hungry", "you", "Are", "?"],
-    6: ["cold", "I’m", "."],
-  };
-
-  // ============================
-  // 1️⃣ الضغط على النقطة الأولى (start-dot)
-  // ============================
   const handleStartDotClick = (e) => {
-    if (showAnswer || locked) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const word = e.target.dataset.word || null;
-    const image = e.target.dataset.image || null;
-
-    const alreadyUsed = lines.some((line) => line.word === word);
+    if (locked || showAnswer) return;
+    const word = e.target.dataset.word;
+    if (!word) return;
+    const alreadyUsed = lines.some((l) => l.word === word);
     if (alreadyUsed) return;
-
-    setFirstDot({
-      word,
-      image,
-      x: e.target.getBoundingClientRect().left - rect.left + 8,
-      y: e.target.getBoundingClientRect().top - rect.top + 8,
-    });
+    const pos = getDotPos(`[data-word="${word}"]`);
+    setFirstDot({ word, ...pos });
   };
 
-  // ============================
-  // 2️⃣ الضغط على النقطة الثانية (end-dot)
-  // ============================
   const handleEndDotClick = (e) => {
-    if (showAnswer || locked) return;
-    if (!firstDot) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const endWord = e.target.dataset.word || null;
-    const endImage = e.target.dataset.image || null;
-
-    const newLine = {
-      x1: firstDot.x,
-      y1: firstDot.y,
-      x2: e.target.getBoundingClientRect().left - rect.left + 8,
-      y2: e.target.getBoundingClientRect().top - rect.top + 8,
-      word: firstDot.word || endWord,
-      image: firstDot.image || endImage,
-    };
-
-    setLines((prev) => [...prev, newLine]);
+    if (locked || showAnswer || !firstDot) return;
+    const image = e.target.dataset.image;
+    if (!image) return;
+    const pos = getDotPos(`[data-image="${image}"]`);
+    setLines((prev) => [
+      ...prev,
+      { x1: firstDot.x, y1: firstDot.y, x2: pos.x, y2: pos.y, word: firstDot.word, image },
+    ]);
     setFirstDot(null);
   };
 
+  // ─── Check ───────────────────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (showAnswer || locked) return;
+    if (locked || showAnswer) return;
 
-    if (!userInputs[2] || !userInputs[3] || !userInputs[4]) {
-      ValidationAlert.info("Oops!", "Please complete all sentences.");
-      return;
-    }
-
-    if (lines.length < 4) {
-      ValidationAlert.info("Oops!", "Please match all pairs before checking.");
+    const allFilled = Object.values(userInputs).every((arr) => arr.length > 0);
+    if (!allFilled || lines.length < ROWS.length) {
+      ValidationAlert.info("Oops!", "Please complete all sentences and matches.");
       return;
     }
 
     let sentenceCorrect = 0;
+    const wrongIn = [];
+    Object.entries(CORRECT_SENTENCES).forEach(([key, correct]) => {
+      const user = userInputs[Number(key)].join(" ");
+      if (user === correct) sentenceCorrect++;
+      else wrongIn.push(key);
+    });
+    setWrongInputs(wrongIn);
+
     let lineCorrect = 0;
-
-    let wrongInputsTemp = [];
-
-    Object.keys(correctSentences).forEach((key) => {
-      if (key === "1") return;
-
-      const userAnswer = userInputs[key].join(" ").toLowerCase();
-
-      const correctAnswer = correctSentences[key];
-
-      if (userAnswer === correctAnswer) sentenceCorrect++;
-      else wrongInputsTemp.push(key);
-    });
-
-    setWrongInputs(wrongInputsTemp);
-
-    let wrongLines = [];
-
+    const wrongL = [];
     lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image,
+      const ok = CORRECT_MATCHES.some(
+        (p) => p.word === line.word && p.image === line.image,
       );
-
-      if (isCorrect) lineCorrect++;
-      else wrongLines.push(line.word);
+      if (ok) lineCorrect++;
+      else wrongL.push(line.word);
     });
-
-    const totalScore = 7;
-    const userScore = sentenceCorrect + lineCorrect;
-
-    setWrongWords([...wrongLines]);
+    setWrongWords(wrongL);
     setLocked(true);
 
-    let color =
-      userScore === totalScore ? "green" : userScore === 0 ? "red" : "orange";
+    const total = Object.keys(CORRECT_SENTENCES).length + CORRECT_MATCHES.length;
+    const score = sentenceCorrect + lineCorrect;
+    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const msg   = `<div style="font-size:20px;text-align:center"><span style="color:${color};font-weight:bold">Score: ${score} / ${total}</span></div>`;
 
-    const scoreMessage = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${userScore} / ${totalScore}
-      </span>
-    </div>
-  `;
-
-    if (userScore === totalScore) ValidationAlert.success(scoreMessage);
-    else if (userScore === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    if (score === total)  ValidationAlert.success(msg);
+    else if (score === 0) ValidationAlert.error(msg);
+    else                  ValidationAlert.warning(msg);
   };
 
+  // ─── Show Answer ──────────────────────────────────────────────────────────
+  const handleShowAnswer = () => {
+    // ✅ CORRECT_ORDER بنفس قطع الـ word bank
+    const filled = {};
+    Object.keys(CORRECT_ORDER).forEach((k) => {
+      filled[k] = CORRECT_ORDER[k];
+    });
+    setUserInputs(filled);
+
+    // خطوط الـ matching
+    const fixedLines = CORRECT_MATCHES.map(({ word, image }) => {
+      const s = getDotPos(`[data-word="${word}"]`);
+      const e = getDotPos(`[data-image="${image}"]`);
+      return { x1: s.x, y1: s.y, x2: e.x, y2: e.y, word, image };
+    });
+    setLines(fixedLines);
+
+    setWrongWords([]);
+    setWrongInputs([]);
+    setLocked(true);
+    setShowAnswer(true);
+  };
+
+  // ─── Reset ────────────────────────────────────────────────────────────────
+  const handleReset = () => {
+    setLines([]);
+    setUserInputs(INITIAL_INPUTS);
+    setWrongWords([]);
+    setWrongInputs([]);
+    setLocked(false);
+    setShowAnswer(false);
+    setFirstDot(null);
+  };
+
+  // ─── Render ───────────────────────────────────────────────────────────────
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "30px",
-        }}
-      >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="page8-q1-container">
-            <h4 className="header-title-page8">
-              <span className="ex-A">C</span> Unscramble, write, and match.
-            </h4>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 30 }}>
+        <div className="div-forall">
+          <h4 className="header-title-page8">
+            <span className="ex-A">C</span> Unscramble, drag, and match.
+          </h4>
 
-            <div
-              className="container12"
-              ref={containerRef}
-              // style={{ margin: "30px" }}
-            >
-              {/* الصف الأول */}
-              <div className="matching-row2">
-                <div>
+          <div className="container12 w-full" ref={containerRef}>
+            {ROWS.map((row) => (
+              <div
+                className="matching-row2"
+                style={{ alignItems: "flex-start" }}
+                key={row.id}
+              >
+                {/* ── يسار ── */}
+                <div className="flex flex-col justify-between h-[110px]">
                   <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">1</span>
+                    <span className="span-num2-wb-unit7-p2-q1">{row.id}</span>
                     <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
+                      className={`word-text2-wb-unit7-p2-q1 ${locked || showAnswer ? "disabled-word" : ""}`}
                       onClick={() =>
-                        document.getElementById("dot-open").click()
+                        !locked && !showAnswer &&
+                        handleStartDotClick({
+                          target: document.querySelector(`[data-word="${row.wordKey}"]`),
+                        })
                       }
                       style={{ cursor: "pointer" }}
                     >
-                      you/happy/Are ?
+                      {row.wordKey}
                     </span>
-                    {wrongWords.includes("you/happy/Are ?") && (
+                    {wrongWords.includes(row.wordKey) && (
                       <span className="error-mark-review3-p1-q2">✕</span>
                     )}
                     <div className="dot-wrapper2">
                       <div
                         className="dot2 start-dot2"
-                        id="dot-open"
-                        data-word="you/happy/Are ?"
+                        id={row.dotId}
+                        data-word={row.wordKey}
                         onClick={handleStartDotClick}
-                      ></div>
+                      />
                     </div>
                   </div>
-                  <Droppable droppableId="bank-1" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[1]
-                          .filter((w) => !userInputs[1].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`1-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
 
-                  <Droppable droppableId="sentence-1" direction="horizontal">
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[1].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
+                  {/* Word Bank */}
+                  <div className="word-bank-wb-unit7-p2-q1">
+                    {SCRAMBLED_WORDS[row.id].map((word) => (
+                      <WordChip
+                        key={word}
+                        id={`bank-${row.id}-${word}`}
+                        text={word}
+                        isUsed={usedWords[row.id].has(word)}
+                        isDisabled={locked || showAnswer}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Sentence Drop Zone */}
+                  <SentenceDropZone
+                    rowId={row.id}
+                    words={userInputs[row.id]}
+                    onReturn={handleReturn}
+                    isLocked={locked || showAnswer}
+                  />
                 </div>
 
+                {/* ── يمين ── */}
                 <div className="img-with-dot2-wb-unit7-p2-q1">
                   <div className="dot-wrapper2">
                     <div
                       className="dot2 end-dot2"
-                      data-image="I’m bored."
-                      id="dot-img1"
+                      id={row.rightDotId}
+                      data-image={row.rightImage}
                       onClick={handleEndDotClick}
-                    ></div>
+                    />
                   </div>
-
                   <p
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() => document.getElementById("dot-img1").click()}
+                    className={`matched-word-wb-unit7-p2-q1 ${locked || showAnswer ? "disabled-word" : ""}`}
+                    onClick={() =>
+                      !locked && !showAnswer &&
+                      handleEndDotClick({
+                        target: document.querySelector(`[data-image="${row.rightImage}"]`),
+                      })
+                    }
                   >
-                    I’m bored.
+                    {row.rightText}
                   </p>
                 </div>
               </div>
+            ))}
 
-              {/* الصف الثاني */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">2</span>
-                    <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
-                      onClick={() =>
-                        document.getElementById("dot-line").click()
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      the/matter/What’s ?
-                    </span>
-                    {wrongWords.includes("the/matter/What’s ?") && (
-                      <span className="error-mark-review3-p1-q2">✕</span>
-                    )}
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        data-word="the/matter/What’s ?"
-                        id="dot-line"
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-                  <Droppable droppableId="bank-2" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[2]
-                          .filter((w) => !userInputs[2].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`2-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  <Droppable droppableId="sentence-2" direction="horizontal">
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[2].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="Are you hungry?"
-                      id="dot-img2"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <p
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() => document.getElementById("dot-img2").click()}
-                  >
-                    Are you hungry?
-                  </p>
-                </div>
-              </div>
-
-              {/* الصف الثالث */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">3</span>
-                    <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
-                      onClick={() =>
-                        document.getElementById("dot-close").click()
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      bored/I’m .
-                    </span>
-                    {wrongWords.includes("bored/I’m .") && (
-                      <span className="error-mark-review3-p1-q2">✕</span>
-                    )}
-
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        id="dot-close"
-                        data-word="bored/I’m ."
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-                  <Droppable droppableId="bank-3" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[3]
-                          .filter((w) => !userInputs[3].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`3-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  <Droppable droppableId="sentence-3" direction="horizontal">
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[3].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="I’m cold."
-                      id="dot-img3"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <p
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    onClick={() => document.getElementById("dot-img3").click()}
-                  >
-                    I’m cold.
-                  </p>
-                </div>
-              </div>
-
-              {/* الصف الرابع */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">4</span>
-                    <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
-                      onClick={() =>
-                        document.getElementById("dot-pencil").click()
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      sad/you/Are ?
-                    </span>
-                    {wrongWords.includes("sad/you/Are ?") && (
-                      <span className="error-mark-review3-p1-q2">✕</span>
-                    )}
-
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        id="dot-pencil"
-                        data-word="sad/you/Are ?"
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-                  <Droppable droppableId="bank-4" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[4]
-                          .filter((w) => !userInputs[4].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`4-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  <Droppable droppableId="sentence-4" direction="horizontal">
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[4].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="What’s the matter?"
-                      id="dot-img4"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <p
-                    src={tiger}
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img4").click()}
-                  >
-                    What’s the matter?
-                  </p>
-                </div>
-              </div>
-
-              {/* الصف الخامس */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">5</span>
-                    <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
-                      onClick={() =>
-                        document.getElementById("dot-hungry").click()
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      hungry/you/Are ?
-                    </span>
-                    {wrongWords.includes("hungry/you/Are ?") && (
-                      <span className="error-mark-review3-p1-q2">✕</span>
-                    )}
-
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        id="dot-hungry"
-                        data-word="hungry/you/Are ?"
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-                  <Droppable droppableId="bank-5" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[5]
-                          .filter((w) => !userInputs[5].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`5-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  <Droppable droppableId="sentence-5" direction="horizontal">
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[5].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="Are you happy?"
-                      id="dot-img5"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <p
-                    src={tiger}
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img5").click()}
-                  >
-                    Are you happy?
-                  </p>
-                </div>
-              </div>
-
-              {/* الصف السادس */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">6</span>
-                    <span
-                      className={`word-text2-wb-unit7-p2-q1 ${
-                        locked || showAnswer ? "disabled-word" : ""
-                      }`}
-                      onClick={() =>
-                        document.getElementById("dot-cold").click()
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      cold/I’m .
-                    </span>
-                    {wrongWords.includes("cold/I’m .") && (
-                      <span className="error-mark-review3-p1-q2">✕</span>
-                    )}
-
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        id="dot-cold"
-                        data-word="cold/I’m ."
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-                  <Droppable droppableId="bank-6" direction="horizontal">
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className="word-bank-wb-unit7-p2-q1"
-                      >
-                        {scrambledWords[6]
-                          .filter((w) => !userInputs[6].includes(w))
-                          .map((word, i) => (
-                            <Draggable
-                              key={word}
-                              draggableId={`6-${word}`}
-                              index={i}
-                            >
-                              {(provided) => (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className="word-box-wb-unit7-p2-q1"
-                                  style={{
-                                    textAlign: "center",
-                                    cursor: "grab",
-                                    ...provided.draggableProps.style,
-                                  }}
-                                >
-                                  {word}
-                                </div>
-                              )}
-                            </Draggable>
-                          ))}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  <Droppable droppableId="sentence-6" direction="horizontal">
-                    {(provided ,snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit7-p2-q1 ${
-                          snapshot.isDraggingOver ? "active-drop" : ""
-                        }`}
-                      >
-                        {userInputs[6].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </div>
-
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="Are you sad?"
-                      id="dot-img6"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <p
-                    src={tiger}
-                    className={`matched-word-wb-unit7-p2-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img6").click()}
-                  >
-                    Are you sad?
-                  </p>
-                </div>
-              </div>
-
-              <svg className="lines-layer2">
-                {lines.map((line, i) => (
-                  <line key={i} {...line} stroke="red" strokeWidth="3" />
-                ))}
-              </svg>
-            </div>
+            {/* SVG Lines */}
+            <svg className="lines-layer2">
+              {lines.map((line, i) => (
+                <line
+                  key={i}
+                  x1={line.x1} y1={line.y1}
+                  x2={line.x2} y2={line.y2}
+                  stroke="red"
+                  strokeWidth="3"
+                />
+              ))}
+            </svg>
           </div>
 
+          {/* Buttons */}
           <div className="action-buttons-container">
-            <button
-              onClick={() => {
-                setLines([]);
-                setUserInputs({
-                  1: [],
-                  2: [],
-                  3: [],
-                  4: [],
-                  5: [],
-                  6: [],
-                });
-
-                setWrongWords([]);
-                setWrongInputs([]);
-                setShowAnswer(false);
-                setLocked(false);
-              }}
-              className="try-again-button"
-            >
+            <button className="try-again-button" onClick={handleReset}>
               Start Again ↻
             </button>
-
-            <button
-              onClick={() => {
-                const rect = containerRef.current.getBoundingClientRect();
-
-                const getDotPosition = (selector) => {
-                  const el = document.querySelector(selector);
-                  if (!el) return { x: 0, y: 0 };
-                  const r = el.getBoundingClientRect();
-                  return {
-                    x: r.left - rect.left + 8,
-                    y: r.top - rect.top + 8,
-                  };
-                };
-
-                // 1️⃣ إنشاء الخطوط الصحيحة
-                const finalLines = correctMatches.map((line) => ({
-                  ...line,
-                  x1: getDotPosition(`[data-word="${line.word}"]`).x,
-                  y1: getDotPosition(`[data-word="${line.word}"]`).y,
-                  x2: getDotPosition(`[data-image="${line.image}"]`).x,
-                  y2: getDotPosition(`[data-image="${line.image}"]`).y,
-                }));
-
-                setLines(finalLines);
-
-                // 2️⃣ تعبئة جميع الإجابات الصحيحة في inputs
-                setUserInputs({
-                  1: correctSentences["1"].split(" "),
-                  2: correctSentences["2"].split(" "),
-                  3: correctSentences["3"].split(" "),
-                  4: correctSentences["4"].split(" "),
-                  5: correctSentences["5"].split(" "),
-                  6: correctSentences["6"].split(" "),
-                });
-
-                // 3️⃣ منع التعديل على كل شيء (قفل inputs + منع الرسم)
-                setLocked(true);
-                setShowAnswer(true);
-                setWrongWords([]);
-                setWrongInputs([]);
-              }}
-              className="show-answer-btn swal-continue"
-            >
+            <button className="show-answer-btn swal-continue" onClick={handleShowAnswer}>
               Show Answer
             </button>
-
-            <button onClick={checkAnswers} className="check-button2">
+            <button className="check-button2" onClick={checkAnswers}>
               Check Answer ✓
             </button>
           </div>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* Drag Overlay */}
+      <DragOverlay>
+        {activeInfo && (
+          <div
+            className="word-box-wb-unit7-p2-q1"
+            style={{ boxShadow: "0 4px 12px rgba(0,0,0,.2)", cursor: "grabbing" }}
+          >
+            {activeInfo.word}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

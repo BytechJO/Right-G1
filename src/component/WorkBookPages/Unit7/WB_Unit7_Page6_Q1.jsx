@@ -1,9 +1,6 @@
 import "./WB_Unit7_Page6_Q1.css";
-import React, { useState, useRef, useEffect } from "react";
-import sound1 from "../../../assets/unit6/sounds/U6P50EXEA1.mp3";
-import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
+import { useState } from "react";
+import sound1 from "../../../assets/U1 WB/U7/audio/cd9pg44-instruction1-adult-lady_LXsZ0C5j.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/U1 WB/U7/U7P44EXEA-01.svg";
 import img2 from "../../../assets/U1 WB/U7/U7P44EXEA-02.svg";
@@ -11,216 +8,210 @@ import img3 from "../../../assets/U1 WB/U7/U7P44EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U7/U7P44EXEA-04.svg";
 import img5 from "../../../assets/U1 WB/U7/U7P44EXEA-05.svg";
 import img6 from "../../../assets/U1 WB/U7/U7P44EXEA-06.svg";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 
+// ─── ثوابت ───────────────────────────────────────────────────────────────────
+const CORRECT_DATA = ["w", "w", "h", "w", "h", "w"];
+const LETTER_BANK = ["h", "w"];
+const IMAGES = [img1, img2, img3, img4, img5, img6];
+const CAPTIONS = [
+  {
+    start: 0,
+    end: 7.18,
+    text: "Phonics exercise A. Does it begin with H or W? Listen and write.",
+  },
+  {
+    start: 7.82,
+    end: 9.74,
+    text: "One, waffle.",
+  },
+  {
+    start: 10.3,
+    end: 11.98,
+    text: "Two, waitress.",
+  },
+  {
+    start: 12.7,
+    end: 14.52,
+    text: "Three, house.",
+  },
+  {
+    start: 15.08,
+    end: 16.86,
+    text: "Four, hose.",
+  },
+  {
+    start: 17.52,
+    end: 19.14,
+    text: "Five, hat.",
+  },
+  {
+    start: 19.82,
+    end: 21.48,
+    text: "Six, worm.",
+  },
+];
+
+// ─── LetterChip — لا يصير disabled لأن نفس الحرف يتكرر ──────────────────────
+const LetterChip = ({ id, letter, isDisabled }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled: isDisabled,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        width: 40,
+        height: 40,
+        border: "2px solid #2c5287",
+        borderRadius: 8,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: "bold",
+        fontSize: 20,
+        background: "white",
+        cursor: isDisabled ? "not-allowed" : "grab",
+        opacity: isDragging ? 0.5 : 1,
+        userSelect: "none",
+        transition: "opacity .2s",
+      }}
+    >
+      {letter}
+    </div>
+  );
+};
+
+// ─── DropBox ──────────────────────────────────────────────────────────────────
+const DropBox = ({ index, value, isWrong, isLocked, onReturn }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `drop-${index}`,
+    disabled: isLocked,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      onClick={() => !isLocked && value && onReturn(index)}
+
+      title={value && !isLocked ? "اضغط لإرجاع الحرف" : ""}
+      className={`wb-unit7-p5-q1-input ${isOver?"drag-over-cell":""}`}
+      style={{
+        // background: isOver ? "#e3f2fd" : value ? "" : "white",
+        cursor: value && !isLocked ? "pointer" : "default",
+        transition: "background .15s",
+      }}
+    >
+      {value || ""}
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 const WB_Unit7_Page6_Q1 = () => {
-  // الإجابات المدخلة من الطالب
-  const [answers, setAnswers] = useState([null, null, null, null, null, null]);
-
-  // النتيجة لكل خانة (صح/غلط)
+  const [answers, setAnswers] = useState(Array(6).fill(null));
   const [showResult, setShowResult] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [activeLetter, setActiveLetter] = useState(null); // الحرف المسحوب حالياً
 
-  // الإجابات الصحيحة
-  const correctData = ["w", "w", "h", "w", "h", "w"];
-  const letterBank = ["h", "w"];
-  const onDragEnd = (result) => {
-    if (!result.destination || showAnswer) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-    const { draggableId, destination } = result;
-    const value = draggableId.replace("letter-", "");
+  // ─── Drag End ───────────────────────────────────────────────────────────────
+  const handleDragEnd = ({ active, over }) => {
+    setActiveLetter(null);
+    if (!over || showAnswer) return;
 
-    // لازم يكون إسقاط على input
-    if (!destination.droppableId.startsWith("drop-")) return;
+    const value = active.id.replace("letter-", ""); // "h" أو "w"
+    const destId = over.id;
+    if (!destId.startsWith("drop-")) return;
 
-    const index = Number(destination.droppableId.replace("drop-", ""));
+    const index = Number(destId.replace("drop-", ""));
 
     setAnswers((prev) => {
       const copy = [...prev];
-
-      // شيل الحرف من مكانه القديم
-
-      copy[index] = value;
+      copy[index] = value; // ✅ نفس الحرف ممكن يكون بأكثر من خانة
       return copy;
     });
 
     setShowResult([]);
   };
 
-  // البيانات
-  const options = [
-    { img: img1 },
-    { img: img2 },
-    { img: img3 },
-    { img: img4 },
-    { img: img5 },
-    { img: img6 },
-  ];
-  const audioRef = useRef(null);
-  const [showContinue, setShowContinue] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const stopAtSecond = 3.5;
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
-
-  // إعدادات الصوت
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const settingsRef = useRef(null);
-  const [forceRender, setForceRender] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [current, setCurrent] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showCaption, setShowCaption] = useState(false);
-
-  // ================================
-  // ✔ Captions Array
-  // ================================
-  const captions = [
-    {
-      start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
-    },
-    {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
-    },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
-  ];
-
-  // ================================
-  // ✔ Update caption highlight
-  // ================================
-  const updateCaption = (time) => {
-    const index = captions.findIndex(
-      (cap) => time >= cap.start && time <= cap.end,
-    );
-    setActiveIndex(index);
-  };
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.currentTime = 0;
-    audio.play();
-
-    const interval = setInterval(() => {
-      if (audio.currentTime >= stopAtSecond) {
-        audio.pause();
-        setPaused(true);
-        setIsPlaying(false);
-        setShowContinue(true);
-        clearInterval(interval);
-      }
-    }, 100);
-
-    // عند انتهاء الأوديو يرجع يبطل أنيميشن + يظهر Continue
-    const handleEnded = () => {
-      const audio = audioRef.current;
-      audio.currentTime = 0; // ← يرجع للبداية
-      setIsPlaying(false);
-      setPaused(false);
-      setActiveIndex(null);
-      setShowContinue(true);
-    };
-
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      clearInterval(interval);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setForceRender((prev) => prev + 1);
-    }, 1000); // كل ثانية
-    if (activeIndex === -1 || activeIndex === null) return;
-
-    const el = document.getElementById(`caption-${activeIndex}`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-
-    if (!audio) return;
-
-    if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
-    } else {
-      audio.pause();
-      setPaused(true);
-      setIsPlaying(false);
-    }
-  };
-  // تحديث خانة الإدخال
-  const handleChange = (index, value) => {
-    setAnswers((prev) => prev.map((a, i) => (i === index ? value : a)));
+  // ─── Return to bank (كليك على الخانة) ───────────────────────────────────────
+  const handleReturn = (index) => {
+    if (showAnswer) return;
+    setAnswers((prev) => {
+      const copy = [...prev];
+      copy[index] = null;
+      return copy;
+    });
     setShowResult([]);
-    setShowAnswer(false);
-  };
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    setShowResult([]);
-    setAnswers(correctData);
   };
 
+  // ─── Check ───────────────────────────────────────────────────────────────────
   const checkAnswers = () => {
     if (showAnswer) return;
-    // ❗ الخطوة 1: فحص الخانات الفارغة
-    if (answers.some((v) => v === null)) {
+
+    if (answers.some((v) => !v)) {
       ValidationAlert.info("Please fill all answer boxes before checking!");
-      return; // وقف التشييك
+      return;
     }
 
-    // ❗ الخطوة 2: مقارنة كل خانة
-    const results = answers.map((value, index) => {
-      return value === correctData[index] ? "correct" : "wrong";
-    });
+    const results = answers.map((value, i) =>
+      value === CORRECT_DATA[i] ? "correct" : "wrong",
+    );
 
     setShowResult(results);
     setShowAnswer(true);
-    // ❗ الخطوة 3: حساب السكور
+
     const correctCount = results.filter((r) => r === "correct").length;
-    const total = correctData.length;
-    const scoreMsg = `${correctCount} / ${total}`;
-
-    let color =
+    const total = CORRECT_DATA.length;
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-
-    const resultHTML = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${scoreMsg}
-        </span>
-      </div>
-    `;
+    const resultHTML = `<div style="font-size:20px;text-align:center;margin-top:8px"><span style="color:${color};font-weight:bold">Score: ${correctCount} / ${total}</span></div>`;
 
     if (correctCount === total) ValidationAlert.success(resultHTML);
     else if (correctCount === 0) ValidationAlert.error(resultHTML);
     else ValidationAlert.warning(resultHTML);
   };
-  // زر الريست
+
+  // ─── Show Answer ─────────────────────────────────────────────────────────────
+  const handleShowAnswer = () => {
+    setAnswers(CORRECT_DATA);
+    setShowResult([]);
+    setShowAnswer(true);
+  };
+
+  // ─── Reset ───────────────────────────────────────────────────────────────────
   const resetAnswers = () => {
-    setAnswers(["", "", "", "", "", ""]);
+    setAnswers(Array(6).fill(null));
     setShowResult([]);
     setShowAnswer(false);
   };
 
+  // ─── Render ───────────────────────────────────────────────────────────────────
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={({ active }) =>
+        setActiveLetter(active.id.replace("letter-", ""))
+      }
+      onDragEnd={handleDragEnd}
+    >
       <div
         className="unit3-q3-wrapper"
         style={{
@@ -228,224 +219,58 @@ const WB_Unit7_Page6_Q1 = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "30px",
+          padding: 30,
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "15px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
+        <div className="div-forall" style={{ gap: 15 }}>
           <h5 className="header-title-page8">
-            <span className="ex-A">A</span>Does it begin with{" "}
-            <span style={{ color: "red" }}>h</span> or{" "}
-            <span style={{ color: "red" }}>h</span>? Listen and write.
+            <span className="ex-A">A</span> Listen and drag the letter to the
+            picture.
           </h5>
 
+          <QuestionAudioPlayer
+            src={sound1}
+            captions={CAPTIONS}
+            stopAtSecond={7.18}
+          />
+
+          {/* ── Letter Bank ── */}
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              margin: "30px 0px",
+              gap: 12,
+              padding: 10,
               width: "100%",
+              border: "2px dashed #ccc",
+              borderRadius: 10,
+              justifyContent: "center",
+              marginBottom: 20,
             }}
           >
-            <div
-              className="audio-popup-read"
-              style={{
-                width: "50%",
-              }}
-            >
-              <div className="audio-inner player-ui">
-                <audio
-                  ref={audioRef}
-                  src={sound1}
-                  onTimeUpdate={(e) => {
-                    const time = e.target.currentTime;
-                    setCurrent(time);
-                    updateCaption(time);
-                  }}
-                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
-                ></audio>
-                {/* Play / Pause */}
-                {/* Play / Pause */}
-                {/* الوقت - السلايدر - الوقت */}
-                <div className="top-row">
-                  <span className="audio-time">
-                    {new Date(current * 1000).toISOString().substring(14, 19)}
-                  </span>
-
-                  <input
-                    type="range"
-                    className="audio-slider"
-                    min="0"
-                    max={duration}
-                    value={current}
-                    onChange={(e) => {
-                      audioRef.current.currentTime = e.target.value;
-                      updateCaption(Number(e.target.value));
-                    }}
-                    style={{
-                      background: `linear-gradient(to right, #430f68 ${
-                        (current / duration) * 100
-                      }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-                    }}
-                  />
-
-                  <span className="audio-time">
-                    {new Date(duration * 1000).toISOString().substring(14, 19)}
-                  </span>
-                </div>
-                {/* الأزرار 3 أزرار بنفس السطر */}
-                <div className="bottom-row">
-                  {/* فقاعة */}
-                  <div
-                    className={`round-btn ${showCaption ? "active" : ""}`}
-                    style={{ position: "relative" }}
-                    onClick={() => setShowCaption(!showCaption)}
-                  >
-                    <TbMessageCircle size={36} />
-                    <div
-                      className={`caption-inPopup ${showCaption ? "show" : ""}`}
-                      style={{ top: "100%", left: "10%" }}
-                    >
-                      {captions.map((cap, i) => (
-                        <p
-                          key={i}
-                          id={`caption-${i}`}
-                          className={`caption-inPopup-line2 ${
-                            activeIndex === i ? "active" : ""
-                          }`}
-                        >
-                          {cap.text}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Play */}
-                  <button className="play-btn2" onClick={togglePlay}>
-                    {isPlaying ? <FaPause size={26} /> : <FaPlay size={26} />}
-                  </button>
-
-                  {/* Settings */}
-                  <div className="settings-wrapper" ref={settingsRef}>
-                    <button
-                      className={`round-btn ${showSettings ? "active" : ""}`}
-                      onClick={() => setShowSettings(!showSettings)}
-                    >
-                      <IoMdSettings size={36} />
-                    </button>
-
-                    {showSettings && (
-                      <div className="settings-popup">
-                        <label>Volume</label>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.05"
-                          value={volume}
-                          onChange={(e) => {
-                            setVolume(e.target.value);
-                            audioRef.current.volume = e.target.value;
-                          }}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>{" "}
-              </div>
-            </div>
+            {LETTER_BANK.map((letter, i) => (
+              <LetterChip
+                key={letter}
+                id={`letter-${letter}`}
+                letter={letter}
+                isDisabled={showAnswer}
+              />
+            ))}
           </div>
-          <Droppable droppableId="letter-bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "10px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                {letterBank.map((l, i) => (
-                  <Draggable
-                    key={l}
-                    draggableId={`letter-${l}`}
-                    index={i}
-                    isDragDisabled={showAnswer}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                          background: "white",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {l}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
 
-          {/* الصور */}
-          <div className="wb-unit7-p5-q1-grid">
-            {options.map((item, index) => (
+          {/* ── Images + Drop Boxes ── */}
+          <div className="wb-unit7-p5-q1-grid w-full">
+            {IMAGES.map((img, index) => (
               <div key={index} className="wb-unit7-p5-q1-box">
-                <img src={item.img} className="unit3-q3-image" alt="" />
+                <img src={img} className="unit3-q3-image" alt="" />
 
-                {/* إدخال الإجابة */}
                 <div className="wb-unit7-p5-q1-input-wrapper">
-                  <Droppable
-                    droppableId={`drop-${index}`}
-                    isDropDisabled={showAnswer}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`wb-unit7-p5-q1-input ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
-                        style={{
-                          background: snapshot.isDraggingOver
-                            ? "#e3f2fd"
-                            : "white",
-                        }}
-                      >
-                        {answers[index] || ""}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  {/* إشارة X */}
+                  <DropBox
+                    index={index}
+                    value={answers[index]}
+                    isWrong={showResult[index] === "wrong"}
+                    isLocked={showAnswer}
+                    onReturn={handleReturn}
+                  />
                   {showResult[index] === "wrong" && (
                     <div className="unit3-q3-wrong">✕</div>
                   )}
@@ -454,6 +279,8 @@ const WB_Unit7_Page6_Q1 = () => {
             ))}
           </div>
         </div>
+
+        {/* ── Buttons ── */}
         <div className="action-buttons-container">
           <button onClick={resetAnswers} className="try-again-button">
             Start Again ↻
@@ -461,13 +288,36 @@ const WB_Unit7_Page6_Q1 = () => {
           <button onClick={handleShowAnswer} className="show-answer-btn">
             Show Answer
           </button>
-
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag Overlay ── */}
+      <DragOverlay>
+        {activeLetter && (
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              border: "2px solid #2c5287",
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              fontSize: 20,
+              background: "white",
+              boxShadow: "0 4px 12px rgba(0,0,0,.2)",
+              cursor: "grabbing",
+            }}
+          >
+            {activeLetter}
+          </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

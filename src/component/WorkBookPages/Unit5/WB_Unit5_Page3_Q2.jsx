@@ -19,7 +19,7 @@ const WB_Unit5_Page3_Q2 = () => {
       text1: "Is this a pen?",
       text2: " No, it isn’t.",
       image: img2,
-      correct: "✗",
+      correct: "✓",
     },
     {
       id: 3,
@@ -33,7 +33,7 @@ const WB_Unit5_Page3_Q2 = () => {
       text1: "Is this an eraser?",
       text2: " Yes, it is. ",
       image: img4,
-      correct: "✓",
+      correct: "✗",
     },
   ];
 
@@ -68,11 +68,11 @@ const WB_Unit5_Page3_Q2 = () => {
 
     // 2) مقارنة الإجابات
     const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong"
+      answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
     setShowResult(results);
-setShowCorrectAnswers(true)
+    setShowCorrectAnswers(true);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -113,17 +113,11 @@ setShowCorrectAnswers(true)
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+        
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span>Look, read, and write
-          <span style={{ color: "red" }}> ✓ </span> or
-          <span style={{ color: "red" }}> ✗</span>.
+          <span className="ex-A">F</span>Tap or click the correct box.
         </h5>
 
         <div

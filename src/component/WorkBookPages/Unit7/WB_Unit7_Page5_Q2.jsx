@@ -201,7 +201,7 @@ export default function WB_Unit7_Page5_Q2() {
   return (
     <div className="wordsearch-wrapper">
       <div className="page8-wrapper">
-        <div className="div-forall" style={{ width: "60%" }}>
+        <div className="div-forall" style={{ }}>
           <h3 className="header-title-page8">
             <span className="ex-A">J</span>Look and complete the puzzle.
           </h3>

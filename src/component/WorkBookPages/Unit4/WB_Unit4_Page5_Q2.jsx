@@ -193,11 +193,11 @@ export default function WB_Unit4_Page5_Q2() {
   return (
     <div className="wordsearch-wrapper">
       <div className="page8-wrapper">
-        <div className="div-forall" style={{ width: "60%" }}>
+        <div className="div-forall" style={{ gap:"20px"}}>
           <h3 className="header-title-page8">
             <span className="ex-A">J</span>Find the words.
           </h3>
-          <div className="word-bank-wb-u4-p5-q1">
+          <div className="word-bank-wb-u4-p5-q1 w-full">
             {words.map((w, i) => (
               <span
                 key={i}

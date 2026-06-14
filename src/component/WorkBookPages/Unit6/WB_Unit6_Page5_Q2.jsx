@@ -144,7 +144,39 @@ const WB_Unit6_Page5_Q2 = () => {
     setCurrentWordIndex({});
     setLocked(false);
   };
+const showAnswers = () => {
+  const allFoundWords = {};
+  const allSelectedIndexes = {};
+  const allWordIndexes = {};
 
+  questions.forEach((q) => {
+    allFoundWords[q.id] = [...q.words];
+
+    let indexes = [];
+
+    q.words.forEach((word) => {
+      const startIndex = q.letters.toLowerCase().indexOf(word.toLowerCase());
+
+      if (startIndex !== -1) {
+        const wordIndexes = Array.from(
+          { length: word.length },
+          (_, i) => startIndex + i
+        );
+
+        indexes.push(...wordIndexes);
+      }
+    });
+
+    allSelectedIndexes[q.id] = indexes;
+    allWordIndexes[q.id] = q.words.length;
+  });
+
+  setFoundWords(allFoundWords);
+  setSelectedIndexes(allSelectedIndexes);
+  setCurrentWordIndex(allWordIndexes);
+  setCurrentWord("");
+  setLocked(true);
+};
   return (
     <div
       style={{
@@ -158,16 +190,14 @@ const WB_Unit6_Page5_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "30px",
+       
         }}
       >
         <h4 className="header-title-page8">
           <span className="ex-A">J</span>Find the words.
         </h4>
+        <div className="flex flex-col gap-5">
         {questions.map((q) => (
           <div className="content-container-wb-unit6-p5-q2">
             <div key={q.id} className="wb-unit6-p5-q2-question">
@@ -203,12 +233,18 @@ const WB_Unit6_Page5_Q2 = () => {
             </div>
             <img src={q.img} className="img-wb-unit6-p5-q2"/>
           </div>
-        ))}
+        ))}</div>
       </div>
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
+          <button
+              className="show-answer-btn swal-continue"
+              onClick={showAnswers}
+            >
+              Show Answer
+            </button>
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>

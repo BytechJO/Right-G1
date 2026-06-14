@@ -210,25 +210,19 @@ const WB_Unit4_Page5_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
-      >
-        <h4 className="header-title-page8">
-          <span className="ex-A">I</span> Look, read, and write
-          <span style={{ color: "red" }}>✓</span>. Color.
-        </h4>
+      <div className="div-forall" style={{}}>
+        <div>
+          <h4 className="header-title-page8">
+            <span className="ex-A">I</span> Tap or click the correct boxes and
+            color the shapes.
+          </h4>
 
-        <span style={{ fontSize: "14px", color: "gray" }}>
-          Hint: Double Click to Color Word
-        </span>
-        <div style={{ position: "relative" }}>
-          <table className="shapes-table-wrapper-wb-unit4-p5-q1">
+          <span style={{ fontSize: "14px", color: "gray" }}>
+            Hint: Double Click to Color Word
+          </span>
+        </div>
+        <div style={{ width: "100%", position: "relative" }}>
+          <table className="shapes-table-wrapper-wb-unit4-p5-q1 w-full">
             <thead>
               <tr>
                 <th></th>

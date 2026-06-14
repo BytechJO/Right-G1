@@ -33,9 +33,10 @@
 
 /* ====== IMAGE ====== */
 .wb-unit9-p1-q2-image {
-  height: 200px;
+  height: 250px;
   width: auto;
   border-radius: 16px;
+  align-self: center;
   /* margin-bottom: 30px; */
   /* border: 2px solid #cfe9f6; */
 }
@@ -83,9 +84,7 @@
 } */
 
 /* ====== TEXT ====== */
-.wb-unit9-p1-q2-text {
-  margin: 0 5px;
-}
+
 
 /* ====== ACTION BUTTONS ====== */
 .wb-unit9-p1-q2-actions {

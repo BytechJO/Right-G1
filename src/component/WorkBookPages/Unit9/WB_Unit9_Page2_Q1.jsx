@@ -107,7 +107,7 @@ const WB_Unit9_Page2_Q1 = () => {
         <h4 className="header-title-page8">
           <span className="ex-A">C</span> Read and draw.
         </h4>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -122,7 +122,7 @@ const WB_Unit9_Page2_Q1 = () => {
             🧽 Eraser
           </button>
         </div>
-        <div className="exercise-container-wb-unit6-p5-q1">
+        <div className="exercise-container-wb-unit6-p5-q1 w-full">
           {[
             "How many horses are there? There are two horses.",
             "How many cows are there? There are four cows.",

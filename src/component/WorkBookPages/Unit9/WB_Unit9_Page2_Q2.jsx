@@ -26,8 +26,8 @@ const WB_Unit9_Page2_Q2 = () => {
   });
 
   const correctSentences = {
-    1: "She likes chickens",
-    2: "I like cows",
+    1: "she likes chickens",
+    2: "i like cows",
   };
 
   const scrambledWords = {
@@ -183,268 +183,276 @@ const WB_Unit9_Page2_Q2 = () => {
         <div
           className="div-forall"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
+            gap: "50px",
           }}
         >
-          <div className="page8-q1-container">
-            <h4 className="header-title-page8">
-              <span className="ex-A">D</span> Unscramble, write, and match.
-            </h4>
+          <h4 className="header-title-page8">
+            <span className="ex-A">D</span> Drag the words to make a sentence
+            and match.
+          </h4>
 
-            <div className="container12-wb-unit9-p2-q1" ref={containerRef}>
-              {/* الصف الأول */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">1</span>
-                    <div>
-                      <span
-                        className={`word-text2-review3-p1-q2 ${
-                          locked || showAnswer ? "disabled-word" : ""
-                        }`}
-                        onClick={() =>
-                          document.getElementById("dot-open").click()
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        likes/she/chickens
-                      </span>
-                      {wrongWords.includes("likes/she/chickens") && (
-                        <span className="error-mark-review3-p1-q2">✕</span>
+          <div className="container12-wb-unit9-p2-q1" ref={containerRef}>
+            {/* الصف الأول */}
+            <div className="matching-row2">
+              <div>
+                <div className="word-with-dot2">
+                  <span className="span-num2-wb-unit7-p2-q1">1</span>
+                  <div>
+                    <span
+                      className={`word-text2-review3-p1-q2 ${
+                        locked || showAnswer ? "disabled-word" : ""
+                      }`}
+                      onClick={() =>
+                        document.getElementById("dot-open").click()
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      likes/she/chickens
+                    </span>
+                    {wrongWords.includes("likes/she/chickens") && (
+                      <span className="error-mark-review3-p1-q2">✕</span>
+                    )}
+                    <Droppable droppableId="bank-1" direction="horizontal">
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          style={{
+                            display: "flex",
+                            gap: "12px",
+                            padding: "10px",
+                            border: "2px dashed #ccc",
+                            borderRadius: "10px",
+                            marginBottom: "20px",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {scrambledWords[1].map((w, i) => (
+                            <Draggable
+                              key={w}
+                              draggableId={w}
+                              index={i}
+                              isDragDisabled={locked}
+                            >
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    borderRadius: "8px",
+                                    border: "2px solid #2c5287",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontWeight: "bold",
+                                    cursor: "grab",
+                                    background: "white",
+                                    padding: "5px",
+                                    ...provided.draggableProps.style,
+                                  }}
+                                >
+                                  {w}
+                                </span>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
                       )}
-                      <Droppable droppableId="bank-1" direction="horizontal">
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            style={{
-                              display: "flex",
-                              gap: "12px",
-                              padding: "10px",
-                              border: "2px dashed #ccc",
-                              borderRadius: "10px",
-                              marginBottom: "20px",
-                              justifyContent: "center",
-                            }}
-                          >
-                            {scrambledWords[1].map((w, i) => (
-                              <Draggable key={w} draggableId={w} index={i} isDragDisabled={locked}>
-                                {(provided) => (
-                                  <span
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      borderRadius: "8px",
-                                      border: "2px solid #2c5287",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      fontWeight: "bold",
-                                      cursor: "grab",
-                                      background: "white",
-                                      padding: "5px",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {w}
-                                  </span>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        id="dot-open"
-                        data-word="likes/she/chickens"
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
+                    </Droppable>
                   </div>
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 start-dot2"
+                      id="dot-open"
+                      data-word="likes/she/chickens"
+                      onClick={handleStartDotClick}
+                    ></div>
+                  </div>
+                </div>
 
-                  <Droppable droppableId="drop-1" direction="horizontal" isDropDisabled={locked}>
-                    {(provided ,snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
+                <Droppable
+                  droppableId="drop-1"
+                  direction="horizontal"
+                  isDropDisabled={locked}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
                       className={`unscramble-input-wb-unit9-p2-q1 ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
-                      >
-                        {userInputs[1].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  {wrongInputs.includes("1") && (
-                    <span className="input-error-x-wb-unit9-p2-q1">✕</span>
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
+                    >
+                      {userInputs[1].join(" ")}
+                      {provided.placeholder}
+                    </div>
                   )}
-                </div>
+                </Droppable>
 
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="img1"
-                      id="dot-img1"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <img
-                    src={table}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img1").click()}
-                    style={{
-                      cursor: "pointer",
-                      height: "130px",
-                      width: "auto",
-                    }}
-                  />
-                </div>
+                {wrongInputs.includes("1") && (
+                  <span className="input-error-x-wb-unit9-p2-q1">✕</span>
+                )}
               </div>
 
-              {/* الصف الثاني */}
-              <div className="matching-row2">
-                <div>
-                  <div className="word-with-dot2">
-                    <span className="span-num2-wb-unit7-p2-q1">2</span>
-                    <div>
-                      <span
-                        className={`word-text2-review3-p1-q2 ${
-                          locked || showAnswer ? "disabled-word" : ""
-                        }`}
-                        onClick={() =>
-                          document.getElementById("dot-line").click()
-                        }
-                        style={{ cursor: "pointer" }}
-                      >
-                        cows/like/I
-                      </span>
-                      {wrongWords.includes("cows/like/I") && (
-                        <span className="error-mark-review3-p1-q2">✕</span>
-                      )}
-
-                      <Droppable droppableId="bank-2" direction="horizontal" isDropDisabled={locked}>
-                        {(provided ,snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            style={{
-                              display: "flex",
-                              gap: "12px",
-                              padding: "10px",
-                              border: "2px dashed #ccc",
-                              borderRadius: "10px",
-                              marginBottom: "20px",
-                              justifyContent: "center",
-                            }}
-                          >
-                            {scrambledWords[2].map((w, i) => (
-                              <Draggable key={w} draggableId={w} index={i}>
-                                {(provided) => (
-                                  <span
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      borderRadius: "8px",
-                                      border: "2px solid #2c5287",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      fontWeight: "bold",
-                                      cursor: "grab",
-                                      background: "white",
-                                      padding: "5px",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {w}
-                                  </span>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                    <div className="dot-wrapper2">
-                      <div
-                        className="dot2 start-dot2"
-                        data-word="cows/like/I"
-                        id="dot-line"
-                        onClick={handleStartDotClick}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <Droppable droppableId="drop-2" direction="horizontal">
-                    {(provided ,snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        className={`unscramble-input-wb-unit9-p2-q1 ${
-                          snapshot.isDraggingOver ? "drag-over-cell" : ""
-                        }`}
-                      >
-                        {userInputs[2].join(" ")}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-
-                  {wrongInputs.includes("2") && (
-                    <span className="input-error-x-wb-unit9-p2-q1">✕</span>
-                  )}
+              <div className="img-with-dot2-wb-unit7-p2-q1">
+                <div className="dot-wrapper2">
+                  <div
+                    className="dot2 end-dot2"
+                    data-image="img1"
+                    id="dot-img1"
+                    onClick={handleEndDotClick}
+                  ></div>
                 </div>
 
-                <div className="img-with-dot2-wb-unit7-p2-q1">
-                  <div className="dot-wrapper2">
-                    <div
-                      className="dot2 end-dot2"
-                      data-image="img2"
-                      id="dot-img2"
-                      onClick={handleEndDotClick}
-                    ></div>
-                  </div>
-
-                  <img
-                    src={dish}
-                    className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
-                    alt=""
-                    onClick={() => document.getElementById("dot-img2").click()}
-                    style={{
-                      cursor: "pointer",
-                      height: "130px",
-                      width: "auto",
-                    }}
-                  />
-                </div>
+                <img
+                  src={table}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img1").click()}
+                  style={{
+                    cursor: "pointer",
+                    height: "130px",
+                    width: "auto",
+                  }}
+                />
               </div>
-
-              <svg className="lines-layer2">
-                {lines.map((line, i) => (
-                  <line key={i} {...line} stroke="red" strokeWidth="3" />
-                ))}
-              </svg>
             </div>
+
+            {/* الصف الثاني */}
+            <div className="matching-row2">
+              <div>
+                <div className="word-with-dot2">
+                  <span className="span-num2-wb-unit7-p2-q1">2</span>
+                  <div>
+                    <span
+                      className={`word-text2-review3-p1-q2 ${
+                        locked || showAnswer ? "disabled-word" : ""
+                      }`}
+                      onClick={() =>
+                        document.getElementById("dot-line").click()
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      cows/like/I
+                    </span>
+                    {wrongWords.includes("cows/like/I") && (
+                      <span className="error-mark-review3-p1-q2">✕</span>
+                    )}
+
+                    <Droppable
+                      droppableId="bank-2"
+                      direction="horizontal"
+                      isDropDisabled={locked}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          style={{
+                            display: "flex",
+                            gap: "12px",
+                            padding: "10px",
+                            border: "2px dashed #ccc",
+                            borderRadius: "10px",
+                            marginBottom: "20px",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {scrambledWords[2].map((w, i) => (
+                            <Draggable key={w} draggableId={w} index={i}>
+                              {(provided) => (
+                                <span
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={{
+                                    borderRadius: "8px",
+                                    border: "2px solid #2c5287",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    fontWeight: "bold",
+                                    cursor: "grab",
+                                    background: "white",
+                                    padding: "5px",
+                                    ...provided.draggableProps.style,
+                                  }}
+                                >
+                                  {w}
+                                </span>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </div>
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 start-dot2"
+                      data-word="cows/like/I"
+                      id="dot-line"
+                      onClick={handleStartDotClick}
+                    ></div>
+                  </div>
+                </div>
+
+                <Droppable droppableId="drop-2" direction="horizontal">
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className={`unscramble-input-wb-unit9-p2-q1 ${
+                        snapshot.isDraggingOver ? "drag-over-cell" : ""
+                      }`}
+                    >
+                      {userInputs[2].join(" ")}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+
+                {wrongInputs.includes("2") && (
+                  <span className="input-error-x-wb-unit9-p2-q1">✕</span>
+                )}
+              </div>
+
+              <div className="img-with-dot2-wb-unit7-p2-q1">
+                <div className="dot-wrapper2">
+                  <div
+                    className="dot2 end-dot2"
+                    data-image="img2"
+                    id="dot-img2"
+                    onClick={handleEndDotClick}
+                  ></div>
+                </div>
+
+                <img
+                  src={dish}
+                  className={`matched-img2 ${
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
+                  alt=""
+                  onClick={() => document.getElementById("dot-img2").click()}
+                  style={{
+                    cursor: "pointer",
+                    height: "130px",
+                    width: "auto",
+                  }}
+                />
+              </div>
+            </div>
+
+            <svg className="lines-layer2">
+              {lines.map((line, i) => (
+                <line key={i} {...line} stroke="red" strokeWidth="3" />
+              ))}
+            </svg>
           </div>
 
           <div className="action-buttons-container">

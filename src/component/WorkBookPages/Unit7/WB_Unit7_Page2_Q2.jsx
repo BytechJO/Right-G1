@@ -35,11 +35,8 @@ const WB_Unit7_Page2_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
+   
         }}
       >
         <h4 className="header-title-page8">

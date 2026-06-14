@@ -104,17 +104,14 @@ const WB_Unit7_Page6_Q2 = () => {
     >
       <div  className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
+        
         }}
       >
         <div>
           <h5 className="header-title-page8">
             {" "}
-            <span className="ex-A">B</span>Look, read, and circle.
+            <span className="ex-A">B</span>Tap or click the word for each picture.
           </h5>
         </div>
         <div className="container-wb-unit6-p6-q2">

@@ -7,12 +7,11 @@ import eraserCursor from "../../../assets/unit1/imgs/gui_eraser_icon_157160.png"
 const WB_Unit6_Page5_Q1 = () => {
   const [answers, setAnswers] = useState(["", "", ""]);
   const [checked, setChecked] = useState(false);
-
+  const [strokeColor, setStrokeColor] = useState("#800080"); // purple
   const canvasRefs = useRef([]);
   const [tool, setTool] = useState("pen"); // pen | eraser
 
   /* ================= CANVAS SETUP ================= */
-
 
   const getPos = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
@@ -39,7 +38,7 @@ const WB_Unit6_Page5_Q1 = () => {
       ctx.lineWidth = 20; // حجم الممحاة
     } else {
       ctx.globalCompositeOperation = "source-over";
-      ctx.strokeStyle = "purple";
+      ctx.strokeStyle = strokeColor;
       ctx.lineWidth = 3;
     }
 
@@ -73,8 +72,6 @@ const WB_Unit6_Page5_Q1 = () => {
 
   /* ================= CHECK ================= */
 
-
-
   const reset = () => {
     setAnswers(["", "", ""]);
     setChecked(false);
@@ -96,17 +93,13 @@ const WB_Unit6_Page5_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
         <h4 className="header-title-page8">
-          <span className="ex-A">I</span> What can you do? Write and draw.
+          <span className="ex-A">I</span>What can you do? Type and draw.
         </h4>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -120,8 +113,31 @@ const WB_Unit6_Page5_Q1 = () => {
           >
             🧽 Eraser
           </button>
+
+          <div
+            className={`unit4-q2-p6-tool-btn`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <label>🎨 Color:</label>
+            <input
+              type="color"
+              value={strokeColor}
+              onChange={(e) => setStrokeColor(e.target.value)}
+              style={{
+                width: "40px",
+                height: "40px",
+                border: "none",
+                cursor: "pointer",
+                background: "transparent",
+              }}
+            />
+          </div>
         </div>
-        <div className="exercise-container-wb-unit6-p5-q1">
+        <div className="exercise-container-wb-unit6-p5-q1 w-full">
           {[0, 1, 2].map((i) => (
             <div key={i} className="row-container-wb-unit6-p5-q1">
               {/* LEFT */}
@@ -144,14 +160,13 @@ const WB_Unit6_Page5_Q1 = () => {
               <canvas
                 ref={(el) => (canvasRefs.current[i] = el)}
                 className="draw-box-wb-unit6-p5-q1"
-                 width={270}
+                width={270}
                 height={120}
                 style={{
                   cursor:
                     tool === "eraser"
                       ? `url(${eraserCursor}) 12 12, auto`
                       : `url(${pencilCursor}) 4 28, auto`,
-                 
                 }}
                 onMouseDown={(e) => startDrawing(e, i)}
                 onMouseMove={(e) => draw(e, i)}

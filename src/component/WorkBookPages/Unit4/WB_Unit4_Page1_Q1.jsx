@@ -14,13 +14,15 @@ const WB_Unit4_Page1_Q1 = () => {
   const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
   const [firstDot, setFirstDot] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLeftWord, setSelectedLeftWord] = useState(null);
+  const [selectedRightWord, setSelectedRightWord] = useState(null);
+
   // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
   const [locked, setLocked] = useState(false);
   const correctMatches = [
     { word: "It’s a circle.", image: "img2" },
     { word: "It’s a square.", image: "img3" },
     { word: "It’s a triangle.", image: "img1" },
-   
   ];
 
   // ============================
@@ -31,7 +33,7 @@ const WB_Unit4_Page1_Q1 = () => {
 
     const rect = containerRef.current.getBoundingClientRect();
     const imgId = e.target.dataset.image;
-
+    setSelectedLeftWord(imgId);
     // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
     const alreadyUsed = lines.some((line) => line.image === imgId);
     if (alreadyUsed) return;
@@ -67,6 +69,13 @@ const WB_Unit4_Page1_Q1 = () => {
     };
 
     setLines((prev) => [...prev, newLine]);
+    setSelectedRightWord(newLine.image);
+
+    setTimeout(() => {
+      setSelectedLeftWord(null);
+      setSelectedRightWord(null);
+    }, 300);
+
     setFirstDot(null);
   };
 
@@ -75,7 +84,7 @@ const WB_Unit4_Page1_Q1 = () => {
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
         "Oops!",
-        "Please connect all the pairs before checking."
+        "Please connect all the pairs before checking.",
       );
       return;
     }
@@ -85,7 +94,7 @@ const WB_Unit4_Page1_Q1 = () => {
 
     lines.forEach((line) => {
       const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
+        (pair) => pair.word === line.word && pair.image === line.image,
       );
 
       if (isCorrect) correctCount++;
@@ -125,41 +134,36 @@ const WB_Unit4_Page1_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "50px",
+ 
         }}
       >
-        <div className="page8-q1-container">
+
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">A</span> Look, read, and match.
           </h5>
 
-          <div className="container12" ref={containerRef}>
+          <div className="container12 w-full" ref={containerRef}>
             {/* الصف الأول */}
             <div className="matching-row2">
               <div className="img-with-dot2-wb-unit4-p1-q1">
                 <span className="span-num2">1</span>{" "}
                 <img
                   src={bird}
-                  className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                  className={`matched-img2 ${locked || showAnswer ? "disabled-hover" : ""}`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 <span
                   className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                    selectedLeftWord === "img1" ? "selected-item" : ""
+                  }${locked || showAnswer ? "disabled-word" : ""}`}
                   onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ cursor: "pointer",width:"350px"  }}
+                  style={{ cursor: "pointer", width: "350px" }}
                 >
-                 What shape is it?
+                  What shape is it?
                 </span>
                 {wrongWords.includes("It’s a triangle.") && ( // ⭐ تم التعديل هون
                   <span className="error-mark8-wb-unit4-p1-q1">✕</span>
@@ -185,12 +189,12 @@ const WB_Unit4_Page1_Q1 = () => {
 
                 <span
                   className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-ball").click()}
-                  style={{ cursor: "pointer",width:"100px" }}
+                  style={{ cursor: "pointer", width: "100px" }}
                 >
-                It’s a circle.
+                  It’s a circle.
                 </span>
               </div>
             </div>
@@ -202,18 +206,18 @@ const WB_Unit4_Page1_Q1 = () => {
                 <img
                   src={boy}
                   className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img2").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
-                  <span
+                <span
                   className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                    selectedLeftWord === "img2" ? "selected-item" : ""
+                  }${locked || showAnswer ? "disabled-word" : ""}`}
                   onClick={() => document.getElementById("dot-img2").click()}
-                  style={{ cursor: "pointer",width:"350px"  }}
+                  style={{ cursor: "pointer", width: "350px" }}
                 >
                   What shape is it?
                 </span>
@@ -241,12 +245,12 @@ const WB_Unit4_Page1_Q1 = () => {
 
                 <span
                   className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-pizza").click()}
-                  style={{ cursor: "pointer",width:"100px"  }}
+                  style={{ cursor: "pointer", width: "100px" }}
                 >
-                 It’s a square.
+                  It’s a square.
                 </span>
               </div>
             </div>
@@ -257,20 +261,20 @@ const WB_Unit4_Page1_Q1 = () => {
                 <img
                   src={pizza2}
                   className={`matched-img2 ${
-                      locked || showAnswer ? "disabled-hover" : ""
-                    }`}
+                    locked || showAnswer ? "disabled-hover" : ""
+                  }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
                   style={{ height: "auto", width: "120px", cursor: "pointer" }}
                 />
                 <span
-                  className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                  className={`word-text2-wb-unit4-p1-q1  ${
+                    selectedLeftWord === "img3" ? "selected-item" : ""
+                  }${locked || showAnswer ? "disabled-word" : ""}`}
                   onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ cursor: "pointer",width:"350px"  }}
+                  style={{ cursor: "pointer", width: "350px" }}
                 >
-                 What shape is it?
+                  What shape is it?
                 </span>
                 {wrongWords.includes("It’s a square.") && ( // ⭐ تم التعديل هون
                   <span className="error-mark8-wb-unit4-p1-q1">✕</span>
@@ -296,17 +300,16 @@ const WB_Unit4_Page1_Q1 = () => {
 
                 <span
                   className={`word-text2-wb-unit4-p1-q1 ${
-                      locked || showAnswer ? "disabled-word" : ""
-                    }`}
+                    locked || showAnswer ? "disabled-word" : ""
+                  }`}
                   onClick={() => document.getElementById("dot-bird").click()}
-                  style={{ cursor: "pointer" ,width:"100px" }}
+                  style={{ cursor: "pointer", width: "100px" }}
                 >
                   It’s a triangle.
                 </span>
               </div>
             </div>
 
-          
             <svg className="lines-layer2">
               {lines.map((line, i) => (
                 <line key={i} {...line} stroke="red" strokeWidth="3" />
@@ -314,13 +317,15 @@ const WB_Unit4_Page1_Q1 = () => {
             </svg>
           </div>
         </div>
-      </div>
+  
       <div className="action-buttons-container">
         <button
           onClick={() => {
             setLines([]);
             setWrongWords([]);
             setFirstDot(null);
+               setSelectedLeftWord(null);
+              setSelectedRightWord(null);
             setShowAnswer(false);
             setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
           }}
@@ -353,6 +358,8 @@ const WB_Unit4_Page1_Q1 = () => {
 
             setLines(finalLines);
             setWrongWords([]);
+               setSelectedLeftWord(null);
+              setSelectedRightWord(null);
             setShowAnswer(true);
             setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
           }}
