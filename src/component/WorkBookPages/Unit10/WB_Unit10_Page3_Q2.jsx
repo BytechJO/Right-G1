@@ -86,17 +86,14 @@ const WB_Unit10_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+        
         }}
       >
         <h5 className="header-title-page8">
           <span className="ex-A">F</span>Read and draw.
         </h5>
-        <div className="unit4-q2-p6-tools">
+        <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}
             className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
@@ -111,7 +108,7 @@ const WB_Unit10_Page3_Q2 = () => {
             🧽 Eraser
           </button>
         </div>
-        <div className="wb-unit5-p4-q1-table">
+        <div className="wb-unit5-p4-q1-table w-full">
           {questions.map((q) => (
             <div key={q.id} className="wb-unit5-p4-q1-row ">
               <div className="wb-unit5-p4-q1-text">

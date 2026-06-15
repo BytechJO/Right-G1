@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 // import "./Unit2_Page8_Q1.css";
 import table from "../../../assets/U1 WB/U5/U5P28EXEC-01.svg";
 import dish from "../../../assets/U1 WB/U5/U5P28EXEC-02.svg";
-import tiger from "../../../assets/unit1/imgs/tiger.svg";
 import duck from "../../../assets/U1 WB/U5/U5P28EXEC-03.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
@@ -197,7 +196,7 @@ const WB_Unit5_Page2_Q1 = () => {
                   }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ cursor: "pointer", height: "100px" }}
+                  style={{ cursor: "pointer", height: "120px" }}
                 />
               </div>
             </div>
@@ -303,7 +302,7 @@ const WB_Unit5_Page2_Q1 = () => {
                   }`}
                   alt=""
                   onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ cursor: "pointer", height: "100px" }}
+                  style={{ cursor: "pointer", height: "110px" }}
                 />
               </div>
             </div>

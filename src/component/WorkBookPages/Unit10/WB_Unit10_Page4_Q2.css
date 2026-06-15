@@ -13,6 +13,7 @@
     font-size: 18px;
     width: 100%;
     flex-direction: row;
+    align-items: center;
 }
 
 .sentence-text-wb-unit10-p4-q2 {

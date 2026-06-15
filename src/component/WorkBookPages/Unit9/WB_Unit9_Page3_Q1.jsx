@@ -104,11 +104,11 @@ const WB_Unit9_Page3_Q1 = () => {
     >
       <div   className="div-forall"
         style={{
-          gap: "30px",
+          gap: "50px",
          
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">F</span>Count and tap or click the number of the animals.

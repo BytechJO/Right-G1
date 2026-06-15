@@ -13,8 +13,8 @@ const WB_Unit10_Page4_Q1 = () => {
       image: img1,
       text: "Do you want bread?",
       items: [
-        { text: "Yes, I do.", correct: "x" },
-        { text: "No, I don’t. I want milk", correct: "✓" },
+        { text: "Yes, I do.", correct: "✓" },
+        { text: "No, I don’t. I want milk", correct: "x" },
       ],
     },
     {
@@ -114,7 +114,7 @@ const WB_Unit10_Page4_Q1 = () => {
 
     questions.forEach((q) => {
       const correctIndex = q.items.findIndex(
-        (item) => item.correct.toLowerCase() === "✓"
+        (item) => item.correct.toLowerCase() === "✓",
       );
       correctAnswers[q.id] = correctIndex;
     });
@@ -137,85 +137,76 @@ const WB_Unit10_Page4_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
         }}
       >
-        <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            <span className="ex-A">G</span> Look, read, and write
-            <span style={{ color: "red" }}>✓</span>.{" "}
-          </h4>
+        <h4 className="header-title-page8">
+          <span className="ex-A">G</span>Tap or click the correct box.
+          <span style={{ color: "red" }}>✓</span>.{" "}
+        </h4>
 
-          <div className="wb-unit10-p4-q1-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="wb-unit10-p4-q1-box">
+        <div className="wb-unit10-p4-q1-grid w-full">
+          {questions.map((q) => (
+            <div key={q.id} className="wb-unit10-p4-q1-box">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <img src={q.image} alt="" className="wb-unit10-p4-q1-img" />
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "center",
+                    gap: "10px",
+                    flexDirection: "row",
                     alignItems: "center",
-                    flexDirection: "column",
                   }}
                 >
-                  <img src={q.image} alt="" className="wb-unit10-p4-q1-img" />
-                  <div
+                  <span
+                    className="wb-unit10-p4-q1-text"
                     style={{
-                      display: "flex",
-                      gap: "10px",
-                      flexDirection: "row",
-                      alignItems:"center"
+                      color: "#1d4f7b",
+                      fontSize: "22px",
+                      fontWeight: "700",
                     }}
                   >
-                    <span
-                      className="wb-unit10-p4-q1-text"
-                      style={{
-                        color: "#1d4f7b",
-                        fontSize: "22px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      {q.id}
-                    </span>
-                    <span className="wb-unit10-p4-q1-text" >{q.text}</span>
-                  </div>
-                </div>
-                <div>
-                  {q.items.map((item, idx) => {
-                    const isSelected = answers[q.id] === idx;
-                    const isWrong = results[q.id] === "wrong" && isSelected;
-
-                    return (
-                      <div key={idx} className="wb-unit10-p4-q1-row">
-                       <div className="review3-p1-q3-input-box">
-                          <input
-                            type="text"
-                            readOnly
-                            value={isSelected ? "✓" : ""}
-                            onFocus={() => handleSelect(q.id, idx)}
-                            className={`wb-unit10-p4-q1-input`}
-                            disabled={showAnswer}
-                            style={{
-                              cursor: showAnswer ? "not-allowed" : "pointer",
-                            }}
-                          />
-
-                          {isWrong && (
-                            <span className="review3-p1-q3-x">✕</span>
-                          )}
-                        </div> <span className="wb-unit10-p4-q1-text">{item.text}</span>
-
-                        
-                      </div>
-                    );
-                  })}
+                    {q.id}
+                  </span>
+                  <span className="wb-unit10-p4-q1-text">{q.text}</span>
                 </div>
               </div>
-            ))}
-          </div>
+              <div>
+                {q.items.map((item, idx) => {
+                  const isSelected = answers[q.id] === idx;
+                  const isWrong = results[q.id] === "wrong" && isSelected;
+
+                  return (
+                    <div key={idx} className="wb-unit10-p4-q1-row">
+                      <div className="review3-p1-q3-input-box">
+                        <input
+                          type="text"
+                          readOnly
+                          value={isSelected ? "✓" : ""}
+                          onFocus={() => handleSelect(q.id, idx)}
+                          className={`wb-unit10-p4-q1-input`}
+                          disabled={showAnswer}
+                          style={{
+                            cursor: showAnswer ? "not-allowed" : "pointer",
+                          }}
+                        />
+
+                        {isWrong && <span className="review3-p1-q3-x">✕</span>}
+                      </div>{" "}
+                      <span className="wb-unit10-p4-q1-text">{item.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

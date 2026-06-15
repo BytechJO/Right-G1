@@ -108,7 +108,7 @@ const WB_Unit6_Page6_Q2 = () => {
          
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">B</span>Tap or click the correct word for each picture.

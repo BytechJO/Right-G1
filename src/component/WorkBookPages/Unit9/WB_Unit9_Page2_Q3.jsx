@@ -60,7 +60,7 @@ function DraggableNumber({ id, text, disabled }) {
         fontWeight: "bold",
         background: "#fff",
         cursor: disabled ? "default" : "grab",
-        opacity: isDragging ||disabled? 0.4 : 1,
+        opacity: isDragging || disabled ? 0.4 : 1,
         touchAction: "none",
       }}
     >
@@ -70,7 +70,14 @@ function DraggableNumber({ id, text, disabled }) {
 }
 
 // ── Droppable cell ────────────────────────────
-function DroppableCell({ id, displayText, isOver, isWrong, disabled, onClear }) {
+function DroppableCell({
+  id,
+  displayText,
+  isOver,
+  isWrong,
+  disabled,
+  onClear,
+}) {
   const { setNodeRef } = useDroppable({ id, disabled });
 
   return (
@@ -91,23 +98,23 @@ function DroppableCell({ id, displayText, isOver, isWrong, disabled, onClear }) 
 
 // ── Main component ────────────────────────────
 const WB_Unit9_Page2_Q3 = () => {
-  const [answers,    setAnswers]    = useState(["", "", ""]);
+  const [answers, setAnswers] = useState(["", "", ""]);
   const [showResult, setShowResult] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [activeId,   setActiveId]   = useState(null);
-  const [overId,     setOverId]     = useState(null);
+  const [activeId, setActiveId] = useState(null);
+  const [overId, setOverId] = useState(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
 
   const activeText = activeId
-    ? numberBank.find((n) => n.id === activeId)?.text ?? null
+    ? (numberBank.find((n) => n.id === activeId)?.text ?? null)
     : null;
 
   // ── Drag handlers ──
   const handleDragStart = ({ active }) => setActiveId(active.id);
-  const handleDragOver  = ({ over  }) => setOverId(over ? over.id : null);
+  const handleDragOver = ({ over }) => setOverId(over ? over.id : null);
 
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
@@ -115,7 +122,7 @@ const WB_Unit9_Page2_Q3 = () => {
     if (!over || showAnswer) return;
 
     const draggableId = active.id;
-    const dest        = over.id;
+    const dest = over.id;
 
     if (!dest.startsWith("drop-")) return;
 
@@ -124,7 +131,9 @@ const WB_Unit9_Page2_Q3 = () => {
 
     setAnswers((prev) => {
       const copy = [...prev];
-      copy.forEach((val, i) => { if (val === draggableId) copy[i] = ""; });
+      copy.forEach((val, i) => {
+        if (val === draggableId) copy[i] = "";
+      });
       copy[index] = draggableId;
       return copy;
     });
@@ -149,7 +158,9 @@ const WB_Unit9_Page2_Q3 = () => {
     setShowAnswer(true);
     setShowResult([]);
     setAnswers(
-      correctData.map((num) => numberBank.find((n) => n.text === num)?.id || "")
+      correctData.map(
+        (num) => numberBank.find((n) => n.text === num)?.id || "",
+      ),
     );
   };
 
@@ -162,15 +173,16 @@ const WB_Unit9_Page2_Q3 = () => {
     }
 
     const results = answers.map((val, i) =>
-      getNumberText(val) === correctData[i] ? "correct" : "wrong"
+      getNumberText(val) === correctData[i] ? "correct" : "wrong",
     );
 
     setShowResult(results);
     setShowAnswer(true);
 
     const correctCount = results.filter((r) => r === "correct").length;
-    const total        = correctData.length;
-    const color        = correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    const total = correctData.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const resultHTML = `
       <div style="font-size:20px;text-align:center;margin-top:8px;">
@@ -179,9 +191,9 @@ const WB_Unit9_Page2_Q3 = () => {
         </span>
       </div>`;
 
-    if (correctCount === total)  ValidationAlert.success(resultHTML);
+    if (correctCount === total) ValidationAlert.success(resultHTML);
     else if (correctCount === 0) ValidationAlert.error(resultHTML);
-    else                         ValidationAlert.warning(resultHTML);
+    else ValidationAlert.warning(resultHTML);
   };
 
   const resetAnswers = () => {
@@ -230,12 +242,18 @@ const WB_Unit9_Page2_Q3 = () => {
                 key={num.id}
                 id={num.id}
                 text={num.text}
-                disabled={showAnswer}
+                disabled={showAnswer || answers.includes(num.id)} // ← هون التعديل
               />
             ))}
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
             {/* Sentences */}
             <div className="word-container-wb-unit9-p2-q3">
               {sentences.map((item, index) => (

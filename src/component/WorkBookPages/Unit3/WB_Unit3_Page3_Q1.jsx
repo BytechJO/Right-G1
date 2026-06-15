@@ -42,6 +42,7 @@ const BankItem = ({ word, disabled }) => {
         opacity: disabled ? 0.45 : isDragging ? 0.3 : 1,
         transition: "opacity 0.15s, border-color 0.15s",
         userSelect: "none",
+        touchAction:"none",
         color: disabled ? "#aaa" : "inherit",
       }}
     >

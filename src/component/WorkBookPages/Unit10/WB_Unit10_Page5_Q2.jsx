@@ -217,9 +217,9 @@ export default function WB_Unit10_Page5_Q2() {
   return (
     <div className="wordsearch-wrapper">
       <div className="page8-wrapper">
-        <div className="div-forall" style={{ width: "60%" }}>
+        <div className="div-forall" style={{}}>
           <h3 className="header-title-page8">
-            <span className="ex-A">J</span>Look and find the words.
+            <span className="ex-A">J</span> Tap or click the hidden words!
           </h3>
           <div className="container-word-grid-wb-unit10-p5-q2">
             <div className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}>

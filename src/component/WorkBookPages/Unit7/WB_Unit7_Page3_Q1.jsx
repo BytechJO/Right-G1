@@ -108,7 +108,7 @@ const WB_Unit7_Page3_Q1 = () => {
          
         }}
       >
-        <div>
+        <div className="w-full"> 
           <h5 className="header-title-page8">
             <span className="ex-A">E</span>Tap or click the correct answer for each picture.
           </h5>

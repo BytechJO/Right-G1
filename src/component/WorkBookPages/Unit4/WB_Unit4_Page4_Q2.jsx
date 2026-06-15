@@ -89,7 +89,7 @@ const WB_Unit4_Page4_Q2 = () => {
           gap: "30px",
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">H</span>Think of a shape and draw it in
             the box. and draw.

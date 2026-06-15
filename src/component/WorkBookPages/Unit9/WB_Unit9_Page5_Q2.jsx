@@ -51,9 +51,9 @@ const WB_Unit9_Page5_Q2 = () => {
             .then((text) =>
               text
                 .replaceAll('fill="none"', 'fill="currentColor"')
-                .replaceAll(/stroke="[^"]*"/g, 'stroke="currentColor"')
-            )
-        )
+                .replaceAll(/stroke="[^"]*"/g, 'stroke="currentColor"'),
+            ),
+        ),
       );
 
       setSvgContent(contents);
@@ -161,19 +161,20 @@ const WB_Unit9_Page5_Q2 = () => {
     >
       <div
         className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          // gap: "30px",
-          width: "60%",
-        }}
+        style={
+          {
+            // gap: "30px",
+          }
+        }
       >
+        <div className="w-full">
         <h4 className="header-title-page8">
-          <span className="ex-A">K</span> Color and circle.
+          <span className="ex-A">K</span>Tap the word for each picture and color
+          them.
         </h4>
         <span style={{ fontSize: "14px", color: "gray" }}>
           Hint: Double Click to Color Word
-        </span>
+        </span></div>
         <div className="wb-unit9-qk-layout">
           {items.map((item, i) => {
             const SvgComponent = item.Svg;

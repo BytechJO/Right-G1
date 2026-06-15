@@ -99,12 +99,12 @@ const WB_Unit4_Page3_Q2 = () => {
           gap: "30px",
         }}
       >
-        <div>
+       
           <h5 className="header-title-page8">
             <span className="ex-A">F</span> What are your favorite shapes? Type
             and draw.
           </h5>
-        </div>
+       
         <div
           style={{
             display: "flex",

@@ -1,110 +1,212 @@
 import React, { useState } from "react";
 import deer from "../../../assets/U1 WB/U9/U9P54EXEI-01.svg";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit9_Page4_Q2.css";
-const data = [
-  { question: "", correct: "There are three cows" },
-  { question: "", correct: "There are two cats" },
-  { question: "", correct: "There are one dog" },
+
+// ─────────────────────────────────────────────
+const correctData = ["one", "two", "three"];
+
+const wordBank = [
+  { id: "w1", text: "one" },
+  { id: "w2", text: "two" },
+  { id: "w3", text: "three" },
 ];
 
+const questions = [
+  { prefix: "There are", blank: true, suffix: "cows.", useIs: false },
+  { prefix: "There are", blank: true, suffix: "cats.", useIs: false },
+  { prefix: "There is", blank: true, suffix: "dog.", useIs: true },
+];
+
+const getWordText = (id) => wordBank.find((w) => w.id === id)?.text || "";
+
+// ── Draggable word chip ───────────────────────
+function DraggableWord({ id, text, disabled }) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled,
+    data: { text },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "8px 16px",
+        border: "2px solid #0d47a1",
+        borderRadius: "8px",
+        background: "#fff",
+        fontWeight: "600",
+        cursor: disabled ? "default" : "grab",
+        opacity: isDragging || disabled ? 0.4 : 1,
+        touchAction: "none",
+        userSelect: "none",
+      }}
+    >
+      {text}
+    </div>
+  );
+}
+
+// ── Droppable answer cell ─────────────────────
+function DroppableCell({
+  id,
+  displayText,
+  isOver,
+  isWrong,
+  disabled,
+  onClear,
+}) {
+  const { setNodeRef } = useDroppable({ id, disabled });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`q-input-wb-unit9-p4-q2 ${isOver ? "drag-over-cell" : ""}`}
+      style={{
+        background: isOver ? "#e3f2fd" : "white",
+        cursor: !disabled && displayText ? "pointer" : "default",
+        position: "relative",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minWidth: "90px",
+      }}
+      onClick={() => !disabled && displayText && onClear(id)}
+    >
+      {displayText}
+      {isWrong && <span className="wrong-icon-review6-p1-q3">✕</span>}
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────
 const WB_Unit9_Page4_Q2 = () => {
-  const [answers, setAnswers] = useState(Array(data.length).fill(""));
-  const [wrongInputs, setWrongInputs] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
-  const wordBank = data.map((d, i) => ({
-    id: `w-${i}`,
-    text: d.correct,
-  }));
+  const [answers, setAnswers] = useState(["", "", ""]);
+  const [showResult, setShowResult] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [activeId, setActiveId] = useState(null);
+  const [overId, setOverId] = useState(null);
 
-  const handleChange = (value, index) => {
-    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
-    setWrongInputs([]);
-  };
-  const onDragEnd = (result) => {
-    if (!result.destination || showAnswer) return;
+  const activeText = activeId
+    ? (wordBank.find((w) => w.id === activeId)?.text ?? null)
+    : null;
 
-    const value = result.draggableId;
-    const index = Number(result.destination.droppableId);
+  // ── Drag handlers ──
+  const handleDragStart = ({ active }) => setActiveId(active.id);
+  const handleDragOver = ({ over }) => setOverId(over ? over.id : null);
+
+  const handleDragEnd = ({ active, over }) => {
+    setActiveId(null);
+    setOverId(null);
+    if (!over || showAnswer) return;
+
+    const draggableId = active.id;
+    const dest = over.id;
+
+    if (!dest.startsWith("drop-")) return;
+
+    const index = Number(dest.replace("drop-", ""));
+    if (isNaN(index)) return;
 
     setAnswers((prev) => {
       const copy = [...prev];
-
-      // منع التكرار
-      copy.forEach((v, i) => {
-        if (v === value) copy[i] = "";
+      // إزالة الكلمة من أي خلية ثانية
+      copy.forEach((val, i) => {
+        if (val === draggableId) copy[i] = "";
       });
-
-      copy[index] = value;
+      copy[index] = draggableId;
       return copy;
     });
 
-    setWrongInputs([]);
+    setShowResult([]);
+  };
+
+  // ── Click to clear ──
+  const handleClear = (cellId) => {
+    const index = Number(cellId.replace("drop-", ""));
+    if (isNaN(index)) return;
+    setAnswers((prev) => {
+      const copy = [...prev];
+      copy[index] = "";
+      return copy;
+    });
+    setShowResult([]);
+  };
+
+  // ── Buttons ──
+  const showCorrectAnswers = () => {
+    setShowAnswer(true);
+    setShowResult([]);
+    setAnswers(
+      correctData.map(
+        (word) => wordBank.find((w) => w.text === word)?.id || "",
+      ),
+    );
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ⭐ منع التعديل عند Show Answer
+    if (showAnswer) return;
 
-    if (answers.some((a) => a.trim() === "")) {
+    if (answers.includes("")) {
       ValidationAlert.info("Please fill in all blanks before checking!");
       return;
     }
 
-    let correctCount = 0;
-    let wrong = [];
+    const results = answers.map((val, i) =>
+      getWordText(val) === correctData[i] ? "correct" : "wrong",
+    );
 
-    answers.forEach((ans, i) => {
-      if (ans.trim().toLowerCase() === data[i].correct.toLowerCase()) {
-        correctCount++;
-      } else {
-        wrong.push(i);
-      }
-    });
-
-    setWrongInputs(wrong);
+    setShowResult(results);
     setShowAnswer(true);
-    let color =
-      correctCount === data.length
-        ? "green"
-        : correctCount === 0
-          ? "red"
-          : "orange";
 
-    const scoreMessage = `
-      <div style="font-size:20px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-          Score: ${correctCount} / ${data.length}
+    const correctCount = results.filter((r) => r === "correct").length;
+    const total = correctData.length;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+
+    const resultHTML = `
+      <div style="font-size:20px;text-align:center;margin-top:8px;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
-      </div>
-    `;
+      </div>`;
 
-    if (correctCount === data.length) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    if (correctCount === total) ValidationAlert.success(resultHTML);
+    else if (correctCount === 0) ValidationAlert.error(resultHTML);
+    else ValidationAlert.warning(resultHTML);
   };
 
   const reset = () => {
-    setAnswers(Array(data.length).fill(""));
-    setWrongInputs([]);
-    setShowAnswer(false); // ⭐ إعادة التفعيل الطبيعي
-  };
-
-  // ⭐⭐⭐ SHOW ANSWER FUNCTION
-  const showCorrectAnswers = () => {
-    const correctList = data.map((item) => item.correct);
-    setAnswers(correctList);
-    setWrongInputs([]);
-    setShowAnswer(true);
+    setAnswers(["", "", ""]);
+    setShowResult([]);
+    setShowAnswer(false);
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <div
         style={{
           display: "flex",
@@ -114,157 +216,131 @@ const WB_Unit9_Page4_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <div className="component-wrapper">
-            <h3 className="header-title-page8">
-              <span className="ex-A">I</span>Count and write.
-            </h3>
-            <Droppable droppableId="bank" direction="horizontal">
-              {(provided) => (
+        <div className="div-forall" style={{ gap: "10px" }}>
+          <h3 className="header-title-page8">
+            <span className="ex-A">I</span>Count and write.
+          </h3>
+
+          {/* ── Word bank ── */}
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              padding: "12px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              width: "100%",
+              justifyContent: "center",
+            }}
+          >
+            {wordBank.map((w) => (
+              <DraggableWord
+                key={w.id}
+                id={w.id}
+                text={w.text}
+                disabled={showAnswer || answers.includes(w.id)}
+              />
+            ))}
+          </div>
+
+          {/* ── Questions + image ── */}
+          <div className="content-wb-unit9-p4-q2 w-full">
+            <div className="group-input-unit5-p5-q3">
+              {questions.map((q, index) => (
                 <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+                  key={index}
                   style={{
                     display: "flex",
-                    gap: "12px",
-                    padding: "12px",
-                    border: "2px dashed #ccc",
-                    borderRadius: "10px",
-                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "8px",
+                    margin: "10px",
+                    width: "100%",
+                    // flexWrap: "wrap",
                   }}
                 >
-                  {wordBank.map((w, i) => (
-                    <Draggable
-                      key={w.id}
-                      draggableId={w.text}
-                      index={i}
-                      isDragDisabled={showAnswer}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            padding: "8px 12px",
-                            border: "2px solid #0d47a1",
-                            borderRadius: "8px",
-                            background: "white",
-                            fontWeight: "600",
-                            cursor: "grab",
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {w.text}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            <div className="content-wb-unit9-p4-q2">
-              <div className="group-input-unit5-p5-q3">
-                {data.map((item, index) => (
-                  <div
-                    key={index}
-                    className="question-row"
+                  {/* رقم السؤال */}
+                  <span
+                    className="q-number"
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      margin: "10px",
-                      width: "100%",
+                      color: "#0d47a1",
+                      fontWeight: "700",
+                      fontSize: "20px",
                     }}
                   >
-                    <span
-                      className="q-number"
-                      style={{
-                        color: "#0d47a1",
-                        fontWeight: "700",
-                        fontSize: "20px",
-                      }}
-                    >
-                      {index + 1}.
-                    </span>
+                    {index + 1}.
+                  </span>
 
-                    <div
-                      className="question-text"
-                      style={{ position: "relative", width: "100%" }}
-                    >
-                      <Droppable
-                        droppableId={`${index}`}
-                        isDropDisabled={showAnswer}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`q-input-wb-unit9-p4-q2 ${
-                              snapshot.isDraggingOver ? "drag-over-cell" : ""
-                            }`}
-                            style={{
-                              background: snapshot.isDraggingOver
-                                ? "#e3f2fd"
-                                : "white",
-                            }}
-                          >
-                            {answers[index]}
-                            {provided.placeholder}
+                  {/* نص البداية */}
+                  <span
+                    style={{
+                      fontWeight: "500",
+                      width: "100px",
+                      fontSize: "17px",
+                    }}
+                  >
+                    {q.prefix}
+                  </span>
 
-                            {wrongInputs.includes(index) && (
-                              <span className="wrong-icon-review6-p1-q3">
-                                ✕
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  {/* خلية الإجابة */}
+                  <DroppableCell
+                    id={`drop-${index}`}
+                    displayText={getWordText(answers[index])}
+                    isOver={overId === `drop-${index}`}
+                    isWrong={showResult[index] === "wrong"}
+                    disabled={showAnswer}
+                    onClear={handleClear}
+                  />
 
-              <img
-                src={deer}
-                className="shape-img-wb-unit9-p4-q2"
-                alt=""
-                style={{ height: "300px", width: "auto" }}
-              />
+                  {/* نص النهاية */}
+                  <span style={{ fontWeight: "500", fontSize: "17px" }}>
+                    {q.suffix}
+                  </span>
+                </div>
+              ))}
             </div>
+
+            <img
+              src={deer}
+              className="shape-img-wb-unit9-p4-q2"
+              alt=""
+              style={{ height: "300px", width: "auto" }}
+            />
           </div>
         </div>
 
+        {/* ── Action buttons ── */}
         <div className="action-buttons-container">
           <button className="try-again-button" onClick={reset}>
             Start Again ↻
           </button>
-
-          {/* ⭐ زر الشو أنسر */}
-          <button
-            className="show-answer-btn swal-continue"
-            onClick={showCorrectAnswers}
-          >
+          <button className="show-answer-btn" onClick={showCorrectAnswers}>
             Show Answer
           </button>
-
           <button className="check-button2" onClick={checkAnswers}>
             Check Answer ✓
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ── Drag overlay ── */}
+      <DragOverlay>
+        {activeText ? (
+          <div
+            style={{
+              padding: "8px 16px",
+              border: "2px solid #0d47a1",
+              borderRadius: "8px",
+              background: "#fff",
+              fontWeight: "600",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              cursor: "grabbing",
+            }}
+          >
+            {activeText}
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

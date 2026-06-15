@@ -16,32 +16,32 @@ const WB_Unit10_Page3_Q1 = () => {
       id: 1,
       word: "I want fruit.",
       imgs: [
-        { src: img2, answer: false }, // short i
-        { src: img3, answer: true },
+        { src: img1, answer: false }, // short i
+        { src: img2, answer: true },
       ],
     },
     {
       id: 2,
       word: "I want chicken.",
       imgs: [
-        { src: img4, answer: false}, // short i
-        { src: img2, answer: true },
+        { src: img3, answer: false}, // short i
+        { src: img4, answer: true },
       ],
     },
     {
       id: 3,
       word: "I want bread.",
       imgs: [
-        { src: img4, answer: false },
-        { src: img3, answer: true }, // short i
+        { src: img5, answer: false },
+        { src: img6, answer: true }, // short i
       ],
     },
     {
       id: 4,
       word: "I want ice cream.",
       imgs: [
-        { src: img1, answer: true }, // short i
-        { src: img4, answer: false },
+        { src: img7, answer: true }, // short i
+        { src: img8, answer: false },
       ],
     },
   ];
@@ -126,19 +126,16 @@ const WB_Unit10_Page3_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+     
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">E</span>Read, look, and write
+          <span className="ex-A">E</span>Tap or click the correct box.
           <span style={{ color: "red" }}>✓</span> .
         </h5>
 
-        <div className="shorti-container-wb-u1-q2">
+        <div className="shorti-container-wb-u1-q2 w-full">
           {data.map((question) => (
             <div key={question.id} className="question-box-wb-unit10-p3-q1">
               <div

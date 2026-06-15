@@ -157,11 +157,8 @@ export default function WB_Unit1_Page4_Q2() {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
         <h5 className="header-title-page8">

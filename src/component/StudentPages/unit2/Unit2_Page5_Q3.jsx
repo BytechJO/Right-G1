@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import presentImg from "../../../assets/img_unit2/imgs/Present img.jpg";
-import pizza from "../../../assets/img_unit2/imgs/Pizza (2).jpg";
-import beard from "../../../assets/img_unit2/imgs/Beard.jpg";
-import boat from "../../../assets/img_unit2/imgs/Boate.jpg";
-import pencil from "../../../assets/img_unit2/imgs/Pencel.jpg";
+import presentImg from "../../../assets/img_unit2/imgs/Present img.svg";
+import pizza from "../../../assets/img_unit2/imgs/Pizza.svg";
+import beard from "../../../assets/img_unit2/imgs/Bird.svg";
+import boat from "../../../assets/img_unit2/imgs/Boate.svg";
+import pencil from "../../../assets/img_unit2/imgs/Pincel.svg";
 import "./Unit2_Page5.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 

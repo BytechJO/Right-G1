@@ -129,6 +129,7 @@ const WB_Unit1_Page8_Q3 = () => {
           style={{
             display: "flex",
             gap: "13px",
+            width:"100%",
             flexDirection: "column",
           }}
         >

@@ -1,23 +1,31 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import find_img from "../../../assets/U1 WB/U5/U5P31EXEI-01.svg";
-
+import highlightPen from "../../../assets/U1 WB/U5/Asset 21.svg"
+import highlightBook from "../../../assets/U1 WB/U5/Asset 20.svg"
+import highlightEraser from "../../../assets/U1 WB/U5/Asset 22.svg"
+import highlightChair1 from "../../../assets/U1 WB/U5/Asset 17.svg"
+import highlightChair2 from "../../../assets/U1 WB/U5/Asset 17.svg"
+import highlightRuler from "../../../assets/U1 WB/U5/Asset 19.svg"
 /* ================= DATA ================= */
 
 const items = [
   {
     key: "pen",
     label: "pen",
+    src:highlightPen,
     area: { x1: 26.4395, y1: 48.9356, x2: 34.2037, y2: 53.5385 },
   },
   {
     key: "book",
     label: "book",
+     src:highlightBook,
     area: { x1: 17.63, y1: 33.6881, x2: 28.9778, y2: 37.7158 },
   },
   {
     key: "eraser",
     label: "eraser",
+     src:highlightEraser,
     area: {
       x1: 56.1526,
       y1: 50.0863,
@@ -28,6 +36,7 @@ const items = [
   {
     key: "chair1",
     label: "chair",
+     src:highlightChair1,
     area: {
       x1: 72.8756,
       y1: 53.5385,
@@ -38,6 +47,7 @@ const items = [
   {
     key: "chair2",
     label: "chair",
+     src:highlightChair2,
     area: {
       x1: 27.634,
       y1: 56.7031,
@@ -48,6 +58,7 @@ const items = [
   {
     key: "ruler",
     label: "ruler",
+     src:highlightRuler,
     area: { x1: 68.2469, y1: 44.3326, x2: 76.518, y2: 54.5 },
   },
 ];

@@ -97,11 +97,8 @@ const WB_Unit9_Page2_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
           // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+       
         }}
       >
         <h4 className="header-title-page8">

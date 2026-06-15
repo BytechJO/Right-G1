@@ -41,7 +41,9 @@ const DraggableWord = ({ word, isUsed, locked }) => {
         cursor: isUsed || locked ? "default" : "grab",
         opacity: isDragging ? 0.3 : 1,
         transition: "all 0.2s",
+        touchAction:"none",
         userSelect: "none",
+
       }}
     >
       {word}
@@ -302,7 +304,7 @@ const WB_Unit5_Page2_Q2 = () => {
           </div>
 
           {/* ── Questions ── */}
-          <div className="content-container-wb-unit4-p1-q2">
+          <div className="content-container-wb-unit4-p1-q2" style={{width:"100%"}}>
             {questions.map((q, qIndex) => (
               <div key={qIndex} className="row2-wb-unit4-p1-q2">
                 <div style={{ display: "flex", gap: "10px" }}>

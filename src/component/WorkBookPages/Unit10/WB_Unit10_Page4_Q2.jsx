@@ -1,12 +1,97 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import bat from "../../../assets/U1 WB/U10/U10P60EXEH-01.svg";
 import cap from "../../../assets/U1 WB/U10/U10P60EXEH-02.svg";
 import ant from "../../../assets/U1 WB/U10/U10P60EXEH-03.svg";
 import dad from "../../../assets/U1 WB/U10/U10P60EXEH-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+} from "@dnd-kit/core";
 import "./WB_Unit10_Page4_Q2.css";
+
+// ─── Word chip in the bank ───────────────────────────────────────────────────
+const BankChip = ({ word, used, locked }) => {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `bank::${word}`,
+    disabled: used || locked,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{
+        padding: "6px 12px",
+        border: "2px solid #2c5287",
+        borderRadius: "8px",
+        background: used ? "#e0e0e0" : "white",
+        fontWeight: "600",
+        cursor: used || locked ? "not-allowed" : "grab",
+        opacity: isDragging ? 0.3 : used ? 0.45 : 1,
+        userSelect: "none",
+        transition: "opacity 0.2s, background 0.2s",
+        color: used ? "#aaa" : "",
+        // textDecoration: used ? "line-through" : "none",
+        touchAction: "none",
+        pointerEvents: used || locked ? "none" : "auto",
+      }}
+    >
+      {word}
+    </div>
+  );
+};
+
+// ─── Drop zone inside a sentence ─────────────────────────────────────────────
+const DropCell = ({ id, value, isWrong, locked, onRemove }) => {
+  const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`inline-input-wb-unit8-p1-q2 ${isOver ? "drag-over-cell" : ""}`}
+      style={{
+        minHeight: "40px",
+        minWidth: "120px",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "4px 8px",
+        // borderRadius: "8px",
+        background: isOver ? "#e3f2fd" : "white",
+        borderBottom: `2px solid black`,
+        transition: "background 0.15s, border-color 0.15s",
+        gap: "6px",
+        width: "100%",
+      }}
+    >
+      <span
+        onClick={onRemove}
+        style={{
+          fontWeight: 600,
+          cursor: "pointer",
+          // color: "#2c5287",
+          flex: 1,
+        }}
+      >
+        {value || ""}
+      </span>
+
+      {/* ✕ علامة الخطأ بعد التصحيح */}
+      {isWrong && locked && (
+        <span className="error-mark-input-wb-unit2-page3-q2">✕</span>
+      )}
+    </div>
+  );
+};
+
+// ─── Main component ───────────────────────────────────────────────────────────
 const WB_Unit10_Page4_Q2 = () => {
   const questions = [
     {
@@ -46,64 +131,88 @@ const WB_Unit10_Page4_Q2 = () => {
     "I want milk",
   ];
 
+  // answers[qIndex][pIndex] = word string or ""
   const [answers, setAnswers] = useState(
     questions.map((q) => q.parts.map((p) => (p.type === "input" ? "" : null))),
   );
-
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
+  const [activeWord, setActiveWord] = useState(null); // for DragOverlay
 
-  const onDragEnd = (result) => {
-  if (!result.destination || locked) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
 
-  const { draggableId, destination } = result;
-  const word = draggableId;
+  // كل الكلمات المستخدمة حالياً
+  const usedWords = answers.flat().filter(Boolean);
 
-  setAnswers((prev) => {
-    const copy = prev.map((row) => [...row]);
+  // ─── حذف كلمة من الدروب زون وإرجاعها للبنك ──────────────────────────────
+  const removeWord = (qIndex, pIndex) => {
+    setAnswers((prev) => {
+      const copy = prev.map((r) => [...r]);
+      copy[qIndex][pIndex] = "";
+      return copy;
+    });
+    setWrongInputs([]);
+  };
 
-    // 1️⃣ شيل الكلمة من أي مكان قديم
-    copy.forEach((row, qi) => {
-      row.forEach((val, pi) => {
-        if (val === word) {
-          copy[qi][pi] = "";
-        }
-      });
+  // ─── Drag start ──────────────────────────────────────────────────────────
+  const handleDragStart = (event) => {
+    const rawId = event.active.id; // "bank::apple" or "drop-0-1"
+    const word = rawId.startsWith("bank::")
+      ? rawId.replace("bank::", "")
+      : null;
+    setActiveWord(word);
+  };
+
+  // ─── Drag end ────────────────────────────────────────────────────────────
+  const handleDragEnd = (event) => {
+    setActiveWord(null);
+    if (locked) return;
+
+    const { active, over } = event;
+    if (!over) return;
+
+    const rawId = active.id; // "bank::word"
+    const word = rawId.startsWith("bank::")
+      ? rawId.replace("bank::", "")
+      : null;
+    if (!word) return;
+
+    const dest = over.id; // "drop-0-1"
+    if (!dest.startsWith("drop-")) return;
+
+    const [, qStr, pStr] = dest.split("-");
+    const qIndex = Number(qStr);
+    const pIndex = Number(pStr);
+
+    setAnswers((prev) => {
+      const copy = prev.map((r) => [...r]);
+
+      // شيل الكلمة من أي مكان قديم
+      copy.forEach((row, qi) =>
+        row.forEach((val, pi) => {
+          if (val === word) copy[qi][pi] = "";
+        }),
+      );
+
+      // حط الكلمة في المكان الجديد (إزاحة القديمة للبنك تلقائياً لأنها تُمحى)
+      copy[qIndex][pIndex] = word;
+      return copy;
     });
 
-    // 2️⃣ إذا نزلت على input
-    if (destination.droppableId.startsWith("drop-")) {
-      const [qIndex, pIndex] = destination.droppableId
-        .replace("drop-", "")
-        .split("-")
-        .map(Number);
+    setWrongInputs([]);
+  };
 
-      copy[qIndex][pIndex] = word;
-    }
-
-    // 3️⃣ إذا نزلت على word-bank → بس تنشال من الجملة
-    return copy;
-  });
-
-  setWrongInputs([]);
-};
-
-
+  // ─── Check ───────────────────────────────────────────────────────────────
   const checkAnswers = () => {
     if (locked) return;
 
-    // 🔴 1) فحص الانبوتات الفاضية
-    for (let qIndex = 0; qIndex < questions.length; qIndex++) {
-      for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
-        const part = questions[qIndex].parts[pIndex];
-
-        if (part.type === "input") {
-          const value = answers[qIndex][pIndex];
-
-          if (!value || value.trim() === "") {
-            ValidationAlert.info(`Please complete question ${qIndex + 1}.`);
-            return; // ⛔ وقف التشييك
-          }
+    for (let qi = 0; qi < questions.length; qi++) {
+      for (let pi = 0; pi < questions[qi].parts.length; pi++) {
+        if (questions[qi].parts[pi].type === "input" && !answers[qi][pi]) {
+          ValidationAlert.info(`Please complete question ${qi + 1}.`);
+          return;
         }
       }
     }
@@ -112,18 +221,15 @@ const WB_Unit10_Page4_Q2 = () => {
     let score = 0;
     let total = 0;
 
-    questions.forEach((q, qIndex) => {
-      q.parts.forEach((p, pIndex) => {
+    questions.forEach((q, qi) =>
+      q.parts.forEach((p, pi) => {
         if (p.type === "input") {
           total++;
-          if (answers[qIndex][pIndex]?.trim() === p.answer) {
-            score++;
-          } else {
-            wrong.push(`${qIndex}-${pIndex}`);
-          }
+          if (answers[qi][pi]?.trim() === p.answer) score++;
+          else wrong.push(`${qi}-${pi}`);
         }
-      });
-    });
+      }),
+    );
 
     setWrongInputs(wrong);
     setLocked(true);
@@ -132,14 +238,15 @@ const WB_Unit10_Page4_Q2 = () => {
     else if (score === 0) ValidationAlert.error(msg);
     else ValidationAlert.warning(msg);
   };
-  const showAnswers = () => {
-    const filled = questions.map((q) =>
-      q.parts.map((p) => (p.type === "input" ? p.answer : null)),
-    );
 
-    setAnswers(filled);
+  const showAnswers = () => {
+    setAnswers(
+      questions.map((q) =>
+        q.parts.map((p) => (p.type === "input" ? p.answer : null)),
+      ),
+    );
     setWrongInputs([]);
-    setLocked(true); // 🔒 قفل التعديل
+    setLocked(true);
   };
 
   const reset = () => {
@@ -153,7 +260,11 @@ const WB_Unit10_Page4_Q2 = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         className="question-wrapper-unit3-page6-q1"
         style={{
@@ -164,67 +275,36 @@ const WB_Unit10_Page4_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div
-          className="div-forall"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // gap: "30px",
-            width: "60%",
-            justifyContent: "flex-start",
-          }}
-        >
+        <div className="div-forall">
           <h5 className="header-title-page8">
-            <span className="ex-A">H</span>Look and write.
+            <span className="ex-A">H</span>Drag and drop.
           </h5>
 
-          <Droppable droppableId="word-bank" direction="horizontal">
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  padding: "12px",
-                  border: "2px dashed #ccc",
-                  borderRadius: "10px",
-                  justifyContent: "center",
-                }}
-              >
-                {wordBank.map((word, i) => (
-                  <Draggable
-                    key={word}
-                    draggableId={word}
-                    index={i}
-                    isDragDisabled={locked}
-                  >
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          padding: "6px 12px",
-                          border: "2px solid #2c5287",
-                          borderRadius: "8px",
-                          background: "white",
-                          fontWeight: "600",
-                          cursor: "grab",
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {word}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          {/* ─── Word Bank ─────────────────────────────────────────────── */}
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              width: "100%",
+              padding: "12px",
+              border: "2px dashed #ccc",
+              borderRadius: "10px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {wordBank.map((word) => (
+              <BankChip
+                key={word}
+                word={word}
+                used={usedWords.includes(word)}
+                locked={locked}
+              />
+            ))}
+          </div>
 
-          <div className="content-container-wb-unit8-p1-q2">
+          {/* ─── Questions ─────────────────────────────────────────────── */}
+          <div className="content-container-wb-unit8-p1-q2 w-full">
             {questions.map((q, qIndex) => (
               <div key={qIndex} className="row2-wb-unit10-p4-q2">
                 <div
@@ -235,7 +315,9 @@ const WB_Unit10_Page4_Q2 = () => {
                     width: "100%",
                   }}
                 >
-                  <span className="num-span">{qIndex + 1}</span>
+                  <span className=" text-black text-[20px] font-bold">
+                    {qIndex + 1}
+                  </span>
                   <div className="sentence-wrapper-wb-unit10-p4-q2">
                     {q.parts.map((part, pIndex) => {
                       if (part.type === "text") {
@@ -249,64 +331,37 @@ const WB_Unit10_Page4_Q2 = () => {
                         );
                       }
 
+                      const cellKey = `drop-${qIndex}-${pIndex}`;
                       return (
                         <span
                           key={pIndex}
                           style={{ position: "relative", width: "90%" }}
                         >
-                          <Droppable
-                            droppableId={`drop-${qIndex}-${pIndex}`}
-                            isDropDisabled={locked}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className={`inline-input-wb-unit8-p1-q2 ${
-                                  snapshot.isDraggingOver
-                                    ? "drag-over-cell"
-                                    : ""
-                                }`}
-                                style={{
-                                  background: snapshot.isDraggingOver
-                                    ? "#e3f2fd"
-                                    : "white",
-                                  minHeight: "40px",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  padding: "6px",
-                                  width: "100%",
-                                }}
-                              >
-                                {answers[qIndex][pIndex]}
-                                {provided.placeholder}
-
-                                {wrongInputs.includes(
-                                  `${qIndex}-${pIndex}`,
-                                ) && (
-                                  <span className="error-mark-input-wb-unit2-page3-q2">
-                                    ✕
-                                  </span>
-                                )}
-                              </div>
+                          <DropCell
+                            id={cellKey}
+                            value={answers[qIndex][pIndex]}
+                            isWrong={wrongInputs.includes(
+                              `${qIndex}-${pIndex}`,
                             )}
-                          </Droppable>
+                            locked={locked}
+                            onRemove={() => removeWord(qIndex, pIndex)}
+                          />
                         </span>
                       );
                     })}
                   </div>
                 </div>
-
                 <img src={q.img} alt="" className="q-img-wb-unit8-p1-q2" />
               </div>
             ))}
           </div>
         </div>
+
+        {/* ─── Buttons ───────────────────────────────────────────────────── */}
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
-          {/* ⭐⭐⭐ NEW — زر Show Answer */}
           <button
             onClick={showAnswers}
             className="show-answer-btn swal-continue"
@@ -318,7 +373,27 @@ const WB_Unit10_Page4_Q2 = () => {
           </button>
         </div>
       </div>
-    </DragDropContext>
+
+      {/* ─── Drag Overlay (الكلمة اللي بتطير تحت الإصبع) ─────────────── */}
+      <DragOverlay>
+        {activeWord ? (
+          <div
+            style={{
+              padding: "6px 12px",
+              border: "2px solid #2c5287",
+              borderRadius: "8px",
+              background: "white",
+              fontWeight: "600",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              cursor: "grabbing",
+              color: "#2c5287",
+            }}
+          >
+            {activeWord}
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

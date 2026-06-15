@@ -255,7 +255,7 @@ const WB_Unit4_Page2_Q1 = () => {
       >
 
         <div className="div-forall" style={{gap:"20px"}}>
-          <div>
+          <div className="w-full">
           <h5 className="header-title-page8" id="ex-d">
             <span className="ex-A">C</span>Drag and color the shapes.
           </h5>

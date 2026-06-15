@@ -1,5 +1,6 @@
 .dt-container-wb-u1-p8-q3 {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(3,1fr);
   gap: 20px;
 }

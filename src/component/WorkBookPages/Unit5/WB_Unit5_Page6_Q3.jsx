@@ -103,7 +103,7 @@ const WB_Unit5_Page6_Q3 = () => {
          
         }}
       >
-        <div>
+        <div className="w-full"> 
           <h5 className="header-title-page8">
             {" "}
             <span className="ex-A">C</span>Tap or click the correct word.

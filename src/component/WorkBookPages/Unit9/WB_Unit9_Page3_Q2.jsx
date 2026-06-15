@@ -10,7 +10,7 @@ import "./WB_Unit9_Page3_Q2.css";
 
 const WB_Unit9_Page3_Q2 = () => {
   const items = [
-    { img:img1, value: "horse" },
+    { img: img1, value: "horse" },
     { img: img2, value: "cat" },
     { img: img3, value: "goat" },
     { img: img4, value: "cow" },
@@ -87,30 +87,27 @@ const WB_Unit9_Page3_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          width: "60%",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
+          gap: "40px",
         }}
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">F</span> What do you want? Circle and write.
+          <span className="ex-A">F</span> What do you want? Tap or click an
+          animal.
         </h5>
 
         {/* الصور */}
-        <div className="images-row-wb-unit9-p3-q2">
+        <div className="images-row-wb-unit9-p3-q2 w-full">
           {items.map((item, i) => (
             <div
               key={i}
               className={`image-box-unit10-page6-q3 ${
                 selectedImage === item.value ? "selected-unit10-page6-q3" : ""
               }`}
-            onClick={() => {
-  if (checked) return;
-  setSelectedImage(item.value);
-  setAnswer(item.value); // ⭐ اكتب اسم الصورة داخل الانبوت
-}}
-
+              onClick={() => {
+                if (checked) return;
+                setSelectedImage(item.value);
+                setAnswer(item.value); // ⭐ اكتب اسم الصورة داخل الانبوت
+              }}
             >
               <img
                 src={item.img}
@@ -123,7 +120,7 @@ const WB_Unit9_Page3_Q2 = () => {
 
         {/* الجملة */}
         <div
-          className="sentence-wrapper-unit10-page6-q3"
+          className="sentence-wrapper-unit10-page6-q3 w-full"
           style={{ position: "relative" }}
         >
           <span>I want</span>

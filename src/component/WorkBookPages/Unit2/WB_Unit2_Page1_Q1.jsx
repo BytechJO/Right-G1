@@ -91,11 +91,11 @@ const WB_Unit2_Page1_Q1 = () => {
        
         }}
       >
-        <div>
+        
           <h5 className="header-title-page8">
             <span className="ex-A">A</span> Read and trace.
           </h5>
-        </div>
+        
         <div className="unit4-q2-p6-tools w-full">
           <button
             onClick={() => setTool("pen")}

@@ -313,7 +313,7 @@ const WB_Unit4_Page1_Q2 = () => {
         }}
       >
         <div className="div-forall">
-          <div>
+          <div className="w-full">
             <h5 className="header-title-page8">
               <span className="ex-A">B</span>Drag and color the pictures.
             </h5>

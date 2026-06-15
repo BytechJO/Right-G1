@@ -88,7 +88,7 @@ const [strokeColor, setStrokeColor] = useState("#800080"); // purple
        
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">J</span> Draw your classroom! Tap or click the pen to start.
           </h5>

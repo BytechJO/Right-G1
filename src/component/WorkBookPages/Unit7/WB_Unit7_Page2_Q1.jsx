@@ -79,6 +79,7 @@ const WordChip = ({ id, text, isUsed, isDisabled }) => {
         opacity:    isUsed ? 0.35 : isDragging ? 0.5 : 1,
         pointerEvents: isUsed ? "none" : undefined,
         userSelect: "none",
+        touchAction:"none",
         transition: "opacity .2s",
       }}
     >

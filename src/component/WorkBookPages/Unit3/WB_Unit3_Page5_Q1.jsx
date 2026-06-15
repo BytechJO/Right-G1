@@ -3,7 +3,7 @@ import img1 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-01.svg";
 import img2 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-02.svg";
 import img3 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI02-01.svg";
 import img4 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI02-02.svg";
-import img5 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-01.svg";
+import img5 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI03-01.svg";
 import img6 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI03-02.svg";
 import img7 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-01.svg";
 import img8 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-02.svg";

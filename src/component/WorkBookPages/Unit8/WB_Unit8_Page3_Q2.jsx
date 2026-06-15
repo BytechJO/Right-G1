@@ -104,7 +104,7 @@ const WB_Unit8_Page3_Q2 = () => {
           gap: "30px",
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">F</span> Tap or click the correct sentence.
           </h5>

@@ -86,6 +86,7 @@ const LetterChip = ({ id, letter, isDisabled }) => {
         background: "white",
         cursor: isDisabled ? "not-allowed" : "grab",
         opacity: isDragging ? 0.5 : 1,
+        touchAction:"none",
         userSelect: "none",
         transition: "opacity .2s",
       }}

@@ -41,6 +41,7 @@ const DraggableWord = ({ word, isUsed, locked }) => {
         cursor: isUsed || locked ? "default" : "grab",
         opacity: isDragging ? 0.3 : 1,
         transition: "all 0.2s",
+        touchAction:"none",
         userSelect: "none",
       }}
     >

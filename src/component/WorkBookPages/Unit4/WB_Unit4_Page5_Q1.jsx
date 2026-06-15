@@ -211,7 +211,7 @@ const WB_Unit4_Page5_Q1 = () => {
       }}
     >
       <div className="div-forall" style={{}}>
-        <div>
+        <div className="w-full">
           <h4 className="header-title-page8">
             <span className="ex-A">I</span> Tap or click the correct boxes and
             color the shapes.

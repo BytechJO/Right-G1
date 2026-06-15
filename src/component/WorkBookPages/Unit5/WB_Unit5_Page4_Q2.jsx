@@ -155,7 +155,7 @@ const WB_Unit5_Page4_Q2 = () => {
       }}
     >
       <div className="div-forall" style={{}}>
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">H</span>Match and color
           </h5>

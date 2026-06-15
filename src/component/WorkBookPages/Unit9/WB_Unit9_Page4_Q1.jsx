@@ -139,18 +139,15 @@ const WB_Unit9_Page4_Q1 = () => {
       <div
         className="div-forall"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
+          gap: "60px",
+          
         }}
       >
         <h3 className="header-title-page8">
-          <span className="ex-A">H</span>Look, read, and circle.
+          <span className="ex-A">H</span>Tap the word for each picture.
         </h3>
         <div
-          className="content-container-wb-unit9-p4-q1 "
+          className="content-container-wb-unit9-p4-q1 w-full"
    
         >
           {questions.map((q, qIndex) => (

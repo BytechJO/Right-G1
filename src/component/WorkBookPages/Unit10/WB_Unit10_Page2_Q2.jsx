@@ -163,18 +163,17 @@ export default function WB_Unit10_Page2_Q2() {
     >
       <div
         className="div-forall"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          // gap: "30px",
-          width: "60%",
-          justifyContent: "flex-start",
-        }}
+        style={
+          {
+            // gap: "30px",
+          }
+        }
       >
         <h5 className="header-title-page8">
-          <span className="ex-A">D</span> Read, look, and circle.
+          <span className="ex-A">D</span>What do they want? Tap or click the
+          word for each one.
         </h5>
-        <div className="img-options-container-wb-unit10-p2-q2">
+        <div className="img-options-container-wb-unit10-p2-q2 w-full">
           <div className="img-container-wb-unit10-p2-q2">
             <img src={mainImg} style={{ height: "160px", width: "auto" }} />
           </div>
@@ -194,7 +193,7 @@ export default function WB_Unit10_Page2_Q2() {
                   </span>
                   <img
                     src={q.mainImg}
-                    style={{ height: "95px", width: "auto" }}
+                    style={{ height: "120px", width: "auto" }}
                   />
                 </div>
                 <div className="images-row-Unit5_Page5_Q2">

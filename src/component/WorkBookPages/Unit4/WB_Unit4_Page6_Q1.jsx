@@ -117,7 +117,7 @@ const WB_Unit4_Page6_Q1 = () => {
       }}
     >
       <div className="div-forall" style={{}}>
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">A</span> Does it start with{" "}
             <span className="text-red-500">F </span>or{" "}

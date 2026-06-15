@@ -17,16 +17,16 @@ import {
 
 // ─── ثوابت ───────────────────────────────────────────────────────────────────
 const WORD_BANK = [
-  { id: "w1", text: "hat"    },
-  { id: "w2", text: "hand"   },
-  { id: "w3", text: "water"  },
+  { id: "w1", text: "hat" },
+  { id: "w2", text: "hand" },
+  { id: "w3", text: "water" },
   { id: "w4", text: "window" },
 ];
 
 const DATA = [
   {
     parts: [
-      { before: "My",       middleImg: img1, blankIndex: 0, after: "" },
+      { before: "My", middleImg: img1, blankIndex: 0, after: "" },
       { before: "is on my", middleImg: img2, blankIndex: 1, after: "." },
     ],
     correct: ["hat", "hand"],
@@ -34,7 +34,7 @@ const DATA = [
   {
     parts: [
       { before: "There is", middleImg: img3, blankIndex: 0, after: "" },
-      { before: "on the",   middleImg: img4, blankIndex: 1, after: "." },
+      { before: "on the", middleImg: img4, blankIndex: 1, after: "." },
     ],
     correct: ["water", "window"],
   },
@@ -42,7 +42,9 @@ const DATA = [
 
 // answers صيغتها: { "0-0": wordId | null, "0-1": ..., "1-0": ..., "1-1": ... }
 const INITIAL_ANSWERS = DATA.reduce((acc, item, qIndex) => {
-  item.correct.forEach((_, bIndex) => { acc[`${qIndex}-${bIndex}`] = null; });
+  item.correct.forEach((_, bIndex) => {
+    acc[`${qIndex}-${bIndex}`] = null;
+  });
   return acc;
 }, {});
 
@@ -61,17 +63,18 @@ const WordChip = ({ id, text, isUsed, isDisabled }) => {
       {...listeners}
       {...attributes}
       style={{
-        padding:      "7px 14px",
-        border:       "2px solid #2c5287",
+        padding: "7px 14px",
+        border: "2px solid #2c5287",
         borderRadius: 8,
-        background:   "white",
-        fontWeight:   "bold",
-        fontSize:     15,
-        cursor:       isUsed || isDisabled ? "not-allowed" : "grab",
-        opacity:      isUsed ? 0.35 : isDragging ? 0.5 : 1,
+        background: "white",
+        fontWeight: "bold",
+        fontSize: 15,
+        cursor: isUsed || isDisabled ? "not-allowed" : "grab",
+        opacity: isUsed ? 0.35 : isDragging ? 0.5 : 1,
         pointerEvents: isUsed ? "none" : undefined,
-        userSelect:   "none",
-        transition:   "opacity .2s",
+        userSelect: "none",
+        touchAction: "none",
+        transition: "opacity .2s",
       }}
     >
       {text}
@@ -89,22 +92,20 @@ const DropBlank = ({ dropId, value, isWrong, isLocked, onReturn }) => {
         ref={setNodeRef}
         onClick={() => !isLocked && value && onReturn(dropId)}
         title={value && !isLocked ? "اضغط لإرجاع الكلمة" : ""}
-        className={`missing-input-wb-unit7-p6-q3 ${isOver?"drag-over-cell":""}`}
+        className={`missing-input-wb-unit7-p6-q3 ${isOver ? "drag-over-cell" : ""}`}
         style={{
           // background: isOver      ? "#e3f2fd"
           //           : value       ? "#fff8e1"
           //           : "transparent",
-          display:    "flex",
+          display: "flex",
           alignItems: "center",
-          cursor:     value && !isLocked ? "pointer" : "default",
+          cursor: value && !isLocked ? "pointer" : "default",
           transition: "background .15s",
           borderBottom: isWrong ? "2px solid #E24B4A" : undefined,
         }}
       >
         {value || ""}
-        {isWrong && (
-          <span className="wrong-icon-review4-p2-q1">✕</span>
-        )}
+        {isWrong && <span className="wrong-icon-review4-p2-q1">✕</span>}
       </div>
     </div>
   );
@@ -112,17 +113,17 @@ const DropBlank = ({ dropId, value, isWrong, isLocked, onReturn }) => {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const WB_Unit7_Page6_Q3 = () => {
-  const [answers,     setAnswers]     = useState(INITIAL_ANSWERS);
+  const [answers, setAnswers] = useState(INITIAL_ANSWERS);
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [locked,      setLocked]      = useState(false);
-  const [activeId,    setActiveId]    = useState(null);
+  const [locked, setLocked] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
 
   const usedWordIds = new Set(Object.values(answers).filter(Boolean));
-  const activeWord  = WORD_BANK.find((w) => w.id === activeId);
+  const activeWord = WORD_BANK.find((w) => w.id === activeId);
 
   // ─── Drag End ──────────────────────────────────────────────────────────────
   const handleDragEnd = ({ active, over }) => {
@@ -176,7 +177,7 @@ const WB_Unit7_Page6_Q3 = () => {
 
     DATA.forEach((item, qIndex) => {
       item.correct.forEach((correctWord, bIndex) => {
-        const key      = `${qIndex}-${bIndex}`;
+        const key = `${qIndex}-${bIndex}`;
         const userText = getWordText(answers[key]);
         if (userText === correctWord) correctCount++;
         else wrong.push(key);
@@ -187,12 +188,13 @@ const WB_Unit7_Page6_Q3 = () => {
     setLocked(true);
 
     const total = DATA.reduce((acc, item) => acc + item.correct.length, 0);
-    const color = correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
-    const msg   = `<div style="font-size:20px;text-align:center"><span style="color:${color};font-weight:bold">Score: ${correctCount} / ${total}</span></div>`;
+    const color =
+      correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
+    const msg = `<div style="font-size:20px;text-align:center"><span style="color:${color};font-weight:bold">Score: ${correctCount} / ${total}</span></div>`;
 
-    if (correctCount === total)  ValidationAlert.success(msg);
+    if (correctCount === total) ValidationAlert.success(msg);
     else if (correctCount === 0) ValidationAlert.error(msg);
-    else                         ValidationAlert.warning(msg);
+    else ValidationAlert.warning(msg);
   };
 
   // ─── Show Answer ───────────────────────────────────────────────────────────
@@ -232,13 +234,13 @@ const WB_Unit7_Page6_Q3 = () => {
           {/* ── Word Bank ── */}
           <div
             style={{
-              display:        "flex",
-              gap:            12,
-              padding:        12,
-              border:         "2px dashed #ccc",
-              borderRadius:   10,
-              marginBottom:   20,
-              width:          "100%",
+              display: "flex",
+              gap: 12,
+              padding: 12,
+              border: "2px dashed #ccc",
+              borderRadius: 10,
+              marginBottom: 20,
+              width: "100%",
               justifyContent: "center",
             }}
           >
@@ -265,7 +267,7 @@ const WB_Unit7_Page6_Q3 = () => {
                     <span
                       key={bIndex}
                       className="sentence-part"
-                      style={{ display:"flex", alignItems:"center" }}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
                       {p.before}
                       <DropBlank
@@ -290,7 +292,10 @@ const WB_Unit7_Page6_Q3 = () => {
           <button className="try-again-button" onClick={handleReset}>
             Start Again ↻
           </button>
-          <button className="show-answer-btn swal-continue" onClick={showAnswer}>
+          <button
+            className="show-answer-btn swal-continue"
+            onClick={showAnswer}
+          >
             Show Answer
           </button>
           <button className="check-button2" onClick={checkAnswers}>
@@ -302,16 +307,18 @@ const WB_Unit7_Page6_Q3 = () => {
       {/* ── Drag Overlay ── */}
       <DragOverlay>
         {activeWord && (
-          <div style={{
-            padding:      "7px 14px",
-            border:       "2px solid #2c5287",
-            borderRadius: 8,
-            background:   "white",
-            fontWeight:   "bold",
-            fontSize:     15,
-            boxShadow:    "0 4px 12px rgba(0,0,0,.2)",
-            cursor:       "grabbing",
-          }}>
+          <div
+            style={{
+              padding: "7px 14px",
+              border: "2px solid #2c5287",
+              borderRadius: 8,
+              background: "white",
+              fontWeight: "bold",
+              fontSize: 15,
+              boxShadow: "0 4px 12px rgba(0,0,0,.2)",
+              cursor: "grabbing",
+            }}
+          >
             {activeWord.text}
           </div>
         )}

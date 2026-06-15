@@ -1,6 +1,8 @@
 .content-container-wb-unit9-p4-q1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  row-gap: 80px;
+  column-gap: 50px;
   /* gap: 30px; */
 }
 
