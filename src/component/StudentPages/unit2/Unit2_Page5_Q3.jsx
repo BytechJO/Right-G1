@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import presentImg from "../../../assets/img_unit2/imgs/Present img.svg";
 import pizza from "../../../assets/img_unit2/imgs/Pizza.svg";
-import beard from "../../../assets/img_unit2/imgs/Bird.svg";
+import beard from "../../../assets/img_unit2/imgs/bird.svg";
 import boat from "../../../assets/img_unit2/imgs/Boate.svg";
 import pencil from "../../../assets/img_unit2/imgs/Pincel.svg";
 import "./Unit2_Page5.css";
