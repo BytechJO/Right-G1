@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import presentImg from "../../../assets/img_unit2/imgs/Present img.svg";
 import pizza from "../../../assets/img_unit2/imgs/pizza.svg";
 import beard from "../../../assets/img_unit2/imgs/bird.svg";
-import boat from "../../../assets/img_unit2/imgs/boate.svg";
+import boat from "../../../assets/img_unit2/imgs/boate22.svg";
 import pencil from "../../../assets/img_unit2/imgs/pincel.svg";
 import "./Unit2_Page5.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
