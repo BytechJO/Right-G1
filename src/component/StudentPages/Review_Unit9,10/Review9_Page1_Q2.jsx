@@ -334,7 +334,7 @@ const Review9_Page1_Q2 = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "60%",
+            // width: "60%",
             justifyContent: "flex-start",
           }}
         >

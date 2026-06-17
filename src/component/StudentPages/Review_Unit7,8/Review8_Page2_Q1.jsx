@@ -96,7 +96,7 @@ const Review8_Page2_Q1 = () => {
       
         }}
       >
-        <div>
+        <div  className="w-full">
           <h5 className="header-title-page8">
             <span className="mr-2">D</span> Look, read, and tap or click the
             correct sentence.

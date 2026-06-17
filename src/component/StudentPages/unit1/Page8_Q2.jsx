@@ -326,7 +326,7 @@ const Page8_Q2 = () => {
           alignItems: "flex-start",
           position: "relative",
           gap: "40px",
-          width: "60%",
+         
         }}
       >
         <h5 className="header-title-page8">

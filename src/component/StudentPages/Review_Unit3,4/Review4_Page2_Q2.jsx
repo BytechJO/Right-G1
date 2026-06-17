@@ -107,7 +107,7 @@ const Review4_Page2_Q2 = () => {
           gap: "40px",
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="mr-2">F</span> Listen and tap or click on the
             beginning letter.

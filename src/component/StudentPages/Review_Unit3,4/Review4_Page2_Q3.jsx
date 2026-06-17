@@ -106,7 +106,7 @@ const Review4_Page2_Q3 = () => {
 
         }}
       >
-        <div>
+        <div  className="w-full">
           <h5 className="header-title-page8">
             <span className="mr-2">G</span> Look and tap or click the correct
             word.

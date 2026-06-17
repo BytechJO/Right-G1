@@ -120,12 +120,12 @@ export default function Page8_Q3() {
 
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
-      <div className="matching-scale">
+      <div className="div-forall">
         <h5 className="header-title-page8">
           <span className="ex-A">B</span>Read and match.
         </h5>
 
-        <div key={resetKey} className="container-unit1-p8-exb" ref={containerRef}>
+        <div key={resetKey} className="container-unit1-p8-exb w-full" ref={containerRef}>
           {/* Row 1 */}
           <div className="matching-row">
             <div className="word-with-dot">

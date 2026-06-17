@@ -309,7 +309,7 @@ const Review3_Page1_Q2 = () => {
             display: "flex",
             flexDirection: "column",
             gap: "30px",
-            width: "60%",
+          
             justifyContent: "flex-start",
           }}
         >

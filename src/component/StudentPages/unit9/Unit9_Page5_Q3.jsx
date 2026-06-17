@@ -253,7 +253,7 @@ const Unit9_Page5_Q3 = () => {
             justifyContent: "flex-start",
             alignItems: "flex-start",
             position: "relative",
-            width: "60%",
+            // width: "60%",
           }}
         >
           <h5 className="header-title-page8" id="ex-d">

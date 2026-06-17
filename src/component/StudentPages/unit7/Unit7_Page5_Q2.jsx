@@ -173,7 +173,7 @@ export default function Unit7_Page5_Q2() {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "60%",
+          // width: "60%",
           justifyContent: "flex-start",
         }}
       >
@@ -236,7 +236,7 @@ export default function Unit7_Page5_Q2() {
                       ${isWrong ? "wrong" : ""}`}
                     onClick={() => handleSelect(q.id, img.value)}
                   >
-                    <img src={img.src} alt="" />
+                    <img src={img.src} alt="" style={{height:"80px" ,width:"80px"}}/>
 
                     {isWrong && (
                       <div className="wrong-mark-Unit5_Page5_Q2">✕</div>

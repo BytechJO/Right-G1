@@ -101,7 +101,7 @@ const Unit7_Page2 = ({ openPopup }) => {
     // // // // الصوت الثاني – الإضافية
     { x1: 18.01, y1: 81.54, x2: 34.11, y2: 77.74, sound: 4, isPrimary: false },
     // // // // الصوت الثاني – الأساسية
-    { x1: 8.6, y1: 51.5, sound: 5, isPrimary: true },
+    { x1: 8.3, y1: 51.5, sound: 5, isPrimary: true },
 
     // // // // الصوت الثاني – الإضافية
     { x1: 10.26, y1: 45.75, x2: 42.27, y2: 69.05, sound: 5, isPrimary: false },

@@ -228,7 +228,7 @@ const Unit2_Page9_Q3 = () => {
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div className="div-forall" style={{ width: "60%" }}>
+        <div className="div-forall" style={{ }}>
           <h5 className="header-title-page8">
             <span className="mr-2">C</span> Fill in the blanks
           </h5>

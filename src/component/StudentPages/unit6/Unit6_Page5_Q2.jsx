@@ -165,7 +165,7 @@ const Unit6_Page5_Q2 = () => {
           display: "flex",
           flexDirection: "column",
           gap: "50px",
-          width: "60%",
+          // width: "60%",
           justifyContent: "flex-start",
         }}
       >

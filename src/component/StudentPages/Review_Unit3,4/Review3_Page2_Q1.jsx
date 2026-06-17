@@ -201,7 +201,7 @@ const Review3_Page2_Q1 = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "60%",
+        
           }}
         >
           <h5 className="header-title-page8">
