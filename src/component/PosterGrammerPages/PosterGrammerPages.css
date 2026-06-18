@@ -22,22 +22,3 @@
   transform: scale(1.1);
   transition: 0.2s ease-in-out;
 }
-
-@media (max-width: 1024px) {
-  .poster-grammar-img {
-    height: 48vh;
-    width: auto;
-  }
-}
-
-@media (max-width: 520px) {
-  .poster-grammar-img {
-    height: 37vh;
-    width: auto;
-  }
-  .audio-btn-poster {
-  
-    width: 33px;
-    height: 33px;
-}
-}

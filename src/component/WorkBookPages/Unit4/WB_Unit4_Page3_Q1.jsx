@@ -113,7 +113,7 @@ const WB_Unit4_Page3_Q1 = () => {
       
         }}
       >
-        <div>
+        <div className="w-full">
           <h5 className="header-title-page8">
             <span className="ex-A">E</span>Tap or click the correct response.
           </h5>

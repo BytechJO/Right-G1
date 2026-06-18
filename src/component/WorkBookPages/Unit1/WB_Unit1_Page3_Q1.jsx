@@ -294,11 +294,11 @@ const WB_Unit1_Page3_Q1 = () => {
     >
       <div className="page8-wrapper" style={{ padding: "30px" }}>
         <div className="div-forall mb-10" style={{ gap: "20px" }}>
-          <div className="page8-content">
-            <header className="header-title-page8">
+          <div className="page8-content w-full">
+            <h5 className="header-title-page8">
               <span className="ex-A">A</span>
             Drag and drop the words to make sentences.
-            </header>
+            </h5>
           </div>
 
           {data.map((item, i) => {

@@ -230,7 +230,7 @@ export default function WB_Unit4_Page6_Q2() {
       onDragEnd={handleDragEnd}
     >
       <div className="page8-wrapper" style={{ padding: "30px" }}>
-        <div className="div-forall" style={{ width: "60%" }}>
+        <div className="div-forall" style={{  }}>
           <h3 className="header-title-page8">
             <span className="ex-A">B</span> Drag and drop.
           </h3>

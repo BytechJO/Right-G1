@@ -149,7 +149,7 @@ const Unit1_PosterMain = ({ openPopup }) => {
                 : ""
             }`}
             style={{
-              height: "20px",
+              height: "25px",
               position: "absolute",
               top: ["46%", "44%", "42%", "25.5%", "27.5%"][i],
               left: ["20%", "52%", "66%", "41%", "34%"][i],
