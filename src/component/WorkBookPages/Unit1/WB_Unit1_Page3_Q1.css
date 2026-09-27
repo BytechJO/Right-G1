@@ -1,0 +1,9 @@
+.word-bank button:focus {
+  outline: none !important;
+}
+
+.word-bank button:focus-visible {
+  outline: 3px solid #065de8 !important;
+  outline-offset: 3px;
+  border-radius: 10px;
+}

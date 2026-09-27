@@ -1,4 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
 import page_3 from "../../../assets/U1 WB/U1/Right Int WB G1 U17.png";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import "./WB_Unit1_Page7.css"
@@ -17,7 +16,16 @@ const WB_Unit1_Page7 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 9"
           onClick={() => openPopup("exercise", { startIndex: 8 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 8 });
+            }
+          }}
           // className="click-icon-page8-1 hover:scale-110 transition"
           style={{ overflow: "visible" }}
         >

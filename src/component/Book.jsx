@@ -48,14 +48,38 @@ import { postersVocabPages } from "./BookData/postersVocabPages";
 import PosterVocabNavigator from "./PostersVocabPages/PosterVocabNavigator";
 import TeacherBook from "./TeacherBookPages/TeacherBook";
 
+const BOOK_TABS = new Set([
+  "student",
+  "work",
+  "teacher",
+  "flash",
+  "poster",
+  "posterVocab",
+]);
+
+const getInitialActiveTab = () => {
+  const savedTab = localStorage.getItem("activeTab");
+  return BOOK_TABS.has(savedTab) ? savedTab : "student";
+};
+
+const getSavedPageIndex = (tab, includeLegacyValue = false) => {
+  const savedValue = localStorage.getItem(`pageIndex-${tab}`);
+  const valueToRead =
+    savedValue ??
+    (includeLegacyValue ? localStorage.getItem("pageIndex") : null);
+  const parsedValue = Number(valueToRead);
+
+  return Number.isInteger(parsedValue) && parsedValue >= 0 ? parsedValue : 0;
+};
+
 export default function Book() {
   // ===========================================================
   //                 📌 STATE
   // ===========================================================
-  const [pageIndex, setPageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState(() => {
-    return localStorage.getItem("activeTab") || "student";
-  });
+  const [activeTab, setActiveTab] = useState(getInitialActiveTab);
+  const [pageIndex, setPageIndex] = useState(() =>
+    getSavedPageIndex(getInitialActiveTab(), true),
+  );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
   const touchStart = useRef({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -99,6 +123,13 @@ export default function Book() {
     setPopupOpen(false);
   }
 
+  const handleTabChange = (nextTab) => {
+    if (!BOOK_TABS.has(nextTab) || nextTab === activeTab) return;
+
+    setActiveTab(nextTab);
+    setPageIndex(getSavedPageIndex(nextTab));
+  };
+
   // ===========================================================
   //                 📌 RESIZE LISTENER
   // ===========================================================
@@ -117,11 +148,8 @@ export default function Book() {
   }, []);
 
   useEffect(() => {
-    setPageIndex(0);
     setOffset({ x: 0, y: 0 });
     setZoom(1);
-    localStorage.setItem("activeTab", activeTab);
-    localStorage.setItem("pageIndex", pageIndex);
     if (
       activeTab === "poster" ||
       activeTab === "flash" ||
@@ -135,17 +163,38 @@ export default function Book() {
         setViewMode("single"); // لو شاشة صغيرة → صفحة واحدة دائمًا
       }
     }
-  }, [activeTab]);
+  }, [activeTab, isMobile]);
+
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+    localStorage.setItem(`pageIndex-${activeTab}`, String(pageIndex));
+
+    // إزالة المفتاح العام القديم بعد نقله إلى مفتاح القسم الحالي.
+    localStorage.removeItem("pageIndex");
+  }, [activeTab, pageIndex]);
+
+  useEffect(() => {
+    const lastAvailableIndex = Math.max(0, pages.length - 1);
+
+    if (pageIndex > lastAvailableIndex) {
+      setPageIndex(lastAvailableIndex);
+    }
+  }, [activeTab, pageIndex, pages.length]);
+
   useEffect(() => {
     if (viewMode === "spread" && !isMobile) {
-      const currentPageNumber = pageIndex + 1;
+      setPageIndex((currentIndex) => {
+        const currentPageNumber = currentIndex + 1;
 
-      // لو فردية → رجّعها للي قبلها
-      if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
-        setPageIndex(pageIndex - 1);
-      }
+        // لو فردية → رجّعها للي قبلها
+        if (currentPageNumber % 2 === 1 && currentPageNumber !== 1) {
+          return currentIndex - 1;
+        }
+
+        return currentIndex;
+      });
     }
-  }, [viewMode]);
+  }, [viewMode, isMobile]);
 
   // ===========================================================
   //                 📌 PAGE NAVIGATION
@@ -516,7 +565,7 @@ export default function Book() {
       {/* ===================== TOP NAV ===================== */}
       <TopNavbar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         logo={logo}
         menuIcon={menu}
         tabs={tabs}

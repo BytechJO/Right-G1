@@ -19,7 +19,7 @@ const data = [
   { scrambled: "you How are ?", answer: "How are you?" },
   { scrambled: "you Fine , thank .", answer: "Fine, thank you." },
   { scrambled: "evening Good !", answer: "Good evening!" },
-  { scrambled: "I'm John . Hello !", answer: "Hello! I'm John ." },
+  { scrambled: "I'm John . Hello !", answer: "Hello! I'm John." },
 ];
 
 // علامات الترقيم اللي لازم تلتصق بالكلمة اللي قبلها
@@ -297,7 +297,7 @@ const WB_Unit1_Page3_Q1 = () => {
           <div className="page8-content w-full">
             <h5 className="header-title-page8">
               <span className="ex-A">A</span>
-            Drag and drop the words to make sentences.
+              Drag and drop the words to make sentences.
             </h5>
           </div>
 
