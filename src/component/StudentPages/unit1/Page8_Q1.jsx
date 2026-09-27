@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import CD6_Pg8_Instruction1_AdultLady from "../../../assets/unit1/sounds/pg8-instruction1-all.mp3";
-import Pg8_1_1_AdultLady from "../../../assets/unit1/sounds/Pg8_1.1_Adult Lady.mp3";
-import Pg8_1_2_AdultLady from "../../../assets/unit1/sounds/Pg8_1.2_Adult Lady.mp3";
-import Pg8_1_3_AdultLady from "../../../assets/unit1/sounds/Pg8_1.3_Adult Lady.mp3";
-import Pg8_1_4_AdultLady from "../../../assets/unit1/sounds/Pg8_1.4_Adult Lady.mp3";
+import Pg8_1_1_AdultLady from "../../../assets/unit1/Page 8 - A 1/tiger.mp3";
+import Pg8_1_2_AdultLady from "../../../assets/unit1/Page 8 - A 1/taxi.mp3";
+import Pg8_1_3_AdultLady from "../../../assets/unit1/Page 8 - A 1/duck.mp3";
+import Pg8_1_4_AdultLady from "../../../assets/unit1/Page 8 - A 1/deer.mp3";
 import deer from "../../../assets/unit1/imgs/deer flip.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";
 import taxi from "../../../assets/unit1/imgs/taxi_1.svg";
@@ -15,8 +15,25 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 
 const Page8_Q1 = () => {
   const clickAudioRef = useRef(null);
+
+  const dropRefs = useRef([]);
+  const bankRefs = useRef([]);
+
+  const lastPickedBankIndexRef = useRef(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isAutoAnswer, setIsAutoAnswer] = useState(false);
+  const [forceStopAudio, setForceStopAudio] = useState(0);
+
+  // ========================================
+  // ACCESSIBILITY
+  // ========================================
+  const [keyboardPickedLetter, setKeyboardPickedLetter] = useState(null);
+  const [keyboardMessage, setKeyboardMessage] = useState("");
+
+  // فقط لعرض الـ focus بالـ inline style
+  const [focusedBankItem, setFocusedBankItem] = useState(null);
+  const [focusedDrop, setFocusedDrop] = useState(null);
+
   const data = [
     {
       word: "deer",
@@ -51,12 +68,12 @@ const Page8_Q1 = () => {
   const displayOrder = [2, 3, 1, 0]; // ترتيب الكلمات
 
   const [answers, setAnswers] = useState({
-    letters: Array(data.length).fill(null), // لكل كلمة حرف
+    letters: Array(data.length).fill(null),
   });
 
   const [wrongLetters, setWrongLetters] = useState(data.map(() => false));
 
-  const stopAtSecond = 9;
+  const stopAtSecond = 7.6;
 
   const lettersBank = [
     { id: "l-d", value: "d" },
@@ -74,13 +91,13 @@ const Page8_Q1 = () => {
     },
     {
       start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      end: 7.4,
+      text: "Listen and write the missing letters.",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 7.8, end: 9.6, text: "1-tiger." },
+    { start: 9.8, end: 11.6, text: "2-taxi." },
+    { start: 11.8, end: 13.7, text: "3-duck." },
+    { start: 13.8, end: 15.8, text: "4-deer." },
   ];
 
   const onDragEnd = (result) => {
@@ -94,21 +111,68 @@ const Page8_Q1 = () => {
       destination.droppableId.startsWith("letter-drop-")
     ) {
       const index = Number(destination.droppableId.replace("letter-drop-", ""));
-      const value = draggableId.replace("l-", ""); // d أو t
+
+      const value = draggableId.replace("l-", "");
 
       setAnswers((prev) => {
         const letters = [...prev.letters];
+
         letters[index] = value;
-        return { ...prev, letters };
+
+        return {
+          ...prev,
+          letters,
+        };
       });
 
       setWrongLetters(data.map(() => false));
+
       return;
     }
 
     // 2) Number drop zones
   };
 
+  // ========================================
+  // ACCESSIBILITY
+  // وضع الحرف بالكيبورد
+  // ========================================
+  const placeLetterWithKeyboard = (dataIndex, displayIndex) => {
+    if (!keyboardPickedLetter || showAnswer) return;
+
+    const placedLetter = keyboardPickedLetter.value;
+
+    setAnswers((prev) => {
+      const letters = [...prev.letters];
+
+      letters[dataIndex] = placedLetter;
+
+      return {
+        ...prev,
+        letters,
+      };
+    });
+
+    setWrongLetters(data.map(() => false));
+
+    setKeyboardMessage(
+      `Letter ${placedLetter} placed in answer ${
+        displayIndex + 1
+      }. Choose another letter.`,
+    );
+
+    // ============================
+    // خلصنا من الحرف
+    // ============================
+    setKeyboardPickedLetter(null);
+
+    // ============================
+    // رجع الـ focus فوق للخيارات
+    // ============================
+    setTimeout(() => {
+      bankRefs.current[lastPickedBankIndexRef.current]?.focus();
+    }, 0);
+  };
   const reset = () => {
     setAnswers({
       letters: Array(data.length).fill(null),
@@ -118,6 +182,12 @@ const Page8_Q1 = () => {
 
     setShowAnswer(false);
     setIsAutoAnswer(false);
+
+    // Accessibility reset
+    setKeyboardPickedLetter(null);
+    setKeyboardMessage("");
+    setFocusedBankItem(null);
+    setFocusedDrop(null);
   };
 
   const checkAnswers = () => {
@@ -129,6 +199,7 @@ const Page8_Q1 = () => {
         "Oops!",
         "Please complete all answers before checking.",
       );
+
       return;
     }
 
@@ -159,21 +230,60 @@ const Page8_Q1 = () => {
       score === totalPoints ? "green" : score === 0 ? "red" : "orange";
 
     const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${score} / ${totalPoints}
-      </span>
-    </div>
-  `;
+      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
+        <span style="color:${color}; font-weight:bold;">
+          Score: ${score} / ${totalPoints}
+        </span>
+      </div>
+    `;
 
     if (score === totalPoints) ValidationAlert.success(scoreMessage);
     else if (score === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
 
+  const playSound = (sound) => {
+    if (!sound) return;
+
+    // خبر الـ QuestionAudioPlayer إنه يوقف ويغير الأيقونة
+    setForceStopAudio((prev) => prev + 1);
+
+    // وقف صوت الصورة السابق
+    if (clickAudioRef.current) {
+      clickAudioRef.current.pause();
+      clickAudioRef.current.currentTime = 0;
+
+      clickAudioRef.current.src = sound;
+      clickAudioRef.current.play();
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="page8-wrapper" style={{ padding: "30px" }}>
+        {/* ========================================
+            ACCESSIBILITY - Screen reader messages
+        ======================================== */}
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            padding: 0,
+            margin: "-1px",
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            clipPath: "inset(50%)",
+            whiteSpace: "nowrap",
+            border: 0,
+          }}
+        >
+          {keyboardMessage}
+        </div>
+
         <div
           className="div-forall"
           style={{
@@ -183,21 +293,24 @@ const Page8_Q1 = () => {
             alignItems: "flex-start",
             position: "relative",
             gap: "30px",
-      
           }}
         >
           <header className="header-title-page8">
             <span className="ex-A">A</span>{" "}
-            <span className="number-of-q">1</span> Listen and drag the missing letter. the missing
-            letters. Number the pictures.
+            <span className="number-of-q">1</span> Listen and write the missing
+            letters.
           </header>
 
           <audio ref={clickAudioRef} style={{ display: "none" }} />
+
           <QuestionAudioPlayer
             src={CD6_Pg8_Instruction1_AdultLady}
             captions={captions}
+            pageId="unit1-page8-q1"
             stopAtSecond={stopAtSecond}
+            forceStop={forceStopAudio}
           />
+
           <Droppable droppableId="letters-bank" direction="horizontal">
             {(provided) => (
               <div
@@ -224,20 +337,106 @@ const Page8_Q1 = () => {
                   >
                     {(provided) => (
                       <div
-                        ref={provided.innerRef}
+                        ref={(el) => {
+                          provided.innerRef(el);
+                          bankRefs.current[i] = el;
+                        }}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        // ==========================
+                        // ACCESSIBILITY
+                        // ==========================
+                        role="button"
+                        tabIndex={showAnswer ? -1 : 0}
+                        aria-pressed={keyboardPickedLetter?.id === l.id}
+                        aria-label={
+                          keyboardPickedLetter?.id === l.id
+                            ? `Letter ${l.value} selected. Use Tab to move to an answer box and press Enter to place it.`
+                            : `Letter ${l.value}. Press Enter to pick it up.`
+                        }
+                        onFocus={() => setFocusedBankItem(l.id)}
+                        onBlur={() => setFocusedBankItem(null)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (keyboardPickedLetter?.id === l.id) {
+                              setKeyboardPickedLetter(null);
+
+                              setKeyboardMessage(
+                                `Letter ${l.value} selection cancelled.`,
+                              );
+                            } else {
+                              // احفظ أي حرف اخترناه
+                              lastPickedBankIndexRef.current = i;
+
+                              setKeyboardPickedLetter(l);
+
+                              setKeyboardMessage(
+                                `Letter ${l.value} selected. Use Tab to choose an answer box, then press Enter.`,
+                              );
+
+                              // مباشرة لأول input
+                              setTimeout(() => {
+                                dropRefs.current[0]?.focus();
+                              }, 0);
+                            }
+
+                            return;
+                          }
+
+                          // باقي مفاتيح الـ drag الأصلية
+                          provided.dragHandleProps?.onKeyDown?.(e);
+                        }}
                         className="bank-item"
                         style={{
-                          width: 40,
-                          height: 40,
+                          width: keyboardPickedLetter?.id === l.id ? 48 : 40,
+
+                          height: keyboardPickedLetter?.id === l.id ? 48 : 40,
+
                           borderRadius: "50%",
-                          border: "2px solid #2c5287",
+                          border:
+                            keyboardPickedLetter?.id === l.id
+                              ? "3px solid #2563eb"
+                              : "2px solid #2c5287",
+
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           fontWeight: "bold",
-                          background: "white",
+
+                          background:
+                            keyboardPickedLetter?.id === l.id
+                              ? "#dbeafe"
+                              : "white",
+
+                          transform:
+                            keyboardPickedLetter?.id === l.id
+                              ? "scale(1.15)"
+                              : focusedBankItem === l.id
+                                ? "scale(1.05)"
+                                : "scale(1)",
+
+                          boxShadow:
+                            keyboardPickedLetter?.id === l.id
+                              ? "0 0 0 5px rgba(37, 99, 235, 0.20), 0 6px 14px rgba(0,0,0,0.22)"
+                              : focusedBankItem === l.id
+                                ? "0 0 0 3px rgba(37, 99, 235, 0.18)"
+                                : "none",
+
+                          outline:
+                            focusedBankItem === l.id
+                              ? "2px solid #2563eb"
+                              : "none",
+
+                          outlineOffset: "3px",
+
+                          transition:
+                            "transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, width 0.15s ease, height 0.15s ease",
+
+                          zIndex: keyboardPickedLetter?.id === l.id ? 20 : 1,
+
                           ...provided.draggableProps.style,
                         }}
                       >
@@ -246,6 +445,7 @@ const Page8_Q1 = () => {
                     )}
                   </Draggable>
                 ))}
+
                 {provided.placeholder}
               </div>
             )}
@@ -281,11 +481,72 @@ const Page8_Q1 = () => {
                   }}
                 >
                   <span className="number-of-q">{index + 1}</span>
+
                   <Droppable droppableId={`letter-drop-${dataIndex}`}>
                     {(provided, snapshot) => (
                       <div
-                        ref={provided.innerRef}
+                        ref={(el) => {
+                          provided.innerRef(el);
+                          dropRefs.current[index] = el;
+                        }}
                         {...provided.droppableProps}
+                        role="button"
+                        tabIndex={showAnswer ? -1 : 0}
+                        aria-label={
+                          keyboardPickedLetter
+                            ? answers.letters[dataIndex]
+                              ? `Answer ${index + 1}. Current letter ${
+                                  answers.letters[dataIndex]
+                                }. Press Enter to replace it with ${
+                                  keyboardPickedLetter.value
+                                }.`
+                              : `Answer ${index + 1}. Press Enter to place letter ${
+                                  keyboardPickedLetter.value
+                                }.`
+                            : answers.letters[dataIndex]
+                              ? `Answer ${index + 1}. Current letter ${
+                                  answers.letters[dataIndex]
+                                }.`
+                              : `Answer ${index + 1} is empty. Select a letter first.`
+                        }
+                        onFocus={() => setFocusedDrop(dataIndex)}
+                        onBlur={() => setFocusedDrop(null)}
+                        onKeyDown={(e) => {
+                          // Tab محصور بين الـ inputs
+                          if (keyboardPickedLetter && e.key === "Tab") {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const totalDrops = dropRefs.current.length;
+
+                            let nextIndex;
+
+                            if (e.shiftKey) {
+                              nextIndex =
+                                index === 0 ? totalDrops - 1 : index - 1;
+                            } else {
+                              nextIndex =
+                                index === totalDrops - 1 ? 0 : index + 1;
+                            }
+
+                            dropRefs.current[nextIndex]?.focus();
+
+                            return;
+                          }
+
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (keyboardPickedLetter) {
+                              placeLetterWithKeyboard(dataIndex, index);
+                            } else {
+                              setKeyboardMessage(
+                                "Select a letter first, then use Tab to choose an answer box.",
+                              );
+                            }
+                          }
+                        }}
                         className={`char-drop ${
                           snapshot.isDraggingOver ? "drag-over-cell" : ""
                         }`}
@@ -293,24 +554,46 @@ const Page8_Q1 = () => {
                           width: "40px",
                           height: "45px",
                           borderBottom: "2px solid #2c5287",
-                          // borderRadius: "8px",
+
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           fontSize: "30px",
+
                           background: snapshot.isDraggingOver
                             ? "#c4e5fcff"
-                            : "white",
+                            : keyboardPickedLetter && focusedDrop === dataIndex
+                              ? "#dbeafe"
+                              : "white",
+
                           color: isAutoAnswer ? "red" : "black",
+
+                          outline:
+                            keyboardPickedLetter && focusedDrop === dataIndex
+                              ? "3px solid #2563eb"
+                              : "none",
+
+                          outlineOffset: "3px",
+
+                          transform:
+                            keyboardPickedLetter && focusedDrop === dataIndex
+                              ? "scale(1.12)"
+                              : "scale(1)",
+
+                          boxShadow:
+                            keyboardPickedLetter && focusedDrop === dataIndex
+                              ? "0 0 0 4px rgba(37, 99, 235, 0.15)"
+                              : "none",
+
+                          transition:
+                            "transform 0.15s ease, background 0.15s ease, outline 0.15s ease, box-shadow 0.15s ease",
                         }}
                       >
                         {answers.letters[dataIndex] || ""}
-
                         {provided.placeholder}
                       </div>
                     )}
                   </Droppable>
-
                   <span
                     style={{
                       textAlign: "center",
@@ -320,6 +603,7 @@ const Page8_Q1 = () => {
                     {data[dataIndex].word.slice(1)}
                   </span>
                 </div>
+
                 <div
                   style={{
                     display: "flex",
@@ -331,9 +615,46 @@ const Page8_Q1 = () => {
                     key={data[dataIndex].num}
                     src={data[dataIndex].src}
                     className="exercise-image"
-                    // onClick={() => playSound(item.sound)}
+                    role="button"
+                    tabIndex={0}
+                    alt={`${data[dataIndex].word} image`}
+                    aria-label={`Play audio for ${data[dataIndex].word}`}
+                    onClick={(e) => {
+                      // mouse click عادي
+                      if (e.detail > 0) {
+                        playSound(data[dataIndex].sound);
+                        return;
+                      }
+
+                      // Narrator / keyboard synthetic click
+                      playSound(data[dataIndex].sound);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        playSound(data[dataIndex].sound);
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.outline = "3px solid #2563eb";
+                      e.currentTarget.style.outlineOffset = "4px";
+                      e.currentTarget.style.borderRadius = "8px";
+                      e.currentTarget.style.transform = "scale(1.05)";
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.outline = "none";
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      transition: "transform 0.15s ease",
+                    }}
+                    forceStop={forceStopAudio}
                   />
                 </div>
+
                 {wrongLetters[dataIndex] && (
                   <div
                     style={{
@@ -363,12 +684,19 @@ const Page8_Q1 = () => {
         </div>
 
         <div className="action-buttons-container">
-          <button onClick={reset} className="try-again-button">
+          <button
+            onClick={reset}
+            className="try-again-button"
+            aria-label="Start again"
+            title="Start again"
+          >
             Start Again ↻
           </button>
 
           <button
             className="show-answer-btn swal-continue"
+            aria-label="Show answer"
+            title="Show answer"
             onClick={() => {
               setShowAnswer(true);
               setIsAutoAnswer(true);
@@ -380,12 +708,21 @@ const Page8_Q1 = () => {
               });
 
               setWrongLetters(data.map(() => false));
+
+              // Accessibility
+              setKeyboardPickedLetter(null);
+              setKeyboardMessage("Correct answers are shown.");
             }}
           >
             Show Answer
           </button>
 
-          <button onClick={checkAnswers} className="check-button2">
+          <button
+            onClick={checkAnswers}
+            className="check-button2"
+            aria-label="Check answer"
+            title="Check answer"
+          >
             Check Answer ✓
           </button>
         </div>

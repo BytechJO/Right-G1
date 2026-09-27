@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./Page8_Q4.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-
+import sentenceAudio from "../../../assets/unit1/Page 8 - C/How are you.mp3";
 const Page8_Q4 = () => {
+  const sentenceAudioRef = useRef(null);
+  const bankRefs = useRef({});
+  const slotRefs = useRef([]);
+
+  const [keyboardPickedLetter, setKeyboardPickedLetter] = useState(null);
+  const [keyboardMessage, setKeyboardMessage] = useState("");
+  const [focusedLetter, setFocusedLetter] = useState(null);
+  const [focusedSlot, setFocusedSlot] = useState(null);
   const data = [
     { letter: "a", number: 1 },
     { letter: "b", number: 2 },
@@ -50,7 +58,64 @@ const Page8_Q4 = () => {
     group.map((letter) => letter || "").join(""),
   );
   const sentence = formedWords.join(" ");
+  const correctSentence = "how are you";
 
+  const isSentenceCorrect = sentence.trim().toLowerCase() === correctSentence;
+  const playSentenceAudio = () => {
+    if (!isSentenceCorrect || !sentenceAudio) return;
+
+    const audio = sentenceAudioRef.current;
+    if (!audio) return;
+
+    // وقف أي تشغيل سابق
+    audio.pause();
+    audio.currentTime = 0;
+
+    audio.src = sentenceAudio;
+    audio.play();
+  };
+  const handleKeyboardPick = (letter) => {
+    if (showAnswer || isChecked) return;
+
+    setKeyboardPickedLetter(letter);
+
+    setKeyboardMessage(
+      `Letter ${letter} selected. Choose a box and press Enter.`,
+    );
+
+    // مباشرة لأول خانة
+    setTimeout(() => {
+      slotRefs.current[0]?.focus();
+    }, 0);
+  };
+  const handleKeyboardDrop = (gIndex, lIndex, flatIndex) => {
+    if (!keyboardPickedLetter || showAnswer || isChecked) {
+      return;
+    }
+
+    const placedLetter = keyboardPickedLetter;
+
+    setSlots((prev) => {
+      const updated = prev.map((group) => [...group]);
+
+      // الحرف الموجود ينستبدل عادي
+      updated[gIndex][lIndex] = placedLetter;
+
+      return updated;
+    });
+
+    setWrongInputs((prev) => prev.filter((id) => id !== `${gIndex}-${lIndex}`));
+
+    setKeyboardMessage(`Letter ${placedLetter} placed. Choose another letter.`);
+
+    // فك الحرف
+    setKeyboardPickedLetter(null);
+
+    // رجع لنفس الحرف فوق
+    setTimeout(() => {
+      bankRefs.current[placedLetter]?.focus();
+    }, 0);
+  };
   // ========================
   // Drag Logic
   // ========================
@@ -85,6 +150,8 @@ const Page8_Q4 = () => {
     setSlots(correct);
     setWrongInputs([]);
     setShowAnswer(true);
+    setKeyboardPickedLetter(null);
+    setKeyboardMessage("Correct answer is shown.");
   };
 
   // ========================
@@ -119,6 +186,8 @@ const Page8_Q4 = () => {
     }
 
     setWrongInputs(wrong);
+    setKeyboardPickedLetter(null);
+    setKeyboardMessage("Correct answer is shown.");
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -135,7 +204,15 @@ const Page8_Q4 = () => {
     else if (correctCount === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
   };
+  const getFlatSlotIndex = (groupIndex, letterIndex) => {
+    let index = 0;
 
+    for (let g = 0; g < groupIndex; g++) {
+      index += questionGroups[g].length;
+    }
+
+    return index + letterIndex;
+  };
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
       <div className="div-forall" style={{}}>
@@ -143,7 +220,7 @@ const Page8_Q4 = () => {
           <span className="ex-A">C</span> Drag the letters into the boxes to
           make the secret sentence.
         </h5>
-
+        <audio ref={sentenceAudioRef} style={{ display: "none" }} />
         <div className="alphabet-box">
           <DragDropContext onDragEnd={onDragEnd}>
             {/* 🔤 الحروف فوق الأرقام */}
@@ -167,10 +244,80 @@ const Page8_Q4 = () => {
                       >
                         {(provided) => (
                           <div
-                            ref={provided.innerRef}
+                            ref={(el) => {
+                              provided.innerRef(el);
+
+                              bankRefs.current[item.letter] = el;
+                            }}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className="cell1 drag-letter"
+                            role="button"
+                            tabIndex={showAnswer || isChecked ? -1 : 0}
+                            aria-pressed={keyboardPickedLetter === item.letter}
+                            aria-label={
+                              keyboardPickedLetter === item.letter
+                                ? `Letter ${item.letter} selected. Choose a box and press Enter.`
+                                : `Letter ${item.letter}. Press Enter to select it.`
+                            }
+                            onFocus={() => setFocusedLetter(item.letter)}
+                            onBlur={() => setFocusedLetter(null)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                handleKeyboardPick(item.letter);
+
+                                return;
+                              }
+
+                              provided.dragHandleProps?.onKeyDown?.(e);
+                            }}
+                            onClick={(e) => {
+                              // Narrator synthetic click فقط
+                              if (e.detail === 0) {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                handleKeyboardPick(item.letter);
+                              }
+                            }}
+                            style={{
+                              transform:
+                                keyboardPickedLetter === item.letter
+                                  ? "scale(1.15)"
+                                  : focusedLetter === item.letter
+                                    ? "scale(1.06)"
+                                    : "scale(1)",
+
+                              outline:
+                                keyboardPickedLetter === item.letter
+                                  ? "3px solid #2563eb"
+                                  : focusedLetter === item.letter
+                                    ? "2px solid #2563eb"
+                                    : "none",
+
+                              outlineOffset: "3px",
+
+                              background:
+                                keyboardPickedLetter === item.letter
+                                  ? "#dbeafe"
+                                  : undefined,
+
+                              boxShadow:
+                                keyboardPickedLetter === item.letter
+                                  ? "0 0 0 5px rgba(37,99,235,0.18), 0 6px 14px rgba(0,0,0,0.22)"
+                                  : "none",
+
+                              transition:
+                                "transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease",
+
+                              zIndex:
+                                keyboardPickedLetter === item.letter ? 20 : 1,
+
+                              ...provided.draggableProps.style,
+                            }}
                           >
                             {item.letter}
                           </div>
@@ -201,20 +348,148 @@ const Page8_Q4 = () => {
 
                           {/* ⬜ مربع الدروب */}
                           <div
-                            ref={provided.innerRef}
+                            ref={(el) => {
+                              provided.innerRef(el);
+
+                              const flatIndex = getFlatSlotIndex(
+                                gIndex,
+                                lIndex,
+                              );
+
+                              slotRefs.current[flatIndex] = el;
+                            }}
                             {...provided.droppableProps}
-                            className={`drop-slot
-                              ${snapshot.isDraggingOver ? "drag-over" : ""}
-                              ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
+                            className={`drop-slot 
+    ${snapshot.isDraggingOver ? "drag-over" : ""}
+    ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
+                            role="button"
+                            tabIndex={showAnswer || isChecked ? -1 : 0}
+                            aria-label={
+                              keyboardPickedLetter
+                                ? slots[gIndex][lIndex]
+                                  ? `Box ${
+                                      getFlatSlotIndex(gIndex, lIndex) + 1
+                                    }. Current letter ${
+                                      slots[gIndex][lIndex]
+                                    }. Press Enter to replace it with ${keyboardPickedLetter}.`
+                                  : `Box ${
+                                      getFlatSlotIndex(gIndex, lIndex) + 1
+                                    }. Press Enter to place ${keyboardPickedLetter}.`
+                                : slots[gIndex][lIndex]
+                                  ? `Box ${
+                                      getFlatSlotIndex(gIndex, lIndex) + 1
+                                    }. Current letter ${slots[gIndex][lIndex]}.`
+                                  : `Box ${
+                                      getFlatSlotIndex(gIndex, lIndex) + 1
+                                    } is empty. Select a letter first.`
+                            }
+                            onFocus={() =>
+                              setFocusedSlot(`${gIndex}-${lIndex}`)
+                            }
+                            onBlur={() => setFocusedSlot(null)}
+                            onKeyDown={(e) => {
+                              const flatIndex = getFlatSlotIndex(
+                                gIndex,
+                                lIndex,
+                              );
+
+                              // ==================================
+                              // Tab محصور بالخانات فقط
+                              // طول ما في حرف ممسوك
+                              // ==================================
+                              if (keyboardPickedLetter && e.key === "Tab") {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                const totalSlots = questionGroups.flat().length;
+
+                                let nextIndex;
+
+                                if (e.shiftKey) {
+                                  nextIndex =
+                                    flatIndex === 0
+                                      ? totalSlots - 1
+                                      : flatIndex - 1;
+                                } else {
+                                  nextIndex =
+                                    flatIndex === totalSlots - 1
+                                      ? 0
+                                      : flatIndex + 1;
+                                }
+
+                                slotRefs.current[nextIndex]?.focus();
+
+                                return;
+                              }
+
+                              // ==================================
+                              // Enter = حط أو استبدل الحرف
+                              // ==================================
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                if (keyboardPickedLetter) {
+                                  handleKeyboardDrop(gIndex, lIndex, flatIndex);
+                                }
+                              }
+                            }}
+                            onClick={(e) => {
+                              if (e.detail === 0 && keyboardPickedLetter) {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                handleKeyboardDrop(
+                                  gIndex,
+                                  lIndex,
+                                  getFlatSlotIndex(gIndex, lIndex),
+                                );
+                              }
+                            }}
+                            style={{
+                              background: snapshot.isDraggingOver
+                                ? "#c4e5fc"
+                                : keyboardPickedLetter &&
+                                    focusedSlot === `${gIndex}-${lIndex}`
+                                  ? "#dbeafe"
+                                  : undefined,
+
+                              outline:
+                                keyboardPickedLetter &&
+                                focusedSlot === `${gIndex}-${lIndex}`
+                                  ? "3px solid #2563eb"
+                                  : "none",
+
+                              outlineOffset: "3px",
+
+                              transform:
+                                keyboardPickedLetter &&
+                                focusedSlot === `${gIndex}-${lIndex}`
+                                  ? "scale(1.08)"
+                                  : "scale(1)",
+
+                              boxShadow:
+                                keyboardPickedLetter &&
+                                focusedSlot === `${gIndex}-${lIndex}`
+                                  ? "0 0 0 4px rgba(37,99,235,0.15)"
+                                  : "none",
+
+                              transition:
+                                "transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease",
+                            }}
                           >
                             {wrongInputs.includes(`${gIndex}-${lIndex}`) && (
-                              <div className="error-mark1">✕</div>
+                              <div className="error-mark1" aria-hidden="true">
+                                ✕
+                              </div>
                             )}
+
                             {slots[gIndex][lIndex] && (
                               <div className="dropped-letter">
                                 {slots[gIndex][lIndex]}
                               </div>
                             )}
+
                             {provided.placeholder}
                           </div>
                         </div>
@@ -227,11 +502,44 @@ const Page8_Q4 = () => {
                 ?
               </div>
             </div>
-            <div className="sentence-box">
-              <span className="sentence-text">{sentence} </span>
-              <div className="text-[30px] font-semibold">
-                ?
-              </div>{" "}
+            <div
+              className={`sentence-box ${
+                isSentenceCorrect ? "sentence-clickable" : ""
+              }`}
+              role={isSentenceCorrect ? "button" : undefined}
+              tabIndex={isSentenceCorrect ? 0 : -1}
+              aria-label={
+                isSentenceCorrect
+                  ? `Correct sentence: ${sentence}. Press Enter to hear it.`
+                  : undefined
+              }
+              title={isSentenceCorrect ? "Play sentence audio" : undefined}
+              onClick={isSentenceCorrect ? playSentenceAudio : undefined}
+              onKeyDown={(e) => {
+                if (isSentenceCorrect && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  playSentenceAudio();
+                }
+              }}
+              onFocus={(e) => {
+                if (!isSentenceCorrect) return;
+
+                e.currentTarget.style.outline = "3px solid #2563eb";
+
+                e.currentTarget.style.outlineOffset = "4px";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.outline = "none";
+              }}
+              style={{
+                cursor: isSentenceCorrect ? "pointer" : "default",
+              }}
+            >
+              <span className="sentence-text">{sentence}</span>
+
+              <div className="text-[30px] font-semibold">?</div>
             </div>
           </DragDropContext>
         </div>
@@ -245,8 +553,13 @@ const Page8_Q4 = () => {
             setWrongInputs([]);
             setShowAnswer(false);
             setIsChecked(false);
+            setKeyboardPickedLetter(null);
+            setKeyboardMessage("");
+            setFocusedLetter(null);
+            setFocusedSlot(null);
           }}
           className="try-again-button"
+          title="Start again"
         >
           Start Again ↻
         </button>
@@ -254,11 +567,16 @@ const Page8_Q4 = () => {
         <button
           onClick={handleShowAnswer}
           className="show-answer-btn swal-continue"
+          title="Show answer"
         >
           Show Answer
         </button>
 
-        <button onClick={handleCheckAnswers} className="check-button2">
+        <button
+          onClick={handleCheckAnswers}
+          className="check-button2"
+          title="Check answer"
+        >
           Check Answer ✓
         </button>
       </div>

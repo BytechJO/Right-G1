@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
 
 const ModernVocabularyComponent = ({
   backgroundImage,
@@ -11,11 +11,15 @@ const ModernVocabularyComponent = ({
   vocabulary,
   markers,
   captions,
-  hight
+  hight,
+  pageId,
 }) => {
   const mainAudioRef = useRef(null);
   const wordRefs = useRef(wordAudios.map(() => React.createRef()));
+  const audioFinishedRef = useRef(false);
+  const resumedFromStorageRef = useRef(false);
 
+  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -26,7 +30,6 @@ const ModernVocabularyComponent = ({
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
   const [playbackRate, setPlaybackRate] = useState(1);
-  const [forceRender, setForceRender] = useState(0);
   // =========================
   // Sync captions + words
   // =========================
@@ -107,7 +110,111 @@ const ModernVocabularyComponent = ({
       }
     }
   }, [activeIndex]);
+  useEffect(() => {
+    const audio = mainAudioRef.current;
+    if (!audio) return;
 
+    audioFinishedRef.current = false;
+
+    const savedTime = Number(localStorage.getItem(AUDIO_TIME_KEY) || 0);
+
+    audio.pause();
+    audio.src = mainAudio;
+
+    const handleLoadedMetadata = () => {
+      // إذا في وقت محفوظ
+      if (savedTime > 0 && savedTime < audio.duration) {
+        resumedFromStorageRef.current = true;
+
+        audio.currentTime = savedTime;
+
+        setCurrent(savedTime);
+        updateSync(savedTime);
+
+        setIsPlaying(false);
+
+        return;
+      }
+
+      // أول مرة
+      resumedFromStorageRef.current = false;
+
+      audio.currentTime = 0;
+
+      setCurrent(0);
+      setIsPlaying(false);
+    };
+
+    const handleEnded = () => {
+      audioFinishedRef.current = true;
+
+      // خلص كامل → امسح الحفظ
+      localStorage.removeItem(AUDIO_TIME_KEY);
+
+      audio.currentTime = 0;
+
+      setCurrent(0);
+      setIsPlaying(false);
+      setActiveIndex(null);
+      setActiveIndex2(null);
+    };
+
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      // تسكر الـ popup / component قبل انتهاء الصوت
+      if (
+        !audioFinishedRef.current &&
+        audio.currentTime > 0 &&
+        audio.duration &&
+        audio.currentTime < audio.duration
+      ) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
+      audio.pause();
+
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [mainAudio, AUDIO_TIME_KEY]);
+  const handleRestart = () => {
+    const audio = mainAudioRef.current;
+    if (!audio) return;
+
+    // وقف أصوات الكلمات
+    wordRefs.current.forEach((ref) => {
+      if (ref.current) {
+        ref.current.pause();
+        ref.current.currentTime = 0;
+      }
+    });
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    resumedFromStorageRef.current = false;
+    audioFinishedRef.current = false;
+
+    localStorage.removeItem(AUDIO_TIME_KEY);
+
+    setCurrent(0);
+    setActiveIndex(null);
+    setActiveIndex2(null);
+    setClickedIndex(null);
+
+    audio
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch(() => {
+        setIsPlaying(false);
+      });
+  };
   return (
     <div className="min-h-screen font-sans text-slate-800 flex flex-col items-center gap-[30px]">
       <div className="w-full bg-white p-5 rounded-[2rem] overflow-hidden border border-slate-100 flex flex-col lg:flex-row relative justify-center">
@@ -133,8 +240,13 @@ const ModernVocabularyComponent = ({
                     src={mainAudio}
                     onTimeUpdate={(e) => {
                       const t = e.target.currentTime;
+
                       setCurrent(t);
                       updateSync(t);
+
+                      if (!audioFinishedRef.current) {
+                        localStorage.setItem(AUDIO_TIME_KEY, String(t));
+                      }
                     }}
                     onLoadedMetadata={(e) => setDuration(e.target.duration)}
                     onEnded={(e) => {
@@ -157,7 +269,8 @@ const ModernVocabularyComponent = ({
                       min="0"
                       max={duration}
                       value={current}
-                      className="audio-slider"
+                      className="audio-slider rounded-full focus-visible:outline-4 focus-visible:outline-blue-600 focus-visible:outline-offset-4"
+                      aria-label="Audio progress"
                       onChange={(e) => {
                         mainAudioRef.current.currentTime = e.target.value;
                       }}
@@ -177,16 +290,43 @@ const ModernVocabularyComponent = ({
 
                   {/* controls */}
                   <div className="bottom-row">
-                    <div
-                      className={`round-btn ${showCaption ? "active" : ""}`}
+                    <button
+                      type="button"
+                      className={`round-btn border-0 bg-transparent p-0 focus-visible:outline-4 focus-visible:outline-blue-600 focus-visible:outline-offset-4 ${
+                        showCaption ? "active" : ""
+                      }`}
                       onClick={() => setShowCaption(!showCaption)}
+                      aria-label={
+                        showCaption ? "Hide captions" : "Show captions"
+                      }
+                      aria-expanded={showCaption}
+                      aria-controls={`vocabulary-caption-panel-${pageId}`}
                     >
-                      <TbMessageCircle size={36} />
-                    </div>
-
-                    <button className="play-btn2" onClick={togglePlay}>
-                      {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+                      <TbMessageCircle size={36} aria-hidden="true" />
                     </button>
+
+                    <div className="main-audio-controls">
+                      <button
+                        className="main-audio-btn"
+                        onClick={togglePlay}
+                        aria-label={isPlaying ? "Pause audio" : "Play audio"}
+                      >
+                        {isPlaying ? (
+                          <FaPause size={20} />
+                        ) : (
+                          <FaPlay size={20} />
+                        )}
+                      </button>
+
+                      <button
+                        className="main-audio-btn"
+                        onClick={handleRestart}
+                        aria-label="Restart audio"
+                        title="Restart"
+                      >
+                        <FaRedo size={22} />
+                      </button>
+                    </div>
 
                     <div className="relative">
                       <button
@@ -245,6 +385,7 @@ const ModernVocabularyComponent = ({
           <div className="p-4 md:p-3 flex flex-col items-center justify-center relative">
             {/* 🔥 NEW CAPTION STYLE */}
             <div
+              id={`vocabulary-caption-panel-${pageId}`}
               className={`absolute -top-2 left-13 z-999999 w-[50%] max-w-md transition-all duration-500 ${
                 showCaption
                   ? "opacity-100 translate-y-0"
@@ -276,9 +417,10 @@ const ModernVocabularyComponent = ({
               />
 
               {markers.map((marker, i) => (
-                <div
+                <button
+                  type="button"
                   key={marker.id}
-                  className={`absolute cursor-pointer transition-all duration-500 ${
+                  className={`absolute cursor-pointer rounded-full border-0 bg-transparent p-0 transition-all duration-500 focus-visible:outline-4 focus-visible:outline-blue-600 focus-visible:outline-offset-4 ${
                     activeIndex2 === i || clickedIndex === i
                       ? "scale-150 z-10 brightness-110"
                       : "hover:scale-110"
@@ -290,6 +432,7 @@ const ModernVocabularyComponent = ({
                     // height: "30px",
                   }}
                   onClick={() => playWordAudio(i)}
+                  aria-label={`${vocabulary[i] || `Vocabulary item ${i + 1}`}. Press Enter or Space to play its audio.`}
                 >
                   <img
                     src={nums[i]}
@@ -301,7 +444,7 @@ const ModernVocabularyComponent = ({
                   {(activeIndex2 === i || clickedIndex === i) && (
                     <span className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-40 -z-10"></span>
                   )}
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -315,7 +458,9 @@ const ModernVocabularyComponent = ({
         </div>
 
         {/* ================= SIDEBAR ================= */}
-        <div className={`w-full lg:w-80 bg-white p-6 lg:border-l border-slate-100 flex flex-col justify-center h-[${hight}vh]`}>
+        <div
+          className={`w-full lg:w-80 bg-white p-6 lg:border-l border-slate-100 flex flex-col justify-center h-[${hight}vh]`}
+        >
           <h2 className="text-2xl font-black mb-6">VOCABULARY</h2>
 
           <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
@@ -323,7 +468,7 @@ const ModernVocabularyComponent = ({
               <button
                 key={i}
                 onClick={() => playWordAudio(i)}
-                className={`flex items-center p-2 rounded-2xl transition ${
+                className={`flex items-center p-2 rounded-2xl transition focus-visible:outline-4 focus-visible:outline-blue-600 focus-visible:outline-offset-4 ${
                   activeIndex2 === i || clickedIndex === i
                     ? "bg-blue-600 text-white"
                     : "bg-slate-50"

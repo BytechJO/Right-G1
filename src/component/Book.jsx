@@ -544,7 +544,16 @@ export default function Book() {
             height="30"
             viewBox="0 0 90 90"
             onClick={prevPage}
-            className="nav-btn absolute left-10 w-14 h-14 rounded-full flex items-center justify-center z-[9999]  transition"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                prevPage();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label="Previous page"
+            className="nav-btn absolute left-10 w-14 h-14 rounded-full flex items-center justify-center z-[9999] transition"
           >
             <image href={back} x="0" y="0" width="90" height="90" />
           </svg>
@@ -556,12 +565,20 @@ export default function Book() {
             height="30"
             viewBox="0 0 90 90"
             onClick={nextPage}
-            className="nav-btn absolute right-10 w-14 h-14 rounded-full  flex items-center justify-center z-[99999999] transition"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                nextPage();
+              }
+            }}
+            tabIndex={0}
+            role="button"
+            aria-label="Next page"
+            className="nav-btn absolute right-10 w-14 h-14 rounded-full flex items-center justify-center z-[99999999] transition"
           >
             <image href={next} x="0" y="0" width="90" height="90" />
           </svg>
         )}
-
         {/* POSTERS ALWAYS SINGLE PAGE */}
         {isMobile ||
         activeTab === "poster" ||

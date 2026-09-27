@@ -4,73 +4,121 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 import MySVG from "../../../assets/unit1/imgs/U1P4 highlight 1.svg";
 
+const targetArea = {
+  left: 24,
+  top: 8.5,
+  width: 35,
+  height: 34.5,
+};
+
 const Page4_Interactive1 = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
   const [checkResult, setCheckResult] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  // ✅ منطقة المطعم (بالنسب المئوية)
-  const targetArea = {
-    x1: 24,
-    y1: 8.5,
-    x2: 100,
-    y2: 34.5,
+  const [selectionMethod, setSelectionMethod] = useState(null);
+  const [announcement, setAnnouncement] = useState("");
+
+  const playSelectionTone = () => {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const audioContext = new AudioContextClass();
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(560, audioContext.currentTime);
+    gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioContext.currentTime + 0.14,
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.14);
+    oscillator.addEventListener("ended", () => audioContext.close());
+  };
+
+  const selectPoint = (point, message, method) => {
+    setClickedPoint(point);
+    setCheckResult(null);
+    setSelectionMethod(method);
+    setAnnouncement(message);
+    playSelectionTone();
   };
 
   const handleImageClick = (e) => {
+    if (showAnswer) return;
+
     const rect = e.currentTarget.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    console.log(xPercent, yPercent);
+    selectPoint(
+      {
+        x,
+        y,
+        inside:
+          x >= targetArea.left &&
+          x <= targetArea.left + targetArea.width &&
+          y >= targetArea.top &&
+          y <= targetArea.top + targetArea.height,
+      },
+      "A point in the scene was selected. Use Check Answer to check it.",
+      "pointer",
+    );
+  };
 
-    setClickedPoint({
-      x: xPercent,
-      y: yPercent,
-      inside:
-        xPercent >= targetArea.x1 &&
-        xPercent <= targetArea.x2 &&
-        yPercent >= targetArea.y1 &&
-        yPercent <= targetArea.y2,
-    });
+  const handleTargetSelection = (e) => {
+    if (showAnswer) return;
+
+    const method = e.detail === 0 ? "keyboard" : "pointer";
+    const containerRect = e.currentTarget.parentElement.getBoundingClientRect();
+
+    const point =
+      method === "pointer"
+        ? {
+            x: ((e.clientX - containerRect.left) / containerRect.width) * 100,
+            y: ((e.clientY - containerRect.top) / containerRect.height) * 100,
+            inside: true,
+          }
+        : {
+            x: targetArea.left + targetArea.width / 2,
+            y: targetArea.top + targetArea.height / 2,
+            inside: true,
+          };
+
+    selectPoint(
+      point,
+      "Restaurant selected. Use Check Answer to check your answer.",
+      method,
+    );
   };
 
   const handleCheck = () => {
     if (showAnswer) return;
-    // 1️⃣ إذا الطالب ما ضغط على الصورة
+
     if (!clickedPoint) {
       ValidationAlert.info(
         "Pay Attention!",
-        "Please click on a spot in the image before checking.",
+        "Please select a spot in the image before checking.",
       );
+      setAnnouncement("Please select a spot in the image before checking.");
       return;
     }
 
-    // 2️⃣ نحدد إنو الصواب / خطأ
-    const correct = clickedPoint.inside;
-    const total = 1;
-    const score = correct ? 1 : 0;
-
-    // 3️⃣ نحدد اللون حسب الإجابة
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
-
-    // 4️⃣ نكتب رسالة العلامة
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
- Score: ${score} / ${total}
-      </span>
-    </div>
-  `;
-
-    // 5️⃣ نحدد نوع الإشعار حسب النتيجة
-    if (score === total) {
+    if (clickedPoint.inside) {
       setCheckResult("success");
-      ValidationAlert.success("Bravo!", "You clicked on the restaurant! 🏆");
-    } else if (score === 0) {
-      setCheckResult("fail");
-      ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
+      setAnnouncement("Correct. You found the restaurant.");
+      ValidationAlert.success("Bravo!", "You found the restaurant! 🏆");
     } else {
-      ValidationAlert.warning(scoreMessage);
+      setCheckResult("fail");
+      setAnnouncement("That is not the restaurant. Try again.");
+      ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
     }
   };
 
@@ -78,12 +126,23 @@ const Page4_Interactive1 = () => {
     setClickedPoint(null);
     setCheckResult(null);
     setShowAnswer(false);
+    setSelectionMethod(null);
+    setAnnouncement("Activity reset. Find the restaurant in the scene.");
   };
+
   const handleShowAnswer = () => {
     setShowAnswer(true);
-    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
-    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
+    setClickedPoint(null);
+    setCheckResult(null);
+    setSelectionMethod(null);
+    setAnnouncement("The correct restaurant is highlighted.");
   };
+
+  const targetSelected = clickedPoint?.inside === true;
+  const keyboardTargetSelected =
+    targetSelected && selectionMethod === "keyboard";
+  const showTargetHighlight =
+    keyboardTargetSelected || checkResult === "success" || showAnswer;
 
   return (
     <div>
@@ -92,7 +151,7 @@ const Page4_Interactive1 = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
-          gap:"50px",
+          gap: "50px",
           alignItems: "center",
         }}
       >
@@ -101,66 +160,130 @@ const Page4_Interactive1 = () => {
         >
           <img
             src={Rabbit}
-            style={{ height: "50px",  width: "auto" }}
-          />{" "}
-          <h5 className="header-title-page8">
-            I need your help. Can you help me find the restaurant by tapping or
-            clicking on it?
+            alt="A rabbit asking for help"
+            style={{ height: "50px", width: "auto" }}
+          />
+          <h5 className="header-title-page8" id="page4-instructions">
+            I need your help. Can you help me find the restaurant in the
+            picture?
           </h5>
         </div>
-        <div style={{ position: "relative" }}>
+
+        <p className="sr-only">
+          Scan the whole picture, then find the restaurant. Use Tab to reach
+          the restaurant target and press Enter or Space to select it.
+        </p>
+
+        <div
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {announcement}
+        </div>
+
+        <div style={{ position: "relative", display: "inline-block" }}>
           <img
             src={backgroundImage}
-            alt="interactive"
+            alt="A schoolyard scene with children near a restaurant, a clothing shop, trees, and a parked car."
             onClick={handleImageClick}
+            draggable="false"
             style={{
               width: "auto",
               height: "70vh",
-              cursor: "pointer",
+              cursor: showAnswer ? "default" : "crosshair",
               borderRadius: "8px",
               display: "block",
             }}
           />
 
-          {/* ✅ الدائرة الحمراء في مكان الكبس */}
-          {clickedPoint && (
+          <button
+            type="button"
+            className="focus-visible:outline-4 focus-visible:outline-blue-600 focus-visible:outline-offset-4"
+            aria-label="Select the restaurant"
+            aria-describedby="page4-instructions"
+            aria-pressed={targetSelected}
+            disabled={showAnswer}
+            onClick={handleTargetSelection}
+            style={{
+              position: "absolute",
+              left: `${targetArea.left}%`,
+              top: `${targetArea.top}%`,
+              width: `${targetArea.width}%`,
+              height: `${targetArea.height}%`,
+              zIndex: 2,
+              padding: 0,
+              border: keyboardTargetSelected
+                ? "4px solid #16a34a"
+                : "4px solid transparent",
+              borderRadius: "12px",
+              background: keyboardTargetSelected
+                ? "rgba(34, 197, 94, 0.2)"
+                : "transparent",
+              boxShadow: "none",
+              cursor: showAnswer ? "default" : "crosshair",
+            }}
+          />
+
+          {clickedPoint && selectionMethod === "pointer" && (
             <div
+              aria-hidden="true"
               style={{
                 position: "absolute",
                 top: `${clickedPoint.y}%`,
                 left: `${clickedPoint.x}%`,
                 width: "3%",
-                height: "3%",
+                aspectRatio: "1",
                 backgroundColor: "red",
+                border: "3px solid white",
                 borderRadius: "50%",
                 transform: "translate(-50%, -50%)",
                 pointerEvents: "none",
+                zIndex: 4,
               }}
-            ></div>
+            />
           )}
-          {(checkResult === "success" || showAnswer) && (
+
+          {showTargetHighlight && (
             <img
               src={MySVG}
-              alt="answer highlight"
+              alt=""
+              aria-hidden="true"
               style={{
                 position: "absolute",
-                top: `${targetArea.y1}%`,
-                left: `${targetArea.x1}%`,
-                height: `${targetArea.y2}%`,
+                top: `${targetArea.top}%`,
+                left: `${targetArea.left}%`,
+                width: `${targetArea.width}%`,
+                height: `${targetArea.height}%`,
                 pointerEvents: "none",
+                zIndex: 3,
               }}
             />
           )}
         </div>
       </div>
-      <div className="action-buttons-container ">
-        <button className="try-again-button" onClick={handleStartAgain}>
+
+      <div className="action-buttons-container">
+        <button
+          type="button"
+          className="try-again-button"
+          onClick={handleStartAgain}
+        >
           Start Again ↻
         </button>
-        <button className="show-answer-btn" onClick={handleShowAnswer}>
+        <button
+          type="button"
+          className="show-answer-btn"
+          onClick={handleShowAnswer}
+        >
           Show Answer
         </button>
-        <button className="check-button2" onClick={handleCheck}>
+        <button
+          type="button"
+          className="check-button2"
+          onClick={handleCheck}
+        >
           Check Answer ✓
         </button>
       </div>

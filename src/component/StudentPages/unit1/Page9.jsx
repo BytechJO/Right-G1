@@ -27,41 +27,7 @@ const Page9 = ({ openPopup }) => {
       style={{ backgroundImage: `url(${page_9})` }}
     >
       {/* <img src={page_9} /> */}
-      <div
-        className="headset-icon-CD-page9 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "audio",
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignContent: "center",
-                }}
-              >
-                <AudioWithCaption src={song} captions={captionsExample} />
-              </div>
-            )
-          }
-          // className="headset-icon-CD-page9 hover:scale-110 transition"
-          style={{ overflow: "visible" }}
-        >
-          <image className="svg-img"
-            href={audioBtn}
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid meet"
-          />
-        </svg>
-      </div>
+    
       <div
         className="click-icon-page9-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -70,10 +36,23 @@ const Page9 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 1"
           onClick={() => openPopup("exercise", { startIndex: 4 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup("exercise", {
+                startIndex: 4,
+              });
+            }
+          }}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
             x="0"
             y="0"
@@ -91,11 +70,84 @@ const Page9 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 2"
           onClick={() => openPopup("exercise", { startIndex: 5 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup("exercise", {
+                startIndex: 5,
+              });
+            }
+          }}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={arrowBtn}
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </svg>
+      </div>
+        <div
+        className="headset-icon-CD-page9 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open song audio"
+          onClick={() =>
+            openPopup(
+              "audio",
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <AudioWithCaption
+                  src={song}
+                  captions={captionsExample}
+                  pageId="unit1-page9-q3"
+                />
+              </div>,
+            )
+          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption src={song} captions={captionsExample} />
+                </div>,
+              );
+            }
+          }}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={audioBtn}
             x="0"
             y="0"
             width="100%"

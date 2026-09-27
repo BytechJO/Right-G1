@@ -169,8 +169,10 @@
   margin-left: 8px;
   vertical-align: middle;
   position: absolute;
-  right: -3%;
-  top: 12%;
+  left: 87%;
+  top: -24%;
+  opacity: 1;
+  z-index: 99;
 }
 
 .div-all {
@@ -185,4 +187,203 @@
 .word-outline,
 .word-colored {
   font-family: "Fredoka", sans-serif;
+}
+/* ======================================
+   ACCESSIBILITY ONLY
+   لا تغير layout ولا مقاسات العناصر
+====================================== */
+
+/* للنصوص اللي لازم يسمعها Screen Reader فقط */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* 
+  الأزرق:
+  هذا العنصر اللي المستخدم واقف عليه بالـ Tab
+*/
+.H5:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/*
+  البنفسجي:
+  الكلمة اليسار اللي المستخدم اختارها.
+
+  مهم:
+  بتضل موجودة حتى بعد ما يعمل Tab
+  ويروح للطرف الثاني.
+*/
+.H5.keyboard-selected {
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.8);
+}
+
+/*
+  الأخضر الخفيف:
+  صوت هاي الكلمة شغال الآن.
+
+  استعملنا background فقط عشان ما نغير
+  حجم الكلمة أو مكانها.
+*/
+.H5.audio-playing {
+  background-color: rgba(22, 163, 74, 0.13);
+} /* =========================================
+   ACCESSIBILITY
+========================================= */
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* العنصر اللي عليه Tab */
+.H5:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* الكلمة المختارة للمطابقة */
+.H5.keyboard-selected {
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.8);
+}
+
+/* الصوت شغال */
+.H5.audio-playing {
+  background-color: rgba(22, 163, 74, 0.13);
+}
+
+/* =========================================
+   DRAWING TOOLBAR
+========================================= */
+
+.drawing-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  width: fit-content;
+
+  padding: 8px 10px;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  background: white;
+}
+
+.drawing-tool {
+  border: 1px solid #bbb;
+
+  border-radius: 7px;
+
+  padding: 6px 10px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.drawing-tool:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+.drawing-tool:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.drawing-tool-active {
+  border: 2px solid #2563eb;
+
+  background: #eef5ff;
+}
+
+/* =========================================
+   COLORS
+========================================= */
+
+.drawing-colors {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-left: 4px;
+}
+
+.drawing-color {
+  width: 25px;
+  height: 25px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  border: 2px solid white;
+
+  box-shadow: 0 0 0 1px #777;
+
+  cursor: pointer;
+}
+
+.drawing-color:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.drawing-color-selected {
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px #2563eb;
+}
+
+/* =========================================
+   CANVAS
+
+   فوق السؤال، لكن ما بمسك clicks
+   إلا لما Pen أو Eraser يكون فعال.
+========================================= */
+
+.drawing-canvas {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 50;
+
+  touch-action: none;
+
+  pointer-events: none;
+}
+
+.drawing-canvas-active {
+  pointer-events: auto;
 }

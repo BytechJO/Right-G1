@@ -1,15 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { TbMessageCircle } from "react-icons/tb";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 
 export default function QuestionAudioPlayer({
   src,
+  pageId,
   captions = [],
   stopAtSecond = null,
+  forceStop,
 }) {
   const clickAudioRef = useRef(null);
   const audioRef = useRef(null);
+  const audioFinishedRef = useRef(false);
+  const resumedFromStorageRef = useRef(false);
+  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
 
   const [paused, setPaused] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -31,44 +36,134 @@ export default function QuestionAudioPlayer({
     );
     setActiveIndex(index);
   };
+  useEffect(() => {
+    if (!forceStop) return;
 
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.pause();
+
+      setPaused(true);
+      setIsPlaying(false);
+    }
+  }, [forceStop]);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.currentTime = 0;
-    audio.play();
+    audioFinishedRef.current = false;
+
+    const savedTime = Number(localStorage.getItem(AUDIO_TIME_KEY) || 0);
+
+    audio.pause();
+    audio.src = src;
+
+    const handleLoadedMetadata = () => {
+      // ================================
+      // إذا في وقت محفوظ
+      // ارجع له بدون تشغيل تلقائي
+      // ================================
+      if (savedTime > 0 && savedTime < audio.duration) {
+        resumedFromStorageRef.current = true;
+
+        audio.currentTime = savedTime;
+
+        setCurrent(savedTime);
+        updateCaption(savedTime);
+
+        setPaused(true);
+        setIsPlaying(false);
+
+        return;
+      }
+
+      // ================================
+      // أول مرة
+      // يبدأ من الصفر ويشتغل تلقائي
+      // ================================
+      resumedFromStorageRef.current = false;
+
+      audio.currentTime = 0;
+
+      setCurrent(0);
+      setPaused(false);
+      setIsPlaying(true);
+
+      audio.play().catch((err) => {
+        console.log("Autoplay blocked:", err);
+        setPaused(true);
+        setIsPlaying(false);
+      });
+    };
 
     let interval;
 
-    if (stopAtSecond) {
+    if (stopAtSecond !== null) {
       interval = setInterval(() => {
-        if (audio.currentTime >= stopAtSecond) {
+        // مهم:
+        // الوقفة التلقائية فقط لو بدأ من الصفر
+        if (
+          !resumedFromStorageRef.current &&
+          !audio.paused &&
+          audio.currentTime >= stopAtSecond
+        ) {
           audio.pause();
+
+          localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+
           setPaused(true);
           setIsPlaying(false);
           setShowContinue(true);
+
           clearInterval(interval);
         }
       }, 100);
     }
 
     const handleEnded = () => {
+      // الصوت خلص كامل
+      audioFinishedRef.current = true;
+
+      // امسح الحفظ
+      localStorage.removeItem(AUDIO_TIME_KEY);
+
       audio.currentTime = 0;
+
+      setCurrent(0);
       setIsPlaying(false);
       setPaused(false);
       setActiveIndex(null);
       setShowContinue(true);
     };
 
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+
     audio.addEventListener("ended", handleEnded);
 
     return () => {
-      if (interval) clearInterval(interval);
+      // إذا تسكر الـ popup قبل النهاية
+      // احفظ مكان الصوت
+      if (
+        !audioFinishedRef.current &&
+        audio.currentTime > 0 &&
+        audio.duration &&
+        audio.currentTime < audio.duration
+      ) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
+      audio.pause();
+
+      if (interval) {
+        clearInterval(interval);
+      }
+
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+
       audio.removeEventListener("ended", handleEnded);
     };
-  }, []);
-
+  }, [src, AUDIO_TIME_KEY, stopAtSecond]);
   useEffect(() => {
     const timer = setInterval(() => {
       setForceRender((prev) => prev + 1);
@@ -98,7 +193,27 @@ export default function QuestionAudioPlayer({
       setIsPlaying(false);
     }
   };
+  const handleRestart = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
+    audio.pause();
+    audio.currentTime = 0;
+
+    resumedFromStorageRef.current = false;
+    audioFinishedRef.current = false;
+
+    localStorage.removeItem(AUDIO_TIME_KEY);
+
+    setCurrent(0);
+    setActiveIndex(null);
+    setPaused(false);
+    setShowContinue(false);
+
+    audio.play();
+
+    setIsPlaying(true);
+  };
   return (
     <div
       style={{
@@ -120,8 +235,13 @@ export default function QuestionAudioPlayer({
             src={src}
             onTimeUpdate={(e) => {
               const time = e.target.currentTime;
+
               setCurrent(time);
               updateCaption(time);
+
+              if (!audioFinishedRef.current) {
+                localStorage.setItem(AUDIO_TIME_KEY, String(time));
+              }
             }}
             onLoadedMetadata={(e) => setDuration(e.target.duration)}
           ></audio>
@@ -132,22 +252,36 @@ export default function QuestionAudioPlayer({
               {new Date(current * 1000).toISOString().substring(14, 19)}
             </span>
 
-            <input
-              type="range"
-              className="audio-slider"
-              min="0"
-              max={duration}
-              value={current}
-              onChange={(e) => {
-                audioRef.current.currentTime = e.target.value;
-                updateCaption(Number(e.target.value));
-              }}
-              style={{
-                background: `linear-gradient(to right, #430f68 ${
-                  (current / duration) * 100
-                }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-              }}
-            />
+             <input
+            type="range"
+            className="audio-slider"
+            min="0"
+            max={duration}
+            value={current}
+            onChange={(e) => {
+              audioRef.current.currentTime = e.target.value;
+              updateCaption(Number(e.target.value));
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.outline = "3px solid #2563eb";
+              e.currentTarget.style.outlineOffset = "4px";
+              e.currentTarget.style.borderRadius = "8px";
+              e.currentTarget.style.boxShadow =
+                "0 0 0 4px rgba(37, 99, 235, 0.15)";
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.outline = "none";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+            aria-label="Audio progress"
+            title="Audio progress"
+            style={{
+              background: `linear-gradient(to right, #430f68 ${
+                (current / duration) * 100
+              }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+            }}
+          />
+
 
             <span className="audio-time">
               {new Date(duration * 1000).toISOString().substring(14, 19)}
@@ -160,11 +294,24 @@ export default function QuestionAudioPlayer({
               className={`round-btn ${showCaption ? "active" : ""}`}
               style={{ position: "relative" }}
               onClick={() => setShowCaption(!showCaption)}
+              role="button"
+              tabIndex={0}
+              title={showCaption ? "Hide captions" : "Show captions"}
+              aria-label={showCaption ? "Hide captions" : "Show captions"}
+              aria-expanded={showCaption}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setShowCaption((prev) => !prev);
+                }
+              }}
             >
               <TbMessageCircle size={36} />
+
               <div
                 className={`caption-inPopup ${showCaption ? "show" : ""}`}
                 style={{ top: "100%", left: "10%" }}
+                aria-hidden={!showCaption}
               >
                 {captions.map((cap, i) => (
                   <p
@@ -181,15 +328,34 @@ export default function QuestionAudioPlayer({
             </div>
 
             {/* Play */}
-            <button className="play-btn2" onClick={togglePlay}>
-              {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
-            </button>
+            <div className="main-audio-controls">
+              {/* Play / Pause */}
+              <button
+                className="main-audio-btn"
+                onClick={togglePlay}
+                title={isPlaying ? "Pause audio" : "Play audio"}
+                aria-label={isPlaying ? "Pause audio" : "Play audio"}
+              >
+                {isPlaying ? <FaPause size={20} /> : <FaPlay size={20} />}
+              </button>
 
+              {/* Restart */}
+              <button
+                className="main-audio-btn"
+                onClick={handleRestart}
+                aria-label="Restart audio"
+                title="Restart audio"
+              >
+                <FaRedo size={22} />
+              </button>
+            </div>
             {/* Settings */}
             <div className="settings-wrapper" ref={settingsRef}>
               <button
                 className={`round-btn ${showSettings ? "active" : ""}`}
                 onClick={() => setShowSettings(!showSettings)}
+                title="Audio settings"
+                aria-label="Audio settings"
               >
                 <IoMdSettings size={36} />
               </button>

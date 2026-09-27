@@ -62,6 +62,7 @@
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .small-box2.active {
@@ -81,6 +82,7 @@
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .small-box1.active {
@@ -91,6 +93,30 @@
 .small-img1 {
   width: 450px;
   height: auto;
+}
+
+.small-box1:focus-visible,
+.small-box2:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 14px;
+}
+
+.audio-slider:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 999px;
+}
+
+.caption-toggle-btn {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.caption-toggle-btn:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 5px;
 }
 
 /* مكان الأوديو */

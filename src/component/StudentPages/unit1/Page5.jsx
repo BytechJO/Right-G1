@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useContext } from "react";
 import page_5 from "../../../assets/unit1/imgs/Pages/Right 1 Unit 01 Good Morning World 2_page-0005.jpg";
 import page5_CD2 from "../../../assets/unit1/sounds/P5 meet my cat.mp3";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
@@ -23,15 +23,9 @@ import Pg5_1_2_Lolo from "../../../assets/unit1/sounds/Pg5_1.2_Lolo.mp3";
 import Pg5_1_1_Bebo from "../../../assets/unit1/sounds/Pg5_1.1_Bebo.mp3";
 import sound2 from "../../../assets/unit1/sounds/pg4-vocabulary-2-how are you.mp3";
 import sound3 from "../../../assets/unit1/sounds/pg4-vocabulary-3-fine thank you.mp3";
-import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 const Page5 = ({ openPopup }) => {
-    const { audioRef, activeId, setActiveId } = useContext(AudioContext);
-
-
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const captionsExample = [
     { start: 0, end: 3.09, text: "Page 5. Meet my cat." },
     { start: 3.13, end: 5.02, text: "Hello. How are you? " },
@@ -84,6 +78,10 @@ const Page5 = ({ openPopup }) => {
     1: sound2,
     2: sound3,
   };
+  const soundLabels = {
+    1: "How are you?",
+    2: "Fine, thank you.",
+  };
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
@@ -120,7 +118,7 @@ const Page5 = ({ openPopup }) => {
       /> */}
 
       {areas.map((area, index) => {
-               const isActive = activeId === `p5-${area.sound}`;
+        const isActive = activeId === `p5-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -129,14 +127,26 @@ const Page5 = ({ openPopup }) => {
           return (
             <div
               key={index}
-                 className={`circle-area ${isActive ? "active" : ""}`}
+              className={`circle-area page5-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
               style={{
                 left: `${area.x1}%`,
                 top: `${area.y1}%`,
               }}
               onClick={() => {
                 playSound(sounds[area.sound], `p5-${area.sound}`);
-                }}
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  playSound(sounds[area.sound], `p5-${area.sound}`);
+                }
+              }}
             ></div>
           );
         }
@@ -149,6 +159,7 @@ const Page5 = ({ openPopup }) => {
           <div
             key={index}
             className="clickable-area"
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: `${area.x1}%`,
@@ -157,8 +168,8 @@ const Page5 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-             playSound(sounds[area.sound], `p5-${area.sound}`);
-                }}
+              playSound(sounds[area.sound], `p5-${area.sound}`);
+            }}
           ></div>
         );
       })}
@@ -172,15 +183,37 @@ const Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Meet my cat audio"
           onClick={() =>
             openPopup(
               "audio",
-              <AudioWithCaption src={page5_CD2} captions={captionsExample} />
+              <AudioWithCaption
+                src={page5_CD2}
+                captions={captionsExample}
+                pageId="unit1-page5-main-audio"
+              />,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <AudioWithCaption
+                  src={page5_CD2}
+                  captions={captionsExample}
+                  pageId="unit1-page5-main-audio"
+                />,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img"
+          <image
+            className="svg-img"
             href={audioBtn}
             x="0"
             y="0"
@@ -200,6 +233,9 @@ const Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open listen read and repeat activity"
           onClick={() =>
             openPopup(
               "html",
@@ -208,15 +244,42 @@ const Page5 = ({ openPopup }) => {
                 audioSrc={longsound2}
                 checkpoints={[0, 4, 5.9]}
                 popupOpen={true}
-                titleQ={`Listen, read, and repeat.`}
+                titleQ="Listen, read, and repeat."
                 audioArr={imageSounds2}
+                pageId="unit1-page5-1"
                 captions={captions}
-              />
+              />,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[read, repeat1, repeat2]}
+                  audioSrc={longsound2}
+                  checkpoints={[0, 4, 5.9]}
+                  popupOpen={true}
+                  titleQ="Listen, read, and repeat."
+                  audioArr={imageSounds2}
+                  pageId="unit1-page5-1"
+                  captions={captions}
+                />,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -227,23 +290,53 @@ const Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open listen and read along activity"
           onClick={() =>
             openPopup(
               "html",
               <FourImagesWithAudio
                 images={[Rabbit, img1, img2, img3, img4]}
                 audioSrc={longsound}
-                checkpoints={[0, 3.4, 4, 4.9, 6]}
+                checkpoints={[0, 3.6, 4.6, 5.8, 6.9]}
                 popupOpen={true}
-                titleQ={"Listen and read along."}
+                titleQ="Listen and read along."
                 audioArr={imageSounds}
+                pageId="unit1-page5-2"
                 captions={captions2}
-              />
+              />,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[Rabbit, img1, img2, img3, img4]}
+                  audioSrc={longsound}
+                  checkpoints={[0, 3.6, 4.6, 5.8, 6.9]}
+                  popupOpen={true}
+                  titleQ="Listen and read along."
+                  audioArr={imageSounds}
+                  pageId="unit1-page5-2"
+                  captions={captions2}
+                />,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
     </div>

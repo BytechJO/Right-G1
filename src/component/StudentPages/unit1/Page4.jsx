@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useContext } from "react";
 import page4 from "../../../assets/unit1/imgs/Pages/Right 1 Unit 01 Good Morning World 2_page-0004.jpg";
 import allUnitSound from "../../../assets/unit1/sounds/U1 P4-5.mp3";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
@@ -20,7 +20,6 @@ import longAudio from "../../../assets/unit1/sounds/pg4-instruction1-adult-lady_
 import sound1 from "../../../assets/unit1/sounds/pg4-vocabulary-1-goodbye.mp3";
 import sound4 from "../../../assets/unit1/sounds/pg4-vocabulary-4-hello..mp3";
 import sound5 from "../../../assets/unit1/sounds/pg4-vocabulary-5-good morning.mp3";
-import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 const Page4 = ({ openPopup }) => {
   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
@@ -79,6 +78,11 @@ const Page4 = ({ openPopup }) => {
     2: sound4,
     3: sound5,
   };
+  const soundLabels = {
+    1: "Goodbye",
+    2: "Hello",
+    3: "Good morning",
+  };
   const captions = [
     { start: 0, end: 3.0, text: "Page 4. Listen and read along." },
     { start: 3.02, end: 6.1, text: " D. Dear. Dish. Duck. " },
@@ -130,13 +134,25 @@ const Page4 = ({ openPopup }) => {
             return (
               <div
                 key={index}
-                className={`circle-area ${isActive ? "active" : ""}`}
+                className={`circle-area page4-audio-hotspot ${
+                  isActive ? "active" : ""
+                }`}
+                role="button"
+                tabIndex={0}
+                aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+                aria-pressed={isActive}
                 style={{
                   left: `${area.x1}%`,
                   top: `${area.y1}%`,
                 }}
                 onClick={() => {
                   playSound(sounds[area.sound], `p4-${area.sound}`);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    playSound(sounds[area.sound], `p4-${area.sound}`);
+                  }
                 }}
               ></div>
             );
@@ -150,6 +166,7 @@ const Page4 = ({ openPopup }) => {
             <div
               key={index}
               className="clickable-area"
+              aria-hidden="true"
               style={{
                 position: "absolute",
                 left: `${area.x1}%`,
@@ -172,6 +189,9 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
+            tabIndex={0}
+            role="button"
+            aria-label="Open page audio"
             onClick={() =>
               openPopup(
                 "audio",
@@ -185,10 +205,33 @@ const Page4 = ({ openPopup }) => {
                   <AudioWithCaption
                     src={allUnitSound}
                     captions={captionsExample}
+                    pageId="unit1-page4-main-audio"
                   />
                 </div>,
               )
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+
+                openPopup(
+                  "audio",
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <AudioWithCaption
+                      src={allUnitSound}
+                      captions={captionsExample}
+                      pageId="unit1-page4-main-audio"
+                    />
+                  </div>,
+                );
+              }
+            }}
             style={{ overflow: "visible" }}
           >
             <image
@@ -211,7 +254,17 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
+            tabIndex={0}
+            role="button"
+            aria-label="Open interactive activity"
             onClick={() => openPopup("html", <Page4_Interactive1 />)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+
+                openPopup("html", <Page4_Interactive1 />);
+              }
+            }}
             style={{ overflow: "visible" }}
           >
             <image
@@ -234,7 +287,17 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
+            tabIndex={0}
+            role="button"
+            aria-label="Open vocabulary activity"
             onClick={() => openPopup("html", <Page4_vocabulary />)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+
+                openPopup("html", <Page4_vocabulary />);
+              }
+            }}
             style={{ overflow: "visible" }}
           >
             <image
@@ -256,20 +319,43 @@ const Page4 = ({ openPopup }) => {
             width="22"
             height="22"
             viewBox="0 0 90 90"
+            tabIndex={0}
+            role="button"
+            aria-label="Open listen and read activity"
             onClick={() =>
               openPopup(
                 "html",
                 <FourImagesWithAudio
                   images={[Rabbit, img1, img2, img3, img4]}
                   audioSrc={longAudio}
-                  checkpoints={[0, 2.9, 3.4, 4.2, 5.1]}
+                  checkpoints={[0, 3, 3.8, 4.8, 5.7]}
                   popupOpen={true}
                   titleQ={"Listen and read along."}
                   audioArr={imageSounds}
                   captions={captions}
+                  pageId="unit1-page4"
                 />,
               )
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+
+                openPopup(
+                  "html",
+                  <FourImagesWithAudio
+                    images={[Rabbit, img1, img2, img3, img4]}
+                    audioSrc={longAudio}
+                    checkpoints={[0, 3, 3.8, 4.8, 5.7]}
+                    popupOpen={true}
+                    titleQ={"Listen and read along."}
+                    audioArr={imageSounds}
+                    captions={captions}
+                    pageId="unit1-page4"
+                  />,
+                );
+              }
+            }}
             style={{ overflow: "visible" }}
           >
             <image

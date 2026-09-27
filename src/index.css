@@ -258,6 +258,14 @@ img {
   border: 2px solid rgba(255, 0, 0, 0.8); /* 👌 تظهر فقط عند التفعيل */
   transform: scale(1.05);
 }
+
+.page4-audio-hotspot:focus-visible,
+.page5-audio-hotspot:focus-visible {
+  opacity: 1;
+  outline: 4px solid #2563eb;
+  outline-offset: 4px;
+  background-color: rgba(37, 99, 235, 0.2);
+}
 .headset-icon-CD-page4-2 {
   position: absolute;
   top: 60.5%;
@@ -1090,4 +1098,13 @@ img {
     white-space: normal; /* ينزل سطر */
     line-height: 1.4;
   }
+}
+svg[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 50%;
+}button[aria-label^="Go to"]:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 50%;
 }
