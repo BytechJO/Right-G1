@@ -7,102 +7,216 @@
   justify-content: center;
   margin-bottom: 20px;
 }
-.word-wb-u1-p2-q1 {
-  border: 2px solid black;
-  border-radius: 8px;
-  padding: 5px;
+
+/* =====================================================
+   WORD BANK
+===================================================== */
+
+.word-bank-accessible-wb-u1-p4-q1 {
+  display: flex;
+  gap: 10px;
+
+  padding: 10px;
+
+  width: 100%;
+
+  border: 2px dashed #ccc;
+
+  border-radius: 10px;
+
+  margin: 10px 0 25px;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
 }
 
-.word-bank-wb-u1-q4 {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  font-size: 20px;
-  margin: 20px;
-}
+/* =====================================================
+   QUESTIONS
+===================================================== */
+
 .question-container-wb-u1-p4-q1 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-      gap: 20px;
-}
-.matching-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 20px 0px;
-  position: relative;
-}
 
-/* الكلمة + النقطة */
-.word-with-dot {
-  display: flex;
-  align-items: center;
-  /* width: 32%; */
-  gap: 10px;
-}
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
 
-.matching-wrapper {
+  gap: 20px;
+
   width: 100%;
+}
+
+.question-row-wb-u1-q4 {
+  width: 100%;
+
+  min-width: 0;
+}
+
+.img-box-wb-u1-q4 {
   display: flex;
-  justify-content: center;
+
+  align-items: center;
+
+  gap: 12px;
+
+  width: 100%;
+
+  min-width: 0;
 }
 
+.question-number-wb-u1-p4-q1 {
+  color: darkblue;
 
-.img-wb-unit1-p4-q1{
+  font-weight: 700;
+
+  font-size: 20px;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.img-wb-unit1-p4-q1 {
   height: 150px;
+
   width: auto;
+
+  flex-shrink: 0;
 }
 
+/* =====================================================
+   DROP SLOT WRAPPER
+===================================================== */
+
+.slot-wrapper-wb-u1-p4-q1 {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  flex: 1;
+
+  min-width: 0;
+}
+
+/* =====================================================
+   ANSWER LINE
+===================================================== */
+
+.missing-input-wb-unit1-p3-q1 {
+  flex: 1;
+
+  min-width: 220px;
+
+  width: auto;
+
+  height: 40px;
+
+  margin: 0;
+
+  border: none;
+
+  border-bottom: 2px solid black;
+
+  font-size: 20px;
+
+  font-weight: 600;
+
+  text-align: left;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.missing-input-wb-unit1-p3-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   WRONG ICON
+===================================================== */
+
+.wrong-icon-wb-u1-p4-q1 {
+  position: absolute;
+
+  top: 30%;
+
+  right: -6%;
+
+  width: 25px;
+
+  height: 25px;
+
+  background-color: red;
+
+  border-radius: 50%;
+
+  border: 2px solid white;
+
+  color: white;
+
+  font-weight: bold;
+
+  font-size: 14px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media (max-width: 1180px) {
-.img-box-wb-u1-q4{
-  flex-direction: column;
-}
-.word-bank-wb-u1-q4 {
+  .question-container-wb-u1-p4-q1 {
+    gap: 15px;
+  }
 
-    font-size: 18px;
-    margin: 0px;
-}
-.img-wb-unit1-p4-q1{
-  height: 100px;
-  width: auto;
-}
-}
+  .img-box-wb-u1-q4 {
+    flex-direction: column;
 
-.word-bank-wb-u1-p4-q1{
-    display: flex;
-    gap: 5px;
-    /* margin: 15px 0 25px; */
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    justify-content: center;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
+  }
+
+  .img-wb-unit1-p4-q1 {
+    height: 100px;
+
+    width: auto;
+
+    object-fit: contain;
+  }
+
+  .missing-input-wb-unit1-p3-q1 {
     width: 100%;
-    margin: 20px 0px;
+
+    min-width: 180px;
+  }
 }
 
+@media (max-width: 768px) {
+  .question-container-wb-u1-p4-q1 {
+    grid-template-columns: 1fr;
+  }
 
-/* ⭐ تم إضافتها */
-.wrong-icon-wb-u1-p4-q1 {
-    position: absolute;
-    top: 30%;
-    right: -6%;
-    width: 25px;
-    height: 25px;
-    background-color: red;
-    border-radius: 50%;
-    border: 2px solid white;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
+  .missing-input-wb-unit1-p3-q1 {
+    min-width: 0;
+
+    width: 100%;
+  }
 }

@@ -1,59 +1,191 @@
 .question-box-wb-u1-p5-q1 {
   display: flex;
+
   flex-direction: row;
+
   justify-content: center;
+
   align-items: flex-start;
+
   gap: 10px;
+}
+
+/* =====================================================
+   OPTIONS
+===================================================== */
+
+.options-row-unit7-p5-q1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 .option-word-wb-u1-p5-q1 {
   font-size: 16px;
+
   font-weight: 500;
+
   cursor: pointer;
+
   padding: 4px 15px;
+
   border-radius: 25px;
+
   border: 2px solid transparent;
-  transition: 0.2s;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    outline 0.2s ease,
+    transform 0.15s ease;
+
   position: relative;
+
   user-select: none;
+
+  background: transparent;
+
+  color: inherit;
+
+  font-family: inherit;
+
+  display: inline-flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 6px;
+
+  appearance: none;
+
+  -webkit-appearance: none;
 }
+
+/* Mouse hover */
+
+.option-word-wb-u1-p5-q1:hover:not(:disabled) {
+  background: rgba(75, 116, 255, 0.08);
+
+  transform: scale(1.03);
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.option-word-wb-u1-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   SELECTED
+===================================================== */
+
 .option-word-wb-u1-p5-q1.selected3-wb-u1-p5-q1 {
   border-color: #4b74ff;
+
+  background: #eef4ff;
 }
+
+/* =====================================================
+   PLAYING
+===================================================== */
+
+.playing-option-wb-u1-p5-q1 {
+  color: #2563eb;
+
+  font-size: 14px;
+}
+
+/* =====================================================
+   GRID
+===================================================== */
+
 .container-wb-u1-p5-q1 {
   display: grid;
+
   width: 100%;
+
   gap: 30px;
+
   grid-template-columns: 1fr 1fr;
 }
 
+/* =====================================================
+   WRONG ICON
+===================================================== */
+
 .wrong-x-wb-u1-p5-q1 {
   width: 22px;
+
   height: 21px;
+
   border: 2px solid white;
+
   background-color: red;
+
   border-radius: 50%;
+
   color: white;
+
   font-weight: bold;
+
   font-size: 12px;
+
   display: inline-flex;
+
   justify-content: center;
+
   align-items: center;
-  margin-left: 8px;
-  vertical-align: middle;
+
   position: absolute;
-  left: 91%;
-  top: -36%;
+
+  right: -9px;
+
+  top: -9px;
+
   z-index: 99;
+
+  pointer-events: none;
 }
+
+/* =====================================================
+   IMAGE
+===================================================== */
 
 .q3-image-wb-unit1-p5-q1 {
   height: 120px;
+
   width: auto;
 }
+
+/* =====================================================
+   DISABLED
+===================================================== */
+
+.option-word-wb-u1-p5-q1:disabled {
+  opacity: 1;
+
+  cursor: default;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media (max-width: 1024px) {
   .q3-image-wb-unit1-p5-q1 {
     height: 100px;
+
     width: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .container-wb-u1-p5-q1 {
+    grid-template-columns: 1fr;
   }
 }

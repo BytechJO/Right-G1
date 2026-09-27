@@ -1,5 +1,318 @@
-.question-box-wb-u1-p8-q1{
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
+/* =====================================================
+   QUESTIONS CONTAINER
+===================================================== */
+
+.container-wb-u1-p8-q1 {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+
+  width: 100%;
+}
+
+/* =====================================================
+   QUESTION
+===================================================== */
+
+.question-box-wb-u1-p8-q1 {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  width: 100%;
+
+  position: relative;
+}
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+.num-wb-u1-p8-q1 {
+  color: darkblue;
+
+  font-weight: 700;
+
+  font-size: 20px;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.q-image-wb-u1-p8 {
+  height: 100px;
+
+  width: auto;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   ITEM AUDIO BUTTON
+===================================================== */
+
+.item-audio-btn-wb-u1-p8 {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  min-height: 40px;
+
+  padding: 6px 10px;
+
+  border: 2px solid #542078;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #542078;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease,
+    outline 0.15s ease;
+}
+
+.item-audio-btn-wb-u1-p8:hover {
+  background: #f5effa;
+
+  transform: scale(1.03);
+}
+
+.item-audio-btn-wb-u1-p8:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+.item-audio-btn-wb-u1-p8.playing {
+  background: #542078;
+
+  color: white;
+}
+
+.audio-btn-text-wb-u1-p8 {
+  font-size: 14px;
+}
+
+/* =====================================================
+   SENTENCE
+===================================================== */
+
+.sentence-options-wb-u1-p8 {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  flex-wrap: wrap;
+
+  font-size: 20px;
+}
+
+.sentence-text-wb-u1-p8 {
+  color: black;
+
+  font-size: 20px;
+}
+
+/* =====================================================
+   OPTIONS
+===================================================== */
+
+.options-inline-wb-u1-p8 {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.option-word-wb-u1-p8 {
+  position: relative;
+
+  min-height: 42px;
+
+  padding: 4px 10px;
+
+  border: 2px solid transparent;
+
+  border-radius: 18px;
+
+  background: transparent;
+
+  color: black;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    outline 0.15s ease,
+    transform 0.15s ease;
+}
+
+.option-word-wb-u1-p8:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.08);
+
+  transform: scale(1.03);
+}
+
+/* selected */
+
+.option-word-wb-u1-p8.selected {
+  border-color: #4b74ff;
+
+  background: #eef4ff;
+}
+
+/* keyboard */
+
+.option-word-wb-u1-p8:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* don't fade after check */
+
+.option-word-wb-u1-p8:disabled {
+  opacity: 1;
+
+  cursor: default;
+}
+
+/* divider */
+
+.option-divider-wb-u1-p8 {
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+/* =====================================================
+   WRONG
+===================================================== */
+
+.wrong-x-wb-u1-p8 {
+  position: absolute;
+
+  top: -10px;
+
+  right: -10px;
+
+  width: 21px;
+
+  height: 21px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 2px solid white;
+
+  background: red;
+
+  color: white;
+
+  font-size: 11px;
+
+  font-weight: bold;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   TRANSCRIPT
+===================================================== */
+
+.item-transcript-wb-u1-p8 {
+  font-size: 13px;
+
+  color: #555;
+
+  max-width: 220px;
+
+  line-height: 1.4;
+}
+
+.transcript-label-wb-u1-p8 {
+  font-weight: 700;
+
+  margin-right: 4px;
+
+  color: #542078;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1024px) {
+  .question-box-wb-u1-p8-q1 {
+    gap: 10px;
+  }
+
+  .q-image-wb-u1-p8 {
+    height: 80px;
+  }
+
+  .sentence-options-wb-u1-p8,
+  .sentence-text-wb-u1-p8,
+  .option-word-wb-u1-p8 {
+    font-size: 17px;
+  }
+
+  .item-audio-btn-wb-u1-p8 {
+    padding: 5px 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  .question-box-wb-u1-p8-q1 {
+    flex-wrap: wrap;
+
+    align-items: flex-start;
+  }
+
+  .sentence-options-wb-u1-p8 {
+    width: 100%;
+  }
+
+  .item-transcript-wb-u1-p8 {
+    width: 100%;
+
+    max-width: none;
+  }
 }

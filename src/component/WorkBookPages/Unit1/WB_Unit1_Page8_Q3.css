@@ -1,82 +1,219 @@
+/* =====================================================
+   GRID
+===================================================== */
+
 .dt-container-wb-u1-p8-q3 {
   display: grid;
+
   width: 100%;
-  grid-template-columns: repeat(3,1fr);
+
+  grid-template-columns: repeat(3, 1fr);
+
   gap: 20px;
 }
 
+/* =====================================================
+   ITEM
+===================================================== */
+
 .dt-item-wb-u1-p8-q3 {
   text-align: center;
-    /* border: 2px solid gray; */
-    border-radius: 10px;
-    width: 100%;
-    justify-content: center;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+
+  border-radius: 10px;
+
+  width: 100%;
+
+  justify-content: center;
+
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  gap: 10px;
 }
+
+/* =====================================================
+   IMAGE
+===================================================== */
 
 .dt-image-wb-u1-p8-q3 {
   width: 160px;
+
   height: 160px;
+
   object-fit: contain;
 }
 
+/* =====================================================
+   OPTIONS WRAPPER
+===================================================== */
+
 .dt-options-wb-u1-p8-q3 {
   display: flex;
+
   justify-content: center;
+
   flex-direction: column;
+
   gap: 15px;
+
   margin-top: 10px;
 }
 
+/* =====================================================
+   OPTION
+===================================================== */
+
 .bp-option {
   font-size: 28px;
+
   cursor: pointer;
+
   position: relative;
+
   height: 50px;
+
   width: 50px;
+
   display: flex;
+
   justify-content: center;
-  padding: 4px 4px;
-  border-radius: 6px;
-  transition: 0.2s;
+
   align-items: center;
+
+  padding: 4px;
+
+  border-radius: 6px;
+
   border: 2px solid transparent;
+
+  background: transparent;
+
+  color: inherit;
+
+  font-family: inherit;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    outline 0.2s ease,
+    background 0.2s ease;
 }
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.bp-option:hover:not(:disabled) {
+  transform: scale(1.15);
+
+  background: rgba(37, 99, 235, 0.06);
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.bp-option:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+
+  background: #eff6ff;
+}
+
+/* =====================================================
+   SELECTED
+===================================================== */
+
 .bp-option.selected {
   border-color: darkblue;
+
   border-radius: 50%;
 }
 
-.bp-option:hover {
-  transform: scale(1.2);
+/* =====================================================
+   DISABLED
+===================================================== */
+
+.bp-option:disabled {
+  opacity: 1;
+
+  cursor: default;
 }
+
+/* =====================================================
+   WRONG
+===================================================== */
 
 .wrong-x-wb-u1-p8-q3 {
-  margin-left: 6px;
   color: white;
+
   font-size: 17px;
+
   font-weight: bold;
+
   position: absolute;
-  bottom: 36px;
+
+  top: -10px;
+
+  right: -10px;
+
   border: 2px solid white;
-  height: 25px;
-  display: flex;
+
   width: 25px;
-  /* flex-direction: column; */
+
+  height: 25px;
+
+  display: flex;
+
   align-items: center;
+
   justify-content: center;
-  border-radius: 20px;
+
+  border-radius: 50%;
+
   background-color: red;
-  left: 22px;
+
+  pointer-events: none;
 }
 
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media (max-width: 1180px) {
-.dt-image-wb-u1-p8-q3 {
+  .dt-image-wb-u1-p8-q3 {
     width: 120px;
+
     height: 120px;
-    object-fit: contain;
+  }
 }
+
+@media (max-width: 850px) {
+  .dt-container-wb-u1-p8-q3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .dt-container-wb-u1-p8-q3 {
+    grid-template-columns: 1fr;
+  }
+
+  .dt-image-wb-u1-p8-q3 {
+    width: 100px;
+
+    height: 100px;
+  }
+
+  .bp-option {
+    width: 45px;
+
+    height: 45px;
+
+    font-size: 24px;
+  }
 }
