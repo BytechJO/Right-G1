@@ -90,7 +90,8 @@ export default function Book() {
 
   const [leftBarOpen, setLeftBarOpen] = useState(false);
   const [rightBarOpen, setRightBarOpen] = useState(false);
-
+  const menuButtonRef = useRef(null);
+  const iconKeyButtonRef = useRef(null);
   //------------------ swipe function -----------------------------
 
   // Popup
@@ -681,6 +682,8 @@ export default function Book() {
         viewMode={viewMode}
         activeTab={activeTab}
         setViewMode={setViewMode}
+        menuButtonRef={menuButtonRef}
+        iconKeyButtonRef={iconKeyButtonRef}
         icons={{
           menu,
           home,
@@ -693,7 +696,7 @@ export default function Book() {
           openRightSidebar: () => setRightBarOpen(true),
           keyIcon: FaKey,
         }}
-        teacherPdf={teacherPdf} // 👈 جديد
+        teacherPdf={teacherPdf}
       />
 
       {/* ===================== LEFT SIDEBAR ===================== */}

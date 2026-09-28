@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import backgroundImage from "../../../assets/unit1/imgs/Page 01/01.jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
+import SquirrelGif from "../../../assets/Squirrel_GIF/Squirrel_1164_1433px.gif";
 import MySVG from "../../../assets/unit1/imgs/U1P4 highlight 1.svg";
 
 const targetArea = {
@@ -19,8 +19,7 @@ const Page4_Interactive1 = () => {
   const [announcement, setAnnouncement] = useState("");
 
   const playSelectionTone = () => {
-    const AudioContextClass =
-      window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 
     if (!AudioContextClass) return;
 
@@ -156,22 +155,57 @@ const Page4_Interactive1 = () => {
         }}
       >
         <div
-          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+          id="page4-instructions"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            gap: "10px",
+            width: "100%",
+          }}
         >
           <img
-            src={Rabbit}
-            alt="A rabbit asking for help"
-            style={{ height: "50px", width: "auto" }}
+            src={SquirrelGif}
+            alt="An animated squirrel asking for help"
+            style={{
+              height: "100px",
+              width: "auto",
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
           />
-          <h5 className="header-title-page8" id="page4-instructions">
-            I need your help. Can you help me find the restaurant in the
-            picture?
-          </h5>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "8px",
+            }}
+          >
+            <h5 className="header-title-page8" style={{ margin: 0 }}>
+              I need your help. Can you help me find the restaurant in the
+              picture?
+            </h5>
+
+            <p
+              className="header-title-page8"
+              style={{
+                margin: 0,
+                color: "#6A3B96",
+                fontSize: "clamp(15px, 2vw, 20px)",
+                fontWeight: 700,
+                textAlign: "left",
+              }}
+            >
+              Scan the whole picture, then tap the restaurant.
+            </p>
+          </div>
         </div>
 
         <p className="sr-only">
-          Scan the whole picture, then find the restaurant. Use Tab to reach
-          the restaurant target and press Enter or Space to select it.
+          Scan the whole picture, then find the restaurant. Use Tab to reach the
+          restaurant target and press Enter or Space to select it.
         </p>
 
         <div
@@ -279,11 +313,7 @@ const Page4_Interactive1 = () => {
         >
           Show Answer
         </button>
-        <button
-          type="button"
-          className="check-button2"
-          onClick={handleCheck}
-        >
+        <button type="button" className="check-button2" onClick={handleCheck}>
           Check Answer ✓
         </button>
       </div>

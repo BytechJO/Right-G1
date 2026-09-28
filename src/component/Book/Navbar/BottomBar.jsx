@@ -19,6 +19,9 @@ export default function BottomBar({
   icons,
   activeTab,
   teacherPdf,
+
+  menuButtonRef,
+  iconKeyButtonRef,
 }) {
   const [pageInput, setPageInput] = useState("");
 
@@ -26,7 +29,8 @@ export default function BottomBar({
     setPageInput("");
   }, [pageIndex]);
 
-
+  const accessibilityButton =
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#430f68] focus-visible:ring-offset-2 rounded";
   return (
     <footer
       className="w-full bg-white border-t shadow 
@@ -34,52 +38,82 @@ export default function BottomBar({
   py-1 fixed bottom-0 left-0 z-[9999] h-[40px]"
     >
       {/* MENU */}
-      <button onClick={icons.openSidebar} className="absolute left-3">
+      <button
+        ref={menuButtonRef}
+        type="button"
+        onClick={icons.openSidebar}
+        aria-label="Open menu"
+        className={`absolute left-3 ${accessibilityButton}`}
+      >
         <img
           src={icons.menu}
-          className="h-1 w-1"
+          alt=""
+          aria-hidden="true"
           style={{ height: "25px", width: "25px" }}
         />
       </button>
 
       {/* HOME */}
-      {/* HOME */}
       {pageIndex > 1 &&
         activeTab !== "flash" &&
         activeTab !== "poster" &&
         activeTab !== "posterVocab" && (
-          <button onClick={goToIndex} className="absolute left-12">
+          <button
+            type="button"
+            onClick={goToIndex}
+            aria-label="Go to home"
+            className={`absolute left-12 ${accessibilityButton}`}
+          >
             <img
               src={icons.home}
-              className="h-1 w-1"
+              alt=""
+              aria-hidden="true"
               style={{ height: "25px", width: "25px" }}
             />
           </button>
         )}
 
       {/* ZOOM IN */}
-      <button onClick={zoomIn}>
+      <button
+        type="button"
+        onClick={zoomIn}
+        aria-label="Zoom in"
+        className={accessibilityButton}
+      >
         <img
           src={icons.zoomIn}
-          className="h-1 w-1"
+          alt=""
+          aria-hidden="true"
           style={{ height: "25px", width: "25px" }}
         />
       </button>
 
       {/* RESET ZOOM */}
-      <button onClick={resetZoom}>
+      <button
+        type="button"
+        onClick={resetZoom}
+        aria-label="Reset zoom"
+        className={accessibilityButton}
+      >
         <img
           src={icons.zoomOut}
-          className="h-1 w-1"
+          alt=""
+          aria-hidden="true"
           style={{ height: "25px", width: "25px" }}
         />
       </button>
 
       {/* FULLSCREEN */}
-      <button onClick={toggleFullScreen}>
+      <button
+        type="button"
+        onClick={toggleFullScreen}
+        aria-label="Toggle fullscreen"
+        className={accessibilityButton}
+      >
         <img
           src={icons.fullScreen}
-          className="h-1 w-1"
+          alt=""
+          aria-hidden="true"
           style={{ height: "25px", width: "25px" }}
         />
       </button>
@@ -194,33 +228,43 @@ export default function BottomBar({
       {/* ✅ DOWNLOAD PDF — Teacher Only */}
       {activeTab === "teacher" && (
         <div className="tooltip-wrapper">
-          <svg
-            width="35"
-            height="35"
-            viewBox="0 0 90 90"
+          <button
+            type="button"
+            aria-label="Download Teacher PDF"
+            className={`cursor-pointer p-1 rounded-lg hover:bg-purple-100 transition ${accessibilityButton}`}
             onClick={() => {
               const link = document.createElement("a");
               link.href = teacherPdf;
               link.download = "Right-1-Teacher-Book.pdf";
               link.click();
             }}
-            className="cursor-pointer p-1 rounded-lg hover:bg-purple-100 transition"
           >
-            <image href={downloadIcon} x="0" y="0" width="90" height="90" />
-          </svg>
+            <svg width="35" height="35" viewBox="0 0 90 90" aria-hidden="true">
+              <image href={downloadIcon} x="0" y="0" width="90" height="90" />
+            </svg>
+          </button>
 
           <span className="tooltip-text">Download Teacher PDF</span>
         </div>
       )}
 
       {/* RIGHT SIDEBAR */}
+      {/* RIGHT SIDEBAR */}
       <button
-        className="absolute right-3"
+        ref={iconKeyButtonRef}
+        type="button"
+        aria-label="Open icon key"
+        className={`absolute right-3 ${accessibilityButton}`}
         onClick={icons.openRightSidebar}
-        style={{ color: "#430f68", display: "flex", gap: "5px" }}
+        style={{
+          color: "#430f68",
+          display: "flex",
+          gap: "5px",
+        }}
       >
-        {!isMobile && <span>Icon Key</span>}{" "}
-        <icons.keyIcon size={24} color="#430f68" />
+        {!isMobile && <span>Icon Key</span>}
+
+        <icons.keyIcon size={24} color="#430f68" aria-hidden="true" />
       </button>
     </footer>
   );

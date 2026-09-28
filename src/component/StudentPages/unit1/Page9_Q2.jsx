@@ -91,8 +91,6 @@ export default function Page9_Q2() {
   // DRAWING
   // =====================================================
 
-  const canvasRef = useRef(null);
-
   /*
     ما بتتفعل الأدوات إلا بعد Check Answer
   */
@@ -108,11 +106,11 @@ export default function Page9_Q2() {
   const [selectedColor, setSelectedColor] = useState("#e53935");
 
   const [isDrawing, setIsDrawing] = useState(false);
+  const [drawingStrokes, setDrawingStrokes] = useState([]);
+  const [activeStroke, setActiveStroke] = useState(null);
+  const activeStrokeRef = useRef(null);
 
-  /*
-    كل عنصر هون عبارة عن snapshot للـ canvas
-    حتى Undo يرجع خطوة.
-  */
+  /* كل عنصر هو نسخة من مسارات SVG حتى Undo يرجع خطوة. */
   const [drawingHistory, setDrawingHistory] = useState([]);
 
   const drawingColors = [
@@ -128,146 +126,12 @@ export default function Page9_Q2() {
     canDraw && (activeTool === "pen" || activeTool === "eraser");
 
   // =====================================================
-  // CANVAS SIZE
+  // VECTOR DRAWING
+  // SVG paths are clipped by the same SVG text shown on screen.
   // =====================================================
 
-  const resizeCanvas = () => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-
-    if (!canvas || !container) return;
-
-    const rect = container.getBoundingClientRect();
-
-    if (!rect.width || !rect.height) return;
-
-    /*
-      نحفظ الرسم الحالي قبل تغيير حجم canvas.
-    */
-    const tempCanvas = document.createElement("canvas");
-
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-
-    const tempCtx = tempCanvas.getContext("2d");
-
-    if (canvas.width && canvas.height) {
-      tempCtx.drawImage(canvas, 0, 0);
-    }
-
-    const dpr = window.devicePixelRatio || 1;
-
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
-
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    /*
-      رجع الرسم بعد resize.
-    */
-    if (tempCanvas.width && tempCanvas.height) {
-      ctx.drawImage(
-        tempCanvas,
-        0,
-        0,
-        tempCanvas.width,
-        tempCanvas.height,
-        0,
-        0,
-        rect.width,
-        rect.height,
-      );
-    }
-  };
-
-  useEffect(() => {
-    resizeCanvas();
-
-    const observer = new ResizeObserver(() => {
-      resizeCanvas();
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // =====================================================
-  // DRAWING HISTORY
-  // =====================================================
-
-  const saveCanvasState = () => {
-    const canvas = canvasRef.current;
-
-    if (!canvas) return;
-
-    const snapshot = canvas.toDataURL();
-
-    setDrawingHistory((prev) => [...prev, snapshot]);
-  };
-
-  const restoreCanvasState = (snapshot) => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-
-    if (!canvas || !container) return;
-
-    const ctx = canvas.getContext("2d");
-    const rect = container.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-
-    ctx.save();
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.restore();
-
-    if (!snapshot) return;
-
-    const image = new Image();
-
-    image.onload = () => {
-      ctx.save();
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      ctx.drawImage(image, 0, 0, rect.width, rect.height);
-
-      ctx.restore();
-    };
-
-    image.src = snapshot;
-  };
-
-  // =====================================================
-  // POINTER POSITION
-  // =====================================================
-
-  const getCanvasPosition = (e) => {
-    const canvas = canvasRef.current;
-
-    if (!canvas) {
-      return {
-        x: 0,
-        y: 0,
-      };
-    }
-
-    const rect = canvas.getBoundingClientRect();
+  const getSvgPosition = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
 
     return {
       x: e.clientX - rect.left,
@@ -275,96 +139,84 @@ export default function Page9_Q2() {
     };
   };
 
-  // =====================================================
-  // START DRAW
-  // =====================================================
+  const pointsToPath = (points) => {
+    if (!points.length) return "";
 
-  const handlePointerDown = (e) => {
+    if (points.length === 1) {
+      return `M ${points[0].x} ${points[0].y} l 0.01 0`;
+    }
+
+    let path = `M ${points[0].x} ${points[0].y}`;
+
+    for (let index = 1; index < points.length - 1; index++) {
+      const point = points[index];
+      const nextPoint = points[index + 1];
+      const middleX = (point.x + nextPoint.x) / 2;
+      const middleY = (point.y + nextPoint.y) / 2;
+
+      path += ` Q ${point.x} ${point.y} ${middleX} ${middleY}`;
+    }
+
+    const lastPoint = points[points.length - 1];
+
+    return `${path} L ${lastPoint.x} ${lastPoint.y}`;
+  };
+
+  const handlePointerDown = (e, word) => {
     if (!drawingActive) return;
 
     e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.setPointerCapture?.(e.pointerId);
 
-    const canvas = canvasRef.current;
+    const pressure =
+      e.pointerType === "pen" && e.pressure > 0 ? e.pressure : 0.5;
 
-    if (!canvas) return;
+    const stroke = {
+      id: `${Date.now()}-${e.pointerId}`,
+      word,
+      tool: activeTool,
+      color: selectedColor,
+      width: activeTool === "eraser" ? 28 : 7 + pressure * 4,
+      points: [getSvgPosition(e)],
+    };
 
-    /*
-      قبل ما نبدأ stroke جديد،
-      خزّن الوضع الحالي للـ Undo.
-    */
-    saveCanvasState();
+    setDrawingHistory((prev) => [...prev, drawingStrokes]);
 
-    canvas.setPointerCapture?.(e.pointerId);
-
-    const ctx = canvas.getContext("2d");
-
-    const { x, y } = getCanvasPosition(e);
-
-    ctx.beginPath();
-
-    ctx.moveTo(x, y);
-
-    if (activeTool === "eraser") {
-      ctx.globalCompositeOperation = "destination-out";
-
-      ctx.lineWidth = 28;
-    } else {
-      ctx.globalCompositeOperation = "source-over";
-
-      ctx.strokeStyle = selectedColor;
-
-      ctx.lineWidth = 9;
-    }
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
+    activeStrokeRef.current = stroke;
+    setActiveStroke(stroke);
     setIsDrawing(true);
   };
 
-  // =====================================================
-  // DRAW
-  // =====================================================
-
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e, word) => {
     if (!isDrawing || !drawingActive) return;
+    if (activeStrokeRef.current?.word !== word) return;
 
     e.preventDefault();
+    e.stopPropagation();
 
-    const canvas = canvasRef.current;
+    const nextStroke = {
+      ...activeStrokeRef.current,
+      points: [...activeStrokeRef.current.points, getSvgPosition(e)],
+    };
 
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
-    const { x, y } = getCanvasPosition(e);
-
-    ctx.lineTo(x, y);
-
-    ctx.stroke();
+    activeStrokeRef.current = nextStroke;
+    setActiveStroke(nextStroke);
   };
 
-  // =====================================================
-  // STOP DRAW
-  // =====================================================
-
   const stopDrawing = (e) => {
-    if (!isDrawing) return;
+    const completedStroke = activeStrokeRef.current;
 
-    const canvas = canvasRef.current;
+    if (!isDrawing || !completedStroke) return;
 
-    if (canvas && e?.pointerId !== undefined) {
-      canvas.releasePointerCapture?.(e.pointerId);
-    }
+    e?.preventDefault();
+    e?.stopPropagation();
+    e?.currentTarget?.releasePointerCapture?.(e.pointerId);
 
-    const ctx = canvas?.getContext("2d");
+    setDrawingStrokes((prev) => [...prev, completedStroke]);
 
-    if (ctx) {
-      ctx.closePath();
-
-      ctx.globalCompositeOperation = "source-over";
-    }
-
+    activeStrokeRef.current = null;
+    setActiveStroke(null);
     setIsDrawing(false);
   };
 
@@ -373,16 +225,12 @@ export default function Page9_Q2() {
   // =====================================================
 
   const handleUndoDrawing = () => {
-    if (!canDraw) return;
+    if (!canDraw || drawingHistory.length === 0) return;
 
-    if (drawingHistory.length === 0) return;
+    const previousStrokes = drawingHistory[drawingHistory.length - 1];
 
-    const lastSnapshot = drawingHistory[drawingHistory.length - 1];
-
-    restoreCanvasState(lastSnapshot);
-
+    setDrawingStrokes(previousStrokes);
     setDrawingHistory((prev) => prev.slice(0, -1));
-
     setAnnouncement("Last drawing action undone.");
   };
 
@@ -393,47 +241,15 @@ export default function Page9_Q2() {
   const handleClearDrawing = () => {
     if (!canDraw) return;
 
-    const canvas = canvasRef.current;
-
-    if (!canvas) return;
-
-    /*
-      حتى Clear نفسه نقدر نعمله Undo.
-    */
-    saveCanvasState();
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.save();
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.restore();
-
+    setDrawingHistory((prev) => [...prev, drawingStrokes]);
+    setDrawingStrokes([]);
     setAnnouncement("Drawing cleared.");
   };
 
-  // =====================================================
-  // CLEAR WITHOUT HISTORY
-  // تستخدم في Start Again
-  // =====================================================
-
   const clearCanvasCompletely = () => {
-    const canvas = canvasRef.current;
-
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.save();
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.restore();
+    activeStrokeRef.current = null;
+    setActiveStroke(null);
+    setDrawingStrokes([]);
   };
 
   // =====================================================
@@ -814,12 +630,139 @@ export default function Page9_Q2() {
   // =====================================================
 
   useEffect(() => {
+    const audio = audioRef.current;
+
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
+      if (audio) {
+        audio.pause();
       }
     };
   }, []);
+
+  const renderColorableWord = (word) => {
+    const safeWordId = word.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const clipId = `letter-clip-${safeWordId}`;
+    const savedStrokes = drawingStrokes.filter(
+      (stroke) => stroke.word === word,
+    );
+    const displayedStrokes =
+      activeStroke?.word === word
+        ? [...savedStrokes, activeStroke]
+        : savedStrokes;
+
+    return (
+      <>
+        <span className="coloring-word-placeholder" aria-hidden="true">
+          {word}
+        </span>
+
+        <svg
+          className={`letter-coloring-svg ${
+            drawingActive ? "letter-coloring-svg-active" : ""
+          }`}
+          aria-hidden="true"
+          style={{
+            cursor:
+              activeTool === "eraser"
+                ? "cell"
+                : activeTool === "pen"
+                  ? "crosshair"
+                  : "default",
+          }}
+          onClick={(e) => {
+            if (canDraw) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+          onPointerDown={(e) => handlePointerDown(e, word)}
+          onPointerMove={(e) => handlePointerMove(e, word)}
+          onPointerUp={stopDrawing}
+          onPointerCancel={stopDrawing}
+        >
+          <defs>
+            <clipPath id={clipId}>
+              <text
+                x="6"
+                y="50%"
+                dominantBaseline="central"
+                className="letter-coloring-text"
+              >
+                {word}
+              </text>
+            </clipPath>
+
+            {displayedStrokes.map((stroke, index) => {
+              if (stroke.tool !== "pen") return null;
+
+              const laterErasers = displayedStrokes
+                .slice(index + 1)
+                .filter((item) => item.tool === "eraser");
+
+              if (laterErasers.length === 0) return null;
+
+              return (
+                <mask
+                  id={`${clipId}-erasers-${stroke.id}`}
+                  key={`${clipId}-mask-${stroke.id}`}
+                >
+                  <rect width="100%" height="100%" fill="white" />
+
+                  {laterErasers.map((eraser) => (
+                    <path
+                      key={eraser.id}
+                      d={pointsToPath(eraser.points)}
+                      fill="none"
+                      stroke="black"
+                      strokeWidth={eraser.width}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  ))}
+                </mask>
+              );
+            })}
+          </defs>
+
+          <g clipPath={`url(#${clipId})`}>
+            {displayedStrokes.map((stroke, index) => {
+              if (stroke.tool !== "pen") return null;
+
+              const hasLaterEraser = displayedStrokes
+                .slice(index + 1)
+                .some((item) => item.tool === "eraser");
+
+              return (
+                <path
+                  key={stroke.id}
+                  d={pointsToPath(stroke.points)}
+                  fill="none"
+                  stroke={stroke.color}
+                  strokeWidth={stroke.width}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  mask={
+                    hasLaterEraser
+                      ? `url(#${clipId}-erasers-${stroke.id})`
+                      : undefined
+                  }
+                />
+              );
+            })}
+          </g>
+
+          <text
+            x="6"
+            y="50%"
+            dominantBaseline="central"
+            className="letter-coloring-text letter-coloring-outline"
+          >
+            {word}
+          </text>
+        </svg>
+      </>
+    );
+  };
 
   // =====================================================
   // JSX
@@ -997,7 +940,7 @@ export default function Page9_Q2() {
                       locked || showAnswer ? "disabled-word" : ""
                     } ${isSelected ? "keyboard-selected" : ""} ${
                       isPlaying ? "audio-playing" : ""
-                    }`}
+                    } ${canDraw ? "coloring-word" : ""}`}
                     style={{
                       cursor: "pointer",
 
@@ -1014,7 +957,7 @@ export default function Page9_Q2() {
                     }}
                     onKeyDown={(e) => handleKeyboard(e, word, "left")}
                   >
-                    {word}
+                    {renderColorableWord(word)}
                   </h5>
 
                   <div
@@ -1078,7 +1021,9 @@ export default function Page9_Q2() {
                     }
                     className={`H5 word-outline ${
                       locked || showAnswer ? "disabled-word" : ""
-                    } ${isPlaying ? "audio-playing" : ""}`}
+                    } ${isPlaying ? "audio-playing" : ""} ${
+                      canDraw ? "coloring-word" : ""
+                    }`}
                     style={{
                       cursor: "pointer",
                       position: "relative",
@@ -1095,7 +1040,7 @@ export default function Page9_Q2() {
                     }}
                     onKeyDown={(e) => handleKeyboard(e, word, "right")}
                   >
-                    {word}
+                    {renderColorableWord(word)}
                   </h5>
                 </div>
               );
@@ -1131,31 +1076,6 @@ export default function Page9_Q2() {
             )}
           </svg>
 
-          {/* ==================================
-              DRAWING CANVAS
-          ================================== */}
-
-          <canvas
-            ref={canvasRef}
-            className={`drawing-canvas ${
-              drawingActive ? "drawing-canvas-active" : ""
-            }`}
-            aria-label="Coloring canvas"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={stopDrawing}
-            onPointerCancel={stopDrawing}
-            style={{
-              pointerEvents: drawingActive ? "auto" : "none",
-
-              cursor:
-                activeTool === "eraser"
-                  ? "cell"
-                  : activeTool === "pen"
-                    ? "crosshair"
-                    : "default",
-            }}
-          />
         </div>
       </div>
 
