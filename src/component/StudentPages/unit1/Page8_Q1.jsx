@@ -10,8 +10,10 @@ import taxi from "../../../assets/unit1/imgs/taxi_1.svg";
 import tiger from "../../../assets/unit1/imgs/tiger.svg";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import SquirrelGif from "../../../assets/Squirrel_GIF/Squirrel_1164_1433px.gif";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const Page8_Q1 = () => {
   const clickAudioRef = useRef(null);
@@ -295,12 +297,12 @@ const Page8_Q1 = () => {
             gap: "30px",
           }}
         >
-          <header className="header-title-page8">
-            <span className="ex-A">A</span>{" "}
-            <span className="number-of-q">1</span> Listen and write the missing
-            letters.
-          </header>
-
+          <ExerciseHeader
+            sectionLetter="A"
+            questionNumber="1"
+            title="Listen and write the missing letters."
+            subTitle="Listen, then drag d or t into each blank. Tap each card to hear it again."
+          />
           <audio ref={clickAudioRef} style={{ display: "none" }} />
 
           <QuestionAudioPlayer

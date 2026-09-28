@@ -3,6 +3,7 @@ import "./Page8_Q4.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import sentenceAudio from "../../../assets/unit1/Page 8 - C/How are you.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 const Page8_Q4 = () => {
   const sentenceAudioRef = useRef(null);
   const bankRefs = useRef({});
@@ -216,10 +217,12 @@ const Page8_Q4 = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
       <div className="div-forall" style={{}}>
-        <h5 className="header-title-page8">
-          <span className="ex-A">C</span> Drag the letters into the boxes to
-          make the secret sentence.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="C"
+          title="Drag the letters into the boxes to
+          make the secret sentence."
+          subTitle="Match each number to its letter, then build the hidden sentence."
+        />
         <audio ref={sentenceAudioRef} style={{ display: "none" }} />
         <div className="alphabet-box">
           <DragDropContext onDragEnd={onDragEnd}>

@@ -8,6 +8,8 @@ import {
   FaVolumeMute,
   FaRedo,
 } from "react-icons/fa";
+import SquirrelGif from "../assets/Squirrel_GIF/Squirrel_1164_1433px.gif";
+
 import { TbMessageCircle } from "react-icons/tb";
 const FourImagesWithAudio = ({
   images,
@@ -269,20 +271,50 @@ const FourImagesWithAudio = ({
           marginTop: "25px",
         }}
       >
-        <h5
-          className="header-title-page8"
+        <div
           style={{
-            fontSize: "25px",
             display: "flex",
-            gap: "5px",
-            alignItems: "center",
+            alignItems: "flex-start",
+            gap: "10px",
           }}
         >
-          {images[0] && (
-            <img src={images[0]} className="main-image" alt="main" />
-          )}
-          {titleQ}
-        </h5>
+          <img
+            src={SquirrelGif}
+            alt="An animated squirrel"
+            style={{
+              height: "100px",
+              width: "auto",
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "8px",
+            }}
+          >
+            <h5
+              className="header-title-page8"
+              style={{
+                fontSize: "25px",
+                display: "flex",
+                gap: "5px",
+                alignItems: "center",
+                margin: 0,
+              }}
+            >
+              {titleQ}
+            </h5>
+
+            <p className="sub-header">
+              Press Play, then tap each card to hear it again.
+            </p>
+          </div>
+        </div>
       </div>
       <div
         className="audio-popup-read-container"

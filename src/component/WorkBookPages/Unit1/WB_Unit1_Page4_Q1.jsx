@@ -25,6 +25,7 @@ import {
 } from "@dnd-kit/core";
 
 import "./WB_Unit1_Page4_Q1.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // DATA
@@ -822,11 +823,11 @@ export default function WB_Unit1_Page4_Q1() {
           </div>
 
           <div className="div-forall">
-            <h3 className="header-title-page8">
-              <span className="ex-A">C</span>
-              Drag and drop.
-            </h3>
-
+            <ExerciseHeader
+              sectionLetter="C"
+              title="Drag and drop."
+              subTitle="Look at each scene, then drag the matching greeting to the line."
+            />
             {/* =================================
                 WORD BANK
             ================================= */}

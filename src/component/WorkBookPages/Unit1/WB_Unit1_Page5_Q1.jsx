@@ -19,6 +19,7 @@ import goodAfternoonAudio from "../../../assets/U1 WB/U1/page_5/Item_003_Good_af
 import helloStellaAudio from "../../../assets/U1 WB/U1/page_5/Item_004_Hello!_I'm_Stella.mp3";
 import goodMorningAudio from "../../../assets/U1 WB/U1/page_5/Item_005_Good_morning!.mp3";
 import goodEveningAudio from "../../../assets/U1 WB/U1/page_5/Item_006_Good_evening!.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // AUDIO MAP
@@ -269,11 +270,11 @@ const WB_Unit1_Page5_Q1 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">E</span>
-          Tap or click the correct greeting.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="E"
+          title="Tap or click the correct greeting."
+          subTitle="Look at the scene and tap the greeting people would say."
+        />
         <div className="container-wb-u1-p5-q1">
           {items.map((question, qIndex) => (
             <div

@@ -17,6 +17,7 @@ import {
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // DATA
@@ -683,11 +684,11 @@ export default function WB_Unit1_Page8_Q2() {
           </div>
 
           <div className="div-forall">
-            <h3 className="header-title-page8">
-              <span className="ex-A">B</span>
-              Drag and drop the words.
-            </h3>
-
+            <ExerciseHeader
+              sectionLetter="B"
+              title="Drag and drop the words."
+              subTitle="Say each word, then place it under d or t."
+            />
             {/* ===================================
                 WORD BANK
             =================================== */}

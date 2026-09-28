@@ -5,6 +5,7 @@ import helloImSound from "../../../assets/unit1/Page 9 - D/helloIm.mp3";
 import howAreYouSound from "../../../assets/unit1/Page 9 - D/How are you.mp3";
 import helloSound from "../../../assets/unit1/Page 9 - D/Hello.mp3";
 import fineThankYouSound from "../../../assets/unit1/Page 9 - D/fineThankYou.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 const Page9_Q1 = () => {
   const audioRef = useRef(null);
   const [playingArea, setPlayingArea] = useState(null);
@@ -96,9 +97,11 @@ const Page9_Q1 = () => {
           gap: "120px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">D</span> Answer and read
-        </h5>
+        <ExerciseHeader
+          sectionLetter="D"
+          title="Answer and read"
+          subTitle="Type your name in the blank, then read the complete dialogue aloud."
+        />
         <audio ref={audioRef} style={{ display: "none" }} />
         {/* ✅ الصورة هي المرجع */}
         <div

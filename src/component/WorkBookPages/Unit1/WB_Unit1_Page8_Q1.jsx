@@ -12,6 +12,7 @@ import img1 from "../../../assets/U1 WB/U1/SVG/U1P8EXEA-01.svg";
 import img2 from "../../../assets/U1 WB/U1/SVG/U1P8EXEA-02.svg";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const questions = [
   {
@@ -250,11 +251,11 @@ const WB_Unit1_Page8_Q1 = () => {
       }}
     >
       <div className="div-forall">
-        <h3 className="header-title-page8">
-          <span className="ex-A">A</span>
-          Listen and tap or click the correct word.
-        </h3>
-
+        <ExerciseHeader
+          sectionLetter="A"
+          title="Listen and tap or click the correct word."
+          subTitle="Play the audio, look at the picture, and tap the correct word."
+        />
         {/* ======================================
             MAIN AUDIO + CAPTIONS
         ====================================== */}
@@ -373,7 +374,6 @@ const WB_Unit1_Page8_Q1 = () => {
                     {question.parts.after}
                   </span>
                 </div>
-
               </div>
             );
           })}

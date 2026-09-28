@@ -10,6 +10,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_6/Item_001_goodbye.mp3";
 import helloAudio from "../../../assets/U1 WB/U1/page_6/Item_002_hello.mp3";
 import howAreYouAudio from "../../../assets/U1 WB/U1/page_6/Item_003_how_are_you.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ========================================
 // GRID
@@ -562,11 +563,11 @@ export default function WB_Unit1_Page6_Q2() {
 
       <div className="page8-wrapper">
         <div className="div-forall">
-          <h3 className="header-title-page8">
-            <span className="ex-A">H</span>
-            Find the words.
-          </h3>
-
+          <ExerciseHeader
+            sectionLetter="H"
+            title="Find the words."
+            subTitle="Find goodbye, hello, and how are you in the letter grid."
+          />
           <div className="container-word-grid-wb-u1-p6-q2">
             {/* ==============================
                 GRID

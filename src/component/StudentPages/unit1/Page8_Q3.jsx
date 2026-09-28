@@ -6,6 +6,7 @@ import "./Page8_Q3.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import helloSound from "../../../assets/unit1/Page 8 - B/Hello.mp3";
 import goodbyeSound from "../../../assets/unit1/Page 8 - B/Goodbye!.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 export default function Page8_Q3() {
   const [previewLine, setPreviewLine] = useState(null);
   const [announcement, setAnnouncement] = useState("");
@@ -333,9 +334,11 @@ export default function Page8_Q3() {
   return (
     <div className="matching-wrapper" style={{ padding: "30px" }}>
       <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="ex-A">B</span>Read and match.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="B"
+          title="Read and match."
+          subTitle="Tap on and connect each greeting to the matching picture."
+        />
         <audio ref={sentenceAudioRef} style={{ display: "none" }} />
 
         <span className="sr-only">
@@ -453,9 +456,7 @@ export default function Page8_Q3() {
                 } ${locked || showAnswer ? "disabled-hover" : ""}`}
                 alt="Matching picture 1"
                 role="button"
-                tabIndex={
-                  locked || showAnswer || !firstDot ? -1 : 0
-                }
+                tabIndex={locked || showAnswer || !firstDot ? -1 : 0}
                 aria-label={
                   firstDot
                     ? `Picture 1. Press Enter to match with ${firstDot.word}.`
@@ -584,9 +585,7 @@ export default function Page8_Q3() {
                 } ${locked || showAnswer ? "disabled-hover" : ""}`}
                 alt="Matching picture 2"
                 role="button"
-                tabIndex={
-                  locked || showAnswer || !firstDot ? -1 : 0
-                }
+                tabIndex={locked || showAnswer || !firstDot ? -1 : 0}
                 aria-label={
                   firstDot
                     ? `Picture 2. Press Enter to match with ${firstDot.word}.`

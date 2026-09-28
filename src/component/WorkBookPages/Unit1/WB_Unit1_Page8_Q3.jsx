@@ -12,6 +12,7 @@ import img5 from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-05.svg";
 import img6 from "../../../assets/U1 WB/U1/SVG/U1P8EXEC-06.svg";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const WB_Unit1_Page8_Q3 = () => {
   const items = [
@@ -174,14 +175,14 @@ const WB_Unit1_Page8_Q3 = () => {
       <div
         className="div-forall"
         style={{
-          gap: "30px",
+          gap: "20px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">C</span>
-          Listen, look, and circle.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="C"
+          title="Listen, look, and circle."
+          subTitle="Listen to each word, then drag d or t below the picture."
+        />
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}

@@ -150,7 +150,6 @@ const Page4_Interactive1 = () => {
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
-          gap: "50px",
           alignItems: "center",
         }}
       >
@@ -189,25 +188,12 @@ const Page4_Interactive1 = () => {
             </h5>
 
             <p
-              className="header-title-page8"
-              style={{
-                margin: 0,
-                color: "#6A3B96",
-                fontSize: "clamp(15px, 2vw, 20px)",
-                fontWeight: 700,
-                textAlign: "left",
-              }}
+              className="sub-header"
             >
               Scan the whole picture, then tap the restaurant.
             </p>
           </div>
         </div>
-
-        <p className="sr-only">
-          Scan the whole picture, then find the restaurant. Use Tab to reach the
-          restaurant target and press Enter or Space to select it.
-        </p>
-
         <div
           className="sr-only"
           role="status"

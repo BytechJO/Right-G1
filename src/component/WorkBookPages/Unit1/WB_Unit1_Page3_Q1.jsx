@@ -21,6 +21,7 @@ import sentence2Audio from "../../../assets/U1 WB/U1/page_3/Item_002_you_How_are
 import sentence3Audio from "../../../assets/U1 WB/U1/page_3/Item_003_you_Fine,_thank.mp3";
 import sentence4Audio from "../../../assets/U1 WB/U1/page_3/Item_005_evening_Good!.mp3";
 import sentence5Audio from "../../../assets/U1 WB/U1/page_3/Item_009_I'm_John._Hello!.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // DATA
@@ -971,10 +972,11 @@ const WB_Unit1_Page3_Q1 = () => {
             }}
           >
             <div className="page8-content w-full">
-              <h5 className="header-title-page8">
-                <span className="ex-A">A</span>
-                Drag and drop the words to make sentences.
-              </h5>
+              <ExerciseHeader
+                sectionLetter="A"
+                title="Drag and drop the words to make sentences."
+                subTitle="Start with the capitalized word, then finish each sentence with the correct punctuation."
+              />
             </div>
 
             {data.map((item, i) => {

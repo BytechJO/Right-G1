@@ -21,6 +21,7 @@ import goodAfternoonSound from "../../../assets/U1 WB/U1/page_4_2/Item_002_Good_
 import howAreYouSound from "../../../assets/U1 WB/U1/page_4_2/Item_004_How_are_you.mp3";
 import helloStellaSound from "../../../assets/U1 WB/U1/page_4_2/Item_006_Hello!_I'm_Stella.mp3";
 import fineThankYouSound from "../../../assets/U1 WB/U1/page_4_2/Item_007_Fine,_thank_you.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // DATA
@@ -674,11 +675,11 @@ export default function WB_Unit1_Page4_Q2() {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">D</span>
-          Unscramble and match.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="D"
+          title="Unscramble and match."
+          subTitle="Put each sentence in order, then connect it to the correct reply."
+        />
         <div key={resetKey} className="matching-wrapper2" ref={containerRef}>
           {/* =================================================
               LEFT COLUMN

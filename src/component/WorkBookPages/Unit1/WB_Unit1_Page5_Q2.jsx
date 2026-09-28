@@ -16,6 +16,7 @@ import goodEveningAudio from "../../../assets/U1 WB/U1/page_5_2/Item_002_Good_Ev
 import helloStellaAudio from "../../../assets/U1 WB/U1/page_5_2/Item_003_Hello!_I'm,_Stella.mp3";
 import fineThankYouAudio from "../../../assets/U1 WB/U1/page_5_2/Item_004_fine,_thank_you.mp3";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_5_2/Item_005_Goodbye.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ===============================================
 // DATA
@@ -288,11 +289,11 @@ const WB_Unit1_Page5_Q2 = () => {
           gap: "60px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">F</span>
-          Tap or click the mistakes in the sentences.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="F"
+          title="Tap or click the mistakes in the sentences."
+          subTitle="Check capital letters and end marks, then tap every mistake."
+        />
         <div className="sentence-container-wb-u1-p5-q2">
           {/* ==========================================
               SENTENCES

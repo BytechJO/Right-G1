@@ -17,6 +17,7 @@ import goodMorningAudio from "../../../assets/U1 WB/U1/page_4/Item_004_Good_morn
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import "./WB_Unit1_Page3_Q2.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const WB_Unit1_Page3_Q2 = () => {
   const data = [
@@ -291,11 +292,11 @@ const WB_Unit1_Page3_Q2 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">B</span>
-          Tap or click the correct box.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="B"
+          title="Tap or click the correct box."
+          subTitle="Read the greeting, then tap the picture that shows it."
+        />
         <div
           className="shorti1-container-wb-u1-q2"
           style={{

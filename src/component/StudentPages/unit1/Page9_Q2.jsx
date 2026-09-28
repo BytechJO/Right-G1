@@ -8,6 +8,7 @@ import howAudio from "../../../assets/unit1/Page 9 - E/How.mp3";
 import thankYouAudio from "../../../assets/unit1/Page 9 - E/thank you.mp3";
 import areYouAudio from "../../../assets/unit1/Page 9 - E/are you.mp3";
 import afternoonAudio from "../../../assets/unit1/Page 9 - E/afternoon.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 export default function Page9_Q2() {
   const [lines, setLines] = useState([]);
@@ -782,11 +783,11 @@ export default function Page9_Q2() {
           gap: "10px",
         }}
       >
-        <h4 className="header-title-page8">
-          <span className="ex-A">E</span>
-          Match and color.
-        </h4>
-
+        <ExerciseHeader
+          sectionLetter="E"
+          title="Match and color."
+          subTitle="Match each phrase first, then click twice to use the coloring tool."
+        />
         <audio
           ref={audioRef}
           style={{
@@ -1075,7 +1076,6 @@ export default function Page9_Q2() {
               />
             )}
           </svg>
-
         </div>
       </div>
 

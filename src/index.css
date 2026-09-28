@@ -87,14 +87,12 @@ input:focus {
     border 0.1s ease;
 }
 
-
 .highlight {
   background-color: rgba(255, 0, 0, 0.078); /* لون أصفر فاتح */
   border: 2px solid rgba(255, 0, 0, 0.8);
   border-radius: 8px; /* ممكن تخليها 0 لو بدك زوايا حادة */
   cursor: pointer;
 }
-
 
 svg {
   cursor: pointer;
@@ -615,7 +613,7 @@ img {
 .header-title-page8 {
   font-size: 25px;
   font-family: "Gill Sans MT", "Gill Sans", Calibri, "Trebuchet MS", sans-serif;
-  color: #6A3B96;
+  color: #6a3b96;
   font-weight: 700;
   /* display: flex;
   align-items: flex-start; */
@@ -623,7 +621,13 @@ img {
   /* white-space: nowrap;
   width: 70%; */
 }
-
+.sub-header {
+  margin: 0;
+  color: #6a3b96;
+  font-size: clamp(15px, 2vw, 20px);
+  font-weight: 700;
+  text-align: left;
+}
 .exercise-container {
   display: flex;
   margin-bottom: 80px;
@@ -1103,7 +1107,8 @@ svg[role="button"]:focus-visible {
   outline: 3px solid #2563eb;
   outline-offset: 3px;
   border-radius: 50%;
-}button[aria-label^="Go to"]:focus-visible {
+}
+button[aria-label^="Go to"]:focus-visible {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
   border-radius: 50%;

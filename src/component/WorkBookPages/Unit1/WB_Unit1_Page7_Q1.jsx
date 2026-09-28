@@ -5,6 +5,7 @@ import goodMorningAudio from "../../../assets/U1 WB/U1/page_7/Item_002_Good_morn
 import goodAfternoonAudio from "../../../assets/U1 WB/U1/page_7/Item_003_Good_afternoon!.mp3";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_7/Item_004_Goodbye!.mp3";
 import howAreYouAudio from "../../../assets/U1 WB/U1/page_7/Item_005_How_are_you.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 const words = [
   {
     text: "Good evening!",
@@ -209,10 +210,11 @@ export default function WB_Unit1_Page7_Q1() {
         ================================================= */}
 
         <div className="w-full flex flex-col gap-1">
-          <h4 className="header-title-page8">
-            <span className="ex-A">I</span>
-            Tap or click to color and say the words.
-          </h4>
+          <ExerciseHeader
+            sectionLetter="I"
+            title="Tap or click to color and say the words."
+            subTitle="Choose a color, color each greeting, and say it aloud."
+          />
         </div>
 
         {/* =================================================

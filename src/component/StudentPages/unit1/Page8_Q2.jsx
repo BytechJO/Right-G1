@@ -22,6 +22,7 @@ import tableSound from "../../../assets/unit1/Page 8 - A 2/Table.mp3";
 import taxiSound from "../../../assets/unit1/Page 8 - A 2/Taxi.mp3";
 import deerSound from "../../../assets/unit1/Page 8 - A 2/Deer.mp3";
 import dishSound from "../../../assets/unit1/Page 8 - A 2/Dish.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ─────────────────────────────────────────────
 // Data
@@ -880,10 +881,11 @@ const Page8_Q2 = () => {
           gap: "40px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="number-of-q">2</span>
-          Drag the words to the correct picture.
-        </h5>
+        <ExerciseHeader
+          questionNumber="2"
+          title="Drag the words to the correct picture."
+          subTitle="Drag table, taxi, dish, and deer to their matching pictures. Tap each card to hear it again."
+        />
 
         <audio
           ref={clickAudioRef}

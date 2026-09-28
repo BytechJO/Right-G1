@@ -109,7 +109,7 @@
 
   width: 100%;
 
-  gap: 30px;
+  gap: 15px;
 
   grid-template-columns: 1fr 1fr;
 }
