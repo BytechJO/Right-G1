@@ -91,6 +91,7 @@ const BankChip = ({
   word,
   isUsed,
   locked,
+  showAnswer,
   selectedWordId,
   onSelect,
   registerRef,
@@ -167,8 +168,7 @@ const BankChip = ({
         cursor:
           isUsed || locked ? "not-allowed" : isDragging ? "grabbing" : "grab",
 
-        opacity: isDragging ? 0.35 : 1,
-
+        opacity: isDragging || showAnswer ? 0.35 : 1,
         transition: "all 0.15s",
 
         userSelect: "none",
@@ -826,7 +826,7 @@ export default function WB_Unit1_Page6_Q1() {
           <div className="div-forall">
             <ExerciseHeader
               sectionLetter="G"
-              title="Drag and drop the greetings."
+              title="Read, look, and write. Say."
               subTitle="Read each greeting and drag it to the matching picture."
             />
             {/* =================================
@@ -847,6 +847,7 @@ export default function WB_Unit1_Page6_Q1() {
                     selectedWordId={selectedWordId}
                     onSelect={handleWordSelect}
                     registerRef={registerBankRef}
+                    showAnswer={showAnswer}
                   />
                 );
               })}

@@ -974,7 +974,7 @@ const WB_Unit1_Page3_Q1 = () => {
             <div className="page8-content w-full">
               <ExerciseHeader
                 sectionLetter="A"
-                title="Drag and drop the words to make sentences."
+                title="Unscramble and write."
                 subTitle="Start with the capitalized word, then finish each sentence with the correct punctuation."
               />
             </div>

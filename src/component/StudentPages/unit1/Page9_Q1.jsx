@@ -99,7 +99,7 @@ const Page9_Q1 = () => {
       >
         <ExerciseHeader
           sectionLetter="D"
-          title="Answer and read"
+          title="Ask and answer."
           subTitle="Type your name in the blank, then read the complete dialogue aloud."
         />
         <audio ref={audioRef} style={{ display: "none" }} />

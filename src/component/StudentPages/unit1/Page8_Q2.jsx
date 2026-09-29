@@ -883,7 +883,7 @@ const Page8_Q2 = () => {
       >
         <ExerciseHeader
           questionNumber="2"
-          title="Drag the words to the correct picture."
+          title="Look and write."
           subTitle="Drag table, taxi, dish, and deer to their matching pictures. Tap each card to hear it again."
         />
 

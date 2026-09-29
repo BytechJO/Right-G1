@@ -294,7 +294,7 @@ const WB_Unit1_Page3_Q2 = () => {
       >
         <ExerciseHeader
           sectionLetter="B"
-          title="Tap or click the correct box."
+          title="Read and write."
           subTitle="Read the greeting, then tap the picture that shows it."
         />
         <div

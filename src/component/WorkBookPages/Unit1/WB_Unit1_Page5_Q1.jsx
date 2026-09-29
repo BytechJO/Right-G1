@@ -272,7 +272,7 @@ const WB_Unit1_Page5_Q1 = () => {
       >
         <ExerciseHeader
           sectionLetter="E"
-          title="Tap or click the correct greeting."
+          title="Look, read, and circle."
           subTitle="Look at the scene and tap the greeting people would say."
         />
         <div className="container-wb-u1-p5-q1">

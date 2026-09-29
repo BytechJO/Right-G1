@@ -686,7 +686,7 @@ export default function WB_Unit1_Page8_Q2() {
           <div className="div-forall">
             <ExerciseHeader
               sectionLetter="B"
-              title="Drag and drop the words."
+              title="Read and write the words in the correct column."
               subTitle="Say each word, then place it under d or t."
             />
             {/* ===================================

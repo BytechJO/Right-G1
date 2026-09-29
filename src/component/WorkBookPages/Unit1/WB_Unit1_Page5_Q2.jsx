@@ -291,7 +291,7 @@ const WB_Unit1_Page5_Q2 = () => {
       >
         <ExerciseHeader
           sectionLetter="F"
-          title="Tap or click the mistakes in the sentences."
+          title="Read and circle the mistakes."
           subTitle="Check capital letters and end marks, then tap every mistake."
         />
         <div className="sentence-container-wb-u1-p5-q2">

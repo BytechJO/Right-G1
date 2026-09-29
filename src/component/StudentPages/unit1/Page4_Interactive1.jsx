@@ -187,9 +187,7 @@ const Page4_Interactive1 = () => {
               picture?
             </h5>
 
-            <p
-              className="sub-header"
-            >
+            <p className="sub-header">
               Scan the whole picture, then tap the restaurant.
             </p>
           </div>

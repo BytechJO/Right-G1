@@ -253,7 +253,7 @@ const WB_Unit1_Page8_Q1 = () => {
       <div className="div-forall">
         <ExerciseHeader
           sectionLetter="A"
-          title="Listen and tap or click the correct word."
+          title="Listen, read, and circle the correct word."
           subTitle="Play the audio, look at the picture, and tap the correct word."
         />
         {/* ======================================

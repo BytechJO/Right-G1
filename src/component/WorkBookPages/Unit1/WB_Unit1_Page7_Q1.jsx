@@ -212,7 +212,7 @@ export default function WB_Unit1_Page7_Q1() {
         <div className="w-full flex flex-col gap-1">
           <ExerciseHeader
             sectionLetter="I"
-            title="Tap or click to color and say the words."
+            title="Read, color, and say."
             subTitle="Choose a color, color each greeting, and say it aloud."
           />
         </div>

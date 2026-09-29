@@ -219,8 +219,7 @@ const Page8_Q4 = () => {
       <div className="div-forall" style={{}}>
         <ExerciseHeader
           sectionLetter="C"
-          title="Drag the letters into the boxes to
-          make the secret sentence."
+          title="Answer the question."
           subTitle="Match each number to its letter, then build the hidden sentence."
         />
         <audio ref={sentenceAudioRef} style={{ display: "none" }} />
