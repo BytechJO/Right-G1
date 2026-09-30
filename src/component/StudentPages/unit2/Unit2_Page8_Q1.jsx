@@ -9,10 +9,10 @@ import duck from "../../../assets/unit1/imgs/duck.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import ExerciseHeader from "../../ExerciseHeader";
-import duckSound from "../../../assets/unit2/Page 17 - D/duck.mp3";
+import duckSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
 import tigerSound from "../../../assets/unit2/Page 17 - D/tiger.mp3";
-import dishSound from "../../../assets/unit2/Page 17 - D/dish.mp3";
-import tableSound from "../../../assets/unit2/Page 17 - D/table.mp3";
+import dishSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
+import tableSound from "../../../assets/unit2/Page 17 - D/Table.mp3";
 
 import { FaVolumeUp } from "react-icons/fa";
 const Unit2_Page8_Q1 = () => {

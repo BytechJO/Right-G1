@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+
 import {
   DndContext,
   DragOverlay,
@@ -9,7 +10,9 @@ import {
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
+
 import { CSS } from "@dnd-kit/utilities";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Page8_Q2.css";
 
@@ -22,25 +25,50 @@ import tableSound from "../../../assets/unit1/Page 8 - A 2/Table.mp3";
 import taxiSound from "../../../assets/unit1/Page 8 - A 2/Taxi.mp3";
 import deerSound from "../../../assets/unit1/Page 8 - A 2/Deer.mp3";
 import dishSound from "../../../assets/unit1/Page 8 - A 2/Dish.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
-// ─────────────────────────────────────────────
-// Data
-// ─────────────────────────────────────────────
+/* =====================================================
+   DATA
+===================================================== */
 
 const exerciseData = {
   pairs: [
-    { id: "pair-1", letter: "Table" },
-    { id: "pair-2", letter: "Taxi" },
-    { id: "pair-3", letter: "Deer" },
-    { id: "pair-4", letter: "Dish" },
+    {
+      id: "pair-1",
+      letter: "Table",
+    },
+    {
+      id: "pair-2",
+      letter: "Taxi",
+    },
+    {
+      id: "pair-3",
+      letter: "Deer",
+    },
+    {
+      id: "pair-4",
+      letter: "Dish",
+    },
   ],
 
   images: [
-    { src: img1, sound: tableSound },
-    { src: img2, sound: taxiSound },
-    { src: img3, sound: deerSound },
-    { src: img4, sound: dishSound },
+    {
+      src: img1,
+      sound: tableSound,
+    },
+    {
+      src: img2,
+      sound: taxiSound,
+    },
+    {
+      src: img3,
+      sound: deerSound,
+    },
+    {
+      src: img4,
+      sound: dishSound,
+    },
   ],
 
   answers: {
@@ -61,25 +89,29 @@ const initialDroppedState = {
   "drop-4": null,
 };
 
-// ─────────────────────────────────────────────
-// WordBankItem
-// ─────────────────────────────────────────────
+/* =====================================================
+   WORD BANK ITEM
+===================================================== */
 
 const WordBankItem = ({
   letter,
   isUsed,
   showAnswer,
+
   keyboardPickedWord,
   onKeyboardPick,
+
   registerBankRef,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: `bank-${letter}`,
+
       data: {
         letter,
         source: "bank",
       },
+
       disabled: isUsed || showAnswer,
     });
 
@@ -137,6 +169,7 @@ const WordBankItem = ({
     <div
       ref={(el) => {
         setNodeRef(el);
+
         registerBankRef(letter, el);
       }}
       style={style}
@@ -172,7 +205,7 @@ const WordBankItem = ({
         }
       }}
       onClick={(e) => {
-        // Narrator / Screen Reader activation
+        // Screen reader synthetic click
         if (e.detail === 0) {
           e.preventDefault();
           e.stopPropagation();
@@ -186,11 +219,17 @@ const WordBankItem = ({
   );
 };
 
-// ─────────────────────────────────────────────
-// PlacedWord
-// ─────────────────────────────────────────────
+/* =====================================================
+   PLACED WORD
+===================================================== */
 
-const PlacedWord = ({ letter, dropId, showAnswer, onReturnToBank }) => {
+const PlacedWord = ({
+  letter,
+  dropId,
+  showAnswer,
+  isLocked,
+  onReturnToBank,
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: `placed-${dropId}`,
@@ -201,21 +240,23 @@ const PlacedWord = ({ letter, dropId, showAnswer, onReturnToBank }) => {
         dropId,
       },
 
-      disabled: showAnswer,
+      disabled: showAnswer || isLocked,
     });
 
   const [isFocused, setIsFocused] = useState(false);
+
+  const disabled = showAnswer || isLocked;
 
   const style = {
     transform: CSS.Translate.toString(transform),
 
     opacity: isDragging ? 0.4 : 1,
 
-    cursor: showAnswer ? "default" : "pointer",
+    cursor: disabled ? "default" : "pointer",
 
     userSelect: "none",
 
-    ...(isFocused
+    ...(isFocused && !disabled
       ? {
           outline: "3px solid #2563eb",
 
@@ -229,25 +270,38 @@ const PlacedWord = ({ letter, dropId, showAnswer, onReturnToBank }) => {
       ref={setNodeRef}
       style={style}
       className="dropped-letter"
-      {...(showAnswer
+      {...(disabled
         ? {}
         : {
             ...listeners,
             ...attributes,
           })}
       role="button"
-      tabIndex={showAnswer ? -1 : 0}
-      aria-label={`${letter}. Press Enter to return it to the word bank.`}
-      title={`Return ${letter}`}
-      onFocus={() => setIsFocused(true)}
+      tabIndex={disabled ? -1 : 0}
+      aria-disabled={disabled}
+      aria-label={
+        isLocked
+          ? `${letter}. Correct answer. Answer locked.`
+          : `${letter}. Press Enter to return it to the word bank.`
+      }
+      title={isLocked ? `${letter} correct` : `Return ${letter}`}
+      onFocus={() => {
+        if (!disabled) {
+          setIsFocused(true);
+        }
+      }}
       onBlur={() => setIsFocused(false)}
-      onClick={() => !showAnswer && onReturnToBank(dropId)}
+      onClick={() => {
+        if (!disabled) {
+          onReturnToBank(dropId);
+        }
+      }}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           e.stopPropagation();
 
-          if (!showAnswer) {
+          if (!disabled) {
             onReturnToBank(dropId);
           }
         }
@@ -258,18 +312,24 @@ const PlacedWord = ({ letter, dropId, showAnswer, onReturnToBank }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// DropZone
-// ─────────────────────────────────────────────
+/* =====================================================
+   DROP ZONE
+===================================================== */
 
 const DropZone = ({
   dropId,
+
   imageSrc,
   sound,
   index,
+
   droppedLetter,
+
   isWrong,
+  isLocked,
+
   showAnswer,
+
   onReturnToBank,
   onPlaySound,
 
@@ -277,26 +337,54 @@ const DropZone = ({
   onKeyboardDrop,
 
   registerDropRef,
-  totalDrops,
+
+  availableDropIndexes,
+
   onMoveDropFocus,
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: dropId,
-    disabled: showAnswer,
+
+    disabled: showAnswer || isLocked,
   });
 
   const [isFocused, setIsFocused] = useState(false);
 
   const [isImageFocused, setIsImageFocused] = useState(false);
 
-  const canKeyboardDrop = keyboardPickedWord && !showAnswer;
+  const canKeyboardDrop = keyboardPickedWord && !showAnswer && !isLocked;
 
   const activateDrop = () => {
-    if (!keyboardPickedWord || showAnswer) {
+    if (!keyboardPickedWord || showAnswer || isLocked) {
       return;
     }
 
     onKeyboardDrop(dropId, index);
+  };
+
+  const moveFocus = (backwards = false) => {
+    if (availableDropIndexes.length === 0) {
+      return;
+    }
+
+    const currentPosition = availableDropIndexes.indexOf(index);
+
+    let nextPosition;
+
+    if (backwards) {
+      nextPosition =
+        currentPosition <= 0
+          ? availableDropIndexes.length - 1
+          : currentPosition - 1;
+    } else {
+      nextPosition =
+        currentPosition === -1 ||
+        currentPosition === availableDropIndexes.length - 1
+          ? 0
+          : currentPosition + 1;
+    }
+
+    onMoveDropFocus(availableDropIndexes[nextPosition]);
   };
 
   return (
@@ -319,7 +407,10 @@ const DropZone = ({
       </div>
 
       <div className="flex flex-col gap-5 items-center">
-        {/* IMAGE */}
+        {/* =========================
+            IMAGE
+        ========================= */}
+
         <img
           src={imageSrc}
           alt={`Picture ${index + 1}`}
@@ -350,59 +441,68 @@ const DropZone = ({
           }}
         />
 
-        {/* DROP BOX */}
+        {/* =========================
+            DROP BOX
+        ========================= */}
+
         <div
           ref={(el) => {
             setNodeRef(el);
 
             registerDropRef(index, el);
           }}
-          className={`drop-box${isOver ? " is-over" : ""}${
+          className={`drop-box${isOver && !isLocked ? " is-over" : ""}${
             isWrong ? " wrong-drop" : ""
           }`}
           role="button"
-          tabIndex={showAnswer ? -1 : 0}
+          aria-disabled={showAnswer || isLocked}
+          tabIndex={showAnswer || isLocked ? -1 : 0}
           aria-label={
-            keyboardPickedWord
-              ? droppedLetter
-                ? `Answer ${
-                    index + 1
-                  }. Current word ${droppedLetter}. Press Enter to replace it with ${keyboardPickedWord}.`
-                : `Answer ${
-                    index + 1
-                  }. Press Enter to place ${keyboardPickedWord}.`
-              : droppedLetter
-                ? `Answer ${index + 1}. ${droppedLetter} is placed here.`
-                : `Answer ${index + 1}. Empty. Select a word first.`
+            isLocked
+              ? `Answer ${
+                  index + 1
+                }. ${droppedLetter} is correct. Answer locked.`
+              : keyboardPickedWord
+                ? droppedLetter
+                  ? `Answer ${
+                      index + 1
+                    }. Current word ${droppedLetter}. Press Enter to replace it with ${keyboardPickedWord}.`
+                  : `Answer ${
+                      index + 1
+                    }. Press Enter to place ${keyboardPickedWord}.`
+                : droppedLetter
+                  ? `Answer ${index + 1}. ${droppedLetter} is placed here.`
+                  : `Answer ${index + 1}. Empty. Select a word first.`
           }
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            if (!isLocked) {
+              setIsFocused(true);
+            }
+          }}
           onBlur={() => setIsFocused(false)}
           onKeyDown={(e) => {
-            // ==================================
-            // طول ما في كلمة ممسوكة
-            // Tab ينحصر بالـ Drop Boxes
-            // ==================================
+            if (isLocked) {
+              return;
+            }
+
+            /* =========================
+               TAB بين الخانات
+               غير المقفلة فقط
+            ========================= */
+
             if (keyboardPickedWord && e.key === "Tab") {
               e.preventDefault();
               e.stopPropagation();
 
-              let nextIndex;
-
-              if (e.shiftKey) {
-                nextIndex = index === 0 ? totalDrops - 1 : index - 1;
-              } else {
-                nextIndex = index === totalDrops - 1 ? 0 : index + 1;
-              }
-
-              onMoveDropFocus(nextIndex);
+              moveFocus(e.shiftKey);
 
               return;
             }
 
-            // ==================================
-            // Enter / Space
-            // حط أو استبدل الكلمة
-            // ==================================
+            /* =========================
+               ENTER / SPACE
+            ========================= */
+
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               e.stopPropagation();
@@ -411,7 +511,8 @@ const DropZone = ({
             }
           }}
           onClick={(e) => {
-            // Narrator synthetic click
+            // Screen reader synthetic click
+
             if (e.detail === 0) {
               e.preventDefault();
               e.stopPropagation();
@@ -420,22 +521,30 @@ const DropZone = ({
             }
           }}
           style={{
-            background: isOver
-              ? "rgba(28,61,126,0.10)"
-              : canKeyboardDrop && isFocused
-                ? "#dbeafe"
-                : undefined,
+            cursor: showAnswer || isLocked ? "default" : "pointer",
+
+            background: isLocked
+              ? undefined
+              : isOver
+                ? "rgba(28,61,126,0.10)"
+                : canKeyboardDrop && isFocused
+                  ? "#dbeafe"
+                  : undefined,
 
             outline:
-              canKeyboardDrop && isFocused ? "3px solid #2563eb" : "none",
+              !isLocked && canKeyboardDrop && isFocused
+                ? "3px solid #2563eb"
+                : "none",
 
             outlineOffset: "4px",
 
             transform:
-              canKeyboardDrop && isFocused ? "scale(1.06)" : "scale(1)",
+              !isLocked && canKeyboardDrop && isFocused
+                ? "scale(1.06)"
+                : "scale(1)",
 
             boxShadow:
-              canKeyboardDrop && isFocused
+              !isLocked && canKeyboardDrop && isFocused
                 ? "0 0 0 4px rgba(37,99,235,0.15)"
                 : "none",
 
@@ -448,6 +557,7 @@ const DropZone = ({
               letter={droppedLetter}
               dropId={dropId}
               showAnswer={showAnswer}
+              isLocked={isLocked}
               onReturnToBank={onReturnToBank}
             />
           ) : (
@@ -459,16 +569,19 @@ const DropZone = ({
   );
 };
 
-// ─────────────────────────────────────────────
-// WordBank
-// ─────────────────────────────────────────────
+/* =====================================================
+   WORD BANK
+===================================================== */
 
 const WordBank = ({
   shuffledPairs,
+
   usedLetters,
+
   showAnswer,
 
   keyboardPickedWord,
+
   onKeyboardPick,
 
   registerBankRef,
@@ -504,24 +617,24 @@ const WordBank = ({
   );
 };
 
-// ─────────────────────────────────────────────
-// Main Component
-// ─────────────────────────────────────────────
+/* =====================================================
+   MAIN COMPONENT
+===================================================== */
 
 const Page8_Q2 = () => {
   const clickAudioRef = useRef(null);
 
-  // ========================================
-  // ACCESSIBILITY REFS
-  // ========================================
+  /* =====================================================
+     ACCESSIBILITY REFS
+  ===================================================== */
 
   const bankRefs = useRef({});
 
   const dropRefs = useRef([]);
 
-  // ========================================
-  // STATES
-  // ========================================
+  /* =====================================================
+     STATES
+  ===================================================== */
 
   const [droppedLetters, setDroppedLetters] = useState({
     ...initialDroppedState,
@@ -531,23 +644,39 @@ const Page8_Q2 = () => {
 
   const [wrongDrops, setWrongDrops] = useState([]);
 
+  const [lockedDrops, setLockedDrops] = useState([]);
+
   const [showAnswer, setShowAnswer] = useState(false);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeDrag, setActiveDrag] = useState(null);
 
-  // ========================================
-  // ACCESSIBILITY
-  // ========================================
+  /* =====================================================
+     ACCESSIBILITY
+  ===================================================== */
 
   const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
 
   const [keyboardMessage, setKeyboardMessage] = useState("");
 
+  /* =====================================================
+     USED WORDS
+  ===================================================== */
+
   const usedLetters = new Set(Object.values(droppedLetters).filter(Boolean));
 
-  // ========================================
-  // PLAY SOUND
-  // ========================================
+  /* =====================================================
+     UNLOCKED DROP INDEXES
+  ===================================================== */
+
+  const availableDropIndexes = exerciseData.images
+    .map((_, index) => index)
+    .filter((index) => !lockedDrops.includes(`drop-${index + 1}`));
+
+  /* =====================================================
+     PLAY SOUND
+  ===================================================== */
 
   const playSound = (sound) => {
     if (!sound) return;
@@ -565,9 +694,9 @@ const Page8_Q2 = () => {
     }
   };
 
-  // ========================================
-  // KEYBOARD PICK
-  // ========================================
+  /* =====================================================
+     KEYBOARD PICK
+  ===================================================== */
 
   const handleKeyboardPick = (letter) => {
     if (!letter) {
@@ -584,51 +713,53 @@ const Page8_Q2 = () => {
       `${letter} selected. Choose an answer box and press Enter.`,
     );
 
-    // مباشرة لأول Drop Box
+    /* =========================================
+       روح لأول Drop غير مقفول
+    ========================================= */
+
     setTimeout(() => {
-      dropRefs.current[0]?.focus();
+      const firstUnlockedIndex = exerciseData.images.findIndex(
+        (_, index) => !lockedDrops.includes(`drop-${index + 1}`),
+      );
+
+      if (firstUnlockedIndex !== -1) {
+        dropRefs.current[firstUnlockedIndex]?.focus();
+      }
     }, 0);
   };
 
-  // ========================================
-  // KEYBOARD DROP
-  // ========================================
+  /* =====================================================
+     KEYBOARD DROP
+  ===================================================== */
 
   const handleKeyboardDrop = (dropId, index) => {
-    if (!keyboardPickedWord || showAnswer) {
+    if (!keyboardPickedWord || showAnswer || lockedDrops.includes(dropId)) {
       return;
     }
 
     const placedWord = keyboardPickedWord;
 
-    // نحسب الوضع الجديد قبل setState
     const nextDropped = {
       ...droppedLetters,
 
-      // ==================================
-      // إذا في كلمة موجودة
-      // بتنستبدل عادي
-      // ==================================
       [dropId]: placedWord,
     };
 
     setDroppedLetters(nextDropped);
 
-    setWrongDrops([]);
+    // شيل X فقط عن نفس الخانة
+    setWrongDrops((prev) => prev.filter((id) => id !== dropId));
 
     setKeyboardMessage(
       `${placedWord} placed in answer ${index + 1}. Choose another word.`,
     );
 
-    // ==================================
-    // فك الكلمة
-    // ==================================
     setKeyboardPickedWord(null);
 
-    // ==================================
-    // رجع Focus فوق
-    // لأول كلمة متاحة
-    // ==================================
+    /* =========================================
+       رجع لأول كلمة متاحة بالبنك
+    ========================================= */
+
     const usedAfter = new Set(Object.values(nextDropped).filter(Boolean));
 
     const firstAvailable = shuffledPairs.find(
@@ -642,9 +773,9 @@ const Page8_Q2 = () => {
     }, 0);
   };
 
-  // ========================================
-  // Sensors
-  // ========================================
+  /* =====================================================
+     SENSORS
+  ===================================================== */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -661,9 +792,9 @@ const Page8_Q2 = () => {
     }),
   );
 
-  // ─────────────────────────────────────────
-  // Drag Start
-  // ─────────────────────────────────────────
+  /* =====================================================
+     DRAG START
+  ===================================================== */
 
   const handleDragStart = (event) => {
     const { data } = event.active;
@@ -671,14 +802,16 @@ const Page8_Q2 = () => {
     setActiveDrag(data.current);
   };
 
-  // ─────────────────────────────────────────
-  // Drag End
-  // ─────────────────────────────────────────
+  /* =====================================================
+     DRAG END
+  ===================================================== */
 
   const handleDragEnd = (event) => {
     setActiveDrag(null);
 
-    if (showAnswer) return;
+    if (showAnswer) {
+      return;
+    }
 
     const { active, over } = event;
 
@@ -688,50 +821,82 @@ const Page8_Q2 = () => {
 
     const toId = over.id;
 
+    /* =========================================
+       لا تعدل خانة صحيحة مقفلة
+    ========================================= */
+
+    if (lockedDrops.includes(toId)) {
+      return;
+    }
+
+    /* =========================================
+       لو المصدر نفسه مقفول
+    ========================================= */
+
+    if (source === "drop" && lockedDrops.includes(fromDropId)) {
+      return;
+    }
+
     setDroppedLetters((prev) => {
       const next = {
         ...prev,
       };
 
-      // لو جاي من drop
+      /* =====================================
+           لو جاي من Drop
+        ===================================== */
+
       if (source === "drop") {
         next[fromDropId] = null;
       }
 
-      // رجعه للبنك
+      /* =====================================
+           رجعه للبنك
+        ===================================== */
+
       if (toId === "letters") {
         return next;
       }
 
-      // ==================================
-      // Drop / Replace
-      // ==================================
+      /* =====================================
+           DROP / REPLACE
+        ===================================== */
+
       next[toId] = letter;
 
       return next;
     });
 
-    setWrongDrops([]);
+    /* =========================================
+       شيل X فقط عن العناصر المعدلة
+    ========================================= */
+
+    setWrongDrops((prev) =>
+      prev.filter((id) => id !== toId && id !== fromDropId),
+    );
   };
 
-  // ─────────────────────────────────────────
-  // Return To Bank
-  // ─────────────────────────────────────────
+  /* =====================================================
+     RETURN TO BANK
+  ===================================================== */
 
   const handleReturnToBank = (dropZoneId) => {
-    if (showAnswer) return;
+    if (showAnswer || lockedDrops.includes(dropZoneId)) {
+      return;
+    }
 
     setDroppedLetters((prev) => ({
       ...prev,
+
       [dropZoneId]: null,
     }));
 
     setWrongDrops((prev) => prev.filter((id) => id !== dropZoneId));
   };
 
-  // ─────────────────────────────────────────
-  // Reset
-  // ─────────────────────────────────────────
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const resetExercise = () => {
     setDroppedLetters({
@@ -740,21 +905,34 @@ const Page8_Q2 = () => {
 
     setWrongDrops([]);
 
+    setLockedDrops([]);
+
     setShowAnswer(false);
+
+    setCheckCompleted(false);
 
     setKeyboardPickedWord(null);
 
     setKeyboardMessage("");
+
+    setActiveDrag(null);
+
+    // اختياري لو بدك shuffle جديد كل reset
+    // setShuffledPairs(getShuffledPairs());
   };
 
-  // ─────────────────────────────────────────
-  // Check
-  // ─────────────────────────────────────────
+  /* =====================================================
+     CHECK
+  ===================================================== */
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
-    const allFilled = Object.values(droppedLetters).every((v) => v !== null);
+    const allFilled = Object.values(droppedLetters).every(
+      (value) => value !== null,
+    );
 
     if (!allFilled) {
       ValidationAlert.info(
@@ -771,19 +949,30 @@ const Page8_Q2 = () => {
 
     const wrongList = [];
 
+    const correctList = [];
+
     exerciseData.pairs.forEach((_, index) => {
       const dropZoneId = `drop-${index + 1}`;
 
-      if (droppedLetters[dropZoneId] === exerciseData.answers[dropZoneId]) {
+      const isCorrect =
+        droppedLetters[dropZoneId] === exerciseData.answers[dropZoneId];
+
+      if (isCorrect) {
         correctCount++;
+
+        correctList.push(dropZoneId);
       } else {
         wrongList.push(dropZoneId);
       }
     });
 
-    setWrongDrops(wrongList);
+    /* =========================================
+         الصح فقط ينقفل
+      ========================================= */
 
-    setShowAnswer(true);
+    setLockedDrops((prev) => Array.from(new Set([...prev, ...correctList])));
+
+    setWrongDrops(wrongList);
 
     setKeyboardPickedWord(null);
 
@@ -791,25 +980,37 @@ const Page8_Q2 = () => {
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-      <div style="font-size:20px;margin-top:10px;text-align:center;">
-        <span style="color:${color};font-weight:bold;">
-          Score: ${correctCount} / ${total}
-        </span>
-      </div>
-    `;
+        <div style="font-size:20px;margin-top:10px;text-align:center;">
+          <span style="color:${color};font-weight:bold;">
+            Score: ${correctCount} / ${total}
+          </span>
+        </div>
+      `;
+
+    /* =========================================
+         ALL CORRECT
+      ========================================= */
 
     if (correctCount === total) {
+      setLockedDrops(Object.keys(exerciseData.answers));
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
   };
 
-  // ─────────────────────────────────────────
-  // Show Answer
-  // ─────────────────────────────────────────
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
 
   const handleShowAnswer = () => {
     setDroppedLetters({
@@ -818,12 +1019,20 @@ const Page8_Q2 = () => {
 
     setWrongDrops([]);
 
+    setLockedDrops(Object.keys(exerciseData.answers));
+
     setShowAnswer(true);
+
+    setCheckCompleted(true);
 
     setKeyboardPickedWord(null);
 
     setKeyboardMessage("Correct answers are shown.");
   };
+
+  /* =====================================================
+     JSX
+  ===================================================== */
 
   return (
     <div
@@ -832,9 +1041,9 @@ const Page8_Q2 = () => {
         padding: "30px",
       }}
     >
-      {/* ========================================
-          Screen Reader Message
-      ======================================== */}
+      {/* =================================================
+          SCREEN READER MESSAGE
+      ================================================= */}
 
       <div
         role="status"
@@ -899,7 +1108,9 @@ const Page8_Q2 = () => {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          {/* Word Bank */}
+          {/* =================================================
+              WORD BANK
+          ================================================= */}
 
           <WordBank
             shuffledPairs={shuffledPairs}
@@ -912,12 +1123,16 @@ const Page8_Q2 = () => {
             }}
           />
 
-          {/* Drop Zones */}
+          {/* =================================================
+              DROP ZONES
+          ================================================= */}
 
           <div className="exercise-layout-vertical">
             <div className="image-section-horizontal">
               {exerciseData.images.map((image, index) => {
                 const dropId = `drop-${index + 1}`;
+
+                const isLocked = lockedDrops.includes(dropId);
 
                 return (
                   <DropZone
@@ -928,6 +1143,7 @@ const Page8_Q2 = () => {
                     index={index}
                     droppedLetter={droppedLetters[dropId]}
                     isWrong={wrongDrops.includes(dropId)}
+                    isLocked={isLocked}
                     showAnswer={showAnswer}
                     onReturnToBank={handleReturnToBank}
                     onPlaySound={playSound}
@@ -936,7 +1152,7 @@ const Page8_Q2 = () => {
                     registerDropRef={(i, el) => {
                       dropRefs.current[i] = el;
                     }}
-                    totalDrops={exerciseData.images.length}
+                    availableDropIndexes={availableDropIndexes}
                     onMoveDropFocus={(i) => {
                       dropRefs.current[i]?.focus();
                     }}
@@ -946,7 +1162,9 @@ const Page8_Q2 = () => {
             </div>
           </div>
 
-          {/* Drag Overlay */}
+          {/* =================================================
+              DRAG OVERLAY
+          ================================================= */}
 
           <DragOverlay>
             {activeDrag ? (
@@ -967,9 +1185,9 @@ const Page8_Q2 = () => {
         </DndContext>
       </div>
 
-      {/* ========================================
-          Action Buttons
-      ======================================== */}
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
 
       <div className="action-buttons-container">
         <button
