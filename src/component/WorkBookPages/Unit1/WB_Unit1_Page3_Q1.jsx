@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import {
@@ -12,20 +13,21 @@ import {
   useDraggable,
 } from "@dnd-kit/core";
 
-// ======================================================
-// AUDIO
-// ======================================================
+/* ======================================================
+   AUDIO
+====================================================== */
 
 import sentence1Audio from "../../../assets/U1 WB/U1/page_3/Item_001_morning_Good!.mp3";
 import sentence2Audio from "../../../assets/U1 WB/U1/page_3/Item_002_you_How_are.mp3";
 import sentence3Audio from "../../../assets/U1 WB/U1/page_3/Item_003_you_Fine,_thank.mp3";
 import sentence4Audio from "../../../assets/U1 WB/U1/page_3/Item_005_evening_Good!.mp3";
 import sentence5Audio from "../../../assets/U1 WB/U1/page_3/Item_009_I'm_John._Hello!.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
-// ======================================================
-// DATA
-// ======================================================
+/* ======================================================
+   DATA
+====================================================== */
 
 const data = [
   {
@@ -71,9 +73,9 @@ const joinWords = (words) => {
   });
 };
 
-// ======================================================
-// WORD CHIP
-// ======================================================
+/* ======================================================
+   WORD CHIP
+====================================================== */
 
 const WordChip = ({
   id,
@@ -145,13 +147,14 @@ const WordChip = ({
 
         color: disabled ? "#999" : undefined,
 
-        cursor: disabled ? "not-allowed" : isDragging ? "grabbing" : "grab",
+        cursor: disabled ? "default" : isDragging ? "grabbing" : "grab",
 
         opacity: isDragging ? 0.35 : 1,
 
         transition: "all 0.2s",
 
         userSelect: "none",
+
         touchAction: "none",
 
         display: "inline-block",
@@ -168,9 +171,9 @@ const WordChip = ({
   );
 };
 
-// ======================================================
-// ANSWER DROP ZONE
-// ======================================================
+/* ======================================================
+   ANSWER DROP ZONE
+====================================================== */
 
 const AnswerDropZone = ({
   id,
@@ -190,12 +193,21 @@ const AnswerDropZone = ({
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id,
+
+    /*
+      إذا الجملة صح ومقفلة
+      الخانة نفسها ما تستقبل Drop.
+    */
+    disabled: locked || showAnswer,
   });
 
   const dropSentenceIndex = Number(id.replace("blank-", ""));
 
   const isKeyboardTarget =
-    Boolean(keyboardSelected) && selectedSentenceIndex === dropSentenceIndex;
+    Boolean(keyboardSelected) &&
+    selectedSentenceIndex === dropSentenceIndex &&
+    !locked &&
+    !showAnswer;
 
   const setRefs = (node) => {
     setNodeRef(node);
@@ -204,6 +216,10 @@ const AnswerDropZone = ({
       registerDropRef(id, node);
     }
   };
+
+  /* ====================================================
+     SHOW ANSWER
+  ==================================================== */
 
   if (showAnswer) {
     return (
@@ -216,8 +232,11 @@ const AnswerDropZone = ({
           className="missing-input-wb-unit1-p3-q1"
           style={{
             display: "flex",
+
             alignItems: "center",
+
             flexWrap: "wrap",
+
             gap: "0px",
           }}
         >
@@ -226,6 +245,10 @@ const AnswerDropZone = ({
       </div>
     );
   }
+
+  /* ====================================================
+     KEYBOARD DROP
+  ==================================================== */
 
   const handleDropKeyDown = (e) => {
     if (locked || !keyboardSelected || !isKeyboardTarget) {
@@ -249,49 +272,61 @@ const AnswerDropZone = ({
       <div
         ref={setRefs}
         role="button"
+        aria-disabled={locked}
         tabIndex={
           locked ? -1 : keyboardSelected ? (isKeyboardTarget ? 0 : -1) : 0
         }
         aria-label={
-          isKeyboardTarget
+          locked
             ? `Answer box for sentence ${
                 dropSentenceIndex + 1
-              }. Press Enter or Space to place ${selectedWord}.`
-            : wordList.length
-              ? "Answer box. Contains selected words."
-              : "Empty answer box."
+              }. Correct answer. Answer locked.`
+            : isKeyboardTarget
+              ? `Answer box for sentence ${
+                  dropSentenceIndex + 1
+                }. Press Enter or Space to place ${selectedWord}.`
+              : wordList.length
+                ? "Answer box. Contains selected words."
+                : "Empty answer box."
         }
         onKeyDown={handleDropKeyDown}
         className={`missing-input-wb-unit1-p3-q1${
-          isOver ? " drag-over-cell" : ""
+          isOver && !locked ? " drag-over-cell" : ""
         }`}
         style={{
-          background: isKeyboardTarget
-            ? "#eff6ff"
-            : isOver
-              ? "#e3f2fd"
-              : undefined,
+          background: locked
+            ? undefined
+            : isKeyboardTarget
+              ? "#eff6ff"
+              : isOver
+                ? "#e3f2fd"
+                : undefined,
 
-          outline: isKeyboardTarget ? "3px solid #2563eb" : undefined,
+          outline:
+            !locked && isKeyboardTarget ? "3px solid #2563eb" : undefined,
 
           outlineOffset: "3px",
 
           transition: "background 0.15s, outline 0.15s",
 
           display: "flex",
+
           alignItems: "center",
+
           flexWrap: "wrap",
 
           gap: "4px",
 
           minHeight: "38px",
 
-          cursor: isKeyboardTarget ? "pointer" : "default",
+          cursor: locked ? "default" : isKeyboardTarget ? "pointer" : "default",
 
           position: "relative",
         }}
       >
-        {/* الكلمات اللي انحطت */}
+        {/* =================================================
+            PLACED WORDS
+        ================================================= */}
 
         {wordList.map((entry, idx) => {
           const isPunct = PUNCTUATION.has(entry.word);
@@ -315,7 +350,9 @@ const AnswerDropZone = ({
                 }
               }}
               onKeyDown={(e) => {
-                if (locked) return;
+                if (locked) {
+                  return;
+                }
 
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
@@ -353,7 +390,9 @@ const AnswerDropZone = ({
           );
         })}
 
-        {/* Preview للكلمة المختارة */}
+        {/* =================================================
+            KEYBOARD PREVIEW
+        ================================================= */}
 
         {isKeyboardTarget && selectedWord && (
           <span
@@ -397,9 +436,9 @@ const AnswerDropZone = ({
   );
 };
 
-// ======================================================
-// MAIN
-// ======================================================
+/* ======================================================
+   MAIN
+====================================================== */
 
 const WB_Unit1_Page3_Q1 = () => {
   const [wordLists, setWordLists] = useState(data.map(() => []));
@@ -412,13 +451,19 @@ const WB_Unit1_Page3_Q1 = () => {
 
   const [keyboardSelected, setKeyboardSelected] = useState(null);
 
-  const [locked, setLocked] = useState(false);
+  /* ====================================================
+     PROGRESSIVE LOCK
+  ==================================================== */
+
+  const [lockedSentences, setLockedSentences] = useState(data.map(() => false));
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [announcement, setAnnouncement] = useState("");
 
-  // ====================================================
-  // AUDIO STATE
-  // ====================================================
+  /* ====================================================
+     AUDIO STATE
+  ==================================================== */
 
   const audioRef = useRef(null);
 
@@ -429,9 +474,11 @@ const WB_Unit1_Page3_Q1 = () => {
 
     if (!src) return;
 
-    // وقف الصوت السابق
+    /* stop previous */
+
     if (audioRef.current) {
       audioRef.current.pause();
+
       audioRef.current.currentTime = 0;
     }
 
@@ -452,10 +499,12 @@ const WB_Unit1_Page3_Q1 = () => {
     };
   };
 
-  // refs الكلمات
+  /* ====================================================
+     REFS
+  ==================================================== */
+
   const wordRefs = useRef({});
 
-  // refs inputs
   const dropRefs = useRef({});
 
   const sensors = useSensors(
@@ -466,9 +515,9 @@ const WB_Unit1_Page3_Q1 = () => {
     }),
   );
 
-  // ====================================================
-  // PARSE ID
-  // ====================================================
+  /* ====================================================
+     PARSE ID
+  ==================================================== */
 
   const parseId = (id) => {
     const parts = String(id).split("-");
@@ -494,9 +543,9 @@ const WB_Unit1_Page3_Q1 = () => {
 
   const selectedWord = selectedData?.word ?? null;
 
-  // ====================================================
-  // USED WORDS
-  // ====================================================
+  /* ====================================================
+     USED WORDS
+  ==================================================== */
 
   const usedWordsPerSentence = data.map((item, i) =>
     wordLists[i].map((entry) => entry.wordIndex),
@@ -505,9 +554,9 @@ const WB_Unit1_Page3_Q1 = () => {
   const isWordUsed = (sentenceIndex, wordIndex) =>
     usedWordsPerSentence[sentenceIndex].includes(wordIndex);
 
-  // ====================================================
-  // REFS
-  // ====================================================
+  /* ====================================================
+     REGISTER REFS
+  ==================================================== */
 
   const registerWordRef = (id, node) => {
     if (node) {
@@ -525,9 +574,9 @@ const WB_Unit1_Page3_Q1 = () => {
     }
   };
 
-  // ====================================================
-  // FOCUS NEXT WORD
-  // ====================================================
+  /* ====================================================
+     FOCUS NEXT AVAILABLE WORD
+  ==================================================== */
 
   const focusNextAvailableWord = (
     currentSentence,
@@ -535,54 +584,104 @@ const WB_Unit1_Page3_Q1 = () => {
     updatedWordLists,
   ) => {
     window.setTimeout(() => {
-      const currentWords = data[currentSentence].scrambled.split(/\s+/);
+      /*
+          إذا الجملة اتقفلت،
+          ما نرجع لكلماتها.
+          روح لأول كلمة متاحة في سؤال آخر.
+        */
 
-      // بعد الحالية بنفس السؤال
-      for (
-        let index = currentWordIndex + 1;
-        index < currentWords.length;
-        index++
-      ) {
-        const used = updatedWordLists[currentSentence].some(
-          (entry) => entry.wordIndex === index,
-        );
+      if (!lockedSentences[currentSentence]) {
+        const currentWords = data[currentSentence].scrambled.split(/\s+/);
 
-        if (!used) {
-          const id = `${currentSentence}-${currentWords[index]}-${index}`;
+        /* بعد الحالية */
 
-          const element = wordRefs.current[id];
+        for (
+          let index = currentWordIndex + 1;
+          index < currentWords.length;
+          index++
+        ) {
+          const used = updatedWordLists[currentSentence].some(
+            (entry) => entry.wordIndex === index,
+          );
 
-          if (element) {
-            element.focus();
-            return;
+          if (!used) {
+            const id = `${currentSentence}-${currentWords[index]}-${index}`;
+
+            const element = wordRefs.current[id];
+
+            if (element) {
+              element.focus();
+              return;
+            }
+          }
+        }
+
+        /* بداية نفس السؤال */
+
+        for (let index = 0; index < currentWordIndex; index++) {
+          const used = updatedWordLists[currentSentence].some(
+            (entry) => entry.wordIndex === index,
+          );
+
+          if (!used) {
+            const id = `${currentSentence}-${currentWords[index]}-${index}`;
+
+            const element = wordRefs.current[id];
+
+            if (element) {
+              element.focus();
+              return;
+            }
           }
         }
       }
 
-      // ارجع لبداية نفس السؤال
-      for (let index = 0; index < currentWordIndex; index++) {
-        const used = updatedWordLists[currentSentence].some(
-          (entry) => entry.wordIndex === index,
-        );
+      /* =========================================
+           الأسئلة التالية غير المقفلة
+        ========================================= */
 
-        if (!used) {
-          const id = `${currentSentence}-${currentWords[index]}-${index}`;
-
-          const element = wordRefs.current[id];
-
-          if (element) {
-            element.focus();
-            return;
-          }
-        }
-      }
-
-      // السؤال اللي بعده
       for (
         let sentenceIndex = currentSentence + 1;
         sentenceIndex < data.length;
         sentenceIndex++
       ) {
+        if (lockedSentences[sentenceIndex]) {
+          continue;
+        }
+
+        const words = data[sentenceIndex].scrambled.split(/\s+/);
+
+        for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+          const used = updatedWordLists[sentenceIndex].some(
+            (entry) => entry.wordIndex === wordIndex,
+          );
+
+          if (!used) {
+            const id = `${sentenceIndex}-${words[wordIndex]}-${wordIndex}`;
+
+            const element = wordRefs.current[id];
+
+            if (element) {
+              element.focus();
+              return;
+            }
+          }
+        }
+      }
+
+      /* =========================================
+           Wrap لأول سؤال غير مقفول
+        ========================================= */
+
+      for (
+        let sentenceIndex = 0;
+        sentenceIndex < currentSentence;
+        sentenceIndex++
+      ) {
+        if (lockedSentences[sentenceIndex]) {
+          continue;
+        }
+
         const words = data[sentenceIndex].scrambled.split(/\s+/);
 
         for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
@@ -605,18 +704,22 @@ const WB_Unit1_Page3_Q1 = () => {
     }, 0);
   };
 
-  // ====================================================
-  // DRAG
-  // ====================================================
+  /* ====================================================
+     DRAG START
+  ==================================================== */
 
   const handleDragStart = ({ active }) => {
     setActiveId(active.id);
   };
 
+  /* ====================================================
+     DRAG END
+  ==================================================== */
+
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
 
-    if (!over || showAnswer || locked) {
+    if (!over || showAnswer || checkCompleted) {
       return;
     }
 
@@ -630,7 +733,21 @@ const WB_Unit1_Page3_Q1 = () => {
 
     const destSentence = Number(destId.replace("blank-", ""));
 
+    /*
+      كل كلمة تروح فقط
+      للخانة الخاصة بجملتها.
+    */
+
     if (sentenceIndex !== destSentence) {
+      return;
+    }
+
+    /*
+      الجملة الصحيحة المقفلة
+      ممنوع تتغير.
+    */
+
+    if (lockedSentences[destSentence]) {
       return;
     }
 
@@ -653,25 +770,46 @@ const WB_Unit1_Page3_Q1 = () => {
       return updated;
     });
 
-    setWrong(data.map(() => false));
+    /*
+      إذا كانت نفس الجملة عليها X،
+      نشيله فقط عنها.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[sentenceIndex] = false;
+
+      return updated;
+    });
   };
 
-  // ====================================================
-  // KEYBOARD SELECT
-  // ====================================================
+  /* ====================================================
+     KEYBOARD SELECT
+  ==================================================== */
 
   const handleKeyboardSelect = (id) => {
-    if (showAnswer || locked) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
     const { word, sentenceIndex } = parseId(id);
 
+    /*
+      الجملة الصحيحة المقفلة
+      ما نقبل اختيار كلمة منها.
+    */
+
+    if (lockedSentences[sentenceIndex]) {
+      return;
+    }
+
     setKeyboardSelected(id);
 
     setAnnouncement(`${word} selected. Press Enter again to place it.`);
 
-    // مباشرة على input نفس السؤال
+    /* مباشرة على input نفس السؤال */
+
     window.setTimeout(() => {
       const dropId = `blank-${sentenceIndex}`;
 
@@ -683,12 +821,12 @@ const WB_Unit1_Page3_Q1 = () => {
     }, 0);
   };
 
-  // ====================================================
-  // KEYBOARD DROP
-  // ====================================================
+  /* ====================================================
+     KEYBOARD DROP
+  ==================================================== */
 
   const handleKeyboardDrop = (dropId) => {
-    if (!keyboardSelected || showAnswer || locked) {
+    if (!keyboardSelected || showAnswer || checkCompleted) {
       return;
     }
 
@@ -697,6 +835,10 @@ const WB_Unit1_Page3_Q1 = () => {
     const destSentence = Number(dropId.replace("blank-", ""));
 
     if (sentenceIndex !== destSentence) {
+      return;
+    }
+
+    if (lockedSentences[destSentence]) {
       return;
     }
 
@@ -723,7 +865,17 @@ const WB_Unit1_Page3_Q1 = () => {
       return updated;
     });
 
-    setWrong(data.map(() => false));
+    /*
+      شيل X فقط عن الجملة المعدلة.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[sentenceIndex] = false;
+
+      return updated;
+    });
 
     setKeyboardSelected(null);
 
@@ -736,14 +888,16 @@ const WB_Unit1_Page3_Q1 = () => {
     }, 0);
   };
 
-  // ====================================================
-  // REMOVE
-  // ====================================================
+  /* ====================================================
+     REMOVE WORD
+  ==================================================== */
 
   const handleRemove = (blankId, wordIndex) => {
-    if (locked) return;
-
     const sentenceIndex = Number(blankId.replace("blank-", ""));
+
+    if (showAnswer || checkCompleted || lockedSentences[sentenceIndex]) {
+      return;
+    }
 
     const removedEntry = wordLists[sentenceIndex].find(
       (entry) => entry.wordIndex === wordIndex,
@@ -759,7 +913,18 @@ const WB_Unit1_Page3_Q1 = () => {
       return updated;
     });
 
-    setWrong(data.map(() => false));
+    /*
+      تعديل نفس الجملة
+      يشيل X تبعها فقط.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[sentenceIndex] = false;
+
+      return updated;
+    });
 
     setKeyboardSelected(null);
 
@@ -768,7 +933,9 @@ const WB_Unit1_Page3_Q1 = () => {
     }
 
     window.setTimeout(() => {
-      if (!removedEntry) return;
+      if (!removedEntry) {
+        return;
+      }
 
       const id = `${sentenceIndex}-${removedEntry.word}-${wordIndex}`;
 
@@ -780,12 +947,17 @@ const WB_Unit1_Page3_Q1 = () => {
     }, 0);
   };
 
-  // ====================================================
-  // CHECK
-  // ====================================================
+  /* ====================================================
+     CHECK ANSWER
+  ==================================================== */
 
   const checkAnswers = () => {
-    if (showAnswer || locked) {
+    /*
+      Show Answer أو نجاح نهائي:
+      الزر ما يعمل شيء.
+    */
+
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -804,20 +976,32 @@ const WB_Unit1_Page3_Q1 = () => {
 
     let correct = 0;
 
-    const wrongStatus = inputs.map((value, index) => {
+    const wrongStatus = data.map(() => false);
+
+    const newlyLocked = data.map(() => false);
+
+    inputs.forEach((value, index) => {
       const ok =
         value.trim().toLowerCase() === data[index].answer.toLowerCase();
 
       if (ok) {
         correct++;
-      }
 
-      return !ok;
+        newlyLocked[index] = true;
+      } else {
+        wrongStatus[index] = true;
+      }
     });
 
-    setWrong(wrongStatus);
+    /* =========================================
+       LOCK ONLY CORRECT SENTENCES
+    ========================================= */
 
-    setLocked(true);
+    setLockedSentences((prev) =>
+      prev.map((locked, index) => locked || newlyLocked[index]),
+    );
+
+    setWrong(wrongStatus);
 
     setKeyboardSelected(null);
 
@@ -834,35 +1018,63 @@ const WB_Unit1_Page3_Q1 = () => {
       </div>
     `;
 
+    /* =========================================
+       ALL CORRECT
+    ========================================= */
+
     if (correct === total) {
+      setLockedSentences(data.map(() => true));
+
+      setCheckCompleted(true);
+
+      setWrong(data.map(() => false));
+
+      setAnnouncement("All answers are correct.");
+
       ValidationAlert.success(msg);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    /* =========================================
+       PARTIAL / WRONG
+    ========================================= */
+
+    if (correct === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
   };
 
-  // ====================================================
-  // SHOW ANSWER
-  // ====================================================
+  /* ====================================================
+     SHOW ANSWER
+  ==================================================== */
 
   const handleShowAnswer = () => {
     setShowAnswer(true);
+
+    setLockedSentences(data.map(() => true));
+
+    setCheckCompleted(true);
+
+    setWrong(data.map(() => false));
 
     setKeyboardSelected(null);
 
     setAnnouncement("Correct answers are displayed.");
   };
 
-  // ====================================================
-  // RESET
-  // ====================================================
+  /* ====================================================
+     RESET
+  ==================================================== */
 
   const reset = () => {
-    // وقف أي صوت
+    /* stop audio */
+
     if (audioRef.current) {
       audioRef.current.pause();
+
       audioRef.current.currentTime = 0;
     }
 
@@ -874,7 +1086,9 @@ const WB_Unit1_Page3_Q1 = () => {
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setLockedSentences(data.map(() => false));
+
+    setCheckCompleted(false);
 
     setKeyboardSelected(null);
 
@@ -899,9 +1113,9 @@ const WB_Unit1_Page3_Q1 = () => {
     }, 0);
   };
 
-  // ====================================================
-  // RENDER
-  // ====================================================
+  /* ====================================================
+     RENDER
+  ==================================================== */
 
   return (
     <>
@@ -938,15 +1152,19 @@ const WB_Unit1_Page3_Q1 = () => {
             padding: "30px",
           }}
         >
-          {/* Screen Reader */}
+          {/* =================================================
+              SCREEN READER
+          ================================================= */}
 
           <div
             aria-live="polite"
             aria-atomic="true"
+            role="status"
             style={{
               position: "absolute",
 
               width: "1px",
+
               height: "1px",
 
               padding: 0,
@@ -956,6 +1174,8 @@ const WB_Unit1_Page3_Q1 = () => {
               overflow: "hidden",
 
               clip: "rect(0,0,0,0)",
+
+              clipPath: "inset(50%)",
 
               whiteSpace: "nowrap",
 
@@ -979,10 +1199,16 @@ const WB_Unit1_Page3_Q1 = () => {
               />
             </div>
 
+            {/* =================================================
+                QUESTIONS
+            ================================================= */}
+
             {data.map((item, i) => {
               const words = item.scrambled.split(/\s+/);
 
               const isPlaying = playingSentence === i;
+
+              const sentenceLocked = lockedSentences[i];
 
               return (
                 <div
@@ -993,14 +1219,14 @@ const WB_Unit1_Page3_Q1 = () => {
                     width: "100%",
                   }}
                 >
-                  {/* ===============================
+                  {/* =========================================
                         QUESTION + WORD BANK
-                    =============================== */}
+                    ========================================= */}
 
                   <div className="scrambled-wb-unit1-p3-q1">
-                    {/* =============================
+                    {/* =======================================
                           CLICKABLE SENTENCE AUDIO
-                      ============================= */}
+                      ======================================= */}
 
                     <div
                       style={{
@@ -1082,9 +1308,9 @@ const WB_Unit1_Page3_Q1 = () => {
                       </button>
                     </div>
 
-                    {/* =============================
+                    {/* =======================================
                           WORD BANK
-                      ============================= */}
+                      ======================================= */}
 
                     <div
                       style={{
@@ -1113,7 +1339,12 @@ const WB_Unit1_Page3_Q1 = () => {
                             key={id}
                             id={id}
                             word={word}
-                            disabled={used || showAnswer || locked}
+                            disabled={
+                              used ||
+                              showAnswer ||
+                              checkCompleted ||
+                              sentenceLocked
+                            }
                             keyboardSelected={keyboardSelected}
                             onKeyboardSelect={handleKeyboardSelect}
                             registerRef={registerWordRef}
@@ -1123,9 +1354,9 @@ const WB_Unit1_Page3_Q1 = () => {
                     </div>
                   </div>
 
-                  {/* ===============================
+                  {/* =========================================
                         ANSWER
-                    =============================== */}
+                    ========================================= */}
 
                   <AnswerDropZone
                     id={`blank-${i}`}
@@ -1133,7 +1364,7 @@ const WB_Unit1_Page3_Q1 = () => {
                     isWrong={wrong[i]}
                     showAnswer={showAnswer}
                     answerText={item.answer}
-                    locked={locked}
+                    locked={sentenceLocked || checkCompleted}
                     onRemove={handleRemove}
                     keyboardSelected={keyboardSelected}
                     selectedSentenceIndex={selectedSentenceIndex}
@@ -1146,7 +1377,9 @@ const WB_Unit1_Page3_Q1 = () => {
             })}
           </div>
 
-          {/* BUTTONS */}
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
 
           <div className="action-buttons-container">
             <button onClick={reset} className="try-again-button">
@@ -1166,7 +1399,9 @@ const WB_Unit1_Page3_Q1 = () => {
           </div>
         </div>
 
-        {/* DRAG OVERLAY */}
+        {/* =================================================
+            DRAG OVERLAY
+        ================================================= */}
 
         <DragOverlay>
           {activeWord ? (

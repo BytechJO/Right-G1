@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./WB_Unit1_Page4_Q2.css";
 
 // ======================================================
@@ -21,6 +23,7 @@ import goodAfternoonSound from "../../../assets/U1 WB/U1/page_4_2/Item_002_Good_
 import howAreYouSound from "../../../assets/U1 WB/U1/page_4_2/Item_004_How_are_you.mp3";
 import helloStellaSound from "../../../assets/U1 WB/U1/page_4_2/Item_006_Hello!_I'm_Stella.mp3";
 import fineThankYouSound from "../../../assets/U1 WB/U1/page_4_2/Item_007_Fine,_thank_you.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
@@ -99,7 +102,19 @@ export default function WB_Unit1_Page4_Q2() {
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const [locked, setLocked] = useState(false);
+  // ======================================================
+  // PROGRESSIVE LOCK
+  // ======================================================
+
+  const [lockedLeftWords, setLockedLeftWords] = useState([]);
+
+  const [lockedRightWords, setLockedRightWords] = useState([]);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  const isLeftLocked = (word) => lockedLeftWords.includes(word);
+
+  const isRightLocked = (word) => lockedRightWords.includes(word);
 
   const [selectedLeftWord, setSelectedLeftWord] = useState(null);
 
@@ -113,6 +128,7 @@ export default function WB_Unit1_Page4_Q2() {
 
   // Keyboard refs
   const leftRefs = useRef({});
+
   const rightRefs = useRef([]);
 
   // Audio
@@ -126,6 +142,7 @@ export default function WB_Unit1_Page4_Q2() {
     if (!audioRef.current) return;
 
     audioRef.current.pause();
+
     audioRef.current.currentTime = 0;
 
     audioRef.current = null;
@@ -199,11 +216,26 @@ export default function WB_Unit1_Page4_Q2() {
   };
 
   // ======================================================
+  // AVAILABLE RIGHT OPTIONS
+  // ======================================================
+
+  const getAvailableRightIndexes = () =>
+    rightWords
+      .map((item, index) => ({
+        word: item.text,
+        index,
+      }))
+      .filter(({ word }) => !isRightLocked(word))
+      .map(({ index }) => index);
+
+  // ======================================================
   // START KEYBOARD MATCH
   // ======================================================
 
   const startKeyboardMatch = (word, dotId) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted || isLeftLocked(word)) {
+      return;
+    }
 
     const dot = document.getElementById(dotId);
 
@@ -217,6 +249,7 @@ export default function WB_Unit1_Page4_Q2() {
     // شيل الخط القديم عشان يقدر يعدله
     setLines((prev) => prev.filter((line) => line.word !== word));
 
+    // شيل X فقط عن نفس الكلمة
     setWrongWords((prev) => prev.filter((item) => item !== word));
 
     setSelectedLeftWord(word);
@@ -233,14 +266,20 @@ export default function WB_Unit1_Page4_Q2() {
       `${word} selected. Use Tab or Shift plus Tab to choose a sentence on the right, then press Enter or Space.`,
     );
 
-    // ينقل مباشرة لأول خيار باليمين
+    // أول خيار يمين غير مقفول
     requestAnimationFrame(() => {
-      const firstRight = rightRefs.current[0];
+      const available = getAvailableRightIndexes();
+
+      if (!available.length) return;
+
+      const firstIndex = available[0];
+
+      const firstRight = rightRefs.current[firstIndex];
 
       if (firstRight) {
         firstRight.focus();
 
-        updatePreviewLine(startPoint, rightWords[0].text);
+        updatePreviewLine(startPoint, rightWords[firstIndex].text);
       }
     });
   };
@@ -252,20 +291,37 @@ export default function WB_Unit1_Page4_Q2() {
   const handleRightKeyboard = (e, index, word) => {
     if (!firstDot) return;
 
+    if (showAnswer || checkCompleted || isRightLocked(word)) {
+      return;
+    }
+
     // ==============================
-    // TAB ONLY BETWEEN RIGHT OPTIONS
+    // TAB ONLY BETWEEN UNLOCKED RIGHT OPTIONS
     // ==============================
 
     if (e.key === "Tab") {
       e.preventDefault();
+      e.stopPropagation();
 
-      let nextIndex;
+      const available = getAvailableRightIndexes();
+
+      if (!available.length) return;
+
+      const currentPosition = available.indexOf(index);
+
+      let nextPosition;
 
       if (e.shiftKey) {
-        nextIndex = index === 0 ? rightRefs.current.length - 1 : index - 1;
+        nextPosition =
+          currentPosition <= 0 ? available.length - 1 : currentPosition - 1;
       } else {
-        nextIndex = index === rightRefs.current.length - 1 ? 0 : index + 1;
+        nextPosition =
+          currentPosition === -1 || currentPosition === available.length - 1
+            ? 0
+            : currentPosition + 1;
       }
+
+      const nextIndex = available[nextPosition];
 
       const nextElement = rightRefs.current[nextIndex];
 
@@ -284,6 +340,7 @@ export default function WB_Unit1_Page4_Q2() {
 
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
+
       e.stopPropagation();
 
       // صوت الجهة اليمين
@@ -300,6 +357,7 @@ export default function WB_Unit1_Page4_Q2() {
 
     if (e.key === "Escape") {
       e.preventDefault();
+
       e.stopPropagation();
 
       const currentWord = firstDot.word;
@@ -315,7 +373,9 @@ export default function WB_Unit1_Page4_Q2() {
       setAnnouncement(`${currentWord} selection cancelled.`);
 
       requestAnimationFrame(() => {
-        leftRefs.current[currentWord]?.focus();
+        if (!isLeftLocked(currentWord)) {
+          leftRefs.current[currentWord]?.focus();
+        }
       });
     }
   };
@@ -327,6 +387,17 @@ export default function WB_Unit1_Page4_Q2() {
   const commitKeyboardMatch = (rightWord, moveToNextLeft = false) => {
     if (!firstDot) return;
 
+    const currentWord = firstDot.word;
+
+    if (
+      showAnswer ||
+      checkCompleted ||
+      isLeftLocked(currentWord) ||
+      isRightLocked(rightWord)
+    ) {
+      return;
+    }
+
     const endDot = document.querySelector(
       `.end-dot5[data-image="${CSS.escape(rightWord)}"]`,
     );
@@ -337,7 +408,13 @@ export default function WB_Unit1_Page4_Q2() {
 
     if (!end) return;
 
-    const currentWord = firstDot.word;
+    /*
+      لو النهاية كانت مستخدمة بتوصيل غلط قديم،
+      لازم نعرف صاحبها حتى نمسح X عنه عند الاستبدال.
+    */
+    const previousEndConnection = lines.find(
+      (line) => line.image === rightWord,
+    );
 
     const newLine = {
       x1: firstDot.x,
@@ -347,7 +424,6 @@ export default function WB_Unit1_Page4_Q2() {
       y2: end.y,
 
       word: currentWord,
-
       image: rightWord,
     };
 
@@ -360,6 +436,16 @@ export default function WB_Unit1_Page4_Q2() {
 
       return [...filtered, newLine];
     });
+
+    /*
+      شيل X عن التوصيل اللي عدلناه فقط.
+    */
+
+    setWrongWords((prev) =>
+      prev.filter(
+        (word) => word !== currentWord && word !== previousEndConnection?.word,
+      ),
+    );
 
     setSelectedRightWord(rightWord);
 
@@ -384,17 +470,25 @@ export default function WB_Unit1_Page4_Q2() {
 
       setSelectedRightWord(null);
 
-      // روح للكلمة التالية بالشمال
-      const currentIndex = leftWords.findIndex(
-        (item) => item.text === currentWord,
+      /*
+        روح لأول كلمة شمال غير مقفلة.
+      */
+
+      const availableLeft = leftWords.filter(
+        (item) => !isLeftLocked(item.text) && item.text !== currentWord,
       );
 
-      const nextIndex =
-        currentIndex === leftWords.length - 1 ? 0 : currentIndex + 1;
+      if (availableLeft.length) {
+        leftRefs.current[availableLeft[0].text]?.focus();
 
-      const nextWord = leftWords[nextIndex].text;
+        return;
+      }
 
-      leftRefs.current[nextWord]?.focus();
+      const fallback = leftWords.find((item) => !isLeftLocked(item.text));
+
+      if (fallback) {
+        leftRefs.current[fallback.text]?.focus();
+      }
     }, 100);
   };
 
@@ -403,16 +497,20 @@ export default function WB_Unit1_Page4_Q2() {
   // ======================================================
 
   const handleStartDotClick = (e) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
-    const word = e.target.dataset.letter;
+    const word = e.currentTarget.dataset.letter;
+
+    if (!word || isLeftLocked(word)) return;
 
     setSelectedLeftWord(word);
 
     // صوت الشمال
     playAudio(getLeftAudio(word));
 
-    const start = getDotPosition(e.target);
+    const start = getDotPosition(e.currentTarget);
 
     if (!start) return;
 
@@ -420,6 +518,7 @@ export default function WB_Unit1_Page4_Q2() {
     // شيله عشان يقدر يغيره
     setLines((prev) => prev.filter((line) => line.word !== word));
 
+    // شيل X عن نفس التوصيل فقط
     setWrongWords((prev) => prev.filter((item) => item !== word));
 
     setFirstDot({
@@ -434,18 +533,26 @@ export default function WB_Unit1_Page4_Q2() {
   // ======================================================
 
   const handleEndDotClick = (e) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted || !firstDot) {
+      return;
+    }
 
-    if (!firstDot) return;
+    const word = e.currentTarget.dataset.image;
 
-    const word = e.target.dataset.image;
+    if (!word || isRightLocked(word)) return;
+
+    if (isLeftLocked(firstDot.word)) return;
 
     // صوت اليمين
     playAudio(getRightAudio(word));
 
-    const end = getDotPosition(e.target);
+    const end = getDotPosition(e.currentTarget);
 
     if (!end) return;
+
+    const selectedWord = firstDot.word;
+
+    const previousEndConnection = lines.find((line) => line.image === word);
 
     const newLine = {
       x1: firstDot.x,
@@ -454,18 +561,27 @@ export default function WB_Unit1_Page4_Q2() {
       x2: end.x,
       y2: end.y,
 
-      word: firstDot.word,
-
+      word: selectedWord,
       image: word,
     };
 
     setLines((prev) => {
       const filtered = prev.filter(
-        (line) => line.word !== firstDot.word && line.image !== word,
+        (line) => line.word !== selectedWord && line.image !== word,
       );
 
       return [...filtered, newLine];
     });
+
+    /*
+      X تنشال فقط عن العناصر المتغيرة.
+    */
+
+    setWrongWords((prev) =>
+      prev.filter(
+        (item) => item !== selectedWord && item !== previousEndConnection?.word,
+      ),
+    );
 
     setSelectedRightWord(word);
 
@@ -485,7 +601,12 @@ export default function WB_Unit1_Page4_Q2() {
   // ======================================================
 
   const checkAnswers = () => {
-    if (showAnswer || locked) {
+    /*
+      بعد Show Answer أو النجاح النهائي:
+      Check ما يعمل شيء.
+    */
+
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -502,21 +623,39 @@ export default function WB_Unit1_Page4_Q2() {
 
     const wrong = [];
 
+    const correctLeft = [];
+
+    const correctRight = [];
+
     lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
+      const correctPair = correctMatches.find(
         (pair) => pair.word1 === line.word && pair.word2 === line.image,
       );
 
-      if (isCorrect) {
+      if (correctPair) {
         correctCount++;
+
+        correctLeft.push(line.word);
+
+        correctRight.push(line.image);
       } else {
         wrong.push(line.word);
       }
     });
 
-    setWrongWords(wrong);
+    // =========================================
+    // LOCK ONLY CORRECT CONNECTIONS
+    // =========================================
 
-    setLocked(true);
+    setLockedLeftWords((prev) =>
+      Array.from(new Set([...prev, ...correctLeft])),
+    );
+
+    setLockedRightWords((prev) =>
+      Array.from(new Set([...prev, ...correctRight])),
+    );
+
+    setWrongWords(wrong);
 
     setFirstDot(null);
 
@@ -539,9 +678,31 @@ export default function WB_Unit1_Page4_Q2() {
       </div>
     `;
 
+    // =========================================
+    // ALL CORRECT
+    // =========================================
+
     if (correctCount === total) {
+      setLockedLeftWords(leftWords.map((item) => item.text));
+
+      setLockedRightWords(rightWords.map((item) => item.text));
+
+      setWrongWords([]);
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All matches are correct.");
+
       ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    // =========================================
+    // WRONG / PARTIAL
+    // =========================================
+
+    if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
@@ -595,9 +756,13 @@ export default function WB_Unit1_Page4_Q2() {
 
     setPreviewLine(null);
 
-    setShowAnswer(true);
+    setLockedLeftWords(leftWords.map((item) => item.text));
 
-    setLocked(true);
+    setLockedRightWords(rightWords.map((item) => item.text));
+
+    setCheckCompleted(true);
+
+    setShowAnswer(true);
 
     setAnnouncement("Correct answers shown.");
   };
@@ -619,7 +784,11 @@ export default function WB_Unit1_Page4_Q2() {
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setLockedLeftWords([]);
+
+    setLockedRightWords([]);
+
+    setCheckCompleted(false);
 
     setSelectedLeftWord(null);
 
@@ -680,6 +849,7 @@ export default function WB_Unit1_Page4_Q2() {
           title="Unscramble and match."
           subTitle="Put each sentence in order, then connect it to the correct reply."
         />
+
         <div key={resetKey} className="matching-wrapper2" ref={containerRef}>
           {/* =================================================
               LEFT COLUMN
@@ -688,6 +858,8 @@ export default function WB_Unit1_Page4_Q2() {
           <div className="column2 left-column">
             {leftWords.map((item, i) => {
               const word = item.text;
+
+              const wordLocked = isLeftLocked(word);
 
               return (
                 <div className="word-row2" key={word}>
@@ -699,16 +871,29 @@ export default function WB_Unit1_Page4_Q2() {
                     }}
                     className={`word-text3 ${
                       selectedLeftWord === word ? "selected-item" : ""
-                    } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                    } ${wordLocked || showAnswer ? "disabled-hover" : ""}`}
                     role="button"
-                    tabIndex={locked || showAnswer || firstDot ? -1 : 0}
-                    aria-label={`${word}. Press Enter or Space to select and hear it.`}
+                    tabIndex={
+                      wordLocked || showAnswer || checkCompleted || firstDot
+                        ? -1
+                        : 0
+                    }
+                    aria-disabled={wordLocked || showAnswer || checkCompleted}
+                    aria-label={
+                      wordLocked
+                        ? `${word}. Correct match.`
+                        : `${word}. Press Enter or Space to select and hear it.`
+                    }
                     onClick={() => {
-                      if (locked || showAnswer) {
+                      /*
+                        الصوت يظل ممكن يشتغل حتى لو
+                        التوصيل صار صح.
+                      */
+                      playAudio(item.audio);
+
+                      if (wordLocked || showAnswer || checkCompleted) {
                         return;
                       }
-
-                      playAudio(item.audio);
 
                       document.getElementById(`left-dot-${i}`)?.click();
                     }}
@@ -716,12 +901,11 @@ export default function WB_Unit1_Page4_Q2() {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
 
-                        if (locked || showAnswer) {
+                        playAudio(item.audio);
+
+                        if (wordLocked || showAnswer || checkCompleted) {
                           return;
                         }
-
-                        // صوت الشمال
-                        playAudio(item.audio);
 
                         startKeyboardMatch(word, `left-dot-${i}`);
                       }
@@ -760,6 +944,8 @@ export default function WB_Unit1_Page4_Q2() {
             {rightWords.map((item, i) => {
               const word = item.text;
 
+              const wordLocked = isRightLocked(word);
+
               return (
                 <div className="word-row2" key={word}>
                   <div
@@ -777,18 +963,23 @@ export default function WB_Unit1_Page4_Q2() {
                     }}
                     className={`word-text3 ${
                       selectedRightWord === word ? "selected-item" : ""
-                    } ${locked || showAnswer ? "disabled-hover" : ""}`}
+                    } ${wordLocked || showAnswer ? "disabled-hover" : ""}`}
                     role="button"
-                    // اليمين يدخل بالـTab
-                    // فقط بعد اختيار كلمة من الشمال
-                    tabIndex={locked || showAnswer || !firstDot ? -1 : 0}
+                    tabIndex={
+                      wordLocked || showAnswer || checkCompleted || !firstDot
+                        ? -1
+                        : 0
+                    }
+                    aria-disabled={wordLocked || showAnswer || checkCompleted}
                     aria-label={
-                      firstDot
-                        ? `${word}. Press Enter or Space to connect with ${firstDot.word}.`
-                        : `${word}.`
+                      wordLocked
+                        ? `${word}. Correct match.`
+                        : firstDot
+                          ? `${word}. Press Enter or Space to connect with ${firstDot.word}.`
+                          : `${word}.`
                     }
                     onFocus={(e) => {
-                      if (!firstDot) {
+                      if (!firstDot || wordLocked) {
                         return;
                       }
 
@@ -805,12 +996,14 @@ export default function WB_Unit1_Page4_Q2() {
                     }}
                     onKeyDown={(e) => handleRightKeyboard(e, i, word)}
                     onClick={() => {
-                      if (locked || showAnswer) {
+                      /*
+                        الصوت يظل شغال.
+                      */
+                      playAudio(item.audio);
+
+                      if (wordLocked || showAnswer || checkCompleted) {
                         return;
                       }
-
-                      // شغّل الصوت دائمًا
-                      playAudio(item.audio);
 
                       if (firstDot) {
                         commitKeyboardMatch(word, false);
@@ -840,7 +1033,7 @@ export default function WB_Unit1_Page4_Q2() {
 
             {lines.map((line, i) => (
               <line
-                key={i}
+                key={`${line.word}-${line.image}-${i}`}
                 x1={line.x1}
                 y1={line.y1}
                 x2={line.x2}

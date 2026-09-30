@@ -1,18 +1,37 @@
 import React, { useRef, useState } from "react";
+
 import "./Page8_Q4.css";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 import sentenceAudio from "../../../assets/unit1/Page 8 - C/How are you.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
+
 const Page8_Q4 = () => {
   const sentenceAudioRef = useRef(null);
+
   const bankRefs = useRef({});
   const slotRefs = useRef([]);
 
+  /* =====================================================
+     ACCESSIBILITY
+  ===================================================== */
+
   const [keyboardPickedLetter, setKeyboardPickedLetter] = useState(null);
+
   const [keyboardMessage, setKeyboardMessage] = useState("");
+
   const [focusedLetter, setFocusedLetter] = useState(null);
+
   const [focusedSlot, setFocusedSlot] = useState(null);
+
+  /* =====================================================
+     DATA
+  ===================================================== */
+
   const data = [
     { letter: "a", number: 1 },
     { letter: "b", number: 2 },
@@ -48,35 +67,145 @@ const Page8_Q4 = () => {
     [25, 15, 21], // you
   ];
 
-  const [slots, setSlots] = useState(
-    questionGroups.map((g) => g.map(() => null)),
-  );
-  const [isChecked, setIsChecked] = useState(false);
+  /* =====================================================
+     STATES
+  ===================================================== */
+
+  const createEmptySlots = () =>
+    questionGroups.map((group) => group.map(() => null));
+
+  const [slots, setSlots] = useState(createEmptySlots());
+
   const [wrongInputs, setWrongInputs] = useState([]);
+
+  // الخانات الصحيحة فقط
+  const [lockedSlots, setLockedSlots] = useState([]);
+
   const [showAnswer, setShowAnswer] = useState(false);
-  // تكوين الكلمات من الخانات
+
+  // بعد آخر Check ناجح فقط
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     GET CORRECT LETTER
+  ===================================================== */
+
+  const getCorrectLetter = (groupIndex, letterIndex) => {
+    const number = questionGroups[groupIndex][letterIndex];
+
+    return data.find((item) => item.number === number)?.letter;
+  };
+
+  /* =====================================================
+     CHECK IF ALL CORRECT
+  ===================================================== */
+
+  const checkIfAllCorrect = (updatedSlots) => {
+    for (let g = 0; g < updatedSlots.length; g++) {
+      for (let l = 0; l < updatedSlots[g].length; l++) {
+        const correctLetter = getCorrectLetter(g, l);
+
+        if (!updatedSlots[g][l] || updatedSlots[g][l] !== correctLetter) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
+  /* =====================================================
+     SENTENCE
+  ===================================================== */
+
   const formedWords = slots.map((group) =>
     group.map((letter) => letter || "").join(""),
   );
+
   const sentence = formedWords.join(" ");
+
   const correctSentence = "how are you";
 
   const isSentenceCorrect = sentence.trim().toLowerCase() === correctSentence;
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
   const playSentenceAudio = () => {
-    if (!isSentenceCorrect || !sentenceAudio) return;
+    if (!sentenceAudio) return;
 
     const audio = sentenceAudioRef.current;
+
     if (!audio) return;
 
-    // وقف أي تشغيل سابق
     audio.pause();
+
     audio.currentTime = 0;
 
     audio.src = sentenceAudio;
-    audio.play();
+
+    audio.play().catch(() => {});
   };
+
+  /* =====================================================
+     SLOT INDEX
+  ===================================================== */
+
+  const getFlatSlotIndex = (groupIndex, letterIndex) => {
+    let index = 0;
+
+    for (let g = 0; g < groupIndex; g++) {
+      index += questionGroups[g].length;
+    }
+
+    return index + letterIndex;
+  };
+
+  /* =====================================================
+     AVAILABLE SLOTS FOR ACCESSIBILITY
+  ===================================================== */
+
+  const getAvailableSlotIndexes = () => {
+    const result = [];
+
+    questionGroups.forEach((group, gIndex) => {
+      group.forEach((_, lIndex) => {
+        const slotId = `${gIndex}-${lIndex}`;
+
+        if (!lockedSlots.includes(slotId)) {
+          result.push(getFlatSlotIndex(gIndex, lIndex));
+        }
+      });
+    });
+
+    return result;
+  };
+
+  /* =====================================================
+     LOCK ALL
+  ===================================================== */
+
+  const lockAllSlots = () => {
+    const all = [];
+
+    questionGroups.forEach((group, gIndex) => {
+      group.forEach((_, lIndex) => {
+        all.push(`${gIndex}-${lIndex}`);
+      });
+    });
+
+    setLockedSlots(all);
+  };
+
+  /* =====================================================
+     KEYBOARD PICK
+  ===================================================== */
+
   const handleKeyboardPick = (letter) => {
-    if (showAnswer || isChecked) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
     setKeyboardPickedLetter(letter);
 
@@ -84,13 +213,31 @@ const Page8_Q4 = () => {
       `Letter ${letter} selected. Choose a box and press Enter.`,
     );
 
-    // مباشرة لأول خانة
+    /* =========================================
+       أول خانة غير مقفلة
+    ========================================= */
+
     setTimeout(() => {
-      slotRefs.current[0]?.focus();
+      const available = getAvailableSlotIndexes();
+
+      if (available.length > 0) {
+        slotRefs.current[available[0]]?.focus();
+      }
     }, 0);
   };
+
+  /* =====================================================
+     KEYBOARD DROP
+  ===================================================== */
+
   const handleKeyboardDrop = (gIndex, lIndex, flatIndex) => {
-    if (!keyboardPickedLetter || showAnswer || isChecked) {
+    if (!keyboardPickedLetter || showAnswer || checkCompleted) {
+      return;
+    }
+
+    const slotId = `${gIndex}-${lIndex}`;
+
+    if (lockedSlots.includes(slotId)) {
       return;
     }
 
@@ -99,96 +246,181 @@ const Page8_Q4 = () => {
     setSlots((prev) => {
       const updated = prev.map((group) => [...group]);
 
-      // الحرف الموجود ينستبدل عادي
       updated[gIndex][lIndex] = placedLetter;
+
+      /* =========================================
+         إذا صار آخر حرف والجملة كلها صح
+         شغّل الصوت مباشرة
+      ========================================= */
+
+      const completedCorrectly = checkIfAllCorrect(updated);
+
+      if (completedCorrectly) {
+        setWrongInputs([]);
+
+        setTimeout(() => {
+          playSentenceAudio();
+        }, 0);
+      }
 
       return updated;
     });
 
-    setWrongInputs((prev) => prev.filter((id) => id !== `${gIndex}-${lIndex}`));
+    /* =========================================
+       امسح X عن نفس الخانة فقط
+    ========================================= */
+
+    setWrongInputs((prev) => prev.filter((id) => id !== slotId));
 
     setKeyboardMessage(`Letter ${placedLetter} placed. Choose another letter.`);
 
-    // فك الحرف
     setKeyboardPickedLetter(null);
 
-    // رجع لنفس الحرف فوق
+    /* =========================================
+       رجع للحرف نفسه فوق
+    ========================================= */
+
     setTimeout(() => {
       bankRefs.current[placedLetter]?.focus();
     }, 0);
   };
-  // ========================
-  // Drag Logic
-  // ========================
+
+  /* =====================================================
+     DRAG END
+  ===================================================== */
+
   const onDragEnd = (result) => {
     const { destination, draggableId } = result;
-    if (!destination || showAnswer || isChecked) return;
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
-
-      const letter = draggableId.replace("letter-", "");
-
-      setSlots((prev) => {
-        const updated = prev.map((group) => [...group]);
-
-        // ✅ استبدال الحرف مباشرة
-        updated[g][l] = letter;
-
-        return updated;
-      });
+    if (!destination || showAnswer || checkCompleted) {
+      return;
     }
+
+    if (!destination.droppableId.startsWith("slot-")) {
+      return;
+    }
+
+    const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
+
+    const slotId = `${g}-${l}`;
+
+    /* =========================================
+       الصح المقفول ما يتغير
+    ========================================= */
+
+    if (lockedSlots.includes(slotId)) {
+      return;
+    }
+
+    const letter = draggableId.replace("letter-", "");
+
+    setSlots((prev) => {
+      const updated = prev.map((group) => [...group]);
+
+      updated[g][l] = letter;
+
+      /* =========================================
+         إذا هذا آخر حرف وخلى الحل كله صح
+         شغّل الصوت
+      ========================================= */
+
+      const completedCorrectly = checkIfAllCorrect(updated);
+
+      if (completedCorrectly) {
+        setWrongInputs([]);
+
+        setTimeout(() => {
+          playSentenceAudio();
+        }, 0);
+      }
+
+      return updated;
+    });
+
+    /* =========================================
+       امسح X عن نفس الخانة فقط
+    ========================================= */
+
+    setWrongInputs((prev) => prev.filter((id) => id !== slotId));
   };
 
-  // ========================
-  // Show Answer
-  // ========================
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
   const handleShowAnswer = () => {
     const correct = questionGroups.map((group) =>
-      group.map((num) => data.find((d) => d.number === num).letter),
+      group.map((num) => data.find((item) => item.number === num)?.letter),
     );
 
     setSlots(correct);
+
     setWrongInputs([]);
+
+    lockAllSlots();
+
     setShowAnswer(true);
+
+    setCheckCompleted(true);
+
     setKeyboardPickedLetter(null);
+
     setKeyboardMessage("Correct answer is shown.");
   };
 
-  // ========================
-  // Check Answer
-  // ========================
-  const handleCheckAnswers = () => {
-    if (showAnswer) return;
-    setIsChecked(true);
+  /* =====================================================
+     CHECK ANSWER
+  ===================================================== */
 
-    const hasEmpty = slots.some((g) => g.some((l) => !l));
+  const handleCheckAnswers = () => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const hasEmpty = slots.some((group) => group.some((letter) => !letter));
+
     if (hasEmpty) {
       ValidationAlert.info(
         "Oops!",
         "Please complete all fields before checking.",
       );
+
       return;
     }
 
-    let wrong = [];
+    const wrong = [];
+
+    const newlyLocked = [];
+
     let correctCount = 0;
-    let total = slots.flat().length;
+
+    const total = slots.flat().length;
 
     for (let g = 0; g < slots.length; g++) {
       for (let l = 0; l < slots[g].length; l++) {
-        const correctLetter = data.find(
-          (d) => d.number === questionGroups[g][l],
-        ).letter;
+        const slotId = `${g}-${l}`;
 
-        if (slots[g][l] === correctLetter) correctCount++;
-        else wrong.push(`${g}-${l}`);
+        const correctLetter = getCorrectLetter(g, l);
+
+        if (slots[g][l] === correctLetter) {
+          correctCount++;
+
+          newlyLocked.push(slotId);
+        } else {
+          wrong.push(slotId);
+        }
       }
     }
 
+    /* =========================================
+       الصح فقط يتقفل
+    ========================================= */
+
+    setLockedSlots((prev) => Array.from(new Set([...prev, ...newlyLocked])));
+
     setWrongInputs(wrong);
+
     setKeyboardPickedLetter(null);
-    setKeyboardMessage("Correct answer is shown.");
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -201,31 +433,107 @@ const Page8_Q4 = () => {
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-  };
-  const getFlatSlotIndex = (groupIndex, letterIndex) => {
-    let index = 0;
+    /* =========================================
+       ALL CORRECT
+    ========================================= */
 
-    for (let g = 0; g < groupIndex; g++) {
-      index += questionGroups[g].length;
+    if (correctCount === total) {
+      lockAllSlots();
+
+      setWrongInputs([]);
+
+      setCheckCompleted(true);
+
+      /* =====================================
+         مهم:
+         ما نشغل الصوت من Check
+      ===================================== */
+
+      ValidationAlert.success(scoreMessage);
+
+      return;
     }
 
-    return index + letterIndex;
+    if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
+
+  const handleReset = () => {
+    setSlots(createEmptySlots());
+
+    setWrongInputs([]);
+
+    setLockedSlots([]);
+
+    setShowAnswer(false);
+
+    setCheckCompleted(false);
+
+    setKeyboardPickedLetter(null);
+
+    setKeyboardMessage("");
+
+    setFocusedLetter(null);
+
+    setFocusedSlot(null);
+
+    if (sentenceAudioRef.current) {
+      sentenceAudioRef.current.pause();
+
+      sentenceAudioRef.current.currentTime = 0;
+    }
+  };
+
+  /* =====================================================
+     JSX
+  ===================================================== */
+
   return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{}}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        padding: "30px",
+      }}
+    >
+      <div className="div-forall">
         <ExerciseHeader
           sectionLetter="C"
           title="Answer the question."
           subTitle="Match each number to its letter, then build the hidden sentence."
         />
-        <audio ref={sentenceAudioRef} style={{ display: "none" }} />
+
+        <audio
+          ref={sentenceAudioRef}
+          style={{
+            display: "none",
+          }}
+        />
+
+        {/* Screen Reader */}
+
+        <div
+          className="sr-only"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {keyboardMessage}
+        </div>
+
         <div className="alphabet-box">
           <DragDropContext onDragEnd={onDragEnd}>
-            {/* 🔤 الحروف فوق الأرقام */}
+            {/* =================================================
+                ALPHABET
+            ================================================= */}
+
             <Droppable
               droppableId="alphabet"
               direction="horizontal"
@@ -242,7 +550,7 @@ const Page8_Q4 = () => {
                       <Draggable
                         draggableId={`letter-${item.letter}`}
                         index={index}
-                        isDragDisabled={showAnswer || isChecked}
+                        isDragDisabled={showAnswer || checkCompleted}
                       >
                         {(provided) => (
                           <div
@@ -255,8 +563,9 @@ const Page8_Q4 = () => {
                             {...provided.dragHandleProps}
                             className="cell1 drag-letter"
                             role="button"
-                            tabIndex={showAnswer || isChecked ? -1 : 0}
+                            tabIndex={showAnswer || checkCompleted ? -1 : 0}
                             aria-pressed={keyboardPickedLetter === item.letter}
+                            aria-disabled={showAnswer || checkCompleted}
                             aria-label={
                               keyboardPickedLetter === item.letter
                                 ? `Letter ${item.letter} selected. Choose a box and press Enter.`
@@ -267,6 +576,7 @@ const Page8_Q4 = () => {
                             onKeyDown={(e) => {
                               if (e.key === "Enter" || e.key === " ") {
                                 e.preventDefault();
+
                                 e.stopPropagation();
 
                                 handleKeyboardPick(item.letter);
@@ -277,9 +587,9 @@ const Page8_Q4 = () => {
                               provided.dragHandleProps?.onKeyDown?.(e);
                             }}
                             onClick={(e) => {
-                              // Narrator synthetic click فقط
                               if (e.detail === 0) {
                                 e.preventDefault();
+
                                 e.stopPropagation();
 
                                 handleKeyboardPick(item.letter);
@@ -329,181 +639,237 @@ const Page8_Q4 = () => {
                       <div className="cell1 number1">{item.number}</div>
                     </div>
                   ))}
+
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
 
-            {/* 🧩 خانات الإجابة */}
+            {/* =================================================
+                ANSWER SLOTS
+            ================================================= */}
+
             <div className="words">
               {questionGroups.map((group, gIndex) => (
                 <div className="word-group" key={gIndex}>
-                  {group.map((num, lIndex) => (
-                    <Droppable
-                      droppableId={`slot-${gIndex}-${lIndex}`}
-                      isDropDisabled={showAnswer || isChecked}
-                    >
-                      {(provided, snapshot) => (
-                        <div className="slot-wrapper">
-                          {/* 🔢 الرقم فوق المربع */}
-                          <h6 className="slot-number">{num}</h6>
+                  {group.map((num, lIndex) => {
+                    const slotId = `${gIndex}-${lIndex}`;
 
-                          {/* ⬜ مربع الدروب */}
-                          <div
-                            ref={(el) => {
-                              provided.innerRef(el);
+                    const isLocked = lockedSlots.includes(slotId);
 
-                              const flatIndex = getFlatSlotIndex(
-                                gIndex,
-                                lIndex,
-                              );
+                    const isWrong = wrongInputs.includes(slotId);
 
-                              slotRefs.current[flatIndex] = el;
-                            }}
-                            {...provided.droppableProps}
-                            className={`drop-slot 
-    ${snapshot.isDraggingOver ? "drag-over" : ""}
-    ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
-                            role="button"
-                            tabIndex={showAnswer || isChecked ? -1 : 0}
-                            aria-label={
-                              keyboardPickedLetter
-                                ? slots[gIndex][lIndex]
-                                  ? `Box ${
-                                      getFlatSlotIndex(gIndex, lIndex) + 1
-                                    }. Current letter ${
+                    const flatIndex = getFlatSlotIndex(gIndex, lIndex);
+
+                    return (
+                      <Droppable
+                        key={slotId}
+                        droppableId={`slot-${gIndex}-${lIndex}`}
+                        isDropDisabled={
+                          showAnswer || isLocked || checkCompleted
+                        }
+                      >
+                        {(provided, snapshot) => (
+                          <div className="slot-wrapper">
+                            <h6 className="slot-number">{num}</h6>
+
+                            <div
+                              ref={(el) => {
+                                provided.innerRef(el);
+
+                                slotRefs.current[flatIndex] = el;
+                              }}
+                              {...provided.droppableProps}
+                              className={`drop-slot
+                                    ${
+                                      snapshot.isDraggingOver && !isLocked
+                                        ? "drag-over"
+                                        : ""
+                                    }
+                                    ${isWrong ? "wrong" : ""}
+                                  `}
+                              role="button"
+                              aria-disabled={
+                                showAnswer || isLocked || checkCompleted
+                              }
+                              tabIndex={
+                                showAnswer || isLocked || checkCompleted
+                                  ? -1
+                                  : 0
+                              }
+                              aria-label={
+                                isLocked
+                                  ? `Box ${flatIndex + 1}. Correct letter ${
                                       slots[gIndex][lIndex]
-                                    }. Press Enter to replace it with ${keyboardPickedLetter}.`
-                                  : `Box ${
-                                      getFlatSlotIndex(gIndex, lIndex) + 1
-                                    }. Press Enter to place ${keyboardPickedLetter}.`
-                                : slots[gIndex][lIndex]
-                                  ? `Box ${
-                                      getFlatSlotIndex(gIndex, lIndex) + 1
-                                    }. Current letter ${slots[gIndex][lIndex]}.`
-                                  : `Box ${
-                                      getFlatSlotIndex(gIndex, lIndex) + 1
-                                    } is empty. Select a letter first.`
-                            }
-                            onFocus={() =>
-                              setFocusedSlot(`${gIndex}-${lIndex}`)
-                            }
-                            onBlur={() => setFocusedSlot(null)}
-                            onKeyDown={(e) => {
-                              const flatIndex = getFlatSlotIndex(
-                                gIndex,
-                                lIndex,
-                              );
-
-                              // ==================================
-                              // Tab محصور بالخانات فقط
-                              // طول ما في حرف ممسوك
-                              // ==================================
-                              if (keyboardPickedLetter && e.key === "Tab") {
-                                e.preventDefault();
-                                e.stopPropagation();
-
-                                const totalSlots = questionGroups.flat().length;
-
-                                let nextIndex;
-
-                                if (e.shiftKey) {
-                                  nextIndex =
-                                    flatIndex === 0
-                                      ? totalSlots - 1
-                                      : flatIndex - 1;
-                                } else {
-                                  nextIndex =
-                                    flatIndex === totalSlots - 1
-                                      ? 0
-                                      : flatIndex + 1;
+                                    }. Answer locked.`
+                                  : keyboardPickedLetter
+                                    ? slots[gIndex][lIndex]
+                                      ? `Box ${flatIndex + 1}. Current letter ${
+                                          slots[gIndex][lIndex]
+                                        }. Press Enter to replace it with ${keyboardPickedLetter}.`
+                                      : `Box ${
+                                          flatIndex + 1
+                                        }. Press Enter to place ${keyboardPickedLetter}.`
+                                    : slots[gIndex][lIndex]
+                                      ? `Box ${flatIndex + 1}. Current letter ${
+                                          slots[gIndex][lIndex]
+                                        }.`
+                                      : `Box ${
+                                          flatIndex + 1
+                                        } is empty. Select a letter first.`
+                              }
+                              onFocus={() => {
+                                if (!isLocked) {
+                                  setFocusedSlot(slotId);
+                                }
+                              }}
+                              onBlur={() => setFocusedSlot(null)}
+                              onKeyDown={(e) => {
+                                if (isLocked) {
+                                  return;
                                 }
 
-                                slotRefs.current[nextIndex]?.focus();
+                                /* =========================
+                                       TAB بين الخانات غير المقفلة
+                                    ========================= */
 
-                                return;
-                              }
+                                if (keyboardPickedLetter && e.key === "Tab") {
+                                  e.preventDefault();
 
-                              // ==================================
-                              // Enter = حط أو استبدل الحرف
-                              // ==================================
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault();
-                                e.stopPropagation();
+                                  e.stopPropagation();
 
-                                if (keyboardPickedLetter) {
+                                  const available = getAvailableSlotIndexes();
+
+                                  if (available.length === 0) {
+                                    return;
+                                  }
+
+                                  const currentPosition =
+                                    available.indexOf(flatIndex);
+
+                                  let nextPosition;
+
+                                  if (e.shiftKey) {
+                                    nextPosition =
+                                      currentPosition <= 0
+                                        ? available.length - 1
+                                        : currentPosition - 1;
+                                  } else {
+                                    nextPosition =
+                                      currentPosition === -1 ||
+                                      currentPosition === available.length - 1
+                                        ? 0
+                                        : currentPosition + 1;
+                                  }
+
+                                  const nextIndex = available[nextPosition];
+
+                                  slotRefs.current[nextIndex]?.focus();
+
+                                  return;
+                                }
+
+                                /* =========================
+                                       ENTER / SPACE
+                                    ========================= */
+
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+
+                                  e.stopPropagation();
+
+                                  if (keyboardPickedLetter) {
+                                    handleKeyboardDrop(
+                                      gIndex,
+                                      lIndex,
+                                      flatIndex,
+                                    );
+                                  }
+                                }
+                              }}
+                              onClick={(e) => {
+                                if (
+                                  e.detail === 0 &&
+                                  keyboardPickedLetter &&
+                                  !isLocked
+                                ) {
+                                  e.preventDefault();
+
+                                  e.stopPropagation();
+
                                   handleKeyboardDrop(gIndex, lIndex, flatIndex);
                                 }
-                              }
-                            }}
-                            onClick={(e) => {
-                              if (e.detail === 0 && keyboardPickedLetter) {
-                                e.preventDefault();
-                                e.stopPropagation();
+                              }}
+                              style={{
+                                background: isLocked
+                                  ? undefined
+                                  : snapshot.isDraggingOver
+                                    ? "#c4e5fc"
+                                    : keyboardPickedLetter &&
+                                        focusedSlot === slotId
+                                      ? "#dbeafe"
+                                      : undefined,
 
-                                handleKeyboardDrop(
-                                  gIndex,
-                                  lIndex,
-                                  getFlatSlotIndex(gIndex, lIndex),
-                                );
-                              }
-                            }}
-                            style={{
-                              background: snapshot.isDraggingOver
-                                ? "#c4e5fc"
-                                : keyboardPickedLetter &&
-                                    focusedSlot === `${gIndex}-${lIndex}`
-                                  ? "#dbeafe"
-                                  : undefined,
+                                outline:
+                                  !isLocked &&
+                                  keyboardPickedLetter &&
+                                  focusedSlot === slotId
+                                    ? "3px solid #2563eb"
+                                    : "none",
 
-                              outline:
-                                keyboardPickedLetter &&
-                                focusedSlot === `${gIndex}-${lIndex}`
-                                  ? "3px solid #2563eb"
-                                  : "none",
+                                outlineOffset: "3px",
 
-                              outlineOffset: "3px",
+                                transform:
+                                  !isLocked &&
+                                  keyboardPickedLetter &&
+                                  focusedSlot === slotId
+                                    ? "scale(1.08)"
+                                    : "scale(1)",
 
-                              transform:
-                                keyboardPickedLetter &&
-                                focusedSlot === `${gIndex}-${lIndex}`
-                                  ? "scale(1.08)"
-                                  : "scale(1)",
+                                boxShadow:
+                                  !isLocked &&
+                                  keyboardPickedLetter &&
+                                  focusedSlot === slotId
+                                    ? "0 0 0 4px rgba(37,99,235,0.15)"
+                                    : "none",
 
-                              boxShadow:
-                                keyboardPickedLetter &&
-                                focusedSlot === `${gIndex}-${lIndex}`
-                                  ? "0 0 0 4px rgba(37,99,235,0.15)"
-                                  : "none",
+                                cursor: isLocked ? "default" : undefined,
 
-                              transition:
-                                "transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease",
-                            }}
-                          >
-                            {wrongInputs.includes(`${gIndex}-${lIndex}`) && (
-                              <div className="error-mark1" aria-hidden="true">
-                                ✕
-                              </div>
-                            )}
+                                transition:
+                                  "transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease",
+                              }}
+                            >
+                              {isWrong && (
+                                <div className="error-mark1" aria-hidden="true">
+                                  ✕
+                                </div>
+                              )}
 
-                            {slots[gIndex][lIndex] && (
-                              <div className="dropped-letter">
-                                {slots[gIndex][lIndex]}
-                              </div>
-                            )}
+                              {slots[gIndex][lIndex] && (
+                                <div className="dropped-letter">
+                                  {slots[gIndex][lIndex]}
+                                </div>
+                              )}
 
-                            {provided.placeholder}
+                              {provided.placeholder}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Droppable>
-                  ))}
+                        )}
+                      </Droppable>
+                    );
+                  })}
                 </div>
               ))}
+
               <div className="text-[40px] text-center font-semibold mt-5">
                 ?
               </div>
             </div>
+
+            {/* =================================================
+                SENTENCE
+            ================================================= */}
+
             <div
               className={`sentence-box ${
                 isSentenceCorrect ? "sentence-clickable" : ""
@@ -520,13 +886,16 @@ const Page8_Q4 = () => {
               onKeyDown={(e) => {
                 if (isSentenceCorrect && (e.key === "Enter" || e.key === " ")) {
                   e.preventDefault();
+
                   e.stopPropagation();
 
                   playSentenceAudio();
                 }
               }}
               onFocus={(e) => {
-                if (!isSentenceCorrect) return;
+                if (!isSentenceCorrect) {
+                  return;
+                }
 
                 e.currentTarget.style.outline = "3px solid #2563eb";
 
@@ -547,19 +916,13 @@ const Page8_Q4 = () => {
         </div>
       </div>
 
-      {/* 🔘 Buttons */}
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
+
       <div className="action-buttons-container">
         <button
-          onClick={() => {
-            setSlots(questionGroups.map((g) => g.map(() => null)));
-            setWrongInputs([]);
-            setShowAnswer(false);
-            setIsChecked(false);
-            setKeyboardPickedLetter(null);
-            setKeyboardMessage("");
-            setFocusedLetter(null);
-            setFocusedSlot(null);
-          }}
+          onClick={handleReset}
           className="try-again-button"
           title="Start again"
         >

@@ -50,9 +50,16 @@ const WB_Unit1_Page8_Q3 = () => {
 
   const [answers, setAnswers] = useState(Array(items.length).fill(null));
 
-  const [showResult, setShowResult] = useState(false);
+  // الأسئلة الغلط فقط
+  const [wrongQuestions, setWrongQuestions] = useState([]);
+
+  // الأسئلة الصح المقفلة
+  const [lockedQuestions, setLockedQuestions] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
+
+  // بعد النجاح النهائي فقط
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const stopAtSecond = 5.1;
 
@@ -94,8 +101,12 @@ const WB_Unit1_Page8_Q3 = () => {
     },
   ];
 
+  const isQuestionLocked = (index) => lockedQuestions.includes(index);
+
   const handleSelect = (index, value) => {
-    if (showAnswer || showResult) return;
+    if (showAnswer || checkCompleted || isQuestionLocked(index)) {
+      return;
+    }
 
     setAnswers((prev) => {
       const updated = [...prev];
@@ -104,10 +115,13 @@ const WB_Unit1_Page8_Q3 = () => {
 
       return updated;
     });
+
+    // إذا كان عليه X، نشيله فقط عن نفس السؤال
+    setWrongQuestions((prev) => prev.filter((qIndex) => qIndex !== index));
   };
 
   const checkAnswers = () => {
-    if (showAnswer || showResult) return;
+    if (showAnswer || checkCompleted) return;
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please answer all items first.");
@@ -115,10 +129,30 @@ const WB_Unit1_Page8_Q3 = () => {
       return;
     }
 
-    const correctCount = answers.filter(
-      (answer, index) =>
-        answer?.toLowerCase() === items[index].correct?.toLowerCase(),
-    ).length;
+    let correctCount = 0;
+
+    const correctIndexes = [];
+    const wrongIndexes = [];
+
+    answers.forEach((answer, index) => {
+      const isCorrect =
+        answer?.toLowerCase() === items[index].correct?.toLowerCase();
+
+      if (isCorrect) {
+        correctCount++;
+        correctIndexes.push(index);
+      } else {
+        wrongIndexes.push(index);
+      }
+    });
+
+    // قفل الصح فقط
+    setLockedQuestions((prev) =>
+      Array.from(new Set([...prev, ...correctIndexes])),
+    );
+
+    // خلي X فقط على الغلط
+    setWrongQuestions(wrongIndexes);
 
     const total = items.length;
 
@@ -134,14 +168,22 @@ const WB_Unit1_Page8_Q3 = () => {
     `;
 
     if (correctCount === total) {
+      setLockedQuestions(items.map((_, index) => index));
+
+      setWrongQuestions([]);
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-
-    setShowResult(true);
   };
 
   const handleShowAnswer = () => {
@@ -149,17 +191,25 @@ const WB_Unit1_Page8_Q3 = () => {
 
     setAnswers(correctAnswers);
 
-    setShowResult(true);
+    setWrongQuestions([]);
+
+    setLockedQuestions(items.map((_, index) => index));
 
     setShowAnswer(true);
+
+    setCheckCompleted(true);
   };
 
   const resetAnswers = () => {
     setAnswers(Array(items.length).fill(null));
 
-    setShowResult(false);
+    setWrongQuestions([]);
+
+    setLockedQuestions([]);
 
     setShowAnswer(false);
+
+    setCheckCompleted(false);
   };
 
   return (
@@ -183,6 +233,7 @@ const WB_Unit1_Page8_Q3 = () => {
           title="Listen, look, and circle."
           subTitle="Listen to each word, then drag d or t below the picture."
         />
+
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
@@ -201,6 +252,10 @@ const WB_Unit1_Page8_Q3 = () => {
           <div className="dt-container-wb-u1-p8-q3">
             {items.map((item, index) => {
               const selectedAnswer = answers[index];
+
+              const questionLocked = isQuestionLocked(index);
+
+              const questionWrong = wrongQuestions.includes(index);
 
               return (
                 <div className="dt-item-wb-u1-p8-q3" key={index}>
@@ -222,21 +277,34 @@ const WB_Unit1_Page8_Q3 = () => {
                       className={`bp-option ${
                         selectedAnswer === "d" ? "selected" : ""
                       } ${
-                        showResult &&
+                        questionWrong &&
                         selectedAnswer === "d" &&
                         selectedAnswer !== item.correct
                           ? "wrong-answer"
                           : ""
                       }`}
                       onClick={() => handleSelect(index, "d")}
-                      disabled={showAnswer || showResult}
+                      disabled={showAnswer || checkCompleted || questionLocked}
+                      aria-disabled={
+                        showAnswer || checkCompleted || questionLocked
+                      }
                       aria-pressed={selectedAnswer === "d"}
                       aria-label={`D${
                         selectedAnswer === "d" ? ", selected" : ""
+                      }${
+                        questionLocked
+                          ? ", correct answer, question locked"
+                          : ""
                       }`}
+                      style={{
+                        cursor:
+                          showAnswer || checkCompleted || questionLocked
+                            ? "default"
+                            : "pointer",
+                      }}
                     >
                       D
-                      {showResult &&
+                      {questionWrong &&
                         selectedAnswer === "d" &&
                         selectedAnswer !== item.correct && (
                           <span
@@ -255,21 +323,34 @@ const WB_Unit1_Page8_Q3 = () => {
                       className={`bp-option ${
                         selectedAnswer === "t" ? "selected" : ""
                       } ${
-                        showResult &&
+                        questionWrong &&
                         selectedAnswer === "t" &&
                         selectedAnswer !== item.correct
                           ? "wrong-answer"
                           : ""
                       }`}
                       onClick={() => handleSelect(index, "t")}
-                      disabled={showAnswer || showResult}
+                      disabled={showAnswer || checkCompleted || questionLocked}
+                      aria-disabled={
+                        showAnswer || checkCompleted || questionLocked
+                      }
                       aria-pressed={selectedAnswer === "t"}
                       aria-label={`T${
                         selectedAnswer === "t" ? ", selected" : ""
+                      }${
+                        questionLocked
+                          ? ", correct answer, question locked"
+                          : ""
                       }`}
+                      style={{
+                        cursor:
+                          showAnswer || checkCompleted || questionLocked
+                            ? "default"
+                            : "pointer",
+                      }}
                     >
                       T
-                      {showResult &&
+                      {questionWrong &&
                         selectedAnswer === "t" &&
                         selectedAnswer !== item.correct && (
                           <span

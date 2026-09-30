@@ -1,12 +1,16 @@
 import React, { useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./WB_Unit1_Page8_Q2.css";
+
 import tableAudio from "../../../assets/U1 WB/U1/page_8_2/Item_003_table.mp3";
 import dishAudio from "../../../assets/U1 WB/U1/page_8_2/Item_004_dish.mp3";
 import duckAudio from "../../../assets/U1 WB/U1/page_8_2/Item_005_duck.mp3";
 import tigerAudio from "../../../assets/U1 WB/U1/page_8_2/Item_006_tiger.mp3";
 import taxiAudio from "../../../assets/U1 WB/U1/page_8_2/Item_001_taxi.mp3";
 import deerAudio from "../../../assets/U1 WB/U1/page_8_2/Item_002_deer.mp3";
+
 import {
   DndContext,
   DragOverlay,
@@ -17,6 +21,7 @@ import {
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
@@ -51,6 +56,7 @@ const wordOptions = [
 ];
 
 const correctWords = wordOptions.map((item) => item.word);
+
 // ======================================================
 // WORD BANK ITEM
 // ======================================================
@@ -99,6 +105,7 @@ function BankWord({
       {...attributes}
       role="button"
       tabIndex={isUsed || disabled || anotherWordSelected ? -1 : 0}
+      aria-disabled={isUsed || disabled}
       aria-pressed={isSelected}
       aria-label={
         isSelected
@@ -147,11 +154,13 @@ function DroppableCell({
 }) {
   const { isOver, setNodeRef } = useDroppable({
     id,
+    disabled: locked || showAnswer,
   });
 
   const [isFocused, setIsFocused] = useState(false);
 
-  const isKeyboardTarget = Boolean(selectedWordId) && isFocused;
+  const isKeyboardTarget =
+    Boolean(selectedWordId) && isFocused && !locked && !showAnswer;
 
   const setRefs = (node) => {
     setNodeRef(node);
@@ -194,6 +203,7 @@ function DroppableCell({
         tabIndex={
           showAnswer || locked ? -1 : selectedWordId ? 0 : value ? 0 : -1
         }
+        aria-disabled={showAnswer || locked}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onKeyDown={handleKeyDown}
@@ -203,15 +213,17 @@ function DroppableCell({
           }
         }}
         aria-label={
-          selectedWordId
-            ? `Answer box. Press Enter or Space to place ${selectedWord}.`
-            : value
-              ? `${value}. Press Enter or Space to return it to the word bank.`
-              : "Empty answer box."
+          locked
+            ? `${value}. Correct answer. Answer locked.`
+            : selectedWordId
+              ? `Answer box. Press Enter or Space to place ${selectedWord}.`
+              : value
+                ? `${value}. Press Enter or Space to return it to the word bank.`
+                : "Empty answer box."
         }
         className={`
           missing-input-wb-unit1-p8-q2
-          ${isOver ? "drag-over-cell" : ""}
+          ${isOver && !locked && !showAnswer ? "drag-over-cell" : ""}
           ${isKeyboardTarget ? "keyboard-target-wb-u1-p8-q2" : ""}
         `}
       >
@@ -229,7 +241,7 @@ function DroppableCell({
 
         {/* Mouse drag preview */}
 
-        {!selectedWordId && isOver && activeWord && !value && (
+        {!selectedWordId && isOver && activeWord && !value && !locked && (
           <span className="mouse-preview-wb-u1-p8-q2">{activeWord}</span>
         )}
       </div>
@@ -250,31 +262,61 @@ export default function WB_Unit1_Page8_Q2() {
 
   const [columnT, setColumnT] = useState(["", "", ""]);
 
-  const [wrong, setWrong] = useState([]);
+  /*
+    بدل wrong بالكلمات،
+    نخزن حالة كل خانة لحالها.
+  */
+
+  const [wrongD, setWrongD] = useState([false, false, false]);
+
+  const [wrongT, setWrongT] = useState([false, false, false]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const [locked, setLocked] = useState(false);
+  /*
+    القفل لكل خانة بشكل مستقل.
+  */
+
+  const [lockedD, setLockedD] = useState([false, false, false]);
+
+  const [lockedT, setLockedT] = useState([false, false, false]);
+
+  /*
+    بعد النجاح النهائي فقط.
+  */
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeWord, setActiveWord] = useState(null);
 
   const [selectedWordId, setSelectedWordId] = useState(null);
 
   const [announcement, setAnnouncement] = useState("");
+
   const audioRef = useRef(null);
 
+  // ======================================================
+  // AUDIO
+  // ======================================================
+
   const stopAudio = () => {
-    if (!audioRef.current) return;
+    if (!audioRef.current) {
+      return;
+    }
 
     audioRef.current.pause();
+
     audioRef.current.currentTime = 0;
+
     audioRef.current = null;
   };
 
   const playWordAudio = (word) => {
     const item = wordOptions.find((option) => option.word === word);
 
-    if (!item?.audio) return;
+    if (!item?.audio) {
+      return;
+    }
 
     stopAudio();
 
@@ -288,6 +330,7 @@ export default function WB_Unit1_Page8_Q2() {
       audioRef.current = null;
     };
   };
+
   // ======================================================
   // REFS
   // ======================================================
@@ -332,6 +375,7 @@ export default function WB_Unit1_Page8_Q2() {
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 150,
+
         tolerance: 5,
       },
     }),
@@ -344,6 +388,44 @@ export default function WB_Unit1_Page8_Q2() {
   const parseWord = (id) => String(id).split("-").slice(1, -1).join("-");
 
   const selectedWord = selectedWordId ? parseWord(selectedWordId) : null;
+
+  // ======================================================
+  // HELPERS
+  // ======================================================
+
+  const isCellLocked = (col, index) => {
+    if (col === "d") {
+      return lockedD[index];
+    }
+
+    if (col === "t") {
+      return lockedT[index];
+    }
+
+    return false;
+  };
+
+  const clearWrongCell = (col, index) => {
+    if (col === "d") {
+      setWrongD((prev) => {
+        const updated = [...prev];
+
+        updated[index] = false;
+
+        return updated;
+      });
+    }
+
+    if (col === "t") {
+      setWrongT((prev) => {
+        const updated = [...prev];
+
+        updated[index] = false;
+
+        return updated;
+      });
+    }
+  };
 
   // ======================================================
   // DRAG START
@@ -364,7 +446,7 @@ export default function WB_Unit1_Page8_Q2() {
 
     const { active, over } = event;
 
-    if (!over || showAnswer || locked) {
+    if (!over || showAnswer || checkCompleted) {
       return;
     }
 
@@ -378,16 +460,47 @@ export default function WB_Unit1_Page8_Q2() {
       return;
     }
 
+    /*
+      ممنوع استبدال خانة صح مقفلة.
+    */
+
+    if (isCellLocked(col, index)) {
+      return;
+    }
+
     let newColumnD = [...columnD];
 
     let newColumnT = [...columnT];
 
-    // شيل الكلمة من مكانها القديم
-    newColumnD = newColumnD.map((value) => (value === word ? "" : value));
+    /*
+      الكلمة بالبنك بتكون draggable فقط
+      إذا مش مستخدمة، لكن نخلي الحماية موجودة.
+    */
 
-    newColumnT = newColumnT.map((value) => (value === word ? "" : value));
+    const oldDIndex = newColumnD.findIndex((value) => value === word);
+
+    const oldTIndex = newColumnT.findIndex((value) => value === word);
+
+    if (oldDIndex !== -1 && lockedD[oldDIndex]) {
+      return;
+    }
+
+    if (oldTIndex !== -1 && lockedT[oldTIndex]) {
+      return;
+    }
+
+    // شيل الكلمة من مكانها القديم
+
+    newColumnD = newColumnD.map((value, currentIndex) =>
+      value === word && !lockedD[currentIndex] ? "" : value,
+    );
+
+    newColumnT = newColumnT.map((value, currentIndex) =>
+      value === word && !lockedT[currentIndex] ? "" : value,
+    );
 
     // ضعها بالمكان الجديد
+
     if (col === "d") {
       newColumnD[index] = word;
     }
@@ -400,7 +513,24 @@ export default function WB_Unit1_Page8_Q2() {
 
     setColumnT(newColumnT);
 
-    setWrong([]);
+    /*
+      نمسح X فقط من الخانة الجديدة.
+    */
+
+    clearWrongCell(col, index);
+
+    /*
+      ولو تحركت من مكان قديم،
+      نمسح X عنه فقط.
+    */
+
+    if (oldDIndex !== -1) {
+      clearWrongCell("d", oldDIndex);
+    }
+
+    if (oldTIndex !== -1) {
+      clearWrongCell("t", oldTIndex);
+    }
   };
 
   // ======================================================
@@ -408,11 +538,13 @@ export default function WB_Unit1_Page8_Q2() {
   // ======================================================
 
   const handleWordSelect = (id) => {
-    if (locked || showAnswer) return;
+    if (checkCompleted || showAnswer) {
+      return;
+    }
 
     const word = parseWord(id);
 
-    // 🔊 صوت الكلمة
+    // صوت الكلمة
     playWordAudio(word);
 
     setSelectedWordId(id);
@@ -421,12 +553,13 @@ export default function WB_Unit1_Page8_Q2() {
       `${word} selected. Use Tab to choose a box, then press Enter.`,
     );
   };
+
   // ======================================================
   // KEYBOARD DROP
   // ======================================================
 
   const handleKeyboardDrop = (cellId) => {
-    if (!selectedWordId || showAnswer || locked) {
+    if (!selectedWordId || showAnswer || checkCompleted) {
       return;
     }
 
@@ -436,16 +569,38 @@ export default function WB_Unit1_Page8_Q2() {
 
     const index = Number(idx);
 
+    if (isCellLocked(col, index)) {
+      return;
+    }
+
     let newColumnD = [...columnD];
 
     let newColumnT = [...columnT];
 
-    // شيل نفس الكلمة من أي مكان قديم
-    newColumnD = newColumnD.map((value) => (value === word ? "" : value));
+    const oldDIndex = newColumnD.findIndex((value) => value === word);
 
-    newColumnT = newColumnT.map((value) => (value === word ? "" : value));
+    const oldTIndex = newColumnT.findIndex((value) => value === word);
+
+    if (oldDIndex !== -1 && lockedD[oldDIndex]) {
+      return;
+    }
+
+    if (oldTIndex !== -1 && lockedT[oldTIndex]) {
+      return;
+    }
+
+    // شيل نفس الكلمة من أي مكان قديم
+
+    newColumnD = newColumnD.map((value, currentIndex) =>
+      value === word && !lockedD[currentIndex] ? "" : value,
+    );
+
+    newColumnT = newColumnT.map((value, currentIndex) =>
+      value === word && !lockedT[currentIndex] ? "" : value,
+    );
 
     // ضعها
+
     if (col === "d") {
       newColumnD[index] = word;
     }
@@ -458,7 +613,15 @@ export default function WB_Unit1_Page8_Q2() {
 
     setColumnT(newColumnT);
 
-    setWrong([]);
+    clearWrongCell(col, index);
+
+    if (oldDIndex !== -1) {
+      clearWrongCell("d", oldDIndex);
+    }
+
+    if (oldTIndex !== -1) {
+      clearWrongCell("t", oldTIndex);
+    }
 
     setSelectedWordId(null);
 
@@ -496,13 +659,13 @@ export default function WB_Unit1_Page8_Q2() {
   // ======================================================
 
   const handleClear = (cellId, word) => {
-    if (locked || showAnswer) {
-      return;
-    }
-
     const [col, idx] = cellId.split("-");
 
     const index = Number(idx);
+
+    if (checkCompleted || showAnswer || isCellLocked(col, index)) {
+      return;
+    }
 
     if (col === "d") {
       const updated = [...columnD];
@@ -520,9 +683,14 @@ export default function WB_Unit1_Page8_Q2() {
       setColumnT(updated);
     }
 
-    setWrong((prev) => prev.filter((item) => item !== word));
+    /*
+      X فقط من نفس الخانة.
+    */
+
+    clearWrongCell(col, index);
 
     // رجع focus للكلمة بالبنك
+
     window.setTimeout(() => {
       const wordIndex = correctWords.findIndex((item) => item === word);
 
@@ -541,7 +709,7 @@ export default function WB_Unit1_Page8_Q2() {
   // ======================================================
 
   const checkAnswers = () => {
-    if (showAnswer || locked) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -550,37 +718,75 @@ export default function WB_Unit1_Page8_Q2() {
     const hasEmpty = allInputs.some((word) => word.trim() === "");
 
     if (hasEmpty) {
-      return ValidationAlert.info(
+      ValidationAlert.info(
         "Oops!",
         "Please complete all answers before checking.",
       );
+
+      return;
     }
 
-    const wrongWords = [];
+    let correctCount = 0;
 
-    // d column
-    columnD.forEach((word) => {
-      if (!correctWords.includes(word) || !word.startsWith("d")) {
-        wrongWords.push(word);
+    const newWrongD = [false, false, false];
+
+    const newWrongT = [false, false, false];
+
+    const newLockedD = [false, false, false];
+
+    const newLockedT = [false, false, false];
+
+    // =========================================
+    // D COLUMN
+    // =========================================
+
+    columnD.forEach((word, index) => {
+      const ok = correctWords.includes(word) && word.startsWith("d");
+
+      if (ok) {
+        correctCount++;
+
+        newLockedD[index] = true;
+      } else {
+        newWrongD[index] = true;
       }
     });
 
-    // t column
-    columnT.forEach((word) => {
-      if (!correctWords.includes(word) || !word.startsWith("t")) {
-        wrongWords.push(word);
+    // =========================================
+    // T COLUMN
+    // =========================================
+
+    columnT.forEach((word, index) => {
+      const ok = correctWords.includes(word) && word.startsWith("t");
+
+      if (ok) {
+        correctCount++;
+
+        newLockedT[index] = true;
+      } else {
+        newWrongT[index] = true;
       }
     });
 
-    setWrong(wrongWords);
+    /*
+      قفل الصح فقط.
+    */
 
-    setLocked(true);
+    setLockedD((prev) =>
+      prev.map((locked, index) => locked || newLockedD[index]),
+    );
+
+    setLockedT((prev) =>
+      prev.map((locked, index) => locked || newLockedT[index]),
+    );
+
+    setWrongD(newWrongD);
+
+    setWrongT(newWrongT);
 
     setSelectedWordId(null);
 
     const total = correctWords.length;
-
-    const correctCount = total - wrongWords.length;
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -593,9 +799,33 @@ export default function WB_Unit1_Page8_Q2() {
       </div>
     `;
 
+    // =========================================
+    // ALL CORRECT
+    // =========================================
+
     if (correctCount === total) {
+      setLockedD([true, true, true]);
+
+      setLockedT([true, true, true]);
+
+      setWrongD([false, false, false]);
+
+      setWrongT([false, false, false]);
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All answers are correct.");
+
       ValidationAlert.success(msg);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    // =========================================
+    // WRONG / PARTIAL
+    // =========================================
+
+    if (correctCount === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
@@ -611,13 +841,21 @@ export default function WB_Unit1_Page8_Q2() {
 
     setColumnT(correctWords.filter((word) => word.startsWith("t")));
 
-    setWrong([]);
+    setWrongD([false, false, false]);
+
+    setWrongT([false, false, false]);
+
+    setLockedD([true, true, true]);
+
+    setLockedT([true, true, true]);
 
     setShowAnswer(true);
 
-    setLocked(true);
+    setCheckCompleted(true);
 
     setSelectedWordId(null);
+
+    setAnnouncement("Correct answers shown.");
   };
 
   // ======================================================
@@ -625,15 +863,23 @@ export default function WB_Unit1_Page8_Q2() {
   // ======================================================
 
   const reset = () => {
+    stopAudio();
+
     setColumnD(["", "", ""]);
 
     setColumnT(["", "", ""]);
 
-    setWrong([]);
+    setWrongD([false, false, false]);
+
+    setWrongT([false, false, false]);
+
+    setLockedD([false, false, false]);
+
+    setLockedT([false, false, false]);
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setCheckCompleted(false);
 
     setActiveWord(null);
 
@@ -689,6 +935,7 @@ export default function WB_Unit1_Page8_Q2() {
               title="Read and write the words in the correct column."
               subTitle="Say each word, then place it under d or t."
             />
+
             {/* ===================================
                 WORD BANK
             =================================== */}
@@ -703,7 +950,7 @@ export default function WB_Unit1_Page8_Q2() {
                     id={id}
                     word={word}
                     isUsed={usedWords.includes(word)}
-                    disabled={locked || showAnswer}
+                    disabled={showAnswer || checkCompleted}
                     selectedWordId={selectedWordId}
                     onSelect={handleWordSelect}
                     registerRef={registerBankRef}
@@ -733,11 +980,9 @@ export default function WB_Unit1_Page8_Q2() {
                         <DroppableCell
                           id={`d-${row}`}
                           value={columnD[row]}
-                          isWrong={
-                            wrong.includes(columnD[row]) && columnD[row] !== ""
-                          }
+                          isWrong={wrongD[row]}
                           showAnswer={showAnswer}
-                          locked={locked}
+                          locked={lockedD[row] || checkCompleted}
                           selectedWord={selectedWord}
                           selectedWordId={selectedWordId}
                           activeWord={activeWord}
@@ -751,11 +996,9 @@ export default function WB_Unit1_Page8_Q2() {
                         <DroppableCell
                           id={`t-${row}`}
                           value={columnT[row]}
-                          isWrong={
-                            wrong.includes(columnT[row]) && columnT[row] !== ""
-                          }
+                          isWrong={wrongT[row]}
                           showAnswer={showAnswer}
-                          locked={locked}
+                          locked={lockedT[row] || checkCompleted}
                           selectedWord={selectedWord}
                           selectedWordId={selectedWordId}
                           activeWord={activeWord}

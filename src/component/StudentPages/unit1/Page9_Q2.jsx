@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./Page9_Q2.css";
 
 import goodAudio from "../../../assets/unit1/Page 9 - E/Good.mp3";
@@ -8,23 +10,46 @@ import howAudio from "../../../assets/unit1/Page 9 - E/How.mp3";
 import thankYouAudio from "../../../assets/unit1/Page 9 - E/thank you.mp3";
 import areYouAudio from "../../../assets/unit1/Page 9 - E/are you.mp3";
 import afternoonAudio from "../../../assets/unit1/Page 9 - E/afternoon.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 export default function Page9_Q2() {
+  /* =====================================================
+     MATCHING STATES
+  ===================================================== */
+
   const [lines, setLines] = useState([]);
+
   const [wrongWords, setWrongWords] = useState([]);
+
   const [firstDot, setFirstDot] = useState(null);
+
   const [previewLine, setPreviewLine] = useState(null);
+
   const [showAnswer, setShowAnswer] = useState(false);
-  const [locked, setLocked] = useState(false);
+
+  /* =====================================================
+     PROGRESSIVE LOCK
+  ===================================================== */
+
+  const [lockedLeftWords, setLockedLeftWords] = useState([]);
+
+  const [lockedRightWords, setLockedRightWords] = useState([]);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  const isLeftLocked = (word) => lockedLeftWords.includes(word);
+
+  const isRightLocked = (word) => lockedRightWords.includes(word);
 
   const containerRef = useRef(null);
 
-  // =====================================================
-  // AUDIO
-  // =====================================================
+  /* =====================================================
+     AUDIO
+  ===================================================== */
 
   const audioRef = useRef(null);
+
   const [playingWord, setPlayingWord] = useState(null);
 
   const wordAudios = {
@@ -44,7 +69,9 @@ export default function Page9_Q2() {
     const audio = audioRef.current;
 
     audio.pause();
+
     audio.currentTime = 0;
+
     audio.src = sound;
 
     setPlayingWord(word);
@@ -58,20 +85,21 @@ export default function Page9_Q2() {
     };
   };
 
-  // =====================================================
-  // ACCESSIBILITY
-  // =====================================================
+  /* =====================================================
+     ACCESSIBILITY
+  ===================================================== */
 
   const [announcement, setAnnouncement] = useState("");
 
   const wordRefs = useRef({});
 
   const leftWords = ["Good", "Fine,", "How"];
+
   const rightWords = ["thank you.", "are you?", "afternoon."];
 
-  // =====================================================
-  // ANSWERS
-  // =====================================================
+  /* =====================================================
+     ANSWERS
+  ===================================================== */
 
   const correctMatches = [
     {
@@ -88,13 +116,14 @@ export default function Page9_Q2() {
     },
   ];
 
-  // =====================================================
-  // DRAWING
-  // =====================================================
+  /* =====================================================
+     DRAWING
+  ===================================================== */
 
   /*
-    ما بتتفعل الأدوات إلا بعد Check Answer
+    أدوات الرسم تتفعل بعد Check Answer
   */
+
   const [canDraw, setCanDraw] = useState(false);
 
   /*
@@ -102,16 +131,19 @@ export default function Page9_Q2() {
     pen = قلم
     eraser = ممحاة
   */
+
   const [activeTool, setActiveTool] = useState(null);
 
   const [selectedColor, setSelectedColor] = useState("#e53935");
 
   const [isDrawing, setIsDrawing] = useState(false);
+
   const [drawingStrokes, setDrawingStrokes] = useState([]);
+
   const [activeStroke, setActiveStroke] = useState(null);
+
   const activeStrokeRef = useRef(null);
 
-  /* كل عنصر هو نسخة من مسارات SVG حتى Undo يرجع خطوة. */
   const [drawingHistory, setDrawingHistory] = useState([]);
 
   const drawingColors = [
@@ -126,10 +158,9 @@ export default function Page9_Q2() {
   const drawingActive =
     canDraw && (activeTool === "pen" || activeTool === "eraser");
 
-  // =====================================================
-  // VECTOR DRAWING
-  // SVG paths are clipped by the same SVG text shown on screen.
-  // =====================================================
+  /* =====================================================
+     VECTOR DRAWING
+  ===================================================== */
 
   const getSvgPosition = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -151,8 +182,11 @@ export default function Page9_Q2() {
 
     for (let index = 1; index < points.length - 1; index++) {
       const point = points[index];
+
       const nextPoint = points[index + 1];
+
       const middleX = (point.x + nextPoint.x) / 2;
+
       const middleY = (point.y + nextPoint.y) / 2;
 
       path += ` Q ${point.x} ${point.y} ${middleX} ${middleY}`;
@@ -167,7 +201,9 @@ export default function Page9_Q2() {
     if (!drawingActive) return;
 
     e.preventDefault();
+
     e.stopPropagation();
+
     e.currentTarget.setPointerCapture?.(e.pointerId);
 
     const pressure =
@@ -175,33 +211,46 @@ export default function Page9_Q2() {
 
     const stroke = {
       id: `${Date.now()}-${e.pointerId}`,
+
       word,
+
       tool: activeTool,
+
       color: selectedColor,
+
       width: activeTool === "eraser" ? 28 : 7 + pressure * 4,
+
       points: [getSvgPosition(e)],
     };
 
     setDrawingHistory((prev) => [...prev, drawingStrokes]);
 
     activeStrokeRef.current = stroke;
+
     setActiveStroke(stroke);
+
     setIsDrawing(true);
   };
 
   const handlePointerMove = (e, word) => {
     if (!isDrawing || !drawingActive) return;
-    if (activeStrokeRef.current?.word !== word) return;
+
+    if (activeStrokeRef.current?.word !== word) {
+      return;
+    }
 
     e.preventDefault();
+
     e.stopPropagation();
 
     const nextStroke = {
       ...activeStrokeRef.current,
+
       points: [...activeStrokeRef.current.points, getSvgPosition(e)],
     };
 
     activeStrokeRef.current = nextStroke;
+
     setActiveStroke(nextStroke);
   };
 
@@ -211,75 +260,127 @@ export default function Page9_Q2() {
     if (!isDrawing || !completedStroke) return;
 
     e?.preventDefault();
+
     e?.stopPropagation();
+
     e?.currentTarget?.releasePointerCapture?.(e.pointerId);
 
     setDrawingStrokes((prev) => [...prev, completedStroke]);
 
     activeStrokeRef.current = null;
+
     setActiveStroke(null);
+
     setIsDrawing(false);
   };
 
-  // =====================================================
-  // UNDO
-  // =====================================================
+  /* =====================================================
+     UNDO
+  ===================================================== */
 
   const handleUndoDrawing = () => {
-    if (!canDraw || drawingHistory.length === 0) return;
+    if (!canDraw || drawingHistory.length === 0) {
+      return;
+    }
 
     const previousStrokes = drawingHistory[drawingHistory.length - 1];
 
     setDrawingStrokes(previousStrokes);
+
     setDrawingHistory((prev) => prev.slice(0, -1));
+
     setAnnouncement("Last drawing action undone.");
   };
 
-  // =====================================================
-  // CLEAR DRAWING
-  // =====================================================
+  /* =====================================================
+     CLEAR DRAWING
+  ===================================================== */
 
   const handleClearDrawing = () => {
     if (!canDraw) return;
 
     setDrawingHistory((prev) => [...prev, drawingStrokes]);
+
     setDrawingStrokes([]);
+
     setAnnouncement("Drawing cleared.");
   };
 
   const clearCanvasCompletely = () => {
     activeStrokeRef.current = null;
+
     setActiveStroke(null);
+
     setDrawingStrokes([]);
   };
 
-  // =====================================================
-  // MATCH - START
-  // =====================================================
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const getAvailableRightWords = () =>
+    rightWords.filter((word) => !isRightLocked(word));
+
+  const getAvailableLeftWords = () =>
+    leftWords.filter((word) => !isLeftLocked(word));
+
+  const focusWord = (word) => {
+    if (!word) return;
+
+    requestAnimationFrame(() => {
+      wordRefs.current[word]?.focus();
+    });
+  };
+
+  /* =====================================================
+     MATCH PREVIEW
+  ===================================================== */
 
   const updatePreviewLine = (startPoint, endWord) => {
     const container = containerRef.current;
+
     const endDot = document.getElementById(`dot-${endWord}`);
 
-    if (!startPoint || !container || !endDot) return;
+    if (!startPoint || !container || !endDot) {
+      return;
+    }
 
     const containerRect = container.getBoundingClientRect();
+
     const endDotRect = endDot.getBoundingClientRect();
 
     setPreviewLine({
       x1: startPoint.x,
+
       y1: startPoint.y,
+
       x2: endDotRect.left - containerRect.left + 8,
+
       y2: endDotRect.top - containerRect.top + 8,
     });
   };
 
+  /* =====================================================
+     MATCH - START
+  ===================================================== */
+
   const handleStartDotClick = (e) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted) return;
 
     const word = e.currentTarget.dataset.letter;
 
-    if (!word || !containerRef.current) return;
+    if (!word || !containerRef.current) {
+      return;
+    }
+
+    /*
+      إذا التوصيل صح واتقفل
+      ما نسمح بتغييره.
+    */
+
+    if (isLeftLocked(word)) {
+      return;
+    }
 
     const rect = containerRef.current.getBoundingClientRect();
 
@@ -289,9 +390,15 @@ export default function Page9_Q2() {
       نفس البداية ما بصير إلها خطين.
       التوصيل الجديد يستبدل القديم.
     */
+
     setLines((prev) => prev.filter((line) => line.word !== word));
 
+    /*
+      لو عليها X نشيله فقط عنها
+    */
+
     setWrongWords((prev) => prev.filter((item) => item !== word));
+
     setPreviewLine(null);
 
     setFirstDot({
@@ -311,14 +418,25 @@ export default function Page9_Q2() {
     }
   };
 
-  // =====================================================
-  // MATCH - END
-  // =====================================================
+  /* =====================================================
+     MATCH - END
+  ===================================================== */
 
   const handleEndDotClick = (e) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted) return;
 
     const image = e.currentTarget.dataset.image;
+
+    if (!image) return;
+
+    /*
+      النهاية الصحيحة المقفلة
+      ما تقبل توصيل جديد
+    */
+
+    if (isRightLocked(image)) {
+      return;
+    }
 
     if (!firstDot) {
       setAnnouncement(`${image}. Select a word from the left side first.`);
@@ -326,14 +444,19 @@ export default function Page9_Q2() {
       return;
     }
 
-    const rect = containerRef.current.getBoundingClientRect();
-
     const selectedWord = firstDot.word;
+
+    if (isLeftLocked(selectedWord)) {
+      return;
+    }
+
+    const rect = containerRef.current.getBoundingClientRect();
 
     const previousEndConnection = lines.find((line) => line.image === image);
 
     const newLine = {
       x1: firstDot.x,
+
       y1: firstDot.y,
 
       x2: e.currentTarget.getBoundingClientRect().left - rect.left + 8,
@@ -341,6 +464,7 @@ export default function Page9_Q2() {
       y2: e.currentTarget.getBoundingClientRect().top - rect.top + 8,
 
       word: selectedWord,
+
       image,
     };
 
@@ -348,12 +472,25 @@ export default function Page9_Q2() {
       /*
         ممنوع duplicate من البداية أو النهاية.
       */
+
       const filtered = prev.filter(
         (line) => line.word !== selectedWord && line.image !== image,
       );
 
       return [...filtered, newLine];
     });
+
+    /*
+      شيل X عن الكلمة اللي عدلناها.
+      ولو الصورة كانت مأخوذة من كلمة غلط ثانية،
+      شيل X عنها لأنها الآن بدون توصيل.
+    */
+
+    setWrongWords((prev) =>
+      prev.filter(
+        (word) => word !== selectedWord && word !== previousEndConnection?.word,
+      ),
+    );
 
     if (previousEndConnection) {
       setAnnouncement(
@@ -364,25 +501,31 @@ export default function Page9_Q2() {
     }
 
     setFirstDot(null);
+
     setPreviewLine(null);
   };
 
-  // =====================================================
-  // KEYBOARD
-  // =====================================================
-
-  const focusWord = (word) => {
-    requestAnimationFrame(() => {
-      wordRefs.current[word]?.focus();
-    });
-  };
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
 
   const handleKeyboard = (e, word, side) => {
-    if (locked || showAnswer) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    if (side === "left" && isLeftLocked(word)) {
+      return;
+    }
+
+    if (side === "right" && isRightLocked(word)) {
+      return;
+    }
 
     /*
-      Enter أو Space يعمل نفس click.
+      Enter / Space يعمل نفس click
     */
+
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
 
@@ -392,74 +535,117 @@ export default function Page9_Q2() {
         document.getElementById(`dot-${word}`)?.click();
 
         /*
-          بعد اختيار كلمة من اليسار، انقل التركيز لأول خيار في اليمين.
-          تصبح خيارات اليسار خارج ترتيب Tab حتى يكتمل الاختيار.
+          بعد اختيار اليسار
+          روح لأول خيار يمين غير مقفول
         */
-        focusWord(rightWords[0]);
+
+        const availableRight = getAvailableRightWords();
+
+        if (availableRight.length > 0) {
+          focusWord(availableRight[0]);
+        }
 
         return;
       }
 
       if (!firstDot) {
         setAnnouncement("Select a word from the left side first.");
+
         return;
       }
 
       const selectedLeftWord = firstDot.word;
-      const selectedLeftIndex = leftWords.indexOf(selectedLeftWord);
-      const nextLeftWord =
-        leftWords[(selectedLeftIndex + 1) % leftWords.length];
 
       document.getElementById(`dot-${word}`)?.click();
 
       /*
-        بعد إتمام التوصيل، ارجع تلقائياً للخيار التالي في اليسار.
+        بعد إتمام التوصيل
+        ارجع لأول كلمة يسار غير مقفلة
+        غير الكلمة الحالية إن أمكن
       */
-      focusWord(nextLeftWord);
+
+      const availableLeft = getAvailableLeftWords().filter(
+        (item) => item !== selectedLeftWord,
+      );
+
+      if (availableLeft.length > 0) {
+        focusWord(availableLeft[0]);
+      } else {
+        /*
+          إذا ما ظل غير الحالية
+          رجع عليها
+        */
+
+        const stillAvailable = getAvailableLeftWords();
+
+        if (stillAvailable.length > 0) {
+          focusWord(stillAvailable[0]);
+        }
+      }
 
       return;
     }
 
     /*
-      أثناء اختيار النهاية، احصر Tab و Shift+Tab داخل خيارات اليمين.
+      أثناء اختيار النهاية،
+      Tab و Shift+Tab فقط بين اليمين غير المقفول.
     */
+
     if (e.key === "Tab" && side === "right" && firstDot) {
       e.preventDefault();
 
-      const currentIndex = rightWords.indexOf(word);
-      const direction = e.shiftKey ? -1 : 1;
-      const nextIndex =
-        (currentIndex + direction + rightWords.length) % rightWords.length;
+      const availableRight = getAvailableRightWords();
 
-      focusWord(rightWords[nextIndex]);
+      if (availableRight.length === 0) {
+        return;
+      }
+
+      const currentIndex = availableRight.indexOf(word);
+
+      const direction = e.shiftKey ? -1 : 1;
+
+      const nextIndex =
+        currentIndex === -1
+          ? 0
+          : (currentIndex + direction + availableRight.length) %
+            availableRight.length;
+
+      focusWord(availableRight[nextIndex]);
 
       return;
     }
 
     /*
-      Escape يمنع تكوين keyboard trap دائم، ويلغي الاختيار الحالي.
+      Escape يلغي الاختيار الحالي.
     */
+
     if (e.key === "Escape" && side === "right" && firstDot) {
       e.preventDefault();
 
       const selectedLeftWord = firstDot.word;
 
       setFirstDot(null);
+
       setPreviewLine(null);
+
       setAnnouncement(
         `${selectedLeftWord} selection cancelled. Choose a word from the left side.`,
       );
 
-      focusWord(selectedLeftWord);
+      if (!isLeftLocked(selectedLeftWord)) {
+        focusWord(selectedLeftWord);
+      }
     }
   };
 
-  // =====================================================
-  // CHECK ANSWERS
-  // =====================================================
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
     if (lines.length < correctMatches.length) {
       ValidationAlert.info(
@@ -478,19 +664,47 @@ export default function Page9_Q2() {
 
     const wrong = [];
 
+    const newlyLockedLeft = [];
+
+    const newlyLockedRight = [];
+
     lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
+      const correctPair = correctMatches.find(
         (pair) => pair.word1 === line.word && pair.word2 === line.image,
       );
 
-      if (isCorrect) {
+      if (correctPair) {
         correctCount++;
+
+        newlyLockedLeft.push(line.word);
+
+        newlyLockedRight.push(line.image);
       } else {
         wrong.push(line.word);
       }
     });
 
+    /* =========================================
+       LOCK ONLY CORRECT CONNECTIONS
+    ========================================= */
+
+    setLockedLeftWords((prev) =>
+      Array.from(new Set([...prev, ...newlyLockedLeft])),
+    );
+
+    setLockedRightWords((prev) =>
+      Array.from(new Set([...prev, ...newlyLockedRight])),
+    );
+
     setWrongWords(wrong);
+
+    /*
+      نلغي أي selection شغال
+    */
+
+    setFirstDot(null);
+
+    setPreviewLine(null);
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -514,39 +728,56 @@ export default function Page9_Q2() {
       </div>
     `;
 
+    /* =========================================
+       DRAWING
+       نفس السلوك الموجود:
+       بعد Check كامل تتفعل الأدوات
+    ========================================= */
+
+    setCanDraw(true);
+
+    setActiveTool(null);
+
+    /* =========================================
+       ALL CORRECT
+    ========================================= */
+
     if (correctCount === total) {
+      setLockedLeftWords([...leftWords]);
+
+      setLockedRightWords([...rightWords]);
+
+      setCheckCompleted(true);
+
+      setWrongWords([]);
+
+      setAnnouncement(
+        `Score ${correctCount} out of ${total}. All matches are correct. Coloring tools are now available.`,
+      );
+
       ValidationAlert.success(scoreMessage);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    /* =========================================
+       WRONG / PARTIAL
+    ========================================= */
+
+    setAnnouncement(
+      `Score ${correctCount} out of ${total}. Correct matches are locked. Fix the incorrect matches. Coloring tools are now available.`,
+    );
+
+    if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-
-    /*
-      ✅ بمجرد ما عمل Check كامل
-      تتفعل أدوات الرسم.
-    */
-    setCanDraw(true);
-
-    /*
-      لكن ما نبدأ الرسم تلقائي.
-      المستخدم لازم يختار Pen أو Eraser.
-    */
-    setActiveTool(null);
-
-    setAnnouncement(
-      `Score ${correctCount} out of ${total}. Coloring tools are now available.`,
-    );
-
-    /*
-      نفس سلوك كودك الحالي.
-    */
-    setLocked(true);
   };
 
-  // =====================================================
-  // SHOW ANSWERS
-  // =====================================================
+  /* =====================================================
+     SHOW ANSWERS
+  ===================================================== */
 
   const showCorrectAnswers = () => {
     const rect = containerRef.current.getBoundingClientRect();
@@ -580,16 +811,23 @@ export default function Page9_Q2() {
     setWrongWords([]);
 
     setFirstDot(null);
+
     setPreviewLine(null);
+
+    setLockedLeftWords([...leftWords]);
+
+    setLockedRightWords([...rightWords]);
+
+    setCheckCompleted(true);
 
     setShowAnswer(true);
 
     setAnnouncement("Correct answers shown.");
   };
 
-  // =====================================================
-  // RESET
-  // =====================================================
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const handleReset = () => {
     setLines([]);
@@ -597,22 +835,27 @@ export default function Page9_Q2() {
     setWrongWords([]);
 
     setFirstDot(null);
+
     setPreviewLine(null);
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setLockedLeftWords([]);
+
+    setLockedRightWords([]);
+
+    setCheckCompleted(false);
 
     if (audioRef.current) {
       audioRef.current.pause();
+
       audioRef.current.currentTime = 0;
     }
 
     setPlayingWord(null);
 
-    /*
-      reset drawing
-    */
+    /* drawing reset */
+
     clearCanvasCompletely();
 
     setDrawingHistory([]);
@@ -626,9 +869,9 @@ export default function Page9_Q2() {
     setAnnouncement("Activity reset.");
   };
 
-  // =====================================================
-  // CLEANUP
-  // =====================================================
+  /* =====================================================
+     CLEANUP
+  ===================================================== */
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -640,12 +883,19 @@ export default function Page9_Q2() {
     };
   }, []);
 
+  /* =====================================================
+     COLORABLE WORD
+  ===================================================== */
+
   const renderColorableWord = (word) => {
     const safeWordId = word.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
     const clipId = `letter-clip-${safeWordId}`;
+
     const savedStrokes = drawingStrokes.filter(
       (stroke) => stroke.word === word,
     );
+
     const displayedStrokes =
       activeStroke?.word === word
         ? [...savedStrokes, activeStroke]
@@ -673,6 +923,7 @@ export default function Page9_Q2() {
           onClick={(e) => {
             if (canDraw) {
               e.preventDefault();
+
               e.stopPropagation();
             }
           }}
@@ -694,13 +945,17 @@ export default function Page9_Q2() {
             </clipPath>
 
             {displayedStrokes.map((stroke, index) => {
-              if (stroke.tool !== "pen") return null;
+              if (stroke.tool !== "pen") {
+                return null;
+              }
 
               const laterErasers = displayedStrokes
                 .slice(index + 1)
                 .filter((item) => item.tool === "eraser");
 
-              if (laterErasers.length === 0) return null;
+              if (laterErasers.length === 0) {
+                return null;
+              }
 
               return (
                 <mask
@@ -727,7 +982,9 @@ export default function Page9_Q2() {
 
           <g clipPath={`url(#${clipId})`}>
             {displayedStrokes.map((stroke, index) => {
-              if (stroke.tool !== "pen") return null;
+              if (stroke.tool !== "pen") {
+                return null;
+              }
 
               const hasLaterEraser = displayedStrokes
                 .slice(index + 1)
@@ -765,15 +1022,17 @@ export default function Page9_Q2() {
     );
   };
 
-  // =====================================================
-  // JSX
-  // =====================================================
+  /* =====================================================
+     JSX
+  ===================================================== */
 
   return (
     <div
       style={{
         display: "flex",
+
         padding: "30px",
+
         justifyContent: "center",
       }}
     >
@@ -788,6 +1047,7 @@ export default function Page9_Q2() {
           title="Match and color."
           subTitle="Match each phrase first, then click twice to use the coloring tool."
         />
+
         <audio
           ref={audioRef}
           style={{
@@ -795,7 +1055,9 @@ export default function Page9_Q2() {
           }}
         />
 
-        {/* Screen Reader instructions */}
+        {/* =================================================
+            SCREEN READER
+        ================================================= */}
 
         <span className="sr-only">
           Match the words. Use Tab to move through the words on the left and
@@ -815,9 +1077,9 @@ export default function Page9_Q2() {
           {announcement}
         </div>
 
-        {/* ======================================
+        {/* =================================================
             DRAWING TOOLBAR
-        ======================================= */}
+        ================================================= */}
 
         <div className="drawing-toolbar">
           <button
@@ -870,8 +1132,6 @@ export default function Page9_Q2() {
             🗑 Clear
           </button>
 
-          {/* COLORS */}
-
           <div className="drawing-colors" aria-label="Drawing colors">
             {drawingColors.map((color) => (
               <button
@@ -898,12 +1158,14 @@ export default function Page9_Q2() {
           </div>
         </div>
 
-        {/* ======================================
+        {/* =================================================
             MATCHING AREA
-        ======================================= */}
+        ================================================= */}
 
         <div className="container3" ref={containerRef}>
-          {/* LEFT */}
+          {/* =================================================
+              LEFT
+          ================================================= */}
 
           <div className="word-section1">
             {leftWords.map((word) => {
@@ -913,15 +1175,22 @@ export default function Page9_Q2() {
 
               const connection = lines.find((line) => line.word === word);
 
+              const wordLocked = isLeftLocked(word);
+
               return (
                 <div
                   key={word}
                   style={{
                     position: "relative",
+
                     display: "flex",
+
                     flexDirection: "row",
+
                     alignItems: "center",
+
                     width: "100%",
+
                     justifyContent: "flex-end",
                   }}
                 >
@@ -930,15 +1199,24 @@ export default function Page9_Q2() {
                       wordRefs.current[word] = el;
                     }}
                     role="button"
-                    tabIndex={locked || showAnswer || firstDot ? -1 : 0}
+                    tabIndex={
+                      showAnswer || checkCompleted || wordLocked || firstDot
+                        ? -1
+                        : 0
+                    }
+                    aria-disabled={showAnswer || checkCompleted || wordLocked}
                     aria-pressed={isSelected}
                     aria-label={
-                      connection
-                        ? `${word}. Connected to ${connection.image}.`
-                        : `${word}. Not connected. Press Enter or Space to select.`
+                      wordLocked
+                        ? `${word}. Correct match.`
+                        : connection
+                          ? `${word}. Connected to ${connection.image}.`
+                          : `${word}. Not connected. Press Enter or Space to select.`
                     }
                     className={`H5 word-outline ${
-                      locked || showAnswer ? "disabled-word" : ""
+                      showAnswer || checkCompleted || wordLocked
+                        ? "disabled-word"
+                        : ""
                     } ${isSelected ? "keyboard-selected" : ""} ${
                       isPlaying ? "audio-playing" : ""
                     } ${canDraw ? "coloring-word" : ""}`}
@@ -952,7 +1230,16 @@ export default function Page9_Q2() {
                       width: "100%",
                     }}
                     onClick={() => {
+                      /*
+                          الصوت يظل يشتغل
+                          حتى لو التوصيل صح
+                        */
+
                       playWordAudio(word);
+
+                      if (showAnswer || checkCompleted || wordLocked) {
+                        return;
+                      }
 
                       document.getElementById(`dot-${word}`)?.click();
                     }}
@@ -980,7 +1267,9 @@ export default function Page9_Q2() {
             })}
           </div>
 
-          {/* RIGHT */}
+          {/* =================================================
+              RIGHT
+          ================================================= */}
 
           <div className="word-section2">
             {rightWords.map((word) => {
@@ -988,15 +1277,22 @@ export default function Page9_Q2() {
 
               const connection = lines.find((line) => line.image === word);
 
+              const wordLocked = isRightLocked(word);
+
               return (
                 <div
                   key={word}
                   style={{
                     position: "relative",
+
                     display: "flex",
+
                     flexDirection: "row",
+
                     alignItems: "center",
+
                     width: "100%",
+
                     justifyContent: "flex-start",
                   }}
                 >
@@ -1014,28 +1310,42 @@ export default function Page9_Q2() {
                       wordRefs.current[word] = el;
                     }}
                     role="button"
-                    tabIndex={locked || showAnswer || !firstDot ? -1 : 0}
+                    tabIndex={
+                      showAnswer || checkCompleted || wordLocked || !firstDot
+                        ? -1
+                        : 0
+                    }
+                    aria-disabled={showAnswer || checkCompleted || wordLocked}
                     aria-label={
-                      connection
-                        ? `${word}. Connected from ${connection.word}.`
-                        : `${word}. Not connected. Press Enter or Space to connect the selected word here.`
+                      wordLocked
+                        ? `${word}. Correct match.`
+                        : connection
+                          ? `${word}. Connected from ${connection.word}.`
+                          : `${word}. Not connected. Press Enter or Space to connect the selected word here.`
                     }
                     className={`H5 word-outline ${
-                      locked || showAnswer ? "disabled-word" : ""
+                      showAnswer || checkCompleted || wordLocked
+                        ? "disabled-word"
+                        : ""
                     } ${isPlaying ? "audio-playing" : ""} ${
                       canDraw ? "coloring-word" : ""
                     }`}
                     style={{
                       cursor: "pointer",
+
                       position: "relative",
                     }}
                     onClick={() => {
                       playWordAudio(word);
 
+                      if (showAnswer || checkCompleted || wordLocked) {
+                        return;
+                      }
+
                       document.getElementById(`dot-${word}`)?.click();
                     }}
                     onFocus={() => {
-                      if (firstDot) {
+                      if (firstDot && !wordLocked) {
                         updatePreviewLine(firstDot, word);
                       }
                     }}
@@ -1048,7 +1358,9 @@ export default function Page9_Q2() {
             })}
           </div>
 
-          {/* MATCHING LINES */}
+          {/* =================================================
+              MATCHING LINES
+          ================================================= */}
 
           <svg className="lines-layer" aria-hidden="true">
             {lines.map((line, i) => (
@@ -1072,14 +1384,18 @@ export default function Page9_Q2() {
                 stroke="red"
                 strokeWidth="3"
                 strokeDasharray="6 4"
-                style={{ pointerEvents: "none" }}
+                style={{
+                  pointerEvents: "none",
+                }}
               />
             )}
           </svg>
         </div>
       </div>
 
-      {/* ACTION BUTTONS */}
+      {/* =================================================
+          ACTION BUTTONS
+      ================================================= */}
 
       <div className="action-buttons-container">
         <button

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import "./WB_Unit1_Page6_Q2.css";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 // ========================================
@@ -10,6 +11,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_6/Item_001_goodbye.mp3";
 import helloAudio from "../../../assets/U1 WB/U1/page_6/Item_002_hello.mp3";
 import howAreYouAudio from "../../../assets/U1 WB/U1/page_6/Item_003_how_are_you.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 // ========================================
@@ -129,11 +131,20 @@ export default function WB_Unit1_Page6_Q2() {
 
   const [foundWords, setFoundWords] = useState([]);
 
+  /*
+    بعد Check:
+    الكلمات اللي لسه ناقصة فقط.
+  */
   const [wrongWords, setWrongWords] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const [locked, setLocked] = useState(false);
+  /*
+    true فقط:
+    - لما يلاقي كل الكلمات
+    - أو يعمل Show Answer
+  */
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [announcement, setAnnouncement] = useState("");
 
@@ -157,6 +168,7 @@ export default function WB_Unit1_Page6_Q2() {
     if (!audioRef.current) return;
 
     audioRef.current.pause();
+
     audioRef.current.currentTime = 0;
 
     audioRef.current = null;
@@ -181,6 +193,7 @@ export default function WB_Unit1_Page6_Q2() {
 
     audio.onended = () => {
       setPlayingWord(null);
+
       audioRef.current = null;
     };
   };
@@ -205,7 +218,12 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const startSelection = (r, c) => {
-    if (locked || showAnswer || isFoundCell(r, c)) {
+    /*
+      الكلمات اللي انوجدت صح
+      تبقى محمية لوحدها عن طريق isFoundCell.
+    */
+
+    if (checkCompleted || showAnswer || isFoundCell(r, c)) {
       return;
     }
 
@@ -223,6 +241,10 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const completeSelection = (endR, endC) => {
+    if (checkCompleted || showAnswer) {
+      return;
+    }
+
     if (!startCell) {
       startSelection(endR, endC);
 
@@ -235,12 +257,18 @@ export default function WB_Unit1_Page6_Q2() {
       setAnnouncement("That selection is not in a straight line.");
 
       setStartCell(null);
+
       setPreviewCells([]);
 
       return;
     }
 
     const matchedWord = words.find((word) => {
+      /*
+            الكلمة الموجودة صح
+            ما بنضيفها مرة ثانية.
+          */
+
       if (foundWords.includes(word.text)) {
         return false;
       }
@@ -253,6 +281,11 @@ export default function WB_Unit1_Page6_Q2() {
 
     if (matchedWord) {
       setFoundWords((prev) => [...prev, matchedWord.text]);
+
+      /*
+        إذا كان عليها X من Check سابق
+        شيله فقط عنها.
+      */
 
       setWrongWords((prev) => prev.filter((word) => word !== matchedWord.text));
 
@@ -273,7 +306,7 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const handleCellClick = (r, c) => {
-    if (locked || showAnswer) {
+    if (checkCompleted || showAnswer) {
       return;
     }
 
@@ -289,7 +322,7 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const handleCellKeyDown = (e, r, c) => {
-    if (locked || showAnswer) {
+    if (checkCompleted || showAnswer) {
       return;
     }
 
@@ -325,11 +358,15 @@ export default function WB_Unit1_Page6_Q2() {
     }
 
     // إذا تحركنا
+
     if (nextR !== r || nextC !== c) {
       setActiveCell([nextR, nextC]);
 
-      // إذا في selection شغال
-      // حدث preview line/cells
+      /*
+        إذا في selection شغال
+        حدث preview.
+      */
+
       if (startCell) {
         const path = getPath(startCell, [nextR, nextC]);
 
@@ -379,7 +416,7 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const handlePointerDown = (r, c) => {
-    if (locked || showAnswer) {
+    if (checkCompleted || showAnswer || isFoundCell(r, c)) {
       return;
     }
 
@@ -431,7 +468,7 @@ export default function WB_Unit1_Page6_Q2() {
   // ========================================
 
   const checkAnswers = () => {
-    if (showAnswer || locked) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -444,17 +481,24 @@ export default function WB_Unit1_Page6_Q2() {
       return;
     }
 
+    /*
+      أي كلمة مش موجودة لسه
+      نعرض X جنبها.
+    */
+
     const missingWords = words
       .map((word) => word.text)
       .filter((word) => !foundWords.includes(word));
 
     setWrongWords(missingWords);
 
-    setLocked(true);
-
     setStartCell(null);
 
     setPreviewCells([]);
+
+    setIsDragging(false);
+
+    dragStartRef.current = null;
 
     const total = words.length;
 
@@ -471,13 +515,36 @@ export default function WB_Unit1_Page6_Q2() {
       </div>
     `;
 
+    // ========================================
+    // ALL CORRECT
+    // ========================================
+
     if (correct === total) {
+      setWrongWords([]);
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All words are correct.");
+
       ValidationAlert.success(msg);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    /*
+      ما بنقفل الشبكة هون.
+      المستخدم يقدر يكمل الكلمات الناقصة.
+    */
+
+    if (correct === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
+
+    setAnnouncement(
+      `Score ${correct} out of ${total}. Continue finding the missing words.`,
+    );
   };
 
   // ========================================
@@ -495,9 +562,13 @@ export default function WB_Unit1_Page6_Q2() {
 
     setPreviewCells([]);
 
+    setIsDragging(false);
+
+    dragStartRef.current = null;
+
     setShowAnswer(true);
 
-    setLocked(true);
+    setCheckCompleted(true);
 
     setAnnouncement("All answers shown.");
   };
@@ -519,7 +590,7 @@ export default function WB_Unit1_Page6_Q2() {
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setCheckCompleted(false);
 
     setIsDragging(false);
 
@@ -528,6 +599,10 @@ export default function WB_Unit1_Page6_Q2() {
     setActiveCell([0, 0]);
 
     setAnnouncement("Activity reset.");
+
+    requestAnimationFrame(() => {
+      cellRefs.current["0-0"]?.focus();
+    });
   };
 
   // ========================================
@@ -568,6 +643,7 @@ export default function WB_Unit1_Page6_Q2() {
             title="Find the words."
             subTitle="Find goodbye, hello, and how are you in the letter grid."
           />
+
           <div className="container-word-grid-wb-u1-p6-q2">
             {/* ==============================
                 GRID
@@ -600,7 +676,13 @@ export default function WB_Unit1_Page6_Q2() {
                           cellRefs.current[`${rIdx}-${cIdx}`] = node;
                         }}
                         role="gridcell"
-                        tabIndex={locked ? -1 : isActiveCell ? 0 : -1}
+                        tabIndex={
+                          showAnswer || checkCompleted
+                            ? -1
+                            : isActiveCell
+                              ? 0
+                              : -1
+                        }
                         aria-label={`Row ${rIdx + 1}, column ${
                           cIdx + 1
                         }, letter ${cell}${

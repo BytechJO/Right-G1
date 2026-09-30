@@ -8,7 +8,6 @@ import img1 from "../../../assets/U1 WB/U1/SVG/U1P5EXEF.svg";
 
 // ===============================================
 // AUDIO
-// عدل أسماء الملفات فقط إذا الاسم عندك مختلف حرفيًا
 // ===============================================
 
 import howAreYouAudio from "../../../assets/U1 WB/U1/page_5_2/Item_001_How_are_you.mp3";
@@ -16,6 +15,7 @@ import goodEveningAudio from "../../../assets/U1 WB/U1/page_5_2/Item_002_Good_Ev
 import helloStellaAudio from "../../../assets/U1 WB/U1/page_5_2/Item_003_Hello!_I'm,_Stella.mp3";
 import fineThankYouAudio from "../../../assets/U1 WB/U1/page_5_2/Item_004_fine,_thank_you.mp3";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_5_2/Item_005_Goodbye.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 // ===============================================
@@ -45,7 +45,7 @@ const sentences = [
   },
 ];
 
-// نفس الـindexes الأصلية تبعت الحروف
+// نفس الـ indexes الأصلية تبعت الحروف
 const correct = {
   0: [12],
   1: [5],
@@ -55,17 +55,63 @@ const correct = {
 };
 
 const WB_Unit1_Page5_Q2 = () => {
-  const [checked, setChecked] = useState(false);
+  // ===============================================
+  // STATE
+  // ===============================================
 
   const [showAnswer, setShowAnswer] = useState(false);
 
   const [circledWords, setCircledWords] = useState({});
+
+  /*
+    الأحرف الصح اللي اتأكدنا منها بالـ Check.
+    الشكل:
+    {
+      0: [12],
+      3: [0]
+    }
+  */
+  const [lockedChars, setLockedChars] = useState({});
+
+  /*
+    الاختيارات الغلط اللي لازم يظهر عليها X.
+  */
+  const [wrongChars, setWrongChars] = useState({});
+
+  /*
+    بعد النجاح النهائي فقط.
+  */
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [playingSentence, setPlayingSentence] = useState(null);
 
   const [announcement, setAnnouncement] = useState("");
 
   const audioRef = useRef(null);
+
+  // ===============================================
+  // HELPERS
+  // ===============================================
+
+  const isCharLocked = (sIndex, charIndex) =>
+    lockedChars[sIndex]?.includes(charIndex);
+
+  const isCharWrong = (sIndex, charIndex) =>
+    wrongChars[sIndex]?.includes(charIndex);
+
+  const getTotalCorrect = () =>
+    Object.values(correct).reduce(
+      (total, indexes) => total + indexes.length,
+      0,
+    );
+
+  const getAllSelected = (obj) =>
+    Object.entries(obj).flatMap(([sentenceIndex, indexes]) =>
+      indexes.map((charIndex) => ({
+        sentenceIndex: Number(sentenceIndex),
+        charIndex,
+      })),
+    );
 
   // ===============================================
   // AUDIO
@@ -112,7 +158,9 @@ const WB_Unit1_Page5_Q2 = () => {
   // ===============================================
 
   const handleCharClick = (sIndex, charIndex) => {
-    if (showAnswer || checked) return;
+    if (showAnswer || checkCompleted || isCharLocked(sIndex, charIndex)) {
+      return;
+    }
 
     const char = sentences[sIndex].text[charIndex];
 
@@ -123,7 +171,7 @@ const WB_Unit1_Page5_Q2 = () => {
         ...prev,
       };
 
-      const currentSentence = updated[sIndex] || [];
+      const currentSentence = [...(updated[sIndex] || [])];
 
       if (currentSentence.includes(charIndex)) {
         updated[sIndex] = currentSentence.filter(
@@ -137,8 +185,30 @@ const WB_Unit1_Page5_Q2 = () => {
         setAnnouncement(`${char} selected as a mistake.`);
       }
 
-      // إذا ما ضل ولا اختيار بالجملة
       if (updated[sIndex]?.length === 0) {
+        delete updated[sIndex];
+      }
+
+      return updated;
+    });
+
+    /*
+      إذا كان هذا الحرف عليه X من Check سابق،
+      أول ما المستخدم يعدله نشيل X عنه فقط.
+    */
+
+    setWrongChars((prev) => {
+      if (!prev[sIndex]?.includes(charIndex)) {
+        return prev;
+      }
+
+      const updated = {
+        ...prev,
+      };
+
+      updated[sIndex] = updated[sIndex].filter((index) => index !== charIndex);
+
+      if (updated[sIndex].length === 0) {
         delete updated[sIndex];
       }
 
@@ -151,7 +221,9 @@ const WB_Unit1_Page5_Q2 = () => {
   // ===============================================
 
   const checkAnswers = () => {
-    if (showAnswer || checked) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
     const selectedCount = Object.values(circledWords).reduce(
       (total, arr) => total + arr.length,
@@ -164,30 +236,96 @@ const WB_Unit1_Page5_Q2 = () => {
       return;
     }
 
-    let totalCorrect = 0;
+    const totalCorrect = getTotalCorrect();
 
     let studentCorrect = 0;
 
-    Object.keys(correct).forEach((sentenceIndex) => {
-      totalCorrect += correct[sentenceIndex].length;
-    });
+    let wrongSelectedCount = 0;
 
-    Object.keys(circledWords).forEach((sentenceIndex) => {
+    const newlyLocked = {};
+
+    const newWrongChars = {};
+
+    /*
+      نفحص كل شيء اختاره المستخدم.
+    */
+
+    Object.keys(circledWords).forEach((sentenceIndexKey) => {
+      const sentenceIndex = Number(sentenceIndexKey);
+
       circledWords[sentenceIndex].forEach((charIndex) => {
-        if (correct[sentenceIndex]?.includes(charIndex)) {
+        const isCorrectSelection = correct[sentenceIndex]?.includes(charIndex);
+
+        if (isCorrectSelection) {
           studentCorrect++;
+
+          if (!newlyLocked[sentenceIndex]) {
+            newlyLocked[sentenceIndex] = [];
+          }
+
+          newlyLocked[sentenceIndex].push(charIndex);
+        } else {
+          wrongSelectedCount++;
+
+          if (!newWrongChars[sentenceIndex]) {
+            newWrongChars[sentenceIndex] = [];
+          }
+
+          newWrongChars[sentenceIndex].push(charIndex);
         }
       });
     });
 
-    setChecked(true);
+    // ===============================================
+    // LOCK ONLY CORRECT SELECTED CHARACTERS
+    // ===============================================
 
-    const color =
-      studentCorrect === totalCorrect
-        ? "green"
-        : studentCorrect === 0
-          ? "red"
-          : "orange";
+    setLockedChars((prev) => {
+      const updated = {
+        ...prev,
+      };
+
+      Object.keys(newlyLocked).forEach((sentenceIndexKey) => {
+        const sentenceIndex = Number(sentenceIndexKey);
+
+        updated[sentenceIndex] = Array.from(
+          new Set([
+            ...(updated[sentenceIndex] || []),
+            ...newlyLocked[sentenceIndex],
+          ]),
+        );
+      });
+
+      return updated;
+    });
+
+    /*
+      X فقط على الاختيارات الغلط الحالية.
+    */
+
+    setWrongChars(newWrongChars);
+
+    // ===============================================
+    // FINAL SUCCESS CHECK
+    // ===============================================
+
+    /*
+      النجاح النهائي يحتاج:
+      1. كل الأخطاء الصح تم اختيارها.
+      2. ما في أي اختيار غلط.
+    */
+
+    const allCorrectMistakesSelected = studentCorrect === totalCorrect;
+
+    const noWrongSelections = wrongSelectedCount === 0;
+
+    const fullyCorrect = allCorrectMistakesSelected && noWrongSelections;
+
+    const color = fullyCorrect
+      ? "green"
+      : studentCorrect === 0
+        ? "red"
+        : "orange";
 
     const scoreMessage = `
       <div style="font-size:20px;text-align:center;">
@@ -197,13 +335,39 @@ const WB_Unit1_Page5_Q2 = () => {
       </div>
     `;
 
-    if (studentCorrect === totalCorrect) {
+    if (fullyCorrect) {
+      /*
+        قفل كل الإجابات الصحيحة.
+      */
+
+      const allLocked = {};
+
+      Object.keys(correct).forEach((sentenceIndex) => {
+        allLocked[sentenceIndex] = [...correct[sentenceIndex]];
+      });
+
+      setLockedChars(allLocked);
+
+      setWrongChars({});
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All mistakes are correctly selected.");
+
       ValidationAlert.success(scoreMessage);
-    } else if (studentCorrect === 0) {
+
+      return;
+    }
+
+    if (studentCorrect === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
+
+    setAnnouncement(
+      `Score ${studentCorrect} out of ${totalCorrect}. Correct selections are locked. Fix the incorrect selections and find any remaining mistakes.`,
+    );
   };
 
   // ===============================================
@@ -221,9 +385,13 @@ const WB_Unit1_Page5_Q2 = () => {
 
     setCircledWords(answerObj);
 
+    setLockedChars(answerObj);
+
+    setWrongChars({});
+
     setShowAnswer(true);
 
-    setChecked(false);
+    setCheckCompleted(true);
 
     setAnnouncement("Correct answers shown.");
   };
@@ -237,7 +405,11 @@ const WB_Unit1_Page5_Q2 = () => {
 
     setCircledWords({});
 
-    setChecked(false);
+    setLockedChars({});
+
+    setWrongChars({});
+
+    setCheckCompleted(false);
 
     setShowAnswer(false);
 
@@ -294,6 +466,7 @@ const WB_Unit1_Page5_Q2 = () => {
           title="Read and circle the mistakes."
           subTitle="Check capital letters and end marks, then tap every mistake."
         />
+
         <div className="sentence-container-wb-u1-p5-q2">
           {/* ==========================================
               SENTENCES
@@ -306,8 +479,8 @@ const WB_Unit1_Page5_Q2 = () => {
               return (
                 <div key={sIndex} className="sentence-row-wb-u1-p5-q2">
                   {/* ==================================
-                        NUMBER / AUDIO
-                    ================================== */}
+                      NUMBER / AUDIO
+                  ================================== */}
 
                   <button
                     type="button"
@@ -330,8 +503,8 @@ const WB_Unit1_Page5_Q2 = () => {
                   </button>
 
                   {/* ==================================
-                        CHARACTERS
-                    ================================== */}
+                      CHARACTERS
+                  ================================== */}
 
                   <div
                     className="sentence-text-wb-u1-p5-q2"
@@ -339,8 +512,10 @@ const WB_Unit1_Page5_Q2 = () => {
                     aria-label={`Sentence ${sIndex + 1}`}
                   >
                     {sentence.text.split("").map((char, charIndex) => {
-                      // spaces stay visual only
-                      // not focusable
+                      /*
+                        المسافات visual فقط.
+                      */
+
                       if (char === " ") {
                         return (
                           <span
@@ -354,27 +529,27 @@ const WB_Unit1_Page5_Q2 = () => {
                       const isCircled =
                         circledWords[sIndex]?.includes(charIndex);
 
-                      const isCorrect =
-                        checked &&
-                        isCircled &&
-                        correct[sIndex]?.includes(charIndex);
+                      const charLocked = isCharLocked(sIndex, charIndex);
 
-                      const isWrong =
-                        checked &&
-                        !showAnswer &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(charIndex);
+                      const charWrong = isCharWrong(sIndex, charIndex);
 
                       return (
                         <span
                           key={charIndex}
                           role="button"
-                          tabIndex={showAnswer || checked ? -1 : 0}
+                          tabIndex={
+                            showAnswer || checkCompleted || charLocked ? -1 : 0
+                          }
+                          aria-disabled={
+                            showAnswer || checkCompleted || charLocked
+                          }
                           aria-pressed={isCircled}
                           aria-label={`Character ${char}. ${
-                            isCircled
-                              ? "Selected as a mistake."
-                              : "Not selected."
+                            charLocked
+                              ? "Correct mistake. Locked."
+                              : isCircled
+                                ? "Selected as a mistake."
+                                : "Not selected."
                           }`}
                           onClick={() => handleCharClick(sIndex, charIndex)}
                           onKeyDown={(e) => {
@@ -388,11 +563,17 @@ const WB_Unit1_Page5_Q2 = () => {
                           }}
                           className={`char-container-wb-u1-p5-q2 ${
                             isCircled ? "circled-wb-u1-p5-q2" : ""
-                          } ${isCorrect ? "correct-char-wb-u1-p5-q2" : ""}`}
+                          } ${charLocked ? "correct-char-wb-u1-p5-q2" : ""}`}
+                          style={{
+                            cursor:
+                              charLocked || showAnswer || checkCompleted
+                                ? "default"
+                                : "pointer",
+                          }}
                         >
                           {char}
 
-                          {isWrong && (
+                          {charWrong && (
                             <span
                               className="wrong-x-unit2-q3"
                               aria-hidden="true"

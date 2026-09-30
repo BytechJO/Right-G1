@@ -5,9 +5,9 @@ import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
 import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
 import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
 
-// ================================
-// AUDIO
-// ================================
+/* ================================
+   AUDIO
+================================ */
 
 import helloStellaAudio from "../../../assets/U1 WB/U1/page_4/Item_001_Hello!_I'm_Stella.mp3";
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_4/Item_002_Goodbye!.mp3";
@@ -17,6 +17,7 @@ import goodMorningAudio from "../../../assets/U1 WB/U1/page_4/Item_004_Good_morn
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import "./WB_Unit1_Page3_Q2.css";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 const WB_Unit1_Page3_Q2 = () => {
@@ -93,23 +94,40 @@ const WB_Unit1_Page3_Q2 = () => {
       ],
     },
   ];
-  // ================================
-  // STATE
-  // ================================
+
+  /* ================================
+     STATE
+  ================================ */
 
   const [selected, setSelected] = useState({});
 
-  const [showResult, setShowResult] = useState(false);
+  /*
+    بعد Check:
+    نخزن فقط الأسئلة الغلط
+  */
+  const [wrongQuestions, setWrongQuestions] = useState([]);
+
+  /*
+    الأسئلة الصح فقط
+  */
+  const [lockedQuestions, setLockedQuestions] = useState([]);
 
   const [showAnswerState, setShowAnswerState] = useState(false);
+
+  /*
+    بعد النجاح النهائي فقط
+  */
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [playingQuestion, setPlayingQuestion] = useState(null);
 
   const audioRef = useRef(null);
 
-  // ================================
-  // AUDIO
-  // ================================
+  const isQuestionLocked = (qId) => lockedQuestions.includes(qId);
+
+  /* ================================
+     AUDIO
+  ================================ */
 
   const stopCurrentAudio = () => {
     if (!audioRef.current) return;
@@ -145,22 +163,33 @@ const WB_Unit1_Page3_Q2 = () => {
     };
   };
 
-  // ================================
-  // SELECT IMAGE
-  // ================================
+  /* ================================
+     SELECT IMAGE
+  ================================ */
 
   const handleSelect = (qId, index) => {
-    if (showAnswerState || showResult) return;
+    if (showAnswerState || checkCompleted || isQuestionLocked(qId)) {
+      return;
+    }
 
     setSelected((prev) => ({
       ...prev,
+
       [qId]: index,
     }));
+
+    /*
+      إذا السؤال كان عليه X
+      وشغّلنا اختيار جديد،
+      شيل X تبعه فقط.
+    */
+
+    setWrongQuestions((prev) => prev.filter((id) => id !== qId));
   };
 
-  // ================================
-  // SHOW ANSWER
-  // ================================
+  /* ================================
+     SHOW ANSWER
+  ================================ */
 
   const showCorrectAnswers = () => {
     const correctSelections = {};
@@ -175,21 +204,28 @@ const WB_Unit1_Page3_Q2 = () => {
 
     setSelected(correctSelections);
 
-    setShowResult(false);
+    setWrongQuestions([]);
+
+    setLockedQuestions(data.map((question) => question.id));
 
     setShowAnswerState(true);
+
+    setCheckCompleted(true);
   };
 
-  // ================================
-  // CHECK ANSWER
-  // ================================
+  /* ================================
+     CHECK ANSWER
+  ================================ */
 
   const checkAnswers = () => {
-    if (showAnswerState) return;
+    if (showAnswerState || checkCompleted) {
+      return;
+    }
 
     const totalQuestions = data.length;
 
-    // لازم يجاوب كل الأسئلة
+    /* لازم يجاوب الكل */
+
     for (const question of data) {
       if (selected[question.id] === undefined) {
         ValidationAlert.info(
@@ -203,13 +239,31 @@ const WB_Unit1_Page3_Q2 = () => {
 
     let correct = 0;
 
+    const wrongIds = [];
+
+    const correctIds = [];
+
     data.forEach((question) => {
       const chosenIndex = selected[question.id];
 
-      if (question.imgs[chosenIndex]?.answer === true) {
+      const isCorrect = question.imgs[chosenIndex]?.answer === true;
+
+      if (isCorrect) {
         correct++;
+
+        correctIds.push(question.id);
+      } else {
+        wrongIds.push(question.id);
       }
     });
+
+    /* =================================
+       قفل الصح فقط
+    ================================= */
+
+    setLockedQuestions((prev) => Array.from(new Set([...prev, ...correctIds])));
+
+    setWrongQuestions(wrongIds);
 
     const color =
       correct === totalQuestions ? "green" : correct === 0 ? "red" : "orange";
@@ -233,34 +287,54 @@ const WB_Unit1_Page3_Q2 = () => {
       </div>
     `;
 
+    /* =============================
+       ALL CORRECT
+    ============================= */
+
     if (correct === totalQuestions) {
+      setLockedQuestions(data.map((question) => question.id));
+
+      setWrongQuestions([]);
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(scoreMessage);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    /* =============================
+       WRONG / PARTIAL
+    ============================= */
+
+    if (correct === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-
-    setShowResult(true);
   };
 
-  // ================================
-  // RESET
-  // ================================
+  /* ================================
+     RESET
+  ================================ */
 
   const reset = () => {
     stopCurrentAudio();
 
     setSelected({});
 
-    setShowResult(false);
+    setWrongQuestions([]);
+
+    setLockedQuestions([]);
 
     setShowAnswerState(false);
+
+    setCheckCompleted(false);
   };
 
-  // ================================
-  // CLEANUP
-  // ================================
+  /* ================================
+     CLEANUP
+  ================================ */
 
   useEffect(() => {
     return () => {
@@ -272,17 +346,21 @@ const WB_Unit1_Page3_Q2 = () => {
     };
   }, []);
 
-  // ================================
-  // RENDER
-  // ================================
+  /* ================================
+     RENDER
+  ================================ */
 
   return (
     <div
       style={{
         display: "flex",
+
         flexDirection: "column",
+
         justifyContent: "center",
+
         alignItems: "center",
+
         padding: "30px",
       }}
     >
@@ -297,6 +375,7 @@ const WB_Unit1_Page3_Q2 = () => {
           title="Read and write."
           subTitle="Read the greeting, then tap the picture that shows it."
         />
+
         <div
           className="shorti1-container-wb-u1-q2"
           style={{
@@ -306,25 +385,35 @@ const WB_Unit1_Page3_Q2 = () => {
           {data.map((question) => {
             const isPlaying = playingQuestion === question.id;
 
+            const questionLocked = isQuestionLocked(question.id);
+
+            const questionWrong = wrongQuestions.includes(question.id);
+
             return (
               <div key={question.id} className="question-box-wb-u1-q2">
                 {/* ============================
-                    QUESTION + AUDIO
-                ============================ */}
+                      QUESTION + AUDIO
+                  ============================ */}
 
                 <div
                   style={{
                     display: "flex",
+
                     gap: "20px",
+
                     alignItems: "center",
+
                     fontWeight: "600",
+
                     fontSize: "20px",
                   }}
                 >
                   <span
                     style={{
                       color: "darkblue",
+
                       fontWeight: "700",
+
                       fontSize: "20px",
                     }}
                   >
@@ -352,36 +441,60 @@ const WB_Unit1_Page3_Q2 = () => {
                 </div>
 
                 {/* ============================
-                    IMAGE OPTIONS
-                ============================ */}
+                      IMAGE OPTIONS
+                  ============================ */}
 
                 <div className="shorti-container-wb-u1-q2">
                   {question.imgs.map((img, index) => {
                     const isSelected = selected[question.id] === index;
 
+                    /*
+                          X فقط على الاختيار الغلط
+                          بعد Check
+                        */
+
                     const isWrong =
-                      showResult &&
-                      !showAnswerState &&
-                      isSelected &&
-                      img.answer === false;
+                      questionWrong && isSelected && img.answer === false;
 
                     return (
                       <button
                         key={index}
                         type="button"
                         className={`img-box-wb-u1-q2 ${
-                          isSelected && !showResult && !showAnswerState
+                          isSelected && !showAnswerState
                             ? "selected-wb-u1-q2"
                             : ""
                         }`}
                         onClick={() => handleSelect(question.id, index)}
-                        disabled={showAnswerState || showResult}
+                        disabled={
+                          showAnswerState || checkCompleted || questionLocked
+                        }
+                        aria-disabled={
+                          showAnswerState || checkCompleted || questionLocked
+                        }
                         aria-pressed={isSelected}
                         aria-label={`${img.alt}${
                           isSelected ? ". Selected." : ""
+                        }${
+                          questionLocked
+                            ? " Correct answer. Question locked."
+                            : ""
                         }`}
+                        style={{
+                          /*
+                                ما بنغير شكل الصح لأخضر.
+                                فقط نخليه غير قابل للتعديل.
+                              */
+
+                          cursor:
+                            questionLocked || showAnswerState || checkCompleted
+                              ? "default"
+                              : "pointer",
+                        }}
                       >
-                        {/* غلط فقط */}
+                        {/* =========================
+                                WRONG X
+                            ========================= */}
 
                         {isWrong && (
                           <span
@@ -394,7 +507,9 @@ const WB_Unit1_Page3_Q2 = () => {
 
                         <img src={img.src} alt={img.alt} />
 
-                        {/* check box الأصلي */}
+                        {/* =========================
+                                CHECK BOX
+                            ========================= */}
 
                         <div className="check-box-wb-u1-q2" aria-hidden="true">
                           {isSelected ? "✓" : ""}

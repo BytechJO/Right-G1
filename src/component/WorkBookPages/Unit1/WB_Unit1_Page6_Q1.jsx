@@ -32,7 +32,6 @@ import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
 // QUESTIONS
-// الصور + الإجابات الصحيحة
 // ======================================================
 
 const data = [
@@ -60,7 +59,6 @@ const data = [
 
 // ======================================================
 // WORD BANK
-// الخيارات نفسها + الصوت تبع كل خيار
 // ======================================================
 
 const options = [
@@ -165,10 +163,10 @@ const BankChip = ({
 
         color: isUsed ? "#999" : undefined,
 
-        cursor:
-          isUsed || locked ? "not-allowed" : isDragging ? "grabbing" : "grab",
+        cursor: isUsed || locked ? "default" : isDragging ? "grabbing" : "grab",
 
         opacity: isDragging || showAnswer ? 0.35 : 1,
+
         transition: "all 0.15s",
 
         userSelect: "none",
@@ -211,11 +209,13 @@ const SlotDropZone = ({
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id,
+    disabled: locked || showAnswer,
   });
 
   const [isFocused, setIsFocused] = useState(false);
 
-  const isKeyboardTarget = Boolean(selectedWordId) && isFocused;
+  const isKeyboardTarget =
+    Boolean(selectedWordId) && isFocused && !locked && !showAnswer;
 
   const setRefs = (node) => {
     setNodeRef(node);
@@ -230,7 +230,6 @@ const SlotDropZone = ({
       return;
     }
 
-    // في كلمة مختارة
     if (selectedWordId && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
 
@@ -241,7 +240,6 @@ const SlotDropZone = ({
       return;
     }
 
-    // إذا فيه كلمة بالـslot
     if (!selectedWordId && value && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
 
@@ -256,17 +254,20 @@ const SlotDropZone = ({
       <div
         ref={setRefs}
         role="button"
+        aria-disabled={locked || showAnswer}
         tabIndex={
           showAnswer || locked ? -1 : selectedWordId ? 0 : value ? 0 : -1
         }
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         aria-label={
-          selectedWordId
-            ? `Answer box. Press Enter or Space to place ${selectedWord}.`
-            : value
-              ? `${value}. Press Enter or Space to return it to the word bank.`
-              : "Empty answer box."
+          locked
+            ? `Correct answer ${value}. Answer locked.`
+            : selectedWordId
+              ? `Answer box. Press Enter or Space to place ${selectedWord}.`
+              : value
+                ? `${value}. Press Enter or Space to return it to the word bank.`
+                : "Empty answer box."
         }
         onKeyDown={handleKeyDown}
         onClick={() => {
@@ -275,7 +276,7 @@ const SlotDropZone = ({
           }
         }}
         className={`missing-input-wb-unit1-p3-q1${
-          isOver && !showAnswer ? " drag-over-cell" : ""
+          isOver && !showAnswer && !locked ? " drag-over-cell" : ""
         }`}
         style={{
           flex: 1,
@@ -296,21 +297,26 @@ const SlotDropZone = ({
 
           padding: "0 8px",
 
-          background: isKeyboardTarget
-            ? "#eff6ff"
-            : isOver && !showAnswer
-              ? "#e3f2fd"
-              : undefined,
+          background: locked
+            ? undefined
+            : isKeyboardTarget
+              ? "#eff6ff"
+              : isOver && !showAnswer
+                ? "#e3f2fd"
+                : undefined,
 
-          outline: isKeyboardTarget ? "3px solid #2563eb" : undefined,
+          outline:
+            !locked && isKeyboardTarget ? "3px solid #2563eb" : undefined,
 
           outlineOffset: "3px",
 
-          cursor: isKeyboardTarget
-            ? "pointer"
-            : value && !locked && !showAnswer
+          cursor: locked
+            ? "default"
+            : isKeyboardTarget
               ? "pointer"
-              : "default",
+              : value && !showAnswer
+                ? "pointer"
+                : "default",
 
           transition: "background 0.15s, outline 0.15s",
 
@@ -321,11 +327,7 @@ const SlotDropZone = ({
           answerText
         ) : (
           <>
-            {/* القيمة الموجودة فعليًا */}
-
             {value && <span>{value}</span>}
-
-            {/* Keyboard Preview */}
 
             {isKeyboardTarget && selectedWord && (
               <span
@@ -355,9 +357,7 @@ const SlotDropZone = ({
               </span>
             )}
 
-            {/* Mouse Drag Preview */}
-
-            {!selectedWordId && isOver && activeWord && !value && (
+            {!selectedWordId && isOver && activeWord && !value && !locked && (
               <span
                 style={{
                   color: "#2563eb",
@@ -388,7 +388,13 @@ export default function WB_Unit1_Page6_Q1() {
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const [locked, setLocked] = useState(false);
+  // ======================================================
+  // PROGRESSIVE LOCK
+  // ======================================================
+
+  const [lockedSlots, setLockedSlots] = useState([false, false, false, false]);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeId, setActiveId] = useState(null);
 
@@ -493,7 +499,7 @@ export default function WB_Unit1_Page6_Q1() {
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
 
-    if (!over || showAnswer || locked) {
+    if (!over || showAnswer || checkCompleted) {
       return;
     }
 
@@ -507,24 +513,48 @@ export default function WB_Unit1_Page6_Q1() {
 
     const destIndex = Number(destination.replace("blank-", ""));
 
+    if (lockedSlots[destIndex]) {
+      return;
+    }
+
+    let oldIndex = -1;
+
     setInputs((prev) => {
       const updated = [...prev];
 
-      // شيل نفس الخيار من مكان قديم
       updated.forEach((currentValue, index) => {
         if (currentValue === word) {
+          oldIndex = index;
+
+          if (lockedSlots[index]) {
+            return;
+          }
+
           updated[index] = "";
         }
       });
 
-      // إذا المكان فيه كلمة ثانية
-      // بتترجع للبنك تلقائيًا لأنه ما عادت موجودة بالinputs
       updated[destIndex] = word;
 
       return updated;
     });
 
-    setWrong([false, false, false, false]);
+    /*
+      امسح X فقط من الخانة الجديدة
+      ومكان الكلمة القديم إذا تحركت.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[destIndex] = false;
+
+      if (oldIndex !== -1) {
+        updated[oldIndex] = false;
+      }
+
+      return updated;
+    });
   };
 
   // ======================================================
@@ -532,13 +562,23 @@ export default function WB_Unit1_Page6_Q1() {
   // ======================================================
 
   const handleWordSelect = (id) => {
-    if (showAnswer || locked) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
     const word = parseWord(id);
 
-    // الصوت من options
+    const usedIndex = inputs.findIndex((value) => value === word);
+
+    /*
+      إذا الكلمة موجودة بخانة صح مقفلة
+      ممنوع نحركها.
+    */
+
+    if (usedIndex !== -1 && lockedSlots[usedIndex]) {
+      return;
+    }
+
     playWordAudio(word);
 
     setSelectedWordId(id);
@@ -553,7 +593,7 @@ export default function WB_Unit1_Page6_Q1() {
   // ======================================================
 
   const handleKeyboardDrop = (slotId) => {
-    if (!selectedWordId || showAnswer || locked) {
+    if (!selectedWordId || showAnswer || checkCompleted) {
       return;
     }
 
@@ -561,13 +601,25 @@ export default function WB_Unit1_Page6_Q1() {
 
     const destIndex = Number(slotId.replace("blank-", ""));
 
+    if (lockedSlots[destIndex]) {
+      return;
+    }
+
     let updatedInputs = null;
+
+    let oldIndex = -1;
 
     setInputs((prev) => {
       const updated = [...prev];
 
       updated.forEach((currentValue, index) => {
         if (currentValue === word) {
+          oldIndex = index;
+
+          if (lockedSlots[index]) {
+            return;
+          }
+
           updated[index] = "";
         }
       });
@@ -579,13 +631,24 @@ export default function WB_Unit1_Page6_Q1() {
       return updated;
     });
 
-    setWrong([false, false, false, false]);
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[destIndex] = false;
+
+      if (oldIndex !== -1) {
+        updated[oldIndex] = false;
+      }
+
+      return updated;
+    });
 
     setSelectedWordId(null);
 
     setAnnouncement(`${word} placed in answer box ${destIndex + 1}.`);
 
     // رجع لأول option غير مستخدم
+
     window.setTimeout(() => {
       const currentInputs = updatedInputs || [];
 
@@ -614,11 +677,11 @@ export default function WB_Unit1_Page6_Q1() {
   // ======================================================
 
   const handleRemove = (slotId) => {
-    if (locked) {
+    const index = Number(slotId.replace("blank-", ""));
+
+    if (showAnswer || checkCompleted || lockedSlots[index]) {
       return;
     }
-
-    const index = Number(slotId.replace("blank-", ""));
 
     const removedWord = inputs[index];
 
@@ -630,7 +693,17 @@ export default function WB_Unit1_Page6_Q1() {
       return updated;
     });
 
-    setWrong([false, false, false, false]);
+    /*
+      امسح X فقط من نفس الخانة.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[index] = false;
+
+      return updated;
+    });
 
     window.setTimeout(() => {
       if (!removedWord) {
@@ -656,7 +729,7 @@ export default function WB_Unit1_Page6_Q1() {
   // ======================================================
 
   const checkAnswers = () => {
-    if (showAnswer || locked) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -671,20 +744,32 @@ export default function WB_Unit1_Page6_Q1() {
 
     let correct = 0;
 
-    const wrongStatus = inputs.map((value, index) => {
+    const wrongStatus = inputs.map(() => false);
+
+    const newlyLocked = inputs.map(() => false);
+
+    inputs.forEach((value, index) => {
       const ok =
         value.trim().toLowerCase() === data[index].answer.toLowerCase();
 
       if (ok) {
         correct++;
-      }
 
-      return !ok;
+        newlyLocked[index] = true;
+      } else {
+        wrongStatus[index] = true;
+      }
     });
 
-    setWrong(wrongStatus);
+    // =========================================
+    // LOCK ONLY CORRECT SLOTS
+    // =========================================
 
-    setLocked(true);
+    setLockedSlots((prev) =>
+      prev.map((locked, index) => locked || newlyLocked[index]),
+    );
+
+    setWrong(wrongStatus);
 
     setSelectedWordId(null);
 
@@ -701,9 +786,25 @@ export default function WB_Unit1_Page6_Q1() {
       </div>
     `;
 
+    // =========================================
+    // ALL CORRECT
+    // =========================================
+
     if (correct === total) {
+      setLockedSlots(data.map(() => true));
+
+      setWrong(data.map(() => false));
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All answers are correct.");
+
       ValidationAlert.success(msg);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    if (correct === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
@@ -717,7 +818,15 @@ export default function WB_Unit1_Page6_Q1() {
   const handleShowAnswer = () => {
     setSelectedWordId(null);
 
+    setWrong(data.map(() => false));
+
+    setLockedSlots(data.map(() => true));
+
+    setCheckCompleted(true);
+
     setShowAnswer(true);
+
+    setAnnouncement("Correct answers are displayed.");
   };
 
   // ======================================================
@@ -733,7 +842,9 @@ export default function WB_Unit1_Page6_Q1() {
 
     setShowAnswer(false);
 
-    setLocked(false);
+    setLockedSlots([false, false, false, false]);
+
+    setCheckCompleted(false);
 
     setActiveId(null);
 
@@ -798,6 +909,7 @@ export default function WB_Unit1_Page6_Q1() {
           {/* Screen Reader */}
 
           <div
+            role="status"
             aria-live="polite"
             aria-atomic="true"
             style={{
@@ -815,6 +927,8 @@ export default function WB_Unit1_Page6_Q1() {
 
               clip: "rect(0,0,0,0)",
 
+              clipPath: "inset(50%)",
+
               whiteSpace: "nowrap",
 
               border: 0,
@@ -829,6 +943,7 @@ export default function WB_Unit1_Page6_Q1() {
               title="Read, look, and write. Say."
               subTitle="Read each greeting and drag it to the matching picture."
             />
+
             {/* =================================
                 WORD BANK
             ================================= */}
@@ -837,13 +952,15 @@ export default function WB_Unit1_Page6_Q1() {
               {options.map((option, i) => {
                 const id = `bank-${option.word}-${i}`;
 
+                const used = isWordUsed(option.word);
+
                 return (
                   <BankChip
                     key={id}
                     id={id}
                     word={option.word}
-                    isUsed={isWordUsed(option.word)}
-                    locked={locked || showAnswer}
+                    isUsed={used}
+                    locked={showAnswer || checkCompleted}
                     selectedWordId={selectedWordId}
                     onSelect={handleWordSelect}
                     registerRef={registerBankRef}
@@ -858,34 +975,40 @@ export default function WB_Unit1_Page6_Q1() {
             ================================= */}
 
             <div className="question-container-wb-u1-p4-q1">
-              {data.map((item, i) => (
-                <div key={i} className="question-row-wb-u1-q4">
-                  <div className="img-box-wb-u1-q4">
-                    <span className="question-number-wb-u1-p4-q1">{i + 1}</span>
+              {data.map((item, i) => {
+                const isLocked = lockedSlots[i];
 
-                    <img
-                      className="img-wb-unit1-p4-q1"
-                      src={item.img}
-                      alt={item.alt}
-                    />
+                return (
+                  <div key={i} className="question-row-wb-u1-q4">
+                    <div className="img-box-wb-u1-q4">
+                      <span className="question-number-wb-u1-p4-q1">
+                        {i + 1}
+                      </span>
 
-                    <SlotDropZone
-                      id={`blank-${i}`}
-                      value={inputs[i]}
-                      activeWord={activeWord}
-                      isWrong={wrong[i]}
-                      showAnswer={showAnswer}
-                      answerText={item.answer}
-                      locked={locked}
-                      selectedWord={selectedWord}
-                      selectedWordId={selectedWordId}
-                      onKeyboardDrop={handleKeyboardDrop}
-                      onRemove={handleRemove}
-                      registerDropRef={registerDropRef}
-                    />
+                      <img
+                        className="img-wb-unit1-p4-q1"
+                        src={item.img}
+                        alt={item.alt}
+                      />
+
+                      <SlotDropZone
+                        id={`blank-${i}`}
+                        value={inputs[i]}
+                        activeWord={activeWord}
+                        isWrong={wrong[i]}
+                        showAnswer={showAnswer}
+                        answerText={item.answer}
+                        locked={isLocked || checkCompleted}
+                        selectedWord={selectedWord}
+                        selectedWordId={selectedWordId}
+                        onKeyboardDrop={handleKeyboardDrop}
+                        onRemove={handleRemove}
+                        registerDropRef={registerDropRef}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

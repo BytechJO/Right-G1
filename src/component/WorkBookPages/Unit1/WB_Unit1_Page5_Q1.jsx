@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./WB_Unit1_Page5_Q1.css";
 
 import img1 from "../../../assets/U1 WB/U1/SVG/U1P5EXEE-01.svg";
@@ -10,7 +11,6 @@ import img4 from "../../../assets/U1 WB/U1/SVG/U1P5EXEE-04.svg";
 
 // ======================================================
 // AUDIO
-// عدل الاسم فقط إذا اسم الملف الفعلي مختلف حرفيًا
 // ======================================================
 
 import goodbyeAudio from "../../../assets/U1 WB/U1/page_5/Item_001_Goodbye!.mp3";
@@ -19,6 +19,7 @@ import goodAfternoonAudio from "../../../assets/U1 WB/U1/page_5/Item_003_Good_af
 import helloStellaAudio from "../../../assets/U1 WB/U1/page_5/Item_004_Hello!_I'm_Stella.mp3";
 import goodMorningAudio from "../../../assets/U1 WB/U1/page_5/Item_005_Good_morning!.mp3";
 import goodEveningAudio from "../../../assets/U1 WB/U1/page_5/Item_006_Good_evening!.mp3";
+
 import ExerciseHeader from "../../ExerciseHeader";
 
 // ======================================================
@@ -88,13 +89,22 @@ const items = [
 const WB_Unit1_Page5_Q1 = () => {
   const [answers, setAnswers] = useState(Array(items.length).fill(null));
 
-  const [showResult, setShowResult] = useState(false);
+  // الأسئلة الغلط بعد Check
+  const [wrongQuestions, setWrongQuestions] = useState([]);
+
+  // الأسئلة الصح المقفلة
+  const [lockedQuestions, setLockedQuestions] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
+
+  // بعد النجاح النهائي فقط
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [playingOption, setPlayingOption] = useState(null);
 
   const audioRef = useRef(null);
+
+  const isQuestionLocked = (qIndex) => lockedQuestions.includes(qIndex);
 
   // ====================================================
   // AUDIO
@@ -123,7 +133,6 @@ const WB_Unit1_Page5_Q1 = () => {
 
     audioRef.current = audio;
 
-    // ✅ نخزن الخيار نفسه مش اسم الكلمة
     setPlayingOption(optionId);
 
     audio.play().catch(() => {
@@ -132,6 +141,7 @@ const WB_Unit1_Page5_Q1 = () => {
 
     audio.onended = () => {
       setPlayingOption(null);
+
       audioRef.current = null;
     };
   };
@@ -141,13 +151,13 @@ const WB_Unit1_Page5_Q1 = () => {
   // ====================================================
 
   const handleSelect = (qIndex, optionIndex, word) => {
-    if (showAnswer || showResult) {
+    if (showAnswer || checkCompleted || isQuestionLocked(qIndex)) {
       return;
     }
 
     const optionId = `${qIndex}-${optionIndex}`;
 
-    // ✅ صوت نفس الخيار فقط
+    // صوت نفس الخيار
     playOptionAudio(word, optionId);
 
     setAnswers((prev) => {
@@ -157,6 +167,14 @@ const WB_Unit1_Page5_Q1 = () => {
 
       return updated;
     });
+
+    /*
+      إذا السؤال كان عليه X،
+      أول ما المستخدم يغيره
+      نشيل X عنه فقط.
+    */
+
+    setWrongQuestions((prev) => prev.filter((index) => index !== qIndex));
   };
 
   // ====================================================
@@ -164,7 +182,7 @@ const WB_Unit1_Page5_Q1 = () => {
   // ====================================================
 
   const checkAnswers = () => {
-    if (showAnswer || showResult) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -174,9 +192,33 @@ const WB_Unit1_Page5_Q1 = () => {
       return;
     }
 
-    const correctCount = answers.filter(
-      (answer, index) => answer === items[index].correctIndex,
-    ).length;
+    let correctCount = 0;
+
+    const wrongIndexes = [];
+
+    const correctIndexes = [];
+
+    answers.forEach((answer, index) => {
+      const isCorrect = answer === items[index].correctIndex;
+
+      if (isCorrect) {
+        correctCount++;
+
+        correctIndexes.push(index);
+      } else {
+        wrongIndexes.push(index);
+      }
+    });
+
+    // =========================================
+    // LOCK ONLY CORRECT QUESTIONS
+    // =========================================
+
+    setLockedQuestions((prev) =>
+      Array.from(new Set([...prev, ...correctIndexes])),
+    );
+
+    setWrongQuestions(wrongIndexes);
 
     const total = items.length;
 
@@ -191,15 +233,31 @@ const WB_Unit1_Page5_Q1 = () => {
       </div>
     `;
 
+    // =========================================
+    // ALL CORRECT
+    // =========================================
+
     if (correctCount === total) {
+      setLockedQuestions(items.map((_, index) => index));
+
+      setWrongQuestions([]);
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(msg);
-    } else if (correctCount === 0) {
+
+      return;
+    }
+
+    // =========================================
+    // WRONG / PARTIAL
+    // =========================================
+
+    if (correctCount === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
-
-    setShowResult(true);
   };
 
   // ====================================================
@@ -213,9 +271,13 @@ const WB_Unit1_Page5_Q1 = () => {
 
     setAnswers(correct);
 
+    setWrongQuestions([]);
+
+    setLockedQuestions(items.map((_, index) => index));
+
     setShowAnswer(true);
 
-    setShowResult(false);
+    setCheckCompleted(true);
   };
 
   // ====================================================
@@ -227,9 +289,13 @@ const WB_Unit1_Page5_Q1 = () => {
 
     setAnswers(Array(items.length).fill(null));
 
+    setWrongQuestions([]);
+
+    setLockedQuestions([]);
+
     setShowAnswer(false);
 
-    setShowResult(false);
+    setCheckCompleted(false);
   };
 
   // ====================================================
@@ -275,103 +341,131 @@ const WB_Unit1_Page5_Q1 = () => {
           title="Look, read, and circle."
           subTitle="Look at the scene and tap the greeting people would say."
         />
+
         <div className="container-wb-u1-p5-q1">
-          {items.map((question, qIndex) => (
-            <div
-              key={qIndex}
-              className="question-box-wb-u1-p5-q1"
-              style={{
-                width: "100%",
-              }}
-            >
-              {/* Question Number */}
+          {items.map((question, qIndex) => {
+            const questionLocked = isQuestionLocked(qIndex);
 
-              <span
-                style={{
-                  color: "#2c5287",
+            const questionWrong = wrongQuestions.includes(qIndex);
 
-                  fontSize: "20px",
-
-                  fontWeight: "700",
-                }}
-              >
-                {qIndex + 1}
-              </span>
-
+            return (
               <div
+                key={qIndex}
+                className="question-box-wb-u1-p5-q1"
                 style={{
-                  display: "flex",
-
-                  gap: "10px",
-
-                  flexDirection: "column",
+                  width: "100%",
                 }}
               >
-                {/* IMAGE */}
+                {/* Question Number */}
 
-                <div className="img-div-unit7-p5-q1">
-                  <img
-                    src={question.img}
-                    className="q3-image-wb-unit1-p5-q1"
-                    alt={question.alt}
-                  />
-                </div>
+                <span
+                  style={{
+                    color: "#2c5287",
 
-                {/* OPTIONS */}
+                    fontSize: "20px",
 
-                <div className="options-row-unit7-p5-q1">
-                  {question.options.map((word, optionIndex) => {
-                    const optionId = `${qIndex}-${optionIndex}`;
+                    fontWeight: "700",
+                  }}
+                >
+                  {qIndex + 1}
+                </span>
 
-                    const isSelected = answers[qIndex] === optionIndex;
+                <div
+                  style={{
+                    display: "flex",
 
-                    const isCorrect = optionIndex === question.correctIndex;
+                    gap: "10px",
 
-                    const isWrong = showResult && isSelected && !isCorrect;
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* IMAGE */}
 
-                    const isPlaying = playingOption === optionId;
+                  <div className="img-div-unit7-p5-q1">
+                    <img
+                      src={question.img}
+                      className="q3-image-wb-unit1-p5-q1"
+                      alt={question.alt}
+                    />
+                  </div>
 
-                    return (
-                      <button
-                        key={optionId}
-                        type="button"
-                        className={`
-          option-word-wb-u1-p5-q1
-          ${isSelected && !showResult ? "selected3-wb-u1-p5-q1" : ""}
-        `}
-                        onClick={() => handleSelect(qIndex, optionIndex, word)}
-                        disabled={showAnswer || showResult}
-                        aria-pressed={isSelected}
-                        aria-label={`${word}${
-                          isSelected ? ". Selected." : ""
-                        } Press Enter or Space to select and hear it.`}
-                      >
-                        <span>{word}</span>
+                  {/* OPTIONS */}
 
-                        {isPlaying && (
-                          <span
-                            aria-hidden="true"
-                            className="playing-option-wb-u1-p5-q1"
-                          >
-                            🔊
-                          </span>
-                        )}
+                  <div className="options-row-unit7-p5-q1">
+                    {question.options.map((word, optionIndex) => {
+                      const optionId = `${qIndex}-${optionIndex}`;
 
-                        {isWrong && (
-                          <span
-                            className="wrong-x-wb-u1-p5-q1"
-                            aria-hidden="true"
-                          >
-                            ✕
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
+                      const isSelected = answers[qIndex] === optionIndex;
+
+                      const isCorrect = optionIndex === question.correctIndex;
+
+                      const isWrong = questionWrong && isSelected && !isCorrect;
+
+                      const isPlaying = playingOption === optionId;
+
+                      return (
+                        <button
+                          key={optionId}
+                          type="button"
+                          className={`
+                                option-word-wb-u1-p5-q1
+                                ${
+                                  isSelected && !showAnswer
+                                    ? "selected3-wb-u1-p5-q1"
+                                    : ""
+                                }
+                              `}
+                          onClick={() =>
+                            handleSelect(qIndex, optionIndex, word)
+                          }
+                          disabled={
+                            showAnswer || checkCompleted || questionLocked
+                          }
+                          aria-disabled={
+                            showAnswer || checkCompleted || questionLocked
+                          }
+                          aria-pressed={isSelected}
+                          aria-label={`${word}${
+                            isSelected ? ". Selected." : ""
+                          }${
+                            questionLocked
+                              ? " Correct answer. Question locked."
+                              : " Press Enter or Space to select and hear it."
+                          }`}
+                          style={{
+                            cursor:
+                              showAnswer || checkCompleted || questionLocked
+                                ? "default"
+                                : "pointer",
+                          }}
+                        >
+                          <span>{word}</span>
+
+                          {isPlaying && (
+                            <span
+                              aria-hidden="true"
+                              className="playing-option-wb-u1-p5-q1"
+                            >
+                              🔊
+                            </span>
+                          )}
+
+                          {isWrong && (
+                            <span
+                              className="wrong-x-wb-u1-p5-q1"
+                              aria-hidden="true"
+                            >
+                              ✕
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

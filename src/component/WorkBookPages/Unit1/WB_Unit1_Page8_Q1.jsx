@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./WB_Unit1_Page8_Q1.css";
 
 import audio1 from "../../../assets/U1 WB/U1/Audio/RWBU1P8EXEA.mp3";
@@ -26,7 +27,6 @@ const questions = [
 
     parts: {
       before: "The food is in the ",
-
       after: ".",
     },
 
@@ -46,7 +46,6 @@ const questions = [
 
     parts: {
       before: "The ",
-
       after: " is round.",
     },
 
@@ -59,13 +58,28 @@ const questions = [
 const WB_Unit1_Page8_Q1 = () => {
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
 
-  const [showResult, setShowResult] = useState(false);
+  /*
+    الأسئلة الغلط بعد Check
+  */
+  const [wrongQuestions, setWrongQuestions] = useState([]);
+
+  /*
+    الأسئلة الصح المقفلة
+  */
+  const [lockedQuestions, setLockedQuestions] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
+
+  /*
+    بعد النجاح الكامل فقط
+  */
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [playingQuestion, setPlayingQuestion] = useState(null);
 
   const audioRef = useRef(null);
+
+  const isQuestionLocked = (qIndex) => lockedQuestions.includes(qIndex);
 
   // ===========================================
   // MAIN PLAYER
@@ -79,11 +93,13 @@ const WB_Unit1_Page8_Q1 = () => {
       end: 5.7,
       text: "Phonics Exercise A. Listen, read, and circle the correct word.",
     },
+
     {
       start: 5.9,
       end: 8.7,
       text: "1. The food is in the dish.",
     },
+
     {
       start: 9.1,
       end: 11.15,
@@ -116,7 +132,9 @@ const WB_Unit1_Page8_Q1 = () => {
       return;
     }
 
-    // يمنع overlapping
+    /*
+      يمنع overlapping
+    */
     stopItemAudio();
 
     const audio = new Audio(src);
@@ -141,7 +159,7 @@ const WB_Unit1_Page8_Q1 = () => {
   // ===========================================
 
   const selectOption = (qIndex, optIndex) => {
-    if (showAnswer || showResult) {
+    if (showAnswer || checkCompleted || isQuestionLocked(qIndex)) {
       return;
     }
 
@@ -152,6 +170,14 @@ const WB_Unit1_Page8_Q1 = () => {
 
       return updated;
     });
+
+    /*
+      لو السؤال عليه X من Check سابق،
+      أول ما المستخدم يعدله
+      نشيل X عن هذا السؤال فقط.
+    */
+
+    setWrongQuestions((prev) => prev.filter((index) => index !== qIndex));
   };
 
   // ===========================================
@@ -159,7 +185,7 @@ const WB_Unit1_Page8_Q1 = () => {
   // ===========================================
 
   const checkAnswers = () => {
-    if (showAnswer || showResult) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -173,32 +199,68 @@ const WB_Unit1_Page8_Q1 = () => {
 
     let correct = 0;
 
+    const correctIndexes = [];
+
+    const wrongIndexes = [];
+
     answers.forEach((answer, index) => {
-      if (answer === questions[index].correctIndex) {
+      const isCorrect = answer === questions[index].correctIndex;
+
+      if (isCorrect) {
         correct++;
+
+        correctIndexes.push(index);
+      } else {
+        wrongIndexes.push(index);
       }
     });
+
+    // =========================================
+    // LOCK ONLY CORRECT QUESTIONS
+    // =========================================
+
+    setLockedQuestions((prev) =>
+      Array.from(new Set([...prev, ...correctIndexes])),
+    );
+
+    setWrongQuestions(wrongIndexes);
 
     const color =
       correct === total ? "green" : correct === 0 ? "red" : "orange";
 
     const msg = `
-        <div style="font-size:20px;text-align:center;">
-          <span style="color:${color};font-weight:bold;">
-            Score: ${correct} / ${total}
-          </span>
-        </div>
-      `;
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correct} / ${total}
+        </span>
+      </div>
+    `;
+
+    // =========================================
+    // ALL CORRECT
+    // =========================================
 
     if (correct === total) {
+      setLockedQuestions(questions.map((_, index) => index));
+
+      setWrongQuestions([]);
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(msg);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    // =========================================
+    // WRONG / PARTIAL
+    // =========================================
+
+    if (correct === 0) {
       ValidationAlert.error(msg);
     } else {
       ValidationAlert.warning(msg);
     }
-
-    setShowResult(true);
   };
 
   // ===========================================
@@ -210,9 +272,13 @@ const WB_Unit1_Page8_Q1 = () => {
 
     setAnswers(questions.map((question) => question.correctIndex));
 
+    setLockedQuestions(questions.map((_, index) => index));
+
+    setWrongQuestions([]);
+
     setShowAnswer(true);
 
-    setShowResult(false);
+    setCheckCompleted(true);
   };
 
   // ===========================================
@@ -224,9 +290,13 @@ const WB_Unit1_Page8_Q1 = () => {
 
     setAnswers(Array(questions.length).fill(null));
 
-    setShowResult(false);
+    setWrongQuestions([]);
+
+    setLockedQuestions([]);
 
     setShowAnswer(false);
+
+    setCheckCompleted(false);
   };
 
   // ===========================================
@@ -256,6 +326,7 @@ const WB_Unit1_Page8_Q1 = () => {
           title="Listen, read, and circle the correct word."
           subTitle="Play the audio, look at the picture, and tap the correct word."
         />
+
         {/* ======================================
             MAIN AUDIO + CAPTIONS
         ====================================== */}
@@ -274,6 +345,10 @@ const WB_Unit1_Page8_Q1 = () => {
           {questions.map((question, qIndex) => {
             const isPlaying = playingQuestion === qIndex;
 
+            const questionLocked = isQuestionLocked(qIndex);
+
+            const questionWrong = wrongQuestions.includes(qIndex);
+
             return (
               <div key={qIndex} className="question-box-wb-u1-p8-q1">
                 {/* Number */}
@@ -289,8 +364,8 @@ const WB_Unit1_Page8_Q1 = () => {
                 />
 
                 {/* =================================
-                      ITEM AUDIO
-                  ================================= */}
+                    ITEM AUDIO
+                ================================= */}
 
                 <button
                   type="button"
@@ -298,7 +373,9 @@ const WB_Unit1_Page8_Q1 = () => {
                     isPlaying ? "playing" : ""
                   }`}
                   onClick={() => playItemAudio(qIndex)}
-                  aria-label={`Play sentence ${qIndex + 1}: ${question.transcript}`}
+                  aria-label={`Play sentence ${
+                    qIndex + 1
+                  }: ${question.transcript}`}
                 >
                   <span aria-hidden="true">🔊</span>
 
@@ -308,8 +385,8 @@ const WB_Unit1_Page8_Q1 = () => {
                 </button>
 
                 {/* =================================
-                      SENTENCE
-                  ================================= */}
+                    SENTENCE
+                ================================= */}
 
                 <div className="sentence-options-wb-u1-p8">
                   <span className="sentence-text-wb-u1-p8">
@@ -328,22 +405,42 @@ const WB_Unit1_Page8_Q1 = () => {
 
                       const isCorrect = optIndex === question.correctIndex;
 
-                      const isWrong = showResult && isSelected && !isCorrect;
+                      /*
+                          X فقط على الاختيار الغلط
+                          بعد Check
+                        */
+
+                      const isWrong = questionWrong && isSelected && !isCorrect;
 
                       return (
                         <React.Fragment key={optIndex}>
                           <button
                             type="button"
                             className={`
-                                  option-word-wb-u1-p8
-                                  ${isSelected ? "selected" : ""}
-                                `}
+                                option-word-wb-u1-p8
+                                ${isSelected ? "selected" : ""}
+                              `}
                             onClick={() => selectOption(qIndex, optIndex)}
-                            disabled={showAnswer || showResult}
+                            disabled={
+                              showAnswer || checkCompleted || questionLocked
+                            }
+                            aria-disabled={
+                              showAnswer || checkCompleted || questionLocked
+                            }
                             aria-pressed={isSelected}
                             aria-label={`${word}${
                               isSelected ? ", selected" : ""
+                            }${
+                              questionLocked
+                                ? ", correct answer, question locked"
+                                : ""
                             }`}
+                            style={{
+                              cursor:
+                                showAnswer || checkCompleted || questionLocked
+                                  ? "default"
+                                  : "pointer",
+                            }}
                           >
                             {word}
 
