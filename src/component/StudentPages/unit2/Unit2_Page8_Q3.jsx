@@ -8,6 +8,7 @@ import sound1 from "../../../assets/unit1/sounds/P17QF.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import "./Unit2_Page8_Q3.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const Unit2_Page8_Q3 = () => {
   const [lines, setLines] = useState([]);
@@ -196,11 +197,16 @@ const Unit2_Page8_Q3 = () => {
       }}
     >
       <div className="div-forall" style={{}}>
-        <h5 className="header-title-page8">
-          <span className="mr-2">F</span> Does it begin with{" "}
-          <span style={{ color: "red" }}>d</span>or{" "}
-          <span style={{ color: "red" }}>t</span>? Listen and match.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="F"
+          title={
+            <>
+              Does it begin with<span style={{ color: "red" }}> d </span> or
+              <span style={{ color: "red" }}> t </span>? Listen and match.
+            </>
+          }
+          subTitle="Listen to each picture name, then match it to d or t."
+        />
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}

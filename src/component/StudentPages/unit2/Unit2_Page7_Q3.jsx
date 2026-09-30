@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Unit2_Page7_Q3.css"; // ضيفي فيه الكود الي فوق
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeader from "../../ExerciseHeader";
 const Unit2_Page7_Q3 = () => {
   const sentences = [
     "hello, I'm John? this is Stella.",
@@ -10,14 +11,14 @@ const Unit2_Page7_Q3 = () => {
   const [checked, setChecked] = useState(false);
   const [circledWords, setCircledWords] = useState({});
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [checkCompleted, setCheckCompleted] = useState(false);
   const correct = {
     0: [0, 5, 15], // جملة رقم 0، الأحرف التي يجب أن تُحاط بدائرة
     1: [0, 11], // جملة رقم 1، حرفين خاطئين
     2: [0, 4, 6, 15], // جملة رقم 2، الأحرف الخاطئة
   };
   const checkAnswers = (circledWords, correctAnswers) => {
-    if (showAnswer) return;
+    if (showAnswer || checkCompleted) return;
     if (Object.keys(circledWords).length === 0) {
       ValidationAlert.info("Please circle at least one mistake.");
       return;
@@ -45,8 +46,10 @@ const Unit2_Page7_Q3 = () => {
 
     const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
 
-    if (studentCorrect === totalCorrect)
+    if (studentCorrect === totalCorrect) {
+      setCheckCompleted(true);
       return ValidationAlert.success(scoreMessage);
+    }
     if (studentCorrect === 0) return ValidationAlert.error(scoreMessage);
     return ValidationAlert.warning(scoreMessage);
   };
@@ -92,10 +95,11 @@ const Unit2_Page7_Q3 = () => {
           gap: "80px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">C</span> Tap or click the mistakes.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="C"
+          title="Read and circle the mistakes."
+          subTitle="Read each sentence carefully and tap every mistake."
+        />
         <div className="sentence-container-review1-p16-exc">
           {sentences.map((sentence, sIndex) => (
             <div
@@ -143,6 +147,7 @@ const Unit2_Page7_Q3 = () => {
             setCircledWords({});
             setChecked(false);
             setShowAnswer(false);
+            setCheckCompleted(false);
           }}
           className="try-again-button"
         >

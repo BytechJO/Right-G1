@@ -3,6 +3,7 @@ import find_img from "../../../assets/img_unit2/imgs/02-03 New copy.jpg";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import MySVG from "../../../assets/img_unit2/imgs/U2P10 highlight.svg";
+import SquirrelGif from "../../../assets/Squirrel_GIF/Squirrel_1164_1433px.gif";
 
 const Unit2_Page1_find = () => {
   const [clickedPoint, setClickedPoint] = useState(null);
@@ -69,23 +70,48 @@ const Unit2_Page1_find = () => {
         style={{
           textAlign: "center",
           display: "flex",
-           gap:"40px",
+          gap: "40px",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
         <div
+          id="page4-instructions"
           style={{
             display: "flex",
-
             justifyContent: "center",
+            alignItems: "flex-start",
+            gap: "10px",
             width: "100%",
           }}
         >
-          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
-          <h5 className="header-title-page8">
-            I need your help. Can you help me find the boat in the picture?
-          </h5>
+          <img
+            src={SquirrelGif}
+            alt="An animated squirrel asking for help"
+            style={{
+              height: "100px",
+              width: "auto",
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
+          />
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "8px",
+            }}
+          >
+            <h5 className="header-title-page8" style={{ margin: 0 }}>
+              I need your help. Can you help me find the boat in the picture?
+            </h5>
+
+            <p className="sub-header">
+              Look carefully around the party, then tap the boat.
+            </p>
+          </div>
         </div>
         <div style={{ position: "relative", display: "inline-block" }}>
           <img

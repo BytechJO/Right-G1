@@ -87,6 +87,9 @@
   font-weight: 500;
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  z-index: 20;
 }
 
 #b-0 {
@@ -178,24 +181,26 @@
 .unit2-q3-content {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 12px;
   flex-wrap: nowrap;
-  /* margin-bottom: 25px; */
   flex-direction: row;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* الصورة الرئيسية */
 
 .q3-main-img {
   width: auto;
-  height: 360px;
+  height: 180px;
 }
 
 /* الخيارات */
 .q3-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
 }
 
 .q3-option-item {
@@ -231,8 +236,8 @@
 }
 
 .q3-option-img {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
 }
 

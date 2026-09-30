@@ -14,6 +14,7 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 import "./Unit2_Page10_Q4.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ─── Draggable Letter (Word Bank) ─────────────────────────────────────────────
 // هون الحروف ممكن تتكرر (p, b) فما في مفهوم "used" مثل الكلمات
@@ -39,7 +40,7 @@ const DraggableWord = ({ id, letter, disabled }) => {
         opacity: isDragging ? 0.4 : 1,
         display: "inline-block",
         userSelect: "none",
-          touchAction:"none",
+        touchAction: "none",
         transition: "opacity 0.2s ease",
       }}
     >
@@ -191,10 +192,11 @@ const Unit2_Page10_Q4 = () => {
         }}
       >
         <div className="div-forall" style={{ gap: "50px" }}>
-          <h5 className="header-title-page8">
-            <span className="mr-2">G</span> Look and drag the starting letter.
-          </h5>
-
+          <ExerciseHeader
+            sectionLetter="G"
+            title="Look and write."
+            subTitle="Drag b or p to complete each picture word."
+          />
           {/* ── Word Bank ──────────────────────────────────────────────────── */}
           <div
             style={{

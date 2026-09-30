@@ -5,6 +5,7 @@ import bird from "../../../assets/img_unit2/imgs/bird.jpg";
 import pizza2 from "../../../assets/img_unit2/imgs/Pizza (2).jpg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit2_Page10_Q2.css";
+import ExerciseHeader from "../../ExerciseHeader";
 // import { faFootball } from "@fortawesome/free-solid-svg-icons";
 const Unit2_Page10_Q2 = () => {
   const [lines, setLines] = useState([]);
@@ -136,10 +137,11 @@ const Unit2_Page10_Q2 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">E</span> Read and match.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="E"
+          title="Look, read, and match."
+          subTitle="Read each word, then connect it to the correct picture."
+        />
         <div className="container12-unit2-pg10-q2" ref={containerRef}>
           {/* الصف الأول */}
           <div className="matching-row2">
@@ -338,16 +340,16 @@ const Unit2_Page10_Q2 = () => {
 
       <div className="action-buttons-container">
         <button
-        onClick={() => {
-  setLines([]);
-  setWrongWords([]);
-  setFirstDot(null);
-  setShowAnswer(false);
-  setLocked(false);
+          onClick={() => {
+            setLines([]);
+            setWrongWords([]);
+            setFirstDot(null);
+            setShowAnswer(false);
+            setLocked(false);
 
-  setSelectedImage(null);
-  setSelectedWord(null);
-}}
+            setSelectedImage(null);
+            setSelectedWord(null);
+          }}
           className="try-again-button"
         >
           Start Again ↻
@@ -374,13 +376,14 @@ const Unit2_Page10_Q2 = () => {
               x2: getDotPosition(`[data-image="${line.image}"]`).x,
               y2: getDotPosition(`[data-image="${line.image}"]`).y,
             }));
-setSelectedImage(null);
-setSelectedWord(null);
+            setSelectedImage(null);
+            setSelectedWord(null);
 
-setLines(finalLines);
-setWrongWords([]);
-setShowAnswer(true);
-setLocked(true);  }}
+            setLines(finalLines);
+            setWrongWords([]);
+            setShowAnswer(true);
+            setLocked(true);
+          }}
           className="show-answer-btn swal-continue"
         >
           Show Answer

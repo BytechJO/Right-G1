@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-// import "./Page8_Q4.css";
+import React, { useRef, useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import ExerciseHeader from "../../ExerciseHeader";
+
+import sentenceSound from "../../../assets/unit2/Page 14 - C/how old are you.mp3";
 
 const Unit2_Page5_Q4 = () => {
   const data = [
@@ -40,84 +42,235 @@ const Unit2_Page5_Q4 = () => {
     [25, 15, 21], // you
   ];
 
-  const [slots, setSlots] = useState(
-    questionGroups.map((g) => g.map(() => null)),
-  );
-  const [isChecked, setIsChecked] = useState(false);
+  const createEmptySlots = () =>
+    questionGroups.map((group) => group.map(() => null));
+
+  const [slots, setSlots] = useState(createEmptySlots());
+
   const [wrongInputs, setWrongInputs] = useState([]);
+
+  const [lockedSlots, setLockedSlots] = useState([]);
+
   const [showAnswer, setShowAnswer] = useState(false);
-  // تكوين الكلمات من الخانات
+
+  // الجملة الحالية كلها صح
+  const [allCorrect, setAllCorrect] = useState(false);
+
+  // بعد أول Check ناجح نقفل Function التشيك فقط
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  const sentenceAudioRef = useRef(null);
+
+  /* =====================================================
+     FORM SENTENCE
+  ===================================================== */
+
   const formedWords = slots.map((group) =>
     group.map((letter) => letter || "").join(""),
   );
+
   const sentence = formedWords.join(" ");
 
-  // ========================
-  // Drag Logic
-  // ========================
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || showAnswer || isChecked) return;
+  /* =====================================================
+     GET CORRECT LETTER
+  ===================================================== */
 
-    if (destination.droppableId.startsWith("slot-")) {
-      const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
+  const getCorrectLetter = (groupIndex, letterIndex) => {
+    const number = questionGroups[groupIndex][letterIndex];
 
-      const letter = draggableId.replace("letter-", "");
-
-      setSlots((prev) => {
-        const updated = prev.map((group) => [...group]);
-
-        // ✅ استبدال الحرف مباشرة
-        updated[g][l] = letter;
-
-        return updated;
-      });
-    }
+    return data.find((item) => item.number === number)?.letter;
   };
 
-  // ========================
-  // Show Answer
-  // ========================
+  /* =====================================================
+     CHECK IF FULL SENTENCE IS CORRECT
+  ===================================================== */
+
+  const checkIfAllCorrect = (updatedSlots) => {
+    for (let g = 0; g < updatedSlots.length; g++) {
+      for (let l = 0; l < updatedSlots[g].length; l++) {
+        const correctLetter = getCorrectLetter(g, l);
+
+        if (!updatedSlots[g][l] || updatedSlots[g][l] !== correctLetter) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
+  /* =====================================================
+     PLAY SENTENCE
+  ===================================================== */
+
+  const playSentence = () => {
+    if (!sentenceAudioRef.current) return;
+
+    sentenceAudioRef.current.pause();
+
+    sentenceAudioRef.current.currentTime = 0;
+
+    sentenceAudioRef.current.play().catch((error) => {
+      console.log("Sentence audio error:", error);
+    });
+  };
+
+  /* =====================================================
+     LOCK ALL SLOTS
+  ===================================================== */
+
+  const lockAllSlots = () => {
+    const allSlotIds = [];
+
+    questionGroups.forEach((group, gIndex) => {
+      group.forEach((_, lIndex) => {
+        allSlotIds.push(`${gIndex}-${lIndex}`);
+      });
+    });
+
+    setLockedSlots(allSlotIds);
+  };
+
+  /* =====================================================
+     DRAG END
+  ===================================================== */
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+
+    if (!destination || showAnswer) {
+      return;
+    }
+
+    if (!destination.droppableId.startsWith("slot-")) {
+      return;
+    }
+
+    const [g, l] = destination.droppableId.split("-").slice(1).map(Number);
+
+    const slotId = `${g}-${l}`;
+
+    // الصح اللي اتقفل بعد Check
+    // ما بنقدر نغيره
+    if (lockedSlots.includes(slotId)) {
+      return;
+    }
+
+    const letter = draggableId.replace("letter-", "");
+
+    setSlots((prev) => {
+      const updated = prev.map((group) => [...group]);
+
+      updated[g][l] = letter;
+
+      // =============================
+      // افحص إذا صار الحل كله صح
+      // =============================
+
+      const completedCorrectly = checkIfAllCorrect(updated);
+
+      if (completedCorrectly) {
+        // فقط نعرف إن الجملة صح
+        setAllCorrect(true);
+
+        setWrongInputs([]);
+
+        // مهم:
+        // لا نقفل الـ Check هون
+        // ولا نعمل Success popup هون
+
+        // الصوت يشتغل لحظة
+        // إكمال آخر حرف صح
+        setTimeout(() => {
+          playSentence();
+        }, 0);
+      } else {
+        setAllCorrect(false);
+      }
+
+      return updated;
+    });
+
+    // لو كانت الخانة عليها X
+    // نشيله بمجرد تعديلها
+    setWrongInputs((prev) => prev.filter((id) => id !== slotId));
+  };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
   const handleShowAnswer = () => {
     const correct = questionGroups.map((group) =>
-      group.map((num) => data.find((d) => d.number === num).letter),
+      group.map((num) => data.find((item) => item.number === num)?.letter),
     );
 
     setSlots(correct);
+
     setWrongInputs([]);
+
+    lockAllSlots();
+
     setShowAnswer(true);
+
+    setAllCorrect(true);
+
+    // إذا Show Answer
+    // Check ما عاد يعمل شيء
+    setCheckCompleted(true);
   };
 
-  // ========================
-  // Check Answer
-  // ========================
-  const handleCheckAnswers = () => {
-    if (showAnswer) return;
-    setIsChecked(true);
+  /* =====================================================
+     CHECK ANSWER
+  ===================================================== */
 
-    const hasEmpty = slots.some((g) => g.some((l) => !l));
+  const handleCheckAnswers = () => {
+    // بعد أول Check ناجح
+    // أي ضغط ثاني ما يعمل شيء
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const hasEmpty = slots.some((group) => group.some((letter) => !letter));
+
     if (hasEmpty) {
       ValidationAlert.info(
         "Oops!",
         "Please complete all fields before checking.",
       );
+
       return;
     }
 
-    let wrong = [];
+    const wrong = [];
+
+    const newlyLocked = [];
+
     let correctCount = 0;
-    let total = slots.flat().length;
+
+    const total = slots.flat().length;
 
     for (let g = 0; g < slots.length; g++) {
       for (let l = 0; l < slots[g].length; l++) {
-        const correctLetter = data.find(
-          (d) => d.number === questionGroups[g][l],
-        ).letter;
+        const slotId = `${g}-${l}`;
 
-        if (slots[g][l] === correctLetter) correctCount++;
-        else wrong.push(`${g}-${l}`);
+        const correctLetter = getCorrectLetter(g, l);
+
+        if (slots[g][l] === correctLetter) {
+          correctCount++;
+
+          newlyLocked.push(slotId);
+        } else {
+          wrong.push(slotId);
+        }
       }
     }
+
+    /* =========================================
+       LOCK ONLY CORRECT SLOTS
+    ========================================= */
+
+    setLockedSlots((prev) => Array.from(new Set([...prev, ...newlyLocked])));
 
     setWrongInputs(wrong);
 
@@ -132,22 +285,99 @@ const Unit2_Page5_Q4 = () => {
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    /* =========================================
+       ALL CORRECT
+    ========================================= */
+
+    if (correctCount === total) {
+      setAllCorrect(true);
+
+      lockAllSlots();
+
+      setWrongInputs([]);
+
+      // من هون وطالع
+      // Check ما عاد يعمل شيء
+      setCheckCompleted(true);
+
+      // مهم:
+      // ما في صوت هون
+      // الصوت صار من الـ drag
+      ValidationAlert.success(scoreMessage);
+
+      return;
+    }
+
+    /* =========================================
+       WRONG / PARTIALLY CORRECT
+    ========================================= */
+
+    if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
 
+  /* =====================================================
+     RESET
+  ===================================================== */
+
+  const handleReset = () => {
+    setSlots(createEmptySlots());
+
+    setWrongInputs([]);
+
+    setLockedSlots([]);
+
+    setShowAnswer(false);
+
+    setAllCorrect(false);
+
+    setCheckCompleted(false);
+
+    if (sentenceAudioRef.current) {
+      sentenceAudioRef.current.pause();
+
+      sentenceAudioRef.current.currentTime = 0;
+    }
+  };
+
+  /* =====================================================
+     CURRENT SENTENCE IS CORRECT
+  ===================================================== */
+
+  const sentenceIsCorrect = checkIfAllCorrect(slots);
+
+  /* =====================================================
+     JSX
+  ===================================================== */
+
   return (
-    <div className="mb-10" style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-      <div className="div-forall" style={{  }}>
-        <h5 className="header-title-page8">
-          <span className="ex-A">C</span> Drag the letters into the boxes to
-          make the secret sentence.
-        </h5>
+    <div
+      className="mb-10"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        padding: "30px",
+      }}
+    >
+      {/* AUDIO */}
+      <audio ref={sentenceAudioRef} src={sentenceSound} />
+
+      <div className="div-forall">
+        <ExerciseHeader
+          sectionLetter="C"
+          title="Answer the question."
+          subTitle="Match each number to its letter, then build the hidden sentence."
+        />
 
         <div className="alphabet-box">
           <DragDropContext onDragEnd={onDragEnd}>
-            {/* 🔤 الحروف فوق الأرقام */}
+            {/* ============================================
+                ALPHABET
+            ============================================ */}
+
             <Droppable
               droppableId="alphabet"
               direction="horizontal"
@@ -160,11 +390,11 @@ const Unit2_Page5_Q4 = () => {
                   {...provided.droppableProps}
                 >
                   {data.map((item, index) => (
-                    <div className="letter-char1" key={index}>
+                    <div className="letter-char1" key={item.letter}>
                       <Draggable
                         draggableId={`letter-${item.letter}`}
                         index={index}
-                        isDragDisabled={showAnswer || isChecked}
+                        isDragDisabled={false}
                       >
                         {(provided) => (
                           <div
@@ -172,6 +402,11 @@ const Unit2_Page5_Q4 = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className="cell1 drag-letter"
+                            style={{
+                              ...provided.draggableProps.style,
+
+                              cursor: "grab",
+                            }}
                           >
                             {item.letter}
                           </div>
@@ -181,73 +416,121 @@ const Unit2_Page5_Q4 = () => {
                       <div className="cell1 number1">{item.number}</div>
                     </div>
                   ))}
+
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
 
-            {/* 🧩 خانات الإجابة */}
+            {/* ============================================
+                ANSWER SLOTS
+            ============================================ */}
+
             <div className="words">
               {questionGroups.map((group, gIndex) => (
                 <div className="word-group" key={gIndex}>
-                  {group.map((num, lIndex) => (
-                    <Droppable
-                      droppableId={`slot-${gIndex}-${lIndex}`}
-                      isDropDisabled={showAnswer || isChecked}
-                    >
-                      {(provided, snapshot) => (
-                        <div className="slot-wrapper">
-                          {/* 🔢 الرقم فوق المربع */}
-                          <h6 className="slot-number">{num}</h6>
+                  {group.map((num, lIndex) => {
+                    const slotId = `${gIndex}-${lIndex}`;
 
-                          {/* ⬜ مربع الدروب */}
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`drop-slot
-                              ${snapshot.isDraggingOver ? "drag-over" : ""}
-                              ${wrongInputs.includes(`${gIndex}-${lIndex}`) ? "wrong" : ""}`}
-                          >
-                            {wrongInputs.includes(`${gIndex}-${lIndex}`) && (
-                              <div className="error-mark1">✕</div>
-                            )}
-                            {slots[gIndex][lIndex] && (
-                              <div className="dropped-letter">
-                                {slots[gIndex][lIndex]}
-                              </div>
-                            )}
-                            {provided.placeholder}
+                    const isLocked = lockedSlots.includes(slotId);
+
+                    const isWrong = wrongInputs.includes(slotId);
+
+                    return (
+                      <Droppable
+                        key={slotId}
+                        droppableId={`slot-${gIndex}-${lIndex}`}
+                        isDropDisabled={showAnswer || isLocked}
+                      >
+                        {(provided, snapshot) => (
+                          <div className="slot-wrapper">
+                            <h6 className="slot-number">{num}</h6>
+
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`drop-slot
+                                    ${
+                                      snapshot.isDraggingOver ? "drag-over" : ""
+                                    }
+                                    ${isWrong ? "wrong" : ""}
+                                  `}
+                              style={{
+                                position: "relative",
+
+                                borderColor: isLocked ? "#28a745" : undefined,
+
+                                backgroundColor: isLocked
+                                  ? "rgba(40, 167, 69, 0.08)"
+                                  : undefined,
+
+                                cursor: isLocked ? "default" : undefined,
+                              }}
+                            >
+                              {/* WRONG */}
+
+                              {isWrong && <div className="error-mark1">✕</div>}
+
+                              {/* LETTER */}
+
+                              {slots[gIndex][lIndex] && (
+                                <div
+                                  className="dropped-letter"
+                                  style={{
+                                    color: isLocked ? "#16843a" : undefined,
+
+                                    fontWeight: isLocked ? "700" : undefined,
+                                  }}
+                                >
+                                  {slots[gIndex][lIndex]}
+                                </div>
+                              )}
+
+                              {provided.placeholder}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Droppable>
-                  ))}
+                        )}
+                      </Droppable>
+                    );
+                  })}
                 </div>
               ))}
+
               <div className="text-[40px] text-center font-semibold mt-5">
                 ?
               </div>
             </div>
 
-            <div className="sentence-box">
+            {/* ============================================
+                SENTENCE
+            ============================================ */}
+
+            <div
+              className="sentence-box"
+              onClick={() => {
+                if (sentenceIsCorrect) {
+                  playSentence();
+                }
+              }}
+              style={{
+                cursor: sentenceIsCorrect ? "pointer" : "default",
+              }}
+              title={sentenceIsCorrect ? "Click to listen" : ""}
+            >
               <span className="sentence-text">{sentence}</span>
+
               <div className="text-[30px] text-center font-semibold">?</div>
             </div>
           </DragDropContext>
         </div>
       </div>
 
-      {/* 🔘 Buttons */}
+      {/* ================================================
+          BUTTONS
+      ================================================ */}
+
       <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setSlots(questionGroups.map((g) => g.map(() => null)));
-            setWrongInputs([]);
-            setShowAnswer(false);
-            setIsChecked(false);
-          }}
-          className="try-again-button"
-        >
+        <button onClick={handleReset} className="try-again-button">
           Start Again ↻
         </button>
 

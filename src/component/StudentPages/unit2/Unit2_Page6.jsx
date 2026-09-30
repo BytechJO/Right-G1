@@ -64,8 +64,12 @@ const Unit2_Page6 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={song} captions={captionsExample} />
-              </div>
+                <AudioWithCaption
+                  src={song}
+                  captions={captionsExample}
+                  pageId="unit2-page15"
+                />
+              </div>,
             )
           }
           style={{ overflow: "visible" }}

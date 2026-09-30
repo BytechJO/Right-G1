@@ -20,6 +20,7 @@ const FourImagesWithAudio = ({
   audioArr,
   captions,
   pageId,
+  subHeader,
 }) => {
   const audioRef = useRef(null);
   const audioFinishedRef = useRef(false);
@@ -310,9 +311,7 @@ const FourImagesWithAudio = ({
               {titleQ}
             </h5>
 
-            <p className="sub-header">
-              Press Play, then tap each card to hear it again.
-            </p>
+            <p className="sub-header">{subHeader}</p>
           </div>
         </div>
       </div>

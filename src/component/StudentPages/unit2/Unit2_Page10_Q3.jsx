@@ -12,6 +12,7 @@ import { FaPlay, FaPause, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 const Unit2_Page10_Q3 = () => {
   const audioRef = useRef(null);
   const stopAtSecond = 4.2;
@@ -193,66 +194,65 @@ const Unit2_Page10_Q3 = () => {
       <div
         className="div-forall"
         style={{
-        
           gap: "30px",
-         
         }}
       >
-     
-          <h5 className="header-title-page8">
-            <span className="mr-2">F</span> Listen and tap or click the starting
-            letter.
-          </h5>
-          <QuestionAudioPlayer
-            src={sound1}
-            captions={captions}
-            stopAtSecond={stopAtSecond}
-          />
+        <ExerciseHeader
+          sectionLetter="F"
+          title="Listen and circle."
+          subTitle="Listen to each word, then tap its beginning sound: b or p."
+        />
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+          pageId="unit2-page19-3"
+        />
 
-          <div className="questions-grid">
-            {questions.map((q) => (
-              <div key={q.id} className="question-box">
-                <div className="question-number">{q.id}</div>
+        <div className="questions-grid">
+          {questions.map((q) => (
+            <div key={q.id} className="question-box">
+              <div className="question-number">{q.id}</div>
 
-                <div className="images-row">
-                  {q.images.map((img, index) => (
-                    <img
-                      key={index}
-                      src={img}
-                      alt=""
-                      className="question-img-unit2-p10-q3"
-                    />
-                  ))}
-                </div>
-
-                <div className="options-row">
-                  {q.options.map((opt) => {
-                    const isSelected = answers[q.id] === opt;
-                    const isWrong =
-                      showResult &&
-                      isSelected &&
-                      answers[q.id]?.toLowerCase() !== q.correct.toLowerCase();
-                    const isCorrectShow = showAnswer;
-
-                    return (
-                      <span
-                        key={opt}
-                        className={`option-letter  ${
-                          isSelected ? "selected3" : ""
-                        } ${isCorrectShow ? "correct-answer" : ""}`}
-                        onClick={() => !showAnswer && handleSelect(q.id, opt)}
-                      >
-                        {opt}
-                        {isWrong && <span className="wrong-x10-3">✕</span>}
-                      </span>
-                    );
-                  })}
-                </div>
+              <div className="images-row">
+                {q.images.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt=""
+                    className="question-img-unit2-p10-q3"
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+
+              <div className="options-row">
+                {q.options.map((opt) => {
+                  const isSelected = answers[q.id] === opt;
+                  const isWrong =
+                    showResult &&
+                    isSelected &&
+                    answers[q.id]?.toLowerCase() !== q.correct.toLowerCase();
+                  const isCorrectShow = showAnswer;
+
+                  return (
+                    <span
+                      key={opt}
+                      className={`option-letter  ${
+                        isSelected ? "selected3" : ""
+                      } ${isCorrectShow ? "correct-answer" : ""}`}
+                      onClick={() => !showAnswer && handleSelect(q.id, opt)}
+                    >
+                      {opt}
+                      {isWrong && <span className="wrong-x10-3">✕</span>}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
-   
+      </div>
+
       <div className="action-buttons-container">
         <button
           onClick={() => {

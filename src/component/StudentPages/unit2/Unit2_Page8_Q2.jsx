@@ -17,6 +17,7 @@ import {
   KeyboardSensor,
 } from "@dnd-kit/core";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ─────────────────────────────────────────────
 // Draggable word chip
@@ -42,7 +43,7 @@ function DraggableWord({ word, isUsed }) {
         cursor: isUsed ? "default" : "grab",
         opacity: isDragging ? 0.4 : 1,
         display: "inline-block",
-          touchAction:"none"
+        touchAction: "none",
       }}
     >
       {word}
@@ -207,11 +208,11 @@ const Unit2_Page8_Q2 = () => {
         }}
       >
         <div className="div-forall" style={{ gap: "20px" }}>
-          <h5 className="header-title-page8">
-            <span className="mr-2">E</span> Read and drag the words to complete
-            the sentences.
-          </h5>
-
+          <ExerciseHeader
+            sectionLetter="E"
+            title="Read, look, and write."
+            subTitle="Use each picture clue to drag the correct word into the sentence."
+          />
           {/* ── Word bank ── */}
           <div
             style={{

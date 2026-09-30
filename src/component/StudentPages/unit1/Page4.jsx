@@ -334,6 +334,7 @@ const Page4 = ({ openPopup }) => {
                   audioArr={imageSounds}
                   captions={captions}
                   pageId="unit1-page4"
+                  subHeader="Press Play, then tap each card to hear it again."
                 />,
               )
             }
@@ -352,6 +353,7 @@ const Page4 = ({ openPopup }) => {
                     audioArr={imageSounds}
                     captions={captions}
                     pageId="unit1-page4"
+                    subHeader="Press Play, then tap each card to hear it again."
                   />,
                 );
               }

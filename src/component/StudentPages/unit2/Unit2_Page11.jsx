@@ -105,8 +105,10 @@ const Unit2_Page11 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-           className={`clickable-area ${
-            activeId === `p11-${area.sound}`||  hoveredAreaIndex === index   ? "highlight" : ""
+          className={`clickable-area ${
+            activeId === `p11-${area.sound}` || hoveredAreaIndex === index
+              ? "highlight"
+              : ""
           }`}
           style={{
             position: "absolute",
@@ -116,7 +118,7 @@ const Unit2_Page11 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-          playSound(area.sound, `p11-${area.sound}`);
+            playSound(area.sound, `p11-${area.sound}`);
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -145,7 +147,11 @@ const Unit2_Page11 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={sound1} captions={captionsExample} />
+                <AudioWithCaption
+                  src={sound1}
+                  captions={captionsExample}
+                  pageId="unit2-page20"
+                />
               </div>,
             )
           }

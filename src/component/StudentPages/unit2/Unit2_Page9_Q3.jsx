@@ -14,6 +14,7 @@ import {
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ─── Draggable Word (used in word bank) ───────────────────────────────────────
 const DraggableWord = ({ id, word, disabled, isUsed }) => {
@@ -39,7 +40,7 @@ const DraggableWord = ({ id, word, disabled, isUsed }) => {
         display: "inline-block",
         transition: "all 0.2s ease",
         userSelect: "none",
-          touchAction:"none"
+        touchAction: "none",
       }}
     >
       {word}
@@ -228,11 +229,12 @@ const Unit2_Page9_Q3 = () => {
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div className="div-forall" style={{ }}>
-          <h5 className="header-title-page8">
-            <span className="mr-2">C</span> Fill in the blanks
-          </h5>
-
+        <div className="div-forall" style={{}}>
+          <ExerciseHeader
+            sectionLetter="C"
+            title="Look and answer."
+            subTitle="Use the picture clues to complete the sentences about jello, a present, and balloons."
+          />
           {/* ── Word Bank ─────────────────────────────────────────────────── */}
           <div
             style={{

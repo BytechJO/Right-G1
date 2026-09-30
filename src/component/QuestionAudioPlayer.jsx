@@ -9,6 +9,7 @@ export default function QuestionAudioPlayer({
   captions = [],
   stopAtSecond = null,
   forceStop,
+  onInteract,
 }) {
   const clickAudioRef = useRef(null);
   const audioRef = useRef(null);
@@ -216,6 +217,11 @@ export default function QuestionAudioPlayer({
   };
   return (
     <div
+      onPointerDown={() => {
+        if (onInteract) {
+          onInteract();
+        }
+      }}
       style={{
         display: "flex",
         justifyContent: "center",
@@ -252,36 +258,35 @@ export default function QuestionAudioPlayer({
               {new Date(current * 1000).toISOString().substring(14, 19)}
             </span>
 
-             <input
-            type="range"
-            className="audio-slider"
-            min="0"
-            max={duration}
-            value={current}
-            onChange={(e) => {
-              audioRef.current.currentTime = e.target.value;
-              updateCaption(Number(e.target.value));
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.outline = "3px solid #2563eb";
-              e.currentTarget.style.outlineOffset = "4px";
-              e.currentTarget.style.borderRadius = "8px";
-              e.currentTarget.style.boxShadow =
-                "0 0 0 4px rgba(37, 99, 235, 0.15)";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.outline = "none";
-              e.currentTarget.style.boxShadow = "none";
-            }}
-            aria-label="Audio progress"
-            title="Audio progress"
-            style={{
-              background: `linear-gradient(to right, #430f68 ${
-                (current / duration) * 100
-              }%, #d9d9d9ff ${(current / duration) * 100}%)`,
-            }}
-          />
-
+            <input
+              type="range"
+              className="audio-slider"
+              min="0"
+              max={duration}
+              value={current}
+              onChange={(e) => {
+                audioRef.current.currentTime = e.target.value;
+                updateCaption(Number(e.target.value));
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.outline = "3px solid #2563eb";
+                e.currentTarget.style.outlineOffset = "4px";
+                e.currentTarget.style.borderRadius = "8px";
+                e.currentTarget.style.boxShadow =
+                  "0 0 0 4px rgba(37, 99, 235, 0.15)";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.outline = "none";
+                e.currentTarget.style.boxShadow = "none";
+              }}
+              aria-label="Audio progress"
+              title="Audio progress"
+              style={{
+                background: `linear-gradient(to right, #430f68 ${
+                  (current / duration) * 100
+                }%, #d9d9d9ff ${(current / duration) * 100}%)`,
+              }}
+            />
 
             <span className="audio-time">
               {new Date(duration * 1000).toISOString().substring(14, 19)}

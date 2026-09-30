@@ -248,6 +248,7 @@ const Page5 = ({ openPopup }) => {
                 audioArr={imageSounds2}
                 pageId="unit1-page5-1"
                 captions={captions}
+                subHeader="Press Play, then tap each card to hear it again."
               />,
             )
           }
@@ -266,6 +267,7 @@ const Page5 = ({ openPopup }) => {
                   audioArr={imageSounds2}
                   pageId="unit1-page5-1"
                   captions={captions}
+                  subHeader="Press Play, then tap each card to hear it again."
                 />,
               );
             }
@@ -304,6 +306,7 @@ const Page5 = ({ openPopup }) => {
                 titleQ="Listen and read along."
                 audioArr={imageSounds}
                 pageId="unit1-page5-2"
+                subHeader="Press Play, then tap each card to hear it again."
                 captions={captions2}
               />,
             )
@@ -322,6 +325,7 @@ const Page5 = ({ openPopup }) => {
                   titleQ="Listen and read along."
                   audioArr={imageSounds}
                   pageId="unit1-page5-2"
+                  subHeader="Press Play, then tap each card to hear it again."
                   captions={captions2}
                 />,
               );

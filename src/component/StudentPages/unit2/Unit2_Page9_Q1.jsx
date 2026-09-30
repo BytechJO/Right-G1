@@ -9,6 +9,7 @@ import {
   DragOverlay,
   useDroppable,
 } from "@dnd-kit/core";
+import ExerciseHeader from "../../ExerciseHeader";
 
 // ─── Draggable Word ────────────────────────────────────────────────────────────
 const DraggableWord = ({ id, word, disabled, isUsed }) => {
@@ -65,7 +66,6 @@ const DropSlot = ({ id, value, wrong, showAnswer, onRemove }) => {
             title={showAnswer ? "" : "Click to remove"}
           >
             {value}
-           
           </span>
         )}
         {wrong && <span className="error-mark-input1">✕</span>}
@@ -86,9 +86,9 @@ const Unit2_Page9_Q1 = () => {
 
   const correctMatches = [
     { input: "party hats", num: "input1" },
-    { input: "What is it",  num: "input2" },
-    { input: "It's",        num: "input3" },
-    { input: "present",     num: "input4" },
+    { input: "What is it", num: "input2" },
+    { input: "It's", num: "input3" },
+    { input: "present", num: "input4" },
   ];
 
   const wordBank = correctMatches.map((c) => c.input);
@@ -166,7 +166,11 @@ const Unit2_Page9_Q1 = () => {
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     ValidationAlert[
-      correctCount === total ? "success" : correctCount === 0 ? "error" : "warning"
+      correctCount === total
+        ? "success"
+        : correctCount === 0
+          ? "error"
+          : "warning"
     ](`
       <div style="font-size:20px;text-align:center;">
         <span style="color:${color};font-weight:bold;">
@@ -198,13 +202,15 @@ const Unit2_Page9_Q1 = () => {
       onDragEnd={onDragEnd}
       onDragCancel={onDragCancel}
     >
-      <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "center", padding: "30px" }}
+      >
         <div className="div-forall" style={{ gap: "88px" }}>
-          <h5 className="header-title-page8">
-            <span className="mr-2">A</span> Complete the sentences with the
-            correct words.
-          </h5>
-
+          <ExerciseHeader
+            sectionLetter="A"
+            title="Look and write."
+            subTitle="Drag the correct words into each birthday sentence."
+          />
           {/* ── Word Bank ──────────────────────────────────────────────────── */}
           <div
             style={{

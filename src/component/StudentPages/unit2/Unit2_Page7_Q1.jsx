@@ -12,13 +12,15 @@ import {
   TouchSensor,
   KeyboardSensor,
 } from "@dnd-kit/core";
+
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 
-// ─────────────────────────────────────────────
-// Sub-components
-// ─────────────────────────────────────────────
+import ExerciseHeader from "../../ExerciseHeader";
 
-/** Single draggable number chip */
+/* =====================================================
+   DRAGGABLE NUMBER
+===================================================== */
+
 function DraggableNumber({ item, isDragDisabled }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `num-${item.num}`,
@@ -33,43 +35,53 @@ function DraggableNumber({ item, isDragDisabled }) {
         style={{
           opacity: isDragging ? 0.4 : 1,
           cursor: isDragDisabled ? "default" : "grab",
-          touchAction:"none"
+          touchAction: "none",
         }}
         {...listeners}
         {...attributes}
       >
         {item.num}
       </span>
+
       <span className="word-label">{item.word}</span>
     </div>
   );
 }
 
-/** A single droppable slot cell */
-function DroppableSlot({ id, value, isWrong, isChecked }) {
-  const { setNodeRef, isOver } = useDroppable({ id });
+/* =====================================================
+   DROPPABLE SLOT
+===================================================== */
+
+function DroppableSlot({ id, value, isWrong, isChecked, isLocked }) {
+  const { setNodeRef, isOver } = useDroppable({
+    id,
+    disabled: isLocked,
+  });
 
   return (
     <div ref={setNodeRef} className="input-wrapper1">
       <div
         className={[
           "input-sentence",
+
           isChecked && isWrong ? "wrong-input1" : "",
-          isOver ? "drag-over-cell" : "",
+
+          isOver && !isLocked ? "drag-over-cell" : "",
         ]
           .filter(Boolean)
           .join(" ")}
       >
         {value || ""}
       </div>
+
       {isChecked && isWrong && <span className="wrong-icon">✕</span>}
     </div>
   );
 }
 
-// ─────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────
+/* =====================================================
+   MAIN COMPONENT
+===================================================== */
 
 const Unit2_Page7_Q1 = () => {
   const words = [
@@ -109,122 +121,330 @@ const Unit2_Page7_Q1 = () => {
     f: [1, 4, 5],
   };
 
-  const [userAnswers, setUserAnswers] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [wrongInputs, setWrongInputs] = useState({});
-  const [activeId, setActiveId] = useState(null); // for DragOverlay
+  /* =====================================================
+     STATES
+  ===================================================== */
 
-  // ── Sensors: pointer (mouse) + touch (tablet/mobile) + keyboard ──
+  const [userAnswers, setUserAnswers] = useState({});
+
+  const [checked, setChecked] = useState(false);
+
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const [wrongInputs, setWrongInputs] = useState({});
+
+  // slots الصح اللي تنقفل بعد Check
+  const [lockedInputs, setLockedInputs] = useState({});
+
+  // بعد Check كامل وصحيح
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  const [activeId, setActiveId] = useState(null);
+
+  /* =====================================================
+     SENSORS
+  ===================================================== */
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 }, // small threshold avoids accidental drags
+      activationConstraint: {
+        distance: 5,
+      },
     }),
+
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 150, tolerance: 8 }, // feels natural on tablet
+      activationConstraint: {
+        delay: 150,
+        tolerance: 8,
+      },
     }),
+
     useSensor(KeyboardSensor),
   );
 
-  // ── Drag handlers ──
+  /* =====================================================
+     DRAG START
+  ===================================================== */
+
   const handleDragStart = ({ active }) => {
     setActiveId(active.id);
   };
 
+  /* =====================================================
+     DRAG END
+  ===================================================== */
+
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
-    if (!over || showAnswer) return;
+
+    if (!over || showAnswer) {
+      return;
+    }
 
     const overId = over.id;
-    if (!overId.startsWith("slot-")) return;
+
+    if (!overId.startsWith("slot-")) {
+      return;
+    }
 
     const [, key, indexStr] = overId.split("-");
+
+    const index = Number(indexStr);
+
+    /* =============================
+       لو الخانة صح ومقفلة
+    ============================= */
+
+    if (lockedInputs[key]?.[index]) {
+      return;
+    }
+
     const num = Number(active.id.replace("num-", ""));
-    const draggedWord = words.find((w) => w.num === num)?.word;
-    if (!draggedWord) return;
+
+    const draggedWord = words.find((word) => word.num === num)?.word;
+
+    if (!draggedWord) {
+      return;
+    }
+
+    /* =============================
+       SET ANSWER
+    ============================= */
 
     setUserAnswers((prev) => {
-      const updated = { ...prev };
-      if (!updated[key]) updated[key] = [];
-      updated[key][Number(indexStr)] = draggedWord;
+      const updated = {
+        ...prev,
+      };
+
+      if (!updated[key]) {
+        updated[key] = [];
+      } else {
+        updated[key] = [...updated[key]];
+      }
+
+      updated[key][index] = draggedWord;
+
       return updated;
     });
 
-    setWrongInputs({});
+    /* =============================
+       REMOVE WRONG ONLY FROM
+       EDITED SLOT
+    ============================= */
+
+    setWrongInputs((prev) => {
+      const updated = {
+        ...prev,
+      };
+
+      if (updated[key]) {
+        updated[key] = [...updated[key]];
+
+        updated[key][index] = false;
+      }
+
+      return updated;
+    });
   };
 
-  // ── Check / Show Answer / Reset ──
-  const checkAnswers = () => {
-    if (showAnswer) return;
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
 
-    let tempScore = 0;
-    let totalInputs = 0;
-    let newWrongInputs = {};
+  const checkAnswers = () => {
+    // بعد النجاح النهائي
+    // Check ما يعمل شيء
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    /* =============================
+       CHECK ALL FILLED
+    ============================= */
 
     for (const key in sentences) {
-      totalInputs += sentences[key].length;
+      const expectedLength = sentences[key].length;
 
-      if (
-        !userAnswers[key] ||
-        userAnswers[key].length !== sentences[key].length
-      ) {
+      if (!userAnswers[key]) {
         ValidationAlert.info(
           "Oops!",
           "Please fill all fields before checking.",
         );
-        // alert("Please fill all fields before checking.");
+
         return;
       }
 
+      for (let i = 0; i < expectedLength; i++) {
+        if (!userAnswers[key][i]) {
+          ValidationAlert.info(
+            "Oops!",
+            "Please fill all fields before checking.",
+          );
+
+          return;
+        }
+      }
+    }
+
+    /* =============================
+       CHECK VALUES
+    ============================= */
+
+    let tempScore = 0;
+
+    let totalInputs = 0;
+
+    const newWrongInputs = {};
+
+    const newLockedInputs = {};
+
+    for (const key in sentences) {
+      totalInputs += sentences[key].length;
+
       newWrongInputs[key] = [];
+
+      newLockedInputs[key] = [];
 
       sentences[key].forEach((_, index) => {
         const entered = userAnswers[key][index]?.toLowerCase();
+
         const correct = correctAnswers2[key][index].toLowerCase();
 
         if (entered !== correct) {
           newWrongInputs[key][index] = true;
+
+          newLockedInputs[key][index] = false;
         } else {
           newWrongInputs[key][index] = false;
+
+          newLockedInputs[key][index] = true;
+
           tempScore++;
         }
       });
     }
 
+    /* =============================
+       KEEP OLD LOCKED +
+       ADD NEW CORRECT
+    ============================= */
+
+    setLockedInputs((prev) => {
+      const updated = {
+        ...prev,
+      };
+
+      for (const key in newLockedInputs) {
+        const oldRow = updated[key] ? [...updated[key]] : [];
+
+        const newRow = newLockedInputs[key];
+
+        updated[key] = newRow.map((value, index) => oldRow[index] || value);
+      }
+
+      return updated;
+    });
+
     setWrongInputs(newWrongInputs);
+
     setChecked(true);
+
+    /* =============================
+       SCORE
+    ============================= */
 
     const color =
       tempScore === totalInputs ? "green" : tempScore === 0 ? "red" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
-        <span style="color:${color};font-weight:bold;">Score: ${tempScore} / ${total}</span>
-      </div>`;
+        <span style="color:${color};font-weight:bold;">
+          Score: ${tempScore} / ${totalInputs}
+        </span>
+      </div>
+    `;
 
-    if (tempScore === totalInputs) ValidationAlert.success(msg);
-    else if (tempScore === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    /* =============================
+       ALL CORRECT
+    ============================= */
+
+    if (tempScore === totalInputs) {
+      setCheckCompleted(true);
+
+      ValidationAlert.success(msg);
+
+      return;
+    }
+
+    /* =============================
+       WRONG / PARTIAL
+    ============================= */
+
+    if (tempScore === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
 
   const handleShowAnswer = () => {
     setUserAnswers(correctAnswers2);
+
     setShowAnswer(true);
+
     setChecked(false);
+
     setWrongInputs({});
+
+    /* lock all */
+
+    const allLocked = {};
+
+    for (const key in sentences) {
+      allLocked[key] = sentences[key].map(() => true);
+    }
+
+    setLockedInputs(allLocked);
+
+    setCheckCompleted(true);
   };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const reset = () => {
     setUserAnswers({});
+
     setChecked(false);
+
     setShowAnswer(false);
+
     setWrongInputs({});
+
+    setLockedInputs({});
+
+    setCheckCompleted(false);
+
+    setActiveId(null);
   };
 
-  // Word shown in the drag overlay (floating ghost while dragging)
+  /* =====================================================
+     ACTIVE WORD
+  ===================================================== */
+
   const activeWord = activeId
-    ? words.find((w) => w.num === Number(activeId.replace("num-", "")))?.word
+    ? words.find((word) => word.num === Number(activeId.replace("num-", "")))
+        ?.word
     : null;
+
+  /* =====================================================
+     JSX
+  ===================================================== */
 
   return (
     <DndContext
@@ -236,46 +456,64 @@ const Unit2_Page7_Q1 = () => {
       <div
         style={{
           display: "flex",
+
           flexDirection: "column",
+
           justifyContent: "center",
+
           alignItems: "center",
+
           padding: "30px",
         }}
       >
-        <div className="div-forall" style={{ gap: "20px" }}>
-          <h5 className="header-title-page8">
-            <span className="mr-2">A</span> Match the numbers and find the
-            hidden words!
-          </h5>
+        <div
+          className="div-forall"
+          style={{
+            gap: "20px",
+          }}
+        >
+          <ExerciseHeader
+            sectionLetter="A"
+            title="Read and write."
+            subTitle="Match each number to its letter to reveal the hidden words."
+          />
 
-          {/* ── Word chips (draggable source) ── */}
-          {/* 
-            dnd-kit لا يحتاج Droppable wrapper هنا.
-            الأرقام قابلة للسحب مباشرة بدون container خاص.
-          */}
+          {/* ============================================
+              WORD BANK
+          ============================================ */}
+
           <div className="number-word-section">
             {words.map((item) => (
               <DraggableNumber
                 key={item.num}
                 item={item}
+                // المصدر يضل draggable
+                // إلا بعد Show Answer فقط
                 isDragDisabled={showAnswer}
               />
             ))}
           </div>
 
-          {/* ── Drop slots ── */}
+          {/* ============================================
+              SENTENCE SLOTS
+          ============================================ */}
+
           <div className="num-input-section">
             {Object.entries(sentences).map(([key, correctArray]) => (
               <div key={key} className="sentence-row">
                 <span className="sentence-label">{key}</span>
 
+                {/* NUMBERS */}
+
                 <div className="num-container">
-                  {correctArray.map((num, i) => (
-                    <span key={i} className="sentence-preview">
+                  {correctArray.map((num, index) => (
+                    <span key={index} className="sentence-preview">
                       {num}
                     </span>
                   ))}
                 </div>
+
+                {/* ANSWERS */}
 
                 <div className="sentence-line">
                   {correctArray.map((_, index) => (
@@ -285,6 +523,7 @@ const Unit2_Page7_Q1 = () => {
                       value={userAnswers[key]?.[index]}
                       isWrong={!!wrongInputs[key]?.[index]}
                       isChecked={checked}
+                      isLocked={!!lockedInputs[key]?.[index]}
                     />
                   ))}
                 </div>
@@ -293,35 +532,53 @@ const Unit2_Page7_Q1 = () => {
           </div>
         </div>
 
-        {/* ── Buttons ── */}
+        {/* ============================================
+            BUTTONS
+        ============================================ */}
+
         <div className="action-buttons-container">
           <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
+
           <button onClick={handleShowAnswer} className="show-answer-btn">
             Show Answer
           </button>
+
           <button onClick={checkAnswers} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
 
-      {/* ── Drag Overlay: ghost chip that follows the finger/cursor ── */}
+      {/* ============================================
+          DRAG OVERLAY
+      ============================================ */}
+
       <DragOverlay>
         {activeWord ? (
           <div
             style={{
               padding: "6px 14px",
+
               background: "#fff",
+
               border: "2px solid #4a90e2",
+
               borderRadius: "8px",
+
               fontWeight: "bold",
+
               fontSize: "16px",
+
               width: "110px",
+
               textAlign: "center",
+
               boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
+
               pointerEvents: "none",
+
               userSelect: "none",
             }}
           >

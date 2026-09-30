@@ -27,9 +27,8 @@ import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 import "./Unit2_Page2.css";
 const Unit2_Page2 = ({ openPopup }) => {
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
 
- const { audioRef, activeId, setActiveId } = useContext(AudioContext);
- 
   // أصوات الصور
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
@@ -92,7 +91,7 @@ const Unit2_Page2 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-   const playSound = (path, id) => {
+  const playSound = (path, id) => {
     if (!audioRef.current) return;
 
     // 🔥 وقف أي صوت شغال بأي صفحة
@@ -135,7 +134,7 @@ const Unit2_Page2 = ({ openPopup }) => {
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-            playSound(sounds[area.sound], `p12-${area.sound}`);
+                playSound(sounds[area.sound], `p12-${area.sound}`);
               }}
             ></div>
           );
@@ -157,7 +156,7 @@ const Unit2_Page2 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-             playSound(sounds[area.sound], `p12-${area.sound}`);
+              playSound(sounds[area.sound], `p12-${area.sound}`);
             }}
           ></div>
         );
@@ -177,12 +176,20 @@ const Unit2_Page2 = ({ openPopup }) => {
               <AudioWithCaption
                 src={Pg11_1_1_Stella}
                 captions={captionsExample}
-              />
+                pageId="unit2-page11-1"
+              />,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -203,13 +210,22 @@ const Unit2_Page2 = ({ openPopup }) => {
                 popupOpen={true}
                 titleQ={`Listen, read, and repeat.`}
                 audioArr={imageSounds2}
+                pageId="unit2-page11-2"
                 captions={captions}
-              />
+                subHeader="Press Play, then tap each card to hear it again."
+              />,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -230,13 +246,22 @@ const Unit2_Page2 = ({ openPopup }) => {
                 popupOpen={true}
                 titleQ={"Listen and read along."}
                 audioArr={imageSounds}
+                pageId="unit2-page11-3"
                 captions={captions2}
-              />
+                subHeader="Press Play, follow the p words, then tap each card to hear it again."
+              />,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit2_Page9_Q2.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 export default function Unit2_Page9_Q2() {
   const [lines, setLines] = useState([]);
@@ -150,15 +151,14 @@ export default function Unit2_Page9_Q2() {
       <div
         className="div-forall"
         style={{
-    
           gap: "30px",
-       
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">B</span> Match the words.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="B"
+          title="Read and match."
+          subTitle="Connect the words to make four complete birthday phrases."
+        />
         <div className="matching-wrapper2" ref={containerRef}>
           <div className="column2 left-column">
             {["Happy", "I’m seven", "How old", "Thank"].map((word, i) => (

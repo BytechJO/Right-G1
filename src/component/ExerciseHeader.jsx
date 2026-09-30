@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SquirrelGif from "../assets/Squirrel_GIF/Squirrel_1164_1433px.gif";
 
 const ExerciseHeader = ({
@@ -8,6 +8,12 @@ const ExerciseHeader = ({
   subTitle,
   showSquirrel = true,
 }) => {
+  const [gifSrc, setGifSrc] = useState(SquirrelGif);
+
+  useEffect(() => {
+    setGifSrc(`${SquirrelGif}?restart=${Date.now()}`);
+  }, [sectionLetter, questionNumber, title, subTitle]);
+
   return (
     <div
       className="header-title-page8"
@@ -19,7 +25,7 @@ const ExerciseHeader = ({
     >
       {showSquirrel && (
         <img
-          src={SquirrelGif}
+          src={gifSrc}
           alt="An animated squirrel"
           style={{
             height: "100px",
@@ -50,12 +56,7 @@ const ExerciseHeader = ({
           <span className="number-of-q">{questionNumber}</span>
         )}
 
-        <header
-          className="header-title-page8"
-          style={{
-            margin: 0,
-          }}
-        >
+        <header className="header-title-page8" style={{ margin: 0 }}>
           {title}
         </header>
 

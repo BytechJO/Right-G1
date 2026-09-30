@@ -21,7 +21,7 @@ import video from "../../../assets/img_unit2/sounds-unit2/p12 1920.mp4";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 const Unit2_Page3 = ({ openPopup }) => {
-   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
 
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -72,7 +72,7 @@ const Unit2_Page3 = ({ openPopup }) => {
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-   const playSound = (path, id) => {
+  const playSound = (path, id) => {
     if (!audioRef.current) return;
 
     // 🔥 وقف أي صوت شغال بأي صفحة
@@ -91,9 +91,11 @@ const Unit2_Page3 = ({ openPopup }) => {
   };
 
   return (
-    <div className="page1-img-wrapper"
-          onClick={handleImageClick}
-          style={{ backgroundImage: `url(${page_3})` }}>
+    <div
+      className="page1-img-wrapper"
+      onClick={handleImageClick}
+      style={{ backgroundImage: `url(${page_3})` }}
+    >
       {/* <img
         src={page_3}
         style={{ display: "block" }}
@@ -102,8 +104,10 @@ const Unit2_Page3 = ({ openPopup }) => {
       {clickableAreas.map((area, index) => (
         <div
           key={index}
-            className={`clickable-area ${
-            activeId === `p13-${area.sound}`||  hoveredAreaIndex === index   ? "highlight" : ""
+          className={`clickable-area ${
+            activeId === `p13-${area.sound}` || hoveredAreaIndex === index
+              ? "highlight"
+              : ""
           }`}
           style={{
             position: "absolute",
@@ -113,7 +117,7 @@ const Unit2_Page3 = ({ openPopup }) => {
             height: `${area.y2 - area.y1}%`,
           }}
           onClick={() => {
-           playSound(area.sound, `p13-${area.sound}`);
+            playSound(area.sound, `p13-${area.sound}`);
           }}
           onMouseEnter={() => {
             if (!isPlaying) setHoveredAreaIndex(index);
@@ -134,7 +138,8 @@ const Unit2_Page3 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "audio", <div
+              "audio",
+              <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -144,13 +149,21 @@ const Unit2_Page3 = ({ openPopup }) => {
                 <AudioWithCaption
                   src={CD11_Pg12_Grammar1_AdultLady}
                   captions={captionsExample}
+                  pageId="unit2-page12"
                 />
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={audioBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <div
@@ -163,9 +176,10 @@ const Unit2_Page3 = ({ openPopup }) => {
           viewBox="0 0 90 90"
           onClick={() =>
             openPopup(
-             "video", <div
+              "video",
+              <div
                 style={{
-                   display: "flex",
+                  display: "flex",
                   justifyContent: "center",
                   alignContent: "center",
                   alignItems: "center",
@@ -185,12 +199,19 @@ const Unit2_Page3 = ({ openPopup }) => {
                 >
                   <source src={video} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
           style={{ overflow: "visible" }}
         >
-          <image className="svg-img" href={pauseBtn} x="0" y="0" width="90" height="90" />
+          <image
+            className="svg-img"
+            href={pauseBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
       <audio ref={audioRef} style={{ display: "none" }} />

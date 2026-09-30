@@ -4,6 +4,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import sound1 from "../../../assets/unit1/sounds/P19QD.mp3";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 const Unit2_Page10_Q1 = () => {
   const [isShowMode, setIsShowMode] = useState(false);
   const stopAtSecond = 4.5;
@@ -106,16 +107,16 @@ const Unit2_Page10_Q1 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          {" "}
-          <span className="mr-2">D</span> Listen and tap or click the word you
-          hear.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="D"
+          title="Listen and circle."
+          subTitle="Press Play for each item, then tap the word you hear."
+        />
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
           stopAtSecond={stopAtSecond}
+          pageId="unit2-page19-1"
         />
 
         <div className="content-container10">
