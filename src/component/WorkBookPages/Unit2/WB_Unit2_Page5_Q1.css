@@ -1,0 +1,378 @@
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
+
+.container12-wb-u2-p5-q1 {
+  width: 100%;
+  position: relative;
+  user-select: none;
+  margin-bottom: 30px;
+}
+
+/* =====================================================
+   EACH ROW
+===================================================== */
+
+.matching-row-wb-u2-p5-q1 {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 105px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 60%;
+
+  margin-bottom: 15px;
+}
+
+/* =====================================================
+   LEFT
+===================================================== */
+
+.sentence-side-wb-u2-p5-q1 {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 14px;
+
+  min-width: 0;
+}
+
+.number-wb-u2-p5-q1 {
+  width: 25px;
+
+  flex-shrink: 0;
+
+  color: #153c91;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+/* =====================================================
+   SENTENCE BOX
+===================================================== */
+
+.sentence-box-wrapper-wb-u2-p5-q1 {
+  position: relative;
+}
+
+.sentence-box-wb-u2-p5-q1 {
+  width: 220px;
+  min-height: 62px;
+
+  box-sizing: border-box;
+
+  padding: 8px 12px;
+
+  border: 2px solid #000;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #111;
+
+  font-size: 17px;
+
+  line-height: 1.15;
+
+  font-weight: 500;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 8px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* selected sentence */
+.sentence-box-wb-u2-p5-q1.selected-item-wb-u2-p5-q1 {
+  box-shadow: 0 0 12px rgba(78, 84, 87, 0.7);
+}
+
+/* =====================================================
+   DOT
+===================================================== */
+
+.dot-wrapper-wb-u2-p5-q1 {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 18px;
+
+  height: 18px;
+
+  flex-shrink: 0;
+}
+
+.dot-wb-u2-p5-q1 {
+  width: 12px;
+
+  height: 12px;
+
+  border-radius: 50%;
+
+  background: #d9272f;
+
+  cursor: pointer;
+
+  position: relative;
+
+  z-index: 5;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.dot-wb-u2-p5-q1:hover {
+  transform: scale(1.2);
+
+  box-shadow: 0 0 0 4px rgba(217, 39, 47, 0.15);
+}
+
+/* =====================================================
+   RIGHT
+===================================================== */
+
+.calendar-side-wb-u2-p5-q1 {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 14px;
+}
+
+.calendar-wrapper-wb-u2-p5-q1 {
+  position: relative;
+
+  width: 135px;
+
+  min-height: 90px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 8px;
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.calendar-wrapper-wb-u2-p5-q1 img {
+  display: block;
+
+  width: 115px;
+
+  height: auto;
+
+  object-fit: contain;
+}
+
+.calendar-wrapper-wb-u2-p5-q1.selected-image-wb-u2-p5-q1 {
+  box-shadow: 0 0 12px rgba(114, 208, 246, 0.7);
+}
+
+/* =====================================================
+   WRONG X - SENTENCE
+===================================================== */
+
+.error-mark-wb-u2-p5-q1 {
+  position: absolute;
+
+  top: -10px;
+
+  right: -10px;
+
+  width: 24px;
+
+  height: 24px;
+
+  border: 2px solid white;
+
+  border-radius: 50%;
+
+  background: red;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 30;
+}
+
+/* =====================================================
+   WRONG X - IMAGE
+===================================================== */
+
+.image-error-wb-u2-p5-q1 {
+  position: absolute;
+
+  top: -6px;
+
+  right: -4px;
+
+  width: 24px;
+
+  height: 24px;
+
+  border: 2px solid white;
+
+  border-radius: 50%;
+
+  background: red;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  z-index: 30;
+}
+
+/* =====================================================
+   SVG LINES
+===================================================== */
+
+.lines-layer-wb-u2-p5-q1 {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  pointer-events: none;
+
+  overflow: visible;
+
+  z-index: 2;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 800px) {
+  .matching-row-wb-u2-p5-q1 {
+    gap: 35px;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+
+  .sentence-box-wb-u2-p5-q1 {
+    width: 180px;
+
+    min-height: 58px;
+
+    font-size: 15px;
+  }
+
+  .calendar-wrapper-wb-u2-p5-q1 {
+    width: 110px;
+  }
+
+  .calendar-wrapper-wb-u2-p5-q1 img {
+    width: 95px;
+  }
+}
+
+@media (max-width: 580px) {
+  .matching-row-wb-u2-p5-q1 {
+    gap: 15px;
+  }
+
+  .sentence-side-wb-u2-p5-q1 {
+    gap: 6px;
+  }
+
+  .calendar-side-wb-u2-p5-q1 {
+    gap: 6px;
+  }
+
+  .sentence-box-wb-u2-p5-q1 {
+    width: 145px;
+
+    min-height: 58px;
+
+    font-size: 13px;
+
+    padding: 6px 8px;
+  }
+
+  .number-wb-u2-p5-q1 {
+    width: 18px;
+
+    font-size: 14px;
+  }
+
+  .calendar-wrapper-wb-u2-p5-q1 {
+    width: 85px;
+  }
+
+  .calendar-wrapper-wb-u2-p5-q1 img {
+    width: 75px;
+  }
+
+  .dot-wb-u2-p5-q1 {
+    width: 10px;
+
+    height: 10px;
+  }
+}

@@ -9,7 +9,7 @@ import duck from "../../../assets/unit1/imgs/duck.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import ExerciseHeader from "../../ExerciseHeader";
-import duckSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
+import duckSound from "../../../assets/unit2/Page 17 - D/duck.mp3";
 import tigerSound from "../../../assets/unit2/Page 17 - D/tiger.mp3";
 import dishSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
 import tableSound from "../../../assets/unit2/Page 17 - D/Table.mp3";
@@ -408,10 +408,6 @@ const Unit2_Page8_Q1 = () => {
               <span
                 className={`word-text2 ${
                   selectedWord === "duck" ? "selected-item" : ""
-                } ${
-                  lockedWords.includes("duck") || showAnswer
-                    ? "disabled-hover"
-                    : ""
                 }`}
                 onClick={() => {
                   // الصوت يشتغل دائمًا
@@ -497,7 +493,6 @@ const Unit2_Page8_Q1 = () => {
                       lockedImages.includes("img1") || showAnswer
                         ? "default"
                         : "pointer",
-
                     width: "110px",
                     height: "100px",
                   }}
@@ -517,10 +512,6 @@ const Unit2_Page8_Q1 = () => {
               <span
                 className={`word-text2 ${
                   selectedWord === "tiger" ? "selected-item" : ""
-                } ${
-                  lockedWords.includes("tiger") || showAnswer
-                    ? "disabled-hover"
-                    : ""
                 }`}
                 onClick={() => {
                   playWordSound("tiger");
@@ -602,7 +593,6 @@ const Unit2_Page8_Q1 = () => {
                       lockedImages.includes("img2") || showAnswer
                         ? "default"
                         : "pointer",
-
                     width: "110px",
                     height: "110px",
                   }}
@@ -622,10 +612,6 @@ const Unit2_Page8_Q1 = () => {
               <span
                 className={`word-text2 ${
                   selectedWord === "dish" ? "selected-item" : ""
-                } ${
-                  lockedWords.includes("dish") || showAnswer
-                    ? "disabled-hover"
-                    : ""
                 }`}
                 onClick={() => {
                   playWordSound("dish");
@@ -707,7 +693,6 @@ const Unit2_Page8_Q1 = () => {
                       lockedImages.includes("img3") || showAnswer
                         ? "default"
                         : "pointer",
-
                     width: "110px",
                     height: "100px",
                   }}
@@ -727,10 +712,6 @@ const Unit2_Page8_Q1 = () => {
               <span
                 className={`word-text2 ${
                   selectedWord === "table" ? "selected-item" : ""
-                } ${
-                  lockedWords.includes("table") || showAnswer
-                    ? "disabled-hover"
-                    : ""
                 }`}
                 onClick={() => {
                   playWordSound("table");
@@ -812,7 +793,6 @@ const Unit2_Page8_Q1 = () => {
                       lockedImages.includes("img4") || showAnswer
                         ? "default"
                         : "pointer",
-
                     width: "110px",
                     height: "100px",
                   }}

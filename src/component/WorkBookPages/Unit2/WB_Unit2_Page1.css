@@ -69,3 +69,31 @@ position: absolute;
         left: 43%;
     }
 } */
+.correct-audio-image-wrapper {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.correct-audio-image-wrapper:hover {
+  border-color: #2c5287;
+  box-shadow: 0 3px 12px rgba(44, 82, 135, 0.18);
+}
+
+.correct-word-audio-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  font-size: 20px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+.correct-word-audio-icon.audio-playing {
+  transform: scale(1.12);
+}

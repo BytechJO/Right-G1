@@ -65,18 +65,22 @@ const exerciseData = {
     {
       img: girl1,
       sound: stella,
+      alt: "Stella",
     },
     {
       img: girl2,
       sound: helen,
+      alt: "Helen",
     },
     {
       img: boy1,
       sound: tom,
+      alt: "Tom",
     },
     {
       img: boy2,
       sound: harley,
+      alt: "Harley",
     },
   ],
 };
@@ -292,7 +296,7 @@ const DropCircle = ({
       >
         <img
           src={imgData.img}
-          alt=""
+          alt={imgData.alt}
           className="person-img"
           style={{
             cursor: "pointer",
@@ -300,14 +304,21 @@ const DropCircle = ({
           onClick={() => onPlaySound(imgData.sound, imageIndex)}
         />
 
+        {/* تظهر فقط أثناء تشغيل الصوت */}
+
         {activeAudioIndex === imageIndex && (
           <FaVolumeUp
             size={24}
+            aria-hidden="true"
             style={{
               position: "absolute",
+
               top: "6px",
+
               right: "6px",
+
               pointerEvents: "none",
+
               zIndex: 10,
             }}
           />
@@ -389,11 +400,13 @@ const Unit2_Page6_Q1 = () => {
   const [wrongDrops, setWrongDrops] = useState([]);
 
   // الخانات الصح بعد Check
+
   const [lockedDrops, setLockedDrops] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
   // بعد Check ناجح بالكامل
+
   const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeDrag, setActiveDrag] = useState(null);
@@ -406,14 +419,59 @@ const Unit2_Page6_Q1 = () => {
 
   const [activeAudioIndex, setActiveAudioIndex] = useState(null);
 
+  /* =====================================================
+     QUESTION AUDIO STOP SIGNAL
+  ===================================================== */
+
+  const [modelStopSignal, setModelStopSignal] = useState(0);
+
+  const stopModelAudio = () => {
+    setModelStopSignal((prev) => prev + 1);
+  };
+
+  /* =====================================================
+     STOP IMAGE AUDIO
+     pause فقط - بدون currentTime = 0
+  ===================================================== */
+
+  const stopImageAudio = () => {
+    if (clickAudioRef.current) {
+      clickAudioRef.current.pause();
+
+      clickAudioRef.current.onended = null;
+    }
+
+    setActiveAudioIndex(null);
+  };
+
+  /* =====================================================
+     PLAY IMAGE AUDIO
+  ===================================================== */
+
   const playSound = (src, index) => {
     if (!clickAudioRef.current) {
       return;
     }
 
+    /*
+      وقف QuestionAudioPlayer
+      عن طريق forceStop.
+    */
+
+    stopModelAudio();
+
+    /*
+      وقف صوت الصورة السابق فقط.
+      ما بنعمل currentTime = 0.
+    */
+
     clickAudioRef.current.pause();
 
-    clickAudioRef.current.currentTime = 0;
+    clickAudioRef.current.onended = null;
+
+    /*
+      حمّل الصوت الجديد.
+    */
 
     clickAudioRef.current.src = src;
 
@@ -428,6 +486,15 @@ const Unit2_Page6_Q1 = () => {
     clickAudioRef.current.onended = () => {
       setActiveAudioIndex(null);
     };
+  };
+
+  /* =====================================================
+     WHEN QUESTION AUDIO IS USED
+     وقف صوت الصورة بدون إرجاعه للصفر
+  ===================================================== */
+
+  const handleModelInteract = () => {
+    stopImageAudio();
   };
 
   /* =====================================================
@@ -450,6 +517,7 @@ const Unit2_Page6_Q1 = () => {
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 100,
+
         tolerance: 5,
       },
     }),
@@ -470,11 +538,15 @@ const Unit2_Page6_Q1 = () => {
   const handleDragEnd = (event) => {
     setActiveDrag(null);
 
-    if (showAnswer) return;
+    if (showAnswer) {
+      return;
+    }
 
     const { active, over } = event;
 
-    if (!over) return;
+    if (!over) {
+      return;
+    }
 
     const { pairId, source, dropId: fromDropId } = active.data.current;
 
@@ -502,7 +574,7 @@ const Unit2_Page6_Q1 = () => {
       };
 
       /* -------------------------
-           Drag from old drop
+             Drag from old drop
         ------------------------- */
 
       if (source === "drop") {
@@ -510,7 +582,7 @@ const Unit2_Page6_Q1 = () => {
       }
 
       /* -------------------------
-           Return to bank
+             Return to bank
         ------------------------- */
 
       if (toId === "letters") {
@@ -518,7 +590,7 @@ const Unit2_Page6_Q1 = () => {
       }
 
       /* -------------------------
-           Put in target
+             Put in target
         ------------------------- */
 
       next[toId] = pairId;
@@ -582,13 +654,26 @@ const Unit2_Page6_Q1 = () => {
 
     setActiveDrag(null);
 
+    /*
+      بالـ Reset فقط عادي نرجع
+      صوت الصورة من البداية.
+    */
+
     if (clickAudioRef.current) {
       clickAudioRef.current.pause();
 
       clickAudioRef.current.currentTime = 0;
+
+      clickAudioRef.current.onended = null;
     }
 
     setActiveAudioIndex(null);
+
+    /*
+      وقف QuestionAudioPlayer
+    */
+
+    stopModelAudio();
   };
 
   /* =====================================================
@@ -598,6 +683,7 @@ const Unit2_Page6_Q1 = () => {
   const handleCheckAnswers = () => {
     // بعد النجاح النهائي
     // أي Check ثاني ما يعمل شيء
+
     if (showAnswer || checkCompleted) {
       return;
     }
@@ -631,19 +717,19 @@ const Unit2_Page6_Q1 = () => {
     });
 
     /* =========================
-         LOCK CORRECT ONLY
+           LOCK CORRECT ONLY
       ========================= */
 
     setLockedDrops((prev) => Array.from(new Set([...prev, ...correctTemp])));
 
     /* =========================
-         WRONG ONLY
+           WRONG ONLY
       ========================= */
 
     setWrongDrops(wrongTemp);
 
     /* =========================
-         SCORE
+           SCORE
       ========================= */
 
     const color =
@@ -658,7 +744,7 @@ const Unit2_Page6_Q1 = () => {
       `;
 
     /* =========================
-         ALL CORRECT
+           ALL CORRECT
       ========================= */
 
     if (correctCount === total) {
@@ -674,7 +760,7 @@ const Unit2_Page6_Q1 = () => {
     }
 
     /* =========================
-         WRONG / PARTIAL
+           WRONG / PARTIAL
       ========================= */
 
     if (correctCount === 0) {
@@ -728,14 +814,24 @@ const Unit2_Page6_Q1 = () => {
             subTitle="Listen to each person, then drag the matching month to the correct picture."
           />
 
+          {/* =================================================
+              QUESTION AUDIO
+          ================================================= */}
+
           <QuestionAudioPlayer
             src={sound1}
             captions={captions}
             stopAtSecond={stopAtSecond}
             pageId="unit2-page15-1"
+            forceStop={modelStopSignal}
+            onInteract={handleModelInteract}
           />
 
           <div className="u2-container">
+            {/* =================================================
+                IMAGE AUDIO
+            ================================================= */}
+
             <audio
               ref={clickAudioRef}
               style={{

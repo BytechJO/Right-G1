@@ -1,127 +1,843 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
+
 import img1 from "../../../assets/U1 WB/U2/U2P12EXEH-01.svg";
 import img2 from "../../../assets/U1 WB/U2/U2P12EXEH-02.svg";
 import img3 from "../../../assets/U1 WB/U2/U2P12EXEH-03.svg";
 import img4 from "../../../assets/U1 WB/U2/U2P12EXEH-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit2_Page4_Q2.css";
-// import { faFootball } from "@fortawesome/free-solid-svg-icons";
+import ExerciseHeader from "../../ExerciseHeader";
+
+import { FaVolumeUp } from "react-icons/fa";
+
+// ======================================================
+// WORD AUDIOS
+// بدلي المسارات حسب ملفاتك
+// ======================================================
+
+import presentAudio from "../../../assets/U1 WB/U2/page_12/Item_001_It's_a_present.mp3";
+import cakeAudio from "../../../assets/U1 WB/U2/page_12/Item_002_It's_a_birthday_cake.mp3";
+import birthdayAudio from "../../../assets/U1 WB/U2/page_12/Item_003_Happy_birthday!.mp3";
+import jelloAudio from "../../../assets/U1 WB/U2/page_12/Item_004_It's_jello.mp3";
+
+// ======================================================
+// DATA
+// ======================================================
+
+const imageItems = [
+  {
+    id: "img1",
+    img: img1,
+    alt: "Children celebrating a birthday party",
+    number: 1,
+  },
+  {
+    id: "img2",
+    img: img2,
+    alt: "A bowl of jelly",
+    number: 2,
+  },
+  {
+    id: "img3",
+    img: img3,
+    alt: "A birthday present",
+    number: 3,
+  },
+  {
+    id: "img4",
+    img: img4,
+    alt: "A birthday cake",
+    number: 4,
+  },
+];
+
+const wordItems = [
+  {
+    word: "present",
+    label: "It’s a present.",
+    audio: presentAudio,
+  },
+  {
+    word: "cake",
+    label: "It’s a birthday cake.",
+    audio: cakeAudio,
+  },
+  {
+    word: "birthday",
+    label: "Happy birthday!",
+    audio: birthdayAudio,
+  },
+  {
+    word: "jello",
+    label: "It’s jello.",
+    audio: jelloAudio,
+  },
+];
+
+const correctMatches = [
+  {
+    word: "birthday",
+    image: "img1",
+  },
+  {
+    word: "jello",
+    image: "img2",
+  },
+  {
+    word: "present",
+    image: "img3",
+  },
+  {
+    word: "cake",
+    image: "img4",
+  },
+];
+
+// ======================================================
+// MAIN
+// ======================================================
+
 const WB_Unit2_Page4_Q2 = () => {
   const [lines, setLines] = useState([]);
+
   const containerRef = useRef(null);
-  let startPoint = null;
-  const [wrongWords, setWrongWords] = useState([]); // ⭐ تم التعديل هون
+
+  // ======================================================
+  // SELECTION
+  // ======================================================
+
   const [firstDot, setFirstDot] = useState(null);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [selectedWord, setSelectedWord] = useState(null);
+
+  // ======================================================
+  // CHECK
+  // ======================================================
+
+  const [wrongWords, setWrongWords] = useState([]);
+
+  const [wrongImages, setWrongImages] = useState([]);
+
+  const [lockedWords, setLockedWords] = useState([]);
+
+  const [lockedImages, setLockedImages] = useState([]);
+
   const [showAnswer, setShowAnswer] = useState(false);
-   const [selectedLeftWord, setSelectedLeftWord] = useState(null);
-    const [selectedRightWord, setSelectedRightWord] = useState(null);
-   
-  // ⭐⭐⭐ NEW: منع الرسم بعد Check Answer
-  const [locked, setLocked] = useState(false);
-  const correctMatches = [
-    { word: "Happy birthday!", image: "img1" },
-    { word: "It’s jello.", image: "img2" },
-    { word: "It’s a present.", image: "img3" },
-    { word: "It’s a birthday cake.", image: "img4" },
-  ];
 
-  // ============================
-  // 1️⃣ الضغط على النقطة الأولى (start-dot)
-  // ============================
-  const handleStartDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐ NEW: لا تسمح بالرسم عند القفل
+  const [checkCompleted, setCheckCompleted] = useState(false);
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const imgId = e.target.dataset.image;
-  setSelectedLeftWord(imgId);
-    // ⭐⭐⭐ NEW: منع رسم أكثر من خط من نفس الصورة
-    const alreadyUsed = lines.some((line) => line.image === imgId);
-    if (alreadyUsed) return;
-    // -----------------------------------------------------
+  // ======================================================
+  // WORD AUDIO
+  // ======================================================
 
-    setFirstDot({
-      image: imgId,
-      x: e.target.getBoundingClientRect().left - rect.left + 8,
-      y: e.target.getBoundingClientRect().top - rect.top + 8,
-    });
+  const audioRef = useRef(null);
+
+  const [activeAudioWord, setActiveAudioWord] = useState(null);
+
+  const stopWordAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+
+      // لما نوقف صوت بسبب صوت ثاني
+      // نرجعه للبداية
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
+
+      audioRef.current = null;
+    }
+
+    setActiveAudioWord(null);
   };
 
-  // ============================
-  // 2️⃣ الضغط على النقطة الثانية (end-dot)
-  // ============================
-  const handleEndDotClick = (e) => {
-    if (showAnswer || locked) return; // ⭐ NEW
-    if (!firstDot) return;
-
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const endWord = e.target.dataset.word || null;
-    const endImage = e.target.dataset.image || null;
-
-    const newLine = {
-      x1: firstDot.x,
-      y1: firstDot.y,
-      x2: e.target.getBoundingClientRect().left - rect.left + 8,
-      y2: e.target.getBoundingClientRect().top - rect.top + 8,
-
-      word: firstDot.word || endWord, // نأخذ الكلمة من البداية أو النهاية حسب المتوفر
-      image: firstDot.image || endImage, // نفس الشي للصورة
-    };
-
-    setLines((prev) => [...prev, newLine]);
-   
-
-    setSelectedRightWord(newLine.word);
-
-    setTimeout(() => {
-      setSelectedLeftWord(null);
-      setSelectedRightWord(null);
-    }, 300);
-
-    setFirstDot(null);
-  };
-
-  const checkAnswers2 = () => {
-    if (showAnswer || locked) return; // ⭐ NEW: لا يمكن إعادة التحقق
-    if (lines.length < correctMatches.length) {
-      ValidationAlert.info(
-        "Oops!",
-        "Please connect all the pairs before checking."
-      );
+  const playWordAudio = (item) => {
+    if (!item?.audio) {
       return;
     }
 
-    let wrong = [];
-    let correctCount = 0;
+    // وقف أي صوت سابق ورجعه للبداية
+    stopWordAudio();
 
-    lines.forEach((line) => {
-      const isCorrect = correctMatches.some(
-        (pair) => pair.word === line.word && pair.image === line.image
-      );
+    const audio = new Audio(item.audio);
 
-      if (isCorrect) correctCount++;
-      else wrong.push(line.word);
+    audioRef.current = audio;
+
+    setActiveAudioWord(item.word);
+
+    audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setActiveAudioWord(null);
     });
 
-    setWrongWords(wrong);
-    setLocked(true); // ⭐⭐⭐ NEW: أقفل الرسم بعد الضغط على Check Answer
+    audio.onended = () => {
+      audio.currentTime = 0;
+
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setActiveAudioWord(null);
+    };
+
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setActiveAudioWord(null);
+    };
+  };
+
+  // ======================================================
+  // HELPERS
+  // ======================================================
+
+  const isImageLocked = (image) => lockedImages.includes(image);
+
+  const isWordLocked = (word) => lockedWords.includes(word);
+
+  const isCorrectMatch = (word, image) => {
+    return correctMatches.some(
+      (pair) => pair.word === word && pair.image === image,
+    );
+  };
+
+  const getDotPosition = (element) => {
+    if (!element || !containerRef.current) {
+      return null;
+    }
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    const rect = element.getBoundingClientRect();
+
+    return {
+      x: rect.left - containerRect.left + rect.width / 2,
+
+      y: rect.top - containerRect.top + rect.height / 2,
+    };
+  };
+
+  // ======================================================
+  // CLEAR SELECTION
+  // ======================================================
+
+  const clearSelection = () => {
+    setFirstDot(null);
+
+    setSelectedImage(null);
+
+    setSelectedWord(null);
+  };
+
+  // ======================================================
+  // REMOVE OLD WRONG CONNECTIONS
+  // ======================================================
+
+  const removeEditableConnection = ({ image, word }) => {
+    setLines((prev) =>
+      prev.filter((line) => {
+        /*
+          الخط الصحيح المقفول ما بنلمسه.
+        */
+
+        const lineLocked = isImageLocked(line.image) || isWordLocked(line.word);
+
+        if (lineLocked) {
+          return true;
+        }
+
+        /*
+          إذا endpoint نفسه مستخدم بخط غلط قديم
+          نحذف الخط عشان نعيد التوصيل.
+        */
+
+        if (image && line.image === image) {
+          return false;
+        }
+
+        if (word && line.word === word) {
+          return false;
+        }
+
+        return true;
+      }),
+    );
+  };
+
+  // ======================================================
+  // START / COMPLETE FROM IMAGE
+  // ======================================================
+
+  const handleImageDotClick = (e) => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const image = e.currentTarget.dataset.image;
+
+    if (!image || isImageLocked(image)) {
+      return;
+    }
+
+    const position = getDotPosition(e.currentTarget);
+
+    if (!position) {
+      return;
+    }
+
+    /*
+      -----------------------------------
+      NO FIRST DOT
+      الصورة تصبح بداية التوصيل
+      -----------------------------------
+    */
+
+    if (!firstDot) {
+      removeEditableConnection({
+        image,
+      });
+
+      setWrongImages((prev) => prev.filter((item) => item !== image));
+
+      /*
+        إذا الخط القديم المحذوف كان مربوط
+        بكلمة غلط، شيل X عنها كمان.
+      */
+
+      const previousLine = lines.find(
+        (line) => line.image === image && !isImageLocked(line.image),
+      );
+
+      if (previousLine) {
+        setWrongWords((prev) =>
+          prev.filter((item) => item !== previousLine.word),
+        );
+      }
+
+      setFirstDot({
+        type: "image",
+        image,
+
+        x: position.x,
+        y: position.y,
+      });
+
+      setSelectedImage(image);
+
+      setSelectedWord(null);
+
+      return;
+    }
+
+    /*
+      -----------------------------------
+      ضغط صورة ثانية والصورة هي البداية
+      فقط بدل الاختيار
+      -----------------------------------
+    */
+
+    if (firstDot.type === "image") {
+      removeEditableConnection({
+        image,
+      });
+
+      setFirstDot({
+        type: "image",
+        image,
+
+        x: position.x,
+        y: position.y,
+      });
+
+      setSelectedImage(image);
+
+      setSelectedWord(null);
+
+      return;
+    }
+
+    /*
+      -----------------------------------
+      البداية كانت WORD
+      والنهاية الآن IMAGE
+      -----------------------------------
+    */
+
+    const word = firstDot.word;
+
+    if (isWordLocked(word)) {
+      clearSelection();
+
+      return;
+    }
+
+    /*
+      إذا الصورة أو الكلمة مستخدمة بخط غلط
+      نحذف الخط القديم.
+    */
+
+    const previousImageLine = lines.find((line) => line.image === image);
+
+    const previousWordLine = lines.find((line) => line.word === word);
+
+    if (
+      previousImageLine &&
+      (isImageLocked(previousImageLine.image) ||
+        isWordLocked(previousImageLine.word))
+    ) {
+      clearSelection();
+
+      return;
+    }
+
+    if (
+      previousWordLine &&
+      (isImageLocked(previousWordLine.image) ||
+        isWordLocked(previousWordLine.word))
+    ) {
+      clearSelection();
+
+      return;
+    }
+
+    const newLine = {
+      x1: firstDot.x,
+
+      y1: firstDot.y,
+
+      x2: position.x,
+
+      y2: position.y,
+
+      word,
+
+      image,
+    };
+
+    setLines((prev) => {
+      const filtered = prev.filter(
+        (line) => line.word !== word && line.image !== image,
+      );
+
+      return [...filtered, newLine];
+    });
+
+    setWrongWords((prev) =>
+      prev.filter((item) => item !== word && item !== previousImageLine?.word),
+    );
+
+    setWrongImages((prev) =>
+      prev.filter((item) => item !== image && item !== previousWordLine?.image),
+    );
+
+    setSelectedImage(image);
+
+    setSelectedWord(word);
+
+    window.setTimeout(() => {
+      clearSelection();
+    }, 300);
+  };
+
+  // ======================================================
+  // START / COMPLETE FROM WORD
+  // ======================================================
+
+  const handleWordDotClick = (e) => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const word = e.currentTarget.dataset.word;
+
+    if (!word || isWordLocked(word)) {
+      return;
+    }
+
+    const position = getDotPosition(e.currentTarget);
+
+    if (!position) {
+      return;
+    }
+
+    /*
+      -----------------------------------
+      NO FIRST DOT
+      الكلمة تصبح بداية التوصيل
+      -----------------------------------
+    */
+
+    if (!firstDot) {
+      removeEditableConnection({
+        word,
+      });
+
+      setWrongWords((prev) => prev.filter((item) => item !== word));
+
+      const previousLine = lines.find(
+        (line) => line.word === word && !isWordLocked(line.word),
+      );
+
+      if (previousLine) {
+        setWrongImages((prev) =>
+          prev.filter((item) => item !== previousLine.image),
+        );
+      }
+
+      setFirstDot({
+        type: "word",
+        word,
+
+        x: position.x,
+        y: position.y,
+      });
+
+      setSelectedWord(word);
+
+      setSelectedImage(null);
+
+      return;
+    }
+
+    /*
+      -----------------------------------
+      ضغط كلمة ثانية والكلمة هي البداية
+      فقط بدل الاختيار
+      -----------------------------------
+    */
+
+    if (firstDot.type === "word") {
+      removeEditableConnection({
+        word,
+      });
+
+      setFirstDot({
+        type: "word",
+        word,
+
+        x: position.x,
+        y: position.y,
+      });
+
+      setSelectedWord(word);
+
+      setSelectedImage(null);
+
+      return;
+    }
+
+    /*
+      -----------------------------------
+      البداية IMAGE
+      والنهاية WORD
+      -----------------------------------
+    */
+
+    const image = firstDot.image;
+
+    if (isImageLocked(image)) {
+      clearSelection();
+
+      return;
+    }
+
+    const previousWordLine = lines.find((line) => line.word === word);
+
+    const previousImageLine = lines.find((line) => line.image === image);
+
+    if (
+      previousWordLine &&
+      (isImageLocked(previousWordLine.image) ||
+        isWordLocked(previousWordLine.word))
+    ) {
+      clearSelection();
+
+      return;
+    }
+
+    if (
+      previousImageLine &&
+      (isImageLocked(previousImageLine.image) ||
+        isWordLocked(previousImageLine.word))
+    ) {
+      clearSelection();
+
+      return;
+    }
+
+    const newLine = {
+      x1: firstDot.x,
+
+      y1: firstDot.y,
+
+      x2: position.x,
+
+      y2: position.y,
+
+      word,
+
+      image,
+    };
+
+    setLines((prev) => {
+      const filtered = prev.filter(
+        (line) => line.word !== word && line.image !== image,
+      );
+
+      return [...filtered, newLine];
+    });
+
+    setWrongWords((prev) =>
+      prev.filter((item) => item !== word && item !== previousImageLine?.word),
+    );
+
+    setWrongImages((prev) =>
+      prev.filter((item) => item !== image && item !== previousWordLine?.image),
+    );
+
+    setSelectedImage(image);
+
+    setSelectedWord(word);
+
+    window.setTimeout(() => {
+      clearSelection();
+    }, 300);
+  };
+
+  // ======================================================
+  // IMAGE CLICK
+  // ======================================================
+
+  const handleImageClick = (imageId) => {
+    if (showAnswer || checkCompleted || isImageLocked(imageId)) {
+      return;
+    }
+
+    document.getElementById(`dot-${imageId}`)?.click();
+  };
+
+  // ======================================================
+  // WORD CLICK
+  // الصوت دائمًا يشتغل
+  // والتوصيل يشتغل فقط إذا مش مقفول
+  // ======================================================
+
+  const handleWordClick = (item) => {
+    /*
+      الصوت يشتغل حتى بعد Check
+      وحتى لو الكلمة صح ومقفلة.
+    */
+
+    playWordAudio(item);
+
+    /*
+      التوصيل فقط يتوقف بعد القفل.
+    */
+
+    if (showAnswer || checkCompleted || isWordLocked(item.word)) {
+      return;
+    }
+
+    document.getElementById(`dot-${item.word}`)?.click();
+  };
+
+  // ======================================================
+  // CHECK
+  // ======================================================
+
+  const checkAnswers2 = () => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    if (lines.length < correctMatches.length) {
+      ValidationAlert.info(
+        "Oops!",
+        "Please connect all the pairs before checking.",
+      );
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const wrongWordTemp = [];
+    const wrongImageTemp = [];
+
+    const correctWordTemp = [];
+    const correctImageTemp = [];
+
+    lines.forEach((line) => {
+      const correct = isCorrectMatch(line.word, line.image);
+
+      if (correct) {
+        correctCount++;
+
+        correctWordTemp.push(line.word);
+
+        correctImageTemp.push(line.image);
+      } else {
+        wrongWordTemp.push(line.word);
+
+        wrongImageTemp.push(line.image);
+      }
+    });
+
+    // ======================================================
+    // LOCK CORRECT ONLY
+    // ======================================================
+
+    setLockedWords((prev) =>
+      Array.from(new Set([...prev, ...correctWordTemp])),
+    );
+
+    setLockedImages((prev) =>
+      Array.from(new Set([...prev, ...correctImageTemp])),
+    );
+
+    // ======================================================
+    // WRONG ONLY
+    // ======================================================
+
+    setWrongWords(wrongWordTemp);
+
+    setWrongImages(wrongImageTemp);
+
+    clearSelection();
 
     const total = correctMatches.length;
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-      <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-        <span style="color:${color}; font-weight:bold;">
-           Score: ${correctCount} / ${total}
+      <div style="font-size:20px;margin-top:10px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
+    // ======================================================
+    // ALL CORRECT
+    // ======================================================
+
+    if (correctCount === total) {
+      setLockedWords(correctMatches.map((item) => item.word));
+
+      setLockedImages(correctMatches.map((item) => item.image));
+
+      setWrongWords([]);
+
+      setWrongImages([]);
+
+      setCheckCompleted(true);
+
+      ValidationAlert.success(scoreMessage);
+
+      return;
+    }
+
+    if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
+
+  // ======================================================
+  // SHOW ANSWER
+  // ======================================================
+
+  const handleShowAnswer = () => {
+    if (!containerRef.current) {
+      return;
+    }
+
+    clearSelection();
+
+    setWrongWords([]);
+
+    setWrongImages([]);
+
+    const finalLines = correctMatches.map((pair) => {
+      const wordDot = document.querySelector(`[data-word="${pair.word}"]`);
+
+      const imageDot = document.querySelector(`[data-image="${pair.image}"]`);
+
+      const wordPosition = getDotPosition(wordDot);
+
+      const imagePosition = getDotPosition(imageDot);
+
+      return {
+        /*
+              نخلي الرسم من الصورة للكلمة
+              لكن النتيجة نفسها.
+            */
+
+        x1: imagePosition?.x ?? 0,
+
+        y1: imagePosition?.y ?? 0,
+
+        x2: wordPosition?.x ?? 0,
+
+        y2: wordPosition?.y ?? 0,
+
+        word: pair.word,
+
+        image: pair.image,
+      };
+    });
+
+    setLines(finalLines);
+
+    setLockedWords(correctMatches.map((item) => item.word));
+
+    setLockedImages(correctMatches.map((item) => item.image));
+
+    setShowAnswer(true);
+
+    setCheckCompleted(true);
+  };
+
+  // ======================================================
+  // RESET
+  // ======================================================
+
+  const reset = () => {
+    stopWordAudio();
+
+    setLines([]);
+
+    setWrongWords([]);
+
+    setWrongImages([]);
+
+    setLockedWords([]);
+
+    setLockedImages([]);
+
+    setFirstDot(null);
+
+    setShowAnswer(false);
+
+    setCheckCompleted(false);
+
+    setSelectedImage(null);
+
+    setSelectedWord(null);
+  };
+
+  // ======================================================
+  // RENDER
+  // ======================================================
 
   return (
     <div
@@ -136,267 +852,158 @@ const WB_Unit2_Page4_Q2 = () => {
       <div
         className="div-forall"
         style={{
-          gap: "10px",
-   
+          gap: "30px",
         }}
       >
-        
-          <h5 className="header-title-page8">
-            {" "}
-            <span className="ex-A">H</span> Look, read, and match.
-          </h5>
+        <ExerciseHeader
+          sectionLetter="H"
+          title="Look, read, and match."
+          subTitle="Connect each birthday picture to the sentence that describes it."
+        />
 
-          <div className="container12 w-full" ref={containerRef}>
-            {/* الصف الأول */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="img-with-dot2">
-                <span className="span-num2">1</span>{" "}
-                <img
-                  src={img1}
-                   className={`matched-img2 
-                    ${
-                      selectedLeftWord === "img1" ? "selected-item" : ""
-                    }
-                    ${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
-                  alt=""
-                  onClick={() => document.getElementById("dot-img1").click()}
-                  style={{ height: "auto", width: "120px", cursor: "pointer" }}
-                />
-                {wrongWords.includes("Happy birthday!") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
-                )}{" "}
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    data-image="img1"
-                    id="dot-img1"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-              <div className="word-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-word="It’s a present."
-                    id="dot-ball"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
+        <div className="container12-unit2-pg10-q2" ref={containerRef}>
+          {imageItems.map((imageItem, index) => {
+            const wordItem = wordItems[index];
 
-                <span
-                 className={`word-text2-wb-unit2-p4-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-ball").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  It’s a present.
-                </span>
-              </div>
-            </div>
+            const imageLocked = isImageLocked(imageItem.id);
 
-            {/* الصف الثاني */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="img-with-dot2">
-                <span className="span-num2">2</span>{" "}
-                <img
-                  src={img2}
-                  className={`matched-img2 ${
-                      selectedLeftWord === "img2" ? "selected-item" : ""
-                    }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
-                  alt=""
-                  onClick={() => document.getElementById("dot-img2").click()}
-                  style={{ height: "auto", width: "120px", cursor: "pointer" }}
-                />
-                {wrongWords.includes("It’s jello.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
-                )}{" "}
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    data-image="img2"
-                    id="dot-img2"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-              <div className="word-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-word="It’s a birthday cake."
-                    id="dot-pizza"
-                    onClick={handleEndDotClick}
-                  ></div>
+            const wordLocked = isWordLocked(wordItem.word);
+
+            const wordIsPlaying = activeAudioWord === wordItem.word;
+
+            return (
+              <div className="matching-row2" key={imageItem.id}>
+                {/* =================================================
+                      IMAGE SIDE
+                  ================================================= */}
+
+                <div className="img-with-dot2">
+                  <span className="span-num2">{imageItem.number}</span>
+
+                  <img
+                    src={imageItem.img}
+                    alt={imageItem.alt}
+                    className={`matched-img2 ${
+                      selectedImage === imageItem.id ? "selected-item" : ""
+                    }`}
+                    onClick={() => handleImageClick(imageItem.id)}
+                    style={{
+                      height: "auto",
+
+                      width: "120px",
+
+                      cursor:
+                        imageLocked || showAnswer || checkCompleted
+                          ? "default"
+                          : "pointer",
+                    }}
+                  />
+
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 start-dot2"
+                      data-image={imageItem.id}
+                      id={`dot-${imageItem.id}`}
+                      onClick={handleImageDotClick}
+                    />
+                  </div>
                 </div>
 
-                <span
-                  className={`word-text2-wb-unit2-p4-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-pizza").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  It’s a birthday cake.
-                </span>
-              </div>
-            </div>
-            {/* الصف الثالث */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="img-with-dot2">
-                <span className="span-num2">3</span>{" "}
-                <img
-                  src={img3}
-                   className={`matched-img2 ${
-                      selectedLeftWord === "img3" ? "selected-item" : ""
-                    }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
-                  alt=""
-                  onClick={() => document.getElementById("dot-img3").click()}
-                  style={{ height: "auto", width: "120px", cursor: "pointer" }}
-                />
-                {wrongWords.includes("It’s a present.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
-                )}{" "}
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    id="dot-img3"
-                    data-image="img3"
-                    onClick={handleStartDotClick}
-                  ></div>
+                {/* =================================================
+                      WORD SIDE
+                  ================================================= */}
+
+                <div className="word-with-dot2">
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 end-dot2"
+                      data-word={wordItem.word}
+                      id={`dot-${wordItem.word}`}
+                      onClick={handleWordDotClick}
+                    />
+                  </div>
+
+                  <span
+                    className={`word-text ${
+                      selectedWord === wordItem.word ? "selected-item" : ""
+                    }`}
+                    onClick={() => handleWordClick(wordItem)}
+                    style={{
+                      cursor: "pointer",
+
+                      position: "relative",
+
+                      display: "inline-flex",
+
+                      alignItems: "center",
+
+                      gap: "8px",
+                    }}
+                  >
+                    {wordItem.label}
+
+                    {/* =================================================
+                          AUDIO ICON
+                          تظهر فقط أثناء الصوت
+                      ================================================= */}
+
+                    {wordIsPlaying && (
+                      <FaVolumeUp
+                        aria-hidden="true"
+                        size={18}
+                        style={{
+                          flexShrink: 0,
+
+                          pointerEvents: "none",
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  {wrongWords.includes(wordItem.word) && (
+                    <span className="error-mark8-u2-p19-q2">✕</span>
+                  )}
                 </div>
               </div>
-              <div className="word-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-word="Happy birthday!"
-                    id="dot-bird"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
+            );
+          })}
 
-                <span
-                  className={`word-text2-wb-unit2-p4-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-bird").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  Happy birthday!
-                </span>
-              </div>
-            </div>
+          {/* =================================================
+              LINES
+          ================================================= */}
 
-            {/* الصف الرابع */}
-            <div className="matching-row2-wb-unit2-p4-q2">
-              <div className="img-with-dot2">
-                <span className="span-num2">4</span>{" "}
-                <img
-                  src={img4}
-                  className={`matched-img2 ${
-                      selectedLeftWord === "img4" ? "selected-item" : ""
-                    }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
-                  alt=""
-                  onClick={() => document.getElementById("dot-img4").click()}
-                  style={{ height: "auto", width: "120px", cursor: "pointer" }}
-                />
-                {wrongWords.includes("It’s a birthday cake.") && ( // ⭐ تم التعديل هون
-                  <span className="error-mark8-wb-unit2-p4-q2">✕</span>
-                )}{" "}
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 start-dot2"
-                    data-image="img4"
-                    id="dot-img4"
-                    onClick={handleStartDotClick}
-                  ></div>
-                </div>
-              </div>
-              <div className="word-with-dot2">
-                <div className="dot-wrapper2">
-                  <div
-                    className="dot2 end-dot2"
-                    data-word="It’s jello."
-                    id="dot-boy"
-                    onClick={handleEndDotClick}
-                  ></div>
-                </div>
-
-                <span
-                  className={`word-text2-wb-unit2-p4-q2 ${
-                    locked || showAnswer ? "disabled-word" : ""
-                  }`}
-                  onClick={() => document.getElementById("dot-boy").click()}
-                  style={{ cursor: "pointer" }}
-                >
-                  It’s jello.
-                </span>
-              </div>
-            </div>
-
-            <svg className="lines-layer2">
-              {lines.map((line, i) => (
-                <line key={i} {...line} stroke="red" strokeWidth="3" />
-              ))}
-            </svg>
-          </div>
+          <svg className="lines-layer2">
+            {lines.map((line, index) => (
+              <line
+                key={`${line.word}-${line.image}-${index}`}
+                x1={line.x1}
+                y1={line.y1}
+                x2={line.x2}
+                y2={line.y2}
+                stroke="red"
+                strokeWidth="3"
+              />
+            ))}
+          </svg>
         </div>
-      
+      </div>
+
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
+
       <div className="action-buttons-container">
-        <button
-          onClick={() => {
-            setLines([]);
-            setWrongWords([]);
-            setFirstDot(null);
-            setShowAnswer(false);
-            setLocked(false); // ⭐⭐⭐ NEW: إعادة فتح الرسم
-          }}
-          className="try-again-button"
-        >
+        <button onClick={reset} className="try-again-button">
           Start Again ↻
         </button>
-        {/* Show Answer */}
+
         <button
-          onClick={() => {
-            const rect = containerRef.current.getBoundingClientRect();
-
-            const getDotPosition = (selector) => {
-              const el = document.querySelector(selector);
-              if (!el) return { x: 0, y: 0 };
-              const r = el.getBoundingClientRect();
-              return {
-                x: r.left - rect.left + 8,
-                y: r.top - rect.top + 8,
-              };
-            };
-
-            const finalLines = correctMatches.map((line) => ({
-              ...line,
-              x1: getDotPosition(`[data-word="${line.word}"]`).x,
-              y1: getDotPosition(`[data-word="${line.word}"]`).y,
-              x2: getDotPosition(`[data-image="${line.image}"]`).x,
-              y2: getDotPosition(`[data-image="${line.image}"]`).y,
-            }));
-
-            setLines(finalLines);
-            setWrongWords([]);
-            setShowAnswer(true);
-            setLocked(true); // ⭐ NEW: ممنوع الرسم بعد Show Answer
-          }}
+          onClick={handleShowAnswer}
           className="show-answer-btn swal-continue"
         >
           Show Answer
         </button>
+
         <button onClick={checkAnswers2} className="check-button2">
           Check Answer ✓
         </button>
