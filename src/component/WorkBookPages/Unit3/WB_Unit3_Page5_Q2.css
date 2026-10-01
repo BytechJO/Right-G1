@@ -1,0 +1,122 @@
+/* =====================================================
+   WORD TAB FOCUS
+===================================================== */
+
+.word-text2-wb-unit3-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.18),
+    0 0 12px rgba(37, 99, 235, 0.35);
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   KEYBOARD IMAGE TARGET
+===================================================== */
+
+.keyboard-preview-dot-wb-u3-p5-q2 {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(250, 204, 21, 0.35),
+    0 0 12px rgba(250, 204, 21, 0.6);
+}
+
+.dot2:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.28),
+    0 0 12px rgba(37, 99, 235, 0.55);
+}
+
+/* =====================================================
+   DASHED PREVIEW LINE
+   Keyboard only
+===================================================== */
+
+.keyboard-preview-line-wb-u3-p5-q2 {
+  stroke: #2563eb;
+
+  stroke-width: 3;
+
+  stroke-dasharray: 9 7;
+
+  stroke-linecap: round;
+
+  opacity: 0.9;
+
+  pointer-events: none;
+
+  animation: wb-u3-p5-q2-preview-line 0.65s linear infinite;
+}
+
+@keyframes wb-u3-p5-q2-preview-line {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+.matching-row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+.word-with-dot2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  min-width: 320px;
+}
+
+.span-num2 {
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: 700;
+  color: purple;
+  line-height: 1;
+}
+
+.word-text2-wb-unit3-p5-q2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  word-break: keep-all;
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.dot-wrapper2 {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-with-dot2 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+}
+
+.matched-img2 {
+  display: block;
+  width: auto;
+  height: 100px;
+  object-fit: contain;
+}

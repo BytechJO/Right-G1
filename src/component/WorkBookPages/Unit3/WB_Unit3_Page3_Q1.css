@@ -1,6 +1,6 @@
 .row-content10-wb-unit3-page3-q1 {
     display: grid;
-    /* margin-bottom: 55px; */
+    margin-bottom: 55px;
     gap: 22px;
     /* margin-top: 20px; */
     grid-template-columns: 1fr 1fr 1fr;

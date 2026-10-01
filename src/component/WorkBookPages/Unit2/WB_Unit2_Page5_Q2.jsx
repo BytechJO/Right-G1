@@ -524,76 +524,130 @@ export default function WB_Unit2_Page5_Q2() {
   /* =====================================================
      POINTER DRAG
   ===================================================== */
+  /* =====================================================
+   POINTER DRAG
+   Mouse + iPad + Apple Pencil
+===================================================== */
 
-  const handlePointerDown = (r, c) => {
+  const pointerStartRef = useRef(null);
+  const pointerCurrentRef = useRef(null);
+  const pointerDraggingRef = useRef(false);
+
+  const getCellFromPoint = (clientX, clientY) => {
+    const el = document.elementFromPoint(clientX, clientY);
+
+    if (!el) return null;
+
+    const cell = el.closest?.("[data-wordsearch-cell='true']");
+
+    if (!cell) return null;
+
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+
+    if (Number.isNaN(r) || Number.isNaN(c)) {
+      return null;
+    }
+
+    return [r, c];
+  };
+
+  const handlePointerDown = (e, r, c) => {
     if (checkCompleted || showAnswer || isFoundCell(r, c)) {
       return;
     }
 
-    setIsDragging(true);
+    e.preventDefault();
 
-    dragStartRef.current = [r, c];
+    pointerDraggingRef.current = true;
+
+    pointerStartRef.current = [r, c];
+    pointerCurrentRef.current = [r, c];
 
     setStartCell([r, c]);
 
     setPreviewCells([[r, c]]);
   };
 
-  const handlePointerEnter = (r, c) => {
-    if (!isDragging || !dragStartRef.current) {
-      return;
-    }
+  const handlePointerMove = (e) => {
+    if (!pointerDraggingRef.current) return;
 
-    const path = getPath(dragStartRef.current, [r, c]);
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    const target = getCellFromPoint(e.clientX, e.clientY);
+
+    if (!target) return;
+
+    const [r, c] = target;
+
+    pointerCurrentRef.current = [r, c];
+
+    const path = getPath(start, [r, c]);
 
     if (path.length > 0) {
       setPreviewCells(path);
     }
   };
 
-  const handlePointerUp = (r, c) => {
-    if (!isDragging) {
-      return;
+  const handlePointerEnter = (r, c) => {
+    if (!pointerDraggingRef.current) return;
+
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    pointerCurrentRef.current = [r, c];
+
+    const path = getPath(start, [r, c]);
+
+    if (path.length > 0) {
+      setPreviewCells(path);
+    }
+  };
+
+  const handlePointerUp = (e) => {
+    if (!pointerDraggingRef.current) return;
+
+    e.preventDefault();
+
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    let end = getCellFromPoint(e.clientX, e.clientY);
+
+    if (!end) {
+      end = pointerCurrentRef.current || start;
     }
 
-    setIsDragging(false);
+    pointerDraggingRef.current = false;
 
-    const start = dragStartRef.current;
+    pointerStartRef.current = null;
+    pointerCurrentRef.current = null;
 
-    dragStartRef.current = null;
-
-    if (!start) {
-      return;
-    }
+    /*
+    نخلي startCell ثابت مؤقتًا
+    لأن completeSelection يعتمد عليه
+  */
 
     setStartCell(start);
 
-    /*
-      نخلي React يحدث startCell أول
-      وبعدين نكمل التحديد.
-    */
-
     window.setTimeout(() => {
-      completeSelection(r, c);
+      completeSelection(end[0], end[1]);
     }, 0);
   };
 
-  /* =====================================================
-     POINTER CANCEL
-  ===================================================== */
-
   const cancelDrag = () => {
-    if (!isDragging) return;
+    pointerDraggingRef.current = false;
 
-    setIsDragging(false);
-
-    dragStartRef.current = null;
+    pointerStartRef.current = null;
+    pointerCurrentRef.current = null;
 
     setStartCell(null);
-
     setPreviewCells([]);
   };
-
   /* =====================================================
      CHECK ANSWERS
   ===================================================== */
@@ -854,6 +908,9 @@ export default function WB_Unit2_Page5_Q2() {
                           cellRefs.current[`${rIdx}-${cIdx}`] = node;
                         }}
                         role="gridcell"
+                        data-wordsearch-cell="true"
+                        data-row={rIdx}
+                        data-col={cIdx}
                         tabIndex={
                           showAnswer || checkCompleted ? -1 : isActive ? 0 : -1
                         }
@@ -865,16 +922,18 @@ export default function WB_Unit2_Page5_Q2() {
                         aria-selected={preview || found}
                         onFocus={() => setActiveCell([rIdx, cIdx])}
                         className={`
-                              cell-wb-u2-p5-q2
-                              ${preview ? "highlight" : ""}
-                              ${found ? "found" : ""}
-                              ${isStart ? "start-cell" : ""}
-                            `}
+    cell-wb-u2-p5-q2
+    ${preview ? "highlight" : ""}
+    ${found ? "found" : ""}
+    ${isStart ? "start-cell" : ""}
+  `}
                         onClick={() => handleCellClick(rIdx, cIdx)}
                         onKeyDown={(e) => handleCellKeyDown(e, rIdx, cIdx)}
-                        onPointerDown={() => handlePointerDown(rIdx, cIdx)}
+                        onPointerDown={(e) => handlePointerDown(e, rIdx, cIdx)}
+                        onPointerMove={handlePointerMove}
                         onPointerEnter={() => handlePointerEnter(rIdx, cIdx)}
-                        onPointerUp={() => handlePointerUp(rIdx, cIdx)}
+                        onPointerUp={handlePointerUp}
+                        onPointerCancel={cancelDrag}
                       >
                         {cell}
                       </div>

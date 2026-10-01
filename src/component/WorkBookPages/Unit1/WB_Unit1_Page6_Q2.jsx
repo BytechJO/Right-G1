@@ -152,10 +152,9 @@ export default function WB_Unit1_Page6_Q2() {
 
   const [activeCell, setActiveCell] = useState([0, 0]);
 
-  const [isDragging, setIsDragging] = useState(false);
-
-  const dragStartRef = useRef(null);
-
+  const pointerStartRef = useRef(null);
+  const pointerCurrentRef = useRef(null);
+  const pointerDraggingRef = useRef(false);
   const audioRef = useRef(null);
 
   const cellRefs = useRef({});
@@ -410,57 +409,128 @@ export default function WB_Unit1_Page6_Q2() {
       setAnnouncement("Selection cancelled.");
     }
   };
-
   // ========================================
   // POINTER DRAG
+  // Mouse + iPad + Apple Pencil
   // ========================================
 
-  const handlePointerDown = (r, c) => {
+  const getCellFromPoint = (clientX, clientY) => {
+    const element = document.elementFromPoint(clientX, clientY);
+
+    if (!element) return null;
+
+    const cell = element.closest?.("[data-wordsearch-cell='true']");
+
+    if (!cell) return null;
+
+    const r = Number(cell.dataset.row);
+    const c = Number(cell.dataset.col);
+
+    if (Number.isNaN(r) || Number.isNaN(c)) {
+      return null;
+    }
+
+    return [r, c];
+  };
+
+  const handlePointerDown = (e, r, c) => {
     if (checkCompleted || showAnswer || isFoundCell(r, c)) {
       return;
     }
 
-    setIsDragging(true);
+    e.preventDefault();
 
-    dragStartRef.current = [r, c];
+    pointerDraggingRef.current = true;
+
+    pointerStartRef.current = [r, c];
+
+    pointerCurrentRef.current = [r, c];
 
     setStartCell([r, c]);
 
     setPreviewCells([[r, c]]);
   };
 
-  const handlePointerEnter = (r, c) => {
-    if (!isDragging || !dragStartRef.current) {
-      return;
-    }
+  const handlePointerMove = (e) => {
+    if (!pointerDraggingRef.current) return;
 
-    const path = getPath(dragStartRef.current, [r, c]);
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    const target = getCellFromPoint(e.clientX, e.clientY);
+
+    if (!target) return;
+
+    const [r, c] = target;
+
+    pointerCurrentRef.current = [r, c];
+
+    const path = getPath(start, [r, c]);
 
     if (path.length > 0) {
       setPreviewCells(path);
     }
   };
 
-  const handlePointerUp = (r, c) => {
-    if (!isDragging) {
-      return;
+  const handlePointerEnter = (r, c) => {
+    if (!pointerDraggingRef.current) return;
+
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    pointerCurrentRef.current = [r, c];
+
+    const path = getPath(start, [r, c]);
+
+    if (path.length > 0) {
+      setPreviewCells(path);
+    }
+  };
+
+  const handlePointerUp = (e) => {
+    if (!pointerDraggingRef.current) return;
+
+    e.preventDefault();
+
+    const start = pointerStartRef.current;
+
+    if (!start) return;
+
+    let end = getCellFromPoint(e.clientX, e.clientY);
+
+    if (!end) {
+      end = pointerCurrentRef.current || start;
     }
 
-    setIsDragging(false);
+    pointerDraggingRef.current = false;
 
-    const start = dragStartRef.current;
+    pointerStartRef.current = null;
 
-    dragStartRef.current = null;
+    pointerCurrentRef.current = null;
 
-    if (!start) {
-      return;
-    }
-
+    /*
+    completeSelection بيعتمد على startCell،
+    لذلك نخليه مضبوط أول.
+  */
     setStartCell(start);
 
     window.setTimeout(() => {
-      completeSelection(r, c);
+      completeSelection(end[0], end[1]);
     }, 0);
+  };
+
+  const cancelDrag = () => {
+    pointerDraggingRef.current = false;
+
+    pointerStartRef.current = null;
+
+    pointerCurrentRef.current = null;
+
+    setStartCell(null);
+
+    setPreviewCells([]);
   };
 
   // ========================================
@@ -496,9 +566,9 @@ export default function WB_Unit1_Page6_Q2() {
 
     setPreviewCells([]);
 
-    setIsDragging(false);
-
-    dragStartRef.current = null;
+    pointerDraggingRef.current = false;
+    pointerStartRef.current = null;
+    pointerCurrentRef.current = null;
 
     const total = words.length;
 
@@ -562,10 +632,9 @@ export default function WB_Unit1_Page6_Q2() {
 
     setPreviewCells([]);
 
-    setIsDragging(false);
-
-    dragStartRef.current = null;
-
+    pointerDraggingRef.current = false;
+    pointerStartRef.current = null;
+    pointerCurrentRef.current = null;
     setShowAnswer(true);
 
     setCheckCompleted(true);
@@ -592,10 +661,9 @@ export default function WB_Unit1_Page6_Q2() {
 
     setCheckCompleted(false);
 
-    setIsDragging(false);
-
-    dragStartRef.current = null;
-
+    pointerDraggingRef.current = false;
+    pointerStartRef.current = null;
+    pointerCurrentRef.current = null;
     setActiveCell([0, 0]);
 
     setAnnouncement("Activity reset.");
@@ -676,6 +744,9 @@ export default function WB_Unit1_Page6_Q2() {
                           cellRefs.current[`${rIdx}-${cIdx}`] = node;
                         }}
                         role="gridcell"
+                        data-wordsearch-cell="true"
+                        data-row={rIdx}
+                        data-col={cIdx}
                         tabIndex={
                           showAnswer || checkCompleted
                             ? -1
@@ -693,16 +764,18 @@ export default function WB_Unit1_Page6_Q2() {
                           setActiveCell([rIdx, cIdx]);
                         }}
                         className={`
-                              cell-wb-u1-p6-q2
-                              ${preview ? "highlight" : ""}
-                              ${found ? "found" : ""}
-                              ${isStart ? "start-cell" : ""}
-                            `}
+    cell-wb-u1-p6-q2
+    ${preview ? "highlight" : ""}
+    ${found ? "found" : ""}
+    ${isStart ? "start-cell" : ""}
+  `}
                         onClick={() => handleCellClick(rIdx, cIdx)}
                         onKeyDown={(e) => handleCellKeyDown(e, rIdx, cIdx)}
-                        onPointerDown={() => handlePointerDown(rIdx, cIdx)}
+                        onPointerDown={(e) => handlePointerDown(e, rIdx, cIdx)}
+                        onPointerMove={handlePointerMove}
                         onPointerEnter={() => handlePointerEnter(rIdx, cIdx)}
-                        onPointerUp={() => handlePointerUp(rIdx, cIdx)}
+                        onPointerUp={handlePointerUp}
+                        onPointerCancel={cancelDrag}
                       >
                         {cell}
                       </div>

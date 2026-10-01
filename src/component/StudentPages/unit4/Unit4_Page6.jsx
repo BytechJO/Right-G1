@@ -41,7 +41,7 @@ const Unit4_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 35 })}
+          onClick={() => openPopup("exercise", { startIndex: 36 })}
           style={{ overflow: "visible" }}
         >
           <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>

@@ -23,9 +23,16 @@ const Unit7_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 73 })}
+          onClick={() => openPopup("exercise", { startIndex: 74 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
       <div
@@ -37,9 +44,16 @@ const Unit7_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 74 })}
+          onClick={() => openPopup("exercise", { startIndex: 75 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
       <div
@@ -51,9 +65,16 @@ const Unit7_Page5 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 75 })}
+          onClick={() => openPopup("exercise", { startIndex: 76 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
 
@@ -68,7 +89,14 @@ const Unit7_Page5 = ({ openPopup }) => {
           style={{ overflow: "visible" }}
           onClick={() => openPopup("exercise", { startIndex: 76 })}
         >
-          <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
     </div>

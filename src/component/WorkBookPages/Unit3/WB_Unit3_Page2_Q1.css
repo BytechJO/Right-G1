@@ -1,45 +1,411 @@
+/* =====================================================
+   MAIN
+===================================================== */
+
+.wb-u3-p2-q1-main {
+  display: flex;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+/* =====================================================
+   SCREEN READER
+===================================================== */
+
+.sr-only-wb-u3-p2-q1 {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =====================================================
+   QUESTION
+===================================================== */
+
+.question-row-wb-u3-p2-q1 {
+  width: 100%;
+
+  border-radius: 10px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.question-locked-wb-u3-p2-q1 {
+  background-color: rgba(34, 197, 94, 0.03);
+}
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
 .input-container-wb-unit3-p2-q1 {
-    width: 100%;
-    /* height: 100%; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    /* padding-top: 90px; */
-}
-.content-container-wb-unit3-p2-q1{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    margin-top: 28px;
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: space-around;
+
+  align-items: center;
 }
 
+/* =====================================================
+   CONTENT
+===================================================== */
 
-.word-bank-wb-unit3-p2-q1 {
-    display: flex;
-    gap: 5px;
-    /* margin: 15px 0 25px; */
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    justify-content: center;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: 10px 0px;
+.content-container-wb-unit3-p2-q1 {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+  align-items: center;
+
+  margin-bottom: 28px;
 }
-.word-item-wb-unit3-p2-q1  {
-    padding: 1px 14px;
-    background-color: #f2f6ff;
-    border: 2px solid #4b74ff;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #1f3cff;
-    cursor: grab;
-    user-select: none;
-    transition: all 0.2s ease;
+
+/* =====================================================
+   LEFT SIDE
+===================================================== */
+
+.question-left-wb-u3-p2-q1 {
+  display: flex;
+
+  flex-direction: column;
+
+  width: 50%;
+}
+
+/* =====================================================
+   SENTENCE ROW
+===================================================== */
+
+.sentence-row-wb-u3-p2-q1 {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* =====================================================
+   SENTENCE + AUDIO
+===================================================== */
+
+.sentence-audio-wb-u3-p2-q1 {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  transition:
+    box-shadow 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.sentence-audio-wb-u3-p2-q1:hover {
+  color: #2563eb;
+}
+
+.sentence-audio-wb-u3-p2-q1:focus-visible {
+  outline: none;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28);
+
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.sentence-playing-wb-u3-p2-q1 {
+  color: #2563eb;
+
+  background-color: rgba(37, 99, 235, 0.06);
+}
+
+.sentence-volume-wb-u3-p2-q1 {
+  color: #2563eb;
+
+  font-size: 17px;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   WORD BANK
+===================================================== */
+
+.word-bank-wb-unit3-p2-q1,
+.word-bank-accessible-wb-u3-p2-q1 {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  width: 70%;
+
+  padding: 12px 14px;
+
+  margin: 6px 0 0;
+
+  border: 2px dashed #ccc;
+
+  border-radius: 12px;
+
+  background-color: #fff;
+}
+
+/* =====================================================
+   WORD ITEM
+===================================================== */
+
+.word-item-wb-unit3-p2-q1 {
+  padding: 4px 8px;
+
+  background-color: #ffffff;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 9px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #000;
+
+  cursor: grab;
+
+  user-select: none;
+
+  touch-action: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 38px;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+/* =====================================================
+   WORD FOCUS
+===================================================== */
+
+.word-item-wb-unit3-p2-q1:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.25),
+    0 0 10px rgba(37, 99, 235, 0.35);
+}
+
+/* =====================================================
+   KEYBOARD SELECTED WORD
+===================================================== */
+
+.keyboard-selected-word-wb-u3-p2-q1 {
+  background: #dbeafe !important;
+
+  border-color: #2563eb !important;
+
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+}
+
+/* =====================================================
+   INPUT WRAPPER
+===================================================== */
+
+.input-wrapper-wb-u3-p2-q1 {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  width: 45%;
+}
+
+/* =====================================================
+   ANSWER INPUT
+===================================================== */
+
+.answer-input33-review10-p1-q3 {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 4px;
+
+  min-height: 38px;
+
+  width: 100%;
+
+  padding: 4px 8px;
+
+  background: white;
+
+  outline: none;
+
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* =====================================================
+   INPUT KEYBOARD TARGET
+===================================================== */
+
+.keyboard-input-target-wb-u3-p2-q1 {
+  background: #eff6ff !important;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+/* =====================================================
+   DRAG OVER
+===================================================== */
+
+.drag-over-cell {
+  background: #e3f2fd !important;
+}
+
+/* =====================================================
+   PLACED WORD
+===================================================== */
+
+.placed-word-wb-u3-p2-q1 {
+  border-radius: 5px;
+
+  padding: 1px 2px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.placed-word-wb-u3-p2-q1:hover {
+  background: #ffe0e0;
+}
+
+.placed-word-wb-u3-p2-q1:focus-visible {
+  outline: 2px solid #2563eb;
+
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW WORD
+
+   هاي الكلمة اللي "ترمش"
+   داخل الـinput قبل Enter
+===================================================== */
+
+.keyboard-preview-word-wb-u3-p2-q1 {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 55px;
+
+  height: 30px;
+
+  padding: 2px 9px;
+
+  border: 2px dashed #2563eb;
+
+  border-radius: 7px;
+
+  color: #2563eb;
+
+  background: rgba(219, 234, 254, 0.45);
+
+  font-weight: 600;
+
+  pointer-events: none;
+
+  animation: keyboard-preview-blink-wb-u3-p2-q1 0.75s ease-in-out infinite
+    alternate;
+}
+
+@keyframes keyboard-preview-blink-wb-u3-p2-q1 {
+  0% {
+    opacity: 0.35;
+
+    background: rgba(219, 234, 254, 0.2);
+
+    box-shadow: none;
+  }
+
+  100% {
+    opacity: 1;
+
+    background: rgba(219, 234, 254, 0.85);
+
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  }
+}
+
+/* =====================================================
+   LOCKED INPUT
+===================================================== */
+
+.locked-input-wb-u3-p2-q1 {
+  cursor: default;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.drag-overlay-word-wb-u3-p2-q1 {
+  padding: 2px 5px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: bold;
+
+  cursor: grabbing;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

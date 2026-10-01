@@ -317,4 +317,9 @@
   text-align: center;
 
   font-size: 15px;
+}.grid-wb-u1-p6-q2,
+.cell-wb-u2-p5-q2 {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }

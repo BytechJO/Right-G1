@@ -16,7 +16,7 @@ import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 const Unit3_Page4 = ({ openPopup }) => {
-const { audioRef, activeId, setActiveId } = useContext(AudioContext);
+  const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeAreaIndex, setActiveAreaIndex] = useState(null);
@@ -60,7 +60,6 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
     };
   };
 
-
   return (
     <div
       className="page1-img-wrapper"
@@ -72,30 +71,6 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
         style={{ display: "block" }}
         onClick={handleImageClick}
       /> */}
-      {clickableAreas.map((area, index) => (
-        <div
-          key={index}
-            className={`clickable-area ${
-            activeId === `p25-${area.sound}`||  hoveredAreaIndex === index   ? "highlight" : ""
-          }`}
-          style={{
-            position: "absolute",
-            left: `${area.x1}%`,
-            top: `${area.y1}%`,
-            width: `${area.x2 - area.x1}%`,
-            height: `${area.y2 - area.y1}%`,
-          }}
-          onClick={() => {
-           playSound(area.sound, `p25-${area.sound}`)
-          }}
-          onMouseEnter={() => {
-            if (!isPlaying) setHoveredAreaIndex(index);
-          }}
-          onMouseLeave={() => {
-            if (!isPlaying) setHoveredAreaIndex(null);
-          }}
-        ></div>
-      ))}
 
       <div
         className="headset-icon-CD-unit3-page4-1 hover:scale-110 transition"
@@ -105,6 +80,9 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open grammar audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -118,10 +96,33 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
                 <AudioWithCaption
                   src={CD23_pg25_Grammar2_AdultLady}
                   captions={captionsExample}
+                  pageId="unit3-page25"
                 />
-              </div>
+              </div>,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={CD23_pg25_Grammar2_AdultLady}
+                    captions={captionsExample}
+                    pageId="unit3-page25"
+                  />
+                </div>,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -142,6 +143,9 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open grammar video"
           onClick={() =>
             openPopup(
               "video",
@@ -168,9 +172,42 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
                 >
                   <source src={video} type="video/mp4" />
                 </video>
-              </div>
+              </div>,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "video",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <video
+                    autoPlay
+                    controls
+                    style={{
+                      width: "auto",
+                      height: "80%",
+                      objectFit: "fill",
+                      borderRadius: "20px",
+                      display: "block",
+                    }}
+                  >
+                    <source src={video} type="video/mp4" />
+                  </video>
+                </div>,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -183,6 +220,55 @@ const { audioRef, activeId, setActiveId } = useContext(AudioContext);
           />
         </svg>
       </div>
+      {clickableAreas.map((area, index) => {
+        const isActive = activeId === `p25-${index}`;
+
+        return (
+          <div
+            key={index}
+            className={`clickable-area page25-audio-hotspot ${
+              isActive || hoveredAreaIndex === index ? "highlight" : ""
+            }`}
+            role="button"
+            tabIndex={0}
+            aria-label={`Play sentence audio ${index + 1}`}
+            aria-pressed={isActive}
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              playSound(area.sound, `p25-${index}`);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+
+                playSound(area.sound, `p25-${index}`);
+              }
+            }}
+            onFocus={() => {
+              setHoveredAreaIndex(index);
+            }}
+            onBlur={() => {
+              setHoveredAreaIndex(null);
+            }}
+            onMouseEnter={() => {
+              if (!isPlaying) {
+                setHoveredAreaIndex(index);
+              }
+            }}
+            onMouseLeave={() => {
+              if (!isPlaying) {
+                setHoveredAreaIndex(null);
+              }
+            }}
+          />
+        );
+      })}
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );
