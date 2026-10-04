@@ -9,11 +9,6 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 
 import "./Unit2_Page8_Q2.css";
 
-// ===========================================
-// SENTENCE AUDIOS
-// بدلي الروابط حسب ملفاتك
-// ===========================================
-
 import sentence1Audio from "../../../assets/unit2/Page 17 - E/The deer is brown.mp3";
 import sentence2Audio from "../../../assets/unit2/Page 17 - E/My brother takes a taxi.mp3";
 import sentence3Audio from "../../../assets/unit2/Page 17 - E/The table is round.mp3";
@@ -27,7 +22,6 @@ import {
   useSensors,
   PointerSensor,
   TouchSensor,
-  KeyboardSensor,
   useDraggable,
   useDroppable,
 } from "@dnd-kit/core";
@@ -35,33 +29,89 @@ import {
 import ExerciseHeader from "../../ExerciseHeader";
 import { FaVolumeUp } from "react-icons/fa";
 
-// ─────────────────────────────────────────────
-// Draggable word chip
-// ─────────────────────────────────────────────
+/* =====================================================
+   DRAGGABLE WORD — BANK
+===================================================== */
 
-function DraggableWord({ word, isUsed, disabled }) {
+function DraggableWord({
+  word,
+  isUsed,
+  disabled,
+
+  keyboardPickedWord,
+  onKeyboardPick,
+
+  bankRefs,
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `word-${word}`,
+
+    data: {
+      word,
+      source: "bank",
+    },
+
     disabled: isUsed || disabled,
   });
 
+  const isDisabled = isUsed || disabled;
+
+  const isPicked =
+    keyboardPickedWord?.word === word && keyboardPickedWord?.source === "bank";
+
   return (
     <span
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      className={`word-item-unit2-p8-q2 ${isUsed ? "used" : ""}`}
-      tabIndex={isUsed || disabled ? -1 : 0}
-      aria-disabled={isUsed || disabled}
+      ref={(el) => {
+        setNodeRef(el);
+
+        bankRefs.current[word] = el;
+      }}
+      {...(isDisabled
+        ? {}
+        : {
+            ...listeners,
+            ...attributes,
+          })}
+      className={`word-item-unit2-p8-q2 ${isUsed ? "used" : ""} ${
+        isPicked ? "keyboard-picked-word" : ""
+      }`}
+      role="button"
+      tabIndex={isDisabled ? -1 : 0}
+      aria-disabled={isDisabled}
+      aria-pressed={isPicked}
+      aria-label={
+        isPicked
+          ? `${word} selected. Choose a blank and press Enter.`
+          : `${word}. Press Enter or Space to select.`
+      }
+      onKeyDown={(e) => {
+        if (isDisabled) {
+          return;
+        }
+
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+
+          onKeyboardPick(word);
+          return;
+        }
+
+        listeners?.onKeyDown?.(e);
+      }}
       style={{
         padding: "7px 14px",
         border: "2px solid #2c5287",
         borderRadius: "8px",
-        background: "white",
+        background: isPicked ? "#dbeafe" : "white",
         fontWeight: "bold",
-        cursor: isUsed || disabled ? "default" : "grab",
+
+        cursor: isDisabled ? "default" : "grab",
+
         opacity: isDragging ? 0.4 : 1,
+
         display: "inline-block",
+
         touchAction: "none",
       }}
     >
@@ -70,33 +120,249 @@ function DraggableWord({ word, isUsed, disabled }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Droppable inline slot
-// ─────────────────────────────────────────────
+/* =====================================================
+   WORD ALREADY INSIDE SLOT
+===================================================== */
 
-function DroppableSlot({ id, value, isWrong, locked, showAnswer, onClick }) {
+function PlacedWord({
+  word,
+  slotIndex,
+
+  locked,
+  showAnswer,
+  checkCompleted,
+
+  onKeyboardPickPlaced,
+
+  placedRefs,
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `placed-${slotIndex}`,
+
+    data: {
+      word,
+      source: "slot",
+      sourceIndex: slotIndex,
+    },
+
+    disabled: locked || showAnswer || checkCompleted,
+  });
+
+  const disabled = locked || showAnswer || checkCompleted;
+
+  return (
+    <span
+      ref={(el) => {
+        setNodeRef(el);
+
+        placedRefs.current[slotIndex] = el;
+      }}
+      {...(disabled
+        ? {}
+        : {
+            ...listeners,
+            ...attributes,
+          })}
+      role={disabled ? undefined : "button"}
+      tabIndex={disabled ? -1 : 0}
+      aria-label={
+        disabled
+          ? undefined
+          : `${word}. Press Enter or Space to move this word.`
+      }
+      onKeyDown={(e) => {
+        if (disabled) {
+          return;
+        }
+
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+
+          onKeyboardPickPlaced(word, slotIndex);
+        }
+      }}
+      className="placed-word-unit2-p8-q2"
+      style={{
+        cursor: disabled ? "default" : "grab",
+
+        opacity: isDragging ? 0.4 : 1,
+
+        display: "inline-block",
+
+        touchAction: "none",
+      }}
+    >
+      {word}
+    </span>
+  );
+}
+
+/* =====================================================
+   DROPPABLE INLINE SLOT
+===================================================== */
+
+function DroppableSlot({
+  id,
+  index,
+
+  value,
+  isWrong,
+
+  locked,
+  showAnswer,
+  checkCompleted,
+
+  keyboardPickedWord,
+
+  focusedSlotId,
+  setFocusedSlotId,
+
+  slotRefs,
+  placedRefs,
+
+  getAvailableSlotIndexes,
+
+  onKeyboardDrop,
+  onKeyboardPickPlaced,
+}) {
   const { setNodeRef, isOver } = useDroppable({
     id,
-    disabled: locked || showAnswer,
+
+    disabled: locked || showAnswer || checkCompleted,
   });
+
+  const keyboardActive =
+    !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
+
+  const showKeyboardPreview = keyboardActive && focusedSlotId === id;
 
   return (
     <span className="drop-slot-wrapper-unit2-p8-q2">
       <span
-        ref={setNodeRef}
-        onClick={value && !locked && !showAnswer ? onClick : undefined}
+        ref={(el) => {
+          setNodeRef(el);
+
+          slotRefs.current[index] = el;
+        }}
         className={[
           "drop-slot-inline-unit2-p8-q2",
+
           isWrong ? "wrong" : "",
+
           isOver && !locked && !showAnswer ? "drag-over-cell" : "",
+
+          showKeyboardPreview ? "keyboard-slot-active-unit2-p8-q2" : "",
         ]
           .filter(Boolean)
           .join(" ")}
+        role={keyboardActive ? "button" : undefined}
+        tabIndex={keyboardActive ? 0 : -1}
+        aria-label={
+          keyboardActive
+            ? value
+              ? `Blank contains ${value}. Press Enter to place ${keyboardPickedWord.word}.`
+              : `Empty blank. Press Enter to place ${keyboardPickedWord.word}.`
+            : undefined
+        }
+        onFocus={(e) => {
+          if (!keyboardActive) {
+            e.currentTarget.blur();
+
+            setFocusedSlotId(null);
+
+            return;
+          }
+
+          setFocusedSlotId(id);
+        }}
+        onBlur={() => {
+          setFocusedSlotId(null);
+        }}
+        onKeyDown={(e) => {
+          if (!keyboardActive) {
+            return;
+          }
+
+          /* =========================================
+             TAB BETWEEN AVAILABLE SLOTS
+          ========================================= */
+
+          if (e.key === "Tab") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const available = getAvailableSlotIndexes();
+
+            if (available.length === 0) {
+              return;
+            }
+
+            const currentPosition = available.indexOf(index);
+
+            let nextPosition;
+
+            if (e.shiftKey) {
+              nextPosition =
+                currentPosition <= 0
+                  ? available.length - 1
+                  : currentPosition - 1;
+            } else {
+              nextPosition =
+                currentPosition === -1 ||
+                currentPosition === available.length - 1
+                  ? 0
+                  : currentPosition + 1;
+            }
+
+            const nextIndex = available[nextPosition];
+
+            slotRefs.current[nextIndex]?.focus();
+
+            return;
+          }
+
+          /* =========================================
+             ENTER / SPACE = PLACE
+          ========================================= */
+
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            onKeyboardDrop(index);
+          }
+        }}
         style={{
-          cursor: value && !locked && !showAnswer ? "pointer" : "default",
+          position: "relative",
+
+          cursor: keyboardActive ? "pointer" : "default",
         }}
       >
-        {value}
+        {/* =========================================
+            BLINKING KEYBOARD PREVIEW
+        ========================================= */}
+
+        {showKeyboardPreview ? (
+          <span
+            className="keyboard-word-preview-unit2-p8-q2"
+            aria-hidden="true"
+          >
+            {keyboardPickedWord.word}
+          </span>
+        ) : value ? (
+          <PlacedWord
+            word={value}
+            slotIndex={index}
+            locked={locked}
+            showAnswer={showAnswer}
+            checkCompleted={checkCompleted}
+            onKeyboardPickPlaced={onKeyboardPickPlaced}
+            placedRefs={placedRefs}
+          />
+        ) : (
+          ""
+        )}
       </span>
 
       {isWrong && <span className="error-mark-input">✕</span>}
@@ -104,9 +370,9 @@ function DroppableSlot({ id, value, isWrong, locked, showAnswer, onClick }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────
+/* =====================================================
+   MAIN COMPONENT
+===================================================== */
 
 const Unit2_Page8_Q2 = () => {
   const correctAnswers = ["deer", "taxi", "table", "dish"];
@@ -119,6 +385,7 @@ const Unit2_Page8_Q2 = () => {
       alt: "deer",
       audio: sentence1Audio,
     },
+
     {
       before: "My brother takes a",
       after: ".",
@@ -126,6 +393,7 @@ const Unit2_Page8_Q2 = () => {
       alt: "taxi",
       audio: sentence2Audio,
     },
+
     {
       before: "The",
       after: "is round.",
@@ -133,6 +401,7 @@ const Unit2_Page8_Q2 = () => {
       alt: "table",
       audio: sentence3Audio,
     },
+
     {
       before: "The",
       after: "is white.",
@@ -142,9 +411,9 @@ const Unit2_Page8_Q2 = () => {
     },
   ];
 
-  // ===========================================
-  // STATE
-  // ===========================================
+  /* =====================================================
+     STATE
+  ===================================================== */
 
   const [answers, setAnswers] = useState(["", "", "", ""]);
 
@@ -158,13 +427,31 @@ const Unit2_Page8_Q2 = () => {
 
   const [activeId, setActiveId] = useState(null);
 
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
+
+  const bankRefs = useRef({});
+
+  const slotRefs = useRef({});
+
+  const placedRefs = useRef({});
+
+  const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
+
+  const [focusedSlotId, setFocusedSlotId] = useState(null);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
   const [speakingRow, setSpeakingRow] = useState(null);
 
   const sentenceAudioRef = useRef(null);
 
-  // ===========================================
-  // SENTENCE AUDIO
-  // ===========================================
+  /* =====================================================
+     SENTENCE AUDIO
+  ===================================================== */
 
   const stopSentenceAudio = () => {
     if (!sentenceAudioRef.current) {
@@ -173,6 +460,7 @@ const Unit2_Page8_Q2 = () => {
     }
 
     sentenceAudioRef.current.pause();
+
     sentenceAudioRef.current.currentTime = 0;
 
     sentenceAudioRef.current = null;
@@ -181,6 +469,12 @@ const Unit2_Page8_Q2 = () => {
   };
 
   const playSentenceAudio = (index) => {
+    /*
+      نفس شرط الكود الأصلي:
+      الصوت فقط لما الجملة صح ومقفلة
+      أو Show Answer.
+    */
+
     if (!lockedRows[index] && !showAnswer) {
       return;
     }
@@ -201,18 +495,174 @@ const Unit2_Page8_Q2 = () => {
 
     audio.play().catch(() => {
       setSpeakingRow(null);
+
       sentenceAudioRef.current = null;
     });
 
     audio.onended = () => {
       setSpeakingRow(null);
+
       sentenceAudioRef.current = null;
     };
   };
 
-  // ===========================================
-  // SENSORS
-  // ===========================================
+  /* =====================================================
+     AVAILABLE SLOTS
+  ===================================================== */
+
+  const getAvailableSlotIndexes = () => {
+    return answers
+      .map((_, index) => index)
+      .filter((index) => !lockedRows[index] && !showAnswer && !checkCompleted);
+  };
+
+  /* =====================================================
+     KEYBOARD PICK FROM BANK
+  ===================================================== */
+
+  const handleKeyboardPick = (word) => {
+    if (showAnswer || checkCompleted || answers.includes(word)) {
+      return;
+    }
+
+    setKeyboardPickedWord({
+      word,
+      source: "bank",
+    });
+
+    requestAnimationFrame(() => {
+      const available = getAvailableSlotIndexes();
+
+      if (!available.length) {
+        return;
+      }
+
+      slotRefs.current[available[0]]?.focus();
+    });
+  };
+
+  /* =====================================================
+     KEYBOARD PICK FROM PLACED SLOT
+  ===================================================== */
+
+  const handleKeyboardPickPlaced = (word, sourceIndex) => {
+    if (showAnswer || checkCompleted || lockedRows[sourceIndex]) {
+      return;
+    }
+
+    setKeyboardPickedWord({
+      word,
+      source: "slot",
+      sourceIndex,
+    });
+
+    requestAnimationFrame(() => {
+      const available = getAvailableSlotIndexes();
+
+      const firstOther = available.find((index) => index !== sourceIndex);
+
+      const targetIndex = firstOther ?? available[0];
+
+      if (targetIndex === undefined) {
+        return;
+      }
+
+      slotRefs.current[targetIndex]?.focus();
+    });
+  };
+
+  /* =====================================================
+     KEYBOARD DROP
+     REPLACE / SWAP
+  ===================================================== */
+
+  const handleKeyboardDrop = (targetIndex) => {
+    if (
+      !keyboardPickedWord ||
+      showAnswer ||
+      checkCompleted ||
+      lockedRows[targetIndex]
+    ) {
+      return;
+    }
+
+    const picked = keyboardPickedWord;
+
+    const updated = [...answers];
+
+    const oldTargetWord = updated[targetIndex];
+
+    /* =========================================
+         FROM PLACED SLOT → SWAP
+      ========================================= */
+
+    if (picked.source === "slot" && picked.sourceIndex !== undefined) {
+      const sourceIndex = picked.sourceIndex;
+
+      if (sourceIndex === targetIndex) {
+        setKeyboardPickedWord(null);
+
+        setFocusedSlotId(null);
+
+        return;
+      }
+
+      if (lockedRows[sourceIndex]) {
+        return;
+      }
+
+      updated[sourceIndex] = oldTargetWord || "";
+    }
+
+    /*
+        FROM BANK:
+        إذا الهدف فيه كلمة،
+        القديمة ترجع للـ bank تلقائيًا
+        لأنها لن تكون داخل answers.
+      */
+
+    updated[targetIndex] = picked.word;
+
+    setAnswers(updated);
+
+    /* =========================================
+         REMOVE X ONLY FROM CHANGED SLOTS
+      ========================================= */
+
+    setWrongInputs((prev) => {
+      const next = [...prev];
+
+      next[targetIndex] = false;
+
+      if (picked.source === "slot" && picked.sourceIndex !== undefined) {
+        next[picked.sourceIndex] = false;
+      }
+
+      return next;
+    });
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
+
+    /*
+        بعد drop:
+        من slot → focus على الكلمة بالمكان الجديد.
+        من bank → focus على نفس كلمة البنك.
+      */
+
+    setTimeout(() => {
+      if (picked.source === "slot") {
+        placedRefs.current[targetIndex]?.focus();
+      } else {
+        bankRefs.current[picked.word]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =====================================================
+     SENSORS
+  ===================================================== */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -227,21 +677,19 @@ const Unit2_Page8_Q2 = () => {
         tolerance: 8,
       },
     }),
-
-    useSensor(KeyboardSensor),
   );
 
-  // ===========================================
-  // DRAG START
-  // ===========================================
+  /* =====================================================
+     DRAG START
+  ===================================================== */
 
   const handleDragStart = ({ active }) => {
     setActiveId(active.id);
   };
 
-  // ===========================================
-  // DRAG END
-  // ===========================================
+  /* =====================================================
+     DRAG END
+  ===================================================== */
 
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
@@ -262,19 +710,43 @@ const Unit2_Page8_Q2 = () => {
       return;
     }
 
-    const word = String(active.id).replace("word-", "");
+    const dragData = active.data.current;
+
+    if (!dragData) {
+      return;
+    }
+
+    const { word, source, sourceIndex } = dragData;
+
+    if (!word) {
+      return;
+    }
 
     const updated = [...answers];
 
-    const oldIndex = updated.findIndex((ans) => ans === word);
+    const oldTargetWord = updated[newIndex];
 
-    if (oldIndex !== -1) {
-      if (lockedRows[oldIndex]) {
+    /* =========================================
+         DRAG FROM PLACED SLOT
+         → SWAP
+      ========================================= */
+
+    if (source === "slot" && sourceIndex !== undefined) {
+      if (lockedRows[sourceIndex]) {
         return;
       }
 
-      updated[oldIndex] = "";
+      if (sourceIndex === newIndex) {
+        return;
+      }
+
+      updated[sourceIndex] = oldTargetWord || "";
     }
+
+    /* =========================================
+         BANK → TARGET
+         REPLACES TARGET WORD
+      ========================================= */
 
     updated[newIndex] = word;
 
@@ -285,17 +757,17 @@ const Unit2_Page8_Q2 = () => {
 
       next[newIndex] = false;
 
-      if (oldIndex !== -1) {
-        next[oldIndex] = false;
+      if (source === "slot" && sourceIndex !== undefined) {
+        next[sourceIndex] = false;
       }
 
       return next;
     });
   };
 
-  // ===========================================
-  // CHECK ANSWERS
-  // ===========================================
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
 
   const checkAnswers = () => {
     if (showAnswer || checkCompleted) {
@@ -327,19 +799,23 @@ const Unit2_Page8_Q2 = () => {
       }
     });
 
-    // =========================================
-    // LOCK ONLY CORRECT ROWS
-    // =========================================
+    /* =========================================
+       LOCK ONLY CORRECT
+    ========================================= */
 
     setLockedRows((prev) =>
       prev.map((locked, index) => locked || newlyLocked[index]),
     );
 
-    // =========================================
-    // WRONG X ONLY ON WRONG ROWS
-    // =========================================
+    /* =========================================
+       X ONLY WRONG
+    ========================================= */
 
     setWrongInputs(newWrong);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
 
     const total = correctAnswers.length;
 
@@ -353,9 +829,9 @@ const Unit2_Page8_Q2 = () => {
       </div>
     `;
 
-    // =========================================
-    // ALL CORRECT
-    // =========================================
+    /* =========================================
+       ALL CORRECT
+    ========================================= */
 
     if (score === total) {
       setLockedRows([true, true, true, true]);
@@ -376,9 +852,9 @@ const Unit2_Page8_Q2 = () => {
     }
   };
 
-  // ===========================================
-  // SHOW ANSWER
-  // ===========================================
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
 
   const showAnswerFun = () => {
     stopSentenceAudio();
@@ -392,11 +868,15 @@ const Unit2_Page8_Q2 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
   };
 
-  // ===========================================
-  // RESET
-  // ===========================================
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const reset = () => {
     stopSentenceAudio();
@@ -412,41 +892,35 @@ const Unit2_Page8_Q2 = () => {
     setCheckCompleted(false);
 
     setActiveId(null);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
   };
 
-  // ===========================================
-  // REMOVE WORD FROM SLOT
-  // ===========================================
+  /* =====================================================
+     ACTIVE WORD
+  ===================================================== */
 
-  const removeWordFromSlot = (index) => {
-    if (showAnswer || checkCompleted || lockedRows[index]) {
-      return;
+  let activeWord = null;
+
+  if (activeId) {
+    const id = String(activeId);
+
+    if (id.startsWith("word-")) {
+      activeWord = id.replace("word-", "");
     }
 
-    const updated = [...answers];
+    if (id.startsWith("placed-")) {
+      const index = Number(id.replace("placed-", ""));
 
-    updated[index] = "";
+      activeWord = answers[index];
+    }
+  }
 
-    setAnswers(updated);
-
-    setWrongInputs((prev) => {
-      const next = [...prev];
-
-      next[index] = false;
-
-      return next;
-    });
-  };
-
-  // ===========================================
-  // DRAG OVERLAY WORD
-  // ===========================================
-
-  const activeWord = activeId ? String(activeId).replace("word-", "") : null;
-
-  // ===========================================
-  // RENDER
-  // ===========================================
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <DndContext
@@ -483,12 +957,19 @@ const Unit2_Page8_Q2 = () => {
           <div
             style={{
               display: "flex",
+
               gap: "10px",
+
               padding: "10px",
+
               border: "2px dashed #ccc",
+
               borderRadius: "10px",
+
               width: "100%",
+
               alignItems: "center",
+
               justifyContent: "center",
             }}
           >
@@ -498,6 +979,9 @@ const Unit2_Page8_Q2 = () => {
                 word={word}
                 isUsed={answers.includes(word)}
                 disabled={showAnswer || checkCompleted}
+                keyboardPickedWord={keyboardPickedWord}
+                onKeyboardPick={handleKeyboardPick}
+                bankRefs={bankRefs}
               />
             ))}
           </div>
@@ -520,15 +1004,17 @@ const Unit2_Page8_Q2 = () => {
                     className="text-[18px]"
                     style={{
                       display: "inline-flex",
+
                       alignItems: "center",
+
                       gap: "4px",
                     }}
                   >
                     <span className="num-span">{i + 1}</span>
 
                     {/* =================================
-                        CLICKABLE SENTENCE AUDIO AREA
-                    ================================= */}
+                          CLICKABLE SENTENCE AUDIO
+                      ================================= */}
 
                     <span
                       onClick={() => {
@@ -554,7 +1040,9 @@ const Unit2_Page8_Q2 = () => {
                       }
                       style={{
                         display: "inline-flex",
+
                         alignItems: "center",
+
                         gap: "4px",
 
                         cursor: canPlaySentence ? "pointer" : "default",
@@ -564,24 +1052,34 @@ const Unit2_Page8_Q2 = () => {
 
                       <DroppableSlot
                         id={`slot-${i}`}
+                        index={i}
                         value={answers[i]}
                         isWrong={wrongInputs[i]}
-                        locked={isLocked || checkCompleted}
+                        locked={isLocked}
                         showAnswer={showAnswer}
-                        onClick={() => removeWordFromSlot(i)}
+                        checkCompleted={checkCompleted}
+                        keyboardPickedWord={keyboardPickedWord}
+                        focusedSlotId={focusedSlotId}
+                        setFocusedSlotId={setFocusedSlotId}
+                        slotRefs={slotRefs}
+                        placedRefs={placedRefs}
+                        getAvailableSlotIndexes={getAvailableSlotIndexes}
+                        onKeyboardDrop={handleKeyboardDrop}
+                        onKeyboardPickPlaced={handleKeyboardPickPlaced}
                       />
 
                       <span>{row.after}</span>
 
                       {/* =================================
-                          AUDIO ICON
-                      ================================= */}
+                            AUDIO ICON
+                        ================================= */}
 
                       {canPlaySentence && (
                         <span
                           aria-hidden="true"
                           style={{
                             marginLeft: "7px",
+
                             fontSize: "18px",
 
                             transform: isSpeaking ? "scale(1.15)" : "scale(1)",
@@ -593,6 +1091,7 @@ const Unit2_Page8_Q2 = () => {
                             size={18}
                             style={{
                               pointerEvents: "none",
+
                               flexShrink: 0,
                             }}
                           />
@@ -639,13 +1138,21 @@ const Unit2_Page8_Q2 = () => {
           <span
             style={{
               padding: "7px 14px",
+
               border: "2px solid #2c5287",
+
               borderRadius: "8px",
+
               background: "white",
+
               fontWeight: "bold",
+
               fontSize: "16px",
+
               boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
+
               pointerEvents: "none",
+
               userSelect: "none",
             }}
           >

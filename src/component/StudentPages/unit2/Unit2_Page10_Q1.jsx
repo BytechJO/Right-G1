@@ -302,16 +302,28 @@ const Unit2_Page10_Q1 = () => {
                     const isWrong =
                       wrongSentences.includes(sIndex) && isCircled;
 
+                    const isDisabled =
+                      sentenceLocked || isShowMode || checkCompleted;
+
                     return (
                       <span
                         key={wIndex}
+                        role="button"
+                        tabIndex={isDisabled ? -1 : 0}
+                        aria-disabled={isDisabled}
+                        aria-pressed={isCircled}
+                        aria-label={`${word}${isCircled ? ", selected" : ""}`}
                         onClick={() => handleWordClick(sIndex, wIndex)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+
+                            handleWordClick(sIndex, wIndex);
+                          }
+                        }}
                         className={`word-text10 ${isCircled ? "circled2" : ""}`}
                         style={{
-                          cursor:
-                            sentenceLocked || isShowMode || checkCompleted
-                              ? "default"
-                              : "pointer",
+                          cursor: isDisabled ? "default" : "pointer",
                         }}
                       >
                         {word}

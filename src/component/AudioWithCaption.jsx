@@ -22,7 +22,7 @@ const AudioWithCaption = ({
   const resumedFromStorageRef = useRef(false);
   const hasStartedPlaybackRef = useRef(false);
 
-  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
+  const AUDIO_TIME_KEY = pageId ? `audio-position-${pageId}` : null;
   const settingsRef = useRef(null);
   const captionRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -86,11 +86,14 @@ const AudioWithCaption = ({
     audioFinishedRef.current = false;
     hasStartedPlaybackRef.current = false;
 
-    const storedTime = localStorage.getItem(AUDIO_TIME_KEY);
-    const savedTime = Number(storedTime || 0);
+    const storedTime = AUDIO_TIME_KEY
+      ? localStorage.getItem(AUDIO_TIME_KEY)
+      : null;
 
+    const savedTime = Number(storedTime || 0);
     // نظّف أي قيمة صفر أو قيمة غير صالحة محفوظة من السلوك القديم.
     if (
+      AUDIO_TIME_KEY &&
       storedTime !== null &&
       (!Number.isFinite(savedTime) || savedTime <= 0)
     ) {
@@ -137,11 +140,10 @@ const AudioWithCaption = ({
         ) {
           audio.pause();
 
-          if (
-            hasStartedPlaybackRef.current &&
-            audio.currentTime > 0
-          ) {
-            localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+          if (hasStartedPlaybackRef.current && audio.currentTime > 0) {
+            if (AUDIO_TIME_KEY) {
+              localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+            }
           }
 
           setIsPlaying(false);
@@ -155,8 +157,9 @@ const AudioWithCaption = ({
       audioFinishedRef.current = true;
 
       // إذا خلص كامل نمسح الحفظ
-      localStorage.removeItem(AUDIO_TIME_KEY);
-
+      if (AUDIO_TIME_KEY) {
+        localStorage.removeItem(AUDIO_TIME_KEY);
+      }
       audio.currentTime = 0;
 
       setCurrent(0);
@@ -177,7 +180,9 @@ const AudioWithCaption = ({
         audio.duration &&
         audio.currentTime < audio.duration
       ) {
-        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+        if (AUDIO_TIME_KEY) {
+          localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+        }
       }
 
       audio.pause();
@@ -202,7 +207,9 @@ const AudioWithCaption = ({
     audioFinishedRef.current = false;
     hasStartedPlaybackRef.current = false;
 
-    localStorage.removeItem(AUDIO_TIME_KEY);
+    if (AUDIO_TIME_KEY) {
+      localStorage.removeItem(AUDIO_TIME_KEY);
+    }
 
     setCurrent(0);
     setActiveIndex(-1);
@@ -227,6 +234,7 @@ const AudioWithCaption = ({
             updateCaption(time);
 
             if (
+              AUDIO_TIME_KEY &&
               !audioFinishedRef.current &&
               hasStartedPlaybackRef.current &&
               time > 0

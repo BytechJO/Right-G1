@@ -361,25 +361,29 @@ const Unit2_Page5_Q1 = () => {
                 {item.options.map((opt, optIndex) => (
                   <div
                     key={optIndex}
-                    className="img-option"
+                    className="img-option accessible-option"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${opt.word}. Press Enter or Space to select and hear it.`}
+                    onClick={() => {
+                      playAudio(opt.sound, rowIndex, optIndex);
+                      handleOptionSelect(rowIndex, optIndex);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+
+                        playAudio(opt.sound, rowIndex, optIndex);
+                        handleOptionSelect(rowIndex, optIndex);
+                      }
+                    }}
                     style={{
                       display: "flex",
-
                       flexDirection: "column",
-
                       alignItems: "center",
-
                       justifyContent: "space-around",
-
-                      cursor: isLocked || showAnswer ? "default" : "pointer",
-                    }}
-                    onClick={() => {
-                      // الصوت يظل شغال
-                      // حتى لو الصف مقفول
-                      playAudio(opt.sound, rowIndex, optIndex);
-
-                      // الاختيار نفسه
-                      handleOptionSelect(rowIndex, optIndex);
+                      cursor: "pointer",
+                      borderRadius: "8px",
                     }}
                   >
                     <div

@@ -9,20 +9,48 @@ import duck from "../../../assets/unit1/imgs/duck.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import ExerciseHeader from "../../ExerciseHeader";
+
 import duckSound from "../../../assets/unit2/Page 17 - D/duck.mp3";
 import tigerSound from "../../../assets/unit2/Page 17 - D/tiger.mp3";
 import dishSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
 import tableSound from "../../../assets/unit2/Page 17 - D/Table.mp3";
 
 import { FaVolumeUp } from "react-icons/fa";
+
 const Unit2_Page8_Q1 = () => {
+  /* =====================================================
+     STATES
+  ===================================================== */
+
   const [lines, setLines] = useState([]);
+
+  const [previewLine, setPreviewLine] = useState(null);
 
   const containerRef = useRef(null);
 
-  const [wrongWords, setWrongWords] = useState([]);
+  /*
+    firstDot:
+
+    WORD FIRST:
+    {
+      side: "word",
+      word,
+      x,
+      y
+    }
+
+    IMAGE FIRST:
+    {
+      side: "image",
+      image,
+      x,
+      y
+    }
+  */
 
   const [firstDot, setFirstDot] = useState(null);
+
+  const [wrongWords, setWrongWords] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -30,13 +58,30 @@ const Unit2_Page8_Q1 = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // الصح فقط بعد Check
+  /* =====================================================
+     PROGRESSIVE LOCK
+  ===================================================== */
+
   const [lockedWords, setLockedWords] = useState([]);
+
   const [lockedImages, setLockedImages] = useState([]);
 
-  // بعد النجاح النهائي
   const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     KEYBOARD REFS
+  ===================================================== */
+
+  const wordRefs = useRef({});
+
+  const imageRefs = useRef([]);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
   const audioRef = useRef(null);
+
   const [activeWordAudio, setActiveWordAudio] = useState(null);
 
   const wordSounds = {
@@ -56,138 +101,656 @@ const Unit2_Page8_Q1 = () => {
 
     setActiveWordAudio(word);
 
-    audioRef.current.play();
+    audioRef.current.play().catch(() => {
+      setActiveWordAudio(null);
+    });
 
     audioRef.current.onended = () => {
       setActiveWordAudio(null);
     };
   };
+
+  /* =====================================================
+     DATA
+  ===================================================== */
+
   const correctMatches = [
-    { word: "duck", image: "img3" },
-    { word: "tiger", image: "img4" },
-    { word: "dish", image: "img2" },
-    { word: "table", image: "img1" },
+    {
+      word: "duck",
+      image: "img3",
+    },
+
+    {
+      word: "tiger",
+      image: "img4",
+    },
+
+    {
+      word: "dish",
+      image: "img2",
+    },
+
+    {
+      word: "table",
+      image: "img1",
+    },
+  ];
+
+  const wordItems = [
+    {
+      word: "duck",
+      num: 1,
+      dotId: "dot-duck",
+    },
+
+    {
+      word: "tiger",
+      num: 2,
+      dotId: "dot-tiger",
+    },
+
+    {
+      word: "dish",
+      num: 3,
+      dotId: "dot-dish",
+    },
+
+    {
+      word: "table",
+      num: 4,
+      dotId: "dot-table",
+    },
+  ];
+
+  /*
+    ترتيب الصور الظاهر بالصفحة.
+  */
+
+  const imageItems = [
+    {
+      id: "img1",
+      src: table,
+      alt: "Table",
+      width: "110px",
+      height: "100px",
+    },
+
+    {
+      id: "img2",
+      src: dish,
+      alt: "Dish",
+      width: "110px",
+      height: "110px",
+    },
+
+    {
+      id: "img3",
+      src: duck,
+      alt: "Duck",
+      width: "110px",
+      height: "100px",
+    },
+
+    {
+      id: "img4",
+      src: tiger,
+      alt: "Tiger",
+      width: "110px",
+      height: "100px",
+    },
   ];
 
   /* =====================================================
-     START DOT - WORD
+     HELPERS
   ===================================================== */
 
-  const handleStartDotClick = (e) => {
-    if (showAnswer) return;
+  const isWordLocked = (word) => lockedWords.includes(word);
 
-    const word = e.currentTarget.dataset.word || null;
+  const isImageLocked = (image) => lockedImages.includes(image);
 
-    if (!word) return;
+  /* =====================================================
+     GET DOT POSITION
+  ===================================================== */
 
-    // الصح المقفول ما يتعدل
-    if (lockedWords.includes(word)) {
-      return;
+  const getDotPosition = (element) => {
+    if (!element || !containerRef.current) {
+      return null;
     }
 
-    const rect = containerRef.current.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
 
-    const dotRect = e.currentTarget.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
 
-    setSelectedWord(word);
-    setSelectedImage(null);
+    return {
+      x: rect.left - containerRect.left + rect.width / 2,
 
-    setFirstDot({
-      word,
-
-      x: dotRect.left - rect.left + 8,
-
-      y: dotRect.top - rect.top + 8,
-    });
-
-    // لو عليه X من Check سابق نشيله
-    setWrongWords((prev) => prev.filter((item) => item !== word));
+      y: rect.top - containerRect.top + rect.height / 2,
+    };
   };
 
   /* =====================================================
-     END DOT - IMAGE
+     GET AVAILABLE IMAGES
+     FOR KEYBOARD
   ===================================================== */
 
-  const handleEndDotClick = (e) => {
-    if (showAnswer) return;
+  const getAvailableImageIndexes = () =>
+    imageItems
+      .map((item, index) => ({
+        item,
+        index,
+      }))
+      .filter(({ item }) => !isImageLocked(item.id))
+      .map(({ index }) => index);
 
-    if (!firstDot) return;
+  /* =====================================================
+     PREVIEW LINE
+     KEYBOARD ONLY
+  ===================================================== */
 
-    const endImage = e.currentTarget.dataset.image || null;
+  const updatePreviewLine = (startPoint, imageId) => {
+    if (!startPoint) return;
 
-    if (!endImage) return;
+    const imageDot = document.getElementById(`dot-${imageId}`);
 
-    // الصورة الصح المقفلة ما نستبدلها
-    if (lockedImages.includes(endImage)) {
+    if (!imageDot) return;
+
+    const end = getDotPosition(imageDot);
+
+    if (!end) return;
+
+    setPreviewLine({
+      x1: startPoint.x,
+      y1: startPoint.y,
+
+      x2: end.x,
+      y2: end.y,
+    });
+  };
+
+  /* =====================================================
+     COMMIT CONNECTION
+     MOUSE + KEYBOARD
+  ===================================================== */
+
+  const commitConnection = (word, image) => {
+    if (
+      !word ||
+      !image ||
+      showAnswer ||
+      checkCompleted ||
+      isWordLocked(word) ||
+      isImageLocked(image)
+    ) {
       return;
     }
 
-    // الكلمة نفسها لو صارت locked
-    if (lockedWords.includes(firstDot.word)) {
-      setFirstDot(null);
-      setSelectedWord(null);
+    const wordItem = wordItems.find((item) => item.word === word);
 
+    if (!wordItem) {
       return;
     }
 
-    const rect = containerRef.current.getBoundingClientRect();
+    const startDot = document.getElementById(wordItem.dotId);
 
-    const dotRect = e.currentTarget.getBoundingClientRect();
+    const endDot = document.getElementById(`dot-${image}`);
+
+    if (!startDot || !endDot) {
+      return;
+    }
+
+    const start = getDotPosition(startDot);
+
+    const end = getDotPosition(endDot);
+
+    if (!start || !end) {
+      return;
+    }
+
+    /*
+      إذا الصورة كانت مستخدمة من قبل
+      اعرف الكلمة القديمة عشان نشيل X عنها.
+    */
+
+    const previousImageConnection = lines.find((line) => line.image === image);
 
     const newLine = {
-      x1: firstDot.x,
-      y1: firstDot.y,
+      x1: start.x,
+      y1: start.y,
 
-      x2: dotRect.left - rect.left + 8,
+      x2: end.x,
+      y2: end.y,
 
-      y2: dotRect.top - rect.top + 8,
-
-      word: firstDot.word,
-      image: endImage,
+      word,
+      image,
     };
 
-    /* =================================================
-       مهم:
-       كل كلمة خط واحد
-       وكل صورة خط واحد
+    /*
+      كل word إلها خط واحد.
+      كل image إلها خط واحد.
 
-       الجديد يحل محل القديم
-    ================================================= */
+      الجديد يستبدل القديم.
+    */
 
     setLines((prev) => {
       const filtered = prev.filter(
-        (line) => line.word !== firstDot.word && line.image !== endImage,
+        (line) => line.word !== word && line.image !== image,
       );
 
       return [...filtered, newLine];
     });
 
     /*
-      لو الصورة كانت موصولة بكلمة غلط قديمة،
-      نشيل X من الكلمة القديمة لأنها فقدت التوصيل.
+      شيل X فقط عن التوصيلات
+      اللي تغيرت.
     */
 
-    setWrongWords((prev) => {
-      const oldLineOnImage = lines.find((line) => line.image === endImage);
+    setWrongWords((prev) =>
+      prev.filter(
+        (wrongWord) =>
+          wrongWord !== word && wrongWord !== previousImageConnection?.word,
+      ),
+    );
 
-      let updated = prev.filter((word) => word !== firstDot.word);
+    setSelectedWord(word);
 
-      if (oldLineOnImage) {
-        updated = updated.filter((word) => word !== oldLineOnImage.word);
-      }
+    setSelectedImage(image);
 
-      return updated;
-    });
+    setFirstDot(null);
 
-    setSelectedWord(firstDot.word);
-    setSelectedImage(endImage);
+    setPreviewLine(null);
 
     setTimeout(() => {
       setSelectedWord(null);
+
       setSelectedImage(null);
     }, 300);
+  };
 
-    setFirstDot(null);
+  /* =====================================================
+     KEYBOARD START
+     WORD -> IMAGE
+  ===================================================== */
+
+  const startKeyboardMatch = (word, dotId) => {
+    if (showAnswer || checkCompleted || isWordLocked(word)) {
+      return;
+    }
+
+    const dot = document.getElementById(dotId);
+
+    if (!dot) {
+      return;
+    }
+
+    const start = getDotPosition(dot);
+
+    if (!start) {
+      return;
+    }
+
+    /*
+      إذا الكلمة إلها توصيل سابق،
+      شيله عشان تقدر تعدله.
+    */
+
+    setLines((prev) => prev.filter((line) => line.word !== word));
+
+    /*
+      شيل X عن نفس الكلمة.
+    */
+
+    setWrongWords((prev) => prev.filter((item) => item !== word));
+
+    setSelectedWord(word);
+
+    setSelectedImage(null);
+
+    const startPoint = {
+      side: "word",
+
+      word,
+
+      x: start.x,
+      y: start.y,
+    };
+
+    setFirstDot(startPoint);
+
+    /*
+      روح لأول صورة غير مقفلة.
+    */
+
+    requestAnimationFrame(() => {
+      const available = getAvailableImageIndexes();
+
+      if (!available.length) {
+        return;
+      }
+
+      const firstIndex = available[0];
+
+      const firstImage = imageRefs.current[firstIndex];
+
+      if (firstImage) {
+        firstImage.focus();
+
+        updatePreviewLine(startPoint, imageItems[firstIndex].id);
+      }
+    });
+  };
+
+  /* =====================================================
+     KEYBOARD IMAGE SIDE
+  ===================================================== */
+
+  const handleImageKeyboard = (e, index, item) => {
+    if (!firstDot || firstDot.side !== "word") {
+      return;
+    }
+
+    if (showAnswer || checkCompleted || isImageLocked(item.id)) {
+      return;
+    }
+
+    /* =================================================
+       TAB / SHIFT TAB
+       ONLY BETWEEN AVAILABLE IMAGES
+    ================================================= */
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const available = getAvailableImageIndexes();
+
+      if (!available.length) {
+        return;
+      }
+
+      const currentPosition = available.indexOf(index);
+
+      let nextPosition;
+
+      if (e.shiftKey) {
+        nextPosition =
+          currentPosition <= 0 ? available.length - 1 : currentPosition - 1;
+      } else {
+        nextPosition =
+          currentPosition === -1 || currentPosition === available.length - 1
+            ? 0
+            : currentPosition + 1;
+      }
+
+      const nextIndex = available[nextPosition];
+
+      const nextElement = imageRefs.current[nextIndex];
+
+      if (nextElement) {
+        nextElement.focus();
+
+        updatePreviewLine(firstDot, imageItems[nextIndex].id);
+      }
+
+      return;
+    }
+
+    /* =================================================
+       ENTER / SPACE = CONNECT
+    ================================================= */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const currentWord = firstDot.word;
+
+      commitConnection(currentWord, item.id);
+
+      /*
+        بعد التوصيل رجع لأول كلمة
+        غير مقفلة.
+      */
+
+      setTimeout(() => {
+        const nextWord =
+          wordItems.find(
+            (wordItem) =>
+              !isWordLocked(wordItem.word) && wordItem.word !== currentWord,
+          ) || wordItems.find((wordItem) => !isWordLocked(wordItem.word));
+
+        if (nextWord) {
+          wordRefs.current[nextWord.word]?.focus();
+        }
+      }, 100);
+
+      return;
+    }
+
+    /* =================================================
+       ESCAPE
+    ================================================= */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const currentWord = firstDot.word;
+
+      setFirstDot(null);
+
+      setPreviewLine(null);
+
+      setSelectedWord(null);
+
+      setSelectedImage(null);
+
+      requestAnimationFrame(() => {
+        if (!isWordLocked(currentWord)) {
+          wordRefs.current[currentWord]?.focus();
+        }
+      });
+    }
+  };
+
+  /* =====================================================
+     MOUSE WORD
+
+     WORD FIRST
+     OR
+     WORD SECOND AFTER IMAGE
+  ===================================================== */
+
+  const handleWordMouseClick = (word) => {
+    /*
+      الصوت الموجود أصلًا يشتغل.
+    */
+
+    playWordSound(word);
+
+    if (showAnswer || checkCompleted || isWordLocked(word)) {
+      return;
+    }
+
+    /* =================================================
+       IMAGE WAS SELECTED FIRST
+       WORD = SECOND SIDE
+    ================================================= */
+
+    if (firstDot?.side === "image") {
+      commitConnection(word, firstDot.image);
+
+      return;
+    }
+
+    /* =================================================
+       WORD = FIRST SIDE
+    ================================================= */
+
+    const wordItem = wordItems.find((item) => item.word === word);
+
+    if (!wordItem) {
+      return;
+    }
+
+    const dot = document.getElementById(wordItem.dotId);
+
+    if (!dot) {
+      return;
+    }
+
+    const start = getDotPosition(dot);
+
+    if (!start) {
+      return;
+    }
+
+    /*
+      إذا الكلمة موصولة من قبل،
+      شيل خطها القديم.
+    */
+
+    setLines((prev) => prev.filter((line) => line.word !== word));
+
+    /*
+      شيل X عن نفس الكلمة.
+    */
+
+    setWrongWords((prev) => prev.filter((item) => item !== word));
+
+    setSelectedWord(word);
+
+    setSelectedImage(null);
+
+    setFirstDot({
+      side: "word",
+
+      word,
+
+      x: start.x,
+      y: start.y,
+    });
+
+    /*
+      Mouse:
+      no preview line.
+    */
+
+    setPreviewLine(null);
+  };
+
+  /* =====================================================
+     MOUSE IMAGE
+
+     IMAGE FIRST
+     OR
+     IMAGE SECOND AFTER WORD
+  ===================================================== */
+
+  const handleImageMouseClick = (item) => {
+    if (showAnswer || checkCompleted || isImageLocked(item.id)) {
+      return;
+    }
+
+    /* =================================================
+       WORD SELECTED FIRST
+       IMAGE = SECOND SIDE
+    ================================================= */
+
+    if (firstDot?.side === "word") {
+      commitConnection(firstDot.word, item.id);
+
+      return;
+    }
+
+    /* =================================================
+       IMAGE = FIRST SIDE
+    ================================================= */
+
+    const dot = document.getElementById(`dot-${item.id}`);
+
+    if (!dot) {
+      return;
+    }
+
+    const start = getDotPosition(dot);
+
+    if (!start) {
+      return;
+    }
+
+    /*
+      إذا الصورة عليها خط سابق،
+      نعرف الكلمة القديمة.
+    */
+
+    const previousConnection = lines.find((line) => line.image === item.id);
+
+    /*
+      شيل الخط القديم للصورة.
+    */
+
+    setLines((prev) => prev.filter((line) => line.image !== item.id));
+
+    /*
+      إذا كانت الصورة متصلة بكلمة غلط،
+      شيل X عن الكلمة القديمة لأنها
+      فقدت التوصيل.
+    */
+
+    if (previousConnection) {
+      setWrongWords((prev) =>
+        prev.filter((word) => word !== previousConnection.word),
+      );
+    }
+
+    setSelectedImage(item.id);
+
+    setSelectedWord(null);
+
+    setFirstDot({
+      side: "image",
+
+      image: item.id,
+
+      x: start.x,
+      y: start.y,
+    });
+
+    setPreviewLine(null);
+  };
+
+  /* =====================================================
+     DOT WORD
+  ===================================================== */
+
+  const handleStartDotClick = (e) => {
+    const word = e.currentTarget.dataset.word || null;
+
+    if (!word) {
+      return;
+    }
+
+    handleWordMouseClick(word);
+  };
+
+  /* =====================================================
+     DOT IMAGE
+  ===================================================== */
+
+  const handleEndDotClick = (e) => {
+    const image = e.currentTarget.dataset.image || null;
+
+    if (!image) {
+      return;
+    }
+
+    const item = imageItems.find((imageItem) => imageItem.id === image);
+
+    if (!item) {
+      return;
+    }
+
+    handleImageMouseClick(item);
   };
 
   /* =====================================================
@@ -213,6 +776,7 @@ const Unit2_Page8_Q1 = () => {
     const wrong = [];
 
     const newlyLockedWords = [];
+
     const newlyLockedImages = [];
 
     lines.forEach((line) => {
@@ -224,15 +788,16 @@ const Unit2_Page8_Q1 = () => {
         correctCount++;
 
         newlyLockedWords.push(line.word);
+
         newlyLockedImages.push(line.image);
       } else {
         wrong.push(line.word);
       }
     });
 
-    /* =========================================
-       الصح فقط ينقفل
-    ========================================= */
+    /* =================================================
+       LOCK CORRECT ONLY
+    ================================================= */
 
     setLockedWords((prev) =>
       Array.from(new Set([...prev, ...newlyLockedWords])),
@@ -242,7 +807,19 @@ const Unit2_Page8_Q1 = () => {
       Array.from(new Set([...prev, ...newlyLockedImages])),
     );
 
+    /*
+      X only wrong connections.
+    */
+
     setWrongWords(wrong);
+
+    setFirstDot(null);
+
+    setPreviewLine(null);
+
+    setSelectedWord(null);
+
+    setSelectedImage(null);
 
     const total = correctMatches.length;
 
@@ -257,9 +834,9 @@ const Unit2_Page8_Q1 = () => {
       </div>
     `;
 
-    /* =========================================
+    /* =================================================
        ALL CORRECT
-    ========================================= */
+    ================================================= */
 
     if (correctCount === total) {
       setWrongWords([]);
@@ -275,9 +852,9 @@ const Unit2_Page8_Q1 = () => {
       return;
     }
 
-    /* =========================================
+    /* =================================================
        WRONG / PARTIAL
-    ========================================= */
+    ================================================= */
 
     if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
@@ -291,31 +868,28 @@ const Unit2_Page8_Q1 = () => {
   ===================================================== */
 
   const handleShowAnswer = () => {
-    const rect = containerRef.current.getBoundingClientRect();
-
-    const getDotPosition = (selector) => {
-      const el = document.querySelector(selector);
-
-      if (!el) {
-        return {
-          x: 0,
-          y: 0,
-        };
-      }
-
-      const r = el.getBoundingClientRect();
-
-      return {
-        x: r.left - rect.left + 8,
-
-        y: r.top - rect.top + 8,
-      };
-    };
+    if (!containerRef.current) {
+      return;
+    }
 
     const finalLines = correctMatches.map((line) => {
-      const start = getDotPosition(`[data-word="${line.word}"]`);
+      const wordItem = wordItems.find((item) => item.word === line.word);
 
-      const end = getDotPosition(`[data-image="${line.image}"]`);
+      const startElement = wordItem
+        ? document.getElementById(wordItem.dotId)
+        : null;
+
+      const endElement = document.getElementById(`dot-${line.image}`);
+
+      const start = getDotPosition(startElement) || {
+        x: 0,
+        y: 0,
+      };
+
+      const end = getDotPosition(endElement) || {
+        x: 0,
+        y: 0,
+      };
 
       return {
         ...line,
@@ -333,9 +907,12 @@ const Unit2_Page8_Q1 = () => {
     setWrongWords([]);
 
     setSelectedWord(null);
+
     setSelectedImage(null);
 
     setFirstDot(null);
+
+    setPreviewLine(null);
 
     setShowAnswer(true);
 
@@ -353,6 +930,8 @@ const Unit2_Page8_Q1 = () => {
   const handleReset = () => {
     setLines([]);
 
+    setPreviewLine(null);
+
     setWrongWords([]);
 
     setFirstDot(null);
@@ -368,6 +947,14 @@ const Unit2_Page8_Q1 = () => {
     setLockedImages([]);
 
     setCheckCompleted(false);
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+
+      audioRef.current.currentTime = 0;
+    }
+
+    setActiveWordAudio(null);
   };
 
   /* =====================================================
@@ -384,7 +971,13 @@ const Unit2_Page8_Q1 = () => {
         padding: "30px",
       }}
     >
-      <audio ref={audioRef} />
+      <audio
+        ref={audioRef}
+        style={{
+          display: "none",
+        }}
+      />
+
       <div
         className="div-forall"
         style={{
@@ -396,416 +989,205 @@ const Unit2_Page8_Q1 = () => {
           title="Read, look, and match."
           subTitle="Match duck, tiger, dish, and table to the correct pictures."
         />
+
         <div className="container12-review1-p17-exd" ref={containerRef}>
-          {/* =================================================
-      ROW 1 - DUCK
-  ================================================= */}
+          {wordItems.map((wordItem, index) => {
+            const imageItem = imageItems[index];
 
-          <div className="matching-row2">
-            <div className="word-with-dot2">
-              <span className="span-num2">1</span>
+            const wordLocked = isWordLocked(wordItem.word);
 
-              <span
-                className={`word-text2 ${
-                  selectedWord === "duck" ? "selected-item" : ""
-                }`}
-                onClick={() => {
-                  // الصوت يشتغل دائمًا
-                  playWordSound("duck");
+            const imageLocked = isImageLocked(imageItem.id);
 
-                  // التوصيل فقط إذا مش locked
-                  if (lockedWords.includes("duck") || showAnswer) {
-                    return;
-                  }
+            return (
+              <div className="matching-row2" key={wordItem.word}>
+                {/* =================================
+                      WORD
+                  ================================= */}
 
-                  document.getElementById("dot-duck")?.click();
-                }}
-                style={{
-                  cursor: "pointer",
-                  position: "relative",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                duck
-                {activeWordAudio === "duck" && (
-                  <FaVolumeUp
-                    size={18}
-                    style={{
-                      pointerEvents: "none",
-                      flexShrink: 0,
+                <div className="word-with-dot2">
+                  <span className="span-num2">{wordItem.num}</span>
+
+                  <span
+                    ref={(element) => {
+                      wordRefs.current[wordItem.word] = element;
                     }}
-                  />
-                )}
-              </span>
-
-              {wrongWords.includes("duck") && (
-                <span className="error-mark8-u2-p19-q1" style={{ left: 0 }}>
-                  ✕
-                </span>
-              )}
-
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 start-dot2"
-                  id="dot-duck"
-                  data-word="duck"
-                  onClick={handleStartDotClick}
-                />
-              </div>
-            </div>
-
-            <div className="img-with-dot2">
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 end-dot2"
-                  data-image="img1"
-                  id="dot-img1"
-                  onClick={handleEndDotClick}
-                />
-              </div>
-
-              <div
-                style={{
-                  width: "150px",
-                }}
-              >
-                <img
-                  src={table}
-                  alt="Table"
-                  className={`matched-img2 ${
-                    selectedImage === "img1" ? "selected-item" : ""
-                  } ${
-                    lockedImages.includes("img1") || showAnswer
-                      ? "disabled-hover"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (lockedImages.includes("img1") || showAnswer) {
-                      return;
+                    className={`word-text2 ${
+                      selectedWord === wordItem.word ? "selected-item" : ""
+                    } ${wordLocked || showAnswer ? "disabled-hover" : ""}`}
+                    role="button"
+                    tabIndex={
+                      wordLocked || showAnswer || checkCompleted || firstDot
+                        ? -1
+                        : 0
                     }
-
-                    document.getElementById("dot-img1")?.click();
-                  }}
-                  style={{
-                    cursor:
-                      lockedImages.includes("img1") || showAnswer
-                        ? "default"
-                        : "pointer",
-                    width: "110px",
-                    height: "100px",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* =================================================
-      ROW 2 - TIGER
-  ================================================= */}
-
-          <div className="matching-row2">
-            <div className="word-with-dot2">
-              <span className="span-num2">2</span>
-
-              <span
-                className={`word-text2 ${
-                  selectedWord === "tiger" ? "selected-item" : ""
-                }`}
-                onClick={() => {
-                  playWordSound("tiger");
-
-                  if (lockedWords.includes("tiger") || showAnswer) {
-                    return;
-                  }
-
-                  document.getElementById("dot-tiger")?.click();
-                }}
-                style={{
-                  cursor: "pointer",
-                  position: "relative",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                tiger
-                {activeWordAudio === "tiger" && (
-                  <FaVolumeUp
-                    size={18}
-                    style={{
-                      pointerEvents: "none",
-                      flexShrink: 0,
+                    aria-label={
+                      wordLocked
+                        ? `${wordItem.word}. Correct match.`
+                        : `${wordItem.word}. Press Enter or Space to select.`
+                    }
+                    onClick={() => {
+                      handleWordMouseClick(wordItem.word);
                     }}
-                  />
-                )}
-              </span>
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
 
-              {wrongWords.includes("tiger") && (
-                <span className="error-mark8-u2-p19-q1">✕</span>
-              )}
+                        /*
+                            Audio موجود أصلًا على الكلمة.
+                          */
 
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 start-dot2"
-                  id="dot-tiger"
-                  data-word="tiger"
-                  onClick={handleStartDotClick}
-                />
-              </div>
-            </div>
+                        playWordSound(wordItem.word);
 
-            <div className="img-with-dot2">
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 end-dot2"
-                  data-image="img2"
-                  id="dot-img2"
-                  onClick={handleEndDotClick}
-                />
-              </div>
+                        if (wordLocked || showAnswer || checkCompleted) {
+                          return;
+                        }
 
-              <div
-                style={{
-                  width: "150px",
-                }}
-              >
-                <img
-                  src={dish}
-                  alt="Dish"
-                  className={`matched-img2 ${
-                    selectedImage === "img2" ? "selected-item" : ""
-                  } ${
-                    lockedImages.includes("img2") || showAnswer
-                      ? "disabled-hover"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (lockedImages.includes("img2") || showAnswer) {
-                      return;
-                    }
-
-                    document.getElementById("dot-img2")?.click();
-                  }}
-                  style={{
-                    cursor:
-                      lockedImages.includes("img2") || showAnswer
-                        ? "default"
-                        : "pointer",
-                    width: "110px",
-                    height: "110px",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* =================================================
-      ROW 3 - DISH
-  ================================================= */}
-
-          <div className="matching-row2">
-            <div className="word-with-dot2">
-              <span className="span-num2">3</span>
-
-              <span
-                className={`word-text2 ${
-                  selectedWord === "dish" ? "selected-item" : ""
-                }`}
-                onClick={() => {
-                  playWordSound("dish");
-
-                  if (lockedWords.includes("dish") || showAnswer) {
-                    return;
-                  }
-
-                  document.getElementById("dot-dish")?.click();
-                }}
-                style={{
-                  cursor: "pointer",
-                  position: "relative",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                dish
-                {activeWordAudio === "dish" && (
-                  <FaVolumeUp
-                    size={18}
-                    style={{
-                      pointerEvents: "none",
-                      flexShrink: 0,
+                        startKeyboardMatch(wordItem.word, wordItem.dotId);
+                      }
                     }}
-                  />
-                )}
-              </span>
-
-              {wrongWords.includes("dish") && (
-                <span className="error-mark8-u2-p19-q1">✕</span>
-              )}
-
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 start-dot2"
-                  id="dot-dish"
-                  data-word="dish"
-                  onClick={handleStartDotClick}
-                />
-              </div>
-            </div>
-
-            <div className="img-with-dot2">
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 end-dot2"
-                  data-image="img3"
-                  id="dot-img3"
-                  onClick={handleEndDotClick}
-                />
-              </div>
-
-              <div
-                style={{
-                  width: "150px",
-                }}
-              >
-                <img
-                  src={duck}
-                  alt="Duck"
-                  className={`matched-img2 ${
-                    selectedImage === "img3" ? "selected-item" : ""
-                  } ${
-                    lockedImages.includes("img3") || showAnswer
-                      ? "disabled-hover"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (lockedImages.includes("img3") || showAnswer) {
-                      return;
-                    }
-
-                    document.getElementById("dot-img3")?.click();
-                  }}
-                  style={{
-                    cursor:
-                      lockedImages.includes("img3") || showAnswer
-                        ? "default"
-                        : "pointer",
-                    width: "110px",
-                    height: "100px",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* =================================================
-      ROW 4 - TABLE
-  ================================================= */}
-
-          <div className="matching-row2">
-            <div className="word-with-dot2">
-              <span className="span-num2">4</span>
-
-              <span
-                className={`word-text2 ${
-                  selectedWord === "table" ? "selected-item" : ""
-                }`}
-                onClick={() => {
-                  playWordSound("table");
-
-                  if (lockedWords.includes("table") || showAnswer) {
-                    return;
-                  }
-
-                  document.getElementById("dot-table")?.click();
-                }}
-                style={{
-                  cursor: "pointer",
-                  position: "relative",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}
-              >
-                table
-                {activeWordAudio === "table" && (
-                  <FaVolumeUp
-                    size={18}
                     style={{
-                      pointerEvents: "none",
-                      flexShrink: 0,
+                      cursor: "pointer",
+
+                      position: "relative",
+
+                      display: "inline-flex",
+
+                      alignItems: "center",
+
+                      gap: "6px",
                     }}
-                  />
-                )}
-              </span>
+                  >
+                    {wordItem.word}
 
-              {wrongWords.includes("table") && (
-                <span className="error-mark8-u2-p19-q1">✕</span>
-              )}
+                    {activeWordAudio === wordItem.word && (
+                      <FaVolumeUp
+                        size={18}
+                        aria-hidden="true"
+                        style={{
+                          pointerEvents: "none",
 
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 start-dot2"
-                  id="dot-table"
-                  data-word="table"
-                  onClick={handleStartDotClick}
-                />
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
+                  </span>
+
+                  {/* WRONG */}
+
+                  {wrongWords.includes(wordItem.word) && (
+                    <span
+                      className="error-mark8-u2-p19-q1"
+                      style={
+                        wordItem.word === "duck"
+                          ? {
+                              left: 0,
+                            }
+                          : undefined
+                      }
+                    >
+                      ✕
+                    </span>
+                  )}
+
+                  {/* WORD DOT */}
+
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 start-dot2"
+                      id={wordItem.dotId}
+                      data-word={wordItem.word}
+                      onClick={handleStartDotClick}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+
+                {/* =================================
+                      IMAGE
+                  ================================= */}
+
+                <div className="img-with-dot2">
+                  <div className="dot-wrapper2">
+                    <div
+                      className="dot2 end-dot2"
+                      id={`dot-${imageItem.id}`}
+                      data-image={imageItem.id}
+                      onClick={handleEndDotClick}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      width: "150px",
+                    }}
+                  >
+                    <img
+                      ref={(element) => {
+                        imageRefs.current[index] = element;
+                      }}
+                      src={imageItem.src}
+                      alt={imageItem.alt}
+                      className={`matched-img2 ${
+                        selectedImage === imageItem.id ? "selected-item" : ""
+                      } ${imageLocked || showAnswer ? "disabled-hover" : ""}`}
+                      role="button"
+                      tabIndex={
+                        firstDot?.side === "word" &&
+                        !imageLocked &&
+                        !showAnswer &&
+                        !checkCompleted
+                          ? 0
+                          : -1
+                      }
+                      aria-label={
+                        imageLocked
+                          ? `${imageItem.alt}. Correct match.`
+                          : firstDot?.side === "word"
+                            ? `${imageItem.alt}. Press Enter or Space to connect with ${firstDot.word}.`
+                            : imageItem.alt
+                      }
+                      onFocus={() => {
+                        if (
+                          !firstDot ||
+                          firstDot.side !== "word" ||
+                          imageLocked
+                        ) {
+                          return;
+                        }
+
+                        updatePreviewLine(firstDot, imageItem.id);
+                      }}
+                      onKeyDown={(e) =>
+                        handleImageKeyboard(e, index, imageItem)
+                      }
+                      onClick={() => {
+                        handleImageMouseClick(imageItem);
+                      }}
+                      style={{
+                        cursor:
+                          imageLocked || showAnswer ? "default" : "pointer",
+
+                        width: imageItem.width,
+
+                        height: imageItem.height,
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="img-with-dot2">
-              <div className="dot-wrapper2">
-                <div
-                  className="dot2 end-dot2"
-                  data-image="img4"
-                  id="dot-img4"
-                  onClick={handleEndDotClick}
-                />
-              </div>
-
-              <div
-                style={{
-                  width: "150px",
-                }}
-              >
-                <img
-                  src={tiger}
-                  alt="Tiger"
-                  className={`matched-img2 ${
-                    selectedImage === "img4" ? "selected-item" : ""
-                  } ${
-                    lockedImages.includes("img4") || showAnswer
-                      ? "disabled-hover"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (lockedImages.includes("img4") || showAnswer) {
-                      return;
-                    }
-
-                    document.getElementById("dot-img4")?.click();
-                  }}
-                  style={{
-                    cursor:
-                      lockedImages.includes("img4") || showAnswer
-                        ? "default"
-                        : "pointer",
-                    width: "110px",
-                    height: "100px",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+            );
+          })}
 
           {/* =================================================
-      LINES
-  ================================================= */}
+              LINES
+          ================================================= */}
 
-          <svg className="lines-layer2">
+          <svg className="lines-layer2" aria-hidden="true">
+            {/* FIXED LINES */}
+
             {lines.map((line, index) => (
               <line
                 key={`${line.word}-${line.image}-${index}`}
@@ -817,6 +1199,21 @@ const Unit2_Page8_Q1 = () => {
                 strokeWidth="3"
               />
             ))}
+
+            {/* KEYBOARD PREVIEW */}
+
+            {previewLine && (
+              <line
+                x1={previewLine.x1}
+                y1={previewLine.y1}
+                x2={previewLine.x2}
+                y2={previewLine.y2}
+                stroke="red"
+                strokeWidth="3"
+                strokeDasharray="6 4"
+                pointerEvents="none"
+              />
+            )}
           </svg>
         </div>
 

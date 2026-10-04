@@ -11,19 +11,18 @@ import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
-// ======================================================
-// WORD AUDIOS
-// بدلي المسارات حسب ملفاتك
-// ======================================================
+/* ======================================================
+   WORD AUDIOS
+====================================================== */
 
 import ballAudio from "../../../assets/unit2/Page 19 - E/ball.mp3";
 import pizzaAudio from "../../../assets/unit2/Page 19 - E/pizza.mp3";
 import birdAudio from "../../../assets/unit2/Page 19 - E/bird.mp3";
 import boyAudio from "../../../assets/unit2/Page 19 - E/boy.mp3";
 
-// ======================================================
-// DATA
-// ======================================================
+/* ======================================================
+   DATA
+====================================================== */
 
 const imageItems = [
   {
@@ -94,18 +93,16 @@ const correctMatches = [
   },
 ];
 
-// ======================================================
-// MAIN
-// ======================================================
-
 const Unit2_Page10_Q2 = () => {
   const [lines, setLines] = useState([]);
 
+  const [previewLine, setPreviewLine] = useState(null);
+
   const containerRef = useRef(null);
 
-  // ======================================================
-  // SELECTION
-  // ======================================================
+  /* ======================================================
+     SELECTION
+  ====================================================== */
 
   const [firstDot, setFirstDot] = useState(null);
 
@@ -113,9 +110,9 @@ const Unit2_Page10_Q2 = () => {
 
   const [selectedWord, setSelectedWord] = useState(null);
 
-  // ======================================================
-  // CHECK
-  // ======================================================
+  /* ======================================================
+     CHECK
+  ====================================================== */
 
   const [wrongWords, setWrongWords] = useState([]);
 
@@ -129,9 +126,18 @@ const Unit2_Page10_Q2 = () => {
 
   const [checkCompleted, setCheckCompleted] = useState(false);
 
-  // ======================================================
-  // WORD AUDIO
-  // ======================================================
+  /* ======================================================
+     KEYBOARD
+  ====================================================== */
+
+  const imageRefs = useRef({});
+  const wordRefs = useRef([]);
+
+  const [announcement, setAnnouncement] = useState("");
+
+  /* ======================================================
+     WORD AUDIO
+  ====================================================== */
 
   const audioRef = useRef(null);
 
@@ -140,9 +146,6 @@ const Unit2_Page10_Q2 = () => {
   const stopWordAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
-
-      // لما نوقف صوت بسبب صوت ثاني
-      // نرجعه للبداية
       audioRef.current.currentTime = 0;
 
       audioRef.current.onended = null;
@@ -155,11 +158,8 @@ const Unit2_Page10_Q2 = () => {
   };
 
   const playWordAudio = (item) => {
-    if (!item?.audio) {
-      return;
-    }
+    if (!item?.audio) return;
 
-    // وقف أي صوت سابق ورجعه للبداية
     stopWordAudio();
 
     const audio = new Audio(item.audio);
@@ -195,9 +195,9 @@ const Unit2_Page10_Q2 = () => {
     };
   };
 
-  // ======================================================
-  // HELPERS
-  // ======================================================
+  /* ======================================================
+     HELPERS
+  ====================================================== */
 
   const isImageLocked = (image) => lockedImages.includes(image);
 
@@ -225,39 +225,26 @@ const Unit2_Page10_Q2 = () => {
     };
   };
 
-  // ======================================================
-  // CLEAR SELECTION
-  // ======================================================
-
   const clearSelection = () => {
     setFirstDot(null);
+    setPreviewLine(null);
 
     setSelectedImage(null);
-
     setSelectedWord(null);
   };
 
-  // ======================================================
-  // REMOVE OLD WRONG CONNECTIONS
-  // ======================================================
+  /* ======================================================
+     REMOVE OLD WRONG CONNECTIONS
+  ====================================================== */
 
   const removeEditableConnection = ({ image, word }) => {
     setLines((prev) =>
       prev.filter((line) => {
-        /*
-          الخط الصحيح المقفول ما بنلمسه.
-        */
-
         const lineLocked = isImageLocked(line.image) || isWordLocked(line.word);
 
         if (lineLocked) {
           return true;
         }
-
-        /*
-          إذا endpoint نفسه مستخدم بخط غلط قديم
-          نحذف الخط عشان نعيد التوصيل.
-        */
 
         if (image && line.image === image) {
           return false;
@@ -272,9 +259,303 @@ const Unit2_Page10_Q2 = () => {
     );
   };
 
-  // ======================================================
-  // START / COMPLETE FROM IMAGE
-  // ======================================================
+  /* ======================================================
+     AVAILABLE WORDS FOR KEYBOARD
+  ====================================================== */
+
+  const getAvailableWordIndexes = () =>
+    wordItems
+      .map((item, index) => ({
+        item,
+        index,
+      }))
+      .filter(({ item }) => !isWordLocked(item.word))
+      .map(({ index }) => index);
+
+  /* ======================================================
+     PREVIEW LINE
+  ====================================================== */
+
+  const updatePreviewLine = (startPoint, word) => {
+    if (!startPoint) return;
+
+    const endDot = document.getElementById(`dot-${word}`);
+
+    if (!endDot) return;
+
+    const end = getDotPosition(endDot);
+
+    if (!end) return;
+
+    setPreviewLine({
+      x1: startPoint.x,
+      y1: startPoint.y,
+
+      x2: end.x,
+      y2: end.y,
+    });
+  };
+
+  /* ======================================================
+     COMMIT CONNECTION
+  ====================================================== */
+
+  const commitConnection = (image, word) => {
+    if (
+      !image ||
+      !word ||
+      showAnswer ||
+      checkCompleted ||
+      isImageLocked(image) ||
+      isWordLocked(word)
+    ) {
+      return;
+    }
+
+    const imageDot = document.getElementById(`dot-${image}`);
+
+    const wordDot = document.getElementById(`dot-${word}`);
+
+    if (!imageDot || !wordDot) return;
+
+    const start = getDotPosition(imageDot);
+
+    const end = getDotPosition(wordDot);
+
+    if (!start || !end) return;
+
+    const previousImageLine = lines.find((line) => line.image === image);
+
+    const previousWordLine = lines.find((line) => line.word === word);
+
+    if (
+      previousImageLine &&
+      (isImageLocked(previousImageLine.image) ||
+        isWordLocked(previousImageLine.word))
+    ) {
+      clearSelection();
+      return;
+    }
+
+    if (
+      previousWordLine &&
+      (isImageLocked(previousWordLine.image) ||
+        isWordLocked(previousWordLine.word))
+    ) {
+      clearSelection();
+      return;
+    }
+
+    const newLine = {
+      x1: start.x,
+      y1: start.y,
+
+      x2: end.x,
+      y2: end.y,
+
+      word,
+      image,
+    };
+
+    /* كل image وكل word إلهم خط واحد فقط */
+
+    setLines((prev) => {
+      const filtered = prev.filter(
+        (line) => line.word !== word && line.image !== image,
+      );
+
+      return [...filtered, newLine];
+    });
+
+    /* X ينشال فقط عن العناصر المتغيرة */
+
+    setWrongWords((prev) =>
+      prev.filter((item) => item !== word && item !== previousImageLine?.word),
+    );
+
+    setWrongImages((prev) =>
+      prev.filter((item) => item !== image && item !== previousWordLine?.image),
+    );
+
+    setSelectedImage(image);
+    setSelectedWord(word);
+
+    setFirstDot(null);
+    setPreviewLine(null);
+
+    setAnnouncement(`${image} connected to ${word}.`);
+
+    window.setTimeout(() => {
+      setSelectedImage(null);
+      setSelectedWord(null);
+    }, 300);
+  };
+
+  /* ======================================================
+     KEYBOARD START FROM IMAGE
+  ====================================================== */
+
+  const startKeyboardMatch = (image, dotId) => {
+    if (showAnswer || checkCompleted || isImageLocked(image)) {
+      return;
+    }
+
+    const dot = document.getElementById(dotId);
+
+    if (!dot) return;
+
+    const position = getDotPosition(dot);
+
+    if (!position) return;
+
+    const previousLine = lines.find(
+      (line) => line.image === image && !isImageLocked(line.image),
+    );
+
+    removeEditableConnection({
+      image,
+    });
+
+    setWrongImages((prev) => prev.filter((item) => item !== image));
+
+    if (previousLine) {
+      setWrongWords((prev) =>
+        prev.filter((item) => item !== previousLine.word),
+      );
+    }
+
+    const startPoint = {
+      type: "image",
+      image,
+
+      x: position.x,
+      y: position.y,
+    };
+
+    setFirstDot(startPoint);
+
+    setSelectedImage(image);
+    setSelectedWord(null);
+
+    setAnnouncement(
+      `${image} selected. Use Tab or Shift plus Tab to choose a word, then press Enter or Space.`,
+    );
+
+    requestAnimationFrame(() => {
+      const available = getAvailableWordIndexes();
+
+      if (!available.length) return;
+
+      const firstIndex = available[0];
+
+      wordRefs.current[firstIndex]?.focus();
+
+      updatePreviewLine(startPoint, wordItems[firstIndex].word);
+    });
+  };
+
+  /* ======================================================
+     KEYBOARD WORD SIDE
+  ====================================================== */
+
+  const handleWordKeyboard = (e, index, item) => {
+    if (!firstDot || firstDot.type !== "image") {
+      return;
+    }
+
+    if (showAnswer || checkCompleted || isWordLocked(item.word)) {
+      return;
+    }
+
+    /* TAB / SHIFT TAB */
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const available = getAvailableWordIndexes();
+
+      if (!available.length) {
+        return;
+      }
+
+      const currentPosition = available.indexOf(index);
+
+      let nextPosition;
+
+      if (e.shiftKey) {
+        nextPosition =
+          currentPosition <= 0 ? available.length - 1 : currentPosition - 1;
+      } else {
+        nextPosition =
+          currentPosition === -1 || currentPosition === available.length - 1
+            ? 0
+            : currentPosition + 1;
+      }
+
+      const nextIndex = available[nextPosition];
+
+      const nextElement = wordRefs.current[nextIndex];
+
+      if (nextElement) {
+        nextElement.focus();
+
+        updatePreviewLine(firstDot, wordItems[nextIndex].word);
+      }
+
+      return;
+    }
+
+    /* ENTER / SPACE */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      playWordAudio(item);
+
+      const currentImage = firstDot.image;
+
+      commitConnection(currentImage, item.word);
+
+      window.setTimeout(() => {
+        const nextImage =
+          imageItems.find(
+            (imageItem) =>
+              !isImageLocked(imageItem.id) && imageItem.id !== currentImage,
+          ) || imageItems.find((imageItem) => !isImageLocked(imageItem.id));
+
+        if (nextImage) {
+          imageRefs.current[nextImage.id]?.focus();
+        }
+      }, 100);
+
+      return;
+    }
+
+    /* ESCAPE */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const currentImage = firstDot.image;
+
+      clearSelection();
+
+      setAnnouncement(`${currentImage} selection cancelled.`);
+
+      requestAnimationFrame(() => {
+        if (!isImageLocked(currentImage)) {
+          imageRefs.current[currentImage]?.focus();
+        }
+      });
+    }
+  };
+
+  /* ======================================================
+     MOUSE IMAGE DOT
+  ====================================================== */
 
   const handleImageDotClick = (e) => {
     if (showAnswer || checkCompleted) {
@@ -289,16 +570,9 @@ const Unit2_Page10_Q2 = () => {
 
     const position = getDotPosition(e.currentTarget);
 
-    if (!position) {
-      return;
-    }
+    if (!position) return;
 
-    /*
-      -----------------------------------
-      NO FIRST DOT
-      الصورة تصبح بداية التوصيل
-      -----------------------------------
-    */
+    /* no first dot */
 
     if (!firstDot) {
       removeEditableConnection({
@@ -306,11 +580,6 @@ const Unit2_Page10_Q2 = () => {
       });
 
       setWrongImages((prev) => prev.filter((item) => item !== image));
-
-      /*
-        إذا الخط القديم المحذوف كان مربوط
-        بكلمة غلط، شيل X عنها كمان.
-      */
 
       const previousLine = lines.find(
         (line) => line.image === image && !isImageLocked(line.image),
@@ -331,18 +600,14 @@ const Unit2_Page10_Q2 = () => {
       });
 
       setSelectedImage(image);
-
       setSelectedWord(null);
+
+      setPreviewLine(null);
 
       return;
     }
 
-    /*
-      -----------------------------------
-      ضغط صورة ثانية والصورة هي البداية
-      فقط بدل الاختيار
-      -----------------------------------
-    */
+    /* image selected then another image */
 
     if (firstDot.type === "image") {
       removeEditableConnection({
@@ -358,98 +623,21 @@ const Unit2_Page10_Q2 = () => {
       });
 
       setSelectedImage(image);
-
       setSelectedWord(null);
 
-      return;
-    }
-
-    /*
-      -----------------------------------
-      البداية كانت WORD
-      والنهاية الآن IMAGE
-      -----------------------------------
-    */
-
-    const word = firstDot.word;
-
-    if (isWordLocked(word)) {
-      clearSelection();
+      setPreviewLine(null);
 
       return;
     }
 
-    /*
-      إذا الصورة أو الكلمة مستخدمة بخط غلط
-      نحذف الخط القديم.
-    */
+    /* word -> image */
 
-    const previousImageLine = lines.find((line) => line.image === image);
-
-    const previousWordLine = lines.find((line) => line.word === word);
-
-    if (
-      previousImageLine &&
-      (isImageLocked(previousImageLine.image) ||
-        isWordLocked(previousImageLine.word))
-    ) {
-      clearSelection();
-
-      return;
-    }
-
-    if (
-      previousWordLine &&
-      (isImageLocked(previousWordLine.image) ||
-        isWordLocked(previousWordLine.word))
-    ) {
-      clearSelection();
-
-      return;
-    }
-
-    const newLine = {
-      x1: firstDot.x,
-
-      y1: firstDot.y,
-
-      x2: position.x,
-
-      y2: position.y,
-
-      word,
-
-      image,
-    };
-
-    setLines((prev) => {
-      const filtered = prev.filter(
-        (line) => line.word !== word && line.image !== image,
-      );
-
-      return [...filtered, newLine];
-    });
-
-    setWrongWords((prev) =>
-      prev.filter((item) => item !== word && item !== previousImageLine?.word),
-    );
-
-    setWrongImages((prev) =>
-      prev.filter((item) => item !== image && item !== previousWordLine?.image),
-    );
-
-    setSelectedImage(image);
-
-    setSelectedWord(word);
-
-    window.setTimeout(() => {
-      clearSelection();
-    }, 300);
+    commitConnection(image, firstDot.word);
   };
 
-  // ======================================================
-  // START / COMPLETE FROM WORD
-  // ======================================================
+  /* ======================================================
+     MOUSE WORD DOT
+  ====================================================== */
 
   const handleWordDotClick = (e) => {
     if (showAnswer || checkCompleted) {
@@ -464,16 +652,9 @@ const Unit2_Page10_Q2 = () => {
 
     const position = getDotPosition(e.currentTarget);
 
-    if (!position) {
-      return;
-    }
+    if (!position) return;
 
-    /*
-      -----------------------------------
-      NO FIRST DOT
-      الكلمة تصبح بداية التوصيل
-      -----------------------------------
-    */
+    /* no first dot */
 
     if (!firstDot) {
       removeEditableConnection({
@@ -501,18 +682,14 @@ const Unit2_Page10_Q2 = () => {
       });
 
       setSelectedWord(word);
-
       setSelectedImage(null);
+
+      setPreviewLine(null);
 
       return;
     }
 
-    /*
-      -----------------------------------
-      ضغط كلمة ثانية والكلمة هي البداية
-      فقط بدل الاختيار
-      -----------------------------------
-    */
+    /* word selected then another word */
 
     if (firstDot.type === "word") {
       removeEditableConnection({
@@ -528,93 +705,21 @@ const Unit2_Page10_Q2 = () => {
       });
 
       setSelectedWord(word);
-
       setSelectedImage(null);
 
-      return;
-    }
-
-    /*
-      -----------------------------------
-      البداية IMAGE
-      والنهاية WORD
-      -----------------------------------
-    */
-
-    const image = firstDot.image;
-
-    if (isImageLocked(image)) {
-      clearSelection();
+      setPreviewLine(null);
 
       return;
     }
 
-    const previousWordLine = lines.find((line) => line.word === word);
+    /* image -> word */
 
-    const previousImageLine = lines.find((line) => line.image === image);
-
-    if (
-      previousWordLine &&
-      (isImageLocked(previousWordLine.image) ||
-        isWordLocked(previousWordLine.word))
-    ) {
-      clearSelection();
-
-      return;
-    }
-
-    if (
-      previousImageLine &&
-      (isImageLocked(previousImageLine.image) ||
-        isWordLocked(previousImageLine.word))
-    ) {
-      clearSelection();
-
-      return;
-    }
-
-    const newLine = {
-      x1: firstDot.x,
-
-      y1: firstDot.y,
-
-      x2: position.x,
-
-      y2: position.y,
-
-      word,
-
-      image,
-    };
-
-    setLines((prev) => {
-      const filtered = prev.filter(
-        (line) => line.word !== word && line.image !== image,
-      );
-
-      return [...filtered, newLine];
-    });
-
-    setWrongWords((prev) =>
-      prev.filter((item) => item !== word && item !== previousImageLine?.word),
-    );
-
-    setWrongImages((prev) =>
-      prev.filter((item) => item !== image && item !== previousWordLine?.image),
-    );
-
-    setSelectedImage(image);
-
-    setSelectedWord(word);
-
-    window.setTimeout(() => {
-      clearSelection();
-    }, 300);
+    commitConnection(firstDot.image, word);
   };
 
-  // ======================================================
-  // IMAGE CLICK
-  // ======================================================
+  /* ======================================================
+     IMAGE CLICK
+  ====================================================== */
 
   const handleImageClick = (imageId) => {
     if (showAnswer || checkCompleted || isImageLocked(imageId)) {
@@ -624,23 +729,14 @@ const Unit2_Page10_Q2 = () => {
     document.getElementById(`dot-${imageId}`)?.click();
   };
 
-  // ======================================================
-  // WORD CLICK
-  // الصوت دائمًا يشتغل
-  // والتوصيل يشتغل فقط إذا مش مقفول
-  // ======================================================
+  /* ======================================================
+     WORD CLICK
+  ====================================================== */
 
   const handleWordClick = (item) => {
-    /*
-      الصوت يشتغل حتى بعد Check
-      وحتى لو الكلمة صح ومقفلة.
-    */
+    /* الصوت يشتغل دائمًا */
 
     playWordAudio(item);
-
-    /*
-      التوصيل فقط يتوقف بعد القفل.
-    */
 
     if (showAnswer || checkCompleted || isWordLocked(item.word)) {
       return;
@@ -649,9 +745,9 @@ const Unit2_Page10_Q2 = () => {
     document.getElementById(`dot-${item.word}`)?.click();
   };
 
-  // ======================================================
-  // CHECK
-  // ======================================================
+  /* ======================================================
+     CHECK
+  ====================================================== */
 
   const checkAnswers2 = () => {
     if (showAnswer || checkCompleted) {
@@ -691,10 +787,6 @@ const Unit2_Page10_Q2 = () => {
       }
     });
 
-    // ======================================================
-    // LOCK CORRECT ONLY
-    // ======================================================
-
     setLockedWords((prev) =>
       Array.from(new Set([...prev, ...correctWordTemp])),
     );
@@ -702,10 +794,6 @@ const Unit2_Page10_Q2 = () => {
     setLockedImages((prev) =>
       Array.from(new Set([...prev, ...correctImageTemp])),
     );
-
-    // ======================================================
-    // WRONG ONLY
-    // ======================================================
 
     setWrongWords(wrongWordTemp);
 
@@ -726,20 +814,17 @@ const Unit2_Page10_Q2 = () => {
       </div>
     `;
 
-    // ======================================================
-    // ALL CORRECT
-    // ======================================================
-
     if (correctCount === total) {
       setLockedWords(correctMatches.map((item) => item.word));
 
       setLockedImages(correctMatches.map((item) => item.image));
 
       setWrongWords([]);
-
       setWrongImages([]);
 
       setCheckCompleted(true);
+
+      setAnnouncement("All matches are correct.");
 
       ValidationAlert.success(scoreMessage);
 
@@ -753,9 +838,9 @@ const Unit2_Page10_Q2 = () => {
     }
   };
 
-  // ======================================================
-  // SHOW ANSWER
-  // ======================================================
+  /* ======================================================
+     SHOW ANSWER
+  ====================================================== */
 
   const handleShowAnswer = () => {
     if (!containerRef.current) {
@@ -765,7 +850,6 @@ const Unit2_Page10_Q2 = () => {
     clearSelection();
 
     setWrongWords([]);
-
     setWrongImages([]);
 
     const finalLines = correctMatches.map((pair) => {
@@ -778,11 +862,6 @@ const Unit2_Page10_Q2 = () => {
       const imagePosition = getDotPosition(imageDot);
 
       return {
-        /*
-              نخلي الرسم من الصورة للكلمة
-              لكن النتيجة نفسها.
-            */
-
         x1: imagePosition?.x ?? 0,
 
         y1: imagePosition?.y ?? 0,
@@ -806,23 +885,25 @@ const Unit2_Page10_Q2 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setAnnouncement("Correct answers shown.");
   };
 
-  // ======================================================
-  // RESET
-  // ======================================================
+  /* ======================================================
+     RESET
+  ====================================================== */
 
   const reset = () => {
     stopWordAudio();
 
     setLines([]);
 
-    setWrongWords([]);
+    setPreviewLine(null);
 
+    setWrongWords([]);
     setWrongImages([]);
 
     setLockedWords([]);
-
     setLockedImages([]);
 
     setFirstDot(null);
@@ -832,13 +913,14 @@ const Unit2_Page10_Q2 = () => {
     setCheckCompleted(false);
 
     setSelectedImage(null);
-
     setSelectedWord(null);
+
+    setAnnouncement("Activity reset.");
   };
 
-  // ======================================================
-  // RENDER
-  // ======================================================
+  /* ======================================================
+     RENDER
+  ====================================================== */
 
   return (
     <div
@@ -850,6 +932,15 @@ const Unit2_Page10_Q2 = () => {
         padding: "30px",
       }}
     >
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {announcement}
+      </div>
+
       <div
         className="div-forall"
         style={{
@@ -882,12 +973,37 @@ const Unit2_Page10_Q2 = () => {
                   <span className="span-num2">{imageItem.number}</span>
 
                   <img
+                    ref={(el) => {
+                      imageRefs.current[imageItem.id] = el;
+                    }}
                     src={imageItem.img}
                     alt={imageItem.alt}
                     className={`matched-img2 ${
                       selectedImage === imageItem.id ? "selected-item" : ""
-                    }`}
+                    } ${imageLocked || showAnswer ? "disabled-hover" : ""}`}
+                    role="button"
+                    tabIndex={
+                      imageLocked || showAnswer || checkCompleted || firstDot
+                        ? -1
+                        : 0
+                    }
+                    aria-label={
+                      imageLocked
+                        ? `${imageItem.alt}. Correct match.`
+                        : `${imageItem.alt}. Press Enter or Space to select.`
+                    }
                     onClick={() => handleImageClick(imageItem.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+
+                        if (imageLocked || showAnswer || checkCompleted) {
+                          return;
+                        }
+
+                        startKeyboardMatch(imageItem.id, `dot-${imageItem.id}`);
+                      }
+                    }}
                     style={{
                       height: "auto",
 
@@ -900,13 +1016,16 @@ const Unit2_Page10_Q2 = () => {
                     }}
                   />
 
-                 
+                
+
                   <div className="dot-wrapper2">
                     <div
                       className="dot2 start-dot2"
                       data-image={imageItem.id}
                       id={`dot-${imageItem.id}`}
                       onClick={handleImageDotClick}
+                      tabIndex={-1}
+                      aria-hidden="true"
                     />
                   </div>
                 </div>
@@ -922,14 +1041,47 @@ const Unit2_Page10_Q2 = () => {
                       data-word={wordItem.word}
                       id={`dot-${wordItem.word}`}
                       onClick={handleWordDotClick}
+                      tabIndex={-1}
+                      aria-hidden="true"
                     />
                   </div>
 
                   <span
+                    ref={(el) => {
+                      wordRefs.current[index] = el;
+                    }}
                     className={`word-text2 ${
                       selectedWord === wordItem.word ? "selected-item" : ""
-                    }`}
+                    } ${wordLocked || showAnswer ? "disabled-hover" : ""}`}
+                    role={firstDot?.type === "image" ? "button" : undefined}
+                    tabIndex={
+                      firstDot?.type === "image" &&
+                      !wordLocked &&
+                      !showAnswer &&
+                      !checkCompleted
+                        ? 0
+                        : -1
+                    }
+                    aria-label={
+                      wordLocked
+                        ? `${wordItem.label}. Correct match.`
+                        : firstDot?.type === "image"
+                          ? `${wordItem.label}. Press Enter or Space to connect.`
+                          : wordItem.label
+                    }
                     onClick={() => handleWordClick(wordItem)}
+                    onFocus={() => {
+                      if (
+                        !firstDot ||
+                        firstDot.type !== "image" ||
+                        wordLocked
+                      ) {
+                        return;
+                      }
+
+                      updatePreviewLine(firstDot, wordItem.word);
+                    }}
+                    onKeyDown={(e) => handleWordKeyboard(e, index, wordItem)}
                     style={{
                       cursor: "pointer",
 
@@ -943,11 +1095,6 @@ const Unit2_Page10_Q2 = () => {
                     }}
                   >
                     {wordItem.label}
-
-                    {/* =================================================
-                          AUDIO ICON
-                          تظهر فقط أثناء الصوت
-                      ================================================= */}
 
                     {wordIsPlaying && (
                       <FaVolumeUp
@@ -974,7 +1121,7 @@ const Unit2_Page10_Q2 = () => {
               LINES
           ================================================= */}
 
-          <svg className="lines-layer2">
+          <svg className="lines-layer2" aria-hidden="true">
             {lines.map((line, index) => (
               <line
                 key={`${line.word}-${line.image}-${index}`}
@@ -986,6 +1133,19 @@ const Unit2_Page10_Q2 = () => {
                 strokeWidth="3"
               />
             ))}
+
+            {previewLine && (
+              <line
+                x1={previewLine.x1}
+                y1={previewLine.y1}
+                x2={previewLine.x2}
+                y2={previewLine.y2}
+                stroke="red"
+                strokeWidth="3"
+                strokeDasharray="6 4"
+                pointerEvents="none"
+              />
+            )}
           </svg>
         </div>
       </div>

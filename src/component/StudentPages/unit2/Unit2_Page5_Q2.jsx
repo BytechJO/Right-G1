@@ -25,7 +25,11 @@ const Unit2_Page5_Q2 = () => {
   const [showResult, setShowResult] = useState(false);
 
   const [showAnswer, setShowAnswer] = useState(false);
+  const [modelStopSignal, setModelStopSignal] = useState(0);
 
+  const stopModelAudio = () => {
+    setModelStopSignal((prev) => prev + 1);
+  };
   // العناصر الصحيحة اللي اتقفلت بعد Check
   const [lockedItems, setLockedItems] = useState([]);
 
@@ -72,8 +76,13 @@ const Unit2_Page5_Q2 = () => {
   const playItemSound = (sound, index) => {
     if (!audioRef.current) return;
 
+    // وقف QuestionAudioPlayer
+    stopModelAudio();
+
+    // وقف صوت الصورة السابق ورجعه للبداية
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
+    audioRef.current.onended = null;
 
     audioRef.current.src = sound;
 
@@ -82,10 +91,20 @@ const Unit2_Page5_Q2 = () => {
     audioRef.current.play();
 
     audioRef.current.onended = () => {
+      audioRef.current.currentTime = 0;
       setActiveAudioIndex(null);
     };
   };
+  const handleModelInteract = () => {
+    // وقف صوت الصورة لما المستخدم يشغل QuestionAudioPlayer
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.onended = null;
+    }
 
+    setActiveAudioIndex(null);
+  };
   /* =====================================================
      CAPTIONS
   ===================================================== */
@@ -250,6 +269,7 @@ const Unit2_Page5_Q2 = () => {
     setShowAnswer(false);
 
     setLockedItems([]);
+    stopModelAudio();
 
     setCheckCompleted(false);
 
@@ -316,6 +336,8 @@ const Unit2_Page5_Q2 = () => {
           captions={captions}
           stopAtSecond={stopAtSecond}
           pageId="unit2-page14"
+          forceStop={modelStopSignal}
+          onInteract={handleModelInteract}
         />
 
         <div
@@ -388,22 +410,32 @@ const Unit2_Page5_Q2 = () => {
                     {/* B */}
 
                     <span
+                      role="button"
+                      tabIndex={isLocked || showAnswer ? -1 : 0}
+                      aria-label={`Select b for ${item.alt}`}
+                      className={`bp-option accessible-bp-option
+    ${answers[index] === "b" ? "selected" : ""}
+    ${
+      showResult && answers[index] === "b" && answers[index] !== item.correct
+        ? "wrong-answer"
+        : ""
+    }
+  `}
                       style={{
                         position: "relative",
-
                         cursor: isLocked || showAnswer ? "default" : "pointer",
                       }}
-                      className={`bp-option
-                          ${answers[index] === "b" ? "selected" : ""}
-                          ${
-                            showResult &&
-                            answers[index] === "b" &&
-                            answers[index] !== item.correct
-                              ? "wrong-answer"
-                              : ""
-                          }
-                        `}
                       onClick={() => handleSelect(index, "b")}
+                      onKeyDown={(e) => {
+                        if (
+                          (e.key === "Enter" || e.key === " ") &&
+                          !isLocked &&
+                          !showAnswer
+                        ) {
+                          e.preventDefault();
+                          handleSelect(index, "b");
+                        }
+                      }}
                     >
                       b
                       {showResult &&
@@ -416,22 +448,32 @@ const Unit2_Page5_Q2 = () => {
                     {/* P */}
 
                     <span
+                      role="button"
+                      tabIndex={isLocked || showAnswer ? -1 : 0}
+                      aria-label={`Select p for ${item.alt}`}
+                      className={`bp-option accessible-bp-option
+    ${answers[index] === "p" ? "selected" : ""}
+    ${
+      showResult && answers[index] === "p" && answers[index] !== item.correct
+        ? "wrong-answer"
+        : ""
+    }
+  `}
                       style={{
                         position: "relative",
-
                         cursor: isLocked || showAnswer ? "default" : "pointer",
                       }}
-                      className={`bp-option
-                          ${answers[index] === "p" ? "selected" : ""}
-                          ${
-                            showResult &&
-                            answers[index] === "p" &&
-                            answers[index] !== item.correct
-                              ? "wrong-answer"
-                              : ""
-                          }
-                        `}
                       onClick={() => handleSelect(index, "p")}
+                      onKeyDown={(e) => {
+                        if (
+                          (e.key === "Enter" || e.key === " ") &&
+                          !isLocked &&
+                          !showAnswer
+                        ) {
+                          e.preventDefault();
+                          handleSelect(index, "p");
+                        }
+                      }}
                     >
                       p
                       {showResult &&

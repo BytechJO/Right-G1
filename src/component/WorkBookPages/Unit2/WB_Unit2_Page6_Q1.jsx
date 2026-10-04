@@ -459,20 +459,28 @@ const WB_Unit2_Page6_Q1 = () => {
 
                       <span
                         className="wb-unit2-p6-q1-text"
+                        role="button"
+                        tabIndex={
+                          questionLocked || showAnswer || checkCompleted
+                            ? -1
+                            : 0
+                        }
+                        aria-label={`Play audio for ${item.text}`}
                         onClick={() => playOptionAudio(q.id, idx, item.audio)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+
+                            playOptionAudio(q.id, idx, item.audio);
+                          }
+                        }}
                         style={{
                           position: "relative",
-
                           cursor: "pointer",
-
                           display: "inline-block",
-
                           padding: "2px 4px",
-
                           border: "2px solid transparent",
-
                           borderRadius: "6px",
-
                           transition: "border-color 0.2s ease",
                         }}
                         onMouseEnter={(e) => {
@@ -484,36 +492,23 @@ const WB_Unit2_Page6_Q1 = () => {
                       >
                         {item.text}
 
-                        {/* =================================================
-                              AUDIO ICON
-                              فوق الزاوية
-                          ================================================= */}
-
                         {isPlaying && (
                           <FaVolumeUp
                             size={15}
                             aria-hidden="true"
                             style={{
                               position: "absolute",
-
                               top: "-9px",
-
                               right: "-9px",
-
                               background: "white",
-
                               borderRadius: "50%",
-
                               padding: "2px",
-
                               pointerEvents: "none",
-
                               zIndex: 10,
                             }}
                           />
                         )}
                       </span>
-
                       {/* =================================================
                             INPUT
                             فقط هذا يحدد الإجابة
@@ -524,8 +519,24 @@ const WB_Unit2_Page6_Q1 = () => {
                           type="text"
                           readOnly
                           value={isSelected ? "✓" : ""}
+                          tabIndex={
+                            questionLocked || showAnswer || checkCompleted
+                              ? -1
+                              : 0
+                          }
+                          role="button"
+                          aria-label={`${item.text}${
+                            isSelected ? ", selected" : ""
+                          }. Press Enter or Space to select.`}
+                          aria-pressed={isSelected}
                           onClick={() => handleSelect(q.id, idx)}
-                          onFocus={() => handleSelect(q.id, idx)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+
+                              handleSelect(q.id, idx);
+                            }
+                          }}
                           className="review3-p1-q3-input"
                           style={{
                             cursor:

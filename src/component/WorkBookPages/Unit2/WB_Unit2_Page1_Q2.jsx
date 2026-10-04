@@ -27,9 +27,9 @@ import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
-// ======================================================
-// AUDIOS
-// ======================================================
+/* ======================================================
+   AUDIOS
+====================================================== */
 
 import fiveAudio from "../../../assets/U1 WB/U2/page_9/Item_001_five.mp3";
 
@@ -41,27 +41,45 @@ import sevenYearsAudio from "../../../assets/U1 WB/U2/page_9/Item_003_I'm_seven_
 
 import howOldAreYouAudio from "../../../assets/U1 WB/U2/page_9/Item_004_How_old_are_you.mp3";
 
-// ======================================================
-// BANK WORD
-// ======================================================
+/* ======================================================
+   BANK WORD
+====================================================== */
 
 function BankWord({
   word,
   id,
+
   isUsed,
   disabled,
+
   audio,
   playingId,
   onPlayAudio,
+
+  keyboardPickedWord,
+  onKeyboardPick,
+
+  bankRefs,
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
+
+    data: {
+      word,
+      source: "bank",
+    },
+
     disabled: isUsed || disabled,
   });
 
   const audioId = `bank-${word}`;
 
   const isPlaying = playingId === audioId;
+
+  const isDisabled = isUsed || disabled;
+
+  const isKeyboardPicked =
+    keyboardPickedWord?.word === word && keyboardPickedWord?.source === "bank";
 
   return (
     <span
@@ -71,20 +89,61 @@ function BankWord({
       }}
     >
       <span
-        ref={setNodeRef}
-        {...(!isUsed && !disabled
+        ref={(el) => {
+          setNodeRef(el);
+
+          bankRefs.current[word] = el;
+        }}
+        {...(!isDisabled
           ? {
               ...listeners,
               ...attributes,
             }
           : {})}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={isDisabled}
+        aria-pressed={isKeyboardPicked}
+        aria-label={
+          isKeyboardPicked
+            ? `${word} selected. Use Tab to choose an answer blank, then press Enter or Space.`
+            : `${word}. Press Enter or Space to select this answer.`
+        }
         onClick={(e) => {
           e.stopPropagation();
 
-          if (isDragging) return;
+          if (isDragging) {
+            return;
+          }
+
+          /*
+            Mouse click:
+            الصوت فقط.
+            الـ Drag بالماوس يظل طبيعي.
+          */
 
           onPlayAudio(audioId, audio);
         }}
+        onKeyDown={(e) => {
+          if (isDisabled) {
+            return;
+          }
+
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            /*
+              Keyboard:
+              شغل الصوت + امسك الخيار.
+            */
+
+            onPlayAudio(audioId, audio);
+
+            onKeyboardPick(word);
+          }
+        }}
+        className={isKeyboardPicked ? "keyboard-picked-bank-wb-u2-p1-q2" : ""}
         style={{
           padding: "4px 8px",
 
@@ -92,11 +151,11 @@ function BankWord({
 
           borderRadius: "8px",
 
-          background: "white",
+          background: isKeyboardPicked ? "#dbeafe" : "white",
 
           fontWeight: "bold",
 
-          cursor: isUsed || disabled ? "pointer" : "grab",
+          cursor: isDisabled ? "pointer" : "grab",
 
           opacity: isDragging ? 0.4 : isUsed ? 0.5 : 1,
 
@@ -105,6 +164,8 @@ function BankWord({
           touchAction: "none",
 
           display: "inline-block",
+
+          transition: "all 0.2s ease",
 
           ...(isUsed
             ? {
@@ -144,56 +205,225 @@ function BankWord({
   );
 }
 
-// ======================================================
-// DROPPABLE INPUT
-// ======================================================
+/* ======================================================
+   DROPPABLE INPUT
+====================================================== */
 
 function DroppableInput({
   id,
+
   value,
+
   extraClass,
+
+  isWrong,
+
   showAnswer,
+
   locked,
+
+  checkCompleted,
+
   onClear,
+
+  onKeyboardClearWrong,
+
+  keyboardPickedWord,
+
+  focusedSlotId,
+
+  setFocusedSlotId,
+
+  inputRefs,
+
+  getAvailableSlotIds,
+
+  onKeyboardDrop,
+
+  onCancelKeyboardPick,
 }) {
   const { isOver, setNodeRef } = useDroppable({
     id,
 
-    disabled: showAnswer || locked,
+    disabled: showAnswer || locked || checkCompleted,
   });
+
+  /*
+    لما في كلمة ممسوكة من البنك،
+    الخانات المفتوحة فقط تدخل بالـTab.
+  */
+
+  const keyboardDropActive =
+    !!keyboardPickedWord && !showAnswer && !locked && !checkCompleted;
+
+  /*
+    لما ما في كلمة ممسوكة:
+    فقط الـinput اللي فيه جواب غلط/قابل للتعديل
+    يدخل بالـTab عشان الطالب يصلحه.
+  */
+
+  const canEditPlacedValue =
+    !!value && !showAnswer && !locked && !checkCompleted;
+
+  const showKeyboardPreview = keyboardDropActive && focusedSlotId === id;
+
+  const visibleValue = showKeyboardPreview ? keyboardPickedWord.word : value;
+
+  const handleKeyDown = (e) => {
+    /* ==================================================
+       STEP 1:
+       WRONG FILLED INPUT -> ENTER
+       CLEAR IT AND RETURN TO BANK
+    ================================================== */
+
+    if (
+      !keyboardPickedWord &&
+      canEditPlacedValue &&
+      (e.key === "Enter" || e.key === " ")
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardClearWrong(id, value);
+
+      return;
+    }
+
+    if (!keyboardDropActive) {
+      return;
+    }
+
+    /* ==================================================
+       TAB / SHIFT + TAB
+       فقط بين الخانات المفتوحة
+    ================================================== */
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const available = getAvailableSlotIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      const currentIndex = available.indexOf(id);
+
+      let nextIndex;
+
+      if (e.shiftKey) {
+        nextIndex = currentIndex <= 0 ? available.length - 1 : currentIndex - 1;
+      } else {
+        nextIndex =
+          currentIndex === -1 || currentIndex === available.length - 1
+            ? 0
+            : currentIndex + 1;
+      }
+
+      const nextId = available[nextIndex];
+
+      inputRefs.current[nextId]?.focus();
+
+      return;
+    }
+
+    /* ==================================================
+       ENTER / SPACE = DROP
+    ================================================== */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardDrop(id);
+
+      return;
+    }
+
+    /* ==================================================
+       ESCAPE = CANCEL
+       ويرجع للخيار اللي كان ماسكه
+    ================================================== */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onCancelKeyboardPick();
+
+      return;
+    }
+  };
 
   return (
     <input
-      ref={setNodeRef}
+      ref={(el) => {
+        setNodeRef(el);
+
+        inputRefs.current[id] = el;
+      }}
       type="text"
-      value={value}
+      value={visibleValue}
       className={`answer-input-unit7-p2-q3 ${extraClass ?? ""} ${
         isOver && !showAnswer && !locked ? "drag-over-cell" : ""
-      }`}
+      } ${showKeyboardPreview ? "keyboard-preview-input-wb-u2-p1-q2" : ""}`}
       readOnly
-      disabled={showAnswer || locked}
+      disabled={false}
+      role="button"
+      tabIndex={keyboardDropActive ? 0 : canEditPlacedValue ? 0 : -1}
+      aria-disabled={showAnswer || locked || checkCompleted}
+      aria-label={
+        keyboardDropActive
+          ? value
+            ? `Answer blank currently contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord.word}.`
+            : `Empty answer blank. Press Enter or Space to place ${keyboardPickedWord.word}.`
+          : canEditPlacedValue
+            ? `${value}. ${
+                isWrong ? "This answer is incorrect. " : ""
+              }Press Enter or Space to remove it and return to the answer options.`
+            : "Answer blank"
+      }
+      onFocus={() => {
+        if (keyboardDropActive) {
+          setFocusedSlotId(id);
+        }
+      }}
+      onBlur={() => {
+        setFocusedSlotId(null);
+      }}
       onClick={() => {
-        if (value && !showAnswer && !locked) {
+        /*
+          Mouse:
+          نفس السلوك القديم.
+          الضغط على input فيه value بمسحه.
+        */
+
+        if (value && !showAnswer && !locked && !checkCompleted) {
           onClear(id);
         }
       }}
+      onKeyDown={handleKeyDown}
       style={{
         textAlign: "center",
 
-        cursor: value && !showAnswer && !locked ? "pointer" : "default",
+        cursor:
+          value && !showAnswer && !locked && !checkCompleted
+            ? "pointer"
+            : "default",
       }}
     />
   );
 }
 
-// ======================================================
-// MAIN
-// ======================================================
+/* ======================================================
+   MAIN
+====================================================== */
 
 const WB_Unit2_Page1_Q2 = () => {
-  // ======================================================
-  // QUESTIONS
-  // ======================================================
+  /* ======================================================
+     QUESTIONS
+  ====================================================== */
 
   const questions = [
     {
@@ -218,6 +448,10 @@ const WB_Unit2_Page1_Q2 = () => {
       fullSentence: "I'm five years old.",
 
       fullAudio: fiveYearsAudio,
+
+      alt: "Conversation illustration for question 1.",
+
+      secAlt: "Age picture clue for question 1.",
     },
 
     {
@@ -240,6 +474,10 @@ const WB_Unit2_Page1_Q2 = () => {
       fullSentence: "I'm four years old.",
 
       fullAudio: fourYearsAudio,
+
+      alt: "Conversation illustration for question 2.",
+
+      secAlt: "Age picture clue for question 2.",
     },
 
     {
@@ -262,6 +500,10 @@ const WB_Unit2_Page1_Q2 = () => {
       fullSentence: "I'm seven years old.",
 
       fullAudio: sevenYearsAudio,
+
+      alt: "Conversation illustration for question 3.",
+
+      secAlt: "Age picture clue for question 3.",
     },
   ];
 
@@ -273,31 +515,53 @@ const WB_Unit2_Page1_Q2 = () => {
     q3: "I'm seven years old",
   };
 
-  // ======================================================
-  // ANSWERS
-  // ======================================================
+  /* ======================================================
+     ANSWERS
+  ====================================================== */
 
   const [answers, setAnswers] = useState({
     q1: "",
+
     q2: "",
+
     q3: "",
   });
 
   const [wrongInputs, setWrongInputs] = useState([]);
 
-  // الصح فقط يتقفل
+  /*
+    الصح فقط يتقفل.
+  */
+
   const [lockedQuestions, setLockedQuestions] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // true فقط بعد النجاح الكامل
+  /*
+    true فقط بعد النجاح الكامل.
+  */
+
   const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeWord, setActiveWord] = useState(null);
 
-  // ======================================================
-  // AUDIO
-  // ======================================================
+  /* ======================================================
+     KEYBOARD DRAG
+  ====================================================== */
+
+  const bankRefs = useRef({});
+
+  const inputRefs = useRef({});
+
+  const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
+
+  const [focusedSlotId, setFocusedSlotId] = useState(null);
+
+  const slotOrder = ["q1", "q2", "q3"];
+
+  /* ======================================================
+     AUDIO
+  ====================================================== */
 
   const audioRef = useRef(null);
 
@@ -307,7 +571,6 @@ const WB_Unit2_Page1_Q2 = () => {
     if (audioRef.current) {
       audioRef.current.pause();
 
-      // أي صوت يتوقف يرجع للبداية
       audioRef.current.currentTime = 0;
 
       audioRef.current.onended = null;
@@ -360,9 +623,9 @@ const WB_Unit2_Page1_Q2 = () => {
     };
   };
 
-  // ======================================================
-  // HELPERS
-  // ======================================================
+  /* ======================================================
+     HELPERS
+  ====================================================== */
 
   const isQuestionLocked = (id) => lockedQuestions.includes(id);
 
@@ -384,9 +647,219 @@ const WB_Unit2_Page1_Q2 = () => {
     return null;
   };
 
-  // ======================================================
-  // SENSORS
-  // ======================================================
+  const getAvailableSlotIds = () =>
+    slotOrder.filter((id) => {
+      const questionId = Number(id.replace("q", ""));
+
+      return !isQuestionLocked(questionId) && !showAnswer && !checkCompleted;
+    });
+
+  /* ======================================================
+     GET FIRST AVAILABLE BANK WORD
+  ====================================================== */
+
+  const getFirstAvailableBankWord = (answersObject) => {
+    const used = Object.values(answersObject).filter(Boolean);
+
+    return Object.values(correctAnswers).find((word) => !used.includes(word));
+  };
+
+  /* ======================================================
+     KEYBOARD PICK FROM BANK
+  ====================================================== */
+
+  const handleKeyboardPick = (word) => {
+    if (showAnswer || checkCompleted || usedWords.includes(word)) {
+      return;
+    }
+
+    setKeyboardPickedWord({
+      word,
+      source: "bank",
+    });
+
+    setFocusedSlotId(null);
+
+    requestAnimationFrame(() => {
+      const available = getAvailableSlotIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      inputRefs.current[available[0]]?.focus();
+    });
+  };
+
+  /* ======================================================
+     NEW PATTERN:
+     WRONG INPUT -> ENTER
+     CLEAR IT -> RETURN TO BANK
+  ====================================================== */
+
+  const handleKeyboardClearWrong = (cellId, currentValue) => {
+    const qId = Number(cellId.replace("q", ""));
+
+    if (showAnswer || checkCompleted || isQuestionLocked(qId)) {
+      return;
+    }
+
+    /*
+      اعمل نسخة جديدة من answers
+      واحذف جواب الخانة الحالية.
+    */
+
+    const updated = {
+      ...answers,
+
+      [cellId]: "",
+    };
+
+    setAnswers(updated);
+
+    /*
+      X تنشال فقط عن نفس السؤال.
+    */
+
+    setWrongInputs((prev) => prev.filter((id) => id !== qId));
+
+    /*
+      ألغي أي keyboard drag قديم.
+    */
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
+
+    /*
+      بعد ما تنشال الإجابة الغلط،
+      رجع المستخدم للخيارات.
+
+      نحاول أولًا نركز نفس الخيار
+      اللي رجع للبنك.
+    */
+
+    window.setTimeout(() => {
+      const sameReturnedWord = currentValue;
+
+      if (sameReturnedWord && bankRefs.current[sameReturnedWord]) {
+        bankRefs.current[sameReturnedWord]?.focus();
+
+        return;
+      }
+
+      /*
+        fallback:
+        أول خيار متاح.
+      */
+
+      const firstAvailable = getFirstAvailableBankWord(updated);
+
+      if (firstAvailable) {
+        bankRefs.current[firstAvailable]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     KEYBOARD DROP
+  ====================================================== */
+
+  const handleKeyboardDrop = (targetId) => {
+    if (!keyboardPickedWord || showAnswer || checkCompleted) {
+      return;
+    }
+
+    const questionId = Number(targetId.replace("q", ""));
+
+    if (isQuestionLocked(questionId)) {
+      return;
+    }
+
+    const word = keyboardPickedWord.word;
+
+    const updated = {
+      ...answers,
+    };
+
+    /*
+      الكلمة تستخدم مرة واحدة فقط.
+
+      لو كانت موجودة بمكان آخر غير مقفول،
+      شيلها من هناك.
+    */
+
+    let oldKey = null;
+
+    Object.keys(updated).forEach((key) => {
+      if (updated[key] === word) {
+        oldKey = key;
+
+        updated[key] = "";
+      }
+    });
+
+    /*
+      ضع الخيار في الهدف.
+    */
+
+    updated[targetId] = word;
+
+    setAnswers(updated);
+
+    /*
+      شيل X فقط عن الخانات
+      اللي تغيرت.
+    */
+
+    setWrongInputs((prev) =>
+      prev.filter((id) => {
+        const oldQuestionId = oldKey ? Number(oldKey.replace("q", "")) : null;
+
+        return id !== questionId && id !== oldQuestionId;
+      }),
+    );
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
+
+    /*
+      بعد تثبيت الخيار،
+      رجع للخيار إذا لسا متاح.
+      وإذا صار used، روح لأول خيار متاح.
+    */
+
+    window.setTimeout(() => {
+      const firstAvailable = getFirstAvailableBankWord(updated);
+
+      if (firstAvailable) {
+        bankRefs.current[firstAvailable]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     CANCEL KEYBOARD PICK
+  ====================================================== */
+
+  const handleCancelKeyboardPick = () => {
+    const pickedWord = keyboardPickedWord?.word;
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
+
+    window.setTimeout(() => {
+      if (pickedWord && bankRefs.current[pickedWord]) {
+        bankRefs.current[pickedWord]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     SENSORS
+  ====================================================== */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -404,21 +877,23 @@ const WB_Unit2_Page1_Q2 = () => {
     }),
   );
 
-  // ======================================================
-  // DRAG START
-  // ======================================================
+  /* ======================================================
+     DRAG START
+  ====================================================== */
 
-  const handleDragStart = (event) => {
-    const parts = event.active.id.split("-");
+  const handleDragStart = ({ active }) => {
+    const word = active.data.current?.word;
 
-    const word = parts.slice(1, parts.length - 1).join("-");
+    if (!word) {
+      return;
+    }
 
     setActiveWord(word);
   };
 
-  // ======================================================
-  // DRAG END
-  // ======================================================
+  /* ======================================================
+     DRAG END
+  ====================================================== */
 
   const handleDragEnd = (event) => {
     setActiveWord(null);
@@ -429,9 +904,11 @@ const WB_Unit2_Page1_Q2 = () => {
       return;
     }
 
-    const parts = active.id.split("-");
+    const draggedWord = active.data.current?.word;
 
-    const draggedWord = parts.slice(1, parts.length - 1).join("-");
+    if (!draggedWord) {
+      return;
+    }
 
     const key = String(over.id);
 
@@ -442,7 +919,8 @@ const WB_Unit2_Page1_Q2 = () => {
     const questionId = Number(key.replace("q", ""));
 
     /*
-      الخانة الصح المقفلة ممنوع تتغير.
+      الخانة الصح المقفلة
+      ممنوع تتغير.
     */
 
     if (isQuestionLocked(questionId)) {
@@ -450,8 +928,9 @@ const WB_Unit2_Page1_Q2 = () => {
     }
 
     /*
-      لو الخيار نفسه موجود في سؤال صح مقفول
-      ما بنسمح نسحبه منه.
+      لو الخيار نفسه موجود
+      في سؤال صح مقفول
+      ممنوع نسحبه منه.
     */
 
     const oldKey = Object.keys(answers).find(
@@ -470,19 +949,28 @@ const WB_Unit2_Page1_Q2 = () => {
       ...answers,
     };
 
+    /*
+      Remove same word
+      from its old slot.
+    */
+
     Object.keys(newAnswers).forEach((k) => {
       if (newAnswers[k] === draggedWord) {
         newAnswers[k] = "";
       }
     });
 
+    /*
+      Place in target.
+    */
+
     newAnswers[key] = draggedWord;
 
     setAnswers(newAnswers);
 
     /*
-      شيل X فقط عن السؤال/الأسئلة
-      اللي تغيرت.
+      X تنشال فقط عن
+      الأماكن اللي تغيرت.
     */
 
     setWrongInputs((prev) =>
@@ -494,9 +982,13 @@ const WB_Unit2_Page1_Q2 = () => {
     );
   };
 
-  // ======================================================
-  // CLEAR
-  // ======================================================
+  const handleDragCancel = () => {
+    setActiveWord(null);
+  };
+
+  /* ======================================================
+     CLEAR WITH MOUSE
+  ====================================================== */
 
   const handleClear = (cellId) => {
     const qIndex = Number(cellId.replace("q", ""));
@@ -512,15 +1004,16 @@ const WB_Unit2_Page1_Q2 = () => {
     }));
 
     /*
-      X تنشال فقط من نفس السؤال.
+      X تنشال فقط
+      من نفس السؤال.
     */
 
     setWrongInputs((prev) => prev.filter((id) => id !== qIndex));
   };
 
-  // ======================================================
-  // CHECK
-  // ======================================================
+  /* ======================================================
+     CHECK
+  ====================================================== */
 
   const handleCheck = () => {
     if (showAnswer || checkCompleted) {
@@ -557,19 +1050,28 @@ const WB_Unit2_Page1_Q2 = () => {
       }
     });
 
-    // ====================================================
-    // LOCK CORRECT ONLY
-    // ====================================================
+    /* ====================================================
+       LOCK CORRECT ONLY
+    ==================================================== */
 
     setLockedQuestions((prev) =>
       Array.from(new Set([...prev, ...correctQuestions])),
     );
 
-    // ====================================================
-    // WRONG ONLY
-    // ====================================================
+    /* ====================================================
+       WRONG ONLY
+    ==================================================== */
 
     setWrongInputs(wrong);
+
+    /*
+      أي keyboard drag مفتوح
+      ينتهي بعد Check.
+    */
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
 
     const total = questions.length;
 
@@ -584,9 +1086,9 @@ const WB_Unit2_Page1_Q2 = () => {
       </div>
     `;
 
-    // ====================================================
-    // ALL CORRECT
-    // ====================================================
+    /* ====================================================
+       ALL CORRECT
+    ==================================================== */
 
     if (correctCount === total) {
       setLockedQuestions(questions.map((q) => q.id));
@@ -607,9 +1109,9 @@ const WB_Unit2_Page1_Q2 = () => {
     }
   };
 
-  // ======================================================
-  // SHOW ANSWER
-  // ======================================================
+  /* ======================================================
+     SHOW ANSWER
+  ====================================================== */
 
   const handleShowAnswer = () => {
     stopAudio();
@@ -629,11 +1131,15 @@ const WB_Unit2_Page1_Q2 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
   };
 
-  // ======================================================
-  // RESET
-  // ======================================================
+  /* ======================================================
+     RESET
+  ====================================================== */
 
   const handleReset = () => {
     stopAudio();
@@ -642,7 +1148,9 @@ const WB_Unit2_Page1_Q2 = () => {
 
     setAnswers({
       q1: "",
+
       q2: "",
+
       q3: "",
     });
 
@@ -653,17 +1161,22 @@ const WB_Unit2_Page1_Q2 = () => {
     setCheckCompleted(false);
 
     setActiveWord(null);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedSlotId(null);
   };
 
-  // ======================================================
-  // RENDER
-  // ======================================================
+  /* ======================================================
+     RENDER
+  ====================================================== */
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
     >
       <div
         style={{
@@ -725,6 +1238,9 @@ const WB_Unit2_Page1_Q2 = () => {
                 onPlayAudio={playAudio}
                 isUsed={usedWords.includes(word)}
                 disabled={showAnswer || checkCompleted}
+                keyboardPickedWord={keyboardPickedWord}
+                onKeyboardPick={handleKeyboardPick}
+                bankRefs={bankRefs}
               />
             ))}
           </div>
@@ -743,6 +1259,8 @@ const WB_Unit2_Page1_Q2 = () => {
 
               const fullAudioPlaying = playingId === `full-${q.id}`;
 
+              const questionWrong = wrongInputs.includes(q.id);
+
               return (
                 <div key={q.id} className="question-row-unit7-p2-q3">
                   {/* ======================================
@@ -752,12 +1270,26 @@ const WB_Unit2_Page1_Q2 = () => {
                   <div className="question-container-unit7-p6-q3">
                     <span className="num2">{index + 1}</span>
 
-                    <img src={q.img} className="avatar-img-wb-u2-q1" alt="" />
+                    <img
+                      src={q.img}
+                      className="avatar-img-wb-u2-q1"
+                      alt={q.alt}
+                    />
 
                     <div
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Play question: ${q.question}`}
                       onClick={() =>
                         playAudio(`question-${q.id}`, q.questionAudio)
                       }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+
+                          playAudio(`question-${q.id}`, q.questionAudio);
+                        }
+                      }}
                       style={{
                         display: "inline-flex",
 
@@ -802,7 +1334,7 @@ const WB_Unit2_Page1_Q2 = () => {
                     <img
                       src={q.secImg}
                       className="avatar-img-wb-u2-q1"
-                      alt=""
+                      alt={q.secAlt}
                     />
 
                     <div
@@ -819,9 +1351,19 @@ const WB_Unit2_Page1_Q2 = () => {
                         <DroppableInput
                           id={`q${q.id}`}
                           value={answers[`q${q.id}`]}
+                          isWrong={questionWrong}
                           showAnswer={showAnswer}
                           locked={questionLocked}
+                          checkCompleted={checkCompleted}
                           onClear={handleClear}
+                          onKeyboardClearWrong={handleKeyboardClearWrong}
+                          keyboardPickedWord={keyboardPickedWord}
+                          focusedSlotId={focusedSlotId}
+                          setFocusedSlotId={setFocusedSlotId}
+                          inputRefs={inputRefs}
+                          getAvailableSlotIds={getAvailableSlotIds}
+                          onKeyboardDrop={handleKeyboardDrop}
+                          onCancelKeyboardPick={handleCancelKeyboardPick}
                         />
                       )}
 
@@ -836,9 +1378,19 @@ const WB_Unit2_Page1_Q2 = () => {
                             id={`q${q.id}`}
                             value={answers[`q${q.id}`]}
                             extraClass="small"
+                            isWrong={questionWrong}
                             showAnswer={showAnswer}
                             locked={questionLocked}
+                            checkCompleted={checkCompleted}
                             onClear={handleClear}
+                            onKeyboardClearWrong={handleKeyboardClearWrong}
+                            keyboardPickedWord={keyboardPickedWord}
+                            focusedSlotId={focusedSlotId}
+                            setFocusedSlotId={setFocusedSlotId}
+                            inputRefs={inputRefs}
+                            getAvailableSlotIds={getAvailableSlotIds}
+                            onKeyboardDrop={handleKeyboardDrop}
+                            onCancelKeyboardPick={handleCancelKeyboardPick}
                           />{" "}
                           {q.prefix}.
                         </p>
@@ -848,13 +1400,10 @@ const WB_Unit2_Page1_Q2 = () => {
                             WRONG X
                         ================================ */}
 
-                      {wrongInputs.includes(q.id) && (
-                        <span className="wrong-mark">✕</span>
-                      )}
+                      {questionWrong && <span className="wrong-mark">✕</span>}
 
                       {/* ================================
                             FULL SENTENCE AUDIO
-                            تظهر بعد Check الصح فقط
                         ================================ */}
 
                       {canPlayFullSentence && (
@@ -888,7 +1437,10 @@ const WB_Unit2_Page1_Q2 = () => {
                             e.currentTarget.style.borderColor = "transparent";
                           }}
                         >
-                          <FaVolumeUp size={fullAudioPlaying ? 20 : 18} />
+                          <FaVolumeUp
+                            size={fullAudioPlaying ? 20 : 18}
+                            aria-hidden="true"
+                          />
                         </button>
                       )}
                     </div>

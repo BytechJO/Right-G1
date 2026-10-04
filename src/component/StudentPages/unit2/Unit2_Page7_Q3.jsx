@@ -55,20 +55,25 @@ const Unit2_Page7_Q3 = () => {
   };
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (showAnswer) return; // 🔒 يمنع التعديل بعد Check أو Show Answer
+    if (showAnswer) return;
+
+    const isLockedCorrect =
+      checked &&
+      circledWords[sIndex]?.includes(wIndex) &&
+      correct[sIndex]?.includes(wIndex);
+
+    if (isLockedCorrect) {
+      return;
+    }
+
     setCircledWords((prev) => {
       const updated = { ...prev };
 
-      // إذا ما كان في دوائر مسبقة للجملة → نعمل مصفوفة جديدة
       if (!updated[sIndex]) {
         updated[sIndex] = [wIndex];
-      }
-      // إذا الكلمة عليها دائرة → نشيلها
-      else if (updated[sIndex].includes(wIndex)) {
+      } else if (updated[sIndex].includes(wIndex)) {
         updated[sIndex] = updated[sIndex].filter((i) => i !== wIndex);
-      }
-      // إذا بدنا نضيف دائرة جديدة مع الإبقاء على الباقي
-      else {
+      } else {
         updated[sIndex] = [...updated[sIndex], wIndex];
       }
 
@@ -77,7 +82,6 @@ const Unit2_Page7_Q3 = () => {
 
     setChecked(false);
   };
-
   //   console.log(result.status); // "all-correct" | "all-wrong" | "partial"
   return (
     <div
@@ -126,12 +130,25 @@ const Unit2_Page7_Q3 = () => {
                 return (
                   <span
                     key={wIndex}
-                    onClick={() => handleWordClick(sIndex, wIndex)} // 🔒 يمنع التعديل بعد الفحص
-                    className={`char-container ${
-                      isCircled ? "circled" : ""
-                    } ${isCorrect ? "correct" : ""}`}
+                    role="button"
+                    tabIndex={showAnswer || (checked && isCorrect) ? -1 : 0}
+                    aria-label={`Character ${char || "space"} in sentence ${
+                      sIndex + 1
+                    }${isCircled ? ", selected" : ""}`}
+                    onClick={() => handleWordClick(sIndex, wIndex)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+
+                        handleWordClick(sIndex, wIndex);
+                      }
+                    }}
+                    className={`char-container ${isCircled ? "circled" : ""} ${
+                      isCorrect ? "correct" : ""
+                    }`}
                   >
                     {char}
+
                     {isWrong && <span className="wrong-x-unit2-q3">✕</span>}
                   </span>
                 );

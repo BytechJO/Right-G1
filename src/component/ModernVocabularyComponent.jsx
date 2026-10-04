@@ -19,7 +19,7 @@ const ModernVocabularyComponent = ({
   const audioFinishedRef = useRef(false);
   const resumedFromStorageRef = useRef(false);
 
-  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
+  const AUDIO_TIME_KEY = pageId ? `audio-position-${pageId}` : null;
   const [isPlaying, setIsPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -116,8 +116,9 @@ const ModernVocabularyComponent = ({
 
     audioFinishedRef.current = false;
 
-    const savedTime = Number(localStorage.getItem(AUDIO_TIME_KEY) || 0);
-
+    const savedTime = AUDIO_TIME_KEY
+      ? Number(localStorage.getItem(AUDIO_TIME_KEY) || 0)
+      : 0;
     audio.pause();
     audio.src = mainAudio;
 
@@ -149,8 +150,9 @@ const ModernVocabularyComponent = ({
       audioFinishedRef.current = true;
 
       // خلص كامل → امسح الحفظ
-      localStorage.removeItem(AUDIO_TIME_KEY);
-
+      if (AUDIO_TIME_KEY) {
+        localStorage.removeItem(AUDIO_TIME_KEY);
+      }
       audio.currentTime = 0;
 
       setCurrent(0);
@@ -166,6 +168,7 @@ const ModernVocabularyComponent = ({
     return () => {
       // تسكر الـ popup / component قبل انتهاء الصوت
       if (
+        AUDIO_TIME_KEY &&
         !audioFinishedRef.current &&
         audio.currentTime > 0 &&
         audio.duration &&
@@ -199,7 +202,9 @@ const ModernVocabularyComponent = ({
     resumedFromStorageRef.current = false;
     audioFinishedRef.current = false;
 
-    localStorage.removeItem(AUDIO_TIME_KEY);
+    if (AUDIO_TIME_KEY) {
+      localStorage.removeItem(AUDIO_TIME_KEY);
+    }
 
     setCurrent(0);
     setActiveIndex(null);
@@ -245,7 +250,9 @@ const ModernVocabularyComponent = ({
                       updateSync(t);
 
                       if (!audioFinishedRef.current) {
-                        localStorage.setItem(AUDIO_TIME_KEY, String(t));
+                        if (AUDIO_TIME_KEY) {
+                          localStorage.setItem(AUDIO_TIME_KEY, String(t));
+                        }
                       }
                     }}
                     onLoadedMetadata={(e) => setDuration(e.target.duration)}
@@ -301,6 +308,7 @@ const ModernVocabularyComponent = ({
                       }
                       aria-expanded={showCaption}
                       aria-controls={`vocabulary-caption-panel-${pageId}`}
+                      title={showCaption ? "Hide captions" : "Show captions"}
                     >
                       <TbMessageCircle size={36} aria-hidden="true" />
                     </button>
@@ -310,6 +318,7 @@ const ModernVocabularyComponent = ({
                         className="main-audio-btn"
                         onClick={togglePlay}
                         aria-label={isPlaying ? "Pause audio" : "Play audio"}
+                        title={isPlaying ? "Pause audio" : "Play audio"}
                       >
                         {isPlaying ? (
                           <FaPause size={20} />
@@ -332,6 +341,11 @@ const ModernVocabularyComponent = ({
                       <button
                         className={`round-btn ${showSettings ? "active" : ""}`}
                         onClick={() => setShowSettings(!showSettings)}
+                        title={
+                          showSettings
+                            ? "Close audio settings"
+                            : "Audio settings"
+                        }
                       >
                         <IoMdSettings size={36} />
                       </button>

@@ -458,19 +458,44 @@ export default function WB_Unit2_Page6_Q2() {
                     const isWrong =
                       questionWrong && isSelected && !isCorrect && !showAnswer;
 
+                    const isDisabled =
+                      questionLocked || showAnswer || checkCompleted;
+
                     return (
                       <div
                         key={img.id}
                         className={`img-box-wb-unit2-p6-q2
-                          ${isSelected ? "selected-Unit5_Page5_Q2" : ""}
-                          ${isWrong ? "wrong" : ""}
-                        `}
-                        onClick={() => handleSelect(q.id, img.value)}
+        ${isSelected ? "selected-Unit5_Page5_Q2" : ""}
+        ${isWrong ? "wrong" : ""}
+      `}
+                        role="button"
+                        tabIndex={isDisabled ? -1 : 0}
+                        aria-disabled={isDisabled}
+                        aria-pressed={isSelected}
+                        aria-label={`${img.alt}${
+                          isSelected ? ", selected" : ""
+                        }. Press Enter or Space to select.`}
+                        onClick={() => {
+                          if (isDisabled) {
+                            return;
+                          }
+
+                          handleSelect(q.id, img.value);
+                        }}
+                        onKeyDown={(e) => {
+                          if (isDisabled) {
+                            return;
+                          }
+
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            handleSelect(q.id, img.value);
+                          }
+                        }}
                         style={{
-                          cursor:
-                            questionLocked || showAnswer || checkCompleted
-                              ? "default"
-                              : "pointer",
+                          cursor: isDisabled ? "default" : "pointer",
                         }}
                       >
                         <img

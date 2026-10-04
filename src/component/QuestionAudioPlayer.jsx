@@ -15,8 +15,7 @@ export default function QuestionAudioPlayer({
   const audioRef = useRef(null);
   const audioFinishedRef = useRef(false);
   const resumedFromStorageRef = useRef(false);
-  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
-
+  const AUDIO_TIME_KEY = pageId ? `audio-position-${pageId}` : null;
   const [paused, setPaused] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -55,7 +54,9 @@ export default function QuestionAudioPlayer({
 
     audioFinishedRef.current = false;
 
-    const savedTime = Number(localStorage.getItem(AUDIO_TIME_KEY) || 0);
+    const savedTime = AUDIO_TIME_KEY
+      ? Number(localStorage.getItem(AUDIO_TIME_KEY) || 0)
+      : 0;
 
     audio.pause();
     audio.src = src;
@@ -111,8 +112,9 @@ export default function QuestionAudioPlayer({
         ) {
           audio.pause();
 
-          localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
-
+          if (AUDIO_TIME_KEY) {
+            localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+          }
           setPaused(true);
           setIsPlaying(false);
           setShowContinue(true);
@@ -127,8 +129,9 @@ export default function QuestionAudioPlayer({
       audioFinishedRef.current = true;
 
       // امسح الحفظ
-      localStorage.removeItem(AUDIO_TIME_KEY);
-
+      if (AUDIO_TIME_KEY) {
+        localStorage.removeItem(AUDIO_TIME_KEY);
+      }
       audio.currentTime = 0;
 
       setCurrent(0);
@@ -151,7 +154,9 @@ export default function QuestionAudioPlayer({
         audio.duration &&
         audio.currentTime < audio.duration
       ) {
-        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+        if (AUDIO_TIME_KEY) {
+          localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+        }
       }
 
       audio.pause();
@@ -204,7 +209,9 @@ export default function QuestionAudioPlayer({
     resumedFromStorageRef.current = false;
     audioFinishedRef.current = false;
 
-    localStorage.removeItem(AUDIO_TIME_KEY);
+    if (AUDIO_TIME_KEY) {
+      localStorage.removeItem(AUDIO_TIME_KEY);
+    }
 
     setCurrent(0);
     setActiveIndex(null);
@@ -246,7 +253,9 @@ export default function QuestionAudioPlayer({
               updateCaption(time);
 
               if (!audioFinishedRef.current) {
-                localStorage.setItem(AUDIO_TIME_KEY, String(time));
+                if (AUDIO_TIME_KEY) {
+                  localStorage.setItem(AUDIO_TIME_KEY, String(time));
+                }
               }
             }}
             onLoadedMetadata={(e) => setDuration(e.target.duration)}

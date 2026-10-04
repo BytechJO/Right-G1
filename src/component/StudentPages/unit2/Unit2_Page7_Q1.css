@@ -5,7 +5,7 @@
 .number-word-section {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap:20px 45px;
+  gap: 20px 45px;
   margin-top: 24px;
 }
 
@@ -35,7 +35,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap:20px;
+  gap: 20px;
   margin-bottom: 60px;
 }
 
@@ -47,7 +47,7 @@
   justify-content: flex-start;
   flex-wrap: nowrap;
   flex-direction: row;
-      height: 30px;
+  height: 30px;
 }
 
 .input-sentence {
@@ -63,10 +63,10 @@
   align-items: center;
   gap: 15px;
 }
-.word-number-unit2-p7-q1{
+.word-number-unit2-p7-q1 {
   display: flex;
-  
-  gap:10px
+
+  gap: 10px;
 }
 .sentence-label {
   color: #2c5287;
@@ -115,7 +115,6 @@
   .div-forall {
     width: 100% !important;
   }
- 
 
   .num-container {
     /* width: 60vw; */
@@ -128,7 +127,7 @@
 }
 
 @media (max-width: 912px) {
-   .sentence-row {
+  .sentence-row {
     display: flex;
     align-items: center;
     gap: 50px;
@@ -138,7 +137,6 @@
   }
 
   .num-container {
-  
     justify-content: flex-start;
     gap: 13px;
   }
@@ -155,7 +153,6 @@
   }
 
   .num-container {
-  
     justify-content: flex-start;
     gap: 13px;
   }
@@ -205,10 +202,10 @@
   .sentence-row {
     flex-direction: row;
   }
-      .num-container {
-        width: auto;
-        justify-content: center;
-    }
+  .num-container {
+    width: auto;
+    justify-content: center;
+  }
 }
 /* ======================== */
 /*    SMALL SCREENS 400px   */
@@ -223,4 +220,52 @@
   .sentence-label {
     font-size: 16px;
   }
+}
+/* =====================================================
+   KEYBOARD PREVIEW INSIDE INPUT
+===================================================== */
+
+.keyboard-word-preview {
+  display: inline-block;
+  pointer-events: none;
+
+  animation: keyboardWordBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes keyboardWordBlink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(0.92);
+  }
+}
+
+/* =====================================================
+   ACTIVE DROP SLOT
+===================================================== */
+
+.keyboard-slot-active {
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* =====================================================
+   WORD ALREADY INSIDE INPUT
+===================================================== */
+
+.placed-word-keyboard {
+  outline: none;
+}
+
+.placed-word-keyboard:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 4px;
 }

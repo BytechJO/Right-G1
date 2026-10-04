@@ -21,77 +21,69 @@ import {
 } from "@dnd-kit/core";
 
 import ExerciseHeader from "../../ExerciseHeader";
-
 import { FaVolumeUp } from "react-icons/fa";
 
-// ======================================================
-// AUDIO
-// ======================================================
+/* ======================================================
+   AUDIO
+====================================================== */
 
 import audio1 from "../../../assets/U1 WB/U2/page_10/Item_001_birthday_Happy!.mp3";
 import audio2 from "../../../assets/U1 WB/U2/page_10/Item_002_a_hat_party_It's.mp3";
 import audio3 from "../../../assets/U1 WB/U2/page_10/Item_003_are_How_you_old.mp3";
 import audio4 from "../../../assets/U1 WB/U2/page_10/Item_004_seven_I'm_years_old.mp3";
 
-// ======================================================
-// DATA
-// ======================================================
+/* ======================================================
+   DATA
+====================================================== */
 
 const rows = [
   {
     id: 1,
     img: table,
-
+    alt: "A table.",
     scrambled: ["birthday", "Happy", "!"],
-
     audio: audio1,
   },
 
   {
     id: 2,
     img: dish,
-
+    alt: "A dish.",
     scrambled: ["a", "hat", "party", "It's", "."],
-
     audio: audio2,
   },
 
   {
     id: 3,
     img: duck,
-
+    alt: "A duck.",
     scrambled: ["are", "How", "you", "old", "?"],
-
     audio: audio3,
   },
 
   {
     id: 4,
     img: tiger,
-
+    alt: "A tiger.",
     scrambled: ["seven", "I'm", "years", "old", "."],
-
     audio: audio4,
   },
 ];
 
-// ======================================================
-// CORRECT SENTENCES
-// ======================================================
+/* ======================================================
+   CORRECT SENTENCES
+====================================================== */
 
 const correctSentences = {
   1: ["Happy", "birthday", "!"],
-
   2: ["It's", "a", "party", "hat", "."],
-
   3: ["How", "old", "are", "you", "?"],
-
   4: ["I'm", "seven", "years", "old", "."],
 };
 
-// ======================================================
-// EMPTY
-// ======================================================
+/* ======================================================
+   EMPTY
+====================================================== */
 
 const createEmptyAnswers = () => ({
   1: [],
@@ -100,48 +92,80 @@ const createEmptyAnswers = () => ({
   4: [],
 });
 
-// ======================================================
-// BUILD SENTENCE
-// ======================================================
+/* ======================================================
+   DRAGGABLE WORD
+====================================================== */
 
-const buildSentence = (words) => {
-  let sentence = "";
+function DraggableWord({
+  id,
+  word,
+  disabled,
+  isUsed,
 
-  words.forEach((word) => {
-    if (/^[!?.،,;:]$/.test(word)) {
-      sentence += word;
-    } else {
-      if (sentence) {
-        sentence += " ";
-      }
+  rowId,
+  sourceIndex,
 
-      sentence += word;
-    }
-  });
+  keyboardPickedWord,
+  onKeyboardPick,
 
-  return sentence;
-};
-
-// ======================================================
-// DRAGGABLE WORD
-// ======================================================
-
-function DraggableWord({ id, word, disabled, isUsed }) {
+  bankRefs,
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
+
+    data: {
+      word,
+      rowId,
+      sourceIndex,
+    },
 
     disabled: disabled || isUsed,
   });
 
+  const isDisabled = disabled || isUsed;
+
+  const isPicked =
+    keyboardPickedWord?.rowId === rowId &&
+    keyboardPickedWord?.sourceIndex === sourceIndex;
+
+  const refKey = `${rowId}-${sourceIndex}`;
+
   return (
     <span
-      ref={setNodeRef}
-      {...(!disabled && !isUsed
+      ref={(el) => {
+        setNodeRef(el);
+        bankRefs.current[refKey] = el;
+      }}
+      {...(!isDisabled
         ? {
             ...listeners,
             ...attributes,
           }
         : {})}
+      role="button"
+      tabIndex={isDisabled ? -1 : 0}
+      aria-disabled={isDisabled}
+      aria-pressed={isPicked}
+      aria-label={
+        isPicked
+          ? `${word} selected. Press Tab to move to the answer area, then press Enter.`
+          : `${word}. Press Enter or Space to select.`
+      }
+      onKeyDown={(e) => {
+        if (isDisabled) return;
+
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+
+          onKeyboardPick({
+            word,
+            rowId,
+            sourceIndex,
+          });
+        }
+      }}
+      className={isPicked ? "keyboard-picked-word-wb-u2-p2-q1" : ""}
       style={{
         padding: "2px 5px",
 
@@ -149,13 +173,14 @@ function DraggableWord({ id, word, disabled, isUsed }) {
 
         borderRadius: "8px",
 
-        background: "white",
+        background: isPicked ? "#dbeafe" : "white",
 
         fontWeight: "bold",
 
-        cursor: disabled || isUsed ? "default" : "grab",
+        cursor: isDisabled ? "default" : "grab",
 
         opacity: isDragging ? 0.4 : isUsed || disabled ? 0.45 : 1,
+
         userSelect: "none",
 
         touchAction: "none",
@@ -174,46 +199,160 @@ function DraggableWord({ id, word, disabled, isUsed }) {
   );
 }
 
-// ======================================================
-// DROPPABLE INPUT
-// ======================================================
+/* ======================================================
+   DROPPABLE INPUT
+====================================================== */
 
-function DroppableInput({ id, words, isWrong, showAnswer, locked, onRemove }) {
+function DroppableInput({
+  id,
+  rowId,
+
+  words,
+
+  isWrong,
+
+  showAnswer,
+  locked,
+  checkCompleted,
+
+  onRemove,
+
+  keyboardPickedWord,
+
+  focusedRowId,
+  setFocusedRowId,
+
+  dropRefs,
+
+  onKeyboardDrop,
+
+  onKeyboardClearWrong,
+
+  onCancelKeyboardPick,
+}) {
   const { isOver, setNodeRef } = useDroppable({
     id,
 
-    disabled: showAnswer || locked,
+    disabled: showAnswer || locked || checkCompleted,
   });
+
+  const keyboardDropActive =
+    !!keyboardPickedWord &&
+    keyboardPickedWord.rowId === rowId &&
+    !showAnswer &&
+    !locked &&
+    !checkCompleted;
+
+  const canFixWrongRow =
+    isWrong &&
+    words.length > 0 &&
+    !keyboardPickedWord &&
+    !showAnswer &&
+    !locked &&
+    !checkCompleted;
+
+  const showKeyboardPreview = keyboardDropActive && focusedRowId === rowId;
+
+  const handleKeyDown = (e) => {
+    /* ==================================================
+       WRONG ROW AFTER CHECK
+       ENTER -> CLEAR ROW -> RETURN TO ITS BANK
+    ================================================== */
+
+    if (canFixWrongRow && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardClearWrong(rowId);
+
+      return;
+    }
+
+    if (!keyboardDropActive) {
+      return;
+    }
+
+    /* ==================================================
+       ENTER = ADD PICKED WORD
+    ================================================== */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardDrop(rowId);
+
+      return;
+    }
+
+    /* ==================================================
+       ESCAPE = CANCEL PICK
+    ================================================== */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onCancelKeyboardPick();
+
+      return;
+    }
+  };
 
   return (
     <div
       style={{
         position: "relative",
-
         width: "100%",
       }}
     >
       <div
-        ref={setNodeRef}
+        ref={(el) => {
+          setNodeRef(el);
+
+          dropRefs.current[rowId] = el;
+        }}
         className={`unscramble-input ${
           isOver && !showAnswer && !locked ? "drag-over-cell" : ""
-        }`}
+        } ${showKeyboardPreview ? "keyboard-drop-active-wb-u2-p2-q1" : ""}`}
+        role="button"
+        tabIndex={keyboardDropActive || canFixWrongRow ? 0 : -1}
+        aria-label={
+          keyboardDropActive
+            ? `Answer area. Press Enter or Space to add ${keyboardPickedWord.word}.`
+            : canFixWrongRow
+              ? "Incorrect sentence. Press Enter or Space to clear this sentence and return to the word choices."
+              : "Sentence answer area"
+        }
+        onFocus={() => {
+          if (keyboardDropActive) {
+            setFocusedRowId(rowId);
+          }
+        }}
+        onBlur={() => {
+          setFocusedRowId(null);
+        }}
+        onKeyDown={handleKeyDown}
         style={{
           display: "flex",
+
           flexWrap: "wrap",
+
           gap: "6px",
+
           alignItems: "center",
+
           minHeight: "46px",
 
-          // ✅ هون
           padding: "6px 10px",
 
-          cursor: "default",
+          cursor: canFixWrongRow ? "pointer" : "default",
+
           boxSizing: "border-box",
         }}
       >
         {words.map((item, index) => {
-          const canReturn = !showAnswer && !locked;
+          const canReturn = !showAnswer && !locked && !checkCompleted;
 
           return (
             <span
@@ -241,25 +380,24 @@ function DroppableInput({ id, words, isWrong, showAnswer, locked, onRemove }) {
 
                 userSelect: "none",
               }}
-              onMouseEnter={(e) => {
-                if (canReturn) {
-                  e.currentTarget.style.background = "#e7f0ff";
-
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (canReturn) {
-                  e.currentTarget.style.background = "#f4f8ff";
-
-                  e.currentTarget.style.transform = "translateY(0)";
-                }
-              }}
             >
               {item.word}
             </span>
           );
         })}
+
+        {/* =========================================
+            KEYBOARD PREVIEW
+        ========================================= */}
+
+        {showKeyboardPreview && (
+          <span
+            className="keyboard-word-preview-wb-u2-p2-q1"
+            aria-hidden="true"
+          >
+            {keyboardPickedWord.word}
+          </span>
+        )}
       </div>
 
       {isWrong && <span className="input-error-x-wb-u2-p2-q1">✕</span>}
@@ -267,32 +405,42 @@ function DroppableInput({ id, words, isWrong, showAnswer, locked, onRemove }) {
   );
 }
 
-// ======================================================
-// MAIN
-// ======================================================
+/* ======================================================
+   MAIN
+====================================================== */
 
 const WB_Unit2_Page2_Q1 = () => {
-  // ======================================================
-  // STATE
-  // ======================================================
+  /* ======================================================
+     STATE
+  ====================================================== */
 
   const [userInputs, setUserInputs] = useState(createEmptyAnswers());
 
   const [wrongInputs, setWrongInputs] = useState([]);
 
-  // الصح فقط يتقفل
   const [lockedRows, setLockedRows] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // true فقط لما كل شيء صح
   const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeId, setActiveId] = useState(null);
 
-  // ======================================================
-  // AUDIO
-  // ======================================================
+  /* ======================================================
+     KEYBOARD DRAG
+  ====================================================== */
+
+  const bankRefs = useRef({});
+
+  const dropRefs = useRef({});
+
+  const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
+
+  const [focusedRowId, setFocusedRowId] = useState(null);
+
+  /* ======================================================
+     AUDIO
+  ====================================================== */
 
   const audioRef = useRef(null);
 
@@ -354,15 +502,178 @@ const WB_Unit2_Page2_Q1 = () => {
     };
   };
 
-  // ======================================================
-  // HELPERS
-  // ======================================================
+  /* ======================================================
+     HELPERS
+  ====================================================== */
 
   const isRowLocked = (rowId) => lockedRows.includes(Number(rowId));
 
-  // ======================================================
-  // SENSORS
-  // ======================================================
+  /* ======================================================
+     KEYBOARD PICK
+  ====================================================== */
+
+  const handleKeyboardPick = ({ word, rowId, sourceIndex }) => {
+    if (showAnswer || checkCompleted || isRowLocked(rowId)) {
+      return;
+    }
+
+    const alreadyUsed = userInputs[rowId].some(
+      (item) => item.sourceIndex === sourceIndex,
+    );
+
+    if (alreadyUsed) {
+      return;
+    }
+
+    setKeyboardPickedWord({
+      word,
+      rowId,
+      sourceIndex,
+    });
+
+    setFocusedRowId(null);
+
+    requestAnimationFrame(() => {
+      dropRefs.current[rowId]?.focus();
+    });
+  };
+
+  /* ======================================================
+     KEYBOARD DROP
+  ====================================================== */
+
+  const handleKeyboardDrop = (rowId) => {
+    if (
+      !keyboardPickedWord ||
+      showAnswer ||
+      checkCompleted ||
+      isRowLocked(rowId)
+    ) {
+      return;
+    }
+
+    if (keyboardPickedWord.rowId !== rowId) {
+      return;
+    }
+
+    const { word, sourceIndex } = keyboardPickedWord;
+
+    const alreadyUsed = userInputs[rowId].some(
+      (item) => item.sourceIndex === sourceIndex,
+    );
+
+    if (alreadyUsed) {
+      return;
+    }
+
+    const updatedRow = [
+      ...userInputs[rowId],
+
+      {
+        word,
+        sourceIndex,
+      },
+    ];
+
+    const updated = {
+      ...userInputs,
+
+      [rowId]: updatedRow,
+    };
+
+    setUserInputs(updated);
+
+    /*
+      X تنشال فقط عن نفس الصف.
+    */
+
+    setWrongInputs((prev) => prev.filter((id) => id !== rowId));
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
+
+    /*
+      بعد التثبيت:
+      ارجع لأول كلمة غير مستخدمة
+      بنفس البنك.
+    */
+
+    window.setTimeout(() => {
+      const row = rows.find((item) => item.id === rowId);
+
+      if (!row) return;
+
+      const used = new Set(updated[rowId].map((item) => item.sourceIndex));
+
+      const nextIndex = row.scrambled.findIndex((_, index) => !used.has(index));
+
+      if (nextIndex !== -1) {
+        bankRefs.current[`${rowId}-${nextIndex}`]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     NEW FIX PATTERN
+     WRONG ROW -> ENTER -> CLEAR ROW -> RETURN BANK
+  ====================================================== */
+
+  const handleKeyboardClearWrong = (rowId) => {
+    if (showAnswer || checkCompleted || isRowLocked(rowId)) {
+      return;
+    }
+
+    /*
+      رجع كل الكلمات للبنك.
+    */
+
+    setUserInputs((prev) => ({
+      ...prev,
+
+      [rowId]: [],
+    }));
+
+    /*
+      شيل X فقط عن نفس الصف.
+    */
+
+    setWrongInputs((prev) => prev.filter((id) => id !== rowId));
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
+
+    /*
+      focus لأول خيار بنفس الصف.
+    */
+
+    window.setTimeout(() => {
+      bankRefs.current[`${rowId}-0`]?.focus();
+    }, 0);
+  };
+
+  /* ======================================================
+     CANCEL KEYBOARD PICK
+  ====================================================== */
+
+  const handleCancelKeyboardPick = () => {
+    const picked = keyboardPickedWord;
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
+
+    if (!picked) return;
+
+    window.setTimeout(() => {
+      bankRefs.current[`${picked.rowId}-${picked.sourceIndex}`]?.focus();
+    }, 0);
+  };
+
+  /* ======================================================
+     SENSORS
+  ====================================================== */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -374,17 +685,14 @@ const WB_Unit2_Page2_Q1 = () => {
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 150,
-
         tolerance: 5,
       },
     }),
   );
 
-  // ======================================================
-  // PARSE DRAG ID
-  // id format:
-  // row-1-word-0
-  // ======================================================
+  /* ======================================================
+     PARSE DRAG ID
+  ====================================================== */
 
   const parseId = (id) => {
     const parts = String(id).split("-");
@@ -396,17 +704,17 @@ const WB_Unit2_Page2_Q1 = () => {
     };
   };
 
-  // ======================================================
-  // DRAG START
-  // ======================================================
+  /* ======================================================
+     DRAG START
+  ====================================================== */
 
   const handleDragStart = (event) => {
     setActiveId(event.active.id);
   };
 
-  // ======================================================
-  // DRAG END
-  // ======================================================
+  /* ======================================================
+     DRAG END
+  ====================================================== */
 
   const handleDragEnd = (event) => {
     setActiveId(null);
@@ -426,8 +734,8 @@ const WB_Unit2_Page2_Q1 = () => {
     const targetSentence = Number(String(over.id).replace("blank-", ""));
 
     /*
-      كل كلمات السؤال تروح
-      فقط لنفس السؤال.
+      كلمات كل row تروح
+      لنفس row فقط.
     */
 
     if (sentenceId !== targetSentence) {
@@ -440,17 +748,9 @@ const WB_Unit2_Page2_Q1 = () => {
 
     const row = rows.find((item) => item.id === sentenceId);
 
-    if (!row) {
-      return;
-    }
+    if (!row) return;
 
     const word = row.scrambled[sourceIndex];
-
-    /*
-      نمنع استخدام نفس token مرتين.
-      مش حسب نص الكلمة،
-      حسب index تبعها.
-    */
 
     const alreadyUsed = userInputs[targetSentence].some(
       (item) => item.sourceIndex === sourceIndex,
@@ -473,16 +773,16 @@ const WB_Unit2_Page2_Q1 = () => {
       ],
     }));
 
-    /*
-      شيل X فقط عن نفس السؤال.
-    */
-
     setWrongInputs((prev) => prev.filter((id) => id !== targetSentence));
   };
 
-  // ======================================================
-  // CLEAR ONE WORD
-  // ======================================================
+  const handleDragCancel = () => {
+    setActiveId(null);
+  };
+
+  /* ======================================================
+     CLEAR ONE WORD WITH MOUSE
+  ====================================================== */
 
   const handleClear = (cellId, answerIndex) => {
     const sentenceId = Number(String(cellId).replace("blank-", ""));
@@ -506,18 +806,14 @@ const WB_Unit2_Page2_Q1 = () => {
     setWrongInputs((prev) => prev.filter((id) => id !== sentenceId));
   };
 
-  // ======================================================
-  // CHECK
-  // ======================================================
+  /* ======================================================
+     CHECK
+  ====================================================== */
 
   const checkAnswers = () => {
     if (showAnswer || checkCompleted) {
       return;
     }
-
-    /*
-        لازم كل جملة تحتوي كل الكلمات.
-      */
 
     const allCompleted = rows.every(
       (row) => userInputs[row.id].length === row.scrambled.length,
@@ -553,17 +849,17 @@ const WB_Unit2_Page2_Q1 = () => {
       }
     });
 
-    // ====================================================
-    // LOCK CORRECT ONLY
-    // ====================================================
+    /* LOCK CORRECT ONLY */
 
     setLockedRows((prev) => Array.from(new Set([...prev, ...correctTemp])));
 
-    // ====================================================
-    // WRONG ONLY
-    // ====================================================
+    /* WRONG ONLY */
 
     setWrongInputs(wrongTemp);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
 
     const total = rows.length;
 
@@ -577,10 +873,6 @@ const WB_Unit2_Page2_Q1 = () => {
           </span>
         </div>
       `;
-
-    // ====================================================
-    // ALL CORRECT
-    // ====================================================
 
     if (correctCount === total) {
       setLockedRows(rows.map((row) => row.id));
@@ -601,9 +893,9 @@ const WB_Unit2_Page2_Q1 = () => {
     }
   };
 
-  // ======================================================
-  // SHOW ANSWER
-  // ======================================================
+  /* ======================================================
+     SHOW ANSWER
+  ====================================================== */
 
   const handleShowAnswer = () => {
     stopAudio();
@@ -614,11 +906,6 @@ const WB_Unit2_Page2_Q1 = () => {
       finalAnswers[row.id] = correctSentences[row.id].map((word, index) => ({
         word,
 
-        /*
-                  sourceIndex مش مهم فعليًا
-                  في Show Answer،
-                  بس نعطيه قيمة unique.
-                */
         sourceIndex: 100 + index,
       }));
     });
@@ -632,11 +919,15 @@ const WB_Unit2_Page2_Q1 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
   };
 
-  // ======================================================
-  // RESET
-  // ======================================================
+  /* ======================================================
+     RESET
+  ====================================================== */
 
   const handleReset = () => {
     stopAudio();
@@ -652,11 +943,15 @@ const WB_Unit2_Page2_Q1 = () => {
     setCheckCompleted(false);
 
     setActiveId(null);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedRowId(null);
   };
 
-  // ======================================================
-  // ACTIVE WORD
-  // ======================================================
+  /* ======================================================
+     ACTIVE WORD
+  ====================================================== */
 
   let activeWord = null;
 
@@ -668,26 +963,23 @@ const WB_Unit2_Page2_Q1 = () => {
     activeWord = row?.scrambled[sourceIndex] ?? null;
   }
 
-  // ======================================================
-  // RENDER
-  // ======================================================
+  /* ======================================================
+     RENDER
+  ====================================================== */
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
     >
       <div
         style={{
           display: "flex",
-
           flexDirection: "column",
-
           justifyContent: "center",
-
           alignItems: "center",
-
           padding: "30px",
         }}
       >
@@ -724,16 +1016,14 @@ const WB_Unit2_Page2_Q1 = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    {/* ======================================
-                          IMAGE
-                      ====================================== */}
+                    {/* IMAGE */}
 
                     <div className="img-with-dot2">
                       <span className="span-num2">{index + 1}</span>
 
                       <img
                         src={row.img}
-                        alt=""
+                        alt={row.alt}
                         style={{
                           height: "100px",
 
@@ -742,18 +1032,24 @@ const WB_Unit2_Page2_Q1 = () => {
                       />
                     </div>
 
-                    {/* ======================================
-                          SCRAMBLED + BANK
-                      ====================================== */}
+                    {/* SCRAMBLED + BANK */}
 
                     <div className="word-with-dot2-wb-u2-p2-q1">
                       <div className="word-bank-container-wb-u2-p2-q1">
-                        {/* ==================================
-                              SCRAMBLED SENTENCE AUDIO
-                          ================================== */}
+                        {/* AUDIO */}
 
                         <div
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Play scrambled words for sentence ${row.id}`}
                           onClick={() => playRowAudio(row)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+
+                              playRowAudio(row);
+                            }
+                          }}
                           style={{
                             position: "relative",
 
@@ -766,14 +1062,6 @@ const WB_Unit2_Page2_Q1 = () => {
                             borderRadius: "8px",
 
                             padding: "4px 6px",
-
-                            transition: "border-color 0.2s ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = "#2c5287";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = "transparent";
                           }}
                         >
                           <span className="word-text2-wb-u2-p2-q1">
@@ -805,9 +1093,7 @@ const WB_Unit2_Page2_Q1 = () => {
                           )}
                         </div>
 
-                        {/* ==================================
-                              DRAGGABLE BANK
-                          ================================== */}
+                        {/* BANK */}
 
                         <div
                           style={{
@@ -835,26 +1121,38 @@ const WB_Unit2_Page2_Q1 = () => {
                               key={`${row.id}-${word}-${i}`}
                               id={`row-${row.id}-word-${i}`}
                               word={word}
+                              rowId={row.id}
+                              sourceIndex={i}
                               disabled={
                                 showAnswer || checkCompleted || rowLocked
                               }
                               isUsed={usedIndexes.has(i)}
+                              keyboardPickedWord={keyboardPickedWord}
+                              onKeyboardPick={handleKeyboardPick}
+                              bankRefs={bankRefs}
                             />
                           ))}
                         </div>
                       </div>
 
-                      {/* ======================================
-                            DROP ANSWER
-                        ====================================== */}
+                      {/* DROP ANSWER */}
 
                       <DroppableInput
                         id={`blank-${row.id}`}
+                        rowId={row.id}
                         words={userInputs[row.id]}
                         isWrong={wrongInputs.includes(row.id)}
                         showAnswer={showAnswer}
                         locked={rowLocked}
+                        checkCompleted={checkCompleted}
                         onRemove={handleClear}
+                        keyboardPickedWord={keyboardPickedWord}
+                        focusedRowId={focusedRowId}
+                        setFocusedRowId={setFocusedRowId}
+                        dropRefs={dropRefs}
+                        onKeyboardDrop={handleKeyboardDrop}
+                        onKeyboardClearWrong={handleKeyboardClearWrong}
+                        onCancelKeyboardPick={handleCancelKeyboardPick}
                       />
                     </div>
                   </div>
@@ -864,9 +1162,7 @@ const WB_Unit2_Page2_Q1 = () => {
           </div>
         </div>
 
-        {/* =================================================
-            BUTTONS
-        ================================================= */}
+        {/* BUTTONS */}
 
         <div className="action-buttons-container">
           <button onClick={handleReset} className="try-again-button">
@@ -886,9 +1182,7 @@ const WB_Unit2_Page2_Q1 = () => {
         </div>
       </div>
 
-      {/* =================================================
-          DRAG OVERLAY
-      ================================================= */}
+      {/* DRAG OVERLAY */}
 
       <DragOverlay>
         {activeWord && (

@@ -107,6 +107,13 @@ const Unit2_Page1 = ({ openPopup }) => {
       setActiveId(null);
     };
   };
+  const soundLabels = {
+    1: "Party Hat",
+    2: "Jello",
+    3: "Cake",
+    4: "Happy Birthday",
+    5: "Balloons",
+  };
   return (
     <div
       className="page1-img-wrapper"
@@ -120,7 +127,8 @@ const Unit2_Page1 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeId === `p11-${area.sound}`;
+        const isActive = activeId === `p4-${area.sound}`;
+
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
         // ============================
@@ -128,13 +136,25 @@ const Unit2_Page1 = ({ openPopup }) => {
           return (
             <div
               key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
               style={{
                 left: `${area.x1}%`,
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                playSound(sounds[area.sound], `p11-${area.sound}`);
+                playSound(sounds[area.sound], `p4-${area.sound}`);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  playSound(sounds[area.sound], `p4-${area.sound}`);
+                }
               }}
             ></div>
           );
@@ -148,6 +168,7 @@ const Unit2_Page1 = ({ openPopup }) => {
           <div
             key={index}
             className="clickable-area"
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: `${area.x1}%`,
@@ -156,7 +177,7 @@ const Unit2_Page1 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              playSound(sounds[area.sound], `p11-${area.sound}`);
+              playSound(sounds[area.sound], `p4-${area.sound}`);
             }}
           ></div>
         );
@@ -170,6 +191,9 @@ const Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open page audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -188,7 +212,29 @@ const Unit2_Page1 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={allUnit2}
+                    captions={captionsExample}
+                    pageId="unit2-page10-1"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{ overflow: "visible", cursor: "pointer" }}
         >
           <image
             className="svg-img"
@@ -209,6 +255,9 @@ const Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Find exercise"
           onClick={() =>
             openPopup(
               "html",
@@ -217,7 +266,19 @@ const Unit2_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit2_Page1_find />
+                </>,
+              );
+            }
+          }}
+          style={{ overflow: "visible", cursor: "pointer" }}
         >
           <image
             className="svg-img"
@@ -237,6 +298,9 @@ const Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Vocabulary exercise"
           onClick={() =>
             openPopup(
               "html",
@@ -245,7 +309,19 @@ const Unit2_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit2_Page1_Vocab />
+                </>,
+              );
+            }
+          }}
+          style={{ overflow: "visible", cursor: "pointer" }}
         >
           <image
             className="svg-img"
@@ -265,6 +341,9 @@ const Unit2_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Reading exercise"
           onClick={() =>
             openPopup(
               "html",
@@ -273,7 +352,19 @@ const Unit2_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit2_Page1_Read />
+                </>,
+              );
+            }
+          }}
+          style={{ overflow: "visible", cursor: "pointer" }}
         >
           <image
             className="svg-img"

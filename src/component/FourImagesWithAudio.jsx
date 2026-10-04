@@ -29,8 +29,7 @@ const FourImagesWithAudio = ({
   const [paused, setPaused] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const [showContinue, setShowContinue] = useState(false);
-  const AUDIO_TIME_KEY = `audio-position-${pageId}`;
-
+  const AUDIO_TIME_KEY = pageId ? `audio-position-${pageId}` : null;
   const stopAtSecond = checkpoints[1] - 0.2;
   // إعدادات الصوت
   const [showSettings, setShowSettings] = useState(false);
@@ -96,9 +95,9 @@ const FourImagesWithAudio = ({
     if (!audio) return;
 
     audioFinishedRef.current = false;
-
-    const savedTime = Number(localStorage.getItem(AUDIO_TIME_KEY) || 0);
-
+    const savedTime = AUDIO_TIME_KEY
+      ? Number(localStorage.getItem(AUDIO_TIME_KEY) || 0)
+      : 0;
     // وقف أي تشغيل قديم
     audio.pause();
     audio.src = audioSrc;
@@ -154,8 +153,9 @@ const FourImagesWithAudio = ({
         audio.pause();
 
         // احفظ مكان الوقوف
-        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
-
+        if (AUDIO_TIME_KEY) {
+          localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+        }
         setPaused(true);
         setIsPlaying(false);
         setShowContinue(true);
@@ -173,8 +173,9 @@ const FourImagesWithAudio = ({
       // ================================
       audioFinishedRef.current = true;
 
-      localStorage.removeItem(AUDIO_TIME_KEY);
-
+      if (AUDIO_TIME_KEY) {
+        localStorage.removeItem(AUDIO_TIME_KEY);
+      }
       audio.currentTime = 0;
 
       setCurrent(0);
@@ -194,6 +195,7 @@ const FourImagesWithAudio = ({
       // احفظ المكان الحالي
       // ================================
       if (
+        AUDIO_TIME_KEY &&
         !audioFinishedRef.current &&
         audio.currentTime > 0 &&
         audio.duration &&
@@ -201,7 +203,6 @@ const FourImagesWithAudio = ({
       ) {
         localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
       }
-
       audio.pause();
 
       clearInterval(interval);
@@ -234,7 +235,9 @@ const FourImagesWithAudio = ({
     audio.currentTime = 0;
     resumedFromStorageRef.current = false;
     audioFinishedRef.current = false;
-    localStorage.removeItem(AUDIO_TIME_KEY);
+    if (AUDIO_TIME_KEY) {
+      localStorage.removeItem(AUDIO_TIME_KEY);
+    }
     setCurrent(0);
     setActiveIndex(null);
     setActiveIndex2(null);
@@ -338,7 +341,9 @@ const FourImagesWithAudio = ({
 
                 // نحفظ آخر نقطة وصلها الصوت
                 if (!audioFinishedRef.current) {
-                  localStorage.setItem(AUDIO_TIME_KEY, String(time));
+                  if (AUDIO_TIME_KEY) {
+                    localStorage.setItem(AUDIO_TIME_KEY, String(time));
+                  }
                 }
 
                 const idx = checkpoints.findIndex(

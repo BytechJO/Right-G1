@@ -24,18 +24,18 @@ import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
-// ======================================================
-// AUDIOS
-// ======================================================
+/* ======================================================
+   AUDIOS
+====================================================== */
 
 import tuesdayAudio from "../../../assets/U1 WB/U2/page_11/Item_001_Tuesday.mp3";
 import saturdayAudio from "../../../assets/U1 WB/U2/page_11/Item_002_Saturday.mp3";
 import sundayAudio from "../../../assets/U1 WB/U2/page_11/Item_003_Sunday.mp3";
 import thursdayAudio from "../../../assets/U1 WB/U2/page_11/Item_004_Thursday.mp3";
 
-// ======================================================
-// DATA
-// ======================================================
+/* ======================================================
+   DATA
+====================================================== */
 
 const correctAnswers = ["Saturday", "Tuesday", "Thursday", "Sunday"];
 
@@ -58,27 +58,61 @@ const wordBank = [
   },
 ];
 
-const images = [bat, cap, ant, dad];
+const images = [
+  {
+    src: bat,
+    alt: "Calendar clue for Saturday.",
+  },
+  {
+    src: cap,
+    alt: "Calendar clue for Tuesday.",
+  },
+  {
+    src: ant,
+    alt: "Calendar clue for Thursday.",
+  },
+  {
+    src: dad,
+    alt: "Calendar clue for Sunday.",
+  },
+];
 
-// ======================================================
-// BANK WORD
-// ======================================================
+/* ======================================================
+   BANK WORD
+====================================================== */
 
 function BankWord({
   id,
   word,
   audio,
+
   isUsed,
   disabled,
+
   playingWord,
   onPlayAudio,
+
+  keyboardPickedWord,
+  onKeyboardPick,
+
+  bankRefs,
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
+
+    data: {
+      word,
+      source: "bank",
+    },
+
     disabled: isUsed || disabled,
   });
 
   const isPlaying = playingWord === word;
+
+  const isDisabled = isUsed || disabled;
+
+  const isPicked = keyboardPickedWord?.word === word;
 
   return (
     <span
@@ -88,13 +122,26 @@ function BankWord({
       }}
     >
       <span
-        ref={setNodeRef}
-        {...(!isUsed && !disabled
+        ref={(el) => {
+          setNodeRef(el);
+
+          bankRefs.current[word] = el;
+        }}
+        {...(!isDisabled
           ? {
               ...listeners,
               ...attributes,
             }
           : {})}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={isDisabled}
+        aria-pressed={isPicked}
+        aria-label={
+          isPicked
+            ? `${word} selected. Use Tab to choose an answer blank, then press Enter or Space.`
+            : `${word}. Press Enter or Space to select.`
+        }
         onClick={(e) => {
           e.stopPropagation();
 
@@ -102,8 +149,36 @@ function BankWord({
             return;
           }
 
+          /*
+            Mouse click:
+            الصوت فقط.
+          */
+
           onPlayAudio(word, audio);
         }}
+        onKeyDown={(e) => {
+          if (isDisabled) {
+            return;
+          }
+
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            /*
+              شغل الصوت.
+            */
+
+            onPlayAudio(word, audio);
+
+            /*
+              امسك الخيار بالكيبورد.
+            */
+
+            onKeyboardPick(word);
+          }
+        }}
+        className={isPicked ? "keyboard-picked-word-wb-u2-p3-q2" : ""}
         style={{
           padding: "7px 14px",
 
@@ -111,11 +186,11 @@ function BankWord({
 
           borderRadius: "8px",
 
-          background: "white",
+          background: isPicked ? "#dbeafe" : "white",
 
           fontWeight: "bold",
 
-          cursor: isUsed || disabled ? "pointer" : "grab",
+          cursor: isDisabled ? "pointer" : "grab",
 
           opacity: isDragging ? 0.4 : isUsed ? 0.5 : 1,
 
@@ -125,10 +200,11 @@ function BankWord({
 
           display: "inline-block",
 
+          transition: "all 0.2s ease",
+
           ...(isUsed
             ? {
                 borderColor: "#ccc",
-
                 color: "#aaa",
               }
             : {}),
@@ -136,11 +212,6 @@ function BankWord({
       >
         {word}
       </span>
-
-      {/* =================================================
-          AUDIO ICON
-          تظهر فقط أثناء تشغيل الصوت
-      ================================================= */}
 
       {isPlaying && (
         <FaVolumeUp
@@ -169,24 +240,150 @@ function BankWord({
   );
 }
 
-// ======================================================
-// DROPPABLE INPUT
-// ======================================================
+/* ======================================================
+   DROPPABLE INPUT
+====================================================== */
 
 function DroppableInput({
   id,
+
   value,
+
   errorClass,
+
   isWrong,
+
   locked,
+
   showAnswer,
+
+  checkCompleted,
+
+  keyboardPickedWord,
+
+  focusedInputId,
+
+  setFocusedInputId,
+
+  inputRefs,
+
+  getAvailableInputIds,
+
+  onKeyboardDrop,
+
+  onKeyboardClearWrong,
+
+  onCancelKeyboardPick,
+
   onClear,
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id,
 
-    disabled: locked || showAnswer,
+    disabled: locked || showAnswer || checkCompleted,
   });
+
+  /* ======================================================
+     KEYBOARD DROP ACTIVE
+  ====================================================== */
+
+  const keyboardDropActive =
+    !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
+
+  /* ======================================================
+     WRONG FILLED INPUT
+  ====================================================== */
+
+  const canFixWrong =
+    !!value &&
+    isWrong &&
+    !keyboardPickedWord &&
+    !locked &&
+    !showAnswer &&
+    !checkCompleted;
+
+  const showKeyboardPreview = keyboardDropActive && focusedInputId === id;
+
+  const displayValue = showKeyboardPreview ? keyboardPickedWord.word : value;
+
+  const handleKeyDown = (e) => {
+    /* ==================================================
+       WRONG INPUT AFTER CHECK
+       ENTER -> CLEAR -> RETURN TO BANK
+    ================================================== */
+
+    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardClearWrong(id, value);
+
+      return;
+    }
+
+    if (!keyboardDropActive) {
+      return;
+    }
+
+    /* ==================================================
+       TAB / SHIFT TAB
+       بين الـinputs المفتوحة فقط
+    ================================================== */
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const available = getAvailableInputIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      const currentIndex = available.indexOf(id);
+
+      let nextIndex;
+
+      if (e.shiftKey) {
+        nextIndex = currentIndex <= 0 ? available.length - 1 : currentIndex - 1;
+      } else {
+        nextIndex =
+          currentIndex === -1 || currentIndex === available.length - 1
+            ? 0
+            : currentIndex + 1;
+      }
+
+      const nextId = available[nextIndex];
+
+      inputRefs.current[nextId]?.focus();
+
+      return;
+    }
+
+    /* ==================================================
+       ENTER / SPACE = DROP
+    ================================================== */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardDrop(id);
+
+      return;
+    }
+
+    /* ==================================================
+       ESCAPE
+    ================================================== */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onCancelKeyboardPick();
+    }
+  };
 
   return (
     <div
@@ -196,23 +393,61 @@ function DroppableInput({
       }}
     >
       <input
-        ref={setNodeRef}
+        ref={(el) => {
+          setNodeRef(el);
+
+          inputRefs.current[id] = el;
+        }}
         type="text"
         className={`q-input-wb-unit2-page3-q2 ${
           isOver && !locked && !showAnswer ? "drag-over-cell" : ""
-        }`}
-        value={value}
+        } ${showKeyboardPreview ? "keyboard-preview-input-wb-u2-p3-q2" : ""}`}
+        value={displayValue}
         readOnly
-        disabled={locked || showAnswer}
+        disabled={locked || showAnswer || checkCompleted}
+        role="button"
+        tabIndex={
+          locked || showAnswer || checkCompleted
+            ? -1
+            : keyboardDropActive || canFixWrong
+              ? 0
+              : -1
+        }
+        aria-label={
+          keyboardDropActive
+            ? value
+              ? `Answer blank currently contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord.word}.`
+              : `Empty answer blank. Press Enter or Space to place ${keyboardPickedWord.word}.`
+            : canFixWrong
+              ? `${value}. Incorrect answer. Press Enter or Space to remove it and return to the word choices.`
+              : "Answer blank"
+        }
+        onFocus={() => {
+          if (keyboardDropActive) {
+            setFocusedInputId(id);
+          }
+        }}
+        onBlur={() => {
+          setFocusedInputId(null);
+        }}
         onClick={() => {
-          if (value && !locked && !showAnswer) {
+          /*
+            Mouse:
+            نفس سلوكك القديم.
+          */
+
+          if (value && !locked && !showAnswer && !checkCompleted) {
             onClear(id);
           }
         }}
+        onKeyDown={handleKeyDown}
         style={{
           background: isOver && !locked && !showAnswer ? "#e3f2fd" : "white",
 
-          cursor: value && !locked && !showAnswer ? "pointer" : "default",
+          cursor:
+            value && !locked && !showAnswer && !checkCompleted
+              ? "pointer"
+              : "default",
         }}
       />
 
@@ -221,28 +456,46 @@ function DroppableInput({
   );
 }
 
-// ======================================================
-// MAIN
-// ======================================================
+/* ======================================================
+   MAIN
+====================================================== */
 
 const WB_Unit2_Page3_Q2 = () => {
   const [answers, setAnswers] = useState(["", "", "", ""]);
 
   const [wrongInputs, setWrongInputs] = useState([]);
 
-  // الصح يتقفل لحاله
+  /*
+    الصح يتقفل لحاله.
+  */
+
   const [lockedInputs, setLockedInputs] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // true فقط عند النجاح الكامل
+  /*
+    true فقط عند النجاح الكامل.
+  */
+
   const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeWord, setActiveWord] = useState(null);
 
-  // ======================================================
-  // AUDIO
-  // ======================================================
+  /* ======================================================
+     KEYBOARD DRAG
+  ====================================================== */
+
+  const bankRefs = useRef({});
+
+  const inputRefs = useRef({});
+
+  const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
+
+  const [focusedInputId, setFocusedInputId] = useState(null);
+
+  /* ======================================================
+     AUDIO
+  ====================================================== */
 
   const audioRef = useRef(null);
 
@@ -252,7 +505,6 @@ const WB_Unit2_Page3_Q2 = () => {
     if (audioRef.current) {
       audioRef.current.pause();
 
-      // أي صوت يتوقف يرجع للبداية
       audioRef.current.currentTime = 0;
 
       audioRef.current.onended = null;
@@ -305,17 +557,195 @@ const WB_Unit2_Page3_Q2 = () => {
     };
   };
 
-  // ======================================================
-  // HELPERS
-  // ======================================================
+  /* ======================================================
+     HELPERS
+  ====================================================== */
 
   const isInputLocked = (index) => lockedInputs.includes(index);
 
-  const usedWords = answers.filter((w) => w !== "");
+  const usedWords = answers.filter((word) => word !== "");
 
-  // ======================================================
-  // SENSORS
-  // ======================================================
+  const getAvailableInputIds = () =>
+    answers
+      .map((_, index) => index)
+      .filter(
+        (index) => !isInputLocked(index) && !showAnswer && !checkCompleted,
+      )
+      .map((index) => `input-${index}`);
+
+  const getFirstAvailableWord = (answersArray) => {
+    const used = answersArray.filter(Boolean);
+
+    return wordBank.find((item) => !used.includes(item.word))?.word;
+  };
+
+  /* ======================================================
+     KEYBOARD PICK FROM BANK
+  ====================================================== */
+
+  const handleKeyboardPick = (word) => {
+    if (showAnswer || checkCompleted || usedWords.includes(word)) {
+      return;
+    }
+
+    setKeyboardPickedWord({
+      word,
+      source: "bank",
+    });
+
+    setFocusedInputId(null);
+
+    requestAnimationFrame(() => {
+      const available = getAvailableInputIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      inputRefs.current[available[0]]?.focus();
+    });
+  };
+
+  /* ======================================================
+     NEW DRAG PATTERN:
+     WRONG INPUT -> ENTER
+     CLEAR IT -> RETURN TO BANK
+  ====================================================== */
+
+  const handleKeyboardClearWrong = (cellId, currentWord) => {
+    const index = Number(cellId.replace("input-", ""));
+
+    if (showAnswer || checkCompleted || isInputLocked(index)) {
+      return;
+    }
+
+    const updated = [...answers];
+
+    updated[index] = "";
+
+    setAnswers(updated);
+
+    /*
+      شيل X فقط
+      عن نفس الخانة.
+    */
+
+    setWrongInputs((prev) => prev.filter((i) => i !== index));
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
+
+    /*
+      رجع على نفس الخيار
+      اللي انشال من الخانة.
+    */
+
+    window.setTimeout(() => {
+      if (currentWord && bankRefs.current[currentWord]) {
+        bankRefs.current[currentWord]?.focus();
+
+        return;
+      }
+
+      const firstAvailable = getFirstAvailableWord(updated);
+
+      if (firstAvailable) {
+        bankRefs.current[firstAvailable]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     KEYBOARD DROP
+  ====================================================== */
+
+  const handleKeyboardDrop = (inputId) => {
+    if (!keyboardPickedWord || showAnswer || checkCompleted) {
+      return;
+    }
+
+    const targetIndex = Number(inputId.replace("input-", ""));
+
+    if (isInputLocked(targetIndex)) {
+      return;
+    }
+
+    const word = keyboardPickedWord.word;
+
+    const updated = [...answers];
+
+    /*
+      الكلمة تستخدم مرة واحدة.
+    */
+
+    const sourceIndex = updated.findIndex((item) => item === word);
+
+    if (sourceIndex !== -1 && isInputLocked(sourceIndex)) {
+      return;
+    }
+
+    /*
+      لو الهدف فيه كلمة،
+      بتصير هاي الكلمة ترجع للبنك.
+    */
+
+    if (sourceIndex !== -1) {
+      updated[sourceIndex] = updated[targetIndex] || "";
+    }
+
+    updated[targetIndex] = word;
+
+    setAnswers(updated);
+
+    /*
+      X فقط عن الأماكن
+      اللي تغيرت.
+    */
+
+    setWrongInputs((prev) =>
+      prev.filter((index) => index !== targetIndex && index !== sourceIndex),
+    );
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
+
+    /*
+      بعد التثبيت:
+      رجع لأول خيار متاح.
+    */
+
+    window.setTimeout(() => {
+      const firstAvailable = getFirstAvailableWord(updated);
+
+      if (firstAvailable) {
+        bankRefs.current[firstAvailable]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     CANCEL KEYBOARD PICK
+  ====================================================== */
+
+  const handleCancelKeyboardPick = () => {
+    const pickedWord = keyboardPickedWord?.word;
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
+
+    window.setTimeout(() => {
+      if (pickedWord && bankRefs.current[pickedWord]) {
+        bankRefs.current[pickedWord]?.focus();
+      }
+    }, 0);
+  };
+
+  /* ======================================================
+     SENSORS
+  ====================================================== */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -327,23 +757,29 @@ const WB_Unit2_Page3_Q2 = () => {
     useSensor(TouchSensor, {
       activationConstraint: {
         delay: 150,
-
         tolerance: 5,
       },
     }),
   );
 
-  // ======================================================
-  // DRAG START
-  // ======================================================
+  /* ======================================================
+     DRAG START
+  ====================================================== */
 
   const handleDragStart = (event) => {
+    const word = event.active.data.current?.word;
+
+    if (word) {
+      setActiveWord(word);
+      return;
+    }
+
     setActiveWord(event.active.id.replace("word-", ""));
   };
 
-  // ======================================================
-  // DRAG END
-  // ======================================================
+  /* ======================================================
+     DRAG END
+  ====================================================== */
 
   const handleDragEnd = (event) => {
     setActiveWord(null);
@@ -358,12 +794,13 @@ const WB_Unit2_Page3_Q2 = () => {
       return;
     }
 
-    const word = active.id.replace("word-", "");
+    const word = active.data.current?.word ?? active.id.replace("word-", "");
 
     const targetIndex = Number(String(over.id).replace("input-", ""));
 
     /*
-      الخانة الصح المقفلة ما بتتعدل
+      الخانة الصح المقفلة
+      ما بتتعدل.
     */
 
     if (isInputLocked(targetIndex)) {
@@ -371,15 +808,14 @@ const WB_Unit2_Page3_Q2 = () => {
     }
 
     /*
-      نحدد مكان الكلمة القديم
-      قبل setState
+      مكان الكلمة القديم.
     */
 
     const sourceIndex = answers.findIndex((item) => item === word);
 
     /*
-      لو الكلمة موجودة بخانة صح مقفلة
-      ممنوع نقلها
+      لو الكلمة بخانة صح
+      مقفلة ممنوع نقلها.
     */
 
     if (sourceIndex !== -1 && isInputLocked(sourceIndex)) {
@@ -400,8 +836,7 @@ const WB_Unit2_Page3_Q2 = () => {
       updated[targetIndex] = word;
 
       /*
-          لو الكلمة كانت بخانة ثانية
-          نعمل swap
+          Swap
         */
 
       if (source !== -1) {
@@ -412,7 +847,8 @@ const WB_Unit2_Page3_Q2 = () => {
     });
 
     /*
-      شيل X فقط عن الخانات اللي تغيرت
+      شيل X فقط عن
+      الخانات المتغيرة.
     */
 
     setWrongInputs((prev) =>
@@ -420,9 +856,13 @@ const WB_Unit2_Page3_Q2 = () => {
     );
   };
 
-  // ======================================================
-  // CLEAR
-  // ======================================================
+  const handleDragCancel = () => {
+    setActiveWord(null);
+  };
+
+  /* ======================================================
+     CLEAR WITH MOUSE
+  ====================================================== */
 
   const handleClear = (cellId) => {
     const index = Number(cellId.replace("input-", ""));
@@ -440,15 +880,15 @@ const WB_Unit2_Page3_Q2 = () => {
     });
 
     /*
-      شيل X فقط عن نفس الخانة
+      شيل X فقط عن نفس الخانة.
     */
 
     setWrongInputs((prev) => prev.filter((i) => i !== index));
   };
 
-  // ======================================================
-  // CHECK
-  // ======================================================
+  /* ======================================================
+     CHECK
+  ====================================================== */
 
   const checkAnswers = () => {
     if (showAnswer || checkCompleted) {
@@ -477,33 +917,37 @@ const WB_Unit2_Page3_Q2 = () => {
       }
     });
 
-    // ====================================================
-    // LOCK CORRECT ONLY
-    // ====================================================
+    /* ====================================================
+       LOCK CORRECT ONLY
+    ==================================================== */
 
     setLockedInputs((prev) => Array.from(new Set([...prev, ...correctTemp])));
 
-    // ====================================================
-    // WRONG ONLY
-    // ====================================================
+    /* ====================================================
+       WRONG ONLY
+    ==================================================== */
 
     setWrongInputs(wrong);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
 
     const total = correctAnswers.length;
 
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
 
     const scoreMessage = `
-        <div style="font-size:20px;margin-top:10px;text-align:center;">
-          <span style="color:${color};font-weight:bold;">
-            Score: ${score} / ${total}
-          </span>
-        </div>
-      `;
+      <div style="font-size:20px;margin-top:10px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${score} / ${total}
+        </span>
+      </div>
+    `;
 
-    // ====================================================
-    // ALL CORRECT
-    // ====================================================
+    /* ====================================================
+       ALL CORRECT
+    ==================================================== */
 
     if (score === total) {
       setLockedInputs(correctAnswers.map((_, index) => index));
@@ -524,9 +968,9 @@ const WB_Unit2_Page3_Q2 = () => {
     }
   };
 
-  // ======================================================
-  // SHOW ANSWER
-  // ======================================================
+  /* ======================================================
+     SHOW ANSWER
+  ====================================================== */
 
   const showAnswers = () => {
     stopAudio();
@@ -540,11 +984,15 @@ const WB_Unit2_Page3_Q2 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
   };
 
-  // ======================================================
-  // RESET
-  // ======================================================
+  /* ======================================================
+     RESET
+  ====================================================== */
 
   const reset = () => {
     stopAudio();
@@ -560,17 +1008,22 @@ const WB_Unit2_Page3_Q2 = () => {
     setCheckCompleted(false);
 
     setActiveWord(null);
+
+    setKeyboardPickedWord(null);
+
+    setFocusedInputId(null);
   };
 
-  // ======================================================
-  // RENDER
-  // ======================================================
+  /* ======================================================
+     RENDER
+  ====================================================== */
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
     >
       <div
         className="question-wrapper-unit3-page6-q1"
@@ -626,6 +1079,9 @@ const WB_Unit2_Page3_Q2 = () => {
                 disabled={showAnswer || checkCompleted}
                 playingWord={playingWord}
                 onPlayAudio={playAudio}
+                keyboardPickedWord={keyboardPickedWord}
+                onKeyboardPick={handleKeyboardPick}
+                bankRefs={bankRefs}
               />
             ))}
           </div>
@@ -635,7 +1091,7 @@ const WB_Unit2_Page3_Q2 = () => {
           ================================================= */}
 
           <div className="row-content10-wb-unit2-page3-q2 w-full">
-            {images.map((img, index) => {
+            {images.map((image, index) => {
               const locked = isInputLocked(index);
 
               return (
@@ -655,7 +1111,11 @@ const WB_Unit2_Page3_Q2 = () => {
                   >
                     <span className="num-span">{index + 1}</span>
 
-                    <img src={img} alt="" className="q-img-wb-unit2-page3-q2" />
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="q-img-wb-unit2-page3-q2"
+                    />
                   </div>
 
                   <DroppableInput
@@ -665,6 +1125,15 @@ const WB_Unit2_Page3_Q2 = () => {
                     isWrong={wrongInputs.includes(index)}
                     locked={locked}
                     showAnswer={showAnswer}
+                    checkCompleted={checkCompleted}
+                    keyboardPickedWord={keyboardPickedWord}
+                    focusedInputId={focusedInputId}
+                    setFocusedInputId={setFocusedInputId}
+                    inputRefs={inputRefs}
+                    getAvailableInputIds={getAvailableInputIds}
+                    onKeyboardDrop={handleKeyboardDrop}
+                    onKeyboardClearWrong={handleKeyboardClearWrong}
+                    onCancelKeyboardPick={handleCancelKeyboardPick}
                     onClear={handleClear}
                   />
                 </div>

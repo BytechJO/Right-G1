@@ -23,11 +23,6 @@ import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
-/* =====================================================
-   ضعي هنا مسارات أصوات الجمل الحقيقية
-===================================================== */
-
-// عدّلي المسارات حسب أسماء الملفات عندك
 import cakeSentenceSound from "../../../assets/unit2/Page 15 - E/Happy birthday! Here is a cake..mp3";
 import balloonSentenceSound from "../../../assets/unit2/Page 15 - E/Happy birthday! Here is a ballon..mp3";
 import presentSentenceSound from "../../../assets/unit2/Page 15 - E/Happy birthday! Here is a present..mp3";
@@ -102,8 +97,18 @@ const WordBankItem = ({
   pair,
   isUsed,
   showAnswer,
+  checkCompleted,
+
   activeSentenceAudio,
   onPlaySentence,
+
+  keyboardPickedPair,
+  onKeyboardPick,
+
+  bankRefs,
+
+  focusedBankId,
+  setFocusedBankId,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -115,46 +120,115 @@ const WordBankItem = ({
         source: "bank",
       },
 
-      disabled: isUsed || showAnswer,
+      disabled: isUsed || showAnswer || checkCompleted,
     });
+
+  const isPicked = keyboardPickedPair?.id === pair.id;
 
   const style = {
     transform: CSS.Translate.toString(transform),
 
     opacity: isDragging ? 0.35 : isUsed ? 0.35 : 1,
 
-    cursor: isUsed || showAnswer ? "default" : "grab",
+    cursor: isUsed || showAnswer || checkCompleted ? "default" : "grab",
 
     filter: isUsed ? "grayscale(60%)" : "none",
 
-    transition: "opacity 0.2s, filter 0.2s",
+    transition:
+      "opacity 0.2s, filter 0.2s, transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease",
 
     userSelect: "none",
+
+    outline: isPicked
+      ? "3px solid #2563eb"
+      : focusedBankId === pair.id
+        ? "2px solid #2563eb"
+        : "none",
+
+    outlineOffset: "3px",
+
+    background: isPicked ? "#dbeafe" : undefined,
+
+    boxShadow: isPicked ? "0 0 0 4px rgba(37,99,235,0.15)" : "none",
   };
 
   return (
     <div className="option-box2">
       {/* NUMBER */}
+
       <span
-        ref={setNodeRef}
+        ref={(el) => {
+          setNodeRef(el);
+          bankRefs.current[pair.id] = el;
+        }}
         style={style}
         className={`number-tag2 draggable-number${
           isDragging ? " dragging" : ""
         }`}
-        {...(isUsed || showAnswer
+        {...(isUsed || showAnswer || checkCompleted
           ? {}
           : {
               ...listeners,
               ...attributes,
             })}
+        role="button"
+        tabIndex={isUsed || showAnswer || checkCompleted ? -1 : 0}
+        aria-pressed={isPicked}
+        aria-disabled={isUsed || showAnswer || checkCompleted}
+        aria-label={
+          isPicked
+            ? `Number ${pair.letter} selected. Choose a box and press Enter.`
+            : `Number ${pair.letter}. Press Enter to select it.`
+        }
+        onFocus={() => {
+          setFocusedBankId(pair.id);
+        }}
+        onBlur={() => {
+          setFocusedBankId(null);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            onKeyboardPick(pair);
+            return;
+          }
+
+          listeners?.onKeyDown?.(e);
+        }}
+        onClick={(e) => {
+          /*
+            Mouse click ما نمسك الرقم منه،
+            عشان يضل الـ drag بالماوس طبيعي.
+          */
+
+          if (e.detail === 0) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            onKeyboardPick(pair);
+          }
+        }}
       >
         {pair.letter}
       </span>
 
       {/* SENTENCE + AUDIO */}
+
       <span
-        className="option-text2"
+        className="option-text2 accessible-sentence-option"
+        role="button"
+        tabIndex={0}
+        aria-label={`Play audio: ${pair.content}`}
         onClick={() => onPlaySentence(pair.sound, pair.id)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+
+            onPlaySentence(pair.sound, pair.id);
+          }
+        }}
         style={{
           cursor: "pointer",
           position: "relative",
@@ -168,6 +242,7 @@ const WordBankItem = ({
         {activeSentenceAudio === pair.id && (
           <FaVolumeUp
             size={20}
+            aria-hidden="true"
             style={{
               flexShrink: 0,
               pointerEvents: "none",
@@ -187,9 +262,16 @@ const PlacedNumber = ({
   pairId,
   letter,
   dropId,
+
   showAnswer,
   isLocked,
+  checkCompleted,
+
   onReturn,
+
+  onKeyboardPickPlaced,
+
+  placedRefs,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -202,32 +284,64 @@ const PlacedNumber = ({
         dropId,
       },
 
-      disabled: showAnswer || isLocked,
+      disabled: showAnswer || isLocked || checkCompleted,
     });
+
+  const isDisabled = showAnswer || isLocked || checkCompleted;
 
   const style = {
     transform: CSS.Translate.toString(transform),
 
     opacity: isDragging ? 0.35 : 1,
 
-    cursor: showAnswer || isLocked ? "default" : "pointer",
+    cursor: isDisabled ? "default" : "grab",
 
     userSelect: "none",
   };
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(el) => {
+        setNodeRef(el);
+
+        if (placedRefs) {
+          placedRefs.current[dropId] = el;
+        }
+      }}
       style={style}
-      className="circle-number2"
-      {...(showAnswer || isLocked
+      className="circle-number2 accessible-placed-number2"
+      {...(isDisabled
         ? {}
         : {
             ...listeners,
             ...attributes,
           })}
+      role={isDisabled ? undefined : "button"}
+      tabIndex={isDisabled ? -1 : 0}
+      aria-label={
+        isDisabled
+          ? undefined
+          : `Number ${letter}. Press Enter to move it to another box.`
+      }
+      onKeyDown={(e) => {
+        if (isDisabled) {
+          return;
+        }
+
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+
+          onKeyboardPickPlaced({
+            id: pairId,
+            letter,
+            source: "drop",
+            dropId,
+          });
+        }
+      }}
       onClick={() => {
-        if (showAnswer || isLocked) {
+        if (isDisabled) {
           return;
         }
 
@@ -247,43 +361,194 @@ const DropCircle = ({
   dropId,
   imageData,
   droppedPairId,
+
   isWrong,
   isLocked,
+
   showAnswer,
+  checkCompleted,
+
   onReturn,
+
+  keyboardPickedPair,
+  onKeyboardDrop,
+
+  dropRefs,
+
+  focusedDropId,
+  setFocusedDropId,
+
+  getAvailableDropIds,
+
+  onKeyboardPickPlaced,
+
+  placedRefs,
 }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: dropId,
 
-    disabled: showAnswer || isLocked,
+    disabled: showAnswer || isLocked || checkCompleted,
   });
 
   const droppedPair = droppedPairId
     ? exerciseData.pairs.find((pair) => pair.id === droppedPairId)
     : null;
 
+  const keyboardActive =
+    !!keyboardPickedPair && !isLocked && !showAnswer && !checkCompleted;
+
+  /*
+    إذا ماسكين رقم والـ focus
+    واقف على هاي الخانة:
+    الرقم يظهر جواتها ويرمش.
+  */
+
+  const showKeyboardPreview = keyboardActive && focusedDropId === dropId;
+
   return (
     <div className="image-row2">
-      {/* DROP CIRCLE */}
+      {/* =================================================
+          DROP CIRCLE
+      ================================================= */}
 
       <div
-        ref={setNodeRef}
+        ref={(el) => {
+          setNodeRef(el);
+
+          dropRefs.current[dropId] = el;
+        }}
         className={`drop-circle2${isOver ? " drop2-hover" : ""}`}
+        role={keyboardActive ? "button" : undefined}
+        tabIndex={keyboardActive ? 0 : -1}
+        aria-label={
+          keyboardActive
+            ? droppedPair
+              ? `Box currently contains number ${droppedPair.letter}. Press Enter to replace it with number ${keyboardPickedPair.letter}.`
+              : `Empty box. Press Enter to place number ${keyboardPickedPair.letter}.`
+            : undefined
+        }
+        onFocus={(e) => {
+          /*
+            بدون رقم ممسوك
+            ممنوع الـ focus يضيع بالخانة.
+          */
+
+          if (!keyboardActive) {
+            e.currentTarget.blur();
+
+            setFocusedDropId(null);
+
+            return;
+          }
+
+          setFocusedDropId(dropId);
+        }}
+        onBlur={() => {
+          setFocusedDropId(null);
+        }}
+        onKeyDown={(e) => {
+          if (!keyboardActive) {
+            return;
+          }
+
+          /* =========================
+             TAB BETWEEN DROPS
+          ========================= */
+
+          if (e.key === "Tab") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const available = getAvailableDropIds();
+
+            if (available.length === 0) {
+              return;
+            }
+
+            const currentIndex = available.indexOf(dropId);
+
+            let nextIndex;
+
+            if (e.shiftKey) {
+              nextIndex =
+                currentIndex <= 0 ? available.length - 1 : currentIndex - 1;
+            } else {
+              nextIndex =
+                currentIndex === -1 || currentIndex === available.length - 1
+                  ? 0
+                  : currentIndex + 1;
+            }
+
+            const nextDropId = available[nextIndex];
+
+            dropRefs.current[nextDropId]?.focus();
+
+            return;
+          }
+
+          /* =========================
+             ENTER / SPACE
+          ========================= */
+
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            onKeyboardDrop(dropId);
+          }
+        }}
         style={{
           position: "relative",
+
+          outline: showKeyboardPreview ? "3px solid #2563eb" : "none",
+
+          outlineOffset: "3px",
+
+          background: showKeyboardPreview ? "#dbeafe" : undefined,
+
+          transform: showKeyboardPreview ? "scale(1.08)" : "scale(1)",
+
+          boxShadow: showKeyboardPreview
+            ? "0 0 0 4px rgba(37,99,235,0.15)"
+            : "none",
+
+          transition:
+            "transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease",
         }}
       >
-        {isWrong && <div className="wrong-x3">✕</div>}
+        {/* WRONG */}
 
-        {droppedPair && (
-          <PlacedNumber
-            pairId={droppedPair.id}
-            letter={droppedPair.letter}
-            dropId={dropId}
-            showAnswer={showAnswer}
-            isLocked={isLocked}
-            onReturn={onReturn}
-          />
+        {isWrong && (
+          <div className="wrong-x3" aria-hidden="true">
+            ✕
+          </div>
+        )}
+
+        {/* =================================================
+            KEYBOARD PREVIEW
+        ================================================= */}
+
+        {showKeyboardPreview ? (
+          <div
+            className="circle-number2 keyboard-preview-number"
+            aria-hidden="true"
+          >
+            {keyboardPickedPair.letter}
+          </div>
+        ) : (
+          droppedPair && (
+            <PlacedNumber
+              pairId={droppedPair.id}
+              letter={droppedPair.letter}
+              dropId={dropId}
+              showAnswer={showAnswer}
+              isLocked={isLocked}
+              checkCompleted={checkCompleted}
+              onReturn={onReturn}
+              onKeyboardPickPlaced={onKeyboardPickPlaced}
+              placedRefs={placedRefs}
+            />
+          )
         )}
       </div>
 
@@ -301,9 +566,20 @@ const DropCircle = ({
 const WordBank = ({
   pairs,
   usedPairIds,
+
   showAnswer,
+  checkCompleted,
+
   activeSentenceAudio,
   onPlaySentence,
+
+  keyboardPickedPair,
+  onKeyboardPick,
+
+  bankRefs,
+
+  focusedBankId,
+  setFocusedBankId,
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: "letters2",
@@ -325,8 +601,14 @@ const WordBank = ({
           pair={pair}
           isUsed={usedPairIds.has(pair.id)}
           showAnswer={showAnswer}
+          checkCompleted={checkCompleted}
           activeSentenceAudio={activeSentenceAudio}
           onPlaySentence={onPlaySentence}
+          keyboardPickedPair={keyboardPickedPair}
+          onKeyboardPick={onKeyboardPick}
+          bankRefs={bankRefs}
+          focusedBankId={focusedBankId}
+          setFocusedBankId={setFocusedBankId}
         />
       ))}
     </div>
@@ -344,15 +626,29 @@ const Unit2_Page6_Q2 = () => {
 
   const [wrongDrops, setWrongDrops] = useState([]);
 
-  // الخانات الصح بعد Check
   const [lockedDrops, setLockedDrops] = useState([]);
 
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // بعد أول Check كامل وصحيح
   const [checkCompleted, setCheckCompleted] = useState(false);
 
   const [activeDrag, setActiveDrag] = useState(null);
+
+  /* =====================================================
+     KEYBOARD ACCESSIBILITY
+  ===================================================== */
+
+  const bankRefs = useRef({});
+
+  const dropRefs = useRef({});
+
+  const placedRefs = useRef({});
+
+  const [keyboardPickedPair, setKeyboardPickedPair] = useState(null);
+
+  const [focusedBankId, setFocusedBankId] = useState(null);
+
+  const [focusedDropId, setFocusedDropId] = useState(null);
 
   /* =====================================================
      SENTENCE AUDIO
@@ -393,6 +689,168 @@ const Unit2_Page6_Q2 = () => {
   const usedPairIds = new Set(Object.values(droppedLetters).filter(Boolean));
 
   /* =====================================================
+     AVAILABLE DROP IDS
+  ===================================================== */
+
+  const getAvailableDropIds = () => {
+    return Object.keys(droppedLetters).filter(
+      (dropId) =>
+        !lockedDrops.includes(dropId) && !showAnswer && !checkCompleted,
+    );
+  };
+
+  /* =====================================================
+     KEYBOARD PICK FROM BANK
+  ===================================================== */
+
+  const handleKeyboardPick = (pair) => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    if (usedPairIds.has(pair.id)) {
+      return;
+    }
+
+    setKeyboardPickedPair({
+      ...pair,
+      source: "bank",
+    });
+
+    /*
+        فور اختيار الرقم:
+        روح لأول drop متاح.
+
+        بمجرد وصول focus له
+        الرقم رح يظهر جواته ويرمش.
+      */
+
+    setTimeout(() => {
+      const available = getAvailableDropIds();
+
+      if (available.length > 0) {
+        dropRefs.current[available[0]]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =====================================================
+     PICK NUMBER FROM INSIDE DROP
+  ===================================================== */
+
+  const handleKeyboardPickPlaced = (pair) => {
+    if (showAnswer || checkCompleted || lockedDrops.includes(pair.dropId)) {
+      return;
+    }
+
+    setKeyboardPickedPair(pair);
+
+    /*
+        الرقم موجود حاليًا بخانة.
+        روح لأول خانة ثانية متاحة.
+      */
+
+    setTimeout(() => {
+      const available = getAvailableDropIds();
+
+      if (available.length > 0) {
+        const nextDrop =
+          available.find((id) => id !== pair.dropId) || available[0];
+
+        dropRefs.current[nextDrop]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =====================================================
+     KEYBOARD DROP / REPLACE / SWAP
+  ===================================================== */
+
+  const handleKeyboardDrop = (dropId) => {
+    if (
+      !keyboardPickedPair ||
+      showAnswer ||
+      checkCompleted ||
+      lockedDrops.includes(dropId)
+    ) {
+      return;
+    }
+
+    const pickedPair = keyboardPickedPair;
+
+    const newPairId = pickedPair.id;
+
+    setDroppedLetters((prev) => {
+      const next = {
+        ...prev,
+      };
+
+      /*
+            مكان الرقم الحالي لو كان
+            أصلًا موجود بخانة.
+          */
+
+      const oldSourceDrop = Object.keys(next).find(
+        (id) => next[id] === newPairId,
+      );
+
+      /*
+            الرقم الموجود حاليًا
+            داخل الخانة الهدف.
+          */
+
+      const oldTargetPair = next[dropId];
+
+      /*
+            إذا الرقم جاي من drop:
+            SWAP.
+          */
+
+      if (
+        oldSourceDrop &&
+        oldSourceDrop !== dropId &&
+        !lockedDrops.includes(oldSourceDrop)
+      ) {
+        next[oldSourceDrop] = oldTargetPair || null;
+      }
+
+      /*
+            حط الرقم الجديد.
+          */
+
+      next[dropId] = newPairId;
+
+      return next;
+    });
+
+    /*
+        شيل X عن الخانة المعدلة.
+      */
+
+    setWrongDrops((prev) => prev.filter((id) => id !== dropId));
+
+    setKeyboardPickedPair(null);
+
+    setFocusedDropId(null);
+
+    /*
+        إذا الرقم جاي من داخل drop:
+        خلي focus على الرقم بعد نقله.
+
+        إذا جاي من bank:
+        رجع focus لنفس رقم bank.
+      */
+
+    setTimeout(() => {
+      if (pickedPair.source === "drop") {
+        placedRefs.current[dropId]?.focus();
+      } else {
+        bankRefs.current[pickedPair.id]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =====================================================
      SENSORS
   ===================================================== */
 
@@ -426,27 +884,31 @@ const Unit2_Page6_Q2 = () => {
   const handleDragEnd = (event) => {
     setActiveDrag(null);
 
-    if (showAnswer) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
     const { active, over } = event;
 
-    if (!over) return;
+    if (!over) {
+      return;
+    }
 
     const { pairId, source, dropId: fromDropId } = active.data.current;
 
     const toId = over.id;
 
-    /* =============================
-       لا تحرك خانة صح مقفلة
-    ============================= */
+    /*
+        لا تحرك خانة صح مقفلة.
+      */
 
     if (source === "drop" && lockedDrops.includes(fromDropId)) {
       return;
     }
 
-    /* =============================
-       لا تحط فوق خانة صح
-    ============================= */
+    /*
+        لا تحط فوق خانة مقفلة.
+      */
 
     if (toId !== "letters2" && lockedDrops.includes(toId)) {
       return;
@@ -457,33 +919,65 @@ const Unit2_Page6_Q2 = () => {
         ...prev,
       };
 
-      /* Drag from old drop */
+      /* =========================
+             DRAG FROM DROP
+          ========================= */
 
       if (source === "drop") {
-        next[fromDropId] = null;
-      }
+        /*
+              رجوع للـ bank.
+            */
 
-      /* Return to word bank */
+        if (toId === "letters2") {
+          next[fromDropId] = null;
 
-      if (toId === "letters2") {
+          return next;
+        }
+
+        /*
+              Swap بين خانتين.
+            */
+
+        const targetPair = next[toId];
+
+        next[toId] = pairId;
+
+        next[fromDropId] = targetPair || null;
+
         return next;
       }
 
-      /* Put in new target */
+      /* =========================
+             DRAG FROM BANK
+          ========================= */
 
-      next[toId] = pairId;
+      if (source === "bank") {
+        if (toId === "letters2") {
+          return next;
+        }
+
+        /*
+              Replace.
+              الرقم الجديد يحل محل القديم.
+              القديم يرجع متاح بالـ bank.
+            */
+
+        next[toId] = pairId;
+
+        return next;
+      }
 
       return next;
     });
 
-    /* =============================
-       REMOVE X ONLY FROM EDITED DROP
-    ============================= */
+    /* =================================================
+         REMOVE X ONLY FROM EDITED DROPS
+      ================================================= */
 
     setWrongDrops((prev) => {
       let updated = [...prev];
 
-      if (source === "drop") {
+      if (source === "drop" && fromDropId) {
         updated = updated.filter((id) => id !== fromDropId);
       }
 
@@ -500,7 +994,7 @@ const Unit2_Page6_Q2 = () => {
   ===================================================== */
 
   const handleReturnToBank = (dropZoneId) => {
-    if (showAnswer || lockedDrops.includes(dropZoneId)) {
+    if (showAnswer || checkCompleted || lockedDrops.includes(dropZoneId)) {
       return;
     }
 
@@ -532,10 +1026,18 @@ const Unit2_Page6_Q2 = () => {
 
     setActiveDrag(null);
 
+    setKeyboardPickedPair(null);
+
+    setFocusedBankId(null);
+
+    setFocusedDropId(null);
+
     if (sentenceAudioRef.current) {
       sentenceAudioRef.current.pause();
 
       sentenceAudioRef.current.currentTime = 0;
+
+      sentenceAudioRef.current.onended = null;
     }
 
     setActiveSentenceAudio(null);
@@ -546,9 +1048,6 @@ const Unit2_Page6_Q2 = () => {
   ===================================================== */
 
   const handleCheckAnswers = () => {
-    /* بعد النجاح النهائي
-         أي Check ثاني ما يعمل شيء */
-
     if (showAnswer || checkCompleted) {
       return;
     }
@@ -588,14 +1087,14 @@ const Unit2_Page6_Q2 = () => {
     setLockedDrops((prev) => Array.from(new Set([...prev, ...correctTemp])));
 
     /* =============================
-         SHOW X ON WRONG ONLY
+         WRONG ONLY
       ============================= */
 
     setWrongDrops(wrongTemp);
 
-    /* =============================
-         SCORE
-      ============================= */
+    setKeyboardPickedPair(null);
+
+    setFocusedDropId(null);
 
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -624,10 +1123,6 @@ const Unit2_Page6_Q2 = () => {
       return;
     }
 
-    /* =============================
-         WRONG / PARTIAL
-      ============================= */
-
     if (correctCount === 0) {
       ValidationAlert.error(msg);
     } else {
@@ -651,6 +1146,10 @@ const Unit2_Page6_Q2 = () => {
     setShowAnswer(true);
 
     setCheckCompleted(true);
+
+    setKeyboardPickedPair(null);
+
+    setFocusedDropId(null);
   };
 
   /* =====================================================
@@ -716,7 +1215,16 @@ const Unit2_Page6_Q2 = () => {
                       isWrong={wrongDrops.includes(dropId)}
                       isLocked={lockedDrops.includes(dropId)}
                       showAnswer={showAnswer}
+                      checkCompleted={checkCompleted}
                       onReturn={handleReturnToBank}
+                      keyboardPickedPair={keyboardPickedPair}
+                      onKeyboardDrop={handleKeyboardDrop}
+                      dropRefs={dropRefs}
+                      focusedDropId={focusedDropId}
+                      setFocusedDropId={setFocusedDropId}
+                      getAvailableDropIds={getAvailableDropIds}
+                      onKeyboardPickPlaced={handleKeyboardPickPlaced}
+                      placedRefs={placedRefs}
                     />
                   );
                 })}
@@ -730,8 +1238,14 @@ const Unit2_Page6_Q2 = () => {
                 pairs={exerciseData.pairs}
                 usedPairIds={usedPairIds}
                 showAnswer={showAnswer}
+                checkCompleted={checkCompleted}
                 activeSentenceAudio={activeSentenceAudio}
                 onPlaySentence={playSentence}
+                keyboardPickedPair={keyboardPickedPair}
+                onKeyboardPick={handleKeyboardPick}
+                bankRefs={bankRefs}
+                focusedBankId={focusedBankId}
+                setFocusedBankId={setFocusedBankId}
               />
             </div>
 

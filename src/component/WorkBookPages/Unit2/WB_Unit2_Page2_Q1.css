@@ -44,20 +44,55 @@
 }
 
 .input-error-x-wb-u2-p2-q1 {
-    position: absolute;
-    right: 37%;
-    top: 50%;
-    border: 2px solid white;
-    background-color: red;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    vertical-align: middle;
-    width: 25px;
-    height: 25px;
+  position: absolute;
+  right: 37%;
+  top: 50%;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+}
+.keyboard-picked-word-wb-u2-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-active-wb-u2-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.keyboard-word-preview-wb-u2-p2-q1 {
+  display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid #2c5287;
+  border-radius: 6px;
+  background: #f4f8ff;
+
+  animation: keyboardWordPreviewWBUnit2P2Q1 1.5s ease-in-out infinite;
+}
+
+@keyframes keyboardWordPreviewWBUnit2P2Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.unscramble-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
 }

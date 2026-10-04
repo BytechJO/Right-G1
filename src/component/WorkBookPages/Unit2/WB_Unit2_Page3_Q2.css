@@ -9,7 +9,7 @@
 
 .q-img-wb-unit2-page3-q2 {
   width: 170px;
-  height:auto;
+  height: auto;
 }
 /* .word-bank-wb-unit2-page3-q2 {
   display: flex;
@@ -21,21 +21,21 @@
 } */
 
 .word-bank-wb-unit2-page3-q2 {
-    display: flex;
-    gap: 5px;
-    /* margin: 15px 0 25px; */
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    justify-content: center;
-    border-radius: 8px;
-    /* padding: 10px; */
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: 10px 0px;
+  display: flex;
+  gap: 5px;
+  /* margin: 15px 0 25px; */
+  flex-wrap: wrap;
+  border: 2px solid #4b74ff;
+  background-color: #f2f6ff;
+  justify-content: center;
+  border-radius: 8px;
+  /* padding: 10px; */
+  /* height: 60px; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 10px 0px;
 }
 .error-mark-input-wb-unit2-page3-q2 {
   position: absolute;
@@ -56,17 +56,16 @@
   border: 2px solid white;
 }
 
-
-.q-input-wb-unit2-page3-q2  {
-    border-bottom: 2px solid #000000;
-    padding: 5px 8px;
-    /* border-radius: 6px; */
-    font-size: 20px;
-    width: 170px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: normal;
-    height: 40px;
+.q-input-wb-unit2-page3-q2 {
+  border-bottom: 2px solid #000000;
+  padding: 5px 8px;
+  /* border-radius: 6px; */
+  font-size: 20px;
+  width: 170px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: normal;
+  height: 40px;
 }
 @media (max-width: 1024px) {
   .word-bank-wb-unit2-page3-q2 {
@@ -77,5 +76,29 @@
     display: grid;
     /* margin-bottom: 55px; */
     gap: 2px;
+  }
+}
+.keyboard-picked-word-wb-u2-p3-q2 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.q-input-wb-unit2-page3-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.keyboard-preview-input-wb-u2-p3-q2 {
+  animation: keyboardPreviewWBUnit2P3Q2 1.5s ease-in-out infinite;
+}
+
+@keyframes keyboardPreviewWBUnit2P3Q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
   }
 }

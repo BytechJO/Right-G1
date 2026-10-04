@@ -88,3 +88,33 @@
   justify-content: center;
   gap: 20px;
 }
+.placed-word-unit2-p9-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.keyboard-slot-active-p9-q3 {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.keyboard-word-preview-p9-q3 {
+  display: inline-block;
+  pointer-events: none;
+
+  animation: keyboardWordBlinkP9Q3 1.5s ease-in-out infinite;
+}
+
+@keyframes keyboardWordBlinkP9Q3 {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.96);
+  }
+}

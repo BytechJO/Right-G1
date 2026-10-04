@@ -36,7 +36,6 @@
 .drop-slot-wrapper-unit2-p8-q2 {
   position: relative;
   display: inline-block;
- 
 }
 
 .q-input {
@@ -154,5 +153,53 @@
   .q-img {
     width: 130px;
     height: auto;
+  }
+}
+/* =====================================================
+   KEYBOARD DRAG ACCESSIBILITY
+===================================================== */
+
+.word-item-unit2-p8-q2:focus-visible,
+.placed-word-unit2-p8-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.keyboard-picked-word {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   ACTIVE SLOT
+===================================================== */
+
+.keyboard-slot-active-unit2-p8-q2 {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   BLINKING WORD INSIDE CURRENT SLOT
+===================================================== */
+
+.keyboard-word-preview-unit2-p8-q2 {
+  display: inline-block;
+  pointer-events: none;
+
+  animation: keyboardWordBlinkUnit2P8Q2 1.5s ease-in-out infinite;
+}
+
+@keyframes keyboardWordBlinkUnit2P8Q2 {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.96);
   }
 }

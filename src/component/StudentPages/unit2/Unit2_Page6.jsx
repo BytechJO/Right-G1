@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import page_6 from "../../../assets/img_unit2/imgs/Right 1 Unit 02 Stell Birthday6.jpg";
 import song from "../../../assets/img_unit2/sounds-unit2/Pg15.Sing_Adult Lady.mp3";
 import "./Unit2_Page6.css";
-import Unit2_Page6_Q1 from "./Unit2_Page6_Q1";
-import Unit2_Page6_Q2 from "./Unit2_Page6_Q2";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import AudioWithCaption from "../../AudioWithCaption";
@@ -22,8 +20,7 @@ const Unit2_Page6 = ({ openPopup }) => {
       className="page1-img-wrapper"
       style={{ backgroundImage: `url(${page_6})` }}
     >
-      {/* <img src={page_6} /> */}
-
+      {/* Exercise 1 */}
       <div
         className="click-icon-unit2-page6-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -32,8 +29,20 @@ const Unit2_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 1"
           onClick={() => openPopup("exercise", { startIndex: 10 })}
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 10 });
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -45,7 +54,41 @@ const Unit2_Page6 = ({ openPopup }) => {
           />
         </svg>
       </div>
-
+      {/* Exercise 2 */}
+      <div
+        className="click-icon-unit2-page6-2 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 2"
+          onClick={() => openPopup("exercise", { startIndex: 11 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 11 });
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+      {/* Song Audio */}
       <div
         className="headset-icon-CD-unit2-page6-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -54,6 +97,9 @@ const Unit2_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open birthday song audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -72,33 +118,36 @@ const Unit2_Page6 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={song}
+                    captions={captionsExample}
+                    pageId="unit2-page15"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
             href={audioBtn}
-            x="0"
-            y="0"
-            width="90"
-            height="90"
-          />
-        </svg>
-      </div>
-
-      <div
-        className="click-icon-unit2-page6-2 hover:scale-110 transition"
-        style={{ overflow: "visible" }}
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 11 })}
-          style={{ overflow: "visible" }}
-        >
-          <image
-            className="svg-img"
-            href={arrowBtn}
             x="0"
             y="0"
             width="90"

@@ -377,11 +377,21 @@ const Unit2_Page5_Q3 = () => {
           <div className="unit2-q3-content">
             {/* الصورة الرئيسية */}
             <div
-              className="q3-main-img-box"
+              className="q3-main-img-box accessible-q3-item"
+              role="button"
+              tabIndex={0}
+              aria-label="Play the model conversation: What is it? It's a present."
               style={{
                 position: "relative",
+                cursor: "pointer",
               }}
               onClick={playConversation}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  playConversation();
+                }
+              }}
             >
               <img
                 src={presentImg}
@@ -393,10 +403,12 @@ const Unit2_Page5_Q3 = () => {
               {activeAudio === "conversation" && (
                 <FaVolumeUp
                   size={28}
+                  aria-hidden="true"
                   style={{
                     position: "absolute",
                     top: "10px",
                     right: "10px",
+                    pointerEvents: "none",
                   }}
                 />
               )}
@@ -407,15 +419,27 @@ const Unit2_Page5_Q3 = () => {
               {options.map((item, index) => (
                 <div
                   key={item.num}
-                  className={`q3-option-item ${
+                  className={`q3-option-item accessible-q3-item ${
                     selected === index ? "active" : ""
                   }`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${item.alt}. Press Enter or Space to select and hear it.`}
                   onClick={() => {
                     handleSelect(index);
                     playAudio(item.sound, index);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+
+                      handleSelect(index);
+                      playAudio(item.sound, index);
+                    }
+                  }}
                   style={{
                     position: "relative",
+                    cursor: "pointer",
                   }}
                 >
                   <div>
@@ -431,10 +455,12 @@ const Unit2_Page5_Q3 = () => {
                   {activeAudio === index && (
                     <FaVolumeUp
                       size={26}
+                      aria-hidden="true"
                       style={{
                         position: "absolute",
                         top: "5px",
                         right: "5px",
+                        pointerEvents: "none",
                       }}
                     />
                   )}

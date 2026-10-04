@@ -179,3 +179,46 @@
     height: 40px;
   }
 }
+.accessible-placed-number {
+  outline: none;
+}
+
+.accessible-placed-number:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  transform: scale(1.08);
+}/* =====================================================
+   KEYBOARD DROP PREVIEW
+===================================================== */
+
+.keyboard-preview-number {
+  pointer-events: none;
+
+  animation: keyboardNumberBlink 0.75s ease-in-out infinite;
+
+  opacity: 1;
+}
+
+/* الرقم الممسوك يرمش داخل الـ input الحالي */
+@keyframes keyboardNumberBlink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+}
+
+/* Focus للرقم الموجود أصلًا داخل input */
+.accessible-placed-number {
+  outline: none;
+}
+
+.accessible-placed-number:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}

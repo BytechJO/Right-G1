@@ -449,32 +449,37 @@ const Unit2_Page10_Q3 = () => {
                   {q.options.map((opt) => {
                     const isSelected = answers[q.id] === opt;
 
-                    /*
-                          X يظهر فقط على الاختيار الغلط المختار
-                        */
-
                     const isWrong =
                       questionWrong && isSelected && opt !== q.correct;
 
-                    /*
-                          Show Answer:
-                          خلي correct-answer فقط على الصح
-                        */
-
                     const isCorrectShow = showAnswer && opt === q.correct;
+
+                    const isDisabled =
+                      questionLocked || showAnswer || checkCompleted;
 
                     return (
                       <span
                         key={opt}
+                        role="button"
+                        tabIndex={isDisabled ? -1 : 0}
+                        aria-disabled={isDisabled}
+                        aria-pressed={isSelected}
+                        aria-label={`Option ${opt}${
+                          isSelected ? ", selected" : ""
+                        }`}
                         className={`option-letter ${
                           isSelected ? "selected3" : ""
                         } ${isCorrectShow ? "correct-answer" : ""}`}
                         onClick={() => handleSelect(q.id, opt)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+
+                            handleSelect(q.id, opt);
+                          }
+                        }}
                         style={{
-                          cursor:
-                            questionLocked || showAnswer || checkCompleted
-                              ? "default"
-                              : "pointer",
+                          cursor: isDisabled ? "default" : "pointer",
                         }}
                       >
                         {opt}

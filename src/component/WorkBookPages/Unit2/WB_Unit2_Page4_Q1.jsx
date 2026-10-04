@@ -103,9 +103,8 @@ const WB_Unit2_Page4_Q1 = () => {
   const items = [
     {
       img: img1,
-
+      alt: "A blue cone-shaped party hat with red decorations.",
       text: "Is it a cake?",
-
       questionAudio: cakeQuestionAudio,
 
       options: [
@@ -124,9 +123,8 @@ const WB_Unit2_Page4_Q1 = () => {
 
     {
       img: img2,
-
+      alt: "A colorful box with a green bow on top.",
       text: "Is it a present?",
-
       questionAudio: presentQuestionAudio,
 
       options: [
@@ -365,20 +363,24 @@ const WB_Unit2_Page4_Q1 = () => {
                   </span>
 
                   <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Play ${q.text}`}
                     onClick={() => playAudio(`question-${i}`, q.questionAudio)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+
+                        playAudio(`question-${i}`, q.questionAudio);
+                      }
+                    }}
                     style={{
                       position: "relative",
-
                       display: "inline-block",
-
                       cursor: "pointer",
-
                       border: "2px solid transparent",
-
                       borderRadius: "8px",
-
                       padding: "3px 6px",
-
                       transition: "border-color 0.2s ease",
                     }}
                     onMouseEnter={(e) => {
@@ -391,7 +393,6 @@ const WB_Unit2_Page4_Q1 = () => {
                     <h6
                       style={{
                         fontSize: "20px",
-
                         fontWeight: "600",
                       }}
                     >
@@ -404,19 +405,12 @@ const WB_Unit2_Page4_Q1 = () => {
                         aria-hidden="true"
                         style={{
                           position: "absolute",
-
                           top: "-8px",
-
                           right: "-8px",
-
                           background: "white",
-
                           borderRadius: "50%",
-
                           padding: "2px",
-
                           pointerEvents: "none",
-
                           zIndex: 10,
                         }}
                       />
@@ -437,11 +431,10 @@ const WB_Unit2_Page4_Q1 = () => {
                 >
                   <img
                     src={q.img}
-                    alt=""
+                    alt={q.alt}
                     className="q3-image-review6-p1-q1"
                     style={{
                       height: "150px",
-
                       width: "auto",
                     }}
                   />
@@ -449,7 +442,8 @@ const WB_Unit2_Page4_Q1 = () => {
                   <div className="options-row-review6-p1-q1">
                     {q.options.map((option, optIndex) => {
                       const isSelected = answers[i] === optIndex;
-
+                      const isDisabled =
+                        questionLocked || showAnswer || checkCompleted;
                       const isCorrect = optIndex === q.correctIndex;
 
                       const isWrong =
@@ -479,17 +473,23 @@ const WB_Unit2_Page4_Q1 = () => {
                           }}
                         >
                           <p
+                            role="button"
+                            tabIndex={isDisabled ? -1 : 0}
+                            aria-disabled={isDisabled}
+                            aria-pressed={isSelected}
+                            aria-label={`${option.text}${
+                              isSelected ? ", selected" : ""
+                            }`}
                             className={`
-                                  option-word-wb-unit2-p4-q1
-                                  ${isSelected ? "selected3" : ""}
-                                  ${isWrong ? "wrong" : ""}
-                                  ${showCorrect ? "correct" : ""}
-                                `}
+    option-word-wb-unit2-p4-q1
+    ${isSelected ? "selected3" : ""}
+    ${isWrong ? "wrong" : ""}
+    ${showCorrect ? "correct" : ""}
+  `}
                             onClick={() => {
                               /*
-                                    الصوت يشتغل دائمًا
-                                    حتى لو السؤال اتقفل
-                                  */
+      الصوت يشتغل دائمًا
+    */
 
                               playAudio(
                                 `option-${i}-${optIndex}`,
@@ -497,30 +497,47 @@ const WB_Unit2_Page4_Q1 = () => {
                               );
 
                               /*
-                                    الاختيار نفسه فقط
-                                    يتوقف عند القفل
-                                  */
+      الاختيار يتوقف فقط عند القفل
+    */
 
-                              if (
-                                questionLocked ||
-                                showAnswer ||
-                                checkCompleted
-                              ) {
+                              if (isDisabled) {
                                 return;
                               }
 
                               handleSelect(i, optIndex);
                             }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+
+                                /*
+        الصوت يشتغل
+      */
+
+                                playAudio(
+                                  `option-${i}-${optIndex}`,
+                                  option.audio,
+                                );
+
+                                /*
+        لو السؤال مقفول،
+        ما نغيّر الاختيار
+      */
+
+                                if (isDisabled) {
+                                  return;
+                                }
+
+                                handleSelect(i, optIndex);
+                              }
+                            }}
                             style={{
                               display: "flex",
-
                               justifyContent: "center",
-
                               alignItems: "center",
-
                               position: "relative",
 
-                              cursor: "pointer",
+                              cursor: isDisabled ? "default" : "pointer",
                             }}
                           >
                             {option.text}
