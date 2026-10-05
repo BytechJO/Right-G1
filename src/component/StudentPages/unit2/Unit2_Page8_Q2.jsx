@@ -26,8 +26,8 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 
-import ExerciseHeader from "../../ExerciseHeader";
 import { FaVolumeUp } from "react-icons/fa";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* =====================================================
    DRAGGABLE WORD — BANK
@@ -944,7 +944,7 @@ const Unit2_Page8_Q2 = () => {
             gap: "20px",
           }}
         >
-          <ExerciseHeader
+          <ExerciseHeaderReview
             sectionLetter="E"
             title="Read, look, and write."
             subTitle="Use each picture clue to drag the correct word into the sentence."

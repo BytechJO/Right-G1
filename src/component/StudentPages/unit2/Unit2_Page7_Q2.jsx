@@ -6,7 +6,6 @@ import img3 from "../../../assets/img_unit2/imgs/bey.jpg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit2_Page7_Q2.css";
-import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
@@ -17,6 +16,7 @@ import { FaVolumeUp } from "react-icons/fa";
 import helloSound from "../../../assets/unit2/Page 16 - B/Hello! I'm Hansel..mp3";
 import morningSound from "../../../assets/unit2/Page 16 - B/Good morning!.mp3";
 import goodbyeSound from "../../../assets/unit2/Page 16 - B/Goodbye!.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 const Unit2_Page7_Q2 = () => {
   /* =====================================================
@@ -972,7 +972,7 @@ const Unit2_Page7_Q2 = () => {
           gap: "40px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="B"
           title="Read, look, and match."
           subTitle="Read each greeting, then connect it to the matching picture."

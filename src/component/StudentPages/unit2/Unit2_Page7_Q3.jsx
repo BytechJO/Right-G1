@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Unit2_Page7_Q3.css"; // ضيفي فيه الكود الي فوق
 import ValidationAlert from "../../Popup/ValidationAlert";
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 const Unit2_Page7_Q3 = () => {
   const sentences = [
     "hello, I'm John? this is Stella.",
@@ -99,7 +99,7 @@ const Unit2_Page7_Q3 = () => {
           gap: "80px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="C"
           title="Read and circle the mistakes."
           subTitle="Read each sentence carefully and tap every mistake."

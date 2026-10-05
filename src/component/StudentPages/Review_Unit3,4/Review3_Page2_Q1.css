@@ -7,7 +7,7 @@
 
 .word-bank-review3-p2-q1 {
   display: flex;
-  gap:40px;
+  gap: 40px;
   margin: 15px 0 25px;
   flex-wrap: wrap;
   border: 2px solid #4b74ff;
@@ -59,12 +59,12 @@
   position: absolute;
   top: -2px;
   right: 5px;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 25px;
   background: red;
   color: white;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -94,4 +94,59 @@
     width: auto;
     height: 110px;
   }
+}
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.review3-p2-q1-bank-word:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-review3-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.q-input-review3-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-review3-p2-q1 {
+  animation: keyboardDropPreviewReview3P2Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewReview3P2Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review3-p2-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 10;
 }

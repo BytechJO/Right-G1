@@ -8,7 +8,6 @@ import tiger from "../../../assets/unit1/imgs/tiger.svg";
 import duck from "../../../assets/unit1/imgs/duck.svg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
-import ExerciseHeader from "../../ExerciseHeader";
 
 import duckSound from "../../../assets/unit2/Page 17 - D/duck.mp3";
 import tigerSound from "../../../assets/unit2/Page 17 - D/tiger.mp3";
@@ -16,6 +15,7 @@ import dishSound from "../../../assets/unit2/Page 17 - D/Dish.mp3";
 import tableSound from "../../../assets/unit2/Page 17 - D/Table.mp3";
 
 import { FaVolumeUp } from "react-icons/fa";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 const Unit2_Page8_Q1 = () => {
   /* =====================================================
@@ -984,7 +984,7 @@ const Unit2_Page8_Q1 = () => {
           gap: "30px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="D"
           title="Read, look, and match."
           subTitle="Match duck, tiger, dish, and table to the correct pictures."

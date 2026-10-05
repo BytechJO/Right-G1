@@ -19,7 +19,7 @@ import {
   useDraggable,
 } from "@dnd-kit/core";
 
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* =====================================================
    DRAGGABLE WORD
@@ -856,7 +856,7 @@ const Unit2_Page9_Q3 = () => {
         }}
       >
         <div className="div-forall">
-          <ExerciseHeader
+          <ExerciseHeaderReview
             sectionLetter="C"
             title="Look and answer."
             subTitle="Use the picture clues to complete the sentences about jello, a present, and balloons."

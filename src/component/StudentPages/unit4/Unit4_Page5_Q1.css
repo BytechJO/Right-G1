@@ -88,7 +88,7 @@
   text-align: center;
 } */
 
-.wrong-mark-unit4-page5-q1  {
+.wrong-mark-unit4-page5-q1 {
   position: absolute;
   top: -10px;
   right: -10px;
@@ -117,5 +117,39 @@
   .question-grid-unit4-page5-q1 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* =====================================================
+   ACCESSIBILITY FOCUS
+===================================================== */
+
+.circle-choice-unit4-page5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 50%;
+}
+
+.keyboard-picked-word-unit4-page5-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.write-input-unit4-page5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-unit4-page5-q1 {
+  animation: keyboardDropPreviewUnit4Page5Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewUnit4Page5Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
   }
 }

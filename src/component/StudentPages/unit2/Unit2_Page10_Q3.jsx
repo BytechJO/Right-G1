@@ -17,7 +17,7 @@ import { IoMdSettings } from "react-icons/io";
 import { TbMessageCircle } from "react-icons/tb";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 const Unit2_Page10_Q3 = () => {
   const audioRef = useRef(null);
@@ -403,7 +403,7 @@ const Unit2_Page10_Q3 = () => {
           gap: "30px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="F"
           title="Listen and circle."
           subTitle="Listen to each word, then tap its beginning sound: b or p."

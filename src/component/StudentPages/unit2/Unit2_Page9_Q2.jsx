@@ -9,7 +9,7 @@ import "./Unit2_Page9_Q2.css";
 // LEFT SIDE - scrambled
 // ======================================================
 
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 // ======================================================
 // DATA
@@ -769,7 +769,7 @@ export default function Unit2_Page9_Q2() {
           gap: "30px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="B"
           title="Read and match."
           subTitle="Connect the words to make four complete birthday phrases."

@@ -3,9 +3,8 @@ import "./Unit4_Page6.css";
 import song from "../../../assets/unit4/sounds/U4P33Song.mp3";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import AudioWithCaption from "../../AudioWithCaption";
-import Unit4_Page6_Q2 from "./Unit4_Page6_Q2";
+
 const Unit4_Page6 = ({ openPopup }) => {
   const captionsExample = [
     { start: 0, end: 4.09, text: "Page 33, Exercise F. Let's sing." },
@@ -29,25 +28,44 @@ const Unit4_Page6 = ({ openPopup }) => {
   return (
     <div
       className="page1-img-wrapper"
-      // onClick={handleImageClick}
       style={{ backgroundImage: `url(${page_6})` }}
     >
-      {/* <img src={page_6} /> */}
+      {/* Exercise */}
       <div
-        className="click-icon-unit4-page6-3  hover:scale-110 transition"
+        className="click-icon-unit4-page6-3 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise"
           onClick={() => openPopup("exercise", { startIndex: 36 })}
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 36 });
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
-          <image href={arrowBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
 
+      {/* Song Audio */}
       <div
         className="headset-icon-CD-unit4-page6-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -56,6 +74,9 @@ const Unit4_Page6 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open song audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -67,12 +88,44 @@ const Unit4_Page6 = ({ openPopup }) => {
                 }}
               >
                 <AudioWithCaption src={song} captions={captionsExample} />
-              </div>
+              </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={song}
+                    captions={captionsExample}
+                    pageId="unit4-page27-song"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
-          <image href={audioBtn} x="0" y="0" width="90" height="90"  className="svg-img"/>
+          <image
+            href={audioBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
         </svg>
       </div>
     </div>

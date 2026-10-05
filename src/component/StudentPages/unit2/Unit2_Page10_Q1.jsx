@@ -4,7 +4,7 @@ import ValidationAlert from "../../Popup/ValidationAlert";
 import sound1 from "../../../assets/unit1/sounds/P19QD.mp3";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 const Unit2_Page10_Q1 = () => {
   const [isShowMode, setIsShowMode] = useState(false);
@@ -274,7 +274,7 @@ const Unit2_Page10_Q1 = () => {
           gap: "30px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="D"
           title="Listen and circle."
           subTitle="Press Play for each item, then tap the word you hear."

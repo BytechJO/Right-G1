@@ -24,9 +24,9 @@ import {
 } from "@dnd-kit/core";
 
 import "./Unit2_Page10_Q4.css";
-import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* =====================================================
    DRAGGABLE LETTER — BANK
@@ -924,7 +924,7 @@ const Unit2_Page10_Q4 = () => {
             gap: "50px",
           }}
         >
-          <ExerciseHeader
+          <ExerciseHeaderReview
             sectionLetter="G"
             title="Look and write."
             subTitle="Drag b or p to complete each picture word."

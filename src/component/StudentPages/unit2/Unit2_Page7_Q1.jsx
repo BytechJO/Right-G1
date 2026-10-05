@@ -15,7 +15,7 @@ import {
   useDroppable,
 } from "@dnd-kit/core";
 
-import ExerciseHeader from "../../ExerciseHeader";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* =====================================================
    DRAGGABLE NUMBER — WORD BANK
@@ -1115,7 +1115,7 @@ const Unit2_Page7_Q1 = () => {
             gap: "20px",
           }}
         >
-          <ExerciseHeader
+          <ExerciseHeaderReview
             sectionLetter="A"
             title="Read and write."
             subTitle="Match each number to its letter to reveal the hidden words."

@@ -7,7 +7,6 @@ import pizza2 from "../../../assets/img_unit2/imgs/Pizza (2).jpg";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit2_Page10_Q2.css";
-import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
 
@@ -19,6 +18,7 @@ import ballAudio from "../../../assets/unit2/Page 19 - E/ball.mp3";
 import pizzaAudio from "../../../assets/unit2/Page 19 - E/pizza.mp3";
 import birdAudio from "../../../assets/unit2/Page 19 - E/bird.mp3";
 import boyAudio from "../../../assets/unit2/Page 19 - E/boy.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* ======================================================
    DATA
@@ -947,7 +947,7 @@ const Unit2_Page10_Q2 = () => {
           gap: "30px",
         }}
       >
-        <ExerciseHeader
+        <ExerciseHeaderReview
           sectionLetter="E"
           title="Look, read, and match."
           subTitle="Read each word, then connect it to the correct picture."

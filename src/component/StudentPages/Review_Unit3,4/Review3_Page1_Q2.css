@@ -5,9 +5,24 @@
   margin-bottom: 30px;
 }
 
-.drop-inner-review3-p1-q2{
+/* =====================
+   INPUT INNER
+===================== */
+.drop-inner-review3-p1-q2 {
   height: 40px;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0 8px;
+  box-sizing: border-box;
 }
+
+/* =====================
+   MATCHING ROW
+===================== */
 .matching-row2 {
   display: flex;
   justify-content: space-between;
@@ -15,12 +30,15 @@
   position: relative;
 }
 
-/* الكلمة + النقطة */
+/* =====================
+   WORD + DOT
+===================== */
 .word-with-dot2 {
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  /* فصل الرقم عن الجملة */
+  gap: 14px;
 }
 
 /* =====================
@@ -28,43 +46,55 @@
 ===================== */
 .word-text2-review3-p1-q2 {
   display: inline-block;
+
   transition:
     transform 0.2s ease,
     background-color 0.2s ease,
     box-shadow 0.2s ease;
+
   padding: 4px 6px;
-  border-radius: 6px;
+  border-radius: 20px;
   cursor: pointer;
+
+  flex: 1;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  width: 230px;
+
+  text-align: start;
+  margin-left: 10px;
+  border: 2px solid transparent;
 }
 
 .word-text2-review3-p1-q2:hover {
   transform: scale(1.05);
   background-color: rgba(67, 15, 104, 0.08);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .word-text2-review3-p1-q2:active {
   transform: scale(0.97);
 }
-/* النص يأخذ مساحة عشان النقطة ما تتحرك */
-.word-text2-review3-p1-q2 {
-  flex: 1;
-  font-size: 18px;
-  font-weight: 700;
-  /* background: #b7eaff; */
-  border-radius: 20px;
-  font-size: 20px;
-  width: 230px;
-  text-align: start;
-  border: 2px solid transparent;
-}
 
+/* =====================
+   NUMBER
+===================== */
 .span-num2 {
   font-weight: 800;
   color: purple;
+
+  /* يمنع الرقم من الانكماش */
+  flex-shrink: 0;
+  font-size: 20px;
+  /* مساحة إضافية بسيطة بعد الرقم */
+  margin-right: 2px;
 }
 
-/* الصورة + النقطة */
+/* =====================
+   IMAGE + DOT
+===================== */
 .img-with-dot2 {
   display: flex;
   align-items: center;
@@ -78,82 +108,134 @@
   width: auto;
 }
 
-/* مكان ثابت للنقطة */
+/* =====================
+   DOT WRAPPER
+===================== */
 .dot-wrapper2 {
   width: 40px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  flex-shrink: 0;
 }
 
-/* النقاط */
+/* =====================
+   DOTS
+===================== */
 .dot2 {
   width: 14px;
   height: 14px;
+
   background: red;
   border-radius: 50%;
+
   cursor: pointer;
+
+  flex-shrink: 0;
 }
 
-/* طبقة الخطوط */
+/* =====================
+   LINES LAYER
+===================== */
 .lines-layer2 {
   position: absolute;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
+
   pointer-events: none;
 }
 
+/* =====================
+   MATCHING ERROR
+===================== */
 .error-mark-review3-p1-q2 {
   width: 25px;
   height: 25px;
+
   border: 2px solid white;
   background-color: red;
   border-radius: 50%;
+
   color: white;
   font-weight: bold;
   font-size: 16px;
+
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
   margin-left: 8px;
+
   vertical-align: middle;
+
   position: absolute;
-  left: 28%;
+
+  left: 74%;
   top: 28%;
 }
 
+/* =====================
+   UNSCRAMBLE INPUT
+===================== */
 .unscramble-input {
   width: 90%;
-  /* padding: 6px 10px; */
+  min-height: 48px;
+
   border: 2px solid #626262;
   border-radius: 8px;
-  /* margin-top: 8px; */
+
   font-size: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
 }
 
+/* =====================
+   INPUT FOCUS
+===================== */
 .unscramble-input:focus {
   outline: none;
+
   border: 2px solid #8ab4f8;
 }
 
+/* =====================
+   INPUT ERROR X
+===================== */
 .input-error-x {
   position: absolute;
+
   right: 100%;
-    top: 43%;
+  top: 43%;
+
   border: 2px solid white;
+
   background-color: red;
+
   border-radius: 50%;
+
   color: white;
+
   font-weight: bold;
   font-size: 16px;
+
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
   margin-left: 8px;
+
   vertical-align: middle;
-   width: 25px;
+
+  width: 25px;
   height: 25px;
- 
 }

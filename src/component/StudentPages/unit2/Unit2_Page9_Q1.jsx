@@ -20,9 +20,9 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 
-import ExerciseHeader from "../../ExerciseHeader";
 
 import { FaVolumeUp } from "react-icons/fa";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 
 /* =====================================================
    DRAGGABLE WORD
@@ -931,7 +931,7 @@ const Unit2_Page9_Q1 = () => {
             gap: "88px",
           }}
         >
-          <ExerciseHeader
+          <ExerciseHeaderReview
             sectionLetter="A"
             title="Look and write."
             subTitle="Drag the correct words into each birthday sentence."

@@ -122,3 +122,52 @@
     flex-wrap: wrap;
   }
 }
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.missing-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-num-review3-p1-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.number-input-review3-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-review3-p1-q1 {
+  animation: keyboardPreviewReview3P1Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardPreviewReview3P1Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+.sentence-audio-review3-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.sentence-audio-icon-review3-p1-q1 {
+  position: absolute;
+  top: -10px;
+  right: -18px;
+  background: white;
+  border-radius: 50%;
+  padding: 2px;
+  pointer-events: none;
+}

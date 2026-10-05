@@ -12,7 +12,6 @@ import img4 from "../../../assets/unit4/imgs/fork.svg";
 import longAudio from "../../../assets/unit1/sounds/pg4-instruction1-adult-lady_9KnGFLcl.mp3";
 import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
 const Unit4_Page1_Read = () => {
-
   const imageSounds = [
     null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
     new Audio(bSound),
@@ -20,11 +19,10 @@ const Unit4_Page1_Read = () => {
     new Audio(ball),
     new Audio(boy),
   ];
-  
-const captions = [
-   { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
-    { start: 3.07, end: 6.14, text: "B, bird, ball, boy " },
-    
+
+  const captions = [
+    { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
+    { start: 3.07, end: 6.14, text: "f, feet, fish, fork " },
   ];
 
   return (
@@ -32,11 +30,13 @@ const captions = [
       <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={listenSound}
-        checkpoints={[0,3.2,4.2, 5.25, 6.22]}
+        checkpoints={[0, 3.2, 4.2, 5.25, 6.22]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
         captions={captions}
+        pageId="unit4-page1-read-audio"
+        subHeader="Press Play, follow the f words, then tap each card to hear it again."
       />
     </>
   );
