@@ -1,21 +1,21 @@
 .answer-input33-wb-unit4-p4-q1 {
-   border-bottom: 2px solid;
-    text-align: start;
-    vertical-align: middle;
-    line-height: normal;
-    font-size: 20px;
-    font-weight: 500;
-    width: 20%;
+  border-bottom: 2px solid;
+  text-align: start;
+  vertical-align: middle;
+  line-height: normal;
+  font-size: 20px;
+  font-weight: 500;
+  width: 20%;
 }
 .word-box-wb-unit4-p4-q1 {
-    display: inline-block;
-    padding: 7px 14px;
-    border: 2px solid #4b74ff;
-    border-radius: 10px;
-    font-size: 16px;
-    margin: 10px;
-    font-weight: 600;
-    background: transparent;
+  display: inline-block;
+  padding: 7px 14px;
+  border: 2px solid #4b74ff;
+  border-radius: 10px;
+  font-size: 16px;
+  margin: 10px;
+  font-weight: 600;
+  background: transparent;
 }
 
 .all-svg-house-wb-unit4-p4-q1 {
@@ -28,4 +28,160 @@
     transform: scale(1.2);
     transform-origin: center top;
   }
+}
+/* =====================================================
+   DRAG KEYBOARD
+===================================================== */
+
+.drag-word-wb-unit4-p4-q1:focus {
+  outline: none;
+}
+
+.drag-word-wb-unit4-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-wb-unit4-p4-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  background: #dbeafe !important;
+}
+
+.drop-label-box:focus {
+  outline: none;
+}
+
+.drop-label-box:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-wb-unit4-p4-q1 {
+  animation: keyboardDropPreviewWBU4P4Q1 1.35s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewWBU4P4Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit4-p4-q1 {
+  position: absolute;
+
+  top: -9px;
+  right: -9px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 30;
+}
+
+/* =====================================================
+   COLORABLE HOUSE PARTS
+===================================================== */
+
+.colorable-house-shape-wb-unit4-p4-q1 {
+  cursor: pointer;
+
+  outline: none;
+}
+
+.colorable-house-shape-wb-unit4-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   COLOR PALETTE
+   مكانها محسوب فوق نفس العنصر
+===================================================== */
+
+.color-palette-wb-unit4-p4-q1 {
+  position: absolute;
+
+  transform: translate(-50%, -100%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 8px 10px;
+
+  background: white;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+
+  white-space: nowrap;
+
+  z-index: 100;
+}
+
+/* السهم الصغير */
+
+.color-palette-wb-unit4-p4-q1::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 100%;
+
+  transform: translateX(-50%);
+
+  border-width: 7px;
+
+  border-style: solid;
+
+  border-color: white transparent transparent transparent;
+}
+
+.color-circle-wb-unit4-p4-q1 {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  border: 2px solid #777;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+.color-circle-wb-unit4-p4-q1:focus {
+  outline: none;
+}
+
+.color-circle-wb-unit4-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
 }

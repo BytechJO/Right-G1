@@ -1,15 +1,17 @@
 .img-with-dot2-wb-unit4-p1-q1 {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 40%;
 }
 
-
-.word-text2-wb-unit4-p1-q1  {
+.word-text2-wb-unit4-p1-q1 {
   /* display: inline-block; مهم للـ transform */
-  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
     box-shadow 0.2s ease;
   /* padding: 4px 6px; */
   border-radius: 6px;
@@ -27,21 +29,30 @@
 }
 
 .error-mark8-wb-unit4-p1-q1 {
-    width: 25px;
-    height: 25px;
-    border: 2px solid white;
-    background-color: red;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    vertical-align: middle;
-    position: absolute;
-    left: 32%;
-    top: 26%;
-    z-index: 99;
+  width: 25px;
+  height: 25px;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  position: absolute;
+  left: 32%;
+  top: 26%;
+  z-index: 99;
+} /* =====================================================
+   MATCHING KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.matched-img2:focus-visible,
+.word-text2-wb-unit4-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
 }

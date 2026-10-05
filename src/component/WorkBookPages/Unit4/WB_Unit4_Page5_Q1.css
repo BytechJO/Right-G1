@@ -9,7 +9,7 @@
   height: 80px;
 }
 .sentence-cell {
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .table-wrapper-wrapper-wb-unit4-p5-q1 {
@@ -20,9 +20,9 @@
 }
 
 .correct-mark-wb-unit4-p5-q1 {
-    color: red;
-    font-size: 35px;
-    font-weight: bold;
+  color: red;
+  font-size: 35px;
+  font-weight: bold;
 }
 .shapes-table-wrapper-wb-unit4-p5-q1 {
   border-collapse: collapse;
@@ -39,4 +39,137 @@
   .shapes-table-wrapper-wb-unit4-p5-q1 td {
     font-size: 16px;
   }
+}
+/* =====================================================
+   SENTENCE TAB + AUDIO
+===================================================== */
+
+.sentence-audio-wb-unit4-p5-q1:focus {
+  outline: none;
+}
+
+.sentence-audio-wb-unit4-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.sentence-audio-icon-wb-unit4-p5-q1 {
+  position: absolute;
+
+  top: -10px;
+  right: -20px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 30;
+}
+
+/* =====================================================
+   TABLE CELL TAB
+===================================================== */
+
+.cell-wrapper-review4-p1-q3:focus {
+  outline: none;
+}
+
+.cell-wrapper-review4-p1-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -4px;
+}
+
+/* =====================================================
+   SHAPE TAB
+===================================================== */
+
+.shape-svg-accessible-wb-unit4-p5-q1 {
+  cursor: pointer;
+  outline: none;
+}
+
+.shape-svg-accessible-wb-unit4-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   COLOR PALETTE
+   بتطلع فوق نفس الشكل
+===================================================== */
+
+.color-palette-wb-unit4-p5-q1 {
+  position: absolute;
+
+  transform: translate(-50%, -100%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 8px 10px;
+
+  background: white;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 12px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
+
+  white-space: nowrap;
+
+  z-index: 100;
+}
+
+.color-palette-wb-unit4-p5-q1::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  top: 100%;
+
+  transform: translateX(-50%);
+
+  border-width: 7px;
+
+  border-style: solid;
+
+  border-color: white transparent transparent transparent;
+}
+
+.color-circle-wb-unit4-p5-q1 {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  border: 2px solid #777;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+.color-circle-wb-unit4-p5-q1:focus {
+  outline: none;
+}
+
+.color-circle-wb-unit4-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
 }

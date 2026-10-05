@@ -1,0 +1,68 @@
+/* =====================================================
+   DRAG WORD KEYBOARD
+===================================================== */
+
+.drag-word-wb-unit4-p6-q3:focus {
+  outline: none;
+}
+
+.drag-word-wb-unit4-p6-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-wb-unit4-p6-q3 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  background: #dbeafe !important;
+}
+
+/* =====================================================
+   DROP BLANK KEYBOARD
+===================================================== */
+
+.missing-input-wb-unit4-p6-q3:focus {
+  outline: none;
+}
+
+.missing-input-wb-unit4-p6-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-wb-unit4-p6-q3 {
+  animation: keyboardDropPreviewU4P6Q3 1.3s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewU4P6Q3 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit4-p6-q3 {
+  position: absolute;
+
+  top: -9px;
+  right: -10px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}

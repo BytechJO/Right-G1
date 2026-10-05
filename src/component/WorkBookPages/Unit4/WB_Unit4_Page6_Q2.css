@@ -61,3 +61,71 @@
   width: 100%;
   justify-content: space-evenly;
 }
+/* =====================================================
+   DRAG WORD KEYBOARD
+===================================================== */
+
+.drag-word-wb-unit4-p6-q2:focus {
+  outline: none;
+}
+
+.drag-word-wb-unit4-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-wb-unit4-p6-q2 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  background: #dbeafe !important;
+}
+
+/* =====================================================
+   DROP CELL KEYBOARD
+===================================================== */
+
+.input-cell-wb-unit4-p6-q2:focus {
+  outline: none;
+}
+
+.input-cell-wb-unit4-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -4px;
+}
+
+.keyboard-drop-preview-wb-unit4-p6-q2 {
+  animation: keyboardDropPreviewU4P6Q2 1.3s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewU4P6Q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit4-p6-q2 {
+  position: absolute;
+
+  top: -9px;
+  right: -10px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}

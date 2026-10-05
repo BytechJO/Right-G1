@@ -1,21 +1,54 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+
 import conversation from "../../../assets/unit7/img/U7P63EXEF-01.svg";
 import conversation2 from "../../../assets/unit7/img/U7P63EXEF-02.svg";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import {
   DndContext,
   DragOverlay,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   useDroppable,
   useDraggable,
 } from "@dnd-kit/core";
 
+import ExerciseHeader from "../../ExerciseHeader";
+import { FaVolumeUp } from "react-icons/fa";
+
+import "./WB_Unit4_Page2_Q1.css";
+
+/* =====================================================
+   AUDIO - OPTIONS
+===================================================== */
+
+import squareAudio from "../../../assets/U1 WB/U4/audio/page_22_qc/Item_002_It_is_a_square.mp3";
+import triangleAudio from "../../../assets/U1 WB/U4/audio/page_22_qc/Item_003_It_is_a_triangle.mp3";
+import circleAudio from "../../../assets/U1 WB/U4/audio/page_22_qc/Item_004_It_is_a_circle.mp3";
+
+/* =====================================================
+   DATA
+===================================================== */
+
 const questions = [
-  { id: 1, img: conversation2, question: "What shape is it?", type: "full" },
-  { id: 2, img: conversation,  question: "What shape is it?", type: "full" },
-  { id: 3, img: conversation,  question: "What shape is it?", type: "full" },
+  {
+    id: 1,
+    question: "What shape is it?",
+    shape: "square",
+  },
+  {
+    id: 2,
+    question: "What shape is it?",
+    shape: "triangle",
+  },
+  {
+    id: 3,
+    question: "What shape is it?",
+    shape: "circle",
+  },
 ];
 
 const correctAnswers = {
@@ -24,351 +57,1253 @@ const correctAnswers = {
   q3: "It is a circle",
 };
 
-const wordBank = Object.values(correctAnswers).map((word, i) => ({
-  word,
-  id: `bank-${i}`,
-}));
+const wordBank = [
+  {
+    id: "bank-0",
+    word: "It is a square.",
+    audio: squareAudio,
+  },
+  {
+    id: "bank-1",
+    word: "It is a triangle",
+    audio: triangleAudio,
+  },
+  {
+    id: "bank-2",
+    word: "It is a circle",
+    audio: circleAudio,
+  },
+];
 
-// ─── Draggable Word ───────────────────────────────────────────────
-const DraggableWord = ({ id, word, locked, isUsed }) => {
+const paletteColors = [
+  {
+    value: "#ff0000",
+    label: "Red",
+  },
+  {
+    value: "#0000ff",
+    label: "Blue",
+  },
+  {
+    value: "#ffff00",
+    label: "Yellow",
+  },
+  {
+    value: "#00aa00",
+    label: "Green",
+  },
+  {
+    value: "#ff9900",
+    label: "Orange",
+  },
+];
+
+/* =====================================================
+   DRAGGABLE WORD
+===================================================== */
+
+const DraggableWord = ({
+  id,
+  word,
+  audio,
+
+  disabled,
+  isUsed,
+
+  keyboardPickedItem,
+  onKeyboardPick,
+
+  bankRefs,
+
+  playingKey,
+  playAudio,
+}) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
-    disabled: locked || isUsed,
+    disabled: disabled || isUsed,
   });
 
+  const isDisabled = disabled || isUsed;
+
+  const isPicked = keyboardPickedItem?.id === id;
+
+  const isPlaying = playingKey === id;
+
   return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
+    <span
       style={{
-        padding: "7px 14px",
-        border: "2px solid #2c5287",
-        borderRadius: "8px",
-        background: isUsed ? "#e0e0e0" : "white",
-        fontWeight: "bold",
-        cursor: locked || isUsed ? "default" : "grab",
-        opacity: isDragging ? 0.4 : isUsed ? 0.45 : 1,
-        touchAction: "none",
-        transition: "all 0.2s ease",
-        color: isUsed ? "#999" : "inherit",
-        userSelect: "none",
+        position: "relative",
+        display: "inline-flex",
       }}
     >
-      {word}
-    </div>
-  );
-};
-
-// ─── Droppable Input ──────────────────────────────────────────────
-const DroppableInput = ({ droppableId, value, locked, onRemove }) => {
-  const { setNodeRef, isOver } = useDroppable({
-    id: droppableId,
-    disabled: locked,
-  });
-
-  return (
-    <span ref={setNodeRef}>
-      <input
-        type="text"
-        value={value?.word || ""}
-        readOnly
-        disabled={locked}
-        className={`answer-input-wb-unit4-p2-q1 ${isOver ? "drag-over-cell" : ""}`}
-        onClick={() => !locked && value && onRemove(droppableId)}
-        style={{
-          background: isOver ? "#e3f2fd" : "",
-          cursor: !locked && value ? "pointer" : "default",
+      <span
+        ref={(el) => {
+          setNodeRef(el);
+          bankRefs.current[id] = el;
         }}
-        title={!locked && value ? "Click to remove" : ""}
-      />
+        {...(!isDisabled
+          ? {
+              ...listeners,
+              ...attributes,
+            }
+          : {})}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={isDisabled}
+        aria-pressed={isPicked}
+        aria-label={
+          isPicked
+            ? `${word} selected. Press Tab to choose an answer blank.`
+            : `${word}. Press Enter or Space to hear and select it.`
+        }
+        onClick={() => {
+          // Mouse click = صوت
+          playAudio(id, audio);
+        }}
+        onKeyDown={(e) => {
+          if (isDisabled) return;
+
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+
+            playAudio(id, audio);
+
+            onKeyboardPick({
+              id,
+              word,
+            });
+          }
+        }}
+        className={`word-bank-item-wb-unit4-p2-q1 ${
+          isPicked ? "keyboard-picked-word-wb-unit4-p2-q1" : ""
+        }`}
+        style={{
+          padding: "7px 14px",
+
+          border: "2px solid #2c5287",
+
+          borderRadius: "8px",
+
+          background: isPicked ? "#dbeafe" : isUsed ? "#e0e0e0" : "white",
+
+          fontWeight: "bold",
+
+          cursor: isDisabled ? "default" : isDragging ? "grabbing" : "grab",
+
+          opacity: isDragging ? 0.4 : isUsed ? 0.45 : 1,
+
+          touchAction: "none",
+
+          transition: "all 0.2s ease",
+
+          color: isUsed ? "#999" : "inherit",
+
+          userSelect: "none",
+        }}
+      >
+        {word}
+      </span>
+
+      {isPlaying && (
+        <FaVolumeUp
+          size={15}
+          aria-hidden="true"
+          className="audio-icon-wb-unit4-p2-q1"
+        />
+      )}
     </span>
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────
-const WB_Unit4_Page2_Q1 = () => {
-  const emptyAnswers = () => ({ q1: null, q2: null, q3: null });
+/* =====================================================
+   DROP SLOT
+===================================================== */
 
-  const [answers, setAnswers]       = useState(emptyAnswers());
+const DroppableInput = ({
+  droppableId,
+  qKey,
+
+  value,
+
+  isWrong,
+  locked,
+
+  showAnswer,
+  checkCompleted,
+
+  keyboardPickedItem,
+
+  focusedSlotId,
+  setFocusedSlotId,
+
+  slotRefs,
+  getAvailableSlotIds,
+
+  onKeyboardDrop,
+  onKeyboardClearWrong,
+  onCancelKeyboardPick,
+
+  onRemove,
+}) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: droppableId,
+
+    disabled: locked || showAnswer || checkCompleted,
+  });
+
+  const keyboardDropActive =
+    !!keyboardPickedItem && !locked && !showAnswer && !checkCompleted;
+
+  const canFixWrong =
+    !!value &&
+    isWrong &&
+    !keyboardPickedItem &&
+    !locked &&
+    !showAnswer &&
+    !checkCompleted;
+
+  const showPreview = keyboardDropActive && focusedSlotId === droppableId;
+
+  const displayValue = showPreview
+    ? keyboardPickedItem.word
+    : value?.word || "";
+
+  const handleKeyDown = (e) => {
+    /* =========================================
+       WRONG SLOT AFTER CHECK
+    ========================================= */
+
+    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardClearWrong(qKey, value);
+
+      return;
+    }
+
+    if (!keyboardDropActive) {
+      return;
+    }
+
+    /* =========================================
+       TAB / SHIFT TAB
+    ========================================= */
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const available = getAvailableSlotIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      const currentIndex = available.indexOf(droppableId);
+
+      let nextIndex;
+
+      if (e.shiftKey) {
+        nextIndex = currentIndex <= 0 ? available.length - 1 : currentIndex - 1;
+      } else {
+        nextIndex =
+          currentIndex === -1 || currentIndex === available.length - 1
+            ? 0
+            : currentIndex + 1;
+      }
+
+      const nextId = available[nextIndex];
+
+      slotRefs.current[nextId]?.focus();
+
+      return;
+    }
+
+    /* =========================================
+       ENTER / SPACE
+    ========================================= */
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardDrop(qKey);
+
+      return;
+    }
+
+    /* =========================================
+       ESCAPE
+    ========================================= */
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onCancelKeyboardPick();
+    }
+  };
+
+  return (
+    <span
+      style={{
+        position: "relative",
+        display: "inline-block",
+      }}
+    >
+      <span
+        ref={(el) => {
+          setNodeRef(el);
+
+          slotRefs.current[droppableId] = el;
+        }}
+        role="button"
+        tabIndex={
+          locked || showAnswer || checkCompleted
+            ? -1
+            : keyboardDropActive || canFixWrong
+              ? 0
+              : -1
+        }
+        aria-label={
+          keyboardDropActive
+            ? value
+              ? `Answer contains ${value.word}. Press Enter to replace it with ${keyboardPickedItem.word}.`
+              : `Empty answer. Press Enter to place ${keyboardPickedItem.word}.`
+            : canFixWrong
+              ? `${value.word} is incorrect. Press Enter to return it to the word bank.`
+              : value
+                ? `Answer contains ${value.word}.`
+                : "Empty answer."
+        }
+        onFocus={() => {
+          if (keyboardDropActive) {
+            setFocusedSlotId(droppableId);
+          }
+        }}
+        onBlur={() => setFocusedSlotId(null)}
+        onKeyDown={handleKeyDown}
+        className={`answer-input-wrapper-wb-unit4-p2-q1 ${
+          showPreview ? "keyboard-drop-preview-wb-unit4-p2-q1" : ""
+        }`}
+      >
+        <input
+          type="text"
+          value={displayValue}
+          readOnly
+          tabIndex={-1}
+          aria-hidden="true"
+          className={`answer-input-wb-unit4-p2-q1 ${
+            isOver && !locked ? "drag-over-cell" : ""
+          }`}
+          onClick={() => {
+            if (value && !locked && !showAnswer && !checkCompleted) {
+              onRemove(droppableId);
+            }
+          }}
+          style={{
+            background: isOver && !locked ? "#e3f2fd" : "",
+
+            cursor:
+              value && !locked && !showAnswer && !checkCompleted
+                ? "pointer"
+                : "default",
+          }}
+        />
+      </span>
+
+      {isWrong && (
+        <span className="wrong-mark" aria-hidden="true">
+          ✕
+        </span>
+      )}
+    </span>
+  );
+};
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+const WB_Unit4_Page2_Q1 = () => {
+  const emptyAnswers = () => ({
+    q1: null,
+    q2: null,
+    q3: null,
+  });
+
+  /* =================================================
+     ANSWERS
+  ================================================= */
+
+  const [answers, setAnswers] = useState(emptyAnswers());
+
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [locked, setLocked]         = useState(false);
+
+  const [lockedQuestions, setLockedQuestions] = useState([]);
+
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
   const [activeWord, setActiveWord] = useState(null);
 
-  const [shapeColors, setShapeColors] = useState({ 1: "#ffffff", 2: "#ffffff", 3: "#ffffff" });
+  /* =================================================
+     KEYBOARD DRAG
+  ================================================= */
+
+  const bankRefs = useRef({});
+  const slotRefs = useRef({});
+
+  const [keyboardPickedItem, setKeyboardPickedItem] = useState(null);
+
+  const [focusedSlotId, setFocusedSlotId] = useState(null);
+
+  /* =================================================
+     COLORING
+     لا يوجد Validation عليها
+  ================================================= */
+
+  const [shapeColors, setShapeColors] = useState({
+    1: "#ffffff",
+    2: "#ffffff",
+    3: "#ffffff",
+  });
+
   const [selectedColor, setSelectedColor] = useState("#ff0000");
-  const [showPalette, setShowPalette]     = useState(false);
-  const [activeShape, setActiveShape]     = useState(null);
+
+  const [activeShape, setActiveShape] = useState(null);
+
+  const shapeRefs = useRef({});
+
+  const paletteButtonRefs = useRef({});
+
+  /* =================================================
+     AUDIO
+  ================================================= */
+
+  const audioRef = useRef(null);
+
+  const [playingKey, setPlayingKey] = useState(null);
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
+
+      audioRef.current = null;
+    }
+
+    setPlayingKey(null);
+  };
+
+  const playAudio = (key, src) => {
+    if (!src) return;
+
+    stopAudio();
+
+    const audio = new Audio(src);
+
+    audioRef.current = audio;
+
+    setPlayingKey(key);
+
+    audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    });
+
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+  };
+
+  /* =================================================
+     HELPERS
+  ================================================= */
+
+  const isQuestionLocked = (qKey) => lockedQuestions.includes(qKey);
+
+  const usedIds = Object.values(answers)
+    .filter(Boolean)
+    .map((item) => item.bankId);
+
+  const getAvailableSlotIds = () =>
+    questions
+      .map((q) => `blank-q${q.id}`)
+      .filter((id) => {
+        const qKey = id.replace("blank-", "");
+
+        return !isQuestionLocked(qKey) && !showAnswer && !checkCompleted;
+      });
+
+  /* =================================================
+     SENSORS
+  ================================================= */
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    }),
   );
 
-  // usedIds بالـ bankId مش الكلمة
-  const usedIds = Object.values(answers).filter(Boolean).map((a) => a.bankId);
+  /* =================================================
+     MOUSE DRAG
+  ================================================= */
 
-  // ─── Drag Handlers ───────────────────────────────────────────
   const handleDragStart = (event) => {
-    const item = wordBank.find((b) => b.id === event.active.id);
+    const item = wordBank.find((bankItem) => bankItem.id === event.active.id);
+
     setActiveWord(item?.word ?? null);
   };
 
   const handleDragEnd = (event) => {
     setActiveWord(null);
-    if (locked) return;
 
-    const { active, over } = event;
-    if (!over || !over.id.startsWith("blank-")) return;
-
-    const bankItem = wordBank.find((b) => b.id === active.id);
-    if (!bankItem) return;
-
-    const qKey = over.id.replace("blank-", ""); // "q1" / "q2" / "q3"
-
-    setAnswers((prev) => {
-      // منع نفس الـ bankId يُستخدم مرتين
-      const alreadyUsed = Object.values(prev).some((a) => a?.bankId === bankItem.id);
-      if (alreadyUsed) return prev;
-
-      return { ...prev, [qKey]: { word: bankItem.word, bankId: bankItem.id } };
-    });
-
-    setWrongInputs([]);
-  };
-
-  const handleRemove = (droppableId) => {
-    const qKey = droppableId.replace("blank-", "");
-    setAnswers((prev) => ({ ...prev, [qKey]: null }));
-    setWrongInputs([]);
-  };
-
-  // ─── Check ───────────────────────────────────────────────────
-  const handleCheck = () => {
-    if (locked) return;
-
-    const keys = ["q1", "q2", "q3"];
-
-    if (keys.some((k) => !answers[k])) {
-      ValidationAlert.info("Please complete all answers.");
+    if (showAnswer || checkCompleted) {
       return;
     }
 
-    let wrong = [];
-    let score = 0;
+    const { active, over } = event;
 
-    keys.forEach((k, i) => {
-      const correct = answers[k]?.word?.trim().toLowerCase() === correctAnswers[k].toLowerCase();
-      if (correct) {
-        score++;
-      } else {
-        wrong.push(questions[i].id);
+    if (!over || !String(over.id).startsWith("blank-")) {
+      return;
+    }
+
+    const bankItem = wordBank.find((item) => item.id === active.id);
+
+    if (!bankItem) return;
+
+    const qKey = String(over.id).replace("blank-", "");
+
+    if (isQuestionLocked(qKey)) {
+      return;
+    }
+
+    let oldQKey = null;
+
+    setAnswers((prev) => {
+      const updated = {
+        ...prev,
+      };
+
+      /*
+        إذا نفس bank item كان بمكان قديم
+      */
+
+      Object.keys(updated).forEach((key) => {
+        if (updated[key]?.bankId === bankItem.id && !isQuestionLocked(key)) {
+          oldQKey = key;
+
+          updated[key] = null;
+        }
+      });
+
+      /*
+        Replace
+      */
+
+      updated[qKey] = {
+        word: bankItem.word,
+
+        bankId: bankItem.id,
+      };
+
+      return updated;
+    });
+
+    setWrongInputs((prev) =>
+      prev.filter((key) => key !== qKey && key !== oldQKey),
+    );
+  };
+
+  /* =================================================
+     KEYBOARD PICK
+  ================================================= */
+
+  const handleKeyboardPick = (item) => {
+    if (showAnswer || checkCompleted || usedIds.includes(item.id)) {
+      return;
+    }
+
+    setKeyboardPickedItem(item);
+
+    setFocusedSlotId(null);
+
+    requestAnimationFrame(() => {
+      const available = getAvailableSlotIds();
+
+      if (!available.length) {
+        return;
+      }
+
+      slotRefs.current[available[0]]?.focus();
+    });
+  };
+
+  /* =================================================
+     KEYBOARD DROP
+  ================================================= */
+
+  const handleKeyboardDrop = (qKey) => {
+    if (
+      !keyboardPickedItem ||
+      showAnswer ||
+      checkCompleted ||
+      isQuestionLocked(qKey)
+    ) {
+      return;
+    }
+
+    const item = keyboardPickedItem;
+
+    const updated = {
+      ...answers,
+    };
+
+    let oldQKey = null;
+
+    Object.keys(updated).forEach((key) => {
+      if (updated[key]?.bankId === item.id && !isQuestionLocked(key)) {
+        oldQKey = key;
+
+        updated[key] = null;
       }
     });
 
+    updated[qKey] = {
+      word: item.word,
+      bankId: item.id,
+    };
+
+    setAnswers(updated);
+
+    setWrongInputs((prev) =>
+      prev.filter((key) => key !== qKey && key !== oldQKey),
+    );
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
+
+    window.setTimeout(() => {
+      const currentUsed = Object.values(updated)
+        .filter(Boolean)
+        .map((answer) => answer.bankId);
+
+      const nextItem = wordBank.find(
+        (bankItem) => !currentUsed.includes(bankItem.id),
+      );
+
+      if (nextItem) {
+        bankRefs.current[nextItem.id]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =================================================
+     WRONG SLOT AFTER CHECK
+  ================================================= */
+
+  const handleKeyboardClearWrong = (qKey, value) => {
+    if (showAnswer || checkCompleted || isQuestionLocked(qKey)) {
+      return;
+    }
+
+    setAnswers((prev) => ({
+      ...prev,
+      [qKey]: null,
+    }));
+
+    /*
+      X فقط عن نفس السؤال
+    */
+
+    setWrongInputs((prev) => prev.filter((key) => key !== qKey));
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
+
+    window.setTimeout(() => {
+      if (value?.bankId) {
+        bankRefs.current[value.bankId]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =================================================
+     CANCEL KEYBOARD DRAG
+  ================================================= */
+
+  const handleCancelKeyboardPick = () => {
+    const item = keyboardPickedItem;
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
+
+    window.setTimeout(() => {
+      if (item?.id) {
+        bankRefs.current[item.id]?.focus();
+      }
+    }, 0);
+  };
+
+  /* =================================================
+     REMOVE WITH MOUSE
+  ================================================= */
+
+  const handleRemove = (droppableId) => {
+    const qKey = droppableId.replace("blank-", "");
+
+    if (showAnswer || checkCompleted || isQuestionLocked(qKey)) {
+      return;
+    }
+
+    setAnswers((prev) => ({
+      ...prev,
+      [qKey]: null,
+    }));
+
+    setWrongInputs((prev) => prev.filter((key) => key !== qKey));
+  };
+
+  /* =================================================
+     CHECK
+     التلوين مش داخل بالـValidation
+  ================================================= */
+
+  const handleCheck = () => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const keys = ["q1", "q2", "q3"];
+
+    if (keys.some((key) => !answers[key])) {
+      ValidationAlert.info("Please complete all answers.");
+
+      return;
+    }
+
+    const wrong = [];
+
+    const newlyLocked = [];
+
+    let score = 0;
+
+    keys.forEach((key) => {
+      const correct =
+        answers[key]?.word?.trim().toLowerCase() ===
+        correctAnswers[key].trim().toLowerCase();
+
+      if (correct) {
+        score++;
+
+        newlyLocked.push(key);
+      } else {
+        wrong.push(key);
+      }
+    });
+
+    /*
+      الصح فقط يقفل
+    */
+
+    setLockedQuestions((prev) =>
+      Array.from(new Set([...prev, ...newlyLocked])),
+    );
+
+    /*
+      الغلط فقط عليه X
+    */
+
     setWrongInputs(wrong);
-    setLocked(true);
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
 
     const total = keys.length;
+
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
+
     const msg = `
-      <div style="font-size:20px; text-align:center;">
-        <span style="color:${color}; font-weight:bold">Score: ${score}/${total}</span>
+      <div style="font-size:20px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${score} / ${total}
+        </span>
       </div>
     `;
 
-    score === total
-      ? ValidationAlert.success(msg)
-      : score === 0
-      ? ValidationAlert.error(msg)
-      : ValidationAlert.warning(msg);
+    if (score === total) {
+      setLockedQuestions(keys);
+
+      setWrongInputs([]);
+
+      setCheckCompleted(true);
+
+      ValidationAlert.success(msg);
+
+      return;
+    }
+
+    if (score === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  // ─── Show Answer ─────────────────────────────────────────────
+  /* =================================================
+     SHOW ANSWER
+     ما بنغير الألوان
+  ================================================= */
+
   const handleShowAnswer = () => {
-    const usedBankIds = new Set();
+    stopAudio();
+
     const filled = {};
 
-    ["q1", "q2", "q3"].forEach((k) => {
+    Object.keys(correctAnswers).forEach((qKey) => {
       const bankItem = wordBank.find(
-        (b) => b.word === correctAnswers[k] && !usedBankIds.has(b.id)
+        (item) =>
+          item.word.trim().toLowerCase() ===
+          correctAnswers[qKey].trim().toLowerCase(),
       );
-      if (bankItem) {
-        usedBankIds.add(bankItem.id);
-        filled[k] = { word: bankItem.word, bankId: bankItem.id };
-      } else {
-        filled[k] = null;
-      }
+
+      filled[qKey] = bankItem
+        ? {
+            word: bankItem.word,
+
+            bankId: bankItem.id,
+          }
+        : null;
     });
 
     setAnswers(filled);
+
     setWrongInputs([]);
-    setLocked(true);
-    setShapeColors({ 1: "red", 2: "red", 3: "red" });
+
+    setLockedQuestions(["q1", "q2", "q3"]);
+
+    setShowAnswer(true);
+
+    setCheckCompleted(true);
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
   };
 
-  // ─── Reset ───────────────────────────────────────────────────
+  /* =================================================
+     RESET
+  ================================================= */
+
   const handleReset = () => {
+    stopAudio();
+
     setAnswers(emptyAnswers());
+
     setWrongInputs([]);
-    setLocked(false);
-    setShowPalette(false);
+
+    setLockedQuestions([]);
+
+    setShowAnswer(false);
+
+    setCheckCompleted(false);
+
+    setActiveWord(null);
+
+    setKeyboardPickedItem(null);
+
+    setFocusedSlotId(null);
+
+    setShapeColors({
+      1: "#ffffff",
+      2: "#ffffff",
+      3: "#ffffff",
+    });
+
+    setSelectedColor("#ff0000");
+
     setActiveShape(null);
-    setShapeColors({ 1: "#ffffff", 2: "#ffffff", 3: "#ffffff" });
   };
 
-  // ─── Shape SVGs ──────────────────────────────────────────────
+  /* =================================================
+     COLORING
+  ================================================= */
+
   const openPalette = (shapeId) => {
     setActiveShape(shapeId);
-    setShowPalette(true);
+
+    requestAnimationFrame(() => {
+      paletteButtonRefs.current[`${shapeId}-0`]?.focus();
+    });
   };
+
+  const closePalette = (shapeId) => {
+    setActiveShape(null);
+
+    requestAnimationFrame(() => {
+      shapeRefs.current[shapeId]?.focus();
+    });
+  };
+
+  const chooseColor = (shapeId, color) => {
+    setShapeColors((prev) => ({
+      ...prev,
+      [shapeId]: color,
+    }));
+
+    setSelectedColor(color);
+
+    setActiveShape(null);
+
+    requestAnimationFrame(() => {
+      shapeRefs.current[shapeId]?.focus();
+    });
+  };
+
+  /* =================================================
+     RENDER SHAPE
+  ================================================= */
 
   const renderShape = (id) => {
-    const props = {
+    const fill = shapeColors[id];
+
+    const stroke = "#999";
+
+    const sw = 4;
+
+    const shapeName = id === 1 ? "square" : id === 2 ? "triangle" : "circle";
+
+    const commonProps = {
       width: 120,
       height: 120,
-      onDoubleClick: () => openPalette(id),
-      onTouchStart: () => openPalette(id),
-    };
-    const fill   = shapeColors[id];
-    const stroke = "#999";
-    const sw     = 4;
 
-    if (id === 1) return <svg {...props}><rect x="10" y="10" width="100" height="100" fill={fill} stroke={stroke} strokeWidth={sw} /></svg>;
-    if (id === 2) return <svg {...props}><polygon points="60,10 110,110 10,110" fill={fill} stroke={stroke} strokeWidth={sw} /></svg>;
-    if (id === 3) return <svg {...props}><circle cx="60" cy="60" r="50" fill={fill} stroke={stroke} strokeWidth={sw} /></svg>;
+      role: "button",
+
+      tabIndex: 0,
+
+      "aria-label": `${shapeName}. Press Enter or Space to choose a color.`,
+
+      ref: (el) => {
+        shapeRefs.current[id] = el;
+      },
+
+      className: "colorable-shape-wb-unit4-p2-q1",
+
+      onClick: () => openPalette(id),
+
+      onKeyDown: (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+
+          e.stopPropagation();
+
+          openPalette(id);
+        }
+      },
+    };
+
+    if (id === 1) {
+      return (
+        <svg {...commonProps}>
+          <rect
+            x="10"
+            y="10"
+            width="100"
+            height="100"
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={sw}
+          />
+        </svg>
+      );
+    }
+
+    if (id === 2) {
+      return (
+        <svg {...commonProps}>
+          <polygon
+            points="60,10 110,110 10,110"
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={sw}
+          />
+        </svg>
+      );
+    }
+
+    return (
+      <svg {...commonProps}>
+        <circle
+          cx="60"
+          cy="60"
+          r="50"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={sw}
+        />
+      </svg>
+    );
   };
+
+  /* =================================================
+     RENDER
+  ================================================= */
 
   return (
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveWord(null)}
     >
       <div
         style={{
           display: "flex",
+
           flexDirection: "column",
+
           justifyContent: "center",
+
           alignItems: "center",
+
           padding: "30px",
         }}
       >
+        <div
+          className="div-forall"
+          style={{
+            gap: "20px",
+          }}
+        >
+          <ExerciseHeader
+            sectionLetter="C"
+            title="Look, read, and write. Color."
+            subTitle="Match each shape sentence to its picture, then color the shape."
+          />
 
-        <div className="div-forall" style={{gap:"20px"}}>
-          <div className="w-full">
-          <h5 className="header-title-page8" id="ex-d">
-            <span className="ex-A">C</span>Drag and color the shapes.
-          </h5>
-          <span style={{ fontSize: "14px", color: "gray" }}>
-            Hint: Double Click to Color Word
-          </span>
-</div>
-          {/* ─── Color Palette ─── */}
-          {showPalette && (
-            <div
-              className="color-pallet-wb-unit4-p2-q1"
-              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-            >
-              {["#ff0000", "#0000ff", "#ffff00", "#00aa00", "#ff9900"].map((c) => (
-                <button
-                  key={c}
-                  onClick={() => {
-                    if (activeShape) {
-                      setShapeColors((prev) => ({ ...prev, [activeShape]: c }));
-                    }
-                    setSelectedColor(c);
-                    setShowPalette(false);
-                    setActiveShape(null);
-                  }}
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    borderRadius: "50%",
-                    backgroundColor: c,
-                    border: selectedColor === c ? "3px solid black" : "1px solid #ccc",
-                    cursor: "pointer",
-                  }}
-                />
-              ))}
-            </div>
-          )}
+          {/* =================================================
+              WORD BANK
+          ================================================= */}
 
-          {/* ─── Word Bank ─── */}
           <div
             style={{
               display: "flex",
+
               gap: "10px",
+
               padding: "10px",
+
               border: "2px dashed #ccc",
+
               borderRadius: "10px",
+
               alignItems: "center",
+
               width: "100%",
+
               justifyContent: "center",
+
               flexWrap: "wrap",
             }}
           >
-            {wordBank.map(({ id, word }) => (
+            {wordBank.map((item) => (
               <DraggableWord
-                key={id}
-                id={id}
-                word={word}
-                locked={locked}
-                isUsed={usedIds.includes(id)}
+                key={item.id}
+                id={item.id}
+                word={item.word}
+                audio={item.audio}
+                disabled={showAnswer || checkCompleted}
+                isUsed={usedIds.includes(item.id)}
+                keyboardPickedItem={keyboardPickedItem}
+                onKeyboardPick={handleKeyboardPick}
+                bankRefs={bankRefs}
+                playingKey={playingKey}
+                playAudio={playAudio}
               />
             ))}
           </div>
 
-          {/* ─── Questions ─── */}
-          <div style={{ width: "100%" }}>
-            {questions.map((q, index) => (
-              <div key={q.id} className="question-row-unit7-p2-q3">
-                <div className="question-container-unit7-p6-q3" style={{ gap: "20px" }}>
-                  <span className="num2">{index + 1}</span>
-                  <div className="shape-wrapper">{renderShape(q.id)}</div>
-                  <p className="question-text-wb-unit4-p2-q1">{q.question}</p>
-                </div>
+          {/* =================================================
+              QUESTIONS
+          ================================================= */}
 
-                <div className="sentence-box-wb-unit4-p2-q1">
-                  <DroppableInput
-                    droppableId={`blank-q${q.id}`}
-                    value={answers[`q${q.id}`]}
-                    locked={locked}
-                    onRemove={handleRemove}
-                  />
-                  {wrongInputs.includes(q.id) && (
-                    <span className="wrong-mark">✕</span>
-                  )}
+          <div
+            style={{
+              width: "100%",
+            }}
+          >
+            {questions.map((q, index) => {
+              const qKey = `q${q.id}`;
+
+              return (
+                <div key={q.id} className="question-row-unit7-p2-q3">
+                  <div
+                    className="question-container-unit7-p6-q3"
+                    style={{
+                      gap: "20px",
+                    }}
+                  >
+                    <span className="num2">{index + 1}</span>
+
+                    {/* =====================================
+                          SHAPE + PALETTE
+                      ===================================== */}
+
+                    <div className="shape-wrapper shape-color-container-wb-unit4-p2-q1">
+                      {renderShape(q.id)}
+
+                      {activeShape === q.id && (
+                        <div
+                          className="color-pallet-wb-unit4-p2-q1"
+                          role="group"
+                          aria-label={`Choose a color for ${q.shape}`}
+                        >
+                          {paletteColors.map((color, colorIndex) => (
+                            <button
+                              key={color.value}
+                              ref={(el) => {
+                                paletteButtonRefs.current[
+                                  `${q.id}-${colorIndex}`
+                                ] = el;
+                              }}
+                              type="button"
+                              className="color-option-wb-unit4-p2-q1"
+                              aria-label={color.label}
+                              style={{
+                                backgroundColor: color.value,
+
+                                border:
+                                  selectedColor === color.value
+                                    ? "3px solid black"
+                                    : "1px solid #ccc",
+                              }}
+                              onClick={() => chooseColor(q.id, color.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Escape") {
+                                  e.preventDefault();
+
+                                  e.stopPropagation();
+
+                                  closePalette(q.id);
+                                }
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="question-text-wb-unit4-p2-q1">{q.question}</p>
+                  </div>
+
+                  {/* =====================================
+                        DROP SLOT
+                    ===================================== */}
+
+                  <div className="sentence-box-wb-unit4-p2-q1">
+                    <DroppableInput
+                      droppableId={`blank-${qKey}`}
+                      qKey={qKey}
+                      value={answers[qKey]}
+                      isWrong={wrongInputs.includes(qKey)}
+                      locked={isQuestionLocked(qKey)}
+                      showAnswer={showAnswer}
+                      checkCompleted={checkCompleted}
+                      keyboardPickedItem={keyboardPickedItem}
+                      focusedSlotId={focusedSlotId}
+                      setFocusedSlotId={setFocusedSlotId}
+                      slotRefs={slotRefs}
+                      getAvailableSlotIds={getAvailableSlotIds}
+                      onKeyboardDrop={handleKeyboardDrop}
+                      onKeyboardClearWrong={handleKeyboardClearWrong}
+                      onCancelKeyboardPick={handleCancelKeyboardPick}
+                      onRemove={handleRemove}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* ─── Buttons ─── */}
+        {/* =================================================
+            BUTTONS
+        ================================================= */}
+
         <div className="action-buttons-container">
           <button onClick={handleReset} className="try-again-button">
             Start Again ↻
           </button>
-          <button onClick={handleShowAnswer} className="show-answer-btn swal-continue">
+
+          <button
+            onClick={handleShowAnswer}
+            className="show-answer-btn swal-continue"
+          >
             Show Answer
           </button>
+
           <button onClick={handleCheck} className="check-button2">
             Check Answer ✓
           </button>
         </div>
       </div>
 
-      {/* ─── Drag Overlay ─── */}
+      {/* =================================================
+          DRAG OVERLAY
+      ================================================= */}
+
       <DragOverlay>
         {activeWord && (
           <div
             style={{
               padding: "7px 14px",
+
               border: "2px solid #2c5287",
+
               borderRadius: "8px",
+
               background: "white",
+
               fontWeight: "bold",
+
               boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+
               cursor: "grabbing",
             }}
           >

@@ -1,0 +1,89 @@
+/* =====================================================
+   GRID KEYBOARD FOCUS
+===================================================== */
+
+.cell-wb-u2-p5-q2:focus {
+  outline: none;
+}
+
+.cell-wb-u2-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -3px;
+  position: relative;
+  z-index: 5;
+}
+
+/* =====================================================
+   LIVE GRID PREVIEW
+===================================================== */
+
+.grid-preview-wb-u4-p5-q2 {
+  opacity: 0.65;
+}
+
+/* =====================================================
+   WORD AUDIO
+===================================================== */
+
+.word-audio-wb-u4-p5-q2 {
+  user-select: none;
+}
+
+.word-audio-wb-u4-p5-q2:focus {
+  outline: none;
+}
+
+.word-audio-wb-u4-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.word-audio-icon-wb-u4-p5-q2 {
+  position: absolute;
+
+  top: -10px;
+  right: -18px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+.word-bank-wb-u4-p5-q1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 20px;
+}
+
+.word-box-wb-u1-p8-q2 {
+  min-width: 70px;
+  height: 30px;
+  padding: 0 16px;
+  border: 1.5px solid #000;
+  border-radius: 8px;
+  background: #fff;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: 18px;
+  font-weight: 400;
+  color: #000;
+  line-height: 1;
+  user-select: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.word-box-wb-u1-p8-q2:hover {
+  background: #f8f8f8;
+}
