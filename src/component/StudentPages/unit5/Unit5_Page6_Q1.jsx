@@ -31,7 +31,7 @@ import { FaVolumeUp } from "react-icons/fa";
 import bookAudio from "../../../assets/unit5/sounds/Page 45 - D/book.mp3";
 import globalAudio from "../../../assets/unit5/sounds/Page 45 - D/global.mp3";
 import isThisAPencilAudio from "../../../assets/unit5/sounds/Page 45 - D/Is this a pencil.mp3";
-import isThisAAudio from "../../../assets/unit5/sounds/Page 45 - D/Is this a.mp3";
+import isThisAAudio from "../../../assets/unit5/sounds/Page 45 - D/is this a.mp3";
 import itIsAudio from "../../../assets/unit5/sounds/Page 45 - D/it is.mp3";
 import noItIsntAudio from "../../../assets/unit5/sounds/Page 45 - D/no, it isn't.mp3";
 import rulerAudio from "../../../assets/unit5/sounds/Page 45 - D/ruler.mp3";
