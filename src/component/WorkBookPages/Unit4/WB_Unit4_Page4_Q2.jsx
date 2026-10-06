@@ -376,46 +376,7 @@ const WB_Unit4_Page4_Q2 = () => {
             INPUT
         ========================= */}
 
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
-          <label
-            htmlFor="age-input"
-            style={{
-              position: "absolute",
-              width: "1px",
-              height: "1px",
-              overflow: "hidden",
-              clip: "rect(0, 0, 0, 0)",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Your answer
-          </label>
-
-          <input
-            id="age-input"
-            type="text"
-            value={answer}
-            className="answer-input33-review10-p1-q3"
-            onChange={(e) => setAnswer(e.target.value)}
-            aria-label="Type your answer"
-          />
-
-          <span
-            style={{
-              fontSize: "20px",
-              fontWeight: "600",
-            }}
-          >
-            .
-          </span>
-        </div>
+      
 
         {/* =========================
             DRAWING TOOLS

@@ -1,49 +1,112 @@
 .q-img-wb-unit5-page2-q2 {
-    width: auto;
-    height: 120px;
+  width: auto;
+  height: 120px;
 }
 
 .word-box-wb-unit5-page2-q2 {
-    display: inline-block;
-    padding: 8px 18px;
-    border: 2px solid #444;
-    border-radius: 10px;
-    font-size: 20px;
-    margin: 10px;
-    height: fit-content;
-    font-weight: 600;
-    background: #fff;
+  display: inline-block;
+  padding: 8px 18px;
+  border: 2px solid #444;
+  border-radius: 10px;
+  font-size: 20px;
+  margin: 10px;
+  height: fit-content;
+  font-weight: 600;
+  background: #fff;
 }
 .sentence-wrapper-wb-unit5-page2-q2 {
-    display: flex;
-    align-items: center;
-    /* flex-wrap: wrap; */
-    gap: 6px;
-    font-size: 18px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  /* flex-wrap: wrap; */
+  gap: 6px;
+  font-size: 18px;
+  width: 100%;
 }
 .inline-input-wb-unit5-page2-q2 {
-    width: 100%;
-    /* border: none; */
-    border-bottom: 2px solid #000000;
-    text-align: center;
-    font-size: 18px;
-    height: 30px;
+  width: 100%;
+  /* border: none; */
+  border-bottom: 2px solid #000000;
+  text-align: center;
+  font-size: 18px;
+  height: 30px;
 }
 .sentence-text-wb-unit5-page2-q2 {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-    width: 35%;
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  width: 35%;
 }
 @media screen and (max-width: 1024px) and (max-height: 600px) {
-    .q-img-wb-unit5-page2-q2 {
+  .q-img-wb-unit5-page2-q2 {
     width: auto;
     height: 100px;
-}
-.word-box-wb-unit5-page2-q2 {
-
+  }
+  .word-box-wb-unit5-page2-q2 {
     font-size: 15px;
+  }
+} /* =====================================================
+   WORD BANK KEYBOARD
+===================================================== */
 
+.drag-word-wb-unit5-page2-q2 {
+  outline: none;
 }
+
+.drag-word-wb-unit5-page2-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DROP KEYBOARD
+===================================================== */
+
+.inline-input-wb-unit5-page2-q2 {
+  outline: none;
+}
+
+.inline-input-wb-unit5-page2-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-wb-unit5-page2-q2 {
+  background: #dbeafe !important;
+  animation: wbU5P2Q2Preview 1.2s ease-in-out infinite;
+}
+
+@keyframes wbU5P2Q2Preview {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit5-page2-q2 {
+  position: absolute;
+
+  top: -10px;
+  right: -12px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
 }
