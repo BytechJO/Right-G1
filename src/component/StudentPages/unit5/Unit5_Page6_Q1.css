@@ -41,23 +41,23 @@
   grid-template-columns: 1fr 1fr;
   gap: 43px;
 }
-.error-mark-input1-unit5-p6-q1  {
-    position: absolute;
-    top: 0px;
-    right: 9px;
-    width: 22px;
-    height: 22px;
-    background: red;
-    color: white;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 999999;
-    border: 2px solid white;
+.error-mark-input1-unit5-p6-q1 {
+  position: absolute;
+  top: 0px;
+  right: 9px;
+  width: 22px;
+  height: 22px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 999999;
+  border: 2px solid white;
 }
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .content-container-unit5-p6-q1 {
@@ -76,4 +76,113 @@
     display: grid;
     grid-template-columns: 1fr;
   }
+}
+/* =====================================================
+   WORD BANK - KEYBOARD
+===================================================== */
+
+.drag-word-unit5-p6-q1 {
+  outline: none;
+}
+
+.drag-word-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-unit5-p6-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+/* =====================================================
+   DROP SLOT - KEYBOARD
+===================================================== */
+
+.answer-input-unit5-p6-q1 {
+  outline: none;
+}
+
+.answer-input-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-unit5-p6-q1 {
+  animation: keyboardPreviewUnit5P6Q1 1.3s ease-in-out infinite;
+}
+
+@keyframes keyboardPreviewUnit5P6Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   WRITTEN TEXT AUDIO
+===================================================== */
+
+.audio-text-unit5-p6-q1 {
+  display: inline-flex;
+  align-items: center;
+
+  outline: none;
+
+  user-select: none;
+}
+
+.audio-text-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+/* =====================================================
+   PLAYING ICON
+===================================================== */
+
+.audio-playing-icon-unit5-p6-q1 {
+  position: absolute;
+
+  top: -10px;
+  right: -12px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+.sentence-audio-group-unit5-p6-q1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  outline: none;
+  font-size: 20px;
+  width: fit-content;
+}
+
+.sentence-audio-group-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 8px;
+}
+.answer-input-unit5-p6-q1,
+.audio-text-unit5-p6-q1 {
+  font-size: 20px;
+}
+.answer-input-unit5-p6-q1 {
+  text-align: center;
 }

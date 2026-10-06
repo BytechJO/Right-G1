@@ -1,50 +1,113 @@
-.content-unit5-p5-q3{
- display: flex;
-    /* justify-content: space-around; */
-    width: 100%;
+.content-unit5-p5-q3 {
+  display: flex;
+  /* justify-content: space-around; */
+  width: 100%;
 }
 
-.group-input-unit5-p5-q3{
-display: flex;
-flex-direction: column;
-width: 100%;
+.group-input-unit5-p5-q3 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 .question-text-unit5-p5-q3 {
-    font-size: 20px;
-    font-weight: 400;
-    width: 100%;
+  font-size: 20px;
+  font-weight: 400;
+  width: 100%;
 }
 .q-input-unit5-p5-q3 {
-    border: 1px solid #000000;
-    padding: 5px 8px;
-    border-radius: 8px;
-    font-size: 18px;
-    width:100%;
-    text-align: center;
-    vertical-align: middle;
-    line-height: normal;
-    height: 40px;
+  border: 1px solid #000000;
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: normal;
+  height: 40px;
 }
 
 .wrong-icon-unit5-p5-q3 {
-    color: white;
-    background: red;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    font-size: 14px;
-    position: absolute;
-    top: -10px;
-    right: -4%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    border: 2px solid white;
+  color: white;
+  background: red;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  font-size: 14px;
+  position: absolute;
+  top: -10px;
+  right: -4%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border: 2px solid white;
 }
 @media screen and (max-width: 1024px) and (max-height: 600px) {
- .content-unit5-p5-q3 {
-
+  .content-unit5-p5-q3 {
     flex-direction: row !important;
-} 
+  }
+} /* =====================================================
+   WORD BANK KEYBOARD
+===================================================== */
+
+.drag-word-unit5-p5-q3:focus {
+  outline: none;
+}
+
+.drag-word-unit5-p5-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-unit5-p5-q3 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+/* =====================================================
+   DROP SLOT KEYBOARD
+===================================================== */
+
+.q-input-unit5-p5-q3:focus {
+  outline: none;
+}
+
+.q-input-unit5-p5-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-unit5-p5-q3 {
+  animation: keyboardDropPreviewUnit5P5Q3 1.3s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewUnit5P5Q3 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-unit5-p5-q3 {
+  position: absolute;
+  top: -9px;
+  right: -10px;
+
+  background: white;
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
 }

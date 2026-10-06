@@ -36,7 +36,7 @@ const captionsExample = [
           height="22"
           viewBox="0 0 90 90"
            style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 109})}
+          onClick={() => openPopup("exercise", { startIndex: 110})}
         >
           <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />
         </svg>
@@ -49,7 +49,7 @@ const captionsExample = [
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 110 })}
+          onClick={() => openPopup("exercise", { startIndex: 111 })}
            style={{ overflow: "visible" }}
         >
           <image className="svg-img" href={arrowBtn} x="0" y="0" width="90" height="90" />

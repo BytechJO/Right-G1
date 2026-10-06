@@ -5,6 +5,7 @@ import img3 from "../../../assets/U1 WB/U5/U5P27EXEA-03.svg";
 import img4 from "../../../assets/U1 WB/U5/U5P27EXEA-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit5_Page1_Q1.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const WB_Unit5_Page1_Q1 = () => {
   const [lines, setLines] = useState([]);
@@ -141,11 +142,11 @@ const WB_Unit5_Page1_Q1 = () => {
           gap: "30px",
         }}
       >
-        <h5 className="header-title-page8">
-          {" "}
-          <span className="ex-A">A</span>Look, read, and match.
-        </h5>
-
+        <ExerciseHeader
+          sectionLetter="A"
+          title="Look, read, and match."
+          subTitle="Connect each picture to map, desk, book, or trash bin."
+        />
         <div className="match-wrapper2" ref={containerRef}>
           {/* الجمل */}
 
@@ -166,12 +167,8 @@ const WB_Unit5_Page1_Q1 = () => {
                 src={img1}
                 alt=""
                 className={`matched-img2 ${
-                  selectedLeftWord === "img1"
-                    ? "selected-item"
-                    : ""
-                }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                  selectedLeftWord === "img1" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
                 onClick={() => document.getElementById("img1-dot").click()}
               />
               {wrongImages.includes("img1") && (
@@ -200,12 +197,8 @@ const WB_Unit5_Page1_Q1 = () => {
                 src={img2}
                 alt=""
                 className={`matched-img2 ${
-                  selectedLeftWord === "img2"
-                    ? "selected-item"
-                    : ""
-                }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                  selectedLeftWord === "img2" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
                 onClick={() => document.getElementById("img2-dot").click()}
               />{" "}
               {wrongImages.includes("img2") && (
@@ -233,12 +226,8 @@ const WB_Unit5_Page1_Q1 = () => {
               <img
                 src={img3}
                 className={`matched-img2 ${
-                  selectedLeftWord === "img3"
-                    ? "selected-item"
-                    : ""
-                }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                  selectedLeftWord === "img3" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
                 alt=""
                 onClick={() => document.getElementById("img3-dot").click()}
               />{" "}
@@ -267,12 +256,8 @@ const WB_Unit5_Page1_Q1 = () => {
                 src={img4}
                 alt=""
                 className={`matched-img2 ${
-                  selectedLeftWord === "img4"
-                    ? "selected-item"
-                    : ""
-                }${
-                  locked || showAnswer ? "disabled-hover" : ""
-                }`}
+                  selectedLeftWord === "img4" ? "selected-item" : ""
+                }${locked || showAnswer ? "disabled-hover" : ""}`}
                 onClick={() => document.getElementById("img4-dot").click()}
               />{" "}
               {wrongImages.includes("img4") && (
@@ -287,10 +272,7 @@ const WB_Unit5_Page1_Q1 = () => {
             </div>
           </div>
           <div className="match-words-row2">
-            <div
-              className="word-box2"
-         
-            >
+            <div className="word-box2">
               <div>
                 <h5
                   className={`h5-wb-unit5-p1-q1 ${

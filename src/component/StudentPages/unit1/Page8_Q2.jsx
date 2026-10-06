@@ -13,7 +13,10 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
+import { FaVolumeUp } from "react-icons/fa";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./Page8_Q2.css";
 
 import img1 from "../../../assets/unit1/imgs/U1P8EXEA2-01.svg";
@@ -37,37 +40,41 @@ const exerciseData = {
     {
       id: "pair-1",
       letter: "Table",
+      sound: tableSound,
     },
     {
       id: "pair-2",
       letter: "Taxi",
+      sound: taxiSound,
     },
     {
       id: "pair-3",
       letter: "Deer",
+      sound: deerSound,
     },
     {
       id: "pair-4",
       letter: "Dish",
+      sound: dishSound,
     },
   ],
 
   images: [
     {
       src: img1,
-      sound: tableSound,
+      alt: "A wooden round table.",
     },
     {
       src: img2,
-      sound: taxiSound,
+      alt: "A yellow taxi.",
     },
     {
       src: img3,
-      sound: deerSound,
+      alt: "A young deer standing.",
     },
     {
       src: img4,
-      sound: dishSound,
+      alt: "A pink dish.",
     },
   ],
 
@@ -79,8 +86,16 @@ const exerciseData = {
   },
 };
 
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
 const getShuffledPairs = () =>
   [...exerciseData.pairs].sort(() => Math.random() - 0.5);
+
+/* =====================================================
+   INITIAL STATE
+===================================================== */
 
 const initialDroppedState = {
   "drop-1": null,
@@ -95,6 +110,8 @@ const initialDroppedState = {
 
 const WordBankItem = ({
   letter,
+  sound,
+
   isUsed,
   showAnswer,
 
@@ -102,6 +119,9 @@ const WordBankItem = ({
   onKeyboardPick,
 
   registerBankRef,
+
+  onPlaySound,
+  playingWord,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -119,8 +139,22 @@ const WordBankItem = ({
 
   const isKeyboardPicked = keyboardPickedWord === letter;
 
+  /* =================================================
+     KEYBOARD ACTIVATION
+  ================================================= */
+
   const handleKeyboardActivation = () => {
     if (isUsed || showAnswer) return;
+
+    /*
+      شغّل صوت الخيار
+    */
+
+    onPlaySound(sound, letter);
+
+    /*
+      Pick / Cancel
+    */
 
     if (isKeyboardPicked) {
       onKeyboardPick(null);
@@ -130,6 +164,8 @@ const WordBankItem = ({
   };
 
   const style = {
+    position: "relative",
+
     transform: CSS.Translate.toString(transform),
 
     opacity: isDragging ? 0.4 : isUsed ? 0.35 : 1,
@@ -190,8 +226,8 @@ const WordBankItem = ({
         isUsed
           ? `${letter}, already used`
           : isKeyboardPicked
-            ? `${letter} selected. Choose an answer box and press Enter to place it.`
-            : `${letter}. Press Enter to pick it up.`
+            ? `${letter} selected. Choose an answer box and press Enter or Space to place it.`
+            : `${letter}. Press Enter or Space to hear and select it.`
       }
       title={isUsed ? `${letter} already used` : letter}
       onFocus={() => setIsFocused(true)}
@@ -205,16 +241,37 @@ const WordBankItem = ({
         }
       }}
       onClick={(e) => {
-        // Screen reader synthetic click
-        if (e.detail === 0) {
-          e.preventDefault();
-          e.stopPropagation();
+        if (isUsed || showAnswer) return;
 
-          handleKeyboardActivation();
+        /*
+          Mouse click = صوت فقط
+          حتى ما نخرب drag بالماوس
+        */
+
+        if (e.detail > 0) {
+          onPlaySound(sound, letter);
+          return;
         }
+
+        /*
+          Screen reader synthetic click
+        */
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        handleKeyboardActivation();
       }}
     >
       {letter}
+
+      {playingWord === letter && (
+        <FaVolumeUp
+          size={17}
+          aria-hidden="true"
+          className="audio-icon-page8-q2"
+        />
+      )}
     </div>
   );
 };
@@ -226,8 +283,10 @@ const WordBankItem = ({
 const PlacedWord = ({
   letter,
   dropId,
+
   showAnswer,
   isLocked,
+
   onReturnToBank,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -282,7 +341,7 @@ const PlacedWord = ({
       aria-label={
         isLocked
           ? `${letter}. Correct answer. Answer locked.`
-          : `${letter}. Press Enter to return it to the word bank.`
+          : `${letter}. Press Enter or Space to return it to the word bank.`
       }
       title={isLocked ? `${letter} correct` : `Return ${letter}`}
       onFocus={() => {
@@ -320,7 +379,8 @@ const DropZone = ({
   dropId,
 
   imageSrc,
-  sound,
+  imageAlt,
+
   index,
 
   droppedLetter,
@@ -331,7 +391,6 @@ const DropZone = ({
   showAnswer,
 
   onReturnToBank,
-  onPlaySound,
 
   keyboardPickedWord,
   onKeyboardDrop,
@@ -350,9 +409,11 @@ const DropZone = ({
 
   const [isFocused, setIsFocused] = useState(false);
 
-  const [isImageFocused, setIsImageFocused] = useState(false);
-
   const canKeyboardDrop = keyboardPickedWord && !showAnswer && !isLocked;
+
+  /* =================================================
+     ACTIVATE DROP
+  ================================================= */
 
   const activateDrop = () => {
     if (!keyboardPickedWord || showAnswer || isLocked) {
@@ -361,6 +422,10 @@ const DropZone = ({
 
     onKeyboardDrop(dropId, index);
   };
+
+  /* =================================================
+     MOVE DROP FOCUS
+  ================================================= */
 
   const moveFocus = (backwards = false) => {
     if (availableDropIndexes.length === 0) {
@@ -389,6 +454,10 @@ const DropZone = ({
 
   return (
     <div className="image-container">
+      {/* =================================================
+          NUMBER
+      ================================================= */}
+
       <div
         style={{
           display: "flex",
@@ -407,43 +476,17 @@ const DropZone = ({
       </div>
 
       <div className="flex flex-col gap-5 items-center">
-        {/* =========================
+        {/* =================================================
             IMAGE
-        ========================= */}
+            No audio
+            No Tab
+        ================================================= */}
 
-        <img
-          src={imageSrc}
-          alt={`Picture ${index + 1}`}
-          role="button"
-          tabIndex={0}
-          aria-label={`Play audio for picture ${index + 1}`}
-          title="Play audio"
-          onClick={() => onPlaySound(sound)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
+        <img src={imageSrc} alt={imageAlt} />
 
-              onPlaySound(sound);
-            }
-          }}
-          onFocus={() => setIsImageFocused(true)}
-          onBlur={() => setIsImageFocused(false)}
-          style={{
-            cursor: "pointer",
-
-            outline: isImageFocused ? "3px solid #2563eb" : "none",
-
-            outlineOffset: "4px",
-
-            transform: isImageFocused ? "scale(1.05)" : "scale(1)",
-
-            transition: "transform 0.15s ease",
-          }}
-        />
-
-        {/* =========================
+        {/* =================================================
             DROP BOX
-        ========================= */}
+        ================================================= */}
 
         <div
           ref={(el) => {
@@ -466,10 +509,10 @@ const DropZone = ({
                 ? droppedLetter
                   ? `Answer ${
                       index + 1
-                    }. Current word ${droppedLetter}. Press Enter to replace it with ${keyboardPickedWord}.`
+                    }. Current word ${droppedLetter}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
                   : `Answer ${
                       index + 1
-                    }. Press Enter to place ${keyboardPickedWord}.`
+                    }. Press Enter or Space to place ${keyboardPickedWord}.`
                 : droppedLetter
                   ? `Answer ${index + 1}. ${droppedLetter} is placed here.`
                   : `Answer ${index + 1}. Empty. Select a word first.`
@@ -481,14 +524,11 @@ const DropZone = ({
           }}
           onBlur={() => setIsFocused(false)}
           onKeyDown={(e) => {
-            if (isLocked) {
-              return;
-            }
+            if (isLocked) return;
 
-            /* =========================
-               TAB بين الخانات
-               غير المقفلة فقط
-            ========================= */
+            /* =========================================
+               TAB BETWEEN TARGETS
+            ========================================= */
 
             if (keyboardPickedWord && e.key === "Tab") {
               e.preventDefault();
@@ -499,19 +539,46 @@ const DropZone = ({
               return;
             }
 
-            /* =========================
+            /* =========================================
                ENTER / SPACE
-            ========================= */
+            ========================================= */
 
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               e.stopPropagation();
 
-              activateDrop();
+              /*
+                إذا في كلمة picked
+              */
+
+              if (keyboardPickedWord) {
+                activateDrop();
+
+                return;
+              }
+
+              /*
+                إذا الجواب غلط
+                رجعه للبنك
+              */
+
+              if (droppedLetter && isWrong) {
+                onReturnToBank(dropId);
+              }
+            }
+
+            /* =========================================
+               ESCAPE
+            ========================================= */
+
+            if (e.key === "Escape") {
+              e.preventDefault();
             }
           }}
           onClick={(e) => {
-            // Screen reader synthetic click
+            /*
+              synthetic click فقط
+            */
 
             if (e.detail === 0) {
               e.preventDefault();
@@ -563,6 +630,12 @@ const DropZone = ({
           ) : (
             <span className="placeholder" />
           )}
+
+          {isWrong && droppedLetter && (
+            <span className="wrong-x" aria-hidden="true">
+              ✕
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -585,6 +658,10 @@ const WordBank = ({
   onKeyboardPick,
 
   registerBankRef,
+
+  onPlaySound,
+
+  playingWord,
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: "letters",
@@ -605,11 +682,14 @@ const WordBank = ({
           <WordBankItem
             key={pair.id}
             letter={pair.letter}
+            sound={pair.sound}
             isUsed={usedLetters.has(pair.letter)}
             showAnswer={showAnswer}
             keyboardPickedWord={keyboardPickedWord}
             onKeyboardPick={onKeyboardPick}
             registerBankRef={registerBankRef}
+            onPlaySound={onPlaySound}
+            playingWord={playingWord}
           />
         ))}
       </div>
@@ -622,25 +702,31 @@ const WordBank = ({
 ===================================================== */
 
 const Page8_Q2 = () => {
+  /* =================================================
+     AUDIO
+  ================================================= */
+
   const clickAudioRef = useRef(null);
 
-  /* =====================================================
+  const [playingWord, setPlayingWord] = useState(null);
+
+  /* =================================================
      ACCESSIBILITY REFS
-  ===================================================== */
+  ================================================= */
 
   const bankRefs = useRef({});
 
   const dropRefs = useRef([]);
 
-  /* =====================================================
+  /* =================================================
      STATES
-  ===================================================== */
+  ================================================= */
 
   const [droppedLetters, setDroppedLetters] = useState({
     ...initialDroppedState,
   });
 
-  const [shuffledPairs, setShuffledPairs] = useState(getShuffledPairs());
+  const [shuffledPairs] = useState(getShuffledPairs());
 
   const [wrongDrops, setWrongDrops] = useState([]);
 
@@ -652,51 +738,69 @@ const Page8_Q2 = () => {
 
   const [activeDrag, setActiveDrag] = useState(null);
 
-  /* =====================================================
-     ACCESSIBILITY
-  ===================================================== */
+  /* =================================================
+     KEYBOARD
+  ================================================= */
 
   const [keyboardPickedWord, setKeyboardPickedWord] = useState(null);
 
   const [keyboardMessage, setKeyboardMessage] = useState("");
 
-  /* =====================================================
+  /* =================================================
      USED WORDS
-  ===================================================== */
+  ================================================= */
 
   const usedLetters = new Set(Object.values(droppedLetters).filter(Boolean));
 
-  /* =====================================================
-     UNLOCKED DROP INDEXES
-  ===================================================== */
+  /* =================================================
+     AVAILABLE DROP INDEXES
+  ================================================= */
 
   const availableDropIndexes = exerciseData.images
     .map((_, index) => index)
     .filter((index) => !lockedDrops.includes(`drop-${index + 1}`));
 
-  /* =====================================================
+  /* =================================================
      PLAY SOUND
-  ===================================================== */
+  ================================================= */
 
-  const playSound = (sound) => {
+  const playSound = (sound, word) => {
     if (!sound) return;
+
+    /*
+      وقف أي صوت ثاني
+    */
 
     document.querySelectorAll("audio").forEach((audio) => {
       audio.pause();
     });
 
     if (clickAudioRef.current) {
+      clickAudioRef.current.pause();
+
       clickAudioRef.current.currentTime = 0;
 
       clickAudioRef.current.src = sound;
 
-      clickAudioRef.current.play();
+      setPlayingWord(word);
+
+      clickAudioRef.current.play().catch(() => {
+        setPlayingWord(null);
+      });
+
+      clickAudioRef.current.onended = () => {
+        setPlayingWord(null);
+      };
+
+      clickAudioRef.current.onerror = () => {
+        setPlayingWord(null);
+      };
     }
   };
 
-  /* =====================================================
+  /* =================================================
      KEYBOARD PICK
-  ===================================================== */
+  ================================================= */
 
   const handleKeyboardPick = (letter) => {
     if (!letter) {
@@ -710,12 +814,8 @@ const Page8_Q2 = () => {
     setKeyboardPickedWord(letter);
 
     setKeyboardMessage(
-      `${letter} selected. Choose an answer box and press Enter.`,
+      `${letter} selected. Choose an answer box and press Enter or Space.`,
     );
-
-    /* =========================================
-       روح لأول Drop غير مقفول
-    ========================================= */
 
     setTimeout(() => {
       const firstUnlockedIndex = exerciseData.images.findIndex(
@@ -728,9 +828,9 @@ const Page8_Q2 = () => {
     }, 0);
   };
 
-  /* =====================================================
+  /* =================================================
      KEYBOARD DROP
-  ===================================================== */
+  ================================================= */
 
   const handleKeyboardDrop = (dropId, index) => {
     if (!keyboardPickedWord || showAnswer || lockedDrops.includes(dropId)) {
@@ -741,13 +841,22 @@ const Page8_Q2 = () => {
 
     const nextDropped = {
       ...droppedLetters,
-
-      [dropId]: placedWord,
     };
+
+    /*
+      شيل نفس الكلمة إذا كانت بمكان ثاني
+    */
+
+    Object.keys(nextDropped).forEach((id) => {
+      if (nextDropped[id] === placedWord) {
+        nextDropped[id] = null;
+      }
+    });
+
+    nextDropped[dropId] = placedWord;
 
     setDroppedLetters(nextDropped);
 
-    // شيل X فقط عن نفس الخانة
     setWrongDrops((prev) => prev.filter((id) => id !== dropId));
 
     setKeyboardMessage(
@@ -756,9 +865,9 @@ const Page8_Q2 = () => {
 
     setKeyboardPickedWord(null);
 
-    /* =========================================
-       رجع لأول كلمة متاحة بالبنك
-    ========================================= */
+    /*
+      رجع لأول كلمة متاحة بالبنك
+    */
 
     const usedAfter = new Set(Object.values(nextDropped).filter(Boolean));
 
@@ -773,9 +882,9 @@ const Page8_Q2 = () => {
     }, 0);
   };
 
-  /* =====================================================
+  /* =================================================
      SENSORS
-  ===================================================== */
+  ================================================= */
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -792,9 +901,9 @@ const Page8_Q2 = () => {
     }),
   );
 
-  /* =====================================================
+  /* =================================================
      DRAG START
-  ===================================================== */
+  ================================================= */
 
   const handleDragStart = (event) => {
     const { data } = event.active;
@@ -802,14 +911,14 @@ const Page8_Q2 = () => {
     setActiveDrag(data.current);
   };
 
-  /* =====================================================
+  /* =================================================
      DRAG END
-  ===================================================== */
+  ================================================= */
 
   const handleDragEnd = (event) => {
     setActiveDrag(null);
 
-    if (showAnswer) {
+    if (showAnswer || checkCompleted) {
       return;
     }
 
@@ -819,19 +928,11 @@ const Page8_Q2 = () => {
 
     const { letter, source, dropId: fromDropId } = active.data.current;
 
-    const toId = over.id;
-
-    /* =========================================
-       لا تعدل خانة صحيحة مقفلة
-    ========================================= */
+    const toId = String(over.id);
 
     if (lockedDrops.includes(toId)) {
       return;
     }
-
-    /* =========================================
-       لو المصدر نفسه مقفول
-    ========================================= */
 
     if (source === "drop" && lockedDrops.includes(fromDropId)) {
       return;
@@ -842,48 +943,40 @@ const Page8_Q2 = () => {
         ...prev,
       };
 
-      /* =====================================
-           لو جاي من Drop
-        ===================================== */
-
       if (source === "drop") {
         next[fromDropId] = null;
       }
-
-      /* =====================================
-           رجعه للبنك
-        ===================================== */
 
       if (toId === "letters") {
         return next;
       }
 
-      /* =====================================
-           DROP / REPLACE
-        ===================================== */
+      Object.keys(next).forEach((id) => {
+        if (next[id] === letter && id !== toId) {
+          next[id] = null;
+        }
+      });
 
       next[toId] = letter;
 
       return next;
     });
 
-    /* =========================================
-       شيل X فقط عن العناصر المعدلة
-    ========================================= */
-
     setWrongDrops((prev) =>
       prev.filter((id) => id !== toId && id !== fromDropId),
     );
   };
 
-  /* =====================================================
+  /* =================================================
      RETURN TO BANK
-  ===================================================== */
+  ================================================= */
 
   const handleReturnToBank = (dropZoneId) => {
-    if (showAnswer || lockedDrops.includes(dropZoneId)) {
+    if (showAnswer || checkCompleted || lockedDrops.includes(dropZoneId)) {
       return;
     }
+
+    const returnedWord = droppedLetters[dropZoneId];
 
     setDroppedLetters((prev) => ({
       ...prev,
@@ -892,13 +985,27 @@ const Page8_Q2 = () => {
     }));
 
     setWrongDrops((prev) => prev.filter((id) => id !== dropZoneId));
+
+    if (returnedWord) {
+      setTimeout(() => {
+        bankRefs.current[returnedWord]?.focus();
+      }, 0);
+    }
   };
 
-  /* =====================================================
+  /* =================================================
      RESET
-  ===================================================== */
+  ================================================= */
 
   const resetExercise = () => {
+    if (clickAudioRef.current) {
+      clickAudioRef.current.pause();
+
+      clickAudioRef.current.currentTime = 0;
+    }
+
+    setPlayingWord(null);
+
     setDroppedLetters({
       ...initialDroppedState,
     });
@@ -916,14 +1023,11 @@ const Page8_Q2 = () => {
     setKeyboardMessage("");
 
     setActiveDrag(null);
-
-    // اختياري لو بدك shuffle جديد كل reset
-    // setShuffledPairs(getShuffledPairs());
   };
 
-  /* =====================================================
+  /* =================================================
      CHECK
-  ===================================================== */
+  ================================================= */
 
   const checkAnswers = () => {
     if (showAnswer || checkCompleted) {
@@ -966,10 +1070,6 @@ const Page8_Q2 = () => {
       }
     });
 
-    /* =========================================
-         الصح فقط ينقفل
-      ========================================= */
-
     setLockedDrops((prev) => Array.from(new Set([...prev, ...correctList])));
 
     setWrongDrops(wrongList);
@@ -980,16 +1080,12 @@ const Page8_Q2 = () => {
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-        <div style="font-size:20px;margin-top:10px;text-align:center;">
-          <span style="color:${color};font-weight:bold;">
-            Score: ${correctCount} / ${total}
-          </span>
-        </div>
-      `;
-
-    /* =========================================
-         ALL CORRECT
-      ========================================= */
+      <div style="font-size:20px;margin-top:10px;text-align:center;">
+        <span style="color:${color};font-weight:bold;">
+          Score: ${correctCount} / ${total}
+        </span>
+      </div>
+    `;
 
     if (correctCount === total) {
       setLockedDrops(Object.keys(exerciseData.answers));
@@ -1008,11 +1104,19 @@ const Page8_Q2 = () => {
     }
   };
 
-  /* =====================================================
+  /* =================================================
      SHOW ANSWER
-  ===================================================== */
+  ================================================= */
 
   const handleShowAnswer = () => {
+    if (clickAudioRef.current) {
+      clickAudioRef.current.pause();
+
+      clickAudioRef.current.currentTime = 0;
+    }
+
+    setPlayingWord(null);
+
     setDroppedLetters({
       ...exerciseData.answers,
     });
@@ -1030,9 +1134,9 @@ const Page8_Q2 = () => {
     setKeyboardMessage("Correct answers are shown.");
   };
 
-  /* =====================================================
+  /* =================================================
      JSX
-  ===================================================== */
+  ================================================= */
 
   return (
     <div
@@ -1096,6 +1200,10 @@ const Page8_Q2 = () => {
           subTitle="Drag table, taxi, dish, and deer to their matching pictures. Tap each card to hear it again."
         />
 
+        {/* =================================================
+            AUDIO
+        ================================================= */}
+
         <audio
           ref={clickAudioRef}
           style={{
@@ -1107,6 +1215,7 @@ const Page8_Q2 = () => {
           sensors={sensors}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          onDragCancel={() => setActiveDrag(null)}
         >
           {/* =================================================
               WORD BANK
@@ -1121,6 +1230,8 @@ const Page8_Q2 = () => {
             registerBankRef={(letter, el) => {
               bankRefs.current[letter] = el;
             }}
+            onPlaySound={playSound}
+            playingWord={playingWord}
           />
 
           {/* =================================================
@@ -1139,14 +1250,13 @@ const Page8_Q2 = () => {
                     key={dropId}
                     dropId={dropId}
                     imageSrc={image.src}
-                    sound={image.sound}
+                    imageAlt={image.alt}
                     index={index}
                     droppedLetter={droppedLetters[dropId]}
                     isWrong={wrongDrops.includes(dropId)}
                     isLocked={isLocked}
                     showAnswer={showAnswer}
                     onReturnToBank={handleReturnToBank}
-                    onPlaySound={playSound}
                     keyboardPickedWord={keyboardPickedWord}
                     onKeyboardDrop={handleKeyboardDrop}
                     registerDropRef={(i, el) => {

@@ -52,7 +52,7 @@ const Unit7_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 78 })}
+          onClick={() => openPopup("exercise", { startIndex: 79 })}
         >
           <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>
@@ -67,7 +67,7 @@ const Unit7_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 79 })}
+          onClick={() => openPopup("exercise", { startIndex: 80 })}
         >
           <image href={arrowBtn} x="0" y="0" width="90" height="90" className="svg-img"/>
         </svg>

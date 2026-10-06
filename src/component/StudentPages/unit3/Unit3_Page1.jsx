@@ -225,63 +225,6 @@ const Unit3_Page1 = ({ openPopup }) => {
         }}
       />
 
-      {areas.map((area, index) => {
-        const isActive = activeId === `p4-${area.sound}`;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area page4-audio-hotspot ${
-                isActive ? "active" : ""
-              }`}
-              role="button"
-              tabIndex={0}
-              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
-              aria-pressed={isActive}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                playSound(sounds[area.sound], `p4-${area.sound}`);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  playSound(sounds[area.sound], `p4-${area.sound}`);
-                }
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              playSound(sounds[area.sound], `p4-${area.sound}`);
-            }}
-          ></div>
-        );
-      })}
-
       {/* ================================
           MAIN AUDIO
       ================================= */}
@@ -457,6 +400,62 @@ const Unit3_Page1 = ({ openPopup }) => {
           />
         </svg>
       </div>
+      {areas.map((area, index) => {
+        const isActive = activeId === `p4-${area.sound}`;
+
+        // ============================
+        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
+        // ============================
+        if (area.isPrimary) {
+          return (
+            <div
+              key={index}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
+              style={{
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+              }}
+              onClick={() => {
+                playSound(sounds[area.sound], `p4-${area.sound}`);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  playSound(sounds[area.sound], `p4-${area.sound}`);
+                }
+              }}
+            ></div>
+          );
+        }
+
+        // ============================
+        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
+        //    عند الضغط عليها → تفعّل الدائرة الأساسية
+        // ============================
+        return (
+          <div
+            key={index}
+            className="clickable-area"
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              playSound(sounds[area.sound], `p4-${area.sound}`);
+            }}
+          ></div>
+        );
+      })}
     </div>
   );
 };
