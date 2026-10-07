@@ -27,38 +27,124 @@
 }
 
 .word-bank-review5-p1-q2 {
-    display: flex;
-    gap: 5px;
-    margin: 15px 0 25px;
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
+  display: flex;
+  gap: 5px;
+  margin: 15px 0 25px;
+  flex-wrap: wrap;
+  border: 2px solid #4b74ff;
+  background-color: #f2f6ff;
+  border-radius: 8px;
+  padding: 10px;
+  /* height: 60px; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 .missing-input-review5-p1-q2 {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    border: 2px solid #6ec1ff;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-    transition: transform 0.2s ease, font-size 0.2s ease;
-    align-items: center;
-    justify-content: center;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  border: 2px solid #6ec1ff;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  transition:
+    transform 0.2s ease,
+    font-size 0.2s ease;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {
   .exercise-image-div-review5-p1-q2 {
     display: grid;
-   grid-template-columns: repeat(2,1fr);
-  
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+/* =====================================================
+   NUMBER BANK KEYBOARD
+===================================================== */
+
+.number-chip-review5-p1-q2 {
+  outline: none;
+}
+
+.number-chip-review5-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-review5-p1-q2 {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DROP SLOT KEYBOARD
+===================================================== */
+
+.missing-input-review5-p1-q2 {
+  outline: none;
+}
+
+.missing-input-review5-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-review5-p1-q2 {
+  background: #dbeafe !important;
+  animation: review5P1Q2Preview 1.1s ease-in-out infinite;
+}
+
+@keyframes review5P1Q2Preview {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-audio-review5-p1-q2 {
+  outline: none;
+}
+
+.sentence-audio-review5-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p1-q2 {
+  position: absolute;
+
+  top: -10px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
 }

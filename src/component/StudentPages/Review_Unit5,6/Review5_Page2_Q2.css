@@ -152,3 +152,34 @@
     height: 130px;
   }
 }
+/* =====================================================
+   IMAGE KEYBOARD
+===================================================== */
+
+.ds-image-wrapper-review5-p2-q2 {
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.ds-image-wrapper-review5-p2-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 10px;
+}
+
+/* =====================================================
+   SELECTED
+===================================================== */
+
+.selected-review5-p2-q2 {
+  position: relative;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.ds-image-review5-p2-q2 {
+  display: block;
+}

@@ -175,6 +175,10 @@ const DraggableWord = ({
    DROP SLOT
 ===================================================== */
 
+/* =====================================================
+   DROP SLOT — UPDATED DRAG PATTERN
+===================================================== */
+
 const DropSlot = ({
   index,
   value,
@@ -203,37 +207,45 @@ const DropSlot = ({
 
   const { setNodeRef, isOver } = useDroppable({
     id: droppableId,
-
     disabled: locked || showAnswer || checkCompleted,
   });
+
+  /* =====================================================
+     PICKED WORD → DROP TARGET MODE
+  ===================================================== */
 
   const keyboardDropActive =
     !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedWord &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =====================================================
+     NEW DRAG PATTERN
+
+     أي slot معبّى ولسا مش locked
+     يضل reachable بالـTab
+     سواء قبل Check أو بعده إذا كان غلط
+  ===================================================== */
+
+  const canEditFilled =
+    !!value && !keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedDropId === droppableId;
 
   const displayedValue = showPreview ? keyboardPickedWord : value;
 
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
+
   const handleKeyDown = (e) => {
     /* =================================================
-       WRONG ANSWER AFTER CHECK
-       يرجع للبنك
+       FILLED SLOT → RETURN TO BANK
     ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
       onKeyboardClearWrong(index, value);
-
       return;
     }
 
@@ -242,7 +254,7 @@ const DropSlot = ({
     }
 
     /* =================================================
-       TAB BETWEEN TARGETS
+       TAB / SHIFT+TAB BETWEEN AVAILABLE SLOTS
     ================================================= */
 
     if (e.key === "Tab") {
@@ -276,7 +288,7 @@ const DropSlot = ({
     }
 
     /* =================================================
-       DROP
+       DROP / REPLACE
     ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -319,7 +331,7 @@ const DropSlot = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
@@ -328,8 +340,8 @@ const DropSlot = ({
             ? value
               ? `Answer box ${index + 1} currently contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
               : `Answer box ${index + 1}. Press Enter or Space to place ${keyboardPickedWord}.`
-            : canFixWrong
-              ? `${value} is incorrect in answer box ${index + 1}. Press Enter or Space to return it to the word bank.`
+            : canEditFilled
+              ? `Answer box ${index + 1} contains ${value}. Press Enter or Space to return it to the word bank.`
               : value
                 ? `Answer box ${index + 1} contains ${value}.`
                 : `Empty answer box ${index + 1}.`
@@ -342,7 +354,9 @@ const DropSlot = ({
             setFocusedDropId(droppableId);
           }
         }}
-        onBlur={() => setFocusedDropId(null)}
+        onBlur={() => {
+          setFocusedDropId(null);
+        }}
         onKeyDown={handleKeyDown}
         onClick={() => {
           if (value && !locked && !showAnswer && !checkCompleted) {

@@ -250,9 +250,14 @@ const SlotDropZone = ({
   const keyboardDropActive =
     !!keyboardPickedLetter && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
+  /* =================================================
+     UPDATED DRAG PATTERN
+     أي blank معبّى ولسا مش locked
+     يضل reachable بالـTab حتى قبل Check
+  ================================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedLetter &&
     !locked &&
     !showAnswer &&
@@ -264,10 +269,10 @@ const SlotDropZone = ({
 
   const handleKeyDown = (e) => {
     /* =================================================
-       WRONG FILLED SLOT AFTER CHECK
+       FILLED SLOT → RETURN TO LETTER BANK
     ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -315,7 +320,7 @@ const SlotDropZone = ({
     }
 
     /* =================================================
-       ENTER / SPACE
+       ENTER / SPACE → PLACE / REPLACE
     ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -354,7 +359,7 @@ const SlotDropZone = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
@@ -363,8 +368,8 @@ const SlotDropZone = ({
             ? value
               ? `Blank. Current letter ${value}. Press Enter or Space to replace it with ${keyboardPickedLetter}.`
               : `Empty blank. Press Enter or Space to place letter ${keyboardPickedLetter}.`
-            : canFixWrong
-              ? `Letter ${value} is incorrect. Press Enter or Space to return it to the letter bank.`
+            : canEditFilled
+              ? `Blank contains letter ${value}. Press Enter or Space to return it to the letter bank.`
               : value
                 ? `Blank contains letter ${value}.`
                 : "Empty blank."

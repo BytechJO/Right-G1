@@ -18,11 +18,11 @@
   height: 40px;
 }
 .q-img-review5-p2-q1 {
-    width: auto;
-    height: 100px;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
+  width: auto;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
 .circle-choice-review5-page2-q1 {
   width: 32px;
@@ -60,4 +60,82 @@
   border-bottom: 2px solid #ffffff !important;
   justify-content: center;
   z-index: 10;
+}
+/* =====================================================
+   G / K KEYBOARD
+===================================================== */
+
+.circle-choice-review5-page2-q1 {
+  outline: none;
+  cursor: pointer;
+}
+
+.circle-choice-review5-page2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   LETTER INPUT
+===================================================== */
+
+.first-letter-input-review5-p2-q1 {
+  min-width: 70px;
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: 2px solid #000;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  text-align: center;
+}
+
+/* =====================================================
+   FULL WORD AUDIO
+===================================================== */
+
+.word-audio-review5-p2-q1 {
+  position: relative;
+
+  margin-top: 10px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.word-audio-review5-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p2-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
 }

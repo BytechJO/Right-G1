@@ -1,7 +1,7 @@
 .word-box2-review6-p1-q3 {
   font-size: 18px;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -17,4 +17,177 @@
   outline: 2px solid #72d0f6;
   outline-offset: 4px;
   border-radius: 10px;
+}
+/* =====================================================
+   QUESTIONS KEYBOARD
+===================================================== */
+
+.question-audio-review5-p1-q3 {
+  outline: none;
+  pointer-events: auto !important;
+}
+
+.question-audio-review5-p1-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   ANSWERS KEYBOARD
+===================================================== */
+
+.answer-audio-review5-p1-q3 {
+  outline: none;
+  pointer-events: auto !important;
+}
+
+.answer-audio-review5-p1-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+.clickable-img-unit2-p7-q2 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   DOTS
+===================================================== */
+
+.dot2-unit2 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p1-q3 {
+  position: absolute;
+
+  top: -10px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* =====================================================
+   IMPORTANT:
+   LINES MUST NOT BLOCK MOUSE
+===================================================== */
+
+.lines-layer2 {
+  pointer-events: none;
+}
+/* =====================================================
+   ANSWER BOX
+===================================================== */
+
+.word-box2-review6-p1-q3 {
+  position: relative;
+
+  font-size: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =====================================================
+   ANSWER DOT - فوق الكلمة بالضبط
+===================================================== */
+
+.answer-dot-review5-p1-q3 {
+  position: absolute;
+
+  width: 14px;
+  height: 14px;
+
+  background: red;
+  border-radius: 50%;
+
+  top: -26px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  cursor: pointer;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   ANSWER TEXT
+===================================================== */
+
+.answer-audio-review5-p1-q3 {
+  position: relative;
+
+  margin: 0;
+
+  border: 2px solid #2effeaff;
+  border-radius: 8px;
+
+  background: #b7fff8ff;
+
+  font-size: 18px;
+
+  padding: 0 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.answer-audio-review5-p1-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p1-q3 {
+  position: absolute;
+
+  top: -10px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* =====================================================
+   LINES
+===================================================== */
+
+.lines-layer2 {
+  pointer-events: none;
 }

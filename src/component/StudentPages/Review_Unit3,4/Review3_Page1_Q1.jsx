@@ -155,20 +155,14 @@ const DropSlot = ({
 
   const { setNodeRef, isOver } = useDroppable({
     id,
-
     disabled: locked || showAnswer || checkCompleted,
   });
 
   const keyboardDropActive =
     !!keyboardPickedNum && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedNum &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  const canEditFilled =
+    !!value && !keyboardPickedNum && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedSlotId === id;
 
@@ -176,10 +170,10 @@ const DropSlot = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG SLOT AFTER CHECK
+       FILLED SLOT → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -266,7 +260,7 @@ const DropSlot = ({
       tabIndex={
         locked || showAnswer || checkCompleted
           ? -1
-          : keyboardDropActive || canFixWrong
+          : keyboardDropActive || canEditFilled
             ? 0
             : -1
       }
@@ -275,8 +269,8 @@ const DropSlot = ({
           ? value
             ? `Answer box ${index + 1}. Current number ${value}. Press Enter or Space to replace it with ${keyboardPickedNum}.`
             : `Answer box ${index + 1}. Press Enter or Space to place number ${keyboardPickedNum}.`
-          : canFixWrong
-            ? `Answer box ${index + 1}. Number ${value} is incorrect. Press Enter or Space to return it to the number bank.`
+          : canEditFilled
+            ? `Answer box ${index + 1}. Number ${value}. Press Enter or Space to return it to the number bank.`
             : value
               ? `Answer box ${index + 1}. Number ${value}.`
               : `Empty answer box ${index + 1}.`
@@ -318,9 +312,7 @@ const DropSlot = ({
         <span
           style={{
             display: "inline-flex",
-
             alignItems: "center",
-
             gap: "2px",
           }}
         >

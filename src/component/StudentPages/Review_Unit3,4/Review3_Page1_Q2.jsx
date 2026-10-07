@@ -184,16 +184,26 @@ const InputSlot = ({
 
   const { setNodeRef, isOver } = useDroppable({
     id,
-
     disabled: locked || showAnswer || checkCompleted,
   });
+
+  /* =================================================
+     PICKED SENTENCE → DROP MODE
+  ================================================= */
 
   const keyboardDropActive =
     !!keyboardPickedSentence && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
+  /* =================================================
+     UPDATED DRAG PATTERN
+
+     أي input معبّى ولسا مش locked
+     لازم يضل reachable بالـTab
+     حتى قبل Check
+  ================================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedSentence &&
     !locked &&
     !showAnswer &&
@@ -205,10 +215,10 @@ const InputSlot = ({
 
   const handleKeyDown = (e) => {
     /* =================================================
-       WRONG AFTER CHECK
+       FILLED INPUT → RETURN TO BANK
     ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -257,7 +267,7 @@ const InputSlot = ({
     }
 
     /* =================================================
-       ENTER / SPACE
+       ENTER / SPACE → PLACE / REPLACE
     ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -300,17 +310,17 @@ const InputSlot = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
         aria-label={
           keyboardDropActive
             ? value
-              ? `Sentence box ${slotKey}. Current sentence ${value}. Press Enter to replace it with ${keyboardPickedSentence}.`
-              : `Sentence box ${slotKey}. Press Enter to place ${keyboardPickedSentence}.`
-            : canFixWrong
-              ? `${value} is incorrect. Press Enter to return it to the sentence bank.`
+              ? `Sentence box ${slotKey}. Current sentence ${value}. Press Enter or Space to replace it with ${keyboardPickedSentence}.`
+              : `Sentence box ${slotKey}. Press Enter or Space to place ${keyboardPickedSentence}.`
+            : canEditFilled
+              ? `Sentence box ${slotKey} contains ${value}. Press Enter or Space to return it to the sentence bank.`
               : value
                 ? `Sentence box ${slotKey}: ${value}`
                 : `Empty sentence box ${slotKey}`
@@ -320,7 +330,9 @@ const InputSlot = ({
             setFocusedInputId(id);
           }
         }}
-        onBlur={() => setFocusedInputId(null)}
+        onBlur={() => {
+          setFocusedInputId(null);
+        }}
         onKeyDown={handleKeyDown}
       >
         <div className="drop-inner-review3-p1-q2">
@@ -344,11 +356,6 @@ const InputSlot = ({
               }}
               onClick={(e) => {
                 e.stopPropagation();
-
-                /*
-                  الجملة الموضوعة:
-                  الكبس عليها يشغل الصوت.
-                */
 
                 playSentenceAudio(displayValue, getSentenceAudio(displayValue));
               }}
@@ -383,12 +390,9 @@ const InputSlot = ({
           onClick={onRemove}
           style={{
             position: "absolute",
-
             width: "1px",
             height: "1px",
-
             opacity: 0,
-
             pointerEvents: "none",
           }}
         />

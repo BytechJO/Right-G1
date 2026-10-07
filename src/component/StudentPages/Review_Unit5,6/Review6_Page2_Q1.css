@@ -1,7 +1,7 @@
 .shorti-container-review6-p2-q1 {
   /* display: flex; */
   flex-direction: column;
-  gap: 25px;
+  gap: 15px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
@@ -66,7 +66,7 @@
   z-index: 99;
 }
 .main-img-review6-p2-q1 {
-  height: 150px;
+  height: 130px;
 }
 .options-review6-p2-q1 {
   display: flex;
@@ -103,4 +103,19 @@
   .main-img-review6-p2-q1 {
     height: 120px;
   }
+}
+.option-review6-p2-q1 {
+  outline: none !important;
+}
+
+.option-review6-p2-q1:focus,
+.option-review6-p2-q1:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.option-review6-p2-q1:focus-visible .check-box-review6-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  box-shadow: none !important;
 }

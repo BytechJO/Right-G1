@@ -7,14 +7,13 @@
   font-size: 25px;
 }
 
-
 .question-row-review5-p2-q3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 25px;
-  height:200px;
-    font-size: 22px;
+  height: 200px;
+  font-size: 22px;
 }
 
 .sentence-review5-p2-q3 {
@@ -23,16 +22,17 @@
   /* gap: 8px; */
   width: 65%;
   align-items: center;
-    font-size: 22px;
-    justify-content: space-evenly;
+  font-size: 22px;
+  justify-content: space-evenly;
 }
 
 .blank-options-review5-p2-q3 {
   display: flex;
   gap: 10px;
-    font-size: 22px;  
-    font-weight:700;
-  flex-direction: column;position: relative;
+  font-size: 22px;
+  font-weight: 700;
+  flex-direction: column;
+  position: relative;
 }
 
 .option-word-review5-p2-q3 {
@@ -45,8 +45,8 @@
 }
 
 .option-word-review5-p2-q3.selected2 {
- border: 3px solid #2c5287;
- position: relative;
+  border: 3px solid #2c5287;
+  position: relative;
 }
 
 .question-img-review5-p2-q3 {
@@ -55,4 +55,67 @@
   border-radius: 8px;
 }
 
+/* =====================================================
+   OPTIONS KEYBOARD
+===================================================== */
 
+.option-word-review5-p2-q3 {
+  outline: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.option-word-review5-p2-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   LOCKED CORRECT OPTION
+
+   ما بنمنع الصوت
+===================================================== */
+
+.locked-option-review5-p2-q3 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   STATIC TEXT AUDIO
+===================================================== */
+
+.audio-text-review5-p2-q3 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.audio-text-review5-p2-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p2-q3 {
+  position: absolute;
+
+  top: -9px;
+  right: -17px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}

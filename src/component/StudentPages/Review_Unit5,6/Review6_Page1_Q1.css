@@ -103,3 +103,62 @@
     justify-content: center;
   }
 }
+/* =====================================================
+   PREFIX AUDIO / KEYBOARD
+===================================================== */
+
+.prefix-audio-review6-p1-q1 {
+  outline: none;
+}
+
+.prefix-audio-review6-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   OPTION KEYBOARD
+===================================================== */
+
+.option-word-review6-p1-q1 {
+  outline: none;
+  cursor: pointer;
+}
+
+.option-word-review6-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   CORRECT LOCKED OPTION
+
+   لسا الصوت شغال
+===================================================== */
+
+.locked-option-review6-p1-q1 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review6-p1-q1 {
+  position: absolute;
+
+  top: -9px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}

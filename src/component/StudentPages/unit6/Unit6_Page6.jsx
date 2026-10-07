@@ -80,7 +80,7 @@ const Unit6_Page6 = ({ openPopup }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 61 });
+              openPopup("exercise", { startIndex: 62 });
             }
           }}
           style={{
@@ -115,7 +115,7 @@ const Unit6_Page6 = ({ openPopup }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 62 });
+              openPopup("exercise", { startIndex: 63 });
             }
           }}
           style={{

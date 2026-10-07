@@ -116,6 +116,10 @@ const DraggableWord = ({
    DROP SLOT
 ====================================================== */
 
+/* ======================================================
+   DROP SLOT — UPDATED DRAG PATTERN
+====================================================== */
+
 const DropSlot = ({
   index,
   value,
@@ -145,7 +149,6 @@ const DropSlot = ({
 
   const { setNodeRef, isOver } = useDroppable({
     id,
-
     disabled: locked || showAnswer || checkCompleted,
   });
 
@@ -157,12 +160,15 @@ const DropSlot = ({
     !!keyboardPickedLetter && !locked && !showAnswer && !checkCompleted;
 
   /* ==================================================
-     WRONG SLOT AFTER CHECK
+     NEW DRAG PATTERN
+
+     أي slot معبّى ولسا مش locked
+     يضل reachable بالـTab
+     قبل Check وبعده إذا كان غلط
   ================================================== */
 
-  const canFixWrong =
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedLetter &&
     !locked &&
     !showAnswer &&
@@ -174,11 +180,10 @@ const DropSlot = ({
 
   const handleKeyDown = (e) => {
     /* ==================================================
-       WRONG SLOT
-       ENTER -> CLEAR -> RETURN TO BANK
+       FILLED SLOT → CLEAR → RETURN TO BANK
     ================================================== */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -226,7 +231,7 @@ const DropSlot = ({
     }
 
     /* ==================================================
-       ENTER / SPACE = PLACE
+       ENTER / SPACE = PLACE / REPLACE
     ================================================== */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -267,7 +272,7 @@ const DropSlot = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
@@ -276,8 +281,8 @@ const DropSlot = ({
             ? value
               ? `${value} is in this blank. Press Enter or Space to replace it with ${keyboardPickedLetter}.`
               : `Empty blank. Press Enter or Space to place ${keyboardPickedLetter}.`
-            : canFixWrong
-              ? `${value}. Incorrect answer. Press Enter or Space to remove it and return to the letter choices.`
+            : canEditFilled
+              ? `${value} is in this blank. Press Enter or Space to remove it and return to the letter choices.`
               : value
                 ? `${value} answer`
                 : "Empty answer blank"

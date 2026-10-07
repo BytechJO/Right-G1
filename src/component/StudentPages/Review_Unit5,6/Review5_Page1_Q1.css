@@ -116,3 +116,97 @@
     flex-wrap: wrap;
   }
 }
+/* =====================================================
+   BANK KEYBOARD
+===================================================== */
+
+.drag-bank-review5-p1-q1 {
+  outline: none;
+}
+
+.drag-bank-review5-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-review5-p1-q1 {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DROP SLOT KEYBOARD
+===================================================== */
+
+.answer-input-unit5-p6-q1 {
+  outline: none;
+}
+
+.answer-input-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-review5-p1-q1 {
+  background: #dbeafe !important;
+  animation: review5P1Q1Preview 1.1s ease-in-out infinite;
+}
+
+@keyframes review5P1Q1Preview {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-review5-p1-q1 {
+  position: absolute;
+  top: -10px;
+  right: -15px;
+
+  padding: 2px;
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+.audio-icon-example-review5-p1-q1 {
+  position: absolute;
+  top: -12px;
+  right: -20px;
+
+  padding: 2px;
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* =====================================================
+   STATIC EXAMPLE KEYBOARD
+===================================================== */
+
+.section-one-unit5-p6-q1 .content-input-unit5-p6-q1:focus-visible {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+  border-radius: 6px;
+}

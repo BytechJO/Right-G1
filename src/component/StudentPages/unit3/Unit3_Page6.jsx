@@ -74,7 +74,7 @@ const Unit3_Page6 = ({ openPopup }) => {
               startIndex: 29,
             })
           }
-          onKeyDown={(e) => handleExerciseKeyDown(e, 30)}
+          onKeyDown={(e) => handleExerciseKeyDown(e, 29)}
           style={{ overflow: "visible" }}
         >
           <image
@@ -104,7 +104,7 @@ const Unit3_Page6 = ({ openPopup }) => {
               startIndex: 30,
             })
           }
-          onKeyDown={(e) => handleExerciseKeyDown(e, 29)}
+          onKeyDown={(e) => handleExerciseKeyDown(e, 30)}
           style={{ overflow: "visible" }}
         >
           <image
@@ -135,7 +135,7 @@ const Unit3_Page6 = ({ openPopup }) => {
               startIndex: 31,
             })
           }
-          onKeyDown={(e) => handleExerciseKeyDown(e, 30)}
+          onKeyDown={(e) => handleExerciseKeyDown(e, 31)}
           style={{ overflow: "visible" }}
         >
           <image

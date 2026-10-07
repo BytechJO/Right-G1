@@ -43,3 +43,12 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+.review3-p2-q2-word {
+  outline: none;
+}
+
+.review3-p2-q2-word:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 20px;
+}

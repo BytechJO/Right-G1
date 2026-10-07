@@ -24,7 +24,7 @@ const Review6_Page2 = ({ openPopup }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 72 });
+              openPopup("exercise", { startIndex: 73 });
             }
           }}
           style={{
@@ -59,7 +59,7 @@ const Review6_Page2 = ({ openPopup }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 73 });
+              openPopup("exercise", { startIndex: 74 });
             }
           }}
           style={{
@@ -94,7 +94,7 @@ const Review6_Page2 = ({ openPopup }) => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 74 });
+              openPopup("exercise", { startIndex: 75 });
             }
           }}
           style={{

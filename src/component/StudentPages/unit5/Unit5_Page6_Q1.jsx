@@ -260,6 +260,10 @@ const DraggableWord = ({
    DROP SLOT
 ===================================================== */
 
+/* =====================================================
+   DROP SLOT — UPDATED DRAG PATTERN
+===================================================== */
+
 const DropSlot = ({
   slotId,
   value,
@@ -290,27 +294,38 @@ const DropSlot = ({
     disabled: locked || showAnswer || checkCompleted,
   });
 
+  /* =====================================================
+     PICKED WORD → TARGET MODE
+  ===================================================== */
+
   const keyboardActive =
     !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedWord &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =====================================================
+     NEW DRAG PATTERN
+
+     أي slot معبّى ولسا مش locked
+     يضل reachable بالـTab
+     قبل Check وبعد Check إذا كان غلط
+  ===================================================== */
+
+  const canEditFilled =
+    !!value && !keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardActive && focusedDropId === slotId;
 
   const displayedValue = showPreview ? keyboardPickedWord : value;
 
-  const handleKeyDown = (e) => {
-    /* =========================================
-       WRONG SLOT AFTER CHECK
-    ========================================= */
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+  const handleKeyDown = (e) => {
+    /* =================================================
+       FILLED SLOT → RETURN TO BANK
+    ================================================= */
+
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -323,9 +338,9 @@ const DropSlot = ({
       return;
     }
 
-    /* =========================================
+    /* =================================================
        TAB / SHIFT TAB
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Tab") {
       e.preventDefault();
@@ -357,9 +372,9 @@ const DropSlot = ({
       return;
     }
 
-    /* =========================================
-       PLACE WORD
-    ========================================= */
+    /* =================================================
+       PLACE / REPLACE WORD
+    ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -370,9 +385,9 @@ const DropSlot = ({
       return;
     }
 
-    /* =========================================
+    /* =================================================
        ESCAPE
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Escape") {
       e.preventDefault();
@@ -393,7 +408,7 @@ const DropSlot = ({
       tabIndex={
         locked || showAnswer || checkCompleted
           ? -1
-          : keyboardActive || canFixWrong
+          : keyboardActive || canEditFilled
             ? 0
             : -1
       }
@@ -402,8 +417,8 @@ const DropSlot = ({
           ? value
             ? `This answer box contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
             : `Empty answer box. Press Enter or Space to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${value} is incorrect. Press Enter or Space to return it to the word bank.`
+          : canEditFilled
+            ? `This answer box contains ${value}. Press Enter or Space to return it to the word bank.`
             : value
               ? `Answer box containing ${value}.`
               : "Empty answer box."

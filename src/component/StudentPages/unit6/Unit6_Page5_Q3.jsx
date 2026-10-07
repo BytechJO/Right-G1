@@ -211,16 +211,23 @@ const DropSlot = ({
     disabled: isLocked || showAnswer || checkCompleted,
   });
 
+  /* =================================================
+     PICKED WORD → SLOT TARGET MODE
+  ================================================= */
+
   const keyboardActive =
     !!keyboardPickedWord && !isLocked && !showAnswer && !checkCompleted;
 
-  /*
-    بعد Check، الـwrong slot يظل reachable
-  */
+  /* =================================================
+     NEW DRAG PATTERN
 
-  const canFixWrong =
+     أي slot معبّى ولسا مش locked
+     لازم يضل reachable بالـTab
+     حتى قبل Check
+  ================================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedWord &&
     !isLocked &&
     !showAnswer &&
@@ -230,12 +237,16 @@ const DropSlot = ({
 
   const displayedValue = showPreview ? keyboardPickedWord : value;
 
+  /* =================================================
+     KEYBOARD
+  ================================================= */
+
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG SLOT → RETURN TO BANK
+       FILLED SLOT → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -279,7 +290,7 @@ const DropSlot = ({
     }
 
     /* =========================================
-       PLACE
+       PLACE / REPLACE
     ========================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -314,7 +325,7 @@ const DropSlot = ({
       tabIndex={
         isLocked || showAnswer || checkCompleted
           ? -1
-          : keyboardActive || canFixWrong
+          : keyboardActive || canEditFilled
             ? 0
             : -1
       }
@@ -323,8 +334,8 @@ const DropSlot = ({
           ? value
             ? `Answer area contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
             : `Empty answer area. Press Enter or Space to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${value} is incorrect. Press Enter or Space to return it to the word bank.`
+          : canEditFilled
+            ? `Answer area contains ${value}. Press Enter or Space to return it to the word bank.`
             : value
               ? `Answer area contains ${value}.`
               : "Empty answer area."
@@ -369,7 +380,6 @@ const DropSlot = ({
     </div>
   );
 };
-
 /* =====================================================
    MAIN COMPONENT
 ===================================================== */

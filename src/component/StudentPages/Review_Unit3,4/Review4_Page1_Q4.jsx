@@ -229,20 +229,20 @@ const SlotDropZone = ({
 }) => {
   const { setNodeRef, isOver } = useDroppable({
     id,
-
     disabled: locked || showAnswer || checkCompleted,
   });
 
   const keyboardDropActive =
     !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedWord &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =====================================================
+     UPDATED DRAG PATTERN
+     أي slot معبّى ولسا مش locked
+     يضل reachable بالـTab حتى قبل Check
+  ===================================================== */
+
+  const canEditFilled =
+    !!value && !keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedSlotId === id;
 
@@ -250,10 +250,10 @@ const SlotDropZone = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG AFTER CHECK
+       FILLED SLOT → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -340,17 +340,17 @@ const SlotDropZone = ({
       tabIndex={
         locked || showAnswer || checkCompleted
           ? -1
-          : keyboardDropActive || canFixWrong
+          : keyboardDropActive || canEditFilled
             ? 0
             : -1
       }
       aria-label={
         keyboardDropActive
           ? value
-            ? `Answer box ${index + 1}. Current answer ${value}. Press Enter to replace it with ${keyboardPickedWord}.`
-            : `Answer box ${index + 1}. Press Enter to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${value} is incorrect. Press Enter to return it to the word bank.`
+            ? `Answer box ${index + 1}. Current answer ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
+            : `Answer box ${index + 1}. Press Enter or Space to place ${keyboardPickedWord}.`
+          : canEditFilled
+            ? `Answer box ${index + 1} contains ${value}. Press Enter or Space to return it to the word bank.`
             : value
               ? `Answer box ${index + 1}: ${value}`
               : `Empty answer box ${index + 1}`
