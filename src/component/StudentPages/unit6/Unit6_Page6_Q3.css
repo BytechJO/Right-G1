@@ -60,5 +60,67 @@
 }
 
 .img-box2-unit6-p6-q3:active {
-  transform: scale(0.96);
+  transform: scale(0);
+}
+/* =====================================================
+   WORD KEYBOARD + AUDIO
+===================================================== */
+
+.clickable-word-unit2-p7-q2 {
+  outline: none;
+  pointer-events: auto !important;
+}
+
+.clickable-word-unit2-p7-q2.disabled-hover {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.clickable-word-unit2-p7-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   IMAGE KEYBOARD
+===================================================== */
+
+.img-box2-unit6-p6-q3 {
+  outline: none;
+}
+
+.img-box2-unit6-p6-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   DOTS
+===================================================== */
+
+.dot22-unit6-q7 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-unit6-p6-q3 {
+  position: absolute;
+
+  top: -10px;
+  right: -18px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
 }

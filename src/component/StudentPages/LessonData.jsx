@@ -69,6 +69,7 @@ import Unit6_Page5_Q1 from "./unit6/Unit6_Page5_Q1";
 import Unit6_Page5_Q2 from "./unit6/Unit6_Page5_Q2";
 import Unit6_Page5_Q3 from "./unit6/Unit6_Page5_Q3";
 import Unit6_Page5_Q4 from "./unit6/Unit6_Page5_Q4";
+import Unit6_Page6_Q1 from "./unit6/Unit6_Page6_Q1";
 import Unit6_Page6_Q2 from "./unit6/Unit6_Page6_Q2";
 import Unit6_Page6_Q3 from "./unit6/Unit6_Page6_Q3";
 
@@ -216,6 +217,7 @@ export const lessons = [
   { component: Unit6_Page5_Q2, unit: 6 },
   { component: Unit6_Page5_Q3, unit: 6 },
   { component: Unit6_Page5_Q4, unit: 6 },
+  { component: Unit6_Page6_Q1, unit: 6 },
   { component: Unit6_Page6_Q2, unit: 6 },
   { component: Unit6_Page6_Q3, unit: 6, lastOfUnit: true }, //60
 

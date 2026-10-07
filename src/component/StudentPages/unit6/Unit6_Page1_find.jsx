@@ -1,146 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
+
 import find_img from "../../../assets/unit6/imgs/G1_U6_Pg_46-47 copy.jpg";
-import ValidationAlert from "../../Popup/ValidationAlert";
-import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
+
 import MySVG from "../../../assets/unit6/imgs/Asset 6.svg";
+
+import targetAudio from "../../../assets/unit6/sounds/Page 46/the fence.mp3";
+
+import FindQuestion from "../../FindQuestion";
+
+/* =====================================================
+   TARGET AREA - FENCE
+===================================================== */
+
+const targetArea = {
+  x1: 0.1,
+  y1: 29.4,
+  x2: 83.7,
+  y2: 40,
+};
+
 const Unit6_Page1_find = () => {
-  const [clickedPoint, setClickedPoint] = useState(null);
-  const [checkResult, setCheckResult] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-  // ✅ منطقة المطعم (بالنسب المئوية)
-  const targetArea = {
-    x1: 0.1,
-    y1: 29.4,
-    x2: 83.7,
-    y2: 40,
-  };
-
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-    console.log(xPercent, yPercent);
-
-    setClickedPoint({
-      x: xPercent,
-      y: yPercent,
-      inside:
-        xPercent >= targetArea.x1 &&
-        xPercent <= targetArea.x2 &&
-        yPercent >= targetArea.y1 &&
-        yPercent <= targetArea.y2,
-    });
-  };
-
-  const handleCheck = () => {
-    if (!clickedPoint) {
-      ValidationAlert.info(
-        "Pay attention!",
-        "Please click on the image first.",
-      );
-      return;
-    }
-
-    if (clickedPoint.inside) {
-      setCheckResult("success");
-      ValidationAlert.success("Bravo!", "You clicked on the restaurant! 🏆");
-    } else {
-      setCheckResult("fail");
-      ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
-    }
-  };
-
-  const handleStartAgain = () => {
-    setClickedPoint(null);
-    setCheckResult(null);
-    setShowAnswer(false);
-  };
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
-    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
-  };
-
   return (
-    <div style={{ textAlign: "center" }}>
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{ display: "flex", justifyContent: "center", width: "100%" }}
-        >
-          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />
-          <h5 className="header-title-page8">
-            I need your help. Can you help me find the fence by tapping or
-            clicking on it?
-          </h5>
-        </div>
-        <div style={{ position: "relative", display: "inline-block" }}>
-          <img
-            src={find_img}
-            alt="interactive"
-            style={{
-              width: "auto",
-              height: "75vh",
-              borderRadius: "8px",
-              cursor: "pointer",
-              display: "block",
-            }}
-            onClick={handleImageClick}
-          />
-
-          {/* ✅ الدائرة الحمراء في مكان الكبس */}
-          {clickedPoint && (
-            <div
-              style={{
-                position: "absolute",
-                top: `${clickedPoint.y}%`,
-                left: `${clickedPoint.x}%`,
-                width: "3%",
-                height: "3%",
-                backgroundColor: "red",
-                borderRadius: "50%",
-                transform: "translate(-50%, -50%)",
-                pointerEvents: "none",
-              }}
-            ></div>
-          )}
-
-          {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {(checkResult === "success" || showAnswer) && (
-            <img
-              src={MySVG}
-              alt="answer highlight"
-              style={{
-                position: "absolute",
-                top: `28%`,
-                left: `0.5%`,
-                height: `8.1%`,
-                pointerEvents: "none",
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <div className="action-buttons-container ">
-        <button className="try-again-button" onClick={handleStartAgain}>
-          Start Again ↻
-        </button>
-        <button className="show-answer-btn" onClick={handleShowAnswer}>
-          Show Answer
-        </button>
-        <button className="check-button2" onClick={handleCheck}>
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    <FindQuestion
+      title="I need your help. Can you help me find the fence in the picture?"
+      subtitle="Scan the whole park scene, then tap the fence."
+      image={find_img}
+      imageAlt="A park scene with children playing, riding a bicycle and scooter, flying a kite, sitting by a tree, swimming in a small pool, and a fence stretching across the background."
+      targetName="fence"
+      targetArea={targetArea}
+      answerHighlight={MySVG}
+      targetAudio={targetAudio}
+      imageHeight="75vh"
+      highlightTop="28%"
+      highlightLeft="0.5%"
+      highlightHeight="8.1%"
+      targetAriaLabel="Select the fence"
+      pointerSelectedMessage="A point in the park scene was selected. Use Check Answer to check it."
+      keyboardSelectedMessage="Fence selected. Use Check Answer to check your answer."
+      correctAnnouncement="Correct. You found the fence."
+      correctAlertMessage="You found the fence! 🏆"
+      wrongAnnouncement="That is not the fence. Try again."
+      wrongAlertMessage="This is not the fence. Try again!"
+      resetAnnouncement="Activity reset. Find the fence in the park scene."
+      showAnswerAnnouncement="The fence is highlighted."
+    />
   );
 };
 

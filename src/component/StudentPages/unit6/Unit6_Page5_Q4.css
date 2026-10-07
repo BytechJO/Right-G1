@@ -1,0 +1,81 @@
+/* =====================================================
+   LETTER KEYBOARD
+===================================================== */
+
+.drag-letter {
+  outline: none;
+}
+
+.drag-letter:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-letter-selected {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   SLOT KEYBOARD
+===================================================== */
+
+.drop-slot {
+  outline: none;
+}
+
+.drop-slot:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   SLOT PREVIEW
+===================================================== */
+
+.keyboard-slot-preview {
+  background: #dbeafe !important;
+  animation: unit6PuzzlePreview 1.1s ease-in-out infinite;
+}
+
+@keyframes unit6PuzzlePreview {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-text {
+  outline: none;
+}
+
+.sentence-text[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 6px;
+}
+
+.audio-icon-unit6-p5-q4 {
+  position: absolute;
+
+  top: 0;
+  right: 35%;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
