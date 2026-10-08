@@ -1,0 +1,133 @@
+/* =====================================================
+   BANK KEYBOARD FOCUS
+===================================================== */
+
+.drag-letter {
+  outline: none;
+}
+
+.drag-letter:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   PICKED LETTER
+===================================================== */
+
+.keyboard-picked-letter-unit7-p5-q4 {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   MOUSE DRAGGING
+===================================================== */
+
+.mouse-dragging-letter-unit7-p5-q4 {
+  opacity: 0.65;
+}
+
+/* =====================================================
+   SLOT FOCUS
+===================================================== */
+
+.drop-slot {
+  position: relative;
+
+  outline: none;
+}
+
+.drop-slot:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD SLOT PREVIEW
+===================================================== */
+
+.keyboard-slot-preview-unit7-p5-q4 {
+  animation: blink-puzzle-slot-unit7-p5-q4 1s ease-in-out infinite;
+}
+
+@keyframes blink-puzzle-slot-unit7-p5-q4 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW LETTER
+===================================================== */
+
+.keyboard-preview-letter-unit7-p5-q4 {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: inherit;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 4;
+}
+
+/* =====================================================
+   LOCKED CORRECT SLOT
+===================================================== */
+
+.locked-slot-unit7-p5-q4 {
+  cursor: default;
+}
+
+/* =====================================================
+   COMPLETED SENTENCE AUDIO
+===================================================== */
+
+.completed-sentence-unit7-p5-q4 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.completed-sentence-unit7-p5-q4:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 8px;
+}
+
+/* =====================================================
+   SENTENCE AUDIO ICON
+===================================================== */
+
+.sentence-audio-icon-unit7-p5-q4 {
+  position: absolute;
+
+  top: 6px;
+  right: 8px;
+
+  width: 15px;
+  height: 15px;
+
+  color: #2563eb;
+
+  pointer-events: none;
+
+  z-index: 5;
+}

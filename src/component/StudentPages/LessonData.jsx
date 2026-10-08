@@ -90,6 +90,7 @@ import Unit7_Page5_Q1 from "./unit7/Unit7_Page5_Q1";
 import Unit7_Page5_Q2 from "./unit7/Unit7_Page5_Q2";
 import Unit7_Page5_Q3 from "./unit7/Unit7_Page5_Q3";
 import Unit7_Page5_Q4 from "./unit7/Unit7_Page5_Q4";
+import Unit7_Page6_Q1 from "./unit7/Unit7_Page6_Q1";
 import Unit7_Page6_Q2 from "./unit7/Unit7_Page6_Q2";
 import Unit7_Page6_Q3 from "./unit7/Unit7_Page6_Q3";
 
@@ -239,6 +240,7 @@ export const lessons = [
   { component: Unit7_Page5_Q2, unit: 7 }, //74
   { component: Unit7_Page5_Q3, unit: 7 }, //75
   { component: Unit7_Page5_Q4, unit: 7 }, //76
+  { component: Unit7_Page6_Q1, unit: 7 }, //77
   { component: Unit7_Page6_Q2, unit: 7 }, //77
   { component: Unit7_Page6_Q3, unit: 7, lastOfUnit: true }, //78
 

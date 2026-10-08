@@ -151,4 +151,88 @@
   
    
 }
+}/* =====================================================
+   IMAGE KEYBOARD FOCUS
+===================================================== */
+
+.matched-img2 {
+  outline: none;
+}
+
+.matched-img2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   WORD KEYBOARD FOCUS
+===================================================== */
+
+.h5-unit6-p5-q2 {
+  outline: none;
+}
+
+.h5-unit6-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-unit7-p6-q2 {
+  position: absolute;
+
+  top: -8px;
+  right: -10px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   SVG
+===================================================== */
+
+.lines-layer2 {
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* =====================================================
+   WRONG X
+===================================================== */
+
+.error-mark-img-unit7-p6-q2 {
+  position: absolute;
+
+  top: -9px;
+  right: -10px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: red;
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  z-index: 20;
 }

@@ -59,15 +59,15 @@ const Unit7_Page2 = ({ openPopup }) => {
   ];
 
   const captions = [
-    { start: 0, end: 3.56, text: "Page 59. Listen, read, and repeat." },
+    { start: 0, end: 3.7, text: "Page 59. Listen, read, and repeat." },
     {
-      start: 3.6,
-      end: 5.18,
+      start: 4.52,
+      end: 5.24,
       text: "I'm happy.",
     },
     {
-      start: 5.2,
-      end: 6.78,
+      start: 6.02,
+      end: 6.88,
       text: " I am happy too",
     },
   ];
@@ -75,7 +75,13 @@ const Unit7_Page2 = ({ openPopup }) => {
     { start: 0, end: 3.33, text: "Page 59. Listen and read along. " },
     { start: 3.5, end: 7.65, text: "W. Water, window, woman." },
   ];
-
+  const soundLabels = {
+    1: "Scared",
+    2: "Crawl",
+    3: "Sad",
+    4: "Broken",
+    5: "Happy",
+  };
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 33.3, y1: 25.7, sound: 1, isPrimary: true },
@@ -149,35 +155,43 @@ const Unit7_Page2 = ({ openPopup }) => {
         style={{ display: "block" }}
       /> */}
       {areas.map((area, index) => {
-        const isActive = activeId === `p59-${area.sound}`;
+        const areaId = `p59-${area.sound}`;
+        const isActive = activeId === areaId;
 
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
         if (area.isPrimary) {
           return (
             <div
               key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
               style={{
                 left: `${area.x1}%`,
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                playSound(sounds[area.sound], `p59-${area.sound}`);
+                playSound(sounds[area.sound], areaId);
               }}
-            ></div>
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+
+                  playSound(sounds[area.sound], areaId);
+                }
+              }}
+            />
           );
         }
 
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
         return (
           <div
             key={index}
             className="clickable-area"
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: `${area.x1}%`,
@@ -186,12 +200,11 @@ const Unit7_Page2 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-              playSound(sounds[area.sound], `p59-${area.sound}`);
+              playSound(sounds[area.sound], areaId);
             }}
-          ></div>
+          />
         );
       })}
-
       <div
         className="headset-icon-CD-unit7-page2-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -200,16 +213,37 @@ const Unit7_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open I'm happy audio"
           onClick={() =>
             openPopup(
               "audio",
               <AudioWithCaption
                 src={Pg11_1_1_Stella}
                 captions={captionsExample}
+                pageId="unit7-page59-main-audio"
               />,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <AudioWithCaption
+                  src={Pg11_1_1_Stella}
+                  captions={captionsExample}
+                  pageId="unit7-page59-main-audio"
+                />,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -229,21 +263,49 @@ const Unit7_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Listen, read, and repeat activity"
           onClick={() =>
             openPopup(
               "html",
               <FourImagesWithAudio
                 images={[read, repeat1, repeat2]}
                 audioSrc={soundListen}
-                checkpoints={[0, 4.3, 5.18]}
+                checkpoints={[0, 4.4, 6.02]}
                 popupOpen={true}
-                titleQ={`Listen, read, and repeat.`}
+                titleQ="Listen, read, and repeat."
                 audioArr={imageSounds2}
                 captions={captions}
+                pageId="unit7-page59-repeat"
+                subHeader="Press Play, then tap each card to hear it again."
               />,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[read, repeat1, repeat2]}
+                  audioSrc={soundListen}
+                  checkpoints={[0, 4.4, 6.02]}
+                  popupOpen={true}
+                  titleQ="Listen, read, and repeat."
+                  audioArr={imageSounds2}
+                  captions={captions}
+                  pageId="unit7-page59-repeat"
+                  subHeader="Press Play, then tap each card to hear it again."
+                />,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -263,6 +325,9 @@ const Unit7_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Listen and read along activity"
           onClick={() =>
             openPopup(
               "html",
@@ -271,13 +336,38 @@ const Unit7_Page2 = ({ openPopup }) => {
                 audioSrc={longsound}
                 checkpoints={[0, 4.37, 5.29, 6.19, 6.77]}
                 popupOpen={true}
-                titleQ={"Listen and read along."}
+                titleQ="Listen and read along."
                 audioArr={imageSounds}
                 captions={captions2}
+                pageId="unit7-page59-listen"
+                subHeader="Press Play, follow the w words, then tap each card to hear it again."
               />,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[Rabbit, img1, img2, img3, img4]}
+                  audioSrc={longsound}
+                  checkpoints={[0, 4.37, 5.29, 6.19, 6.77]}
+                  popupOpen={true}
+                  titleQ="Listen and read along."
+                  audioArr={imageSounds}
+                  captions={captions2}
+                  pageId="unit7-page59-listen"
+                  subHeader="Press Play, follow the w words, then tap each card to hear it again."
+                />,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
