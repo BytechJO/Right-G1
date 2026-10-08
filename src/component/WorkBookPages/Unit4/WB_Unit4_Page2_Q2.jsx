@@ -205,6 +205,10 @@ const DroppableInput = ({
     disabled: locked || showAnswer || checkCompleted,
   });
 
+  /* =========================================
+     KEYBOARD DROP MODE
+  ========================================= */
+
   const keyboardDropActive =
     !!keyboardPickedItem &&
     keyboardPickedItem.qId === qId &&
@@ -212,14 +216,14 @@ const DroppableInput = ({
     !showAnswer &&
     !checkCompleted;
 
-  /*
-    بعد Check:
-    الصف الغلط كامل يضل بالـTab.
-    Enter عليه يرجع كل الكلمات للبنك.
-  */
+  /* =========================================
+     UPDATED DRAG PATTERN
 
-  const canFixWrong =
-    isWrong &&
+     أي row فيه كلمات ولسا editable
+     يضل reachable بالـTab حتى قبل Check.
+  ========================================= */
+
+  const canEditFilled =
     value.length > 0 &&
     !keyboardPickedItem &&
     !locked &&
@@ -228,10 +232,10 @@ const DroppableInput = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG ROW AFTER CHECK
+       FILLED ROW → RETURN ALL WORDS TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
 
       e.stopPropagation();
@@ -247,7 +251,7 @@ const DroppableInput = ({
 
     /* =========================================
        ENTER / SPACE
-       أضف الكلمة للجملة
+       ADD WORD TO SENTENCE
     ========================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -289,15 +293,19 @@ const DroppableInput = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
         aria-label={
           keyboardDropActive
             ? `Sentence answer for question ${qId}. Press Enter or Space to add ${keyboardPickedItem.word}.`
-            : canFixWrong
-              ? `The sentence is incorrect. Press Enter or Space to return all words to this question's word bank.`
+            : canEditFilled
+              ? `Sentence answer for question ${qId} contains ${value
+                  .map((item) => item.word)
+                  .join(
+                    " ",
+                  )}. Press Enter or Space to return all words to this question's word bank.`
               : `Sentence answer for question ${qId}.`
         }
         onKeyDown={handleKeyDown}
@@ -319,7 +327,7 @@ const DroppableInput = ({
 
           padding: "4px 8px",
 
-          cursor: canFixWrong ? "pointer" : "default",
+          cursor: canEditFilled ? "pointer" : "default",
         }}
       >
         {/* =====================================
@@ -369,7 +377,6 @@ const DroppableInput = ({
     </div>
   );
 };
-
 /* =====================================================
    MAIN COMPONENT
 ===================================================== */

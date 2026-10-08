@@ -190,9 +190,15 @@ const DroppableSlot = ({
   const keyboardActive =
     !!keyboardPickedWord && !isLocked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
+  /* =========================================
+     UPDATED DRAG PATTERN
+
+     أي slot فيه value ولسا editable
+     يضل reachable بالـTab حتى قبل Check
+  ========================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedWord &&
     !isLocked &&
     !showAnswer &&
@@ -204,10 +210,10 @@ const DroppableSlot = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG SLOT → RETURN LETTER TO BANK
+       FILLED SLOT → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -255,7 +261,7 @@ const DroppableSlot = ({
     }
 
     /* =========================================
-       PLACE LETTER
+       PLACE / REPLACE LETTER
     ========================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -297,7 +303,7 @@ const DroppableSlot = ({
           tabIndex={
             isLocked || showAnswer || checkCompleted
               ? -1
-              : keyboardActive || canFixWrong
+              : keyboardActive || canEditFilled
                 ? 0
                 : -1
           }
@@ -306,8 +312,8 @@ const DroppableSlot = ({
               ? value
                 ? `Blank ${index + 1} contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
                 : `Blank ${index + 1}. Press Enter or Space to place ${keyboardPickedWord}.`
-              : canFixWrong
-                ? `${value} is incorrect in blank ${index + 1}. Press Enter or Space to return it to the letter bank.`
+              : canEditFilled
+                ? `Blank ${index + 1} contains ${value}. Press Enter or Space to return it to the letter bank.`
                 : value
                   ? `Blank ${index + 1} contains ${value}.`
                   : `Empty blank ${index + 1}.`
@@ -381,7 +387,6 @@ const DroppableSlot = ({
     </div>
   );
 };
-
 /* =====================================================
    MAIN COMPONENT
 ===================================================== */

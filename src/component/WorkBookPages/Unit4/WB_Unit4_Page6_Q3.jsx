@@ -250,7 +250,6 @@ const DraggableWord = ({
 /* =====================================================
    DROP BLANK
 ===================================================== */
-
 const DroppableBlank = ({
   droppableId,
 
@@ -284,13 +283,14 @@ const DroppableBlank = ({
   const keyboardDropActive =
     !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedWord &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =================================================
+     UPDATED DRAG PATTERN
+     أي blank معبّى ولسا editable
+     يضل reachable بالـTab حتى قبل Check
+  ================================================= */
+
+  const canEditFilled =
+    !!value && !keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedDropId === droppableId;
 
@@ -298,10 +298,10 @@ const DroppableBlank = ({
 
   const handleKeyDown = (e) => {
     /* =================================================
-       WRONG ANSWER → RETURN TO BANK
+       FILLED ANSWER → RETURN TO BANK
     ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -315,7 +315,7 @@ const DroppableBlank = ({
     }
 
     /* =================================================
-       TAB BETWEEN TARGETS
+       TAB / SHIFT TAB BETWEEN TARGETS
     ================================================= */
 
     if (e.key === "Tab") {
@@ -349,7 +349,7 @@ const DroppableBlank = ({
     }
 
     /* =================================================
-       DROP
+       DROP / REPLACE
     ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -385,7 +385,7 @@ const DroppableBlank = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
@@ -394,8 +394,8 @@ const DroppableBlank = ({
             ? value
               ? `Blank currently contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
               : `Empty blank. Press Enter or Space to place ${keyboardPickedWord}.`
-            : canFixWrong
-              ? `${value} is incorrect. Press Enter or Space to return it to the word bank.`
+            : canEditFilled
+              ? `Blank containing ${value}. Press Enter or Space to return it to the word bank.`
               : value
                 ? `Blank containing ${value}.`
                 : "Empty blank."

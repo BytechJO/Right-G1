@@ -255,13 +255,14 @@ const DroppableInput = ({
   const keyboardDropActive =
     !!keyboardPickedItem && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedItem &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =========================================
+     UPDATED DRAG PATTERN
+     أي answer معبّى ولسا editable
+     يضل reachable بالـTab حتى قبل Check
+  ========================================= */
+
+  const canEditFilled =
+    !!value && !keyboardPickedItem && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedSlotId === droppableId;
 
@@ -271,10 +272,10 @@ const DroppableInput = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG SLOT AFTER CHECK
+       FILLED SLOT → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -322,7 +323,7 @@ const DroppableInput = ({
     }
 
     /* =========================================
-       ENTER / SPACE
+       ENTER / SPACE → PLACE / REPLACE
     ========================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -363,17 +364,17 @@ const DroppableInput = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
         aria-label={
           keyboardDropActive
             ? value
-              ? `Answer contains ${value.word}. Press Enter to replace it with ${keyboardPickedItem.word}.`
-              : `Empty answer. Press Enter to place ${keyboardPickedItem.word}.`
-            : canFixWrong
-              ? `${value.word} is incorrect. Press Enter to return it to the word bank.`
+              ? `Answer contains ${value.word}. Press Enter or Space to replace it with ${keyboardPickedItem.word}.`
+              : `Empty answer. Press Enter or Space to place ${keyboardPickedItem.word}.`
+            : canEditFilled
+              ? `Answer contains ${value.word}. Press Enter or Space to return it to the word bank.`
               : value
                 ? `Answer contains ${value.word}.`
                 : "Empty answer."
@@ -383,7 +384,9 @@ const DroppableInput = ({
             setFocusedSlotId(droppableId);
           }
         }}
-        onBlur={() => setFocusedSlotId(null)}
+        onBlur={() => {
+          setFocusedSlotId(null);
+        }}
         onKeyDown={handleKeyDown}
         className={`answer-input-wrapper-wb-unit4-p2-q1 ${
           showPreview ? "keyboard-drop-preview-wb-unit4-p2-q1" : ""

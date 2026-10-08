@@ -325,14 +325,15 @@ const DroppableBlank = ({
   const keyboardActive =
     !!keyboardPickedWord && !isLocked && !showAnswer && !checkCompleted;
 
-  /*
-    بعد Check:
-    الـWrong slot يضل Tab reachable
-  */
+  /* =========================================
+     UPDATED DRAG PATTERN
 
-  const canFixWrong =
+     أي blank فيه value ولسا editable
+     يضل بالـTab حتى قبل Check
+  ========================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedWord &&
     !isLocked &&
     !showAnswer &&
@@ -344,10 +345,10 @@ const DroppableBlank = ({
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG ITEM → RETURN TO BANK
+       FILLED ITEM → RETURN TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -395,7 +396,7 @@ const DroppableBlank = ({
     }
 
     /* =========================================
-       PLACE
+       PLACE / REPLACE
     ========================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -430,7 +431,7 @@ const DroppableBlank = ({
       tabIndex={
         isLocked || showAnswer || checkCompleted
           ? -1
-          : keyboardActive || canFixWrong
+          : keyboardActive || canEditFilled
             ? 0
             : -1
       }
@@ -439,8 +440,8 @@ const DroppableBlank = ({
           ? value
             ? `Answer blank contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
             : `Empty answer blank. Press Enter or Space to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${value} is incorrect. Press Enter or Space to return it to the word bank.`
+          : canEditFilled
+            ? `Answer blank contains ${value}. Press Enter or Space to return it to the word bank.`
             : value
               ? `Answer blank containing ${value}.`
               : "Empty answer blank."
@@ -499,7 +500,6 @@ const DroppableBlank = ({
     </span>
   );
 };
-
 /* =====================================================
    MAIN
 ===================================================== */

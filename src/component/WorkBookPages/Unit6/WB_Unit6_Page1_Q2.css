@@ -81,3 +81,45 @@
     height: 65px;
   }
 }
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.grammar-table-wb-u6-p1-q2 td[role="button"] {
+  outline: none;
+}
+
+.grammar-table-wb-u6-p1-q2 td[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -4px;
+}
+
+/* =====================================================
+   OPTION AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-u6-p1-q2 {
+  position: absolute;
+
+  right: 8px;
+  top: 8px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   SENTENCE AUDIO ICON
+===================================================== */
+
+.sentence-audio-icon-wb-u6-p1-q2 {
+  position: absolute;
+
+  right: 8px;
+  top: 8px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}

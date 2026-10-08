@@ -368,16 +368,23 @@ const DroppableInputBlank = ({
     disabled: locked || showAnswer || checkCompleted,
   });
 
+  /* =====================================================
+     KEYBOARD DROP MODE
+  ===================================================== */
+
   const keyboardDropActive =
     !!keyboardPickedItem && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!value &&
-    isWrong &&
-    !keyboardPickedItem &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =====================================================
+     UPDATED DRAG PATTERN
+
+     أي blank معبّى ولسا مش locked
+     يضل reachable بالـTab
+     حتى قبل Check
+  ===================================================== */
+
+  const canEditFilled =
+    !!value && !keyboardPickedItem && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedSlotId === droppableId;
 
@@ -385,14 +392,17 @@ const DroppableInputBlank = ({
     ? keyboardPickedItem.word
     : value?.word || "";
 
+  /* =====================================================
+     KEYBOARD
+  ===================================================== */
+
   const handleKeyDown = (e) => {
-    /* =========================================
-       WRONG SLOT AFTER CHECK
-    ========================================= */
+    /* =================================================
+       FILLED SLOT → RETURN TO BANK
+    ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
-
       e.stopPropagation();
 
       onKeyboardClearWrong(qIndex, pIndex, value);
@@ -404,13 +414,12 @@ const DroppableInputBlank = ({
       return;
     }
 
-    /* =========================================
+    /* =================================================
        TAB / SHIFT TAB
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Tab") {
       e.preventDefault();
-
       e.stopPropagation();
 
       const available = getAvailableSlotIds();
@@ -439,13 +448,12 @@ const DroppableInputBlank = ({
       return;
     }
 
-    /* =========================================
-       ENTER / SPACE
-    ========================================= */
+    /* =================================================
+       ENTER / SPACE → PLACE / REPLACE
+    ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-
       e.stopPropagation();
 
       onKeyboardDrop(qIndex, pIndex);
@@ -453,13 +461,12 @@ const DroppableInputBlank = ({
       return;
     }
 
-    /* =========================================
+    /* =================================================
        ESCAPE
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Escape") {
       e.preventDefault();
-
       e.stopPropagation();
 
       onCancelKeyboardPick();
@@ -482,17 +489,17 @@ const DroppableInputBlank = ({
         tabIndex={
           locked || showAnswer || checkCompleted
             ? -1
-            : keyboardDropActive || canFixWrong
+            : keyboardDropActive || canEditFilled
               ? 0
               : -1
         }
         aria-label={
           keyboardDropActive
             ? value
-              ? `Blank currently contains ${value.word}. Press Enter to replace it with ${keyboardPickedItem.word}.`
-              : `Empty blank. Press Enter to place ${keyboardPickedItem.word}.`
-            : canFixWrong
-              ? `${value.word} is incorrect. Press Enter to return it to the word bank.`
+              ? `Blank currently contains ${value.word}. Press Enter or Space to replace it with ${keyboardPickedItem.word}.`
+              : `Empty blank. Press Enter or Space to place ${keyboardPickedItem.word}.`
+            : canEditFilled
+              ? `Blank contains ${value.word}. Press Enter or Space to return it to the word bank.`
               : value
                 ? `Blank contains ${value.word}.`
                 : "Empty blank."
@@ -502,7 +509,9 @@ const DroppableInputBlank = ({
             setFocusedSlotId(droppableId);
           }
         }}
-        onBlur={() => setFocusedSlotId(null)}
+        onBlur={() => {
+          setFocusedSlotId(null);
+        }}
         onKeyDown={handleKeyDown}
         className={`inline-input-wrapper-wb-unit4-p1-q2 ${
           showPreview ? "keyboard-drop-preview-wb-unit4-p1-q2" : ""
@@ -541,7 +550,6 @@ const DroppableInputBlank = ({
     </span>
   );
 };
-
 /* =====================================================
    MAIN
 ===================================================== */

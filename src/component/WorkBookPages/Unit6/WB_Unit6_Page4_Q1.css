@@ -21,18 +21,86 @@
   margin-bottom: 12px;
 }
 .wb-unit6-p4-q1-text {
-    font-size: 20px;
+  font-size: 20px;
 }
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .wb-unit6-p4-q1-img {
     width: 130px;
   }
-.wb-unit6-p4-q1-text {
+  .wb-unit6-p4-q1-text {
     font-size: 16px;
-}
-.wb-unit6-p4-q1-grid {
-   
+  }
+  .wb-unit6-p4-q1-grid {
     gap: 0px;
- 
+  }
 }
+/* =====================================================
+   QUESTION AUDIO
+===================================================== */
+
+.wb-unit6-p4-q1-audio-text {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.wb-unit6-p4-q1-audio-text:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.audio-icon-wb-unit6-p4-q1 {
+  position: absolute;
+
+  top: 0;
+  right: -20px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* =====================================================
+   OPTION AUDIO
+===================================================== */
+
+.wb-unit6-p4-q1-option-text {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.wb-unit6-p4-q1-option-text:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+
+.audio-icon-option-wb-unit6-p4-q1 {
+  position: absolute;
+
+  top: 0;
+  right: -20px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* =====================================================
+   SELECT BOX KEYBOARD FOCUS
+===================================================== */
+
+.review3-p1-q3-input {
+  outline: none;
+}
+
+.review3-p1-q3-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
 }

@@ -293,20 +293,24 @@ const DroppableLabelBox = ({
 
   const { setNodeRef, isOver } = useDroppable({
     id: droppableId,
-
     disabled: locked || showAnswer || checkCompleted,
   });
+
+  /* =================================================
+     KEYBOARD DROP MODE
+  ================================================= */
 
   const keyboardDropActive =
     !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
-  const canFixWrong =
-    !!label &&
-    isWrong &&
-    !keyboardPickedWord &&
-    !locked &&
-    !showAnswer &&
-    !checkCompleted;
+  /* =================================================
+     UPDATED DRAG PATTERN
+     أي label box معبّى ولسا مش locked
+     يضل reachable بالـTab حتى قبل Check
+  ================================================= */
+
+  const canEditFilled =
+    !!label && !keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
 
   const showPreview = keyboardDropActive && focusedDropId === droppableId;
 
@@ -314,10 +318,10 @@ const DroppableLabelBox = ({
 
   const handleKeyDown = (e) => {
     /* =================================================
-       WRONG ANSWER AFTER CHECK
+       FILLED BOX → RETURN WORD TO BANK
     ================================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (canEditFilled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -365,7 +369,7 @@ const DroppableLabelBox = ({
     }
 
     /* =================================================
-       DROP
+       ENTER / SPACE → DROP / REPLACE
     ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
@@ -378,7 +382,7 @@ const DroppableLabelBox = ({
     }
 
     /* =================================================
-       CANCEL
+       ESCAPE
     ================================================= */
 
     if (e.key === "Escape") {
@@ -400,7 +404,7 @@ const DroppableLabelBox = ({
       tabIndex={
         locked || showAnswer || checkCompleted
           ? -1
-          : keyboardDropActive || canFixWrong
+          : keyboardDropActive || canEditFilled
             ? 0
             : -1
       }
@@ -409,8 +413,8 @@ const DroppableLabelBox = ({
           ? label
             ? `${shapeNames[shapeKey]} currently contains ${label}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
             : `${shapeNames[shapeKey]} label box. Press Enter or Space to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${label} is incorrect for ${shapeNames[shapeKey]}. Press Enter or Space to clear it and return to ${label} in the word bank.`
+          : canEditFilled
+            ? `${shapeNames[shapeKey]} currently contains ${label}. Press Enter or Space to return ${label} to the word bank.`
             : label
               ? `${shapeNames[shapeKey]} labeled ${label}.`
               : `${shapeNames[shapeKey]} label box.`
@@ -467,7 +471,6 @@ const DroppableLabelBox = ({
     </div>
   );
 };
-
 /* =====================================================
    MAIN COMPONENT
 ===================================================== */

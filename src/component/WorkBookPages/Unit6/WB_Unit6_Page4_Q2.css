@@ -1,0 +1,285 @@
+/* =====================================================
+   KEYBOARD DROP PREVIEW - BLINK
+===================================================== */
+
+.keyboard-drop-preview-wb-unit6-p4-q2 {
+  animation: blink-drop-wb-unit6-p4-q2 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-drop-wb-unit6-p4-q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   DROP INPUT FOCUS
+===================================================== */
+
+.answer-input-wb-unit6-p4-q2 {
+  outline: none;
+}
+
+.answer-input-wb-unit6-p4-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   BANK AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit6-p4-q2 {
+  position: absolute;
+
+  top: 50%;
+  right: 5px;
+
+  transform: translateY(-50%);
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   CORRECT FULL SECTION
+===================================================== */
+
+.completed-section-wb-unit6-p4-q2 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.completed-section-wb-unit6-p4-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   FULL SECTION AUDIO ICON
+===================================================== */
+
+.full-audio-icon-wb-unit6-p4-q2 {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  width: 15px;
+  height: 15px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+/* =====================================================
+   REMOVE INNER DROP BORDER
+===================================================== */
+
+.answer-input-wb-unit6-p4-q2 {
+  outline: none;
+}
+.error-mark-input1 {
+  top: 0;
+}
+/* =====================================================
+   DROP FOCUS
+===================================================== */
+
+.answer-input-wb-unit6-p4-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD DRAG PREVIEW - BLINK
+===================================================== */
+
+.keyboard-drop-preview-wb-unit6-p4-q2 {
+  animation: blink-drop-wb-unit6-p4-q2 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-drop-wb-unit6-p4-q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   BANK AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit6-p4-q2 {
+  position: absolute;
+
+  top: 50%;
+  right: 5px;
+
+  transform: translateY(-50%);
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   COMPLETE CORRECT SECTION
+===================================================== */
+
+.completed-section-wb-unit6-p4-q2 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.completed-section-wb-unit6-p4-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 5px;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   COMPLETE SECTION AUDIO ICON
+===================================================== */
+
+.full-audio-icon-wb-unit6-p4-q2 {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  width: 15px;
+  height: 15px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+.answer-input-wb-unit6-p4-q2 {
+  position: relative;
+
+  width: 100%;
+  min-height: 32px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 6px;
+
+  box-sizing: border-box;
+
+  outline: none;
+}
+
+/* القيمة الحقيقية */
+.drop-real-value-wb-unit6-p4-q2 {
+  position: relative;
+  z-index: 1;
+
+  font-size: 18px;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.drop-preview-value-wb-unit6-p4-q2 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  padding: 3px 10px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  animation: blink-preview-wb-unit6-p4-q2 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-wb-unit6-p4-q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* الخلفية تبعت الخانة أثناء الاختيار */
+.keyboard-drop-preview-wb-unit6-p4-q2 {
+  background: rgba(219, 234, 254, 0.45);
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+.mouse-drag-overlay-wb-unit6-p4-q2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  max-width: 220px;
+
+  padding: 3px 10px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
+
+  transform: translateY(-12px);
+}

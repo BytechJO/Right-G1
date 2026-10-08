@@ -249,31 +249,49 @@ const DroppableCell = ({
   });
 
   const keyboardDropActive =
-    !!keyboardPickedWord && !locked && !showAnswer && !checkCompleted;
+    !!keyboardPickedWord &&
+    !locked &&
+    !showAnswer &&
+    !checkCompleted;
 
-  const canFixWrong =
+  /* =========================================
+     UPDATED DRAG PATTERN
+
+     أي cell فيها value ولسا editable
+     تضل reachable بالـTab حتى قبل Check
+  ========================================= */
+
+  const canEditFilled =
     !!value &&
-    isWrong &&
     !keyboardPickedWord &&
     !locked &&
     !showAnswer &&
     !checkCompleted;
 
-  const showPreview = keyboardDropActive && focusedDropId === droppableId;
+  const showPreview =
+    keyboardDropActive &&
+    focusedDropId === droppableId;
 
-  const displayedValue = showPreview ? keyboardPickedWord : value;
+  const displayedValue = showPreview
+    ? keyboardPickedWord
+    : value;
 
   const handleKeyDown = (e) => {
     /* =========================================
-       WRONG SLOT AFTER CHECK
-       Enter => return word to bank
+       FILLED CELL → RETURN WORD TO BANK
     ========================================= */
 
-    if (canFixWrong && (e.key === "Enter" || e.key === " ")) {
+    if (
+      canEditFilled &&
+      (e.key === "Enter" || e.key === " ")
+    ) {
       e.preventDefault();
       e.stopPropagation();
 
-      onKeyboardClearWrong(droppableId, value);
+      onKeyboardClearWrong(
+        droppableId,
+        value,
+      );
 
       return;
     }
@@ -283,54 +301,70 @@ const DroppableCell = ({
     }
 
     /* =========================================
-       TAB BETWEEN DROP TARGETS
+       TAB / SHIFT TAB BETWEEN DROP TARGETS
     ========================================= */
 
     if (e.key === "Tab") {
       e.preventDefault();
       e.stopPropagation();
 
-      const available = getAvailableDropIds();
+      const available =
+        getAvailableDropIds();
 
       if (!available.length) {
         return;
       }
 
-      const currentIndex = available.indexOf(droppableId);
+      const currentIndex =
+        available.indexOf(
+          droppableId,
+        );
 
       let nextIndex;
 
       if (e.shiftKey) {
-        nextIndex = currentIndex <= 0 ? available.length - 1 : currentIndex - 1;
+        nextIndex =
+          currentIndex <= 0
+            ? available.length - 1
+            : currentIndex - 1;
       } else {
         nextIndex =
-          currentIndex === -1 || currentIndex === available.length - 1
+          currentIndex === -1 ||
+          currentIndex === available.length - 1
             ? 0
             : currentIndex + 1;
       }
 
-      const nextId = available[nextIndex];
+      const nextId =
+        available[nextIndex];
 
-      dropRefs.current[nextId]?.focus();
+      dropRefs.current[
+        nextId
+      ]?.focus();
 
       return;
     }
 
     /* =========================================
-       PLACE
+       ENTER / SPACE → PLACE / REPLACE
     ========================================= */
 
-    if (e.key === "Enter" || e.key === " ") {
+    if (
+      e.key === "Enter" ||
+      e.key === " "
+    ) {
       e.preventDefault();
       e.stopPropagation();
 
-      onKeyboardDrop(droppableId);
+      onKeyboardDrop(
+        droppableId,
+      );
 
       return;
     }
 
     /* =========================================
-       CANCEL
+       ESCAPE
     ========================================= */
 
     if (e.key === "Escape") {
@@ -346,58 +380,96 @@ const DroppableCell = ({
       ref={(el) => {
         setNodeRef(el);
 
-        dropRefs.current[droppableId] = el;
+        dropRefs.current[
+          droppableId
+        ] = el;
       }}
+
       role="button"
+
       tabIndex={
-        locked || showAnswer || checkCompleted
+        locked ||
+        showAnswer ||
+        checkCompleted
           ? -1
-          : keyboardDropActive || canFixWrong
+          : keyboardDropActive || canEditFilled
             ? 0
             : -1
       }
+
       aria-label={
         keyboardDropActive
           ? value
             ? `This box currently contains ${value}. Press Enter or Space to replace it with ${keyboardPickedWord}.`
             : `Empty answer box. Press Enter or Space to place ${keyboardPickedWord}.`
-          : canFixWrong
-            ? `${value} is incorrect. Press Enter or Space to return it to the word bank.`
+          : canEditFilled
+            ? `Answer box containing ${value}. Press Enter or Space to return it to the word bank.`
             : value
               ? `Answer box containing ${value}.`
               : "Empty answer box."
       }
-      className={`input-cell-wb-unit4-p6-q2 ${isOver ? "drag-over-cell" : ""} ${
-        showPreview ? "keyboard-drop-preview-wb-unit4-p6-q2" : ""
+
+      className={`input-cell-wb-unit4-p6-q2 ${
+        isOver
+          ? "drag-over-cell"
+          : ""
+      } ${
+        showPreview
+          ? "keyboard-drop-preview-wb-unit4-p6-q2"
+          : ""
       }`}
+
       onFocus={() => {
         if (keyboardDropActive) {
-          setFocusedDropId(droppableId);
+          setFocusedDropId(
+            droppableId,
+          );
         }
       }}
+
       onBlur={() => {
         setFocusedDropId(null);
       }}
+
       onKeyDown={handleKeyDown}
+
       onClick={() => {
-        if (value && !locked && !showAnswer && !checkCompleted) {
-          onRemove(droppableId);
+        if (
+          value &&
+          !locked &&
+          !showAnswer &&
+          !checkCompleted
+        ) {
+          onRemove(
+            droppableId,
+          );
         }
       }}
+
       style={{
         position: "relative",
 
-        background: isOver ? "#e3f2fd" : "",
+        background: isOver
+          ? "#e3f2fd"
+          : "",
 
         cursor:
-          value && !locked && !showAnswer && !checkCompleted
+          value &&
+          !locked &&
+          !showAnswer &&
+          !checkCompleted
             ? "pointer"
             : "default",
 
-        transition: "background 0.15s ease",
+        transition:
+          "background 0.15s ease",
       }}
+
       title={
-        value && !locked && !showAnswer && !checkCompleted
+        value &&
+        !locked &&
+        !showAnswer &&
+        !checkCompleted
           ? "Click to remove"
           : ""
       }
@@ -405,7 +477,10 @@ const DroppableCell = ({
       {displayedValue}
 
       {isWrong && value && (
-        <span className="wrong-x-circle-wb-u1-p8-q2" aria-hidden="true">
+        <span
+          className="wrong-x-circle-wb-u1-p8-q2"
+          aria-hidden="true"
+        >
           ✕
         </span>
       )}
