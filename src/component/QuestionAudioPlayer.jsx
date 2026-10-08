@@ -185,16 +185,48 @@ export default function QuestionAudioPlayer({
     return () => clearInterval(timer);
   }, [activeIndex]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     const audio = audioRef.current;
+
     if (!audio) return;
 
     if (audio.paused) {
-      audio.play();
-      setPaused(false);
-      setIsPlaying(true);
+      // New playback after the audio has finished
+      if (audioFinishedRef.current) {
+        audioFinishedRef.current = false;
+        resumedFromStorageRef.current = false;
+
+        audio.currentTime = 0;
+
+        setCurrent(0);
+        setActiveIndex(null);
+        setShowContinue(false);
+      }
+
+      try {
+        await audio.play();
+
+        setPaused(false);
+        setIsPlaying(true);
+      } catch (error) {
+        setPaused(true);
+        setIsPlaying(false);
+        console.error("Audio playback failed:", error);
+      }
     } else {
       audio.pause();
+
+      // Save the current position immediately on Pause
+      if (
+        AUDIO_TIME_KEY &&
+        !audioFinishedRef.current &&
+        audio.currentTime > 0 &&
+        Number.isFinite(audio.duration) &&
+        audio.currentTime < audio.duration
+      ) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
       setPaused(true);
       setIsPlaying(false);
     }
@@ -247,15 +279,20 @@ export default function QuestionAudioPlayer({
             ref={audioRef}
             src={src}
             onTimeUpdate={(e) => {
-              const time = e.target.currentTime;
+              const audio = e.currentTarget;
+              const time = audio.currentTime;
 
               setCurrent(time);
               updateCaption(time);
 
-              if (!audioFinishedRef.current) {
-                if (AUDIO_TIME_KEY) {
-                  localStorage.setItem(AUDIO_TIME_KEY, String(time));
-                }
+              if (
+                AUDIO_TIME_KEY &&
+                !audioFinishedRef.current &&
+                time > 0 &&
+                Number.isFinite(audio.duration) &&
+                time < audio.duration
+              ) {
+                localStorage.setItem(AUDIO_TIME_KEY, String(time));
               }
             }}
             onLoadedMetadata={(e) => setDuration(e.target.duration)}

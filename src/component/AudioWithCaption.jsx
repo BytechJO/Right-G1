@@ -46,14 +46,44 @@ const AudioWithCaption = ({
   };
 
   // تشغيل/إيقاف
-  const togglePlay = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-      if (captions) setShowCaption(true);
+  const togglePlay = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    // PAUSE
+    if (!audio.paused) {
+      audio.pause();
+      setIsPlaying(false);
+
+      if (
+        AUDIO_TIME_KEY &&
+        !audioFinishedRef.current &&
+        audio.currentTime > 0 &&
+        audio.currentTime < audio.duration
+      ) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
+      return;
     }
-    setIsPlaying(!isPlaying);
+
+    // PLAY
+    // Reset finished status when starting again
+    audioFinishedRef.current = false;
+    hasStartedPlaybackRef.current = true;
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+
+      if (captions?.length > 0) {
+        setShowCaption(true);
+      }
+    } catch (error) {
+      setIsPlaying(false);
+      console.error("Audio playback failed:", error);
+    }
   };
 
   // إغلاق settings عند الضغط خارج
@@ -196,8 +226,9 @@ const AudioWithCaption = ({
       audio.removeEventListener("ended", handleEnded);
     };
   }, [src, AUDIO_TIME_KEY, stopAtSecond]);
-  const handleRestart = () => {
+  const handleRestart = async () => {
     const audio = audioRef.current;
+
     if (!audio) return;
 
     audio.pause();
@@ -213,9 +244,17 @@ const AudioWithCaption = ({
 
     setCurrent(0);
     setActiveIndex(-1);
+    setIsPlaying(false);
 
-    audio.play();
-    setIsPlaying(true);
+    try {
+      await audio.play();
+
+      hasStartedPlaybackRef.current = true;
+      setIsPlaying(true);
+    } catch (error) {
+      setIsPlaying(false);
+      console.error("Audio restart failed:", error);
+    }
   };
   return (
     <div className="audio-popup">
@@ -237,7 +276,9 @@ const AudioWithCaption = ({
               AUDIO_TIME_KEY &&
               !audioFinishedRef.current &&
               hasStartedPlaybackRef.current &&
-              time > 0
+              time > 0 &&
+              Number.isFinite(e.target.duration) &&
+              time < e.target.duration
             ) {
               localStorage.setItem(AUDIO_TIME_KEY, String(time));
             }

@@ -52,9 +52,10 @@ const ModernVocabularyComponent = ({
   // =========================
   const togglePlay = () => {
     const audio = mainAudioRef.current;
+
     if (!audio) return;
 
-    // 🔥 وقف أصوات الكلمات
+    // Stop all word audios
     wordRefs.current.forEach((ref) => {
       if (ref.current) {
         ref.current.pause();
@@ -63,10 +64,34 @@ const ModernVocabularyComponent = ({
     });
 
     if (audio.paused) {
-      audio.play();
-      setIsPlaying(true);
+      // Start a new playback session after audio completion
+      if (audioFinishedRef.current) {
+        audioFinishedRef.current = false;
+        resumedFromStorageRef.current = false;
+        audio.currentTime = 0;
+        setCurrent(0);
+      }
+
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          setIsPlaying(false);
+        });
     } else {
       audio.pause();
+
+      // Save the current position immediately
+      if (
+        AUDIO_TIME_KEY &&
+        !audioFinishedRef.current &&
+        audio.currentTime > 0
+      ) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
       setIsPlaying(false);
     }
   };
@@ -249,10 +274,14 @@ const ModernVocabularyComponent = ({
                       setCurrent(t);
                       updateSync(t);
 
-                      if (!audioFinishedRef.current) {
-                        if (AUDIO_TIME_KEY) {
-                          localStorage.setItem(AUDIO_TIME_KEY, String(t));
-                        }
+                      if (
+                        AUDIO_TIME_KEY &&
+                        !audioFinishedRef.current &&
+                        t > 0 &&
+                        Number.isFinite(e.target.duration) &&
+                        t < e.target.duration
+                      ) {
+                        localStorage.setItem(AUDIO_TIME_KEY, String(t));
                       }
                     }}
                     onLoadedMetadata={(e) => setDuration(e.target.duration)}

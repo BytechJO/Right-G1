@@ -254,11 +254,23 @@ const FourImagesWithAudio = ({
     if (!audio) return;
 
     if (audio.paused) {
+      // إذا الصوت كان منتهي وبلّشنا تشغيل جديد
+      if (audioFinishedRef.current) {
+        audioFinishedRef.current = false;
+        resumedFromStorageRef.current = false;
+      }
+
       audio.play();
       setPaused(false);
       setIsPlaying(true);
     } else {
       audio.pause();
+
+      // حفظ الوقت مباشرة لما نعمل Pause
+      if (AUDIO_TIME_KEY && !audioFinishedRef.current) {
+        localStorage.setItem(AUDIO_TIME_KEY, String(audio.currentTime));
+      }
+
       setPaused(true);
       setIsPlaying(false);
     }

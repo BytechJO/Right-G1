@@ -37,7 +37,7 @@ const Unit8_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 86 })}
+          onClick={() => openPopup("exercise", { startIndex: 87 })}
         >
           <image
             href={arrowBtn}
@@ -59,7 +59,7 @@ const Unit8_Page6 = ({ openPopup }) => {
           height="22"
           viewBox="0 0 90 90"
           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 87 })}
+          onClick={() => openPopup("exercise", { startIndex: 88 })}
         >
           <image
             href={arrowBtn}

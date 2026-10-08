@@ -30,7 +30,7 @@ const Review9_Page2 = ({ openPopup }) => {
              width="22"
              height="22"
              viewBox="0 0 90 90"
-             onClick={() => openPopup("exercise", { startIndex:116})}
+             onClick={() => openPopup("exercise", { startIndex:117})}
              style={{ overflow: "visible" }}
            >
              <image
@@ -51,7 +51,7 @@ const Review9_Page2 = ({ openPopup }) => {
              width="22"
              height="22"
              viewBox="0 0 90 90"
-             onClick={() => openPopup("exercise", { startIndex: 117 })}
+             onClick={() => openPopup("exercise", { startIndex: 118 })}
              style={{ overflow: "visible" }}
            >
              <image
@@ -72,7 +72,7 @@ const Review9_Page2 = ({ openPopup }) => {
              width="22"
              height="22"
              viewBox="0 0 90 90"
-             onClick={() => openPopup("exercise", { startIndex: 118 })}
+             onClick={() => openPopup("exercise", { startIndex: 119 })}
              style={{ overflow: "visible" }}
            >
              <image
