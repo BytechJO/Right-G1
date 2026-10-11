@@ -1,66 +1,331 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import React, { useEffect, useRef, useState } from "react";
+import { FaVolumeUp } from "react-icons/fa";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit7_Page3_Q1.css";
+
 import img1 from "../../../assets/U1 WB/U7/U7P41EXEE-01.svg";
 import img2 from "../../../assets/U1 WB/U7/U7P41EXEE-02.svg";
 import img3 from "../../../assets/U1 WB/U7/U7P41EXEE-03.svg";
 import img4 from "../../../assets/U1 WB/U7/U7P41EXEE-04.svg";
+
+import ExerciseHeader from "../../ExerciseHeader";
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+import sadQuestionAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_001_Are_you_sad.mp3";
+import boredQuestionAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_002_Are_you_bored.mp3";
+import yesIAmAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_003_a_Yes,lam.mp3";
+import noHappyAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_004_b_No,_I'm_not._I'm_happy.mp3";
+import noColdAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_005_b_No,_I'm_not._I'm_cold.mp3";
+import hungryQuestionAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_006_Are_you_hungry.mp3";
+import happyQuestionAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_007_Are_you_happy.mp3";
+import noSadAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_008_No,_I'm_sad.mp3";
+import noScaredAudio from "../../../assets/U1 WB/U7/audio/page 41- E/Item_009_No,_I'm_not._I'm_scared.mp3";
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const items = [
+  {
+    img: img1,
+
+    alt: "A smiling boy reaching toward a colorful ball.",
+
+    text: "Are you sad?",
+
+    questionAudio: sadQuestionAudio,
+
+    options: [
+      {
+        label: "a",
+        text: "Yes, I am.",
+        audio: yesIAmAudio,
+      },
+      {
+        label: "b",
+        text: "No, I’m not. I’m happy.",
+        audio: noHappyAudio,
+      },
+    ],
+
+    correctIndex: 1,
+  },
+
+  {
+    img: img2,
+
+    alt: "A boy sitting on a bench outdoors with a bored expression.",
+
+    text: "Are you bored?",
+
+    questionAudio: boredQuestionAudio,
+
+    options: [
+      {
+        label: "a",
+        text: "Yes, I am.",
+        audio: yesIAmAudio,
+      },
+      {
+        label: "b",
+        text: "No, I’m not. I’m cold.",
+        audio: noColdAudio,
+      },
+    ],
+
+    correctIndex: 0,
+  },
+
+  {
+    img: img3,
+
+    alt: "A boy outdoors thinking about a hamburger and looking hungry.",
+
+    text: "Are you hungry?",
+
+    questionAudio: hungryQuestionAudio,
+
+    options: [
+      {
+        label: "a",
+        text: "Yes, I am.",
+        audio: yesIAmAudio,
+      },
+      {
+        label: "b",
+        text: "No, I’m not. I’m sad.",
+        audio: noSadAudio,
+      },
+    ],
+
+    correctIndex: 0,
+  },
+
+  {
+    img: img4,
+
+    alt: "A girl kneeling on the grass and looking frightened by a spider.",
+
+    text: "Are you happy?",
+
+    questionAudio: happyQuestionAudio,
+
+    options: [
+      {
+        label: "a",
+        text: "Yes, I am.",
+        audio: yesIAmAudio,
+      },
+      {
+        label: "b",
+        text: "No, I’m not. I’m scared.",
+        audio: noScaredAudio,
+      },
+    ],
+
+    correctIndex: 1,
+  },
+];
+
+/* =====================================================
+   COMPONENT
+===================================================== */
+
 const WB_Unit7_Page3_Q1 = () => {
-  const [answers, setAnswers] = useState(Array(4).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+  /* =====================================================
+     STATE
+  ===================================================== */
 
-  // 🔥 الداتا المطابقة للصورة
-  const items = [
-    {
-      img: img1,
-      text: "Are you sad?",
-      options: ["a Yes, I am.", "b No, I’m not. I’m happy."],
-      correctIndex: 1,
-    },
-    {
-      img: img2,
-      text: "Are you bored?",
-      options: ["a Yes, I am.", "b No, I’m not. I’m cold."],
-      correctIndex: 0,
-    },
-    {
-      img: img3,
-      text: "Are you hungry?",
-      options: ["a Yes, I am.", "b No, I’m not. I’m sad."],
-      correctIndex: 0,
-    },
-    {
-      img: img4,
-      text: "Are you happy?",
-      options: ["a Yes, I am.", "b No, I’m not. I’m scared."],
-      correctIndex: 1,
-    },
-  ];
+  const [answers, setAnswers] = useState(Array(items.length).fill(null));
 
-  const handleSelect = (qIndex, optionIndex) => {
-    if (locked ||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    const newAns = [...answers];
-    newAns[qIndex] = optionIndex;
-    setAnswers(newAns);
-    setShowResult(false);
+  /*
+    null | correct | wrong
+  */
+
+  const [results, setResults] = useState(Array(items.length).fill(null));
+
+  const [showAnswerMode, setShowAnswerMode] = useState(false);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
+  const audioRef = useRef(null);
+
+  const [playingKey, setPlayingKey] = useState(null);
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.onended = null;
+
+      audioRef.current.onerror = null;
+
+      audioRef.current = null;
+    }
+
+    setPlayingKey(null);
   };
 
-  const checkAnswers = () => {
-    if (locked||showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please circle all words first.");
+  const playAudio = (key, src) => {
+    if (!src) return;
+
+    stopAudio();
+
+    const audio = new Audio(src);
+
+    audioRef.current = audio;
+
+    setPlayingKey(key);
+
+    audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    });
+
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const isQuestionLocked = (index) =>
+    showAnswerMode || results[index] === "correct";
+
+  const allCorrect = items.every((_, index) => results[index] === "correct");
+
+  /* =====================================================
+     SELECT ANSWER
+  ===================================================== */
+
+  const handleSelect = (qIndex, optionIndex) => {
+    if (showAnswerMode || results[qIndex] === "correct") {
       return;
     }
 
-    let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex
-    ).length;
+    const option = items[qIndex].options[optionIndex];
+
+    /*
+      Mouse/Keyboard select:
+      يشغل صوت الخيار.
+    */
+
+    playAudio(`option-${qIndex}-${optionIndex}`, option.audio);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      updated[qIndex] = optionIndex;
+
+      return updated;
+    });
+
+    /*
+      تعديل نفس السؤال:
+      يشيل wrong state عنه فقط.
+    */
+
+    setResults((prev) => {
+      const updated = [...prev];
+
+      if (updated[qIndex] === "wrong") {
+        updated[qIndex] = null;
+      }
+
+      return updated;
+    });
+  };
+
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
+
+  const checkAnswers = () => {
+    /*
+      بعد الكل صح:
+      Check يظل ظاهر لكن no-op.
+    */
+
+    if (showAnswerMode || allCorrect) {
+      return;
+    }
+
+    const hasEmpty = items.some(
+      (_, index) => results[index] !== "correct" && answers[index] === null,
+    );
+
+    if (hasEmpty) {
+      ValidationAlert.info("Please choose an answer for all questions.");
+
+      return;
+    }
+
+    const nextResults = [...results];
+
+    let correctCount = 0;
+
+    items.forEach((item, index) => {
+      /*
+        سؤال كان صح من Check سابق.
+      */
+
+      if (results[index] === "correct") {
+        nextResults[index] = "correct";
+
+        correctCount++;
+
+        return;
+      }
+
+      if (answers[index] === item.correctIndex) {
+        nextResults[index] = "correct";
+
+        correctCount++;
+      } else {
+        nextResults[index] = "wrong";
+      }
+    });
+
+    setResults(nextResults);
 
     const total = items.length;
 
-    let color =
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
@@ -71,26 +336,46 @@ const WB_Unit7_Page3_Q1 = () => {
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-
-    setShowResult(true);
+    if (correctCount === total) {
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
+  const showAnswers = () => {
+    stopAudio();
+
+    setAnswers(items.map((item) => item.correctIndex));
+
+    setResults(items.map(() => "correct"));
+
+    setShowAnswerMode(true);
+  };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const reset = () => {
-    setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setLocked(false);
-  };
-  const showAnswers = () => {
-    // كل سؤال → نضع correctIndex بدل null
-    const filled = items.map((item) => item.correctIndex);
+    stopAudio();
 
-    setAnswers(filled);
-    setShowResult(true);
-    setLocked(true); // 🔒 قفل الإجابات
+    setAnswers(Array(items.length).fill(null));
+
+    setResults(Array(items.length).fill(null));
+
+    setShowAnswerMode(false);
   };
+
+  /* =====================================================
+     JSX
+  ===================================================== */
 
   return (
     <div
@@ -102,99 +387,223 @@ const WB_Unit7_Page3_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div  className="div-forall"
+      <div
+        className="div-forall"
         style={{
-          gap: "30px",
-         
+          gap: "15px",
         }}
       >
-        <div className="w-full"> 
-          <h5 className="header-title-page8">
-            <span className="ex-A">E</span>Tap or click the correct answer for each picture.
-          </h5>
-        </div>
+          <ExerciseHeader
+            sectionLetter="E"
+            title="Read and circle."
+            subTitle="Look at the expression and tap the answer that matches it."
+          />
+
         <div className="container-review6-p1-q1">
-          {items.map((q, i) => (
-            <div
-              key={i}
-              className="question-box-review6-p1-q1"
-              style={{ width: "100%" }}
-            >
+          {items.map((q, i) => {
+            const locked = isQuestionLocked(i);
+
+            const isQuestionWrong = results[i] === "wrong";
+
+            return (
               <div
+                key={i}
+                className="question-box-review6-p1-q1"
                 style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "80%",
+                  width: "100%",
                 }}
               >
-                <span
+                {/* =================================================
+                      QUESTION TEXT + AUDIO
+                  ================================================= */}
+
+                <div
                   style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
-                    fontWeight: "700",
+                    display: "flex",
+                    gap: "10px",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    width: "80%",
                   }}
                 >
-                  {i + 1}
-                </span>
-                <h6 style={{ fontSize: "20px", fontWeight: "600" }}>
-                 {q.text}
-                </h6>
-              </div>
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
 
-              <div style={{ display: "flex",flexDirection:"column"}}>
-                <div className="img-div-wb-unit7-p3-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-wb-unit7-p3-q1"
-      
-                  />
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Play audio: ${q.text}`}
+                    onClick={() => {
+                      playAudio(`question-${i}`, q.questionAudio);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        playAudio(`question-${i}`, q.questionAudio);
+                      }
+                    }}
+                    className="wb-unit7-p3-q1-question-audio"
+                  >
+                    <h6
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {q.text}
+                    </h6>
+
+                    {playingKey === `question-${i}` && (
+                      <FaVolumeUp
+                        aria-hidden="true"
+                        className="wb-unit7-p3-q1-audio-icon"
+                      />
+                    )}
+                  </div>
                 </div>
 
-                <div className="options-row-review6-p1-q1">
-                  {q.options.map((word, optIndex) => {
-                    const isSelected = answers[i] === optIndex;
-                    const isCorrect = optIndex === q.correctIndex;
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* =================================================
+                        IMAGE
+                    ================================================= */}
 
-                    return (
-                      <p
-                        key={optIndex}
-                        className={`
-                    option-word-wb-unit7-p3-q1
-                    ${isSelected ? "selected3" : ""}
-                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
-                    ${showResult && isCorrect ? "correct" : ""}
-                  `}
-                        onClick={() => handleSelect(i, optIndex)}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
-                          gap:"20px"
-                        }}
-                      >
-                       <span style={{fontWeight:"bold" ,fontSize:"20px"}}>{word.split(" ")[0]}</span>  {word.slice(1)}
-                        {showResult && isSelected && !isCorrect && !locked && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
-                        )}
-                      </p>
-                    );
-                  })}
+                  <div className="img-div-wb-unit7-p3-q1">
+                    <img
+                      src={q.img}
+                      alt={q.alt}
+                      className="q3-image-wb-unit7-p3-q1"
+                    />
+                  </div>
+
+                  {/* =================================================
+                        OPTIONS
+                    ================================================= */}
+
+                  <div className="options-row-review6-p1-q1">
+                    {q.options.map((option, optIndex) => {
+                      const isSelected = answers[i] === optIndex;
+
+                      const isWrongSelected = isQuestionWrong && isSelected;
+
+                      const isPlaying =
+                        playingKey === `option-${i}-${optIndex}`;
+
+                      return (
+                        <p
+                          key={optIndex}
+                          role="button"
+                          tabIndex={locked ? -1 : 0}
+                          aria-disabled={locked}
+                          aria-pressed={isSelected}
+                          aria-label={`${option.label}. ${option.text}${
+                            isSelected ? ". Selected." : ""
+                          }`}
+                          className={`
+                                option-word-wb-unit7-p3-q1
+
+                                ${isSelected ? "selected3" : ""}
+
+                                ${isWrongSelected ? "wrong" : ""}
+                              `}
+                          onClick={() => {
+                            if (locked) {
+                              return;
+                            }
+
+                            handleSelect(i, optIndex);
+                          }}
+                          onKeyDown={(e) => {
+                            if (locked) {
+                              return;
+                            }
+
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              handleSelect(i, optIndex);
+                            }
+                          }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "relative",
+                            gap: "20px",
+                          }}
+                        >
+                          {/* LETTER */}
+
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {option.label}
+                          </span>
+
+                          {/* OPTION TEXT */}
+
+                          <span>{option.text}</span>
+
+                          {/* AUDIO ICON */}
+
+                          {isPlaying && (
+                            <FaVolumeUp
+                              aria-hidden="true"
+                              className="wb-unit7-p3-q1-audio-icon"
+                            />
+                          )}
+
+                          {/* WRONG X */}
+
+                          {isWrongSelected && (
+                            <span
+                              className="wrong-x-review4-p2-q3"
+                              aria-hidden="true"
+                            >
+                              ✕
+                            </span>
+                          )}
+                        </p>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
+
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
+
         <button onClick={showAnswers} className="show-answer-btn">
           Show Answer
         </button>
+
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>

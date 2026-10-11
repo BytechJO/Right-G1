@@ -13,3 +13,157 @@
     gap: 0px;
   }
 }
+/* =====================================================
+   TOOLS
+===================================================== */
+
+.unit4-q2-p6-tools {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+  margin-bottom: 20px;
+}
+
+.unit4-q2-p6-tool-btn {
+  border: 2px solid #6ec1ff;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  padding: 8px 14px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.unit4-q2-p6-tool-btn:hover {
+  transform: translateY(-1px);
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.unit4-q2-p6-tool-btn:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+.unit4-q2-p6-tool-btn.active-tool {
+  background: #e7f5ff;
+
+  border-color: #2563eb;
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.drawing-sentence-audio-wb-unit7-p4-q1 {
+  position: relative;
+
+  display: inline-block;
+
+  padding-right: 20px;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.drawing-sentence-audio-wb-unit7-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+
+  border-radius: 5px;
+}
+
+.drawing-sentence-audio-icon-wb-unit7-p4-q1 {
+  position: absolute;
+
+  top: 2px;
+  right: 2px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   CANVAS WRAPPER
+===================================================== */
+
+.canvas-wrapper-wb-unit7-p4-q1 {
+  position: relative;
+
+  display: inline-block;
+}
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+.wb-unit7-p4-q1-canvas {
+  outline: none;
+
+  touch-action: none;
+}
+
+.wb-unit7-p4-q1-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD DRAW CURSOR
+===================================================== */
+
+.keyboard-cursor-wb-unit7-p4-q1 {
+  position: absolute;
+
+  width: 10px;
+  height: 10px;
+
+  border: 2px solid #2563eb;
+
+  border-radius: 50%;
+
+  background: white;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 5;
+
+  opacity: 0;
+}
+
+.canvas-wrapper-wb-unit7-p4-q1:focus-within .keyboard-cursor-wb-unit7-p4-q1 {
+  opacity: 1;
+}
+
+.keyboard-cursor-wb-unit7-p4-q1.drawing {
+  background: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}

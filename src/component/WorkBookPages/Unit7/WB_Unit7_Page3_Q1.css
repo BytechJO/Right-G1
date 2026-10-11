@@ -13,7 +13,10 @@
     height: 100px;
     width: auto;
 }
-
+.container-review6-p1-q1{
+    row-gap: 20px;
+    column-gap: 50px;
+}
 .option-word-wb-unit7-p3-q1{
     font-size: 16px;
     font-weight: 500;
@@ -41,4 +44,57 @@
    
 }
 
+}/* =====================================================
+   QUESTION AUDIO
+===================================================== */
+
+.wb-unit7-p3-q1-question-audio {
+  position: relative;
+
+  width: fit-content;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.wb-unit7-p3-q1-question-audio:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   OPTION KEYBOARD FOCUS
+===================================================== */
+
+.option-word-wb-unit7-p3-q1 {
+  outline: none;
+}
+
+.option-word-wb-unit7-p3-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق يمين وما بتأثر على المحتوى
+===================================================== */
+
+.wb-unit7-p3-q1-audio-icon {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
 }

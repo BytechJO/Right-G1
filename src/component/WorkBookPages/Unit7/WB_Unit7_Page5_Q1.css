@@ -84,3 +84,163 @@
     border-radius: 9px;
   }
 }
+/* =====================================================
+   DROP FOCUS
+===================================================== */
+
+.wb-unit7-p5-q1-input {
+  position: relative;
+  outline: none;
+}
+
+.wb-unit7-p5-q1-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   MOUSE DROP OVER
+===================================================== */
+
+.wb-unit7-p5-q1-drop-over {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   KEYBOARD TARGET
+===================================================== */
+
+.wb-unit7-p5-q1-keyboard-target {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   KEYBOARD NUMBER PREVIEW
+===================================================== */
+
+.wb-unit7-p5-q1-number-preview {
+  font-weight: 700;
+
+  animation: wb-unit7-p5-q1-number-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes wb-unit7-p5-q1-number-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* =====================================================
+   CORRECT IMAGE AUDIO BOX
+===================================================== */
+
+.wb-unit7-p5-q1-correct-audio-box {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 12px;
+}
+
+/*
+  Mouse hover:
+  يبين إن الصورة + الرقم صاروا Audio control
+*/
+
+.wb-unit7-p5-q1-correct-audio-box:hover {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+
+  outline-offset: 6px;
+}
+
+/*
+  Keyboard:
+  Tab يوقف على كامل البوكس مرة وحدة.
+*/
+
+.wb-unit7-p5-q1-correct-audio-box:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 6px;
+}
+
+/* =====================================================
+   FULL AUDIO ICON
+===================================================== */
+
+.wb-unit7-p5-q1-full-audio-icon {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 15px;
+  height: 15px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-audio-wb-unit7-p5-q1 {
+  position: relative;
+
+  width: fit-content;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 6px;
+}
+
+/* Mouse hover */
+
+.sentence-audio-wb-unit7-p5-q1:hover {
+  outline: 2px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 3px;
+}
+
+/* Keyboard */
+
+.sentence-audio-wb-unit7-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.sentence-audio-wb-unit7-p5-q1 p {
+  margin: 0;
+}
+
+/* =====================================================
+   SENTENCE AUDIO ICON
+===================================================== */
+
+.sentence-audio-icon-wb-unit7-p5-q1 {
+  position: absolute;
+
+  top: -7px;
+  right: -18px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
