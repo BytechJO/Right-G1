@@ -27,7 +27,7 @@ import handAudio from "../../../assets/unit8/sound/Page 71 - E/hand.mp3";
 import hatAudio from "../../../assets/unit8/sound/Page 71 - E/hat.mp3";
 import houseAudio from "../../../assets/unit8/sound/Page 71 - E/house.mp3";
 import windowAudio from "../../../assets/unit8/sound/Page 71 - E/window.mp3";
-import womanAudio from "../../../assets/unit8/sound/Page 71 - E/woman.mp3";
+import womanAudio from "../../../assets/unit8/sound/Page 71 - E/Woman.mp3";
 
 /* =====================================================
    DATA
