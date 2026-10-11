@@ -56,7 +56,14 @@ const Unit8_Page1 = ({ openPopup }) => {
     { start: 58.23, end: 63.11, text: "Page 65. Listen and read along. " },
     { start: 63.14, end: 67.23, text: " Z-zoo, zebra, zipper." },
   ];
-
+  const soundLabels = {
+    1: "Eye",
+    2: "Nose",
+    3: "Mouth",
+    4: "Head",
+    5: "Knee",
+    6: "Leg",
+  };
   const areas = [
     // الصوت الأول – المنطقة الأساسية
     { x1: 43.25, y1: 32.8, sound: 1, isPrimary: true },
@@ -135,50 +142,8 @@ const Unit8_Page1 = ({ openPopup }) => {
         onClick={handleImageClick}
         style={{ display: "block" }}
       /> */}
-      {areas.map((area, index) => {
-        const isActive = activeId === `p64-${area.sound}`;
 
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                playSound(sounds[area.sound], `p64-${area.sound}`);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-              playSound(sounds[area.sound], `p64-${area.sound}`);
-            }}
-          ></div>
-        );
-      })}
-
+      {/* Main Audio */}
       <div
         className="headset-icon-CD-unit8-page1-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -187,6 +152,9 @@ const Unit8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Unit 8 main audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -197,11 +165,40 @@ const Unit8_Page1 = ({ openPopup }) => {
                   alignContent: "center",
                 }}
               >
-                <AudioWithCaption src={allUnit2} captions={captionsExample} />
+                <AudioWithCaption
+                  src={allUnit2}
+                  captions={captionsExample}
+                  pageId="unit8-page64-main-audio"
+                />
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={allUnit2}
+                    captions={captionsExample}
+                    pageId="unit8-page64-main-audio"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -222,6 +219,9 @@ const Unit8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open find activity"
           onClick={() =>
             openPopup(
               "html",
@@ -230,7 +230,22 @@ const Unit8_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit8_Page1_find />
+                </>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -250,6 +265,9 @@ const Unit8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open vocabulary activity"
           onClick={() =>
             openPopup(
               "html",
@@ -258,7 +276,22 @@ const Unit8_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit8_Page1_Vocab />
+                </>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -278,6 +311,9 @@ const Unit8_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open reading activity"
           onClick={() =>
             openPopup(
               "html",
@@ -286,7 +322,22 @@ const Unit8_Page1 = ({ openPopup }) => {
               </>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <>
+                  <Unit8_Page1_Read />
+                </>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -298,6 +349,57 @@ const Unit8_Page1 = ({ openPopup }) => {
           />
         </svg>
       </div>
+      {areas.map((area, index) => {
+        const areaId = `p64-${area.sound}`;
+        const isActive = activeId === areaId;
+
+        if (area.isPrimary) {
+          return (
+            <div
+              key={index}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
+              style={{
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+              }}
+              onClick={() => {
+                playSound(sounds[area.sound], areaId);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+
+                  playSound(sounds[area.sound], areaId);
+                }
+              }}
+            />
+          );
+        }
+
+        return (
+          <div
+            key={index}
+            className="clickable-area"
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              playSound(sounds[area.sound], areaId);
+            }}
+          />
+        );
+      })}
     </div>
   );
 };

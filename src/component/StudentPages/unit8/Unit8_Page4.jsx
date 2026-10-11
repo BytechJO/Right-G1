@@ -67,32 +67,7 @@ const Unit8_Page4 = ({ openPopup }) => {
         style={{ display: "block" }}
         onClick={handleImageClick}
       /> */}
-      {clickableAreas.map((area, index) => (
-        <div
-          key={index}
-          className={`clickable-area ${
-            activeId === `p67-${area.sound}` || hoveredAreaIndex === index
-              ? "highlight"
-              : ""
-          }`}
-          style={{
-            position: "absolute",
-            left: `${area.x1}%`,
-            top: `${area.y1}%`,
-            width: `${area.x2 - area.x1}%`,
-            height: `${area.y2 - area.y1}%`,
-          }}
-          onClick={() => {
-            playSound(area.sound, `p67-${area.sound}`);
-          }}
-          onMouseEnter={() => {
-            if (!isPlaying) setHoveredAreaIndex(index);
-          }}
-          onMouseLeave={() => {
-            if (!isPlaying) setHoveredAreaIndex(null);
-          }}
-        ></div>
-      ))}
+
       <div
         className="headset-icon-CD-unit8-page4-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -101,6 +76,9 @@ const Unit8_Page4 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open grammar audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -114,11 +92,37 @@ const Unit8_Page4 = ({ openPopup }) => {
                 <AudioWithCaption
                   src={CD12_Pg13_Grammar2_AdultLady}
                   captions={captionsExample}
+                  pageId="unit8-page67-grammer"
                 />
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={CD12_Pg13_Grammar2_AdultLady}
+                    captions={captionsExample}
+                    pageId="unit8-page67-grammer"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -138,6 +142,9 @@ const Unit8_Page4 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open grammar video"
           onClick={() =>
             openPopup(
               "video",
@@ -166,7 +173,42 @@ const Unit8_Page4 = ({ openPopup }) => {
               </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "video",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <video
+                    autoPlay
+                    controls
+                    style={{
+                      width: "auto",
+                      height: "80%",
+                      objectFit: "fill",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    <source src={video} type="video/mp4" />
+                  </video>
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -178,6 +220,52 @@ const Unit8_Page4 = ({ openPopup }) => {
           />
         </svg>
       </div>
+      {clickableAreas.map((area, index) => {
+        const areaId = `p67-${index}`;
+
+        return (
+          <div
+            key={index}
+            role="button"
+            tabIndex={0}
+            aria-label={`Play sentence audio ${index + 1}`}
+            aria-pressed={activeId === areaId}
+            className={`clickable-area ${
+              activeId === areaId || hoveredAreaIndex === index
+                ? "highlight"
+                : ""
+            }`}
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              playSound(area.sound, areaId);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                playSound(area.sound, areaId);
+              }
+            }}
+            onFocus={() => {
+              setHoveredAreaIndex(index);
+            }}
+            onBlur={() => {
+              setHoveredAreaIndex(null);
+            }}
+            onMouseEnter={() => {
+              if (!isPlaying) setHoveredAreaIndex(index);
+            }}
+            onMouseLeave={() => {
+              if (!isPlaying) setHoveredAreaIndex(null);
+            }}
+          />
+        );
+      })}
       <audio ref={audioRef} style={{ display: "none" }} />
     </div>
   );

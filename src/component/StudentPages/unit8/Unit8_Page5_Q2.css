@@ -28,3 +28,16 @@
     gap: 100px;
   }
 }
+.matching-image-source-unit8 {
+  outline: none;
+}
+
+.matching-image-source-unit8:not(.disabled-hover):hover {
+  cursor: pointer;
+}
+
+.matching-image-source-unit8:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 12px;
+}
