@@ -73,7 +73,7 @@ const captionsExample = [
           height="22"
           viewBox="0 0 90 90"
            style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 106 })}
+          onClick={() => openPopup("exercise", { startIndex: 107 })}
         >
          <image
                      href={arrowBtn}
@@ -93,7 +93,7 @@ const captionsExample = [
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 107 })}
+          onClick={() => openPopup("exercise", { startIndex: 108 })}
            style={{ overflow: "visible" }}
         >
           <image

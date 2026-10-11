@@ -20,11 +20,11 @@ const Review8_Page2 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 1"
-          onClick={() => openPopup("exercise", { startIndex: 98 })}
+          onClick={() => openPopup("exercise", { startIndex: 99 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 98 });
+              openPopup("exercise", { startIndex: 99 });
             }
           }}
           style={{
@@ -55,11 +55,11 @@ const Review8_Page2 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 2"
-          onClick={() => openPopup("exercise", { startIndex: 99 })}
+          onClick={() => openPopup("exercise", { startIndex: 100 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 99 });
+              openPopup("exercise", { startIndex: 100 });
             }
           }}
           style={{
@@ -90,11 +90,11 @@ const Review8_Page2 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 3"
-          onClick={() => openPopup("exercise", { startIndex: 100 })}
+          onClick={() => openPopup("exercise", { startIndex: 101 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 100 });
+              openPopup("exercise", { startIndex: 101 });
             }
           }}
           style={{
@@ -125,11 +125,11 @@ const Review8_Page2 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 4"
-          onClick={() => openPopup("exercise", { startIndex: 101 })}
+          onClick={() => openPopup("exercise", { startIndex: 102 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 101 });
+              openPopup("exercise", { startIndex: 102 });
             }
           }}
           style={{

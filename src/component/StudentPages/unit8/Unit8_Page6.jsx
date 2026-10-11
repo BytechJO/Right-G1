@@ -67,7 +67,7 @@ const Unit8_Page6 = ({ openPopup }) => {
 
       {/* Exercise 2 */}
       <div
-        className="click-icon-unit8-page6-3 hover:scale-110 transition"
+        className="click-icon-unit8-page6-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
@@ -99,7 +99,40 @@ const Unit8_Page6 = ({ openPopup }) => {
           />
         </svg>
       </div>
-
+      {/* Exercise 3 */}
+      <div
+        className="click-icon-unit8-page6-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 2"
+          onClick={() => openPopup("exercise", { startIndex: 89 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 89 });
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
+        >
+          <image
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+            className="svg-img"
+          />
+        </svg>
+      </div>
       {/* Song */}
       <div
         className="headset-icon-CD-unit8-page6-1 hover:scale-110 transition"

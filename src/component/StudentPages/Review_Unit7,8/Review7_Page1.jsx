@@ -20,11 +20,11 @@ const Review7_Page1 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 1"
-          onClick={() => openPopup("exercise", { startIndex: 89 })}
+          onClick={() => openPopup("exercise", { startIndex: 90 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 89 });
+              openPopup("exercise", { startIndex: 90 });
             }
           }}
           style={{
@@ -55,11 +55,11 @@ const Review7_Page1 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 2"
-          onClick={() => openPopup("exercise", { startIndex: 90 })}
+          onClick={() => openPopup("exercise", { startIndex: 91 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 90 });
+              openPopup("exercise", { startIndex: 91 });
             }
           }}
           style={{
@@ -90,11 +90,11 @@ const Review7_Page1 = ({ openPopup }) => {
           tabIndex={0}
           role="button"
           aria-label="Open exercise 3"
-          onClick={() => openPopup("exercise", { startIndex: 91 })}
+          onClick={() => openPopup("exercise", { startIndex: 92 })}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              openPopup("exercise", { startIndex: 91 });
+              openPopup("exercise", { startIndex: 92 });
             }
           }}
           style={{

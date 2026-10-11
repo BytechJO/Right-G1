@@ -23,7 +23,7 @@ const Review9_Page1 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() => openPopup("exercise", { startIndex: 114 })}
+          onClick={() => openPopup("exercise", { startIndex: 115 })}
           style={{ overflow: "visible" }}
         >
           <image
@@ -37,48 +37,48 @@ const Review9_Page1 = ({ openPopup }) => {
         </svg>
       </div>
       <div
-           className="click-icon-review9-page1-3 hover:scale-110 transition"
-           style={{ overflow: "visible" }}
-         >
-           <svg
-             width="22"
-             height="22"
-             viewBox="0 0 90 90"
-             onClick={() => openPopup("exercise", { startIndex: 115 })}
-             style={{ overflow: "visible" }}
-           >
-             <image
-               className="svg-img"
-               href={arrowBtn}
-               x="0"
-               y="0"
-               width="90"
-               height="90"
-             />
-           </svg>
-         </div>
-   
-         <div
-           className="click-icon-review9-page1-1 hover:scale-110 transition"
-           style={{ overflow: "visible" }}
-         >
-           <svg
-             width="22"
-             height="22"
-             viewBox="0 0 90 90"
-             onClick={() => openPopup("exercise", { startIndex: 116 })}
-             style={{ overflow: "visible" }}
-           >
-             <image
-               className="svg-img"
-               href={arrowBtn}
-               x="0"
-               y="0"
-               width="90"
-               height="90"
-             />
-           </svg>
-         </div>
+        className="click-icon-review9-page1-3 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 116 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
+
+      <div
+        className="click-icon-review9-page1-1 hover:scale-110 transition"
+        style={{ overflow: "visible" }}
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 90 90"
+          onClick={() => openPopup("exercise", { startIndex: 117 })}
+          style={{ overflow: "visible" }}
+        >
+          <image
+            className="svg-img"
+            href={arrowBtn}
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
+        </svg>
+      </div>
     </div>
   );
 };

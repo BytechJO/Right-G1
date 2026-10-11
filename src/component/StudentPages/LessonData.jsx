@@ -99,6 +99,7 @@ import Unit8_Page5_Q2 from "./unit8/Unit8_Page5_Q2";
 import Unit8_Page5_Q3 from "./unit8/Unit8_Page5_Q3";
 import Unit8_Page5_Q4 from "./unit8/Unit8_Page5_Q4";
 import Unit8_Page6_Q1 from "./unit8/Unit8_Page6_Q1";
+import Unit8_Page6_Q2 from "./unit8/Unit8_Page6_Q2";
 import Unit8_Page6_Q3 from "./unit8/Unit8_Page6_Q3";
 
 import Review7_Page1_Q1 from "./Review_Unit7,8/Review7_Page1_Q1";
@@ -249,6 +250,7 @@ export const lessons = [
   { component: Unit8_Page5_Q3, unit: 8 }, //81
   { component: Unit8_Page5_Q4, unit: 8 }, //82
   { component: Unit8_Page6_Q1, unit: 8 }, //83
+  { component: Unit8_Page6_Q2, unit: 8 }, //83
   { component: Unit8_Page6_Q3, unit: 8, lastOfUnit: true }, //84
 
   { component: Review7_Page1_Q1, unit: 8, isReview: true }, //85
