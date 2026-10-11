@@ -44,3 +44,99 @@
     flex-wrap: wrap;
   }
 }
+/* =====================================================
+   OPTIONS FOCUS
+===================================================== */
+
+.option-word-review5-p2-q3 {
+  position: relative;
+  outline: none;
+}
+
+.option-word-review5-p2-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   FIXED TEXT AUDIO
+===================================================== */
+
+.fixed-text-audio-review8-p2-q4 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.fixed-text-audio-review8-p2-q4:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   SMALL AUDIO ICON
+===================================================== */
+
+.audio-icon-review8-p2-q4 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   FULL CORRECT QUESTION
+===================================================== */
+
+.completed-question-review8-p2-q4 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 12px;
+}
+
+.completed-question-review8-p2-q4:hover {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+
+  outline-offset: 6px;
+}
+
+.completed-question-review8-p2-q4:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 6px;
+}
+
+/* =====================================================
+   FULL AUDIO ICON
+===================================================== */
+
+.full-audio-icon-review8-p2-q4 {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  width: 15px;
+  height: 15px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}

@@ -34,3 +34,12 @@
     margin-top: 0px;
   }
 }
+.gk-option {
+  outline: none;
+}
+
+.gk-option:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 50%;
+}

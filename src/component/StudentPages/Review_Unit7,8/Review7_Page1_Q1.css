@@ -108,7 +108,7 @@
 }
 
 .img-item-review7-p1-q1 img {
-    width: 150px;
+    width: 120px;
     height: auto;
     object-fit: contain;
     /* border: 2px solid #bcd7ff; */
@@ -121,8 +121,8 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-top: 25px;
-  gap: 45px;
+  margin-top: 10px;
+  gap: 30px;
 }
 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
@@ -136,4 +136,105 @@
    
     flex-direction: column-reverse;
 }
+}/* =====================================================
+   CROSSWORD CELL FOCUS
+===================================================== */
+
+.letter22 {
+  outline: none;
+}
+
+.letter22:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   KEYBOARD DROP PREVIEW
+===================================================== */
+
+.keyboard-drop-preview-review7-p1-q1 {
+  background: rgba(219, 234, 254, 0.55) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   KEYBOARD LETTER PREVIEW
+===================================================== */
+
+.keyboard-letter-preview-review7-p1-q1 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 28px;
+  min-height: 28px;
+
+  padding: 2px 6px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 6px;
+
+  background: white;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  animation: blink-crossword-preview 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-crossword-preview {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   MOUSE DRAG OVERLAY
+===================================================== */
+
+.mouse-drag-overlay-review7-p1-q1 {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
+
+  transform: translateY(-12px);
 }

@@ -20,4 +20,35 @@ width: auto;
 height: 105px;
 width: auto;
 }
+}/* =====================================================
+   OPTION KEYBOARD FOCUS
+===================================================== */
+
+.option-word-unit7-p5-q1 {
+  outline: none;
+}
+
+.option-word-unit7-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 25px;
+}
+
+/* =====================================================
+   AUDIO ICON
+   الزاوية اليمين فوق بدون ما يأثر على النص
+===================================================== */
+
+.audio-icon-review7-p1-q3 {
+  position: absolute;
+
+  top: -7px;
+  right: -7px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
 }

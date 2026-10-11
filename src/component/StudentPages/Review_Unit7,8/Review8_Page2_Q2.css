@@ -64,3 +64,24 @@
   z-index: 5;
   border: 2px solid white;
 }
+/* =====================================================
+   TABLE CELL KEYBOARD FOCUS
+===================================================== */
+
+.cell-wrapper-review4-p1-q3 {
+  position: relative;
+  outline: none;
+}
+
+.cell-wrapper-review4-p1-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -4px;
+}
+
+/* =====================================================
+   WRONG CELL
+===================================================== */
+
+.wrong-cell-review8-p2-q2 {
+  position: relative;
+}

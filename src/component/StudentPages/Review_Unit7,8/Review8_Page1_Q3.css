@@ -1,7 +1,7 @@
 
 .start-dot22-review8-p1-q3 {
   position: absolute !important;
-  top: 32px;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -10,4 +10,90 @@
 .selected-match {
   outline: 2px solid #4da6ff;
   background: #e8f3ff;
+}/* =====================================================
+   WORD FOCUS
+===================================================== */
+
+.clickable-word-unit2-p7-q2 {
+  position: relative;
+
+  outline: none;
+}
+
+.clickable-word-unit2-p7-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 7px;
+}
+
+/* =====================================================
+   IMAGE FOCUS
+===================================================== */
+
+.img-box2-unit6-p6-q3 {
+  outline: none;
+}
+
+.img-box2-unit6-p6-q3:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   SELECTED ENDPOINT
+===================================================== */
+
+.selected-match-review8-p1-q3 {
+  outline: 3px solid #2563eb !important;
+
+  outline-offset: 4px;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.15),
+    0 3px 8px rgba(0, 0, 0, 0.14);
+
+  transform: scale(1.04);
+}
+
+/* =====================================================
+   SELECTED DOT
+===================================================== */
+
+.dot-active-review8-p1-q3 {
+  transform: scale(1.3);
+
+  box-shadow:
+    0 0 0 4px rgba(255, 0, 0, 0.18);
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق بالزاوية وما بتاخذ مساحة من النص
+===================================================== */
+
+.audio-icon-review8-p1-q3 {
+  position: absolute;
+
+  top: 2px;
+  right: 3px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   SVG
+===================================================== */
+
+.lines-layer2 {
+  pointer-events: none;
+
+  overflow: visible;
 }

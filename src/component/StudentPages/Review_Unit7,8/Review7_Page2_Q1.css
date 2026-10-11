@@ -1,25 +1,169 @@
 .question-grid-review7-p2-q1 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    width: 100%;
-    justify-items: center;
-    margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  width: 100%;
+  justify-items: center;
+  margin-top: 20px;
 }
 
 .word-bank-review7-p2-q1 {
-    display: flex;
-    gap: 5px;
-    margin: 15px 0 25px;
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    gap: 30px;
+  display: flex;
+  gap: 5px;
+  margin: 15px 0 25px;
+  flex-wrap: wrap;
+  border: 2px solid #4b74ff;
+  background-color: #f2f6ff;
+  border-radius: 8px;
+  padding: 10px;
+  /* height: 60px; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 30px;
+} /* =====================================================
+   SELECT KEYBOARD FOCUS
+===================================================== */
+
+.circle-choice-unit4-page5-q1 {
+  outline: none;
+}
+
+.circle-choice-unit4-page5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DROP KEYBOARD FOCUS
+===================================================== */
+
+.write-input-unit4-page5-q1 {
+  position: relative;
+  outline: none;
+}
+
+.write-input-unit4-page5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD DROP TARGET
+===================================================== */
+
+.keyboard-drop-preview-review7-p2-q1 {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   REAL VALUE
+===================================================== */
+
+.drop-real-value-review7-p2-q1 {
+  position: relative;
+
+  z-index: 1;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.drop-preview-value-review7-p2-q1 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  padding: 3px 10px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  animation: blink-preview-review7-p2-q1 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-review7-p2-q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق يمين الكلمة بالبنك
+===================================================== */
+
+.audio-icon-review7-p2-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   MOUSE DRAG OVERLAY
+===================================================== */
+
+.mouse-drag-overlay-review7-p2-q1 {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: bold;
+
+  color: #2c5287;
+
+  white-space: nowrap;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
+
+  transform: translateY(-12px);
 }
