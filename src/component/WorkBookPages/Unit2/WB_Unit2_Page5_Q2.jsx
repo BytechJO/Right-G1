@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import "./WB_Unit2_Page5_Q2.css";
 
 import ValidationAlert from "../../Popup/ValidationAlert";
@@ -157,6 +158,7 @@ const reverseCoords = (coords) => {
   - عمودي
   - قطري
 */
+
 const getPath = (start, end) => {
   const [r1, c1] = start;
   const [r2, c2] = end;
@@ -177,10 +179,12 @@ const getPath = (start, end) => {
 
   const length = Math.max(Math.abs(rowDiff), Math.abs(colDiff)) + 1;
 
-  return Array.from({ length }, (_, index) => [
-    r1 + rowStep * index,
-    c1 + colStep * index,
-  ]);
+  return Array.from(
+    {
+      length,
+    },
+    (_, index) => [r1 + rowStep * index, c1 + colStep * index],
+  );
 };
 
 /* =====================================================
@@ -208,6 +212,12 @@ export default function WB_Unit2_Page5_Q2() {
     - أو Show Answer
   */
   const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     WRONG SHAKE
+  ===================================================== */
+
+  const [wrongTry, setWrongTry] = useState(false);
 
   /* =====================================================
      ACCESSIBILITY
@@ -292,6 +302,27 @@ export default function WB_Unit2_Page5_Q2() {
   };
 
   /* =====================================================
+     SHAKE GRID
+  ===================================================== */
+
+  const shakeGrid = () => {
+    /*
+      نخلي animation يقدر يعيد نفسه
+      حتى لو الاختيارات الغلط ورا بعض.
+    */
+
+    setWrongTry(false);
+
+    requestAnimationFrame(() => {
+      setWrongTry(true);
+
+      window.setTimeout(() => {
+        setWrongTry(false);
+      }, 400);
+    });
+  };
+
+  /* =====================================================
      CELL STATES
   ===================================================== */
 
@@ -347,11 +378,18 @@ export default function WB_Unit2_Page5_Q2() {
 
     const path = getPath(startCell, [endR, endC]);
 
+    /* =====================================================
+       NOT STRAIGHT
+    ===================================================== */
+
     if (path.length === 0) {
       setAnnouncement("That selection is not in a straight line.");
 
       setStartCell(null);
+
       setPreviewCells([]);
+
+      shakeGrid();
 
       return;
     }
@@ -372,6 +410,10 @@ export default function WB_Unit2_Page5_Q2() {
       );
     });
 
+    /* =====================================================
+       CORRECT
+    ===================================================== */
+
     if (matchedWord) {
       setFoundWords((prev) => [...prev, matchedWord.text]);
 
@@ -384,16 +426,19 @@ export default function WB_Unit2_Page5_Q2() {
 
       setAnnouncement(`${matchedWord.text} found.`);
 
-      /*
-        شغّل صوت الكلمة لما يلاقيها.
-      */
-
       playWordAudio(matchedWord);
     } else {
+      /* =====================================================
+         WRONG
+      ===================================================== */
+
       setAnnouncement("That is not one of the target words.");
+
+      shakeGrid();
     }
 
     setStartCell(null);
+
     setPreviewCells([]);
   };
 
@@ -523,14 +568,13 @@ export default function WB_Unit2_Page5_Q2() {
 
   /* =====================================================
      POINTER DRAG
+     Mouse + iPad + Apple Pencil
   ===================================================== */
-  /* =====================================================
-   POINTER DRAG
-   Mouse + iPad + Apple Pencil
-===================================================== */
 
   const pointerStartRef = useRef(null);
+
   const pointerCurrentRef = useRef(null);
+
   const pointerDraggingRef = useRef(false);
 
   const getCellFromPoint = (clientX, clientY) => {
@@ -543,6 +587,7 @@ export default function WB_Unit2_Page5_Q2() {
     if (!cell) return null;
 
     const r = Number(cell.dataset.row);
+
     const c = Number(cell.dataset.col);
 
     if (Number.isNaN(r) || Number.isNaN(c)) {
@@ -562,6 +607,7 @@ export default function WB_Unit2_Page5_Q2() {
     pointerDraggingRef.current = true;
 
     pointerStartRef.current = [r, c];
+
     pointerCurrentRef.current = [r, c];
 
     setStartCell([r, c]);
@@ -570,7 +616,9 @@ export default function WB_Unit2_Page5_Q2() {
   };
 
   const handlePointerMove = (e) => {
-    if (!pointerDraggingRef.current) return;
+    if (!pointerDraggingRef.current) {
+      return;
+    }
 
     const start = pointerStartRef.current;
 
@@ -592,7 +640,9 @@ export default function WB_Unit2_Page5_Q2() {
   };
 
   const handlePointerEnter = (r, c) => {
-    if (!pointerDraggingRef.current) return;
+    if (!pointerDraggingRef.current) {
+      return;
+    }
 
     const start = pointerStartRef.current;
 
@@ -608,7 +658,9 @@ export default function WB_Unit2_Page5_Q2() {
   };
 
   const handlePointerUp = (e) => {
-    if (!pointerDraggingRef.current) return;
+    if (!pointerDraggingRef.current) {
+      return;
+    }
 
     e.preventDefault();
 
@@ -625,12 +677,13 @@ export default function WB_Unit2_Page5_Q2() {
     pointerDraggingRef.current = false;
 
     pointerStartRef.current = null;
+
     pointerCurrentRef.current = null;
 
     /*
-    نخلي startCell ثابت مؤقتًا
-    لأن completeSelection يعتمد عليه
-  */
+      نخلي startCell ثابت مؤقتًا
+      لأن completeSelection يعتمد عليه
+    */
 
     setStartCell(start);
 
@@ -643,11 +696,14 @@ export default function WB_Unit2_Page5_Q2() {
     pointerDraggingRef.current = false;
 
     pointerStartRef.current = null;
+
     pointerCurrentRef.current = null;
 
     setStartCell(null);
+
     setPreviewCells([]);
   };
+
   /* =====================================================
      CHECK ANSWERS
   ===================================================== */
@@ -657,7 +713,18 @@ export default function WB_Unit2_Page5_Q2() {
       return;
     }
 
+    /* =====================================================
+       AT LEAST ONE WORD
+    ===================================================== */
+
     if (foundWords.length === 0) {
+      /*
+        مهم:
+        ما نطلع Xات.
+      */
+
+      setWrongWords([]);
+
       ValidationAlert.info(
         "Oops!",
         "Please find at least one word before checking.",
@@ -689,8 +756,7 @@ export default function WB_Unit2_Page5_Q2() {
 
     const correct = foundWords.length;
 
-    const color =
-      correct === total ? "green" : correct === 0 ? "red" : "orange";
+    const color = correct === total ? "green" : "orange";
 
     const msg = `
       <div
@@ -733,11 +799,7 @@ export default function WB_Unit2_Page5_Q2() {
       الناقصة بعد Check.
     */
 
-    if (correct === 0) {
-      ValidationAlert.error(msg);
-    } else {
-      ValidationAlert.warning(msg);
-    }
+    ValidationAlert.warning(msg);
 
     setAnnouncement(
       `Score ${correct} out of ${total}. Continue finding the missing words.`,
@@ -794,6 +856,8 @@ export default function WB_Unit2_Page5_Q2() {
     dragStartRef.current = null;
 
     setActiveCell([0, 0]);
+
+    setWrongTry(false);
 
     setAnnouncement("Activity reset.");
 
@@ -873,7 +937,7 @@ export default function WB_Unit2_Page5_Q2() {
             ============================================= */}
 
             <div
-              className="grid-wb-u1-p6-q2"
+              className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}
               role="grid"
               aria-label="Word search grid. Use arrow keys to move. Press Enter or Space on the first and last letter."
               onPointerLeave={() => {
@@ -881,6 +945,7 @@ export default function WB_Unit2_Page5_Q2() {
                   ما نلغي selection بالكبس العادي،
                   فقط drag.
                 */
+
                 if (isDragging) {
                   cancelDrag();
                 }
@@ -922,11 +987,11 @@ export default function WB_Unit2_Page5_Q2() {
                         aria-selected={preview || found}
                         onFocus={() => setActiveCell([rIdx, cIdx])}
                         className={`
-    cell-wb-u2-p5-q2
-    ${preview ? "highlight" : ""}
-    ${found ? "found" : ""}
-    ${isStart ? "start-cell" : ""}
-  `}
+                              cell-wb-u2-p5-q2
+                              ${preview ? "highlight" : ""}
+                              ${found ? "found" : ""}
+                              ${isStart ? "start-cell" : ""}
+                            `}
                         onClick={() => handleCellClick(rIdx, cIdx)}
                         onKeyDown={(e) => handleCellKeyDown(e, rIdx, cIdx)}
                         onPointerDown={(e) => handlePointerDown(e, rIdx, cIdx)}
@@ -988,16 +1053,6 @@ export default function WB_Unit2_Page5_Q2() {
                             }}
                           >
                             🔊
-                          </span>
-                        )}
-                        {found && (
-                          <span
-                            aria-hidden="true"
-                            style={{
-                              marginLeft: "8px",
-                            }}
-                          >
-                            ✓
                           </span>
                         )}
                       </p>

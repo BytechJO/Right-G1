@@ -1,102 +1,344 @@
+/* =====================================================
+   WORD
+===================================================== */
+
 .word-text2-wb-unit8-p3-q1 {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
+
   padding: 6px 14px;
-  /* height: 50px; */
+
   width: 70px;
+
   border: 2px solid #000000;
+
   border-radius: 9px;
+
   background-color: #ffffff;
+
   font-size: 18px;
   font-weight: 600;
+
   color: #333;
+
   position: relative;
-  /* width: fit-content; */
+
   margin-bottom: 25px;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  outline: none;
+
+  cursor: pointer;
 }
 
-.img-dot-container-wb-unit8-p3-q1 {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 30px;
-}
-.word-text2-wb-unit8-p3-q1 {
-  /* display: inline-block; مهم للـ transform */
-  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease,
-    box-shadow 0.2s ease;
-  /* padding: 4px 6px; */
-  border-radius: 6px;
-}
-/* ✨ Hover animation */
+/* =====================================================
+   WORD HOVER
+===================================================== */
+
 .word-text2-wb-unit8-p3-q1:hover {
   transform: scale(1.06);
+
   background-color: rgba(67, 15, 104, 0.08);
+
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
 }
 
 .word-text2-wb-unit8-p3-q1:active {
   transform: scale(0.98);
 }
 
-.container12-wb-unit8-p3-q1 {
-  margin: auto;
+/* =====================================================
+   WORD KEYBOARD FOCUS
+===================================================== */
+
+.word-text2-wb-unit8-p3-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 9px;
+}
+
+/* =====================================================
+   SELECTED WORD
+===================================================== */
+
+.selected-item-wb-unit8-p3-q1 {
+  outline: 3px solid #2563eb !important;
+
+  outline-offset: 4px;
+
+  background: #dbeafe !important;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.14),
+    0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* =====================================================
+   MAIN MATCH AREA
+===================================================== */
+
+.img-dot-container-wb-unit8-p3-q1 {
+  display: flex;
+
+  flex-direction: row;
+
+  width: 100%;
+
+  justify-content: space-between;
+
+  margin-top: 30px;
+
   position: relative;
+}
+
+/* =====================================================
+   WORDS COLUMN
+===================================================== */
+
+.container12-wb-unit8-p3-q1 {
+  position: relative;
+
   user-select: none;
+
   margin-bottom: 30px;
   margin-top: 30px;
 }
 
+/* =====================================================
+   WORD + DOT
+===================================================== */
+
 .word-with-dot2-wb-unit8-p3-q1 {
   display: flex;
+
   align-items: baseline;
+
   gap: 10px;
 }
 
+/* =====================================================
+   WRONG X
+===================================================== */
+
 .error-mark8-wb-unit8-p3-q1 {
-    width: 25px;
-    height: 25px;
-    border: 2px solid white;
-    background-color: red;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    vertical-align: middle;
-    position: absolute;
-    left: 37%;
-    top: -13%;
-    z-index: 99;
+  width: 24px;
+  height: 24px;
+
+  border: 2px solid white;
+
+  background-color: red;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-weight: bold;
+
+  font-size: 16px;
+
+  display: inline-flex;
+
+  justify-content: center;
+  align-items: center;
+
+  margin-left: 8px;
+
+  vertical-align: middle;
+
+  position: absolute;
+
+  left: 71%;
+
+  top: -9%;
+
+  z-index: 99;
 }
+
+/* =====================================================
+   BODY IMAGE WRAPPER
+
+   مهم:
+   كل الـdots absolute بالنسبة لهذا العنصر.
+===================================================== */
+
+.body-image-wrapper-wb-unit8-p3-q1 {
+  position: relative;
+
+  width: fit-content;
+
+  height: fit-content;
+}
+
+/* =====================================================
+   BODY IMAGE
+===================================================== */
+
+.body-image-wb-unit8-p3-q1 {
+  display: block;
+
+  height: 300px;
+
+  width: auto;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   TARGET DOT POSITIONS
+
+   نفس الأماكن الأصلية بالزبط
+===================================================== */
 
 #dot-img1-wb-unit8-p3-q1 {
   position: absolute;
+
   top: 6%;
 }
 
+/* EYE */
+
 #dot-img2-wb-unit8-p3-q1 {
-    position: absolute;
-    top: 17%;
-    left: 12%;
+  position: absolute;
+
+  top: 18%;
+
+  left: 12%;
 }
+
+/* NOSE */
+
 #dot-img3-wb-unit8-p3-q1 {
-    position: absolute;
-    top: 19%;
-    left: 24%;
+  position: absolute;
+
+  top: 19%;
+
+  left: 24%;
 }
+
+/* ARM */
+
 #dot-img4-wb-unit8-p3-q1 {
-    position: absolute;
-    top: 38%;
-    left: 12%;
+  position: absolute;
+
+  top: 42%;
+
+  left: 12%;
 }
+
+/* LEG */
+
 #dot-img5-wb-unit8-p3-q1 {
-    position: absolute;
-    top: 75%;
+  position: absolute;
+
+  top: 78%;
+}
+
+/* =====================================================
+   TARGET DOT
+
+   نخلي النقطة نفسها interactive
+===================================================== */
+
+.body-image-wrapper-wb-unit8-p3-q1 .end-dot2 {
+  outline: none;
+
+  cursor: pointer;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   TARGET DOT KEYBOARD FOCUS
+===================================================== */
+
+.body-image-wrapper-wb-unit8-p3-q1 .end-dot2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  transform: scale(1.25);
+}
+
+/* =====================================================
+   SELECTED DOT
+===================================================== */
+
+.dot-active-wb-unit8-p3-q1 {
+  transform: scale(1.3);
+
+  box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.18);
+}
+
+/* =====================================================
+   CONNECTED DOT
+===================================================== */
+
+.dot-connected {
+  cursor: pointer;
+}
+
+/* =====================================================
+   AUDIO ICON
+
+   فوق بالزاوية
+   وما بتاخذ مساحة من النص
+===================================================== */
+
+.audio-icon-wb-unit8-p3-q1 {
+  position: absolute;
+
+  top: 3px;
+
+  right: 4px;
+
+  width: 14px;
+
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   SVG LINE LAYER
+===================================================== */
+
+.lines-layer2 {
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  pointer-events: none;
+
+  overflow: visible;
+
+  z-index: 1;
+}
+
+/* =====================================================
+   DOTS ABOVE SVG
+===================================================== */
+
+.dot2 {
+  position: relative;
+
+  z-index: 5;
 }

@@ -322,4 +322,321 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+}.grid-wb-u1-p6-q2 {
+  display: inline-block;
+  border: 2px solid #999;
+}
+
+.row-wb-u1-p6-q2 {
+  display: flex;
+}
+
+/* =========================================
+   GRID CELLS
+========================================= */
+
+.cell-wb-u2-p5-q2 {
+  width: 55px;
+  height: 45px;
+
+  border: 1px solid #ccc;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.cell-wb-u2-p5-q2:hover {
+  background-color: #eef9ff;
+
+  transform: scale(1.06);
+
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+/* الخلايا المحددة حالياً */
+.cell-wb-u2-p5-q2.highlight {
+  background-color: #cdfffa;
+  border: 2px solid rgb(0, 179, 255);
+}
+
+/* الخلايا التابعة لكلمة صحيحة */
+.cell-wb-u2-p5-q2.found {
+  background-color: #dcffcd;
+  border: 2px solid green;
+  font-weight: bold;
+}
+
+/* نحافظ على شكل الصحيح وقت hover */
+.cell-wb-u2-p5-q2.found:hover {
+  background-color: #dcffcd;
+  border: 2px solid green;
+  transform: scale(1.03);
+}
+
+/* أول خلية في الاختيار */
+.cell-wb-u2-p5-q2.start-cell {
+  box-shadow: 0 0 0 3px rgba(0, 179, 255, 0.2);
+}
+
+/* فوكس الكيبورد */
+.cell-wb-u2-p5-q2:focus-visible {
+  outline: 3px solid rgb(0, 179, 255);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.container-word-grid-wb-u2-p5-q2 {
+  display: flex;
+
+  width: 100%;
+
+  justify-content: space-around;
+  align-items: center;
+
+  gap: 20px;
+}
+
+/* =========================================
+   WORD GRID
+========================================= */
+
+.word-btn-wb-u2-p5-q2 {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px 15px;
+
+  height: 360px;
+
+  align-content: space-between;
+}
+
+/* =========================================
+   WORD WRAPPER
+========================================= */
+
+.word-label-wrapper-wb-u2-p5-q2 {
+  width: 140px;
+  height: 110px;
+
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  color: black;
+  background: white;
+
+  position: relative;
+}
+
+/* =========================================
+   WORD / AUDIO BUTTON
+========================================= */
+
+.word-label-wb-u2-p5-q2 {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  border: none;
+  background: transparent;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  padding: 4px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.word-label-wb-u2-p5-q2:hover {
+  transform: scale(1.03);
+
+  background-color: #f8fbff;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyboard focus */
+.word-label-wb-u2-p5-q2:focus-visible {
+  outline: 3px solid rgb(0, 179, 255);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   CORRECT WORD
+   بدل علامة الصح
+========================================= */
+
+.word-label-wb-u2-p5-q2.done {
+  background-color: #dcffcd;
+}
+
+.word-label-wb-u2-p5-q2.done:hover {
+  background-color: #dcffcd;
+}
+
+/* النص */
+.word-label-wb-u2-p5-q2 p {
+  margin: 0 0 3px 0;
+
+  text-align: center;
+
+  font-size: 15px;
+}
+
+/* الصورة */
+.word-label-wb-u2-p5-q2 img {
+  display: block;
+
+  max-width: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   WRONG X
+========================================= */
+
+.wrong-x-circle-wb-u1-p6-q2 {
+  position: absolute;
+
+  right: -12px;
+  top: -3%;
+
+  transform: translateY(-50%);
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: red;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  z-index: 20;
+
+  pointer-events: none;
+}
+
+/* =========================================
+   WRONG GRID SHAKE
+========================================= */
+
+.shake {
+  animation: wb-u2-grid-shake 0.4s ease;
+}
+
+@keyframes wb-u2-grid-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .cell-wb-u2-p5-q2 {
+    width: 50px;
+    height: 40px;
+  }
+
+  .word-label-wrapper-wb-u2-p5-q2 {
+    width: 155px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container-word-grid-wb-u2-p5-q2 {
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 1024px) and (max-height: 800px) {
+  .container-word-grid-wb-u2-p5-q2 {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 820px) {
+  .container-word-grid-wb-u2-p5-q2 {
+    gap: 5px;
+  }
+
+  .word-btn-wb-u2-p5-q2 {
+    gap: 10px;
+  }
+
+  .word-label-wrapper-wb-u2-p5-q2 {
+    width: 145px;
+  }
+}
+
+/* =========================================
+   PREVENT TEXT SELECTION
+========================================= */
+
+.grid-wb-u1-p6-q2,
+.cell-wb-u2-p5-q2 {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
 }

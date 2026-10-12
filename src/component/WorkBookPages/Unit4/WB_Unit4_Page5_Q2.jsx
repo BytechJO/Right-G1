@@ -115,10 +115,13 @@ const samePath = (a, b) => {
   return a.every((coord, index) => sameCoord(coord, reversed[index]));
 };
 
-/*
-  بنبني مسار مستقيم:
-  horizontal / vertical / diagonal
-*/
+/* =====================================================
+   BUILD STRAIGHT PATH
+
+   horizontal
+   vertical
+   diagonal
+===================================================== */
 
 const buildPath = (start, end) => {
   if (!start || !end) return [];
@@ -175,6 +178,12 @@ export default function WB_Unit4_Page5_Q2() {
   const [allSelections, setAllSelections] = useState([]);
 
   /* =================================================
+     WRONG SHAKE
+  ================================================= */
+
+  const [wrongTry, setWrongTry] = useState(false);
+
+  /* =================================================
      SELECTION
   ================================================= */
 
@@ -202,9 +211,14 @@ export default function WB_Unit4_Page5_Q2() {
 
   const [playingWord, setPlayingWord] = useState(null);
 
+  /* =================================================
+     STOP AUDIO
+  ================================================= */
+
   const stopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
+
       audioRef.current.currentTime = 0;
 
       audioRef.current.onended = null;
@@ -215,6 +229,10 @@ export default function WB_Unit4_Page5_Q2() {
 
     setPlayingWord(null);
   };
+
+  /* =================================================
+     PLAY AUDIO
+  ================================================= */
 
   const playWordAudio = (word) => {
     if (!word?.audio) return;
@@ -277,6 +295,28 @@ export default function WB_Unit4_Page5_Q2() {
     isPreviewCell(r, c) || isFoundCell(r, c) || isShowAnswerCell(r, c);
 
   /* =================================================
+     SHAKE GRID
+  ================================================= */
+
+  const shakeGrid = () => {
+    /*
+      لو shake شغال أصلًا
+      بنرجعه false وبعدين true
+      حتى يشتغل animation من جديد.
+    */
+
+    setWrongTry(false);
+
+    requestAnimationFrame(() => {
+      setWrongTry(true);
+
+      window.setTimeout(() => {
+        setWrongTry(false);
+      }, 400);
+    });
+  };
+
+  /* =================================================
      CHECK A SELECTED PATH
   ================================================= */
 
@@ -285,44 +325,90 @@ export default function WB_Unit4_Page5_Q2() {
       return;
     }
 
-    const matchedWord = words.find(
-      (word) => !foundWords.includes(word.text) && samePath(path, word.coords),
-    );
+    /*
+      أولًا شوف هل المسار يمثل أي كلمة
+      حتى لو كانت موجودة من قبل.
+    */
 
-    if (matchedWord) {
-      setFoundWords((prev) => [...prev, matchedWord.text]);
+    const matchedWord = words.find((word) => samePath(path, word.coords));
 
-      /*
-        لو كان عليه X من Check سابق
-        شيله فقط عنه
-      */
+    /* =====================================================
+       WRONG SELECTION
+       اهتز الجريد
+    ===================================================== */
 
-      setWrongWords((prev) => prev.filter((word) => word !== matchedWord.text));
+    if (!matchedWord) {
+      setSelectionStart(null);
 
-      playWordAudio(matchedWord);
+      setPreviewSelection([]);
+
+      setKeyboardStart(null);
+
+      shakeGrid();
+
+      return;
     }
 
+    /* =====================================================
+       ALREADY FOUND
+       فقط شغّل الصوت
+    ===================================================== */
+
+    if (foundWords.includes(matchedWord.text)) {
+      setSelectionStart(null);
+
+      setPreviewSelection([]);
+
+      setKeyboardStart(null);
+
+      playWordAudio(matchedWord);
+
+      return;
+    }
+
+    /* =====================================================
+       NEW CORRECT WORD
+    ===================================================== */
+
+    setFoundWords((prev) => [...prev, matchedWord.text]);
+
+    /*
+      إذا كان عليه X من Check سابق
+      نشيله فقط عن هذه الكلمة
+    */
+
+    setWrongWords((prev) => prev.filter((word) => word !== matchedWord.text));
+
     setSelectionStart(null);
+
     setPreviewSelection([]);
 
     setKeyboardStart(null);
+
+    /* =====================================================
+       AUDIO ON SUCCESS
+    ===================================================== */
+
+    playWordAudio(matchedWord);
   };
 
-  /* =================================================
-     POINTER / MOUSE / TOUCH / PEN
-  ================================================= */
-
   /* =====================================================
-   POINTER / MOUSE / TOUCH / PEN
-===================================================== */
+     POINTER DOWN
+     MOUSE / TOUCH / PEN
+  ===================================================== */
 
   const handlePointerDown = (e, r, c) => {
-    if (showAnswer || checkCompleted) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
     /*
-    إذا الخلية من كلمة موجودة صح، لكن بنفس الوقت
-    داخلة بكلمة ثانية لسا مش موجودة، خليها قابلة للاستخدام.
-  */
+      إذا الخلية من كلمة موجودة صح،
+      لكن بنفس الوقت جزء من كلمة ثانية
+      لسا مش موجودة،
+      خليها قابلة للاستخدام.
+    */
+
     const neededByUnfoundWord = words.some(
       (word) =>
         !foundWords.includes(word.text) &&
@@ -335,12 +421,6 @@ export default function WB_Unit4_Page5_Q2() {
 
     e.preventDefault();
 
-    /*
-    مهم:
-    ما بنستخدم setPointerCapture هون
-    لأنه كان مانع السحب من الانتقال بين الخلايا.
-  */
-
     setIsPointerSelecting(true);
 
     setSelectionStart([r, c]);
@@ -349,8 +429,8 @@ export default function WB_Unit4_Page5_Q2() {
   };
 
   /* =====================================================
-   POINTER MOVE
-===================================================== */
+     POINTER MOVE
+  ===================================================== */
 
   const handlePointerMove = (e) => {
     if (
@@ -364,10 +444,6 @@ export default function WB_Unit4_Page5_Q2() {
 
     e.preventDefault();
 
-    /*
-    نجيب الخلية الموجودة فعليًا تحت المؤشر.
-    هاي بتشتغل للماوس واللمس والقلم.
-  */
     const element = document
       .elementFromPoint(e.clientX, e.clientY)
       ?.closest("[data-grid-cell='true']");
@@ -375,6 +451,7 @@ export default function WB_Unit4_Page5_Q2() {
     if (!element) return;
 
     const r = Number(element.dataset.row);
+
     const c = Number(element.dataset.col);
 
     if (Number.isNaN(r) || Number.isNaN(c)) {
@@ -387,8 +464,8 @@ export default function WB_Unit4_Page5_Q2() {
   };
 
   /* =====================================================
-   POINTER UP
-===================================================== */
+     POINTER UP
+  ===================================================== */
 
   const handlePointerUp = (e) => {
     if (!isPointerSelecting || !selectionStart) {
@@ -405,6 +482,7 @@ export default function WB_Unit4_Page5_Q2() {
 
     if (element) {
       const r = Number(element.dataset.row);
+
       const c = Number(element.dataset.col);
 
       if (!Number.isNaN(r) && !Number.isNaN(c)) {
@@ -420,8 +498,8 @@ export default function WB_Unit4_Page5_Q2() {
   };
 
   /* =====================================================
-   POINTER CANCEL
-===================================================== */
+     POINTER CANCEL
+  ===================================================== */
 
   const handlePointerCancel = () => {
     setIsPointerSelecting(false);
@@ -430,9 +508,10 @@ export default function WB_Unit4_Page5_Q2() {
 
     setPreviewSelection([]);
   };
-  /* =================================================
+
+  /* =====================================================
      KEYBOARD MOVE
-  ================================================= */
+  ===================================================== */
 
   const moveKeyboardCell = (r, c, key) => {
     let nextR = r;
@@ -470,9 +549,9 @@ export default function WB_Unit4_Page5_Q2() {
     });
   };
 
-  /* =================================================
+  /* =====================================================
      KEYBOARD CELL
-  ================================================= */
+  ===================================================== */
 
   const handleCellKeyDown = (e, r, c) => {
     if (showAnswer || checkCompleted) {
@@ -480,6 +559,10 @@ export default function WB_Unit4_Page5_Q2() {
     }
 
     const arrows = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+
+    /* =================================================
+       ARROWS
+    ================================================= */
 
     if (arrows.includes(e.key)) {
       e.preventDefault();
@@ -489,12 +572,13 @@ export default function WB_Unit4_Page5_Q2() {
       return;
     }
 
-    /* =========================================
+    /* =================================================
        ENTER / SPACE
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
+
       e.stopPropagation();
 
       /*
@@ -503,7 +587,18 @@ export default function WB_Unit4_Page5_Q2() {
       */
 
       if (!keyboardStart) {
-        if (isFoundCell(r, c)) {
+        /*
+          خلية موجودة صح ومش محتاجينها
+          بكلمة ثانية
+        */
+
+        const neededByUnfoundWord = words.some(
+          (word) =>
+            !foundWords.includes(word.text) &&
+            word.coords.some(([wr, wc]) => wr === r && wc === c),
+        );
+
+        if (isFoundCell(r, c) && !neededByUnfoundWord) {
           return;
         }
 
@@ -528,13 +623,14 @@ export default function WB_Unit4_Page5_Q2() {
       return;
     }
 
-    /* =========================================
+    /* =================================================
        ESCAPE
-    ========================================= */
+    ================================================= */
 
     if (e.key === "Escape") {
       if (keyboardStart) {
         e.preventDefault();
+
         e.stopPropagation();
 
         setKeyboardStart(null);
@@ -546,14 +642,41 @@ export default function WB_Unit4_Page5_Q2() {
     }
   };
 
-  /* =================================================
+  /* =====================================================
      CHECK ANSWER
-  ================================================= */
+  ===================================================== */
 
   const checkAnswers = () => {
     if (showAnswer || checkCompleted) {
       return;
     }
+
+    const total = words.length;
+
+    const score = foundWords.length;
+
+    /* =====================================================
+       لازم يلاقي كلمة وحدة على الأقل
+    ===================================================== */
+
+    if (score === 0) {
+      /*
+        مهم:
+        ما نطلع أي X.
+      */
+
+      setWrongWords([]);
+
+      ValidationAlert.info(
+        "Please find at least one word before checking your answer.",
+      );
+
+      return;
+    }
+
+    /* =====================================================
+       MISSING WORDS
+    ===================================================== */
 
     const missing = words
       .map((word) => word.text)
@@ -561,11 +684,11 @@ export default function WB_Unit4_Page5_Q2() {
 
     setWrongWords(missing);
 
-    const total = words.length;
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
 
-    const score = foundWords.length;
-
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : "orange";
 
     const msg = `
       <div style="font-size:20px;text-align:center;">
@@ -575,11 +698,9 @@ export default function WB_Unit4_Page5_Q2() {
       </div>
     `;
 
-    /*
-      مهم:
-      لو مش كلهم صح
-      ما نقفل الشبكة.
-    */
+    /* =====================================================
+       ALL CORRECT
+    ===================================================== */
 
     if (score === total) {
       setWrongWords([]);
@@ -591,16 +712,22 @@ export default function WB_Unit4_Page5_Q2() {
       return;
     }
 
-    if (score === 0) {
-      ValidationAlert.error(msg);
-    } else {
-      ValidationAlert.warning(msg);
-    }
+    /* =====================================================
+       PARTIAL SCORE
+    ===================================================== */
+
+    ValidationAlert.warning(msg);
+
+    /*
+      مهم:
+      ما بنقفل الشبكة.
+      الطالب يضل يكمل الكلمات الناقصة.
+    */
   };
 
-  /* =================================================
+  /* =====================================================
      SHOW ANSWER
-  ================================================= */
+  ===================================================== */
 
   const showAnswers = () => {
     stopAudio();
@@ -617,14 +744,16 @@ export default function WB_Unit4_Page5_Q2() {
 
     setKeyboardStart(null);
 
+    setIsPointerSelecting(false);
+
     setShowAnswer(true);
 
     setCheckCompleted(true);
   };
 
-  /* =================================================
+  /* =====================================================
      RESET
-  ================================================= */
+  ===================================================== */
 
   const reset = () => {
     stopAudio();
@@ -647,6 +776,8 @@ export default function WB_Unit4_Page5_Q2() {
 
     setIsPointerSelecting(false);
 
+    setWrongTry(false);
+
     setActiveCell([0, 0]);
 
     requestAnimationFrame(() => {
@@ -654,9 +785,9 @@ export default function WB_Unit4_Page5_Q2() {
     });
   };
 
-  /* =================================================
+  /* =====================================================
      RENDER
-  ================================================= */
+  ===================================================== */
 
   return (
     <div className="wordsearch-wrapper">
@@ -697,24 +828,30 @@ export default function WB_Unit4_Page5_Q2() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
+
                       e.stopPropagation();
 
                       playWordAudio(word);
                     }
                   }}
                   className={`
-          word-box-wb-u1-p8-q2
-          word-audio-wb-u4-p5-q2
-          ${isFound ? "word-found-wb-u4-p5-q2" : ""}
-        `}
+                      word-box-wb-u1-p8-q2
+                      word-audio-wb-u4-p5-q2
+                      ${isFound ? "word-found-wb-u4-p5-q2" : ""}
+                    `}
                   style={{
                     position: "relative",
+
                     cursor: "pointer",
                   }}
                 >
                   <span>{word.text}</span>
 
-                  {/* صوت */}
+                  {/* ================================
+                        AUDIO ICON
+                        فقط أثناء التشغيل
+                    ================================ */}
+
                   {isPlaying && (
                     <FaVolumeUp
                       size={15}
@@ -723,14 +860,10 @@ export default function WB_Unit4_Page5_Q2() {
                     />
                   )}
 
-                  {/* صح */}
-                  {isFound && (
-                    <span className="word-check-wb-u4-p5-q2" aria-hidden="true">
-                      ✓
-                    </span>
-                  )}
+                  {/* ================================
+                        WRONG X
+                    ================================ */}
 
-                  {/* غلط */}
                   {isWrong && (
                     <span
                       className="wrong-x-circle-wb-u4-p5-q1"
@@ -750,9 +883,9 @@ export default function WB_Unit4_Page5_Q2() {
 
           <div className="container-word-grid-wb-u2-p5-q2">
             <div
-              className="grid-wb-u1-p6-q2"
+              className={`grid-wb-u1-p6-q2 ${wrongTry ? "shake" : ""}`}
               role="grid"
-              aria-label="Word search grid"
+              aria-label="Word search grid. Use Tab to enter the grid, arrow keys to move, and Enter or Space to start and finish a word."
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerCancel={handlePointerCancel}
@@ -769,6 +902,8 @@ export default function WB_Unit4_Page5_Q2() {
                     const found = isFoundCell(rIdx, cIdx);
 
                     const highlighted = isHighlighted(rIdx, cIdx);
+
+                    const preview = isPreviewCell(rIdx, cIdx);
 
                     return (
                       <div
@@ -787,11 +922,12 @@ export default function WB_Unit4_Page5_Q2() {
                           found ? ", part of a found word" : ""
                         }`}
                         aria-selected={highlighted}
-                        className={`cell-wb-u2-p5-q2
-    ${highlighted ? "highlight" : ""}
-    ${found ? "found" : ""}
-    ${isPreviewCell(rIdx, cIdx) ? "grid-preview-wb-u4-p5-q2" : ""}
-  `}
+                        className={`
+                              cell-wb-u2-p5-q2
+                              ${highlighted ? "highlight" : ""}
+                              ${found ? "found" : ""}
+                              ${preview ? "grid-preview-wb-u4-p5-q2" : ""}
+                            `}
                         onFocus={() => {
                           setActiveCell([rIdx, cIdx]);
 
@@ -805,6 +941,7 @@ export default function WB_Unit4_Page5_Q2() {
                         onPointerDown={(e) => handlePointerDown(e, rIdx, cIdx)}
                         style={{
                           touchAction: "none",
+
                           userSelect: "none",
                         }}
                       >

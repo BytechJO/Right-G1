@@ -16,4 +16,71 @@
     justify-content: space-around;
     align-items: center;
     flex-direction: row;
+}.container-word-grid-wb-u8-p5-q2 {
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+}
+
+/* =====================================================
+   GRID CELL ACCESSIBILITY
+===================================================== */
+
+.cell-wb-u1-p6-q2 {
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.cell-wb-u1-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  z-index: 2;
+}
+
+/* =====================================================
+   POINTER / KEYBOARD PREVIEW
+===================================================== */
+
+.cell-wb-u1-p6-q2.highlight {
+  background: #dbeafe;
+}
+
+/* =====================================================
+   FOUND WORD
+===================================================== */
+
+.cell-wb-u1-p6-q2.found {
+  background: #86efac;
+}
+
+/* =====================================================
+   WORD LIST
+===================================================== */
+
+.word-label-wb-u1-p6-q2.done {
+  cursor: pointer;
+  position: relative;
+  outline: none;
+}
+
+.word-label-wb-u1-p6-q2.done:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+   تظهر فقط وقت التشغيل
+===================================================== */
+
+.word-audio-playing-wb-u8-p5-q2 {
+  margin-left: 6px;
+  font-size: 12px;
+  pointer-events: none;
 }

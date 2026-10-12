@@ -1,6 +1,5 @@
 .unscramble-row-wb-unit8-p6-q1 {
   display: grid;
-  gap: 20px;
   justify-content: space-around;
   width: 100%;
   /* margin-top: 20px; */
@@ -17,4 +16,203 @@
     gap: 17px;
     margin-top: 0px;
   }
+}
+/* =====================================================
+   LETTER BANK
+===================================================== */
+
+.wb-u8-p6-q1-letter-bank {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+
+  justify-content: center;
+
+  width: 100%;
+}
+
+/* =====================================================
+   LETTER
+===================================================== */
+
+.wb-u8-p6-q1-letter {
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: 700;
+  font-size: 22px;
+
+  cursor: grab;
+
+  touch-action: none;
+  user-select: none;
+
+  outline: none;
+}
+
+.wb-u8-p6-q1-letter:focus {
+  outline: none;
+}
+
+.wb-u8-p6-q1-letter:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   SELECTED LETTER
+===================================================== */
+
+.wb-u8-p6-q1-letter-selected {
+  outline: 3px dashed #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DROP CELL FOCUS
+===================================================== */
+
+.text-input {
+  outline: none;
+}
+
+.text-input:focus {
+  outline: none;
+}
+
+.text-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-wb-u8-p6-q1 {
+  background: #e3f2fd !important;
+
+  outline: 2px dashed #2563eb !important;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   MOUSE DRAG OVER
+===================================================== */
+
+.drag-over-cell {
+  background: #e3f2fd !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   WRONG
+===================================================== */
+
+.error-icon {
+  position: absolute;
+
+  top: -10px;
+  right: -10px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dc2626;
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.wb-u8-p6-q1-drag-overlay {
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: 700;
+  font-size: 22px;
+
+  box-shadow: 0 4px 12px
+    rgba(0, 0, 0, 0.15);
+
+  cursor: grabbing;
+}.correct-audio-card-wb-u8-p6-q1 {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+}
+
+.correct-audio-card-wb-u8-p6-q1:focus {
+  outline: none;
+}
+
+.correct-audio-card-wb-u8-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 10px;
+}
+
+.correct-audio-icon-wb-u8-p6-q1 {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 16px;
+  height: 16px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+}.correct-audio-card-wb-u8-p6-q1 {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.correct-audio-card-wb-u8-p6-q1:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  background: rgba(44, 82, 135, 0.04);
+}
+
+.correct-audio-card-wb-u8-p6-q1:focus {
+  outline: none;
+}
+
+.correct-audio-card-wb-u8-p6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 10px;
 }

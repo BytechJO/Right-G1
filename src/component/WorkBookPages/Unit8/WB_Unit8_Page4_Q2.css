@@ -17,3 +17,149 @@
     font-size: 20px;
     font-weight: 600;
 }
+/* =====================================================
+   QUESTION NUMBER
+===================================================== */
+
+.question-row-wb-unit8-p4-q2 .q-number {
+  color: #2c5287;
+
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-audio-wb-u8-p4-q2 {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin: 0;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.sentence-audio-wb-u8-p4-q2:focus {
+  outline: none;
+}
+
+.sentence-audio-wb-u8-p4-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 5px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.question-audio-icon-wb-u8-p4-q2 {
+  width: 14px;
+
+  height: 14px;
+
+  color: #2c5287;
+
+  flex-shrink: 0;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   SELECT OPTION KEYBOARD
+===================================================== */
+
+.img-box-Unit5_Page5_Q2 {
+  position: relative;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.img-box-Unit5_Page5_Q2:focus {
+  outline: none;
+}
+
+.img-box-Unit5_Page5_Q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 5px;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.img-box-Unit5_Page5_Q2 img {
+  display: block;
+}
+
+/* =====================================================
+   CORRECT LOCKED OPTION
+
+   ما بنغير لونه للأخضر.
+   فقط يظل selected الطبيعي.
+===================================================== */
+
+.locked-correct-wb-u8-p4-q2 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   WRONG
+===================================================== */
+
+.img-box-Unit5_Page5_Q2.wrong {
+  position: relative;
+}
+
+/* =====================================================
+   WRONG X
+===================================================== */
+
+.wrong-mark-Unit5_Page5_Q2 {
+  position: absolute;
+
+  top: -9px;
+
+  right: -9px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 22px;
+
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 10;
+}

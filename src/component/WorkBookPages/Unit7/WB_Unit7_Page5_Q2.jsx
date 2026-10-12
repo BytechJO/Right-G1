@@ -671,31 +671,49 @@ export default function WB_Unit7_Page5_Q2() {
       return;
     }
 
+    const score = foundWords.length;
+    const total = words.length;
+
+    /* =====================================================
+     لازم يكون حال كلمة وحدة على الأقل
+  ===================================================== */
+
+    if (score === 0) {
+      // مهم: ما نعرض أي X
+      setWrongWords([]);
+
+      ValidationAlert.info(
+        "Please find at least one word before checking your answer.",
+      );
+
+      return;
+    }
+
+    /* =====================================================
+     من هون فقط نحدد الكلمات الغلط
+  ===================================================== */
+
     const missing = words
       .map((word) => word.text)
       .filter((text) => !foundWords.includes(text));
 
     setWrongWords(missing);
 
-    const score = foundWords.length;
-
-    const total = words.length;
-
-    const color = score === total ? "green" : score === 0 ? "red" : "orange";
+    const color = score === total ? "green" : "orange";
 
     const msg = `
-        <div style="
-          font-size:20px;
-          text-align:center;
-        ">
-          <span style="
-            color:${color};
-            font-weight:bold;
-          ">
-            Score: ${score} / ${total}
-          </span>
-        </div>
-      `;
+    <div style="
+      font-size:20px;
+      text-align:center;
+    ">
+      <span style="
+        color:${color};
+        font-weight:bold;
+      ">
+        Score: ${score} / ${total}
+      </span>
+    </div>
+  `;
 
     if (score === total) {
       setCheckCompleted(true);
@@ -707,19 +725,8 @@ export default function WB_Unit7_Page5_Q2() {
       return;
     }
 
-    if (score === 0) {
-      ValidationAlert.error(msg);
-    } else {
-      ValidationAlert.warning(msg);
-    }
-
-    /*
-        مهم:
-        ما بنقفل النشاط.
-        الطالب يضل يكمل الكلمات الناقصة.
-      */
+    ValidationAlert.warning(msg);
   };
-
   /* =====================================================
      SHOW ANSWER
   ===================================================== */
