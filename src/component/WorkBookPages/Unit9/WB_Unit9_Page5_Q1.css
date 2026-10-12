@@ -62,3 +62,12 @@
     flex-direction: column;
   }
 }
+.grid-wb-u1-p6-q2,
+.cell-wb-u9-p5-q1 {
+  touch-action: none;
+}
+
+.cell-wb-u9-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -2px;
+}

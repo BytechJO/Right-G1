@@ -37,3 +37,23 @@
     width: 25px;
     height: 25px;
 }
+.lines-layer2 {
+    pointer-events: none;
+}
+
+.keyboard-drag-preview-wb-unit9-p2-q2 {
+    animation: blink-preview-wb-unit9-p2-q2 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-wb-unit9-p2-q2 {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.unscramble-input-wb-unit9-p2-q1:focus-visible,
+.word-text2-review3-p1-q2:focus-visible,
+.matched-img2:focus-visible,
+[aria-label^="Pick"]:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 4px;
+}

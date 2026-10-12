@@ -32,3 +32,26 @@
 }
 
 }
+.keyboard-drag-preview-wb-unit9-p4-q2 {
+  animation: blink-preview-wb-unit9-p4-q2 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-wb-unit9-p4-q2 {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.q-input-wb-unit9-p4-q2:focus-visible,
+[aria-label^="Pick"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+.wb-unit9-completed-audio {
+  position: relative;
+}
+
+.wb-unit9-completed-audio:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  z-index: 2;
+}

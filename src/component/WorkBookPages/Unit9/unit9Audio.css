@@ -1,0 +1,44 @@
+.wb-unit9-audio-control {
+  position: relative;
+  outline: none;
+}
+
+.wb-unit9-audio-control:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.wb-unit9-playing-audio-icon {
+  position: absolute;
+  top: -17px;
+  right: -13px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  /* background-color: #2563eb; */
+  color: #000000;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.wb-unit9-playing-audio-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.wb-unit9-completed-audio {
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wb-unit9-completed-audio:hover,
+.wb-unit9-completed-audio:focus-visible {
+  background-color: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.22);
+}

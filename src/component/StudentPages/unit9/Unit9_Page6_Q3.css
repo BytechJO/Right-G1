@@ -1,26 +1,197 @@
-.unit9-p3-q2-canvas {
-    border: 3px solid #6ec1ff;
-    background: #ffffff;
-    border-radius: 12px;
-    height: 260px;
-    width: 270px;
-    box-sizing: border-box;
-    cursor: crosshair;
+/* =====================================================
+   CANVAS WRAPPER
+===================================================== */
+
+.unit9-p6-q3-canvas-wrapper {
+  position: relative;
+
+  width: 270px;
+
+  height: 260px;
 }
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+.unit9-p3-q2-canvas {
+  border: 3px solid #6ec1ff;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  height: 260px;
+
+  width: 270px;
+
+  box-sizing: border-box;
+
+  cursor: crosshair;
+
+  touch-action: none;
+
+  outline: none;
+
+  display: block;
+}
+
+/* =====================================================
+   CANVAS KEYBOARD FOCUS
+===================================================== */
+
+.unit9-p3-q2-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DRAWING ACTIVE CANVAS
+===================================================== */
+
+.unit9-p3-q2-canvas.keyboard-drawing-active {
+  box-shadow: inset 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* =====================================================
+   COLOR CONTROL
+===================================================== */
+
+.unit4-q2-p6-color-control {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-weight: 700;
+}
+
+.unit4-q2-p6-color-control input:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD CURSOR
+===================================================== */
+
+.unit9-p6-q3-keyboard-cursor {
+  position: absolute;
+
+  width: 18px;
+
+  height: 18px;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 20;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   MOVE MODE
+===================================================== */
+
+.unit9-p6-q3-keyboard-cursor.moving {
+  border: 3px solid #2563eb;
+
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* =====================================================
+   DRAWING MODE
+===================================================== */
+
+.unit9-p6-q3-keyboard-cursor.drawing {
+  border: 3px solid #dc2626;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  animation: unit9-p6-q3-drawing-pulse 0.8s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   CURSOR CENTER
+===================================================== */
+
+.unit9-p6-q3-keyboard-cursor-center {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  width: 5px;
+
+  height: 5px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+/* =====================================================
+   KEYBOARD MODE LABEL
+===================================================== */
+
+.unit9-p6-q3-keyboard-status {
+  position: absolute;
+
+  left: 50%;
+
+  top: 22px;
+
+  transform: translateX(-50%);
+
+  padding: 2px 6px;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  border: 1px solid currentColor;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   OLD CANVAS HELPERS
+===================================================== */
 
 .canvas-wrapper {
   position: relative;
+
   width: 500px;
+
   height: 80px;
 }
 
 .bg-canvas,
 .draw-canvas {
   position: absolute;
+
   top: 0;
+
   left: 0;
 }
 
 .bg-canvas {
-  pointer-events: none; /* مهم */
+  pointer-events: none;
 }

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import "./WB_Unit9_Page6_Q2.css";
 import sound1 from "../../../assets/U1 WB/U9/audio/cd11pg56-instruction1-adult-lady_ynLikPrn.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 
 import img1 from "../../../assets/U1 WB/U9/U9P56EXEB01-01.svg";
 import img2 from "../../../assets/U1 WB/U9/U9P56EXEB01-02.svg";
@@ -37,8 +38,9 @@ const data = [
 
 const WB_Unit9_Page6_Q2 = () => {
   const [selected, setSelected] = useState({});
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+  const [wrongQuestions, setWrongQuestions] = useState([]);
+  const [lockedQuestions, setLockedQuestions] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const stopAtSecond = 7.28;
 
@@ -64,7 +66,7 @@ const WB_Unit9_Page6_Q2 = () => {
   ];
 
   const checkAnswers = () => {
-    if (locked) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (showAnswer || lockedQuestions.length === data.length) return;
 
     const totalQuestions = data.length;
     let correct = 0;
@@ -102,13 +104,14 @@ const WB_Unit9_Page6_Q2 = () => {
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-    setShowResult(true);
-    setLocked(true);
+    const correctIds = data.filter((question) => question.options[selected[question.id]].answer).map((question) => question.id);
+    setLockedQuestions(correctIds);
+    setWrongQuestions(data.map((question) => question.id).filter((id) => !correctIds.includes(id)));
   };
   const handleSelect = (qId, index) => {
-    if (locked) return; // 🔒 منع التعديل بعد رؤية الحل
+    if (showAnswer || lockedQuestions.includes(qId)) return;
     setSelected((prev) => ({ ...prev, [qId]: index }));
-    setShowResult(false);
+    setWrongQuestions((current) => current.filter((id) => id !== qId));
   };
   const showAnswers = () => {
     const correctSelection = {};
@@ -119,8 +122,9 @@ const WB_Unit9_Page6_Q2 = () => {
     });
 
     setSelected(correctSelection);
-    setShowResult(false);
-    setLocked(true);
+    setWrongQuestions([]);
+    setLockedQuestions(data.map((question) => question.id));
+    setShowAnswer(true);
   };
 
   return (
@@ -139,16 +143,13 @@ const WB_Unit9_Page6_Q2 = () => {
           gap: "60px",
         }}
       >
-        <h5 className="header-title-page8" style={{ alignItems: "baseline" }}>
-          <span className="ex-A">B</span> Which picture has a{" "}
-          <span style={{ color: "red" }}>different beginning sound</span>?
-          Listen and tap or click<span style={{ color: "red" }}>✕</span> .
-        </h5>
+        <ExerciseHeader sectionLetter="B" title="Which picture has a different beginning sound? Listen and write ✓." subTitle="Listen to each group and tap the picture with the different first sound." />
 
         <QuestionAudioPlayer
           src={sound1}
           stopAtSecond={stopAtSecond}
           captions={captions}
+          pageId="wb-unit9-page6-q2"
         />
         <div className="shorti-container-wb-unit9-p6-q2 ">
           {data.map((question) => (
@@ -175,17 +176,17 @@ const WB_Unit9_Page6_Q2 = () => {
                   <img
                     src={question.src1}
                     className="main-img-wb-unit9-p6-q2"
-                    alt=""
+                    alt={question.options[0].label}
                   />
                   <img
                     src={question.src2}
                     className="main-img-wb-unit9-p6-q2"
-                    alt=""
+                    alt={question.options[1].label}
                   />
                   <img
                     src={question.src3}
                     className="main-img-wb-unit9-p6-q2"
-                    alt=""
+                    alt={question.options[2].label}
                   />
                 </div>
                 {/* الخيارات */}
@@ -199,9 +200,19 @@ const WB_Unit9_Page6_Q2 = () => {
                           : ""
                       }`}
                       onClick={() => handleSelect(question.id, index)}
+                      role="button"
+                      tabIndex={lockedQuestions.includes(question.id) ? -1 : 0}
+                      aria-label={`Question ${question.id}: choose ${opt.label}`}
+                      aria-pressed={selected[question.id] === index}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleSelect(question.id, index);
+                        }
+                      }}
                     >
                       {/* X عند الغلط */}
-                      {showResult &&
+                      {wrongQuestions.includes(question.id) &&
                         selected[question.id] === index &&
                         opt.answer === false && (
                           <span className="wrong-x-circle-wb-unit8-p6-q2">
@@ -225,8 +236,9 @@ const WB_Unit9_Page6_Q2 = () => {
           className="try-again-button"
           onClick={() => {
             setSelected({});
-            setShowResult(false);
-            setLocked(false);
+            setWrongQuestions([]);
+            setLockedQuestions([]);
+            setShowAnswer(false);
           }}
         >
           Start Again ↻

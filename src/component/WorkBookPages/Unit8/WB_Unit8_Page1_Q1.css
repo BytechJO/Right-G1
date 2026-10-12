@@ -1,6 +1,6 @@
 .wb-unit8-p1-q1-grid {
   display: flex;
-width: 100%;
+  width: 100%;
   gap: 25px;
   justify-content: space-between;
 }
@@ -19,6 +19,7 @@ width: 100%;
   padding: 5px;
   width: 60%;
   text-align: start;
+  cursor: pointer;
 }
 .draggable-fixed-wrapper {
   width: 260px; /* ثابتي العرض */
@@ -155,9 +156,7 @@ width: 100%;
 
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
 
-  animation:
-    blink-preview-wb-unit8-p1-q1
-    0.8s ease-in-out infinite;
+  animation: blink-preview-wb-unit8-p1-q1 0.8s ease-in-out infinite;
 }
 
 @keyframes blink-preview-wb-unit8-p1-q1 {

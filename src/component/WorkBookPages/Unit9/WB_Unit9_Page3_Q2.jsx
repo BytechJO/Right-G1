@@ -7,6 +7,10 @@ import img5 from "../../../assets/U1 WB/U9/U9P53EXEG-05.svg";
 import img6 from "../../../assets/U1 WB/U9/U9P53EXEG-06.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit9_Page3_Q2.css";
+import ExerciseHeader from "../../ExerciseHeader";
+import useUnit9Audio from "./useUnit9Audio";
+import Unit9PlayingAudioIcon from "./Unit9PlayingAudioIcon";
+import iWantAudio from "../../../assets/U1 WB/U9/audio/page53- G/Item_001_I_want.mp3";
 
 const WB_Unit9_Page3_Q2 = () => {
   const items = [
@@ -22,10 +26,13 @@ const WB_Unit9_Page3_Q2 = () => {
   const [checked, setChecked] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const { activeAudioKey, playAudio } = useUnit9Audio();
 
   const normalize = (str) => str.toLowerCase().replace(/[-_]/g, " ").trim();
 
   const checkAnswer = () => {
+    if (checked && isCorrect) return;
     // 1️⃣ لازم يداير على صورة
     if (!selectedImage) {
       ValidationAlert.info("Please circle one picture first!");
@@ -73,6 +80,25 @@ const WB_Unit9_Page3_Q2 = () => {
     setAnswer("");
     setChecked(false);
     setSelectedImage(null);
+    setIsCorrect(null);
+    setShowAnswer(false);
+  };
+
+  const chooseImage = (value) => {
+    if (showAnswer || (checked && isCorrect)) return;
+    setSelectedImage(value);
+    setAnswer(value);
+    setChecked(false);
+    setIsCorrect(null);
+  };
+
+  const revealAnswer = () => {
+    const value = items[0].value;
+    setSelectedImage(value);
+    setAnswer(value);
+    setChecked(true);
+    setIsCorrect(true);
+    setShowAnswer(true);
   };
 
   return (
@@ -90,10 +116,7 @@ const WB_Unit9_Page3_Q2 = () => {
           gap: "40px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">F</span> What do you want? Tap or click an
-          animal.
-        </h5>
+        <ExerciseHeader sectionLetter="G" title="What animals do you like? Circle and write." subTitle="Tap an animal, then complete the sentence shown below." />
 
         {/* الصور */}
         <div className="images-row-wb-unit9-p3-q2 w-full">
@@ -103,10 +126,16 @@ const WB_Unit9_Page3_Q2 = () => {
               className={`image-box-unit10-page6-q3 ${
                 selectedImage === item.value ? "selected-unit10-page6-q3" : ""
               }`}
-              onClick={() => {
-                if (checked) return;
-                setSelectedImage(item.value);
-                setAnswer(item.value); // ⭐ اكتب اسم الصورة داخل الانبوت
+              onClick={() => chooseImage(item.value)}
+              role="button"
+              tabIndex={showAnswer || (checked && isCorrect) ? -1 : 0}
+              aria-label={`Choose ${item.value}`}
+              aria-pressed={selectedImage === item.value}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  chooseImage(item.value);
+                }
               }}
             >
               <img
@@ -123,14 +152,34 @@ const WB_Unit9_Page3_Q2 = () => {
           className="sentence-wrapper-unit10-page6-q3 w-full"
           style={{ position: "relative" }}
         >
-          <span>I want</span>
+          <span
+            className="wb-unit9-audio-control cursor-pointer"
+            role="button"
+            tabIndex={0}
+            aria-label="Play I want"
+            onClick={() => playAudio("i-want", iWantAudio)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                playAudio("i-want", iWantAudio);
+              }
+            }}
+          >
+            {activeAudioKey === "i-want" && <Unit9PlayingAudioIcon />}
+            I want
+          </span>
 
           <input
             type="text"
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={(e) => {
+              setAnswer(e.target.value);
+              setChecked(false);
+              setIsCorrect(null);
+            }}
             className="write-input-unit10-page6-q3"
-            disabled={checked}
+            disabled={showAnswer || (checked && isCorrect)}
+            aria-label="Animal name"
           />
 
           {checked && isCorrect === false && (
@@ -144,6 +193,10 @@ const WB_Unit9_Page3_Q2 = () => {
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻
+        </button>
+
+        <button onClick={revealAnswer} className="show-answer-btn">
+          Show Answer
         </button>
 
         <button onClick={checkAnswer} className="check-button2">

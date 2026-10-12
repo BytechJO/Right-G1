@@ -1,0 +1,9 @@
+.lines-layer2 {
+  pointer-events: none;
+}
+
+.clickable-img-unit2-p7-q2:focus-visible,
+.h5-unit6-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}

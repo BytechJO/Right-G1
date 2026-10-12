@@ -44,3 +44,17 @@
     justify-items: start;
   }
 }
+.keyboard-drag-preview-wb-unit9-p6-q1 {
+  animation: blink-preview-wb-unit9-p6-q1 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-wb-unit9-p6-q1 {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.text-input:focus-visible,
+[aria-label^="Pick letter"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}

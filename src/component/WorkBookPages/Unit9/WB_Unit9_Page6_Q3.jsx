@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./WB_Unit9_Page6_Q3.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/U1 WB/U9/U9P56EXEC-01.svg";
@@ -7,10 +7,12 @@ import img3 from "../../../assets/U1 WB/U9/U9P56EXEC-03.svg";
 import img4 from "../../../assets/U1 WB/U9/U9P56EXEC-04.svg";
 import sound1 from "../../../assets/U1 WB/U9/audio/cd12pg56-instruction2-adult-lady_uuCOILX6.mp3";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const WB_Unit9_Page6_Q3 = () => {
   const stopAtSecond = 7.66;
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  const [lockedQuestions, setLockedQuestions] = useState([]);
+  const [showAnswer, setShowAnswer] = useState(false);
   // ================================
   // ✔ Captions Array
   // ================================
@@ -62,12 +64,12 @@ const WB_Unit9_Page6_Q3 = () => {
   ];
 
   const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState([]);
+  const [wrongQuestions, setWrongQuestions] = useState([]);
 
   const selectAnswer = (id, value) => {
-    if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
+    if (showAnswer || lockedQuestions.includes(id)) return;
     setAnswers({ ...answers, [id]: value });
-    setShowResult(false);
+    setWrongQuestions((current) => current.filter((questionId) => questionId !== id));
   };
   const showAnswers = () => {
     const corrects = {};
@@ -76,12 +78,13 @@ const WB_Unit9_Page6_Q3 = () => {
     });
 
     setAnswers(corrects);
-    setShowResult([]); // إخفاء كل X
-    setLocked(true); // 🔒 قفل التعديل
+    setWrongQuestions([]);
+    setLockedQuestions(questions.map((question) => question.id));
+    setShowAnswer(true);
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (showAnswer || lockedQuestions.length === questions.length) return;
     // 1) فحص الخانات الفارغة
     const isEmpty = questions.some((q) => !answers[q.id]);
     if (isEmpty) {
@@ -94,8 +97,9 @@ const WB_Unit9_Page6_Q3 = () => {
       answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
-    setShowResult(results);
-    setLocked(true);
+    const correctIds = questions.filter((question) => answers[question.id] === question.correct).map((question) => question.id);
+    setLockedQuestions(correctIds);
+    setWrongQuestions(questions.map((question) => question.id).filter((id) => !correctIds.includes(id)));
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -119,8 +123,9 @@ const WB_Unit9_Page6_Q3 = () => {
 
   const resetAnswers = () => {
     setAnswers({});
-    setShowResult([]);
-    setLocked(false); // ← مهم جداً
+    setWrongQuestions([]);
+    setLockedQuestions([]);
+    setShowAnswer(false);
   };
 
   return (
@@ -139,20 +144,15 @@ const WB_Unit9_Page6_Q3 = () => {
           gap: "50px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">C</span>
-          Does it begin with
-          <span style={{ color: "red" }}> m </span>? Listen and tap or click
-          <span style={{ color: "red" }}> ✓ </span> or
-          <span style={{ color: "red" }}> ✗</span>.
-        </h5>
+        <ExerciseHeader sectionLetter="C" title="Does it begin with m? Listen and write ✓ or ✗." subTitle="Listen and choose ✓ if the word begins with m or X if it does not." />
         <QuestionAudioPlayer
           src={sound1}
           stopAtSecond={stopAtSecond}
           captions={captions}
+          pageId="wb-unit9-page6-q3"
         />
         <div className="wb-unit9-p6-q3-container">
-          {questions.map((q, index) => (
+          {questions.map((q) => (
             <div key={q.id} className="wb-unit9-p6-q3-question-box">
               <p
                 className="unit6-p1-q1-question-text"
@@ -166,7 +166,7 @@ const WB_Unit9_Page6_Q3 = () => {
               <div className="wb-unit9-p6-q3-flex">
                 <img
                   src={q.image}
-                  alt=""
+                  alt={`Picture for phonics question ${q.id}`}
                   className="unit6-p1-q1-question-img"
                 />
 
@@ -178,11 +178,21 @@ const WB_Unit9_Page6_Q3 = () => {
                         answers[q.id] === "✓" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✓")}
+                      role="button"
+                      tabIndex={lockedQuestions.includes(q.id) ? -1 : 0}
+                      aria-label={`Question ${q.id}: yes`}
+                      aria-pressed={answers[q.id] === "✓"}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✓");
+                        }
+                      }}
                     >
                       ✓
                     </div>
 
-                    {showResult[index] === "wrong" && answers[q.id] === "✓" && (
+                    {wrongQuestions.includes(q.id) && answers[q.id] === "✓" && (
                       <div className="unit6-p1-q1-wrong-icon">✕</div>
                     )}
                   </div>
@@ -194,11 +204,21 @@ const WB_Unit9_Page6_Q3 = () => {
                         answers[q.id] === "✗" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✗")}
+                      role="button"
+                      tabIndex={lockedQuestions.includes(q.id) ? -1 : 0}
+                      aria-label={`Question ${q.id}: no`}
+                      aria-pressed={answers[q.id] === "✗"}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✗");
+                        }
+                      }}
                     >
                       ✗
                     </div>
 
-                    {showResult[index] === "wrong" && answers[q.id] === "✗" && (
+                    {wrongQuestions.includes(q.id) && answers[q.id] === "✗" && (
                       <div className="unit6-p1-q1-wrong-icon">✕</div>
                     )}
                   </div>
