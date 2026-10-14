@@ -17,25 +17,26 @@ const Unit10_Page1_Read = () => {
     new Audio(Pg22_1_3_AdultLady),
     new Audio(Pg22_1_4_AdultLady),
   ];
-  const captions= [
-  { start: 0.379, end: 1.439, text: "Page 82." },
-  { start: 1.86, end: 3.199, text: "Listen and read along." },
-  { start: 3.759, end: 4.759, text: "Short E:" },
-  { start: 5.159, end: 5.519, text: "bed" },
-  { start: 6.039, end: 6.44, text: "egg" },
-  { start: 6.799, end: 7.199, text: "hen" },
-];
+  const captions = [
+    { start: 0.379, end: 1.439, text: "Page 82." },
+    { start: 1.86, end: 3.199, text: "Listen and read along." },
+    { start: 3.759, end: 4.759, text: "Short E:" },
+    { start: 5.159, end: 5.519, text: "bed" },
+    { start: 6.039, end: 6.44, text: "egg" },
+    { start: 6.799, end: 7.199, text: "hen" },
+  ];
   return (
     <>
-
-         <FourImagesWithAudio
+      <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 3.65, 5.159,6.039,6.799]}
+        checkpoints={[0, 3.65, 5.159, 6.039, 6.799]}
         popupOpen={true}
         titleQ={"Listen and read along."}
+        pageId="unit10-page82-read"
+        subHeader="Press Play, follow the short-e words, then tap each card to hear it again."
         audioArr={imageSounds}
-         captions={captions}
+        captions={captions}
       />
     </>
   );

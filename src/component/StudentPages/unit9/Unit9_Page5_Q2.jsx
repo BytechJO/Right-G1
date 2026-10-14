@@ -403,7 +403,6 @@ const Unit9_Page5_Q2 = () => {
       >
         <div className="div-forall" style={{ gap: "40px" }}>
           <ExerciseHeader
-            sectionLetter="A"
             questionNumber="2"
             title={
               <>

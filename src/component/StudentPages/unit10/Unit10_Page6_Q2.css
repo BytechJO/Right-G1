@@ -11,7 +11,14 @@
   display: inline-block;
   border: 2px solid transparent;
   border-radius: 50%;
+  cursor: pointer;
+  outline: none;
 }
+
+.unit10-page6-q2-page { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
+.unit10-page6-q2-bank { display: flex; gap: 10px; padding: 10px; width: 100%; border: 2px dashed #ccc; border-radius: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.unit10-page6-q2-slot-row { position: relative; display: flex; align-items: flex-end; width: 100%; gap: 4px; }
+.unit10-page6-q2-drag-overlay { padding: 7px 14px; border: 2px solid #2c5287; border-radius: 8px; background: white; font-weight: bold; cursor: grabbing; box-shadow: 0 4px 12px rgba(0,0,0,.2); display: inline-block; }
 
 .circle-wrapper-unit10-page6-q2.active {
   border-color: #2c5287;
@@ -57,4 +64,392 @@
   border-bottom: 2px solid #ffffff !important;
   justify-content: center;
   z-index: 10;
+}
+/* =====================================================
+   WORD BANK
+===================================================== */
+
+.unit10-p6-q2-word-bank {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+
+  width: 100%;
+
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* =====================================================
+   BANK CHIP
+===================================================== */
+
+.unit10-p6-q2-bank-chip {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: 700;
+
+  user-select: none;
+  touch-action: none;
+
+  outline: none;
+}
+
+.unit10-p6-q2-bank-chip:focus {
+  outline: none;
+}
+
+.unit10-p6-q2-bank-chip:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.unit10-p6-q2-bank-chip-selected {
+  outline: 3px dashed #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   BANK AUDIO ICON
+===================================================== */
+
+.unit10-p6-q2-bank-audio-icon {
+  position: absolute;
+
+  top: -9px;
+  right: -9px;
+
+  width: 14px;
+  height: 14px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   IMAGE SELECT
+===================================================== */
+
+.circle-wrapper-unit10-page6-q2 {
+  position: relative;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.circle-wrapper-unit10-page6-q2:focus {
+  outline: none;
+}
+
+.circle-wrapper-unit10-page6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+/* =====================================================
+   IMAGE AUDIO ICON
+===================================================== */
+
+.image-audio-icon-unit10-p6-q2 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 15px;
+  height: 15px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   SLOT
+===================================================== */
+
+.write-input-unit4-page5-q1 {
+  position: relative;
+
+  outline: none;
+}
+
+.write-input-unit4-page5-q1:focus {
+  outline: none;
+}
+
+.write-input-unit4-page5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-unit10-p6-q2 {
+  background: #e3f2fd !important;
+
+  outline: 2px dashed #2563eb !important;
+
+  outline-offset: -2px;
+}
+
+.preview-text-unit10-p6-q2 {
+  opacity: 0.65;
+  font-style: italic;
+}
+
+/* =====================================================
+   MOUSE DRAG OVER
+===================================================== */
+
+.drag-over-cell {
+  background: #e3f2fd !important;
+
+  outline: 2px dashed #2563eb;
+
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   SLOT ROW
+===================================================== */
+
+.slot-row-unit10-p6-q2 {
+  position: relative;
+
+  display: flex;
+  align-items: flex-end;
+
+  width: 100%;
+}
+
+/* =====================================================
+   FIXED / END WORD AUDIO
+===================================================== */
+
+.fixed-audio-unit10-p6-q2,
+.after-answer-audio-unit10-p6-q2 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.fixed-audio-unit10-p6-q2:focus-visible,
+.after-answer-audio-unit10-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+
+/* =====================================================
+   SMALL AUDIO ICON
+===================================================== */
+
+.small-audio-icon-unit10-p6-q2 {
+  position: absolute;
+
+  top: -10px;
+  right: -12px;
+
+  width: 14px;
+  height: 14px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   COMPLETE CORRECT QUESTION
+===================================================== */
+
+.completed-question-unit10-p6-q2 {
+  position: relative;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  outline: none;
+}
+
+.completed-question-unit10-p6-q2:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 15px
+    rgba(0, 0, 0, 0.12);
+
+  background:
+    rgba(44, 82, 135, 0.035);
+}
+
+.completed-question-unit10-p6-q2:focus {
+  outline: none;
+}
+
+.completed-question-unit10-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 5px;
+
+  border-radius: 12px;
+}
+
+/* =====================================================
+   FULL AUDIO ICON
+===================================================== */
+
+.full-audio-icon-unit10-p6-q2 {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 17px;
+  height: 17px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* =====================================================
+   WRONG
+===================================================== */
+
+.wrong-mark-unit10-p6-q2 {
+  position: absolute;
+
+  top: -10px;
+  right: -10px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dc2626;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.drag-overlay-unit10-p6-q2 {
+  display: inline-block;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: 700;
+
+  cursor: grabbing;
+
+  box-shadow:
+    0 4px 12px
+    rgba(0, 0, 0, 0.2);
+}/* =========================================
+   SELECTED X
+========================================= */
+
+.selected-x-unit10-p6-q2 {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #2c5287;
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =========================================
+   SELECTED STATE
+========================================= */
+
+.circle-wrapper-unit10-page6-q2.active {
+  outline: 3px solid #2c5287;
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* =========================================
+   CORRECT SELECTED
+   يظل ثابت بعد Check
+========================================= */
+
+.correct-selected-unit10-p6-q2 {
+  outline: 3px solid #2c5287 !important;
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* =========================================
+   WRONG SELECTED
+========================================= */
+
+.wrong-selected-unit10-p6-q2 {
+  outline: 3px solid #2c5287;
+  outline-offset: 3px;
 }
