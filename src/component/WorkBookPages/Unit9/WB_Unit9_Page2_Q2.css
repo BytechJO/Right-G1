@@ -1,59 +1,81 @@
 .container12-wb-unit9-p2-q1 {
-    margin: auto;
-    position: relative;
-    display: flex;
-    gap: 30px;
-    user-select: none;
-    margin-bottom: 30px;
-    flex-direction: column;
+  margin: auto;
+  position: relative;
+  display: flex;
+  gap: 30px;
+  user-select: none;
+  margin-bottom: 30px;
+  flex-direction: column;
 }
 
-
+.error-mark-unit9-p2-q2 {
+  width: 25px;
+  height: 25px;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  position: absolute;
+  left: 76%;
+  top: 2%;
+}
 .unscramble-input-wb-unit9-p2-q1 {
-    width: 90%;
-    /* padding: 6px 10px; */
-    border-bottom: 2px solid #000000;
-    /* border-radius: 6px; */
-    /* margin-top: 8px; */
-    font-size: 20px;
-    height: 30px;
+  width: 90%;
+  /* padding: 6px 10px; */
+  border-bottom: 2px solid #000000;
+  /* border-radius: 6px; */
+  /* margin-top: 8px; */
+  font-size: 20px;
+  height: 30px;
 }
 
 .input-error-x-wb-unit9-p2-q1 {
-    position: absolute;
-    right: 99%;
-    top: 70%;
-    border: 2px solid white;
-    background-color: red;
-    border-radius: 50%;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 8px;
-    vertical-align: middle;
-    width: 25px;
-    height: 25px;
+  position: absolute;
+  right: 99%;
+  top: 70%;
+  border: 2px solid white;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 8px;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
 }
 .lines-layer2 {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .keyboard-drag-preview-wb-unit9-p2-q2 {
-    animation: blink-preview-wb-unit9-p2-q2 0.8s ease-in-out infinite;
+  animation: blink-preview-wb-unit9-p2-q2 0.8s ease-in-out infinite;
 }
 
 @keyframes blink-preview-wb-unit9-p2-q2 {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .unscramble-input-wb-unit9-p2-q1:focus-visible,
 .word-text2-review3-p1-q2:focus-visible,
 .matched-img2:focus-visible,
 [aria-label^="Pick"]:focus-visible {
-    outline: 3px solid #2563eb;
-    outline-offset: 4px;
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
 }

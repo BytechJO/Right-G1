@@ -17,7 +17,9 @@
   font-weight: 700;
   margin-bottom: 20px;
 }
-
+.wb-unit9-p1-q2-content {
+  margin-bottom: 60px;
+}
 .wb-unit9-p1-q2-title::before {
   content: "B";
   background: #5bb9e6;

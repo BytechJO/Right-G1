@@ -16,6 +16,8 @@ import momAudio from "../../../assets/unit9/sound/Page 80 - A 1/mom.mp3";
 import nurseAudio from "../../../assets/unit9/sound/Page 80 - A 1/nurse.mp3";
 import milkAudio from "../../../assets/unit9/sound/Page 80 - A 1/milk.mp3";
 import nestAudio from "../../../assets/U1 WB/U9/audio/page56- A/Item_014_nest.mp3";
+import manAudio from "../../../assets/U1 WB/U9/audio/page56- A/Item_002_man.mp3";
+
 import {
   DndContext,
   DragOverlay,
@@ -29,7 +31,7 @@ import {
 // ─────────────────────────────────────────────
 const data = [
   { img: img1, answer: "n", pattern: "ight", audio: nightAudio },
-  { img: img2, answer: "m", pattern: "an", audio: null },
+  { img: img2, answer: "m", pattern: "an", audio: manAudio },
   { img: img3, answer: "m", pattern: "om", audio: momAudio },
   { img: img4, answer: "n", pattern: "urse", audio: nurseAudio },
   { img: img5, answer: "m", pattern: "ilk", audio: milkAudio },
@@ -53,7 +55,10 @@ function DraggableLetter({ id, text, disabled, onKeyboardPick, bankRef }) {
 
   return (
     <div
-      ref={(element) => { setNodeRef(element); bankRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        bankRef(element);
+      }}
       {...listeners}
       {...attributes}
       role="button"
@@ -104,7 +109,10 @@ function DroppableCell({
 
   return (
     <div
-      ref={(element) => { setNodeRef(element); targetRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        targetRef(element);
+      }}
       className={`text-input ${isOver ? "drag-over-cell" : ""}`}
       style={{
         background: isOver ? "#e3f2fd" : "white",
@@ -120,10 +128,18 @@ function DroppableCell({
       onClick={() => !disabled && displayText && onClear(id)}
       role="button"
       tabIndex={!disabled && (keyboardActive || displayText) ? 0 : -1}
-      aria-label={displayText ? `Letter ${displayText}. Press Enter to remove` : "Empty letter box"}
+      aria-label={
+        displayText
+          ? `Letter ${displayText}. Press Enter to remove`
+          : "Empty letter box"
+      }
       onKeyDown={onKeyDown}
     >
-      {preview ? <span className="keyboard-drag-preview-wb-unit9-p6-q1">{preview}</span> : displayText}
+      {preview ? (
+        <span className="keyboard-drag-preview-wb-unit9-p6-q1">{preview}</span>
+      ) : (
+        displayText
+      )}
       {isWrong && <div className="error-icon">✕</div>}
     </div>
   );
@@ -174,7 +190,11 @@ const WB_Unit9_Page6_Q1 = () => {
       return copy;
     });
 
-    setWrongInputs((current) => current.map((wrong, wrongIndex) => wrongIndex === index ? false : wrong));
+    setWrongInputs((current) =>
+      current.map((wrong, wrongIndex) =>
+        wrongIndex === index ? false : wrong,
+      ),
+    );
   };
 
   // ── Click to clear ──
@@ -187,11 +207,18 @@ const WB_Unit9_Page6_Q1 = () => {
       copy[index] = "";
       return copy;
     });
-    setWrongInputs((current) => current.map((wrong, wrongIndex) => wrongIndex === index ? false : wrong));
-    if (returnFocus) requestAnimationFrame(() => bankRefs.current[returnedId]?.focus());
+    setWrongInputs((current) =>
+      current.map((wrong, wrongIndex) =>
+        wrongIndex === index ? false : wrong,
+      ),
+    );
+    if (returnFocus)
+      requestAnimationFrame(() => bankRefs.current[returnedId]?.focus());
   };
 
-  const availableTargets = data.map((_, index) => index).filter((index) => !lockedSlots.includes(index));
+  const availableTargets = data
+    .map((_, index) => index)
+    .filter((index) => !lockedSlots.includes(index));
 
   const pickWithKeyboard = (id) => {
     if (showAnswer) return;
@@ -228,7 +255,11 @@ const WB_Unit9_Page6_Q1 = () => {
       event.preventDefault();
       const current = availableTargets.indexOf(index);
       const direction = event.shiftKey ? -1 : 1;
-      const next = availableTargets[(current + direction + availableTargets.length) % availableTargets.length];
+      const next =
+        availableTargets[
+          (current + direction + availableTargets.length) %
+            availableTargets.length
+        ];
       setKeyboardTarget(next);
       targetRefs.current[next]?.focus();
       return;
@@ -236,8 +267,16 @@ const WB_Unit9_Page6_Q1 = () => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       const item = keyboardItem;
-      setInputs((current) => current.map((value, valueIndex) => valueIndex === index ? item : value));
-      setWrongInputs((current) => current.map((wrong, wrongIndex) => wrongIndex === index ? false : wrong));
+      setInputs((current) =>
+        current.map((value, valueIndex) =>
+          valueIndex === index ? item : value,
+        ),
+      );
+      setWrongInputs((current) =>
+        current.map((wrong, wrongIndex) =>
+          wrongIndex === index ? false : wrong,
+        ),
+      );
       setKeyboardItem(null);
       setKeyboardTarget(null);
       focusNextBank(item);
@@ -272,7 +311,11 @@ const WB_Unit9_Page6_Q1 = () => {
     });
 
     setWrongInputs(wrongFlags);
-    setLockedSlots(wrongFlags.map((wrong, index) => !wrong ? index : null).filter((index) => index !== null));
+    setLockedSlots(
+      wrongFlags
+        .map((wrong, index) => (!wrong ? index : null))
+        .filter((index) => index !== null),
+    );
 
     const total = data.length;
     const color =
@@ -325,7 +368,11 @@ const WB_Unit9_Page6_Q1 = () => {
             justifyContent: "flex-start",
           }}
         >
-          <ExerciseHeader sectionLetter="A" title="Write the missing letters. Say the words." subTitle="Say each word and drag m or n into the blank." />
+          <ExerciseHeader
+            sectionLetter="A"
+            title="Write the missing letters. Say the words."
+            subTitle="Say each word and drag m or n into the blank."
+          />
 
           {/* ── Letter bank ── */}
           <div
@@ -347,7 +394,9 @@ const WB_Unit9_Page6_Q1 = () => {
                 text={l.text}
                 disabled={showAnswer}
                 onKeyboardPick={() => pickWithKeyboard(l.id)}
-                bankRef={(element) => { bankRefs.current[l.id] = element; }}
+                bankRef={(element) => {
+                  bankRefs.current[l.id] = element;
+                }}
               />
             ))}
           </div>
@@ -358,22 +407,43 @@ const WB_Unit9_Page6_Q1 = () => {
               <div
                 className={`unscramble-box-wb-unit9-p6-q1 wb-unit9-audio-control ${lockedSlots.includes(index) && item.audio ? "wb-unit9-completed-audio" : ""}`}
                 key={index}
-                role={lockedSlots.includes(index) && item.audio ? "button" : undefined}
-                tabIndex={lockedSlots.includes(index) && item.audio ? 0 : undefined}
-                aria-label={lockedSlots.includes(index) && item.audio ? `Play ${item.answer}${item.pattern}` : undefined}
+                role={
+                  lockedSlots.includes(index) && item.audio
+                    ? "button"
+                    : undefined
+                }
+                tabIndex={
+                  lockedSlots.includes(index) && item.audio ? 0 : undefined
+                }
+                aria-label={
+                  lockedSlots.includes(index) && item.audio
+                    ? `Play ${item.answer}${item.pattern}`
+                    : undefined
+                }
                 onClick={() => {
-                  if (lockedSlots.includes(index) && item.audio) playAudio(`word-${index}`, item.audio);
+                  if (lockedSlots.includes(index) && item.audio)
+                    playAudio(`word-${index}`, item.audio);
                 }}
                 onKeyDown={(event) => {
-                  if (lockedSlots.includes(index) && item.audio && (event.key === "Enter" || event.key === " ")) {
+                  if (
+                    lockedSlots.includes(index) &&
+                    item.audio &&
+                    (event.key === "Enter" || event.key === " ")
+                  ) {
                     event.preventDefault();
                     playAudio(`word-${index}`, item.audio);
                   }
                 }}
               >
-                {activeAudioKey === `word-${index}` && <Unit9PlayingAudioIcon />}
+                {activeAudioKey === `word-${index}` && (
+                  <Unit9PlayingAudioIcon />
+                )}
                 <div className="img-box-wb-unit9-p6-q1">
-                  <img src={item.img} alt={`${item.answer}${item.pattern}`} style={{ height: "110px" }} />
+                  <img
+                    src={item.img}
+                    alt={`${item.answer}${item.pattern}`}
+                    style={{ height: "110px" }}
+                  />
                 </div>
 
                 <div className="input-row">
@@ -395,10 +465,16 @@ const WB_Unit9_Page6_Q1 = () => {
                       isWrong={wrongInputs[index]}
                       disabled={showAnswer || lockedSlots.includes(index)}
                       onClear={handleClear}
-                      preview={keyboardItem && keyboardTarget === index ? getLetterText(keyboardItem) : ""}
+                      preview={
+                        keyboardItem && keyboardTarget === index
+                          ? getLetterText(keyboardItem)
+                          : ""
+                      }
                       keyboardActive={Boolean(keyboardItem)}
                       onKeyDown={(event) => handleTargetKeyDown(event, index)}
-                      targetRef={(element) => { targetRefs.current[index] = element; }}
+                      targetRef={(element) => {
+                        targetRefs.current[index] = element;
+                      }}
                     />
                   </div>
 

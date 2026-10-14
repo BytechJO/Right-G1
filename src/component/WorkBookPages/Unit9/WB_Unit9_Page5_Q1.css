@@ -71,3 +71,110 @@
   outline: 3px solid #2563eb;
   outline-offset: -2px;
 }
+/* =====================================================
+   GRID POINTER SUPPORT
+   Mouse + Touch + iPad + Apple Pencil
+===================================================== */
+
+.grid-wb-u1-p6-q2 {
+  touch-action: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+}
+
+.cell-wb-u9-p5-q1 {
+  touch-action: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+/* =====================================================
+   KEYBOARD ACTIVE CELL
+===================================================== */
+
+.cell-wb-u9-p5-q1:focus-visible,
+.active-keyboard-cell-wb-u9-p5-q1 {
+  outline: 3px solid #2563eb;
+
+  outline-offset: -3px;
+
+  position: relative;
+
+  z-index: 3;
+}
+
+/* =====================================================
+   KEYBOARD SELECTING STATE
+===================================================== */
+
+.keyboard-grid-selecting-wb-u9-p5-q1
+  .active-keyboard-cell-wb-u9-p5-q1 {
+  outline: 3px dashed #2563eb;
+
+  outline-offset: -3px;
+}
+
+/* =====================================================
+   PREVIEW
+
+   حافظي كمان على .highlight الموجود عندك.
+===================================================== */
+
+.cell-wb-u9-p5-q1.highlight {
+  transition:
+    background-color 0.1s ease,
+    transform 0.1s ease;
+}
+
+/* =====================================================
+   FOUND
+
+   حافظي على ألوان .found الأصلية إذا عندك.
+===================================================== */
+
+.cell-wb-u9-p5-q1.found {
+  position: relative;
+}
+
+/* =====================================================
+   WORD AUDIO
+===================================================== */
+
+.word-label-wb-u1-p6-q2 {
+  outline: none;
+}
+
+.word-label-wb-u1-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق بالزاوية وما بتاخذ مساحة
+===================================================== */
+
+.audio-icon-wb-u9-p5-q1 {
+  position: absolute;
+
+  top: 2px;
+  right: 3px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}

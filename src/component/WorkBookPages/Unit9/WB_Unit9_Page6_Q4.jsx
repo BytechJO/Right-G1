@@ -70,7 +70,9 @@ const WB_Unit9_Page6_Q4 = () => {
   const selectAnswer = (id, value) => {
     if (showAnswer || lockedQuestions.includes(id)) return;
     setAnswers({ ...answers, [id]: value });
-    setWrongQuestions((current) => current.filter((questionId) => questionId !== id));
+    setWrongQuestions((current) =>
+      current.filter((questionId) => questionId !== id),
+    );
   };
   const showAnswers = () => {
     const corrects = {};
@@ -98,9 +100,15 @@ const WB_Unit9_Page6_Q4 = () => {
       answers[q.id] === q.correct ? "correct" : "wrong",
     );
 
-    const correctIds = questions.filter((question) => answers[question.id] === question.correct).map((question) => question.id);
+    const correctIds = questions
+      .filter((question) => answers[question.id] === question.correct)
+      .map((question) => question.id);
     setLockedQuestions(correctIds);
-    setWrongQuestions(questions.map((question) => question.id).filter((id) => !correctIds.includes(id)));
+    setWrongQuestions(
+      questions
+        .map((question) => question.id)
+        .filter((id) => !correctIds.includes(id)),
+    );
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -145,7 +153,17 @@ const WB_Unit9_Page6_Q4 = () => {
           gap: "50px",
         }}
       >
-        <ExerciseHeader sectionLetter="D" title="Does it begin with n? Listen and write ✓ or ✗." subTitle="Listen and choose ✓ if the word begins with n or X if it does not." />
+        <ExerciseHeader
+          sectionLetter="D"
+          title={
+            <>
+              Does it begin with <span style={{ color: "red" }}>n</span>? Listen
+              and write <span style={{ color: "red" }}>✓</span> or{" "}
+              <span style={{ color: "red" }}>✗</span>.
+            </>
+          }
+          subTitle="Listen and choose ✓ if the word begins with n or X if it does not."
+        />
         <QuestionAudioPlayer
           src={sound1}
           stopAtSecond={stopAtSecond}

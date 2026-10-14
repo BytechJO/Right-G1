@@ -104,9 +104,15 @@ const WB_Unit9_Page6_Q2 = () => {
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-    const correctIds = data.filter((question) => question.options[selected[question.id]].answer).map((question) => question.id);
+    const correctIds = data
+      .filter((question) => question.options[selected[question.id]].answer)
+      .map((question) => question.id);
     setLockedQuestions(correctIds);
-    setWrongQuestions(data.map((question) => question.id).filter((id) => !correctIds.includes(id)));
+    setWrongQuestions(
+      data
+        .map((question) => question.id)
+        .filter((id) => !correctIds.includes(id)),
+    );
   };
   const handleSelect = (qId, index) => {
     if (showAnswer || lockedQuestions.includes(qId)) return;
@@ -143,7 +149,17 @@ const WB_Unit9_Page6_Q2 = () => {
           gap: "60px",
         }}
       >
-        <ExerciseHeader sectionLetter="B" title="Which picture has a different beginning sound? Listen and write ✓." subTitle="Listen to each group and tap the picture with the different first sound." />
+        <ExerciseHeader
+          sectionLetter="B"
+          title={
+            <>
+              Which picture has a{" "}
+              <span style={{ color: "red" }}>different beginning sound</span>?
+              Listen and write <span style={{ color: "red" }}>✗</span>.
+            </>
+          }
+          subTitle="Listen to each group and tap the picture with the different first sound."
+        />
 
         <QuestionAudioPlayer
           src={sound1}

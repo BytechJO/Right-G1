@@ -51,7 +51,14 @@ const WB_Unit9_Page5_Q2 = () => {
   const paletteRefs = useRef({});
   const itemRefs = useRef({});
   const { activeAudioKey, playAudio } = useUnit9Audio();
-  const optionAudios = { horse: horseAudio, cow: cowAudio, chicken: chickenAudio, goat: goatAudio, cat: catAudio, dog: dogAudio };
+  const optionAudios = {
+    horse: horseAudio,
+    cow: cowAudio,
+    chicken: chickenAudio,
+    goat: goatAudio,
+    cat: catAudio,
+    dog: dogAudio,
+  };
   useEffect(() => {
     const loadSvgs = async () => {
       const files = [CatSvg, HorseSvg, DogSvg];
@@ -96,7 +103,8 @@ const WB_Unit9_Page5_Q2 = () => {
     if (event.key === "Tab") {
       event.preventDefault();
       const direction = event.shiftKey ? -1 : 1;
-      const nextIndex = (colorIndex + direction + paletteColors.length) % paletteColors.length;
+      const nextIndex =
+        (colorIndex + direction + paletteColors.length) % paletteColors.length;
       paletteRefs.current[itemIndex]?.[nextIndex]?.focus();
     }
   };
@@ -108,7 +116,9 @@ const WB_Unit9_Page5_Q2 = () => {
     const newSel = [...selected];
     newSel[index] = value;
     setSelected(newSel);
-    setWrongChoices((current) => current.filter((itemIndex) => itemIndex !== index));
+    setWrongChoices((current) =>
+      current.filter((itemIndex) => itemIndex !== index),
+    );
   };
 
   /* ================= CHECK ================= */
@@ -133,7 +143,9 @@ const WB_Unit9_Page5_Q2 = () => {
     });
 
     setWrongChoices(wrongs);
-    setLockedItems(items.map((_, index) => index).filter((index) => !wrongs.includes(index)));
+    setLockedItems(
+      items.map((_, index) => index).filter((index) => !wrongs.includes(index)),
+    );
 
     const total = items.length;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
@@ -187,7 +199,7 @@ const WB_Unit9_Page5_Q2 = () => {
       }}
     >
       <div
-        className="div-forall"
+        className="div-forall mb-10"
         style={
           {
             // gap: "30px",
@@ -195,10 +207,12 @@ const WB_Unit9_Page5_Q2 = () => {
         }
       >
         <div className="w-full">
-        <ExerciseHeader sectionLetter="K" title="Color and circle." subTitle="Name each animal, tap the correct word, then color the picture." />
-        <span style={{ fontSize: "14px", color: "gray" }}>
-          Hint: Double Click to Color Word
-        </span></div>
+          <ExerciseHeader
+            sectionLetter="K"
+            title="Color and circle."
+            subTitle="Name each animal, tap the correct word, then color the picture."
+          />
+        </div>
         <div className="wb-unit9-qk-layout">
           {items.map((item, i) => {
             const SvgComponent = item.Svg;
@@ -214,7 +228,9 @@ const WB_Unit9_Page5_Q2 = () => {
                       openPalette(i);
                     }
                   }}
-                  ref={(element) => { itemRefs.current[i] = element; }}
+                  ref={(element) => {
+                    itemRefs.current[i] = element;
+                  }}
                   role="button"
                   tabIndex={showAnswer || lockedItems.includes(i) ? -1 : 0}
                   aria-label={`Color the ${item.correct}`}
@@ -239,7 +255,8 @@ const WB_Unit9_Page5_Q2 = () => {
                       <button
                         key={color}
                         ref={(element) => {
-                          if (!paletteRefs.current[i]) paletteRefs.current[i] = [];
+                          if (!paletteRefs.current[i])
+                            paletteRefs.current[i] = [];
                           paletteRefs.current[i][colorIndex] = element;
                         }}
                         className="color-circle"
@@ -251,7 +268,9 @@ const WB_Unit9_Page5_Q2 = () => {
                           setSelectedColors(copy);
                           setActivePaletteIndex(null); // سكّر الباليت
                         }}
-                        onKeyDown={(event) => handlePaletteKeyDown(event, i, colorIndex)}
+                        onKeyDown={(event) =>
+                          handlePaletteKeyDown(event, i, colorIndex)
+                        }
                       />
                     ))}
                   </div>
@@ -281,13 +300,14 @@ const WB_Unit9_Page5_Q2 = () => {
                       }}
                       style={{ position: "relative" }}
                     >
-                      {activeAudioKey === `option-${i}-${opt}` && <Unit9PlayingAudioIcon />}
+                      {activeAudioKey === `option-${i}-${opt}` && (
+                        <Unit9PlayingAudioIcon />
+                      )}
                       {opt}
 
-                      {wrongChoices.includes(i) &&
-                        selected[i] === opt && (
-                          <div className="wb-unit9-qk-wrong-mark">✕</div>
-                        )}
+                      {wrongChoices.includes(i) && selected[i] === opt && (
+                        <div className="wb-unit9-qk-wrong-mark">✕</div>
+                      )}
                     </div>
                   ))}
                 </div>

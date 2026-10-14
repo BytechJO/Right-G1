@@ -373,7 +373,7 @@ const WB_Unit9_Page4_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div className="div-forall" style={{ gap: "10px" }}>
+        <div className="div-forall mb-10" style={{ gap: "10px" }}>
           <ExerciseHeader
             sectionLetter="I"
             title="Count and write."

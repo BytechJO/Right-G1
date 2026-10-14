@@ -21,8 +21,20 @@ import {
 } from "@dnd-kit/core";
 
 const rows = [
-  { id: "1", label: "likes/she/chickens", words: ["likes", "she", "chickens"], correct: ["she", "likes", "chickens"], audio: sentenceOneAudio },
-  { id: "2", label: "cows/like/I", words: ["cows", "like", "I"], correct: ["I", "like", "cows"], audio: sentenceTwoAudio },
+  {
+    id: "1",
+    label: "likes/she/chickens",
+    words: ["likes", "she", "chickens"],
+    correct: ["she", "likes", "chickens"],
+    audio: sentenceOneAudio,
+  },
+  {
+    id: "2",
+    label: "cows/like/I",
+    words: ["cows", "like", "I"],
+    correct: ["I", "like", "cows"],
+    audio: sentenceTwoAudio,
+  },
 ];
 
 const images = [
@@ -40,37 +52,104 @@ const activateKey = (event, action) => {
 };
 
 function BankWord({ id, word, disabled, onKeyboardPick, bankRef }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id, disabled });
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id,
+    disabled,
+  });
   return (
     <span
-      ref={(element) => { setNodeRef(element); bankRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        bankRef(element);
+      }}
       {...listeners}
       {...attributes}
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-label={`Pick ${word}`}
       onKeyDown={(event) => activateKey(event, onKeyboardPick)}
-      style={{ opacity: disabled ? 0.35 : isDragging ? 0.4 : 1, borderRadius: "8px", border: `2px solid ${disabled ? "#aaa" : "#2c5287"}`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", cursor: disabled ? "default" : "grab", background: disabled ? "#e9e9e9" : "white", color: disabled ? "#999" : "", padding: "5px 10px", userSelect: "none", touchAction: "none" }}
-    >{word}</span>
+      style={{
+        opacity: disabled ? 0.35 : isDragging ? 0.4 : 1,
+        borderRadius: "8px",
+        border: `2px solid ${disabled ? "#aaa" : "#2c5287"}`,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: "bold",
+        cursor: disabled ? "default" : "grab",
+        background: disabled ? "#e9e9e9" : "white",
+        color: disabled ? "#999" : "",
+        padding: "5px 10px",
+        userSelect: "none",
+        touchAction: "none",
+      }}
+    >
+      {word}
+    </span>
   );
 }
 
-function AnswerZone({ id, words, disabled, wrong, preview, keyboardActive, onReturn, onKeyDown, zoneRef }) {
+function AnswerZone({
+  id,
+  words,
+  disabled,
+  wrong,
+  preview,
+  keyboardActive,
+  onReturn,
+  onKeyDown,
+  zoneRef,
+}) {
   const { setNodeRef, isOver } = useDroppable({ id, disabled });
   return (
     <div
-      ref={(element) => { setNodeRef(element); zoneRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        zoneRef(element);
+      }}
       className={`unscramble-input-wb-unit9-p2-q1 ${isOver ? "drag-over-cell" : ""}`}
       role="button"
       tabIndex={!disabled && (keyboardActive || words.length) ? 0 : -1}
-      aria-label={words.length ? `${words.join(" ")}. Press Enter on a word to remove it` : "Empty sentence answer area"}
+      aria-label={
+        words.length
+          ? `${words.join(" ")}. Press Enter on a word to remove it`
+          : "Empty sentence answer area"
+      }
       onKeyDown={onKeyDown}
-      style={{ display: "flex", flexWrap: "wrap", gap: "8px", minHeight: "46px", borderBottom: "2px solid black", padding: "8px 12px", background: isOver ? "#eef4ff" : "transparent" }}
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "8px",
+        minHeight: "46px",
+        borderBottom: "2px solid black",
+        padding: "8px 12px",
+        background: isOver ? "#eef4ff" : "transparent",
+      }}
     >
       {words.map((word) => (
-        <span key={word} role="button" tabIndex={disabled ? -1 : 0} aria-label={`Return ${word} to the bank`} onClick={() => !disabled && onReturn(word, false)} onKeyDown={(event) => activateKey(event, () => onReturn(word, true))} style={{ borderRadius: "8px", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", cursor: disabled ? "default" : "pointer", background: "white" }}>{word}</span>
+        <span
+          key={word}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-label={`Return ${word} to the bank`}
+          onClick={() => !disabled && onReturn(word, false)}
+          onKeyDown={(event) => activateKey(event, () => onReturn(word, true))}
+          style={{
+            borderRadius: "8px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            cursor: disabled ? "default" : "pointer",
+            background: "white",
+          }}
+        >
+          {word}
+        </span>
       ))}
-      {preview && <span className="keyboard-drag-preview-wb-unit9-p2-q2">{preview}</span>}
+      {preview && (
+        <span className="keyboard-drag-preview-wb-unit9-p2-q2">{preview}</span>
+      )}
       {wrong && <span className="input-error-x-wb-unit9-p2-q1">✕</span>}
     </div>
   );
@@ -94,12 +173,15 @@ const WB_Unit9_Page2_Q2 = () => {
   const zoneRefs = useRef({});
   const controlRefs = useRef({ source: {}, target: {} });
   const dotRefs = useRef({ source: {}, target: {} });
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+  );
   const { activeAudioKey, playAudio } = useUnit9Audio();
 
   const findRow = (word) => rows.find((row) => row.words.includes(word));
   const wordUsed = (rowId, word) => answer[rowId].includes(word);
-  const sentenceLocked = (rowId) => showAnswer || lockedSentences.includes(rowId);
+  const sentenceLocked = (rowId) =>
+    showAnswer || lockedSentences.includes(rowId);
   const matchTargetLocked = (imageId) => {
     const line = lines.find((item) => item.target === imageId);
     return line ? lockedMatches.includes(line.source) : false;
@@ -107,7 +189,10 @@ const WB_Unit9_Page2_Q2 = () => {
 
   const addWord = (word, rowId) => {
     if (sentenceLocked(rowId) || wordUsed(rowId, word)) return;
-    setAnswer((current) => ({ ...current, [rowId]: [...current[rowId], word] }));
+    setAnswer((current) => ({
+      ...current,
+      [rowId]: [...current[rowId], word],
+    }));
     setWrongInputs((current) => current.filter((id) => id !== rowId));
   };
 
@@ -166,13 +251,21 @@ const WB_Unit9_Page2_Q2 = () => {
   const returnWord = (word, returnFocus) => {
     const row = findRow(word);
     if (!row || sentenceLocked(row.id)) return;
-    setAnswer((current) => ({ ...current, [row.id]: current[row.id].filter((item) => item !== word) }));
+    setAnswer((current) => ({
+      ...current,
+      [row.id]: current[row.id].filter((item) => item !== word),
+    }));
     setWrongInputs((current) => current.filter((id) => id !== row.id));
-    if (returnFocus) requestAnimationFrame(() => bankRefs.current[word]?.focus());
+    if (returnFocus)
+      requestAnimationFrame(() => bankRefs.current[word]?.focus());
   };
 
-  const endpointAvailable = (side, id) => side === "source" ? !lockedMatches.includes(id) : !matchTargetLocked(id);
-  const oppositeItems = (side) => side === "source" ? images.filter((image) => endpointAvailable("target", image.id)) : rows.filter((row) => endpointAvailable("source", row.id));
+  const endpointAvailable = (side, id) =>
+    side === "source" ? !lockedMatches.includes(id) : !matchTargetLocked(id);
+  const oppositeItems = (side) =>
+    side === "source"
+      ? images.filter((image) => endpointAvailable("target", image.id))
+      : rows.filter((row) => endpointAvailable("source", row.id));
 
   const focusNextOrigin = (side, id) => {
     const items = side === "source" ? rows : images;
@@ -180,7 +273,9 @@ const WB_Unit9_Page2_Q2 = () => {
     for (let step = 1; step <= items.length; step += 1) {
       const next = items[(index + step) % items.length];
       if (endpointAvailable(side, next.id)) {
-        requestAnimationFrame(() => controlRefs.current[side][next.id]?.focus());
+        requestAnimationFrame(() =>
+          controlRefs.current[side][next.id]?.focus(),
+        );
         return;
       }
     }
@@ -190,8 +285,14 @@ const WB_Unit9_Page2_Q2 = () => {
     const source = first.side === "source" ? first.id : second.id;
     const target = first.side === "target" ? first.id : second.id;
     const displaced = lines.find((line) => line.target === target)?.source;
-    setLines((current) => current.filter((line) => line.source !== source && line.target !== target).concat({ source, target }));
-    setWrongMatches((current) => current.filter((id) => id !== source && id !== displaced));
+    setLines((current) =>
+      current
+        .filter((line) => line.source !== source && line.target !== target)
+        .concat({ source, target }),
+    );
+    setWrongMatches((current) =>
+      current.filter((id) => id !== source && id !== displaced),
+    );
   };
 
   const activateEndpoint = (side, id, keyboard) => {
@@ -203,7 +304,9 @@ const WB_Unit9_Page2_Q2 = () => {
         const oppositeSide = side === "source" ? "target" : "source";
         if (next) {
           setFocusedEndpoint({ side: oppositeSide, id: next.id });
-          requestAnimationFrame(() => controlRefs.current[oppositeSide][next.id]?.focus());
+          requestAnimationFrame(() =>
+            controlRefs.current[oppositeSide][next.id]?.focus(),
+          );
         }
       }
       return;
@@ -225,10 +328,16 @@ const WB_Unit9_Page2_Q2 = () => {
       const origin = firstEndpoint;
       setFirstEndpoint(null);
       setFocusedEndpoint(null);
-      requestAnimationFrame(() => controlRefs.current[origin.side][origin.id]?.focus());
+      requestAnimationFrame(() =>
+        controlRefs.current[origin.side][origin.id]?.focus(),
+      );
       return;
     }
-    if (event.key === "Tab" && firstEndpoint?.keyboard && firstEndpoint.side !== side) {
+    if (
+      event.key === "Tab" &&
+      firstEndpoint?.keyboard &&
+      firstEndpoint.side !== side
+    ) {
       event.preventDefault();
       const items = oppositeItems(firstEndpoint.side);
       const index = items.findIndex((item) => item.id === id);
@@ -249,11 +358,19 @@ const WB_Unit9_Page2_Q2 = () => {
     if (!dot || !container) return { x: 0, y: 0 };
     const rect = dot.getBoundingClientRect();
     const parent = container.getBoundingClientRect();
-    return { x: rect.left - parent.left + rect.width / 2, y: rect.top - parent.top + rect.height / 2 };
+    return {
+      x: rect.left - parent.left + rect.width / 2,
+      y: rect.top - parent.top + rect.height / 2,
+    };
   };
 
   const checkAnswers = () => {
-    if (showAnswer || (lockedSentences.length === rows.length && lockedMatches.length === rows.length)) return;
+    if (
+      showAnswer ||
+      (lockedSentences.length === rows.length &&
+        lockedMatches.length === rows.length)
+    )
+      return;
     if (rows.some((row) => answer[row.id].length !== row.words.length)) {
       ValidationAlert.info("Oops!", "Please complete all sentences.");
       return;
@@ -262,12 +379,26 @@ const WB_Unit9_Page2_Q2 = () => {
       ValidationAlert.info("Oops!", "Please match all pairs before checking.");
       return;
     }
-    const correctSentenceIds = rows.filter((row) => answer[row.id].join(" ").toLowerCase() === row.correct.join(" ").toLowerCase()).map((row) => row.id);
-    const correctMatchIds = lines.filter((line) => correctMatches[line.source] === line.target).map((line) => line.source);
+    const correctSentenceIds = rows
+      .filter(
+        (row) =>
+          answer[row.id].join(" ").toLowerCase() ===
+          row.correct.join(" ").toLowerCase(),
+      )
+      .map((row) => row.id);
+    const correctMatchIds = lines
+      .filter((line) => correctMatches[line.source] === line.target)
+      .map((line) => line.source);
     setLockedSentences(correctSentenceIds);
-    setWrongInputs(rows.map((row) => row.id).filter((id) => !correctSentenceIds.includes(id)));
+    setWrongInputs(
+      rows
+        .map((row) => row.id)
+        .filter((id) => !correctSentenceIds.includes(id)),
+    );
     setLockedMatches(correctMatchIds);
-    setWrongMatches(rows.map((row) => row.id).filter((id) => !correctMatchIds.includes(id)));
+    setWrongMatches(
+      rows.map((row) => row.id).filter((id) => !correctMatchIds.includes(id)),
+    );
     const score = correctSentenceIds.length + correctMatchIds.length;
     const total = rows.length * 2;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
@@ -279,7 +410,9 @@ const WB_Unit9_Page2_Q2 = () => {
 
   const handleShowAnswer = () => {
     setAnswer(Object.fromEntries(rows.map((row) => [row.id, row.correct])));
-    setLines(rows.map((row) => ({ source: row.id, target: correctMatches[row.id] })));
+    setLines(
+      rows.map((row) => ({ source: row.id, target: correctMatches[row.id] })),
+    );
     setLockedSentences(rows.map((row) => row.id));
     setLockedMatches(rows.map((row) => row.id));
     setWrongInputs([]);
@@ -304,13 +437,36 @@ const WB_Unit9_Page2_Q2 = () => {
     setFocusedEndpoint(null);
   };
 
-  const previewLine = firstEndpoint?.keyboard && focusedEndpoint ? { start: getDotCenter(firstEndpoint.side, firstEndpoint.id), end: getDotCenter(focusedEndpoint.side, focusedEndpoint.id) } : null;
+  const previewLine =
+    firstEndpoint?.keyboard && focusedEndpoint
+      ? {
+          start: getDotCenter(firstEndpoint.side, firstEndpoint.id),
+          end: getDotCenter(focusedEndpoint.side, focusedEndpoint.id),
+        }
+      : null;
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active }) => setActiveId(active.id)} onDragEnd={handleDragEnd}>
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "30px" }}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={({ active }) => setActiveId(active.id)}
+      onDragEnd={handleDragEnd}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "30px",
+        }}
+      >
         <div className="div-forall" style={{ gap: "50px" }}>
-          <ExerciseHeader sectionLetter="D" title="Unscramble, write, and match." subTitle="Arrange the words, then connect each sentence to the matching picture." />
+          <ExerciseHeader
+            sectionLetter="D"
+            title="Unscramble, write, and match."
+            subTitle="Arrange the words, then connect each sentence to the matching picture."
+          />
           <div className="container12-wb-unit9-p2-q1 w-full" ref={containerRef}>
             {rows.map((row, rowIndex) => {
               const image = images[rowIndex];
@@ -321,7 +477,9 @@ const WB_Unit9_Page2_Q2 = () => {
                       <span className="span-num2-wb-unit7-p2-q1">{row.id}</span>
                       <div style={{ flex: 1 }}>
                         <span
-                          ref={(element) => { controlRefs.current.source[row.id] = element; }}
+                          ref={(element) => {
+                            controlRefs.current.source[row.id] = element;
+                          }}
                           className={`word-text2-review3-p1-q2 wb-unit9-audio-control ${firstEndpoint?.side === "source" && firstEndpoint.id === row.id ? "selected-item" : ""} ${lockedMatches.includes(row.id) || showAnswer ? "disabled-word" : ""}`}
                           role="button"
                           tabIndex={0}
@@ -331,38 +489,127 @@ const WB_Unit9_Page2_Q2 = () => {
                             activateEndpoint("source", row.id, false);
                           }}
                           onKeyDown={(event) => {
-                            if (event.key === "Enter" || event.key === " ") playAudio(`main-${row.id}`, row.audio);
+                            if (event.key === "Enter" || event.key === " ")
+                              playAudio(`main-${row.id}`, row.audio);
                             handleEndpointKeyDown(event, "source", row.id);
                           }}
                         >
-                          {activeAudioKey === `main-${row.id}` && <Unit9PlayingAudioIcon />}
+                          {activeAudioKey === `main-${row.id}` && (
+                            <Unit9PlayingAudioIcon />
+                          )}
                           {row.label}
                         </span>
-                        {wrongMatches.includes(row.id) && <span className="error-mark-review3-p1-q2">✕</span>}
-                        <div style={{ display: "flex", gap: "12px", padding: "10px", border: "2px dashed #ccc", borderRadius: "10px", marginBottom: "12px", justifyContent: "center", minHeight: "48px", flexWrap: "wrap" }}>
+                        {wrongMatches.includes(row.id) && (
+                          <span className="error-mark-unit9-p2-q2">✕</span>
+                        )}
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "12px",
+                            padding: "10px",
+                            border: "2px dashed #ccc",
+                            borderRadius: "10px",
+                            marginBottom: "12px",
+                            justifyContent: "center",
+                            minHeight: "48px",
+                            flexWrap: "wrap",
+                          }}
+                        >
                           {row.words.map((word) => (
-                            <BankWord key={word} id={word} word={word} disabled={sentenceLocked(row.id) || wordUsed(row.id, word)} onKeyboardPick={() => pickWord(word)} bankRef={(element) => { bankRefs.current[word] = element; }} />
+                            <BankWord
+                              key={word}
+                              id={word}
+                              word={word}
+                              disabled={
+                                sentenceLocked(row.id) || wordUsed(row.id, word)
+                              }
+                              onKeyboardPick={() => pickWord(word)}
+                              bankRef={(element) => {
+                                bankRefs.current[word] = element;
+                              }}
+                            />
                           ))}
                         </div>
-                        <AnswerZone id={`drop-${row.id}`} words={answer[row.id]} disabled={sentenceLocked(row.id)} wrong={wrongInputs.includes(row.id)} preview={keyboardWord && keyboardZone === row.id ? keyboardWord : ""} keyboardActive={Boolean(keyboardWord)} onReturn={returnWord} onKeyDown={(event) => handleZoneKeyDown(event, row.id)} zoneRef={(element) => { zoneRefs.current[row.id] = element; }} />
+                        <AnswerZone
+                          id={`drop-${row.id}`}
+                          words={answer[row.id]}
+                          disabled={sentenceLocked(row.id)}
+                          wrong={wrongInputs.includes(row.id)}
+                          preview={
+                            keyboardWord && keyboardZone === row.id
+                              ? keyboardWord
+                              : ""
+                          }
+                          keyboardActive={Boolean(keyboardWord)}
+                          onReturn={returnWord}
+                          onKeyDown={(event) =>
+                            handleZoneKeyDown(event, row.id)
+                          }
+                          zoneRef={(element) => {
+                            zoneRefs.current[row.id] = element;
+                          }}
+                        />
                       </div>
-                      <div className="dot-wrapper2"><div ref={(element) => { dotRefs.current.source[row.id] = element; }} className="dot2 start-dot2" data-word={row.label} tabIndex={-1} aria-hidden="true" onClick={() => activateEndpoint("source", row.id, false)} /></div>
+                      <div className="dot-wrapper2">
+                        <div
+                          ref={(element) => {
+                            dotRefs.current.source[row.id] = element;
+                          }}
+                          className="dot2 start-dot2"
+                          data-word={row.label}
+                          tabIndex={-1}
+                          aria-hidden="true"
+                          onClick={() =>
+                            activateEndpoint("source", row.id, false)
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
 
                   <div className="img-with-dot2-wb-unit7-p2-q1">
-                    <div className="dot-wrapper2"><div ref={(element) => { dotRefs.current.target[image.id] = element; }} className="dot2 end-dot2" data-image={image.id} tabIndex={-1} aria-hidden="true" onClick={() => activateEndpoint("target", image.id, false)} /></div>
+                    <div className="dot-wrapper2">
+                      <div
+                        ref={(element) => {
+                          dotRefs.current.target[image.id] = element;
+                        }}
+                        className="dot2 end-dot2"
+                        data-image={image.id}
+                        tabIndex={-1}
+                        aria-hidden="true"
+                        onClick={() =>
+                          activateEndpoint("target", image.id, false)
+                        }
+                      />
+                    </div>
                     <img
-                      ref={(element) => { controlRefs.current.target[image.id] = element; }}
+                      ref={(element) => {
+                        controlRefs.current.target[image.id] = element;
+                      }}
                       src={image.src}
                       className={`matched-img2 ${firstEndpoint?.side === "target" && firstEndpoint.id === image.id ? "selected-item" : ""} ${matchTargetLocked(image.id) || showAnswer ? "disabled-hover" : ""}`}
                       alt={image.alt}
                       role="button"
-                      tabIndex={endpointAvailable("target", image.id) && !showAnswer ? 0 : -1}
+                      tabIndex={
+                        endpointAvailable("target", image.id) && !showAnswer
+                          ? 0
+                          : -1
+                      }
                       aria-label={`Match ${image.alt}`}
-                      onClick={() => activateEndpoint("target", image.id, false)}
-                      onKeyDown={(event) => handleEndpointKeyDown(event, "target", image.id)}
-                      style={{ cursor: matchTargetLocked(image.id) || showAnswer ? "default" : "pointer", height: "130px", width: "auto" }}
+                      onClick={() =>
+                        activateEndpoint("target", image.id, false)
+                      }
+                      onKeyDown={(event) =>
+                        handleEndpointKeyDown(event, "target", image.id)
+                      }
+                      style={{
+                        cursor:
+                          matchTargetLocked(image.id) || showAnswer
+                            ? "default"
+                            : "pointer",
+                        height: "130px",
+                        width: "auto",
+                      }}
                     />
                   </div>
                 </div>
@@ -373,20 +620,77 @@ const WB_Unit9_Page2_Q2 = () => {
               {lines.map((line) => {
                 const start = getDotCenter("source", line.source);
                 const end = getDotCenter("target", line.target);
-                return <line key={line.source} x1={start.x} y1={start.y} x2={end.x} y2={end.y} stroke="red" strokeWidth="3" />;
+                return (
+                  <line
+                    key={line.source}
+                    x1={start.x}
+                    y1={start.y}
+                    x2={end.x}
+                    y2={end.y}
+                    stroke="red"
+                    strokeWidth="3"
+                  />
+                );
               })}
-              {previewLine && <line x1={previewLine.start.x} y1={previewLine.start.y} x2={previewLine.end.x} y2={previewLine.end.y} stroke="red" strokeWidth="3" strokeDasharray="6 4" />}
+              {previewLine && (
+                <line
+                  x1={previewLine.start.x}
+                  y1={previewLine.start.y}
+                  x2={previewLine.end.x}
+                  y2={previewLine.end.y}
+                  stroke="red"
+                  strokeWidth="3"
+                  strokeDasharray="6 4"
+                />
+              )}
             </svg>
           </div>
 
           <div className="action-buttons-container">
-            <button type="button" onClick={handleReset} className="try-again-button">Start Again ↻</button>
-            <button type="button" onClick={handleShowAnswer} className="show-answer-btn swal-continue">Show Answer</button>
-            <button type="button" onClick={checkAnswers} className="check-button2">Check Answer ✓</button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="try-again-button"
+            >
+              Start Again ↻
+            </button>
+            <button
+              type="button"
+              onClick={handleShowAnswer}
+              className="show-answer-btn swal-continue"
+            >
+              Show Answer
+            </button>
+            <button
+              type="button"
+              onClick={checkAnswers}
+              className="check-button2"
+            >
+              Check Answer ✓
+            </button>
           </div>
         </div>
       </div>
-      <DragOverlay>{activeId ? <span style={{ borderRadius: "8px", border: "2px solid #2c5287", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", background: "white", padding: "5px 10px", boxShadow: "0 4px 12px rgba(0,0,0,0.2)", pointerEvents: "none" }}>{activeId}</span> : null}</DragOverlay>
+      <DragOverlay>
+        {activeId ? (
+          <span
+            style={{
+              borderRadius: "8px",
+              border: "2px solid #2c5287",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              background: "white",
+              padding: "5px 10px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              pointerEvents: "none",
+            }}
+          >
+            {activeId}
+          </span>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };

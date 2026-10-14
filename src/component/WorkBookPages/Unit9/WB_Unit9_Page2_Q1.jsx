@@ -14,7 +14,11 @@ const sentences = [
   "How many cows are there? There are four cows.",
   "How many goats are there? There is one goat.",
 ];
-const sentenceAudios = [horsesSentenceAudio, cowsSentenceAudio, goatsSentenceAudio];
+const sentenceAudios = [
+  horsesSentenceAudio,
+  cowsSentenceAudio,
+  goatsSentenceAudio,
+];
 
 const WB_Unit9_Page2_Q1 = () => {
   const [tool, setTool] = useState("pen");
@@ -42,7 +46,14 @@ const WB_Unit9_Page2_Q1 = () => {
   const saveHistory = (index) => {
     const canvas = canvasRefs.current[index];
     if (!canvas) return;
-    history.current.push([{ index, imageData: canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height) }]);
+    history.current.push([
+      {
+        index,
+        imageData: canvas
+          .getContext("2d")
+          .getImageData(0, 0, canvas.width, canvas.height),
+      },
+    ]);
   };
 
   const pointerPosition = (event, canvas) => {
@@ -98,16 +109,26 @@ const WB_Unit9_Page2_Q1 = () => {
   };
 
   const clearCanvases = (save = true) => {
-    const action = canvasRefs.current.filter(Boolean).map((canvas, index) => ({ index, imageData: canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height) }));
+    const action = canvasRefs.current.filter(Boolean).map((canvas, index) => ({
+      index,
+      imageData: canvas
+        .getContext("2d")
+        .getImageData(0, 0, canvas.width, canvas.height),
+    }));
     if (save && action.length) history.current.push(action);
-    canvasRefs.current.forEach((canvas) => canvas?.getContext("2d").clearRect(0, 0, canvas.width, canvas.height));
+    canvasRefs.current.forEach((canvas) =>
+      canvas?.getContext("2d").clearRect(0, 0, canvas.width, canvas.height),
+    );
     setKeyboardDrawing(null);
   };
 
   const initializeCursor = (index) => {
     const canvas = canvasRefs.current[index];
     if (!canvas) return;
-    const position = keyboardPositions.current[index] || { x: canvas.width / 2, y: canvas.height / 2 };
+    const position = keyboardPositions.current[index] || {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+    };
     keyboardPositions.current[index] = position;
     setCursorPositions((current) => ({ ...current, [index]: position }));
   };
@@ -116,7 +137,10 @@ const WB_Unit9_Page2_Q1 = () => {
     const canvas = canvasRefs.current[index];
     if (!canvas) return;
     const context = canvas.getContext("2d");
-    const position = keyboardPositions.current[index] || { x: canvas.width / 2, y: canvas.height / 2 };
+    const position = keyboardPositions.current[index] || {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+    };
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (keyboardDrawing === index) setKeyboardDrawing(null);
@@ -132,14 +156,25 @@ const WB_Unit9_Page2_Q1 = () => {
       setKeyboardDrawing(null);
       return;
     }
-    const directions = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    const directions = {
+      ArrowLeft: [-1, 0],
+      ArrowRight: [1, 0],
+      ArrowUp: [0, -1],
+      ArrowDown: [0, 1],
+    };
     if (!directions[event.key]) return;
     event.preventDefault();
     const distance = event.shiftKey ? 12 : 4;
     const [xDirection, yDirection] = directions[event.key];
     const next = {
-      x: Math.min(canvas.width, Math.max(0, position.x + xDirection * distance)),
-      y: Math.min(canvas.height, Math.max(0, position.y + yDirection * distance)),
+      x: Math.min(
+        canvas.width,
+        Math.max(0, position.x + xDirection * distance),
+      ),
+      y: Math.min(
+        canvas.height,
+        Math.max(0, position.y + yDirection * distance),
+      ),
     };
     if (keyboardDrawing === index) {
       configureContext(context);
@@ -160,15 +195,78 @@ const WB_Unit9_Page2_Q1 = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "30px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "30px",
+      }}
+    >
       <div className="div-forall">
-        <ExerciseHeader sectionLetter="C" title="Read and draw." subTitle="Read each sentence and draw exactly the stated number of animals." />
+        <ExerciseHeader
+          sectionLetter="C"
+          title="Read and draw."
+          subTitle="Read each sentence and draw exactly the stated number of animals."
+        />
         <div className="unit4-q2-p6-tools w-full">
-          <button type="button" onClick={() => setTool("pen")} aria-pressed={tool === "pen"} className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}>✏️ Pen</button>
-          <button type="button" onClick={() => setTool("eraser")} aria-pressed={tool === "eraser"} className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}>🧽 Eraser</button>
-          <label className="wb-unit9-p2-q1-color-control">Color <input type="color" value={color} onChange={(event) => { setColor(event.target.value); setTool("pen"); }} aria-label="Choose drawing color" /></label>
-          <button type="button" onClick={undo} className="unit4-q2-p6-tool-btn">Undo</button>
-          <button type="button" onClick={() => clearCanvases(true)} className="unit4-q2-p6-tool-btn">Clear</button>
+          <button
+            type="button"
+            onClick={() => setTool("pen")}
+            aria-pressed={tool === "pen"}
+            className={`unit4-q2-p6-tool-btn ${tool === "pen" ? "active-tool" : ""}`}
+          >
+            ✏️ Pen
+          </button>
+          <button
+            type="button"
+            onClick={() => setTool("eraser")}
+            aria-pressed={tool === "eraser"}
+            className={`unit4-q2-p6-tool-btn ${tool === "eraser" ? "active-tool" : ""}`}
+          >
+            🧽 Eraser
+          </button>
+
+          <label
+            className="unit4-q2-p6-tool-btn"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              cursor: "pointer",
+            }}
+          >
+            🎨 Color
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+
+                setTool("pen");
+              }}
+              aria-label="Choose pen color"
+              style={{
+                width: "26px",
+                height: "26px",
+                padding: 0,
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            />
+          </label>
+          <button type="button" onClick={undo} className="unit4-q2-p6-tool-btn">
+            Undo
+          </button>
+          <button
+            type="button"
+            onClick={() => clearCanvases(true)}
+            className="unit4-q2-p6-tool-btn"
+          >
+            Clear
+          </button>
         </div>
         <div className="exercise-container-wb-unit6-p5-q1 w-full">
           {sentences.map((sentence, index) => {
@@ -181,7 +279,9 @@ const WB_Unit9_Page2_Q1 = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`Play sentence ${index + 1}`}
-                  onClick={() => playAudio(`sentence-${index}`, sentenceAudios[index])}
+                  onClick={() =>
+                    playAudio(`sentence-${index}`, sentenceAudios[index])
+                  }
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
@@ -189,21 +289,38 @@ const WB_Unit9_Page2_Q1 = () => {
                     }
                   }}
                 >
-                  {activeAudioKey === `sentence-${index}` && <Unit9PlayingAudioIcon />}
-                  <span className="number-wb-unit6-p5-q1">{index + 1}</span><span className="text">{sentence}</span>
+                  {activeAudioKey === `sentence-${index}` && (
+                    <Unit9PlayingAudioIcon />
+                  )}
+                  <span className="number-wb-unit6-p5-q1">{index + 1}</span>
+                  <span className="text">{sentence}</span>
                 </div>
                 <div className="wb-unit9-p2-q1-canvas-wrapper">
                   <canvas
-                    ref={(element) => { canvasRefs.current[index] = element; }}
+                    ref={(element) => {
+                      canvasRefs.current[index] = element;
+                    }}
                     className={`draw-box-wb-unit9-p2-q1 ${keyboardDrawing === index ? "keyboard-drawing-active" : ""}`}
                     height={120}
                     width={300}
                     tabIndex={0}
                     role="application"
                     aria-label={`Drawing area ${index + 1}. Arrow keys move the drawing cursor. Enter or Space starts or stops drawing. Shift plus an arrow moves faster. Escape stops drawing.`}
-                    style={{ cursor: tool === "eraser" ? `url(${eraserCursor}) 12 12, auto` : `url(${pencilCursor}) 4 28, auto` }}
-                    onFocus={() => { setFocusedCanvas(index); initializeCursor(index); }}
-                    onBlur={() => { stopDrawing(index); setFocusedCanvas(null); setKeyboardDrawing(null); }}
+                    style={{
+                      cursor:
+                        tool === "eraser"
+                          ? `url(${eraserCursor}) 12 12, auto`
+                          : `url(${pencilCursor}) 4 28, auto`,
+                    }}
+                    onFocus={() => {
+                      setFocusedCanvas(index);
+                      initializeCursor(index);
+                    }}
+                    onBlur={() => {
+                      stopDrawing(index);
+                      setFocusedCanvas(null);
+                      setKeyboardDrawing(null);
+                    }}
                     onKeyDown={(event) => handleCanvasKeyDown(event, index)}
                     onPointerDown={(event) => startDrawing(event, index)}
                     onPointerMove={(event) => draw(event, index)}
@@ -212,7 +329,18 @@ const WB_Unit9_Page2_Q1 = () => {
                     onPointerLeave={() => stopDrawing(index)}
                   />
                   {focusedCanvas === index && position && (
-                    <span className={`wb-unit9-p2-q1-keyboard-cursor ${keyboardDrawing === index ? "drawing" : "moving"}`} style={{ left: canvas ? `${(position.x / canvas.width) * 100}%` : "50%", top: canvas ? `${(position.y / canvas.height) * 100}%` : "50%" }} aria-hidden="true" />
+                    <span
+                      className={`wb-unit9-p2-q1-keyboard-cursor ${keyboardDrawing === index ? "drawing" : "moving"}`}
+                      style={{
+                        left: canvas
+                          ? `${(position.x / canvas.width) * 100}%`
+                          : "50%",
+                        top: canvas
+                          ? `${(position.y / canvas.height) * 100}%`
+                          : "50%",
+                      }}
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
               </div>
@@ -220,7 +348,11 @@ const WB_Unit9_Page2_Q1 = () => {
           })}
         </div>
       </div>
-      <div className="action-buttons-container"><button type="button" className="try-again-button" onClick={reset}>Start Again ↻</button></div>
+      <div className="action-buttons-container">
+        <button type="button" className="try-again-button" onClick={reset}>
+          Start Again ↻
+        </button>
+      </div>
     </div>
   );
 };

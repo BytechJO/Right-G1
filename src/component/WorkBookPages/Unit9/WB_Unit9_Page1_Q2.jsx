@@ -30,10 +30,34 @@ import {
 } from "@dnd-kit/core";
 
 const questions = [
-  { label: "goats", correctLeft: "How many", correctRight: "There are three", labelAudio: goatsAudio, fullAudio: full1Audio },
-  { label: "cows", correctLeft: "How many", correctRight: "There are three", labelAudio: cowsAudio, fullAudio: full2Audio },
-  { label: "dogs", correctLeft: "How many", correctRight: "There are one", labelAudio: dogsAudio, fullAudio: full3Audio },
-  { label: "cats", correctLeft: "How many", correctRight: "There are two", labelAudio: catsAudio, fullAudio: full4Audio },
+  {
+    label: "goats",
+    correctLeft: "How many",
+    correctRight: "There are three",
+    labelAudio: goatsAudio,
+    fullAudio: full1Audio,
+  },
+  {
+    label: "cows",
+    correctLeft: "How many",
+    correctRight: "There are three",
+    labelAudio: cowsAudio,
+    fullAudio: full2Audio,
+  },
+  {
+    label: "dogs",
+    correctLeft: "How many",
+    correctRight: "There are one",
+    labelAudio: dogsAudio,
+    fullAudio: full3Audio,
+  },
+  {
+    label: "cats",
+    correctLeft: "How many",
+    correctRight: "There are two",
+    labelAudio: catsAudio,
+    fullAudio: full4Audio,
+  },
 ];
 
 const allPhrases = [
@@ -60,7 +84,14 @@ const activateWithKeyboard = (event, action) => {
   }
 };
 
-function DraggableChip({ id, disabled, onKeyboardPick, onPlay, playing, bankRef }) {
+function DraggableChip({
+  id,
+  disabled,
+  onKeyboardPick,
+  onPlay,
+  playing,
+  bankRef,
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
     disabled,
@@ -325,8 +356,12 @@ const WB_Unit9_Page1_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div className="div-forall" style={{ gap: "10px" }}>
-          <ExerciseHeader sectionLetter="B" title="Look, read, and write." subTitle="Count each animal group, then drag the question and number words into the blanks." />
+        <div className="div-forall mb-10" style={{ gap: "10px" }}>
+          <ExerciseHeader
+            sectionLetter="B"
+            title="Look, read, and write."
+            subTitle="Count each animal group, then drag the question and number words into the blanks."
+          />
           <div
             style={{
               display: "flex",
@@ -366,20 +401,45 @@ const WB_Unit9_Page1_Q2 = () => {
               <div
                 key={question.label}
                 className={`wb-unit9-p1-q2-row wb-unit9-audio-control ${lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? "wb-unit9-completed-audio" : ""}`}
-                role={lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? "button" : undefined}
-                tabIndex={lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? 0 : undefined}
-                aria-label={lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? `Play complete answer for ${question.label}` : undefined}
+                role={
+                  lockedCells.includes(`${index}-left`) &&
+                  lockedCells.includes(`${index}-right`)
+                    ? "button"
+                    : undefined
+                }
+                tabIndex={
+                  lockedCells.includes(`${index}-left`) &&
+                  lockedCells.includes(`${index}-right`)
+                    ? 0
+                    : undefined
+                }
+                aria-label={
+                  lockedCells.includes(`${index}-left`) &&
+                  lockedCells.includes(`${index}-right`)
+                    ? `Play complete answer for ${question.label}`
+                    : undefined
+                }
                 onClick={() => {
-                  if (lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`)) playAudio(`full-${index}`, question.fullAudio);
+                  if (
+                    lockedCells.includes(`${index}-left`) &&
+                    lockedCells.includes(`${index}-right`)
+                  )
+                    playAudio(`full-${index}`, question.fullAudio);
                 }}
                 onKeyDown={(event) => {
-                  if (lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) && (event.key === "Enter" || event.key === " ")) {
+                  if (
+                    lockedCells.includes(`${index}-left`) &&
+                    lockedCells.includes(`${index}-right`) &&
+                    (event.key === "Enter" || event.key === " ")
+                  ) {
                     event.preventDefault();
                     playAudio(`full-${index}`, question.fullAudio);
                   }
                 }}
               >
-                {activeAudioKey === `full-${index}` && <Unit9PlayingAudioIcon />}
+                {activeAudioKey === `full-${index}` && (
+                  <Unit9PlayingAudioIcon />
+                )}
                 <span className="wb-unit9-p1-q2-number">{index + 1}</span>
                 {["left", "right"].map((side) => {
                   const id = `${index}-${side}`;
@@ -409,25 +469,50 @@ const WB_Unit9_Page1_Q2 = () => {
                       </div>
                       <span
                         className="wb-unit9-p1-q2-text wb-unit9-audio-control cursor-pointer"
-                        role={lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? undefined : "button"}
-                        tabIndex={lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`) ? -1 : 0}
+                        role={
+                          lockedCells.includes(`${index}-left`) &&
+                          lockedCells.includes(`${index}-right`)
+                            ? undefined
+                            : "button"
+                        }
+                        tabIndex={
+                          lockedCells.includes(`${index}-left`) &&
+                          lockedCells.includes(`${index}-right`)
+                            ? -1
+                            : 0
+                        }
                         aria-label={`Play ${question.label}`}
                         onClick={(event) => {
-                          if (lockedCells.includes(`${index}-left`) && lockedCells.includes(`${index}-right`)) return;
+                          if (
+                            lockedCells.includes(`${index}-left`) &&
+                            lockedCells.includes(`${index}-right`)
+                          )
+                            return;
                           event.stopPropagation();
-                          playAudio(`label-${index}-${side}`, question.labelAudio);
+                          playAudio(
+                            `label-${index}-${side}`,
+                            question.labelAudio,
+                          );
                         }}
                         onKeyDown={(event) => {
-                          if (!lockedCells.includes(`${index}-left`) || !lockedCells.includes(`${index}-right`)) {
+                          if (
+                            !lockedCells.includes(`${index}-left`) ||
+                            !lockedCells.includes(`${index}-right`)
+                          ) {
                             if (event.key === "Enter" || event.key === " ") {
                               event.preventDefault();
                               event.stopPropagation();
-                              playAudio(`label-${index}-${side}`, question.labelAudio);
+                              playAudio(
+                                `label-${index}-${side}`,
+                                question.labelAudio,
+                              );
                             }
                           }
                         }}
                       >
-                        {activeAudioKey === `label-${index}-${side}` && <Unit9PlayingAudioIcon />}
+                        {activeAudioKey === `label-${index}-${side}` && (
+                          <Unit9PlayingAudioIcon />
+                        )}
                         {side === "left"
                           ? `${question.label} are there?`
                           : question.label}
