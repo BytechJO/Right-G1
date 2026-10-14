@@ -5,39 +5,69 @@ import img1 from "../../../assets/unit10/imgs/U10P88EXEA-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P88EXEA-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P88EXEA-03.svg";
 import img4 from "../../../assets/unit10/imgs/U10P88EXEA-04.svg";
+import chickenAudio from "../../../assets/Review_9,10/Page 88 - A/chicken.mp3";
+import cowAudio from "../../../assets/Review_9,10/Page 88 - A/cow.mp3";
+import dogAudio from "../../../assets/Review_9,10/Page 88 - A/dog.mp3";
+import goatAudio from "../../../assets/Review_9,10/Page 88 - A/goat.mp3";
+import horseAudio from "../../../assets/Review_9,10/Page 88 - A/horse.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
 
 const Review9_Page1_Q1 = () => {
   const [answers, setAnswers] = useState(Array(4).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const [showAnswer, setShowAnswer] = useState(false); // ⭐ NEW
+  const [lockedQuestions, setLockedQuestions] = useState(new Set());
+  const [wrongQuestions, setWrongQuestions] = useState(new Set());
+  const [showAnswer, setShowAnswer] = useState(false);
 
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
+  const wordAudio = {
+    chicken: chickenAudio,
+    cow: cowAudio,
+    dog: dogAudio,
+    goat: goatAudio,
+    horse: horseAudio,
+  };
   const items = [
-    { img: img1, options: ["horse", "chicken"], correctIndex: 1 },
-    { img: img2, options: ["cow", "goat"], correctIndex: 0 },
-    { img: img3, options: ["dog", "horse"], correctIndex: 1 },
-    { img: img4, options: ["dog", "goat"], correctIndex: 1 },
+    { img: img1, alt: "A brown chicken.", options: ["horse", "chicken"], correctIndex: 1 },
+    { img: img2, alt: "A black-and-white cow.", options: ["cow", "goat"], correctIndex: 0 },
+    { img: img3, alt: "A brown horse.", options: ["dog", "horse"], correctIndex: 1 },
+    { img: img4, alt: "A brown-and-white goat.", options: ["dog", "goat"], correctIndex: 1 },
   ];
 
   const handleSelect = (qIndex, optionIndex) => {
-    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || lockedQuestions.has(qIndex)) return;
 
     const newAns = [...answers];
     newAns[qIndex] = optionIndex;
     setAnswers(newAns);
-    setShowResult(false);
+    setWrongQuestions((current) => {
+      const next = new Set(current);
+      next.delete(qIndex);
+      return next;
+    });
   };
 
   const checkAnswers = () => {
-    if (showAnswer || showResult) return; // ⭐ منع التعديل بعد Show Answer
+    if (showAnswer || lockedQuestions.size === items.length) return;
 
     if (answers.includes(null)) {
       ValidationAlert.info("Oops!", "Please circle all words first.");
       return;
     }
 
-    let correctCount = answers.filter(
+    const correctCount = answers.filter(
       (ans, i) => ans === items[i].correctIndex,
     ).length;
+
+    const nextLocked = new Set(lockedQuestions);
+    const nextWrong = new Set();
+    items.forEach((item, index) => {
+      if (answers[index] === item.correctIndex) nextLocked.add(index);
+      else nextWrong.add(index);
+    });
+    setLockedQuestions(nextLocked);
+    setWrongQuestions(nextWrong);
 
     const total = items.length;
     const color =
@@ -55,13 +85,14 @@ const Review9_Page1_Q1 = () => {
     else if (correctCount === 0) ValidationAlert.error(msg);
     else ValidationAlert.warning(msg);
 
-    setShowResult(true);
   };
 
   const reset = () => {
     setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setShowAnswer(false); // ⭐ Reset disables Show Answer mode
+    setLockedQuestions(new Set());
+    setWrongQuestions(new Set());
+    setShowAnswer(false);
+    stopAudio();
   };
 
   // =====================================================
@@ -71,7 +102,8 @@ const Review9_Page1_Q1 = () => {
     const correct = items.map((q) => q.correctIndex);
     setAnswers(correct);
     setShowAnswer(true);
-    setShowResult(true);
+    setLockedQuestions(new Set(items.map((_, index) => index)));
+    setWrongQuestions(new Set());
   };
 
   return (
@@ -90,10 +122,11 @@ const Review9_Page1_Q1 = () => {
           gap: "60px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">A</span> Look and tap or click the correct
-          word.{" "}
-        </h5>
+        <ExerciseHeaderReview
+          sectionLetter="A"
+          title="Look, read, and circle."
+          subTitle="Look at each animal, then tap the correct word."
+        />
 
         <div className="container-review9-p1-q1">
           {items.map((q, i) => (
@@ -119,6 +152,7 @@ const Review9_Page1_Q1 = () => {
               >
                 <img
                   src={q.img}
+                  alt={q.alt}
                   className="q3-image-review6-p1-q1"
                   style={{ height: "130px", width: "auto" }}
                 />
@@ -131,21 +165,37 @@ const Review9_Page1_Q1 = () => {
                     return (
                       <p
                         key={optIndex}
+                        role="button"
+                        tabIndex={0}
+                        aria-pressed={isSelected}
+                        aria-label={`${isSelected ? "Selected. " : ""}Choose ${word} and play its audio.`}
                         className={`
                           option-word-review6-p1-q1
                           ${isSelected ? "selected3" : ""}
                           ${
-                            showResult && isSelected && !isCorrect
+                            wrongQuestions.has(i) && isSelected && !isCorrect
                               ? "wrong"
                               : ""
                           }
-                          ${showResult && isCorrect ? "correct" : ""}
                         `}
-                        onClick={() => handleSelect(i, optIndex)}
+                        onClick={() => {
+                          playAudio(`word-${i}-${word}`, wordAudio[word]);
+                          handleSelect(i, optIndex);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            playAudio(`word-${i}-${word}`, wordAudio[word]);
+                            handleSelect(i, optIndex);
+                          }
+                        }}
                       >
+                        {activeAudioKey === `word-${i}-${word}` && (
+                          <ReviewPlayingAudioIcon />
+                        )}
                         {word}
 
-                        {showResult && isSelected && !isCorrect && (
+                        {wrongQuestions.has(i) && isSelected && !isCorrect && (
                           <span className="wrong-x-review4-p2-q3">✕</span>
                         )}
                       </p>

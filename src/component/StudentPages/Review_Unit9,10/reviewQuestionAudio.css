@@ -1,0 +1,61 @@
+.review-audio-control {
+  position: relative;
+  outline: none;
+}
+
+.review-audio-control:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.review-playing-audio-icon {
+  position: absolute;
+  top: -15px;
+  right: -12px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  color: #000;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+}
+
+.review-playing-audio-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.review-full-audio-ready {
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.review-full-audio-ready:hover,
+.review-full-audio-ready:focus-visible {
+  background-color: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22);
+  transform: translateY(-1px);
+}
+
+.review-keyboard-drop-preview {
+  animation: review-keyboard-preview-blink 0.8s ease-in-out infinite;
+  opacity: 0.75;
+}
+
+@keyframes review-keyboard-preview-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

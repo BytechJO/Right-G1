@@ -1,284 +1,693 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import img1 from "../../../assets/unit10/imgs/U10P90EXEA-01.svg";
 import img2 from "../../../assets/unit10/imgs/U10P90EXEA-02.svg";
 import img3 from "../../../assets/unit10/imgs/U10P90EXEA-03.svg";
 import img4 from "../../../assets/unit10/imgs/U10P90EXEA-04.svg";
 
+import appleAudio from "../../../assets/Review_9,10/Page 90 - A/I want an apple..mp3";
+import chickenAudio from "../../../assets/Review_9,10/Page 90 - A/I want chicken..mp3";
+import iceCreamAudio from "../../../assets/Review_9,10/Page 90 - A/I want ice cream..mp3";
+import milkAudio from "../../../assets/Review_9,10/Page 90 - A/I want milk.mp3";
+
 import "./Review10_Page1_Q1.css";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
+import useReviewMatching from "./useReviewMatching";
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const exchanges = [
+  {
+    id: "exchange-1",
+    question: "What do you want?",
+    answer: "I want an apple.",
+    target: "img4",
+    audio: appleAudio,
+  },
+  {
+    id: "exchange-2",
+    question: "What do you want?",
+    answer: "I want ice cream.",
+    target: "img1",
+    audio: iceCreamAudio,
+  },
+  {
+    id: "exchange-3",
+    question: "What do you want?",
+    answer: "I want chicken.",
+    target: "img2",
+    audio: chickenAudio,
+  },
+  {
+    id: "exchange-4",
+    question: "What do you want?",
+    answer: "I want milk",
+    target: "img3",
+    audio: milkAudio,
+  },
+];
+
+const images = [
+  {
+    id: "img1",
+    src: img1,
+    alt: "A boy thinking about ice cream.",
+  },
+  {
+    id: "img2",
+    src: img2,
+    alt: "A boy thinking about chicken.",
+  },
+  {
+    id: "img3",
+    src: img3,
+    alt: "A boy thinking about milk.",
+  },
+  {
+    id: "img4",
+    src: img4,
+    alt: "A girl thinking about an apple.",
+  },
+];
+
+/* =====================================================
+   COMPONENT
+===================================================== */
 
 export default function Review10_Page1_Q1() {
-  // ============================
-  // 🔹 CORRECT ANSWERS (المصدر الوحيد)
-  // ============================
-  const correctMatches = [
-    { word: "What do you want?", word2: "I want an apple.", image: "img4" },
-    { word: "What do you want?", word2: "I want ice cream.", image: "img1" },
-    { word: "What do you want?", word2: "I want chicken.", image: "img2" },
-    { word: "What do you want?.", word2: "I want milk", image: "img3" },
-  ];
+  /* =====================================================
+     STATE
+  ===================================================== */
 
-  const imagesMap = [img1, img2, img3, img4];
+  const [connections, setConnections] = useState({});
 
-  // ============================
-  // 🔹 STATES
-  // ============================
-  const [lines, setLines] = useState([]);
-  const [wrongWords, setWrongWords] = useState([]);
-  const [firstDot, setFirstDot] = useState(null);
-  const [locked, setLocked] = useState(false);
+  const [lockedSources, setLockedSources] = useState(new Set());
+
+  const [wrongSources, setWrongSources] = useState(new Set());
+
   const [showAnswer, setShowAnswer] = useState(false);
-  const [resetKey, setResetKey] = useState(0);
-  const [letters, setLetters] = useState({});
-  const [wrongLetters, setWrongLetters] = useState([]);
-  const [wrongConnections, setWrongConnections] = useState([]);
 
-  const containerRef = useRef(null);
+  /* =====================================================
+     AUDIO
+  ===================================================== */
 
-  // ============================
-  // 1️⃣ Start dot
-  // ============================
-  const handleStartDotClick = (e) => {
-    if (locked || showAnswer) return;
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
 
-    const word = e.target.dataset.word;
-    if (lines.some((l) => l.word === word)) return;
+  /* =====================================================
+     KEYBOARD FOCUS REFS
+  ===================================================== */
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const r = e.target.getBoundingClientRect();
+  /*
+    نخزن كل source element
+  */
+  const sourceRefs = useRef({});
 
-    setFirstDot({
-      word,
-      x: r.left - rect.left + 8,
-      y: r.top - rect.top + 8,
-    });
-  };
+  /*
+    نعرف إذا آخر connection
+    تم عن طريق الكيبورد
+  */
+  const keyboardConnectionRef = useRef(false);
 
-  // ============================
-  // 2️⃣ End dot
-  // ============================
-  const handleEndDotClick = (e) => {
-    if (!firstDot || locked || showAnswer) return;
+  /*
+    نسخة من connections قبل التحديث
+    حتى نعرف أي source صار له connection جديد
+  */
+  const previousConnectionsRef = useRef({});
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const r = e.target.getBoundingClientRect();
+  /* =====================================================
+     MATCHING
+  ===================================================== */
 
-    setLines((prev) => [
-      ...prev,
-      {
-        word: firstDot.word,
-        image: e.target.dataset.image,
-        x1: firstDot.x,
-        y1: firstDot.y,
-        x2: r.left - rect.left + 8,
-        y2: r.top - rect.top + 8,
-      },
-    ]);
+  const matching = useReviewMatching({
+    sourceIds: exchanges.map((item) => item.id),
 
-    setFirstDot(null);
-  };
+    targetIds: images.map((item) => item.id),
 
-  // ============================
-  // 3️⃣ Check Answers
-  // ============================
-  const checkAnswers = () => {
+    connections,
+
+    setConnections,
+
+    lockedSources,
+
+    onConnectionsEdited: (sourceIds) => {
+      setWrongSources((current) => {
+        const next = new Set(current);
+
+        sourceIds.forEach((id) => {
+          next.delete(id);
+        });
+
+        return next;
+      });
+    },
+  });
+
+  /* =====================================================
+     KEYBOARD MATCHING HANDLER
+  ===================================================== */
+
+  const handleMatchingKeyDown = (event, side, id, locked) => {
+    /*
+      source locked:
+      يظل Tab للصوت
+      لكن ما يعمل matching
+    */
     if (locked) return;
-    // =========================
-    // 2️⃣ فحص توصيل كل كلمة
-    // =========================
-    for (const item of correctMatches) {
-      const hasLine = lines.some((l) => l.word === item.word + item.word2);
-      if (!hasLine) {
-        ValidationAlert.info("Please connect all the words to pictures.");
-        return;
-      }
+
+    const isActivation = event.key === "Enter" || event.key === " ";
+
+    /*
+      إذا في endpoint مختار من الجهة الثانية،
+      فهذا Enter/Space رح يكمل connection.
+
+      فقط بهذه الحالة نعلم إنه
+      connection تم بالكيبورد.
+    */
+    if (
+      isActivation &&
+      matching.selectedEndpoint &&
+      matching.selectedEndpoint.side !== side
+    ) {
+      keyboardConnectionRef.current = true;
     }
 
-    // =========================
-    // 3️⃣ فحص توصيل كل صورة (ما في صورة مكررة)
-    // =========================
-    const usedImages = lines.map((l) => l.image);
-    const uniqueImages = new Set(usedImages);
+    matching.handleKeyDown(event, side, id);
+  };
 
-    if (uniqueImages.size < correctMatches.length) {
-      ValidationAlert.info("Please connect each picture to only one word.");
+  /* =====================================================
+     AFTER KEYBOARD CONNECTION
+     FOCUS NEXT SOURCE
+  ===================================================== */
+
+  useEffect(() => {
+    const previousConnections = previousConnectionsRef.current;
+
+    /*
+      نحدد الـsource اللي connection تبعه
+      انضاف أو تغير.
+    */
+    const newlyConnectedSource = exchanges.find(
+      (item) =>
+        connections[item.id] &&
+        previousConnections[item.id] !== connections[item.id],
+    );
+
+    /*
+      حدث النسخة القديمة دائمًا
+    */
+    previousConnectionsRef.current = {
+      ...connections,
+    };
+
+    /*
+      إذا connection بالماوس:
+      ما نعمل focus movement.
+    */
+    if (!keyboardConnectionRef.current || !newlyConnectedSource) {
       return;
     }
 
-    // =========================
-    // 4️⃣ التصحيح (8 نقاط)
-    // =========================
+    keyboardConnectionRef.current = false;
+
+    const currentIndex = exchanges.findIndex(
+      (item) => item.id === newlyConnectedSource.id,
+    );
+
+    let nextSource = null;
+
+    /*
+      ندور من الـsource اللي بعد الحالي.
+    */
+    for (let offset = 1; offset <= exchanges.length; offset++) {
+      const nextIndex = (currentIndex + offset) % exchanges.length;
+
+      const candidate = exchanges[nextIndex];
+
+      /*
+        لا نرجع على نفس الـsource
+      */
+      if (candidate.id === newlyConnectedSource.id) {
+        continue;
+      }
+
+      /*
+        إذا locked تخطاه
+      */
+      if (lockedSources.has(candidate.id)) {
+        continue;
+      }
+
+      /*
+        إذا موصول أصلًا تخطاه
+      */
+      if (connections[candidate.id]) {
+        continue;
+      }
+
+      nextSource = candidate;
+
+      break;
+    }
+
+    if (!nextSource) return;
+
+    /*
+      بعد تحديث React:
+      رجع الـfocus للـsource التالي
+    */
+    requestAnimationFrame(() => {
+      sourceRefs.current[nextSource.id]?.focus?.();
+    });
+  }, [connections, lockedSources]);
+
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
+
+  const checkAnswers = () => {
+    if (showAnswer || lockedSources.size === exchanges.length) {
+      return;
+    }
+
+    /* =================================================
+       REQUIRE ALL CONNECTIONS
+    ================================================= */
+
+    if (exchanges.some((item) => !connections[item.id])) {
+      ValidationAlert.info("Please connect all the words to pictures.");
+
+      return;
+    }
+
+    /* =================================================
+       VALIDATE
+    ================================================= */
+
+    const nextLocked = new Set(lockedSources);
+
+    const nextWrong = new Set();
+
     let score = 0;
-    let wrongL = [];
-    let wrongC = [];
 
-    correctMatches.forEach((item) => {
-      const line = lines.find((l) => l.word === item.word + item.word2);
+    exchanges.forEach((item) => {
+      if (connections[item.id] === item.target) {
+        score += 1;
 
-      const imageCorrect = line && line.image === item.image;
-
-      if (imageCorrect) score += 1;
-
-      if (!imageCorrect) wrongC.push(item.word + item.word2);
+        nextLocked.add(item.id);
+      } else {
+        nextWrong.add(item.id);
+      }
     });
 
-    // setWrongLetters(wrongL);
-    setWrongConnections(wrongC);
-    setLocked(true);
+    setLockedSources(nextLocked);
 
-    const totalScore = correctMatches.length;
+    setWrongSources(nextWrong);
+
+    /* =================================================
+       SCORE
+    ================================================= */
 
     const color =
-      score === totalScore ? "green" : score === 0 ? "red" : "orange";
+      score === exchanges.length ? "green" : score === 0 ? "red" : "orange";
 
-    const msg = `
-    <div style="font-size:20px;text-align:center;">
-      <span style="color:${color};font-weight:bold">
-        Score: ${score} / ${totalScore}
-      </span>
-    </div>
-  `;
+    const message = `
+      <div
+        style="
+          font-size:20px;
+          text-align:center;
+        "
+      >
+        <span
+          style="
+            color:${color};
+            font-weight:bold;
+          "
+        >
+          Score: ${score} / ${exchanges.length}
+        </span>
+      </div>
+    `;
 
-    score === totalScore
-      ? ValidationAlert.success(msg)
-      : score === 0
-        ? ValidationAlert.error(msg)
-        : ValidationAlert.warning(msg);
+    if (score === exchanges.length) {
+      ValidationAlert.success(message);
+    } else if (score === 0) {
+      ValidationAlert.error(message);
+    } else {
+      ValidationAlert.warning(message);
+    }
   };
 
-  // ============================
-  // 👁 Show Answer
-  // ============================
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
   const showCorrectAnswer = () => {
-    const rect = containerRef.current.getBoundingClientRect();
+    setConnections(
+      Object.fromEntries(exchanges.map((item) => [item.id, item.target])),
+    );
 
-    const getPos = (id) => {
-      const el = document.getElementById(id);
-      if (!el) return { x: 0, y: 0 };
-      const r = el.getBoundingClientRect();
-      return {
-        x: r.left - rect.left + 8,
-        y: r.top - rect.top + 8,
-      };
-    };
+    setLockedSources(new Set(exchanges.map((item) => item.id)));
 
-    const finalLines = correctMatches.map((item, i) => ({
-      word: item.word,
-      image: item.image,
-      x1: getPos(`${item.word}-${i + 1}-dot`).x,
-      y1: getPos(`${item.word}-${i + 1}-dot`).y,
-      x2: getPos(`${item.image}-dot`).x,
-      y2: getPos(`${item.image}-dot`).y,
-    }));
+    setWrongSources(new Set());
 
-    setLines(finalLines);
-    setWrongWords([]);
-
-    setLocked(true);
     setShowAnswer(true);
-    setResetKey((k) => k + 1);
+
+    /*
+      Show Answer مش keyboard connection
+      فلا تنقلي focus
+    */
+    keyboardConnectionRef.current = false;
+
+    matching.cancel();
+
+    stopAudio();
   };
 
-  // ============================
-  // 🔄 Reset
-  // ============================
+  /* =====================================================
+     RESET
+  ===================================================== */
+
   const reset = () => {
-    setLines([]);
-    setWrongWords([]);
-    setFirstDot(null);
-    // setLetters({});
-    setLocked(false);
+    setConnections({});
+
+    setLockedSources(new Set());
+
+    setWrongSources(new Set());
+
     setShowAnswer(false);
-    setResetKey((k) => k + 1);
+
+    keyboardConnectionRef.current = false;
+
+    previousConnectionsRef.current = {};
+
+    matching.cancel();
+
+    stopAudio();
   };
 
-  // ============================
-  // 🔹 JSX
-  // ============================
-  const selectedWord = firstDot?.word;
+  /* =====================================================
+     RENDER
+  ===================================================== */
+
   return (
-    <div className="matching-wrapper" style={{ padding: "30px" }}>
+    <div
+      className="matching-wrapper"
+      style={{
+        padding: "30px",
+      }}
+    >
       <div className="div-forall">
-        <h5 className="header-title-page8">
-          <span className="mr-2">A</span> Look, read, and match.
-        </h5>
-        <div key={resetKey} className="container1 w-full" ref={containerRef}>
-          {correctMatches.map((item, index) => {
-            const isSelected =
-  selectedWord === item.word + item.word2;
-            return(
-            <div className="matching-row-review10-p1-q1" key={item.word}>
-              <div className="word-with-dot-review10-p1-q1">
-                <span className="span-num">{index + 1}</span>
-                <div style={{ position: "relative" }}>
-                  <span
-                    id="width-span-review10-p1-q1"
-                   className={`clickable-word-unit2-p7-q2 ${
-  locked || showAnswer ? "disabled-hover" : ""
-} ${isSelected ? "selected-match-item" : ""}`}
-                    onClick={() =>
-                      document
-                        .getElementById(`${item.word}-${index + 1}-dot`)
-                        .click()
-                    }
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
+        <ExerciseHeaderReview
+          sectionLetter="A"
+          title="Read, look, and match."
+          subTitle="Read each What do you want? exchange, then connect it to the correct person and food."
+        />
+
+        {/* =================================================
+            MATCHING AREA
+        ================================================= */}
+
+        <div className="container1 w-full" ref={matching.containerRef}>
+          {exchanges.map((item, index) => {
+            const image = images[index];
+
+            const sourceSelected =
+              matching.selectedEndpoint?.side === "source" &&
+              matching.selectedEndpoint.id === item.id;
+
+            const targetSelected =
+              matching.selectedEndpoint?.side === "target" &&
+              matching.selectedEndpoint.id === image.id;
+
+            const sourceLocked = lockedSources.has(item.id) || showAnswer;
+
+            const targetLocked =
+              matching.isLocked("target", image.id) || showAnswer;
+
+            return (
+              <div className="matching-row-review10-p1-q1" key={item.id}>
+                {/* =========================================
+                      SOURCE
+                  ========================================= */}
+
+                <div className="word-with-dot-review10-p1-q1">
+                  <span className="span-num">{index + 1}</span>
+
+                  <div
+                    style={{
+                      position: "relative",
+                    }}
                   >
-                    {item.word} <br /> {item.word2}
-                  </span>
-                  {!showAnswer &&
-                    locked &&
-                    wrongConnections.includes(item.word + item.word2) && (
-                      <span className="error-mark-review10-p1-q1">✕</span>
+                    <span
+                      ref={(node) => {
+                        /*
+                            Matching endpoint ref
+                          */
+                        matching.registerEndpoint("source", item.id, node);
+
+                        /*
+                            Focus ref
+                          */
+                        sourceRefs.current[item.id] = node;
+                      }}
+                      id="width-span-review10-p1-q1"
+                      className={`
+                          clickable-word-unit2-p7-q2
+                          review-audio-control
+
+                          ${sourceLocked ? "disabled-hover" : ""}
+
+                          ${sourceSelected ? "selected-match-item" : ""}
+                        `}
+                      role="button"
+                      /*
+                          مهم:
+                          source يظل بالـTab حتى لو matched
+                          لأنه الصوت لازم يظل available
+                        */
+                      tabIndex={0}
+                      aria-label={`${item.question} ${item.answer}. ${
+                        sourceLocked
+                          ? "Play audio."
+                          : "Play audio and start matching."
+                      }`}
+                      /* =====================================
+                           MOUSE
+                           AUDIO + MATCHING
+                        ===================================== */
+
+                      onClick={() => {
+                        playAudio(`answer-${index}`, item.audio);
+
+                        if (!sourceLocked) {
+                          matching.activateEndpoint("source", item.id);
+                        }
+                      }}
+                      /* =====================================
+                           KEYBOARD
+                        ===================================== */
+
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+
+                          /*
+                              الصوت يشتغل سواء
+                              source locked أو لا
+                            */
+                          playAudio(`answer-${index}`, item.audio);
+                        }
+
+                        /*
+                            matching فقط إذا
+                            source مش locked
+                          */
+                        handleMatchingKeyDown(
+                          event,
+                          "source",
+                          item.id,
+                          sourceLocked,
+                        );
+                      }}
+                    >
+                      {/* =================================
+                            AUDIO ICON
+                        ================================= */}
+
+                      {activeAudioKey === `answer-${index}` && (
+                        <ReviewPlayingAudioIcon />
+                      )}
+
+                      {item.question}
+
+                      <br />
+
+                      {item.answer}
+                    </span>
+
+                    {/* =================================
+                          WRONG CONNECTION X
+                      ================================= */}
+
+                    {!showAnswer && wrongSources.has(item.id) && (
+                      <span
+                        className="error-mark-review10-p1-q1"
+                        aria-hidden="true"
+                      >
+                        ✕
+                      </span>
                     )}
+                  </div>
+
+                  {/* =========================================
+                        SOURCE DOT
+                    ========================================= */}
+
+                  <div className="dot-wrapper">
+                    <div
+                      ref={(node) =>
+                        matching.registerDot("source", item.id, node)
+                      }
+                      className="dot start-dot"
+                      id={`${item.question}-${index + 1}-dot`}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      onClick={() => {
+                        if (!sourceLocked) {
+                          matching.activateEndpoint("source", item.id);
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="dot-wrapper">
-                  <div
-                    className="dot start-dot"
-                    id={`${item.word}-${index + 1}-dot`}
-                    data-word={item.word + item.word2}
-                    onClick={handleStartDotClick}
+
+                {/* =========================================
+                      TARGET
+                  ========================================= */}
+
+                <div className="img-with-dot">
+                  {/* =========================================
+                        TARGET DOT
+                    ========================================= */}
+
+                  <div className="dot-wrapper">
+                    <div
+                      ref={(node) =>
+                        matching.registerDot("target", image.id, node)
+                      }
+                      className="dot end-dot"
+                      id={`${image.id}-dot`}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      onClick={() => {
+                        if (!targetLocked) {
+                          matching.activateEndpoint("target", image.id);
+                        }
+                      }}
+                    />
+                  </div>
+
+                  {/* =========================================
+                        TARGET IMAGE
+                    ========================================= */}
+
+                  <img
+                    ref={(node) =>
+                      matching.registerEndpoint("target", image.id, node)
+                    }
+                    src={image.src}
+                    className={`
+                        matched-img
+
+                        ${targetLocked ? "disabled-hover" : ""}
+
+                        ${targetSelected ? "selected-match-item" : ""}
+                      `}
+                    style={{
+                      height: "100px",
+                    }}
+                    alt={image.alt}
+                    role="button"
+                    tabIndex={targetLocked ? -1 : 0}
+                    aria-label={`${image.alt} ${
+                      targetLocked ? "Already matched." : "Select for matching."
+                    }`}
+                    /* =====================================
+                         MOUSE
+                      ===================================== */
+
+                    onClick={() => {
+                      if (!targetLocked) {
+                        matching.activateEndpoint("target", image.id);
+                      }
+                    }}
+                    /* =====================================
+                         KEYBOARD
+                      ===================================== */
+
+                    onKeyDown={(event) =>
+                      handleMatchingKeyDown(
+                        event,
+                        "target",
+                        image.id,
+                        targetLocked,
+                      )
+                    }
                   />
                 </div>
               </div>
+            );
+          })}
 
-              <div className="img-with-dot">
-                <div className="dot-wrapper">
-                  <div
-                    className="dot end-dot"
-                    id={`img${index + 1}-dot`}
-                    data-image={`img${index + 1}`}
-                    onClick={handleEndDotClick}
-                  />
-                </div>
-                <img
-                  src={imagesMap[index]}
-                  className={`matched-img ${
-                    locked || showAnswer ? "disabled-hover" : ""
-                  }`}
-                  style={{ height: "100px" }}
-                  alt=""
-                  onClick={() =>
-                    document.getElementById(`img${index + 1}-dot`).click()
-                  }
-                />
-              </div>
-            </div>
-          )})}
+          {/* =================================================
+              LINES
+          ================================================= */}
 
-          <svg className="lines-layer">
-            {lines.map((l, i) => (
+          <svg
+            className="lines-layer"
+            style={{
+              pointerEvents: "none",
+            }}
+            aria-hidden="true"
+          >
+            {Object.entries(connections).map(([sourceId, targetId]) => {
+              const line = matching.lineFor(sourceId, targetId);
+
+              return line ? (
+                <line key={sourceId} {...line} stroke="red" strokeWidth="3" />
+              ) : null;
+            })}
+
+            {/* =========================================
+                PREVIEW LINE
+            ========================================= */}
+
+            {matching.previewLine && (
               <line
-                key={i}
-                x1={l.x1}
-                y1={l.y1}
-                x2={l.x2}
-                y2={l.y2}
+                {...matching.previewLine}
                 stroke="red"
                 strokeWidth="3"
+                strokeDasharray="6 4"
               />
-            ))}
+            )}
           </svg>
         </div>
       </div>
+
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
+
       <div className="action-buttons-container">
         <button onClick={reset} className="try-again-button">
           Start Again ↻

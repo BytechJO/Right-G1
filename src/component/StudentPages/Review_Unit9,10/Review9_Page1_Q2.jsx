@@ -1,7 +1,22 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from "react";
 import farmImg from "../../../assets/unit10/imgs/U10P88EXEB.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page1_Q2.css";
+import howManyAudio from "../../../assets/Review_9,10/Page 88 - B/How many.mp3";
+import cowsQuestionAudio from "../../../assets/Review_9,10/Page 88 - B/How many cows are there.mp3";
+import goatsQuestionEndAudio from "../../../assets/Review_9,10/Page 88 - B/goats are there.mp3";
+import catsQuestionEndAudio from "../../../assets/Review_9,10/Page 88 - B/cats are there.mp3";
+import cowsAnswerAudio from "../../../assets/Review_9,10/Page 88 - B/There are five cows..mp3";
+import goatsAnswerAudio from "../../../assets/Review_9,10/Page 88 - B/There are four goats..mp3";
+import catsAnswerAudio from "../../../assets/Review_9,10/Page 88 - B/There are three cats..mp3";
+import full1Audio from "../../../assets/Review_9,10/Page 88 - B/full1.mp3";
+import full2Audio from "../../../assets/Review_9,10/Page 88 - B/full2.mp3";
+import full3Audio from "../../../assets/Review_9,10/Page 88 - B/full3.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
+import useReviewDragKeyboard from "./useReviewDragKeyboard";
 
 import {
   DndContext,
@@ -23,6 +38,9 @@ const items = [
     blanksCount: 0,
     questionAnswers: [],
     answer: "There are five cows.",
+    questionAudio: cowsQuestionAudio,
+    answerAudio: cowsAnswerAudio,
+    fullAudio: full1Audio,
   },
   {
     image: farmImg,
@@ -30,6 +48,9 @@ const items = [
     blanksCount: 2,
     questionAnswers: ["How many"],
     answer: "There are four goats.",
+    suffixAudio: goatsQuestionEndAudio,
+    answerAudio: goatsAnswerAudio,
+    fullAudio: full2Audio,
   },
   {
     image: farmImg,
@@ -37,6 +58,9 @@ const items = [
     blanksCount: 2,
     questionAnswers: ["How many"],
     answer: "There are three cats.",
+    suffixAudio: catsQuestionEndAudio,
+    answerAudio: catsAnswerAudio,
+    fullAudio: full3Audio,
   },
 ];
 
@@ -49,7 +73,7 @@ const wordBank = [
 
 // ─── Bank Chip (Draggable) ─────────────────────────────────────────────────────
 
-const BankChip = ({ word, isUsed, locked }) => {
+const BankChip = ({ word, isUsed, locked, onPlay, playing, keyboard }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `bank-${word}`,
     disabled: isUsed || locked,
@@ -57,9 +81,29 @@ const BankChip = ({ word, isUsed, locked }) => {
 
   return (
     <span
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        keyboard.registerBank(`bank-${word}`, node);
+      }}
       {...listeners}
       {...attributes}
+      role="button"
+      tabIndex={keyboard.picked ? -1 : 0}
+      aria-label={`${isUsed || locked ? "Play audio" : "Pick up"}: ${word}`}
+      className="review-audio-control"
+      onClick={onPlay}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onPlay();
+          keyboard.handleBankKeyDown(
+            event,
+            word,
+            `bank-${word}`,
+            !isUsed && !locked,
+          );
+        }
+      }}
       style={{
         padding: "7px 14px",
         border: `2px solid ${isUsed ? "#b0b0b0" : "#2c5287"}`,
@@ -75,9 +119,9 @@ const BankChip = ({ word, isUsed, locked }) => {
         userSelect: "none",
         touchAction: "none",
         display: "inline-block",
-        pointerEvents: isUsed ? "none" : undefined,
       }}
     >
+      {playing && <ReviewPlayingAudioIcon />}
       {word}
     </span>
   );
@@ -85,12 +129,34 @@ const BankChip = ({ word, isUsed, locked }) => {
 
 // ─── Drop Zone (Droppable) ────────────────────────────────────────────────────
 
-const DropZone = ({ id, value, isWrong, locked, onRemove, className }) => {
-  const { setNodeRef, isOver } = useDroppable({ id });
+const DropZone = ({
+  id,
+  value,
+  isWrong,
+  locked,
+  onRemove,
+  className,
+  keyboard,
+}) => {
+  const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
+  const preview = keyboard.previewFor(id);
 
   return (
     <span
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        keyboard.registerTarget(id, node);
+      }}
+      role="button"
+      tabIndex={keyboard.targetTabIndex(id)}
+      aria-label={
+        preview
+          ? `Place ${preview} here.`
+          : value
+            ? `${value}. Press Enter or Space to return it.`
+            : "Empty question blank."
+      }
+      onKeyDown={(event) => keyboard.handleTargetKeyDown(event, id)}
       className={`${className || ""} ${isOver ? "drag-over-cell" : ""}`}
       style={{
         // background: isOver ? "#e8f0fe" : undefined,
@@ -107,7 +173,9 @@ const DropZone = ({ id, value, isWrong, locked, onRemove, className }) => {
       }}
       title={value && !locked ? "Click to remove" : ""}
     >
-      {value || ""}
+      <span className={preview ? "review-keyboard-drop-preview" : ""}>
+        {preview || value || ""}
+      </span>
       {isWrong && <div className="wrong-x-circle-review9-p1-q2">✕</div>}
     </span>
   );
@@ -115,12 +183,26 @@ const DropZone = ({ id, value, isWrong, locked, onRemove, className }) => {
 
 // ─── Answer Drop Zone ─────────────────────────────────────────────────────────
 
-const AnswerDropZone = ({ id, value, isWrong, locked, onRemove }) => {
-  const { setNodeRef, isOver } = useDroppable({ id });
+const AnswerDropZone = ({ id, value, isWrong, locked, onRemove, keyboard }) => {
+  const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
+  const preview = keyboard.previewFor(id);
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        keyboard.registerTarget(id, node);
+      }}
+      role="button"
+      tabIndex={keyboard.targetTabIndex(id)}
+      aria-label={
+        preview
+          ? `Place ${preview} here.`
+          : value
+            ? `${value}. Press Enter or Space to return it.`
+            : "Empty answer blank."
+      }
+      onKeyDown={(event) => keyboard.handleTargetKeyDown(event, id)}
       className={`answer-input-review9-p1-q2 ${isOver ? "drag-over-cell" : ""}`}
       style={{
         // background: isOver ? "#e8f0fe" : undefined,
@@ -133,7 +215,9 @@ const AnswerDropZone = ({ id, value, isWrong, locked, onRemove }) => {
       }}
       title={value && !locked ? "Click to remove" : ""}
     >
-      {value || ""}
+      <span className={preview ? "review-keyboard-drop-preview" : ""}>
+        {preview || value || ""}
+      </span>
       {isWrong && <div className="wrong-x-circle-review9-p1-q2">✕</div>}
     </div>
   );
@@ -147,8 +231,18 @@ const Review9_Page1_Q2 = () => {
   );
   const [answers, setAnswers] = useState(items.map(() => ""));
   const [showCorrect, setShowCorrect] = useState(false);
-  const [wrongMarks, setWrongMarks] = useState([]);
+  const [wrongMarks, setWrongMarks] = useState(new Set());
+  const [lockedInputs, setLockedInputs] = useState(new Set());
   const [activeId, setActiveId] = useState(null);
+  const [correctRows, setCorrectRows] = useState([]);
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
+
+  const wordAudio = {
+    "How many": howManyAudio,
+    "There are five cows.": cowsAnswerAudio,
+    "There are four goats.": goatsAnswerAudio,
+    "There are three cats.": catsAnswerAudio,
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -174,69 +268,97 @@ const Review9_Page1_Q2 = () => {
   const isWordUsedUp = (word) =>
     (usedCount[word] || 0) >= (bankCount[word] || 1);
 
+  const targetIds = [
+    ...items.flatMap((item, i) =>
+      item.questionAnswers.map((_, j) => `q-${i}-${j}`),
+    ),
+    ...items.map((_, i) => `a-${i}`),
+  ];
+
+  const getValue = (id) => {
+    const [type, row, column] = id.split("-");
+    return type === "q"
+      ? questionInputs[Number(row)][Number(column)]
+      : answers[Number(row)];
+  };
+
+  const placeWord = (id, word) => {
+    if (showCorrect || lockedInputs.has(id)) return;
+    const [type, row, column] = id.split("-");
+    if (type === "q") {
+      setQuestionInputs((current) => {
+        const next = current.map((values) => [...values]);
+        next[Number(row)][Number(column)] = word;
+        return next;
+      });
+    } else {
+      setAnswers((current) => {
+        const next = [...current];
+        next[Number(row)] = word;
+        return next;
+      });
+    }
+    setWrongMarks((current) => {
+      const next = new Set(current);
+      next.delete(id);
+      return next;
+    });
+  };
+
+  const removeValue = (id) => {
+    if (showCorrect || lockedInputs.has(id)) return;
+    placeWord(id, "");
+  };
+
+  const keyboard = useReviewDragKeyboard({
+    targetIds,
+    lockedIds: lockedInputs,
+    getValue,
+    onPlace: placeWord,
+    onRemove: removeValue,
+  });
+
   // ─── Drag Handlers ────────────────────────────────────────────────────────
 
   const handleDragStart = ({ active }) => setActiveId(active.id);
 
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
-    if (!over || showCorrect) return;
+    if (!over || showCorrect || lockedInputs.has(String(over.id))) return;
 
     const word = active.id.replace("bank-", "");
     const destId = over.id; // e.g. "q-1-0" or "a-1"
 
-    const parts = destId.split("-");
-    const type = parts[0];
-
-    if (type === "q") {
-      const i = parseInt(parts[1]);
-      const j = parseInt(parts[2]);
-      const updated = questionInputs.map((row) => [...row]);
-      updated[i][j] = word;
-      setQuestionInputs(updated);
-    }
-
-    if (type === "a") {
-      const i = parseInt(parts[1]);
-      const updated = [...answers];
-      updated[i] = word;
-      setAnswers(updated);
-    }
-
-    setWrongMarks([]);
+    placeWord(destId, word);
   };
 
   // ─── Remove (click to clear) ──────────────────────────────────────────────
 
   const handleRemove = (id) => {
-    const parts = id.split("-");
-    const type = parts[0];
-
-    if (type === "q") {
-      const i = parseInt(parts[1]);
-      const j = parseInt(parts[2]);
-      const updated = questionInputs.map((row) => [...row]);
-      updated[i][j] = "";
-      setQuestionInputs(updated);
-    }
-
-    if (type === "a") {
-      const i = parseInt(parts[1]);
-      const updated = [...answers];
-      updated[i] = "";
-      setAnswers(updated);
-    }
-
-    setWrongMarks([]);
+    removeValue(id);
   };
 
   // ─── Show Answers ─────────────────────────────────────────────────────────
 
   const showAnswers = () => {
     setQuestionInputs(items.map((item) => item.questionAnswers || []));
+
     setAnswers(items.map((item) => item.answer));
+
     setShowCorrect(true);
-    setWrongMarks([]);
+
+    setWrongMarks(new Set());
+
+    setLockedInputs(new Set(targetIds));
+
+    /*
+    ✅ بعد Show Answer
+    اعتبر كل الصفوف مكتملة وصحيحة
+    حتى يصير كل div clickable/tabbable للصوت الكامل
+  */
+    setCorrectRows(items.map((_, index) => index));
+
+    stopAudio();
   };
 
   // ─── Reset ────────────────────────────────────────────────────────────────
@@ -245,13 +367,16 @@ const Review9_Page1_Q2 = () => {
     setQuestionInputs(items.map((item) => Array(item.blanksCount).fill("")));
     setAnswers(items.map(() => ""));
     setShowCorrect(false);
-    setWrongMarks([]);
+    setWrongMarks(new Set());
+    setLockedInputs(new Set());
+    setCorrectRows([]);
+    stopAudio();
   };
 
   // ─── Check Answers ────────────────────────────────────────────────────────
 
   const checkAnswers = () => {
-    if (showCorrect) return;
+    if (showCorrect || lockedInputs.size === targetIds.length) return;
 
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < items[i].questionAnswers.length; j++) {
@@ -274,9 +399,12 @@ const Review9_Page1_Q2 = () => {
 
     let score = 0;
     let total = 0;
-    const wrong = [];
+    const wrong = new Set();
+    const nextLocked = new Set(lockedInputs);
 
+    const correctRowIndexes = [];
     items.forEach((item, i) => {
+      let rowCorrect = true;
       item.questionAnswers.forEach((correctWord, idx) => {
         total++;
         if (
@@ -285,20 +413,33 @@ const Review9_Page1_Q2 = () => {
         ) {
           score++;
         } else {
-          wrong.push({ type: "question", qIndex: i, idx });
+          wrong.add(`q-${i}-${idx}`);
+          rowCorrect = false;
+        }
+        if (
+          questionInputs[i][idx]?.trim().toLowerCase() ===
+          correctWord.toLowerCase()
+        ) {
+          nextLocked.add(`q-${i}-${idx}`);
         }
       });
 
       total++;
       if (answers[i].trim().toLowerCase() === item.answer.toLowerCase()) {
         score++;
+        nextLocked.add(`a-${i}`);
       } else {
-        wrong.push({ type: "answer", qIndex: i });
+        wrong.add(`a-${i}`);
+        rowCorrect = false;
       }
+      if (rowCorrect) correctRowIndexes.push(i);
     });
 
     setWrongMarks(wrong);
-    setShowCorrect(true);
+    setLockedInputs(nextLocked);
+    setCorrectRows((current) =>
+      Array.from(new Set([...current, ...correctRowIndexes])),
+    );
 
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
     const msg = `
@@ -338,10 +479,11 @@ const Review9_Page1_Q2 = () => {
             justifyContent: "flex-start",
           }}
         >
-          <h5 className="header-title-page8">
-            <span className="mr-2">B</span> Read and drag the correct words to
-            complete the sentences.
-          </h5>
+          <ExerciseHeaderReview
+            sectionLetter="B"
+            title="Look and write."
+            subTitle="Count the cows, goats, and cats, then drag the correct question and answers into place."
+          />
 
           {/* ── Word Bank ── */}
           <div
@@ -363,6 +505,9 @@ const Review9_Page1_Q2 = () => {
                 word={word}
                 isUsed={isWordUsedUp(word)}
                 locked={showCorrect}
+                onPlay={() => playAudio(`bank-${word}`, wordAudio[word])}
+                playing={activeAudioKey === `bank-${word}`}
+                keyboard={keyboard}
               />
             ))}
           </div>
@@ -371,35 +516,115 @@ const Review9_Page1_Q2 = () => {
           <div className="content-review9-p1-q2 w-full">
             <img
               src={farmImg}
-              alt=""
+              alt="A farm scene with five cows, four goats, and three cats."
               style={{ height: "270px", width: "auto" }}
             />
 
             <div style={{ width: "100%" }}>
               {items.map((item, i) => (
-                <div key={i} className="question-box-review9-p1-q2">
+                <div
+                  key={i}
+                  className={`question-box-review9-p1-q2 review-audio-control${
+                    correctRows.includes(i) ? " review-full-audio-ready" : ""
+                  }`}
+                  role={correctRows.includes(i) ? "button" : undefined}
+                  tabIndex={correctRows.includes(i) ? 0 : undefined}
+                  aria-label={
+                    correctRows.includes(i)
+                      ? `Play the complete correct exchange for item ${i + 1}.`
+                      : undefined
+                  }
+                  onClick={
+                    correctRows.includes(i)
+                      ? () => playAudio(`full-${i}`, item.fullAudio)
+                      : undefined
+                  }
+                  onKeyDown={
+                    correctRows.includes(i)
+                      ? (event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            playAudio(`full-${i}`, item.fullAudio);
+                          }
+                        }
+                      : undefined
+                  }
+                >
+                  {activeAudioKey === `full-${i}` && <ReviewPlayingAudioIcon />}
                   {/* ── Question ── */}
-                  <p className="question-text">
+                  <p className="question-text question-text-review9-p1-q2">
+                    {" "}
                     {item.questionParts.map((part, idx) =>
                       part === "" ? (
                         <DropZone
                           key={`q-${i}-${idx}`}
                           id={`q-${i}-${idx}`}
                           value={questionInputs[i][idx]}
-                          isWrong={wrongMarks.some(
-                            (w) =>
-                              w.type === "question" &&
-                              w.qIndex === i &&
-                              w.idx === idx,
-                          )}
-                          locked={showCorrect}
+                          isWrong={wrongMarks.has(`q-${i}-${idx}`)}
+                          locked={
+                            showCorrect || lockedInputs.has(`q-${i}-${idx}`)
+                          }
                           onRemove={handleRemove}
                           className="question-blank-review9-p1-q2"
+                          keyboard={keyboard}
                         />
                       ) : (
-                        <span key={idx} style={{ width: "100%" }}>
-                          {" "}
-                          {part}{" "}
+                        <span
+                          key={idx}
+                          className="question-part-review9-p1-q2 review-audio-control"
+                          role={
+                            !correctRows.includes(i) &&
+                            (item.questionAudio || item.suffixAudio)
+                              ? "button"
+                              : undefined
+                          }
+                          tabIndex={
+                            !correctRows.includes(i) &&
+                            (item.questionAudio || item.suffixAudio)
+                              ? 0
+                              : undefined
+                          }
+                          aria-label={
+                            !correctRows.includes(i) &&
+                            (item.questionAudio || item.suffixAudio)
+                              ? `Play audio: ${part}`
+                              : undefined
+                          }
+                          onClick={
+                            !correctRows.includes(i) &&
+                            (item.questionAudio || item.suffixAudio)
+                              ? (event) => {
+                                  event.stopPropagation();
+                                  playAudio(
+                                    `question-${i}-${idx}`,
+                                    item.questionAudio || item.suffixAudio,
+                                  );
+                                }
+                              : undefined
+                          }
+                          onKeyDown={
+                            !correctRows.includes(i) &&
+                            (item.questionAudio || item.suffixAudio)
+                              ? (event) => {
+                                  if (
+                                    event.key === "Enter" ||
+                                    event.key === " "
+                                  ) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    playAudio(
+                                      `question-${i}-${idx}`,
+                                      item.questionAudio || item.suffixAudio,
+                                    );
+                                  }
+                                }
+                              : undefined
+                          }
+                        >
+                          {activeAudioKey === `question-${i}-${idx}` && (
+                            <ReviewPlayingAudioIcon />
+                          )}
+                          {part}
                         </span>
                       ),
                     )}
@@ -409,11 +634,10 @@ const Review9_Page1_Q2 = () => {
                   <AnswerDropZone
                     id={`a-${i}`}
                     value={answers[i]}
-                    isWrong={wrongMarks.some(
-                      (w) => w.type === "answer" && w.qIndex === i,
-                    )}
-                    locked={showCorrect}
+                    isWrong={wrongMarks.has(`a-${i}`)}
+                    locked={showCorrect || lockedInputs.has(`a-${i}`)}
                     onRemove={handleRemove}
+                    keyboard={keyboard}
                   />
                 </div>
               ))}

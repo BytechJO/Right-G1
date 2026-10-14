@@ -1,12 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+
 import "./Review9_Page2_Q1.css";
+
 import sound1 from "../../../assets/unit10/sound/cd82pg89-instruction1-adult-lady_HJ6dZOlG.mp3";
+
 import img2 from "../../../assets/unit10/imgs/U10P89EXED-01.svg";
 import img3 from "../../../assets/unit10/imgs/U10P89EXED-02.svg";
+
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+
+import item1Audio from "../../../assets/unit10/sound/Pg89_1.1_Adult Lady.mp3";
+import item2Audio from "../../../assets/unit10/sound/Pg89_1.2_Adult Lady.mp3";
+
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+
+import useReviewAudio from "./useReviewAudio";
+
+import useReviewDragKeyboard from "./useReviewDragKeyboard";
+
+/* =====================================================
+   DATA
+===================================================== */
 
 const data = [
   {
@@ -22,9 +42,16 @@ const data = [
         after: "ight.",
       },
     ],
+
     correct: ["m", "n"],
+
     img: img2,
+
+    alt: "A man walking outside at night.",
+
+    audio: item1Audio,
   },
+
   {
     parts: [
       {
@@ -38,96 +65,263 @@ const data = [
         after: "urse",
       },
     ],
+
     correct: ["m", "n"],
+
     img: img3,
+
+    alt: "A woman working as a nurse.",
+
+    audio: item2Audio,
   },
 ];
 
+/* =====================================================
+   COMPONENT
+===================================================== */
+
 const Review9_Page2_Q1 = () => {
+  /* =====================================================
+     ANSWERS
+  ===================================================== */
+
   const [answers, setAnswers] = useState(
-    data.map((d) => Array(d.correct.length).fill("")),
+    data.map((item) => Array(item.correct.length).fill("")),
   );
-  const [wrongInputs, setWrongInputs] = useState([]);
 
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  /* =====================================================
+     WRONG INPUTS
+  ===================================================== */
 
-  const onDragEnd = (result) => {
-    const { destination, draggableId } = result;
-    if (!destination || locked) return;
+  const [wrongInputs, setWrongInputs] = useState(new Set());
 
-    const value = draggableId.replace("char-", "");
+  /* =====================================================
+     LOCKED CORRECT INPUTS
+  ===================================================== */
 
-    // 🟢 1) إذا رجع الحرف على الـ bank
-    if (destination.droppableId === "char-bank") {
-      setAnswers((prev) => {
-        const updated = prev.map((row) => [...row]);
+  const [lockedInputs, setLockedInputs] = useState(new Set());
 
-        updated.forEach((row, q) =>
-          row.forEach((cell, b) => {
-            if (cell === value) updated[q][b] = "";
-          }),
-        );
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
 
-        return updated;
-      });
+  const [showAnswerMode, setShowAnswerMode] = useState(false);
 
-      setWrongInputs([]);
+  /* =====================================================
+     ROWS THAT BECAME FULLY CORRECT AFTER CHECK
+     فقط هاي الجمل بصير إلها صوت
+  ===================================================== */
+
+  const [correctRows, setCorrectRows] = useState(new Set());
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
+
+  /* =====================================================
+     TARGET IDS
+  ===================================================== */
+
+  const targetIds = data.flatMap((item, qIndex) =>
+    item.correct.map((_, blankIndex) => `slot-${qIndex}-${blankIndex}`),
+  );
+
+  /* =====================================================
+     PARSE TARGET
+  ===================================================== */
+
+  const parseTarget = (targetId) =>
+    targetId.replace("slot-", "").split("-").map(Number);
+
+  /* =====================================================
+     PLACE LETTER
+     IMPORTANT:
+     NO AUDIO HERE
+  ===================================================== */
+
+  const placeLetter = (targetId, value) => {
+    if (showAnswerMode || lockedInputs.has(targetId)) {
       return;
     }
 
-    // 🟢 2) إذا drop على خانة
+    const [qIndex, blankIndex] = parseTarget(targetId);
+
+    setAnswers((prev) => {
+      const updated = prev.map((row) => [...row]);
+
+      updated[qIndex][blankIndex] = value;
+
+      return updated;
+    });
+
+    /*
+      تعديل خانة غلط:
+      امسح الغلط لهذه الخانة فقط
+    */
+
+    setWrongInputs((current) => {
+      const next = new Set(current);
+
+      next.delete(`${qIndex}-${blankIndex}`);
+
+      return next;
+    });
+  };
+
+  /* =====================================================
+     REMOVE LETTER
+  ===================================================== */
+
+  const removeLetter = (targetId) => {
+    if (showAnswerMode || lockedInputs.has(targetId)) {
+      return;
+    }
+
+    placeLetter(targetId, "");
+  };
+
+  /* =====================================================
+     KEYBOARD DRAG PATTERN
+  ===================================================== */
+
+  const keyboard = useReviewDragKeyboard({
+    targetIds,
+
+    lockedIds: lockedInputs,
+
+    getValue: (targetId) => {
+      const [qIndex, blankIndex] = parseTarget(targetId);
+
+      return answers[qIndex][blankIndex];
+    },
+
+    onPlace: placeLetter,
+
+    onRemove: removeLetter,
+  });
+
+  /* =====================================================
+     DRAG END
+  ===================================================== */
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId } = result;
+
+    if (!destination || showAnswerMode) {
+      return;
+    }
+
+    const value = draggableId.replace("char-", "");
+
+    /* =================================================
+       RETURNED TO BANK
+    ================================================= */
+
+    if (destination.droppableId === "char-bank") {
+      return;
+    }
+
+    /* =================================================
+       DROP ON SLOT
+    ================================================= */
+
     if (destination.droppableId.startsWith("slot-")) {
-      const [, qIndex, blankIndex] = destination.droppableId
-        .split("-")
-        .map(Number);
-
-      setAnswers((prev) => {
-        const updated = prev.map((row) => [...row]);
-
-        updated[qIndex][blankIndex] = value;
-        return updated;
-      });
-
-      setWrongInputs([]);
+      placeLetter(destination.droppableId, value);
     }
   };
 
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
+
   const checkAnswers = () => {
-    if (locked) return; // ⭐ NEW — لا تعديل بعد Show Answer
-    // 1) افحص إذا في أي خانة فاضية
-    const hasEmpty = answers.some((arr) =>
-      arr.some((val) => val.trim() === ""),
+    if (showAnswerMode || lockedInputs.size === targetIds.length) {
+      return;
+    }
+
+    /* =================================================
+       REQUIRE ALL BLANKS
+    ================================================= */
+
+    const hasEmpty = answers.some((row) =>
+      row.some((value) => value.trim() === ""),
     );
 
     if (hasEmpty) {
       ValidationAlert.info("Please fill in all blanks before checking!");
+
       return;
     }
 
-    // 2) اجمع كل الأخطاء
-    let wrong = [];
+    /* =================================================
+       VALIDATE
+    ================================================= */
+
+    const wrong = new Set();
+
+    const nextLocked = new Set(lockedInputs);
+
+    /*
+      Preserve rows that were already
+      fully correct after previous Check
+    */
+
+    const nextCorrectRows = new Set(correctRows);
+
     let correctCount = 0;
 
-    answers.forEach((arr, qIndex) => {
-      arr.forEach((val, blankIndex) => {
-        if (val.trim() === data[qIndex].correct[blankIndex]) {
-          correctCount++; // صح
+    answers.forEach((row, qIndex) => {
+      let rowCorrect = true;
+
+      row.forEach((value, blankIndex) => {
+        const isCorrect = value.trim() === data[qIndex].correct[blankIndex];
+
+        if (isCorrect) {
+          correctCount++;
+
+          /*
+                Progressive lock:
+                كل خانة صح تنقفل
+              */
+
+          nextLocked.add(`slot-${qIndex}-${blankIndex}`);
         } else {
-          wrong.push(`${qIndex}-${blankIndex}`); // غلط
+          wrong.add(`${qIndex}-${blankIndex}`);
+
+          rowCorrect = false;
         }
       });
+
+      /*
+          فقط بعد Check:
+          إذا كل الجملة صح
+          فعل full sentence audio
+        */
+
+      if (rowCorrect) {
+        nextCorrectRows.add(qIndex);
+      }
     });
 
     setWrongInputs(wrong);
 
-    // 3) احسب العدد الكلي للحقول
+    setLockedInputs(nextLocked);
+
+    setCorrectRows(nextCorrectRows);
+
+    /* =================================================
+       SCORE
+    ================================================= */
+
     const totalInputs = data.reduce(
-      (acc, item) => acc + item.correct.length,
+      (total, item) => total + item.correct.length,
+
       0,
     );
 
-    // 4) اختر اللون حسب السكور
-    let color =
+    const color =
       correctCount === totalInputs
         ? "green"
         : correctCount === 0
@@ -135,14 +329,23 @@ const Review9_Page2_Q1 = () => {
           : "orange";
 
     const scoreMessage = `
-    <div style="font-size:20px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-        Score: ${correctCount} / ${totalInputs}
-      </span>
-    </div>
-  `;
-    setLocked(true); // ⭐ NEW — قفل التعديل بعد Check
-    // 5) طباعة النتيجة
+      <div
+        style="
+          font-size:20px;
+          text-align:center;
+        "
+      >
+        <span
+          style="
+            color:${color};
+            font-weight:bold;
+          "
+        >
+          Score: ${correctCount} / ${totalInputs}
+        </span>
+      </div>
+    `;
+
     if (correctCount === totalInputs) {
       ValidationAlert.success(scoreMessage);
     } else if (correctCount === 0) {
@@ -151,39 +354,84 @@ const Review9_Page2_Q1 = () => {
       ValidationAlert.warning(scoreMessage);
     }
   };
-  // ⭐⭐⭐ NEW — Show Answer
+
+  /* =====================================================
+     SHOW ANSWER
+     IMPORTANT:
+     لا نفعل صوت الجملة هنا
+  ===================================================== */
+
   const showAnswer = () => {
-    const correctFilled = data.map((d) => [...d.correct]);
+    const correctFilled = data.map((item) => [...item.correct]);
 
-    setAnswers(correctFilled); // ضع الإجابات الصحيحة
-    setWrongInputs([]); // إزالة الأخطاء
-    setLocked(true); // قفل الحقول
+    setAnswers(correctFilled);
+
+    setWrongInputs(new Set());
+
+    setLockedInputs(new Set(targetIds));
+
+    setShowAnswerMode(true);
+
+    /*
+    Show Answer:
+    كل الجمل تصير كاملة وصحيحة
+    وتدخل وضع full sentence audio
+  */
+    setCorrectRows(new Set(data.map((_, index) => index)));
+
+    stopAudio();
   };
-  const stopAtSecond = 3.5;
 
+  /* =====================================================
+     RESET
+  ===================================================== */
 
-  // ================================
-  // ✔ Captions Array
-  // ================================
-const captions = [
-  {
-    start: 0.479,
-    end: 4.639,
-    text: "Page 89, exercise D. Listen and write."
-  },
+  const resetAll = () => {
+    setAnswers(data.map((item) => Array(item.correct.length).fill("")));
 
-  {
-    start: 5.44,
-    end: 8.019,
-    text: "1, the man walks at night."
-  },
+    setWrongInputs(new Set());
 
-  {
-    start: 8.72,
-    end: 11.1,
-    text: "2, my mom is a nurse."
-  }
-];
+    setLockedInputs(new Set());
+
+    setShowAnswerMode(false);
+
+    setCorrectRows(new Set());
+
+    stopAudio();
+  };
+
+  /* =====================================================
+     QUESTION AUDIO
+  ===================================================== */
+
+  const stopAtSecond = 4.7;
+
+  const captions = [
+    {
+      start: 0.479,
+      end: 4.639,
+
+      text: "Page 89, exercise D. Listen and write.",
+    },
+
+    {
+      start: 5.44,
+      end: 8.019,
+
+      text: "1, the man walks at night.",
+    },
+
+    {
+      start: 8.72,
+      end: 11.1,
+
+      text: "2, my mom is a nurse.",
+    },
+  ];
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -194,31 +442,51 @@ const captions = [
             gap: "30px",
           }}
         >
-          <h3 className="header-title-page8">
-            <span className="mr-2">D</span> Listen and drag the correct letters.
-          </h3>
+          {/* =================================================
+              HEADER
+          ================================================= */}
+
+          <ExerciseHeaderReview
+            sectionLetter="D"
+            title="Listen and write."
+            subTitle="Listen to each sentence, then drag m or n into every blank."
+          />
+
+          {/* =================================================
+              INSTRUCTION AUDIO
+          ================================================= */}
 
           <QuestionAudioPlayer
             src={sound1}
             captions={captions}
             stopAtSecond={stopAtSecond}
+            pageId="review9-page89-qD"
           />
-      
 
-          <Droppable droppableId="char-bank" isDropDisabled={locked}>
+          {/* =================================================
+              LETTER BANK
+          ================================================= */}
+
+          <Droppable droppableId="char-bank" isDropDisabled={showAnswerMode}>
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 style={{
                   display: "flex",
+
                   gap: "10px",
+
                   padding: "10px",
+
                   border: "2px dashed #ccc",
+
                   borderRadius: "10px",
-                  // margin: "10px 0",
+
                   alignItems: "center",
+
                   width: "100%",
+
                   justifyContent: "center",
                 }}
               >
@@ -227,21 +495,49 @@ const captions = [
                     key={char}
                     draggableId={`char-${char}`}
                     index={index}
-                    isDragDisabled={locked}
+                    isDragDisabled={
+                      showAnswerMode || lockedInputs.size === targetIds.length
+                    }
                   >
                     {(provided) => (
                       <span
-                        ref={provided.innerRef}
+                        ref={(node) => {
+                          provided.innerRef(node);
+
+                          keyboard.registerBank(`bank-${char}`, node);
+                        }}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        role="button"
+                        tabIndex={
+                          keyboard.picked ||
+                          lockedInputs.size === targetIds.length
+                            ? -1
+                            : 0
+                        }
+                        aria-label={`Pick up the letter ${char}.`}
+                        onKeyDown={(event) =>
+                          keyboard.handleBankKeyDown(
+                            event,
+                            char,
+                            `bank-${char}`,
+                          )
+                        }
                         style={{
                           padding: "7px 14px",
+
                           border: "2px solid #2c5287",
+
                           borderRadius: "8px",
+
                           background: "white",
+
                           fontWeight: "bold",
+
                           fontSize: "22px",
+
                           cursor: "grab",
+
                           ...provided.draggableProps.style,
                         }}
                       >
@@ -256,95 +552,242 @@ const captions = [
             )}
           </Droppable>
 
-          {data.map((item, qIndex) => (
-            <div className="row-missing" key={qIndex}>
-              <span className="num">{qIndex + 1}.</span>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div className="sentence-review4-p2-q1">
-                  {item.parts.map((p, blankIndex) => (
-                    <span
-                      key={blankIndex}
-                      className="sentence-part"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      {p.before}
+          {/* =================================================
+              QUESTIONS
+          ================================================= */}
 
-                      <div className="input-wrapper-review9-p2-q2">
-                        <Droppable
-                          droppableId={`slot-${qIndex}-${blankIndex}`}
-                          isDropDisabled={locked}
+          {data.map((item, qIndex) => {
+            /*
+                الجملة Audio Control
+                فقط إذا أصبحت كاملة صح
+                عن طريق Check Answer
+              */
+
+            const sentenceCorrect = correctRows.has(qIndex);
+
+            const sentenceAudioKey = `item-${qIndex}`;
+
+            return (
+              <div className="row-missing" key={qIndex}>
+                <span className="num">{qIndex + 1}.</span>
+
+                <div
+                  style={{
+                    display: "flex",
+
+                    width: "100%",
+
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {/* =========================================
+                        SENTENCE
+                    ========================================= */}
+
+                  <div
+                    className={`
+                        sentence-review4-p2-q1
+
+                        ${
+                          sentenceCorrect
+                            ? "correct-sentence-audio-review9-p2-q1"
+                            : ""
+                        }
+                      `}
+                    role={sentenceCorrect ? "button" : undefined}
+                    tabIndex={sentenceCorrect ? 0 : undefined}
+                    aria-label={
+                      sentenceCorrect
+                        ? `Correct sentence ${qIndex + 1}. Press Enter or Space to hear it.`
+                        : undefined
+                    }
+                    onClick={
+                      sentenceCorrect
+                        ? (event) => {
+                            event.stopPropagation();
+
+                            playAudio(sentenceAudioKey, item.audio);
+                          }
+                        : undefined
+                    }
+                    onKeyDown={
+                      sentenceCorrect
+                        ? (event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+
+                              event.stopPropagation();
+
+                              playAudio(sentenceAudioKey, item.audio);
+                            }
+                          }
+                        : undefined
+                    }
+                  >
+                    {/* =====================================
+                          AUDIO ICON
+                      ===================================== */}
+
+                    {sentenceCorrect && activeAudioKey === sentenceAudioKey && (
+                      <ReviewPlayingAudioIcon />
+                    )}
+
+                    {/* =====================================
+                          SENTENCE PARTS
+                      ===================================== */}
+
+                    {item.parts.map((part, blankIndex) => {
+                      const targetId = `slot-${qIndex}-${blankIndex}`;
+
+                      return (
+                        <span
+                          key={blankIndex}
+                          className="sentence-part"
+                          style={{
+                            display: "flex",
+
+                            alignItems: "center",
+                          }}
                         >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                              className={`missing-input-review4-p2-q1 ${
-                                snapshot.isDraggingOver ? "drag-over-cell" : ""
-                              }`}
+                          {part.before}
+
+                          <div className="input-wrapper-review9-p2-q2">
+                            <Droppable
+                              droppableId={targetId}
+                              isDropDisabled={
+                                showAnswerMode || lockedInputs.has(targetId)
+                              }
                             >
-                              {answers[qIndex][blankIndex] && (
-                                <Draggable
-                                  draggableId={`filled-${answers[qIndex][blankIndex]}-${qIndex}-${blankIndex}`}
-                                  index={0}
-                                  isDragDisabled
-                                >
-                                  {(provided) => (
-                                    <span
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                    >
-                                      {answers[qIndex][blankIndex]}
-                                    </span>
-                                  )}
-                                </Draggable>
-                              )}
-                              {provided.placeholder}
+                              {(provided, snapshot) => {
+                                const preview = keyboard.previewFor(targetId);
 
-                              {wrongInputs.includes(
-                                `${qIndex}-${blankIndex}`,
-                              ) && (
-                                <span className="wrong-icon-review4-p2-q1">
-                                  ✕
-                                </span>
-                              )}
-                            </div>
-                          )}
-                        </Droppable>
-                      </div>
+                                return (
+                                  <div
+                                    ref={(node) => {
+                                      provided.innerRef(node);
 
-                      {p.after}
-                    </span>
-                  ))}
+                                      keyboard.registerTarget(targetId, node);
+                                    }}
+                                    {...provided.droppableProps}
+                                    role="button"
+                                    tabIndex={keyboard.targetTabIndex(targetId)}
+                                    aria-label={
+                                      preview
+                                        ? `Place ${preview} here.`
+                                        : answers[qIndex][blankIndex]
+                                          ? `${answers[qIndex][blankIndex]}. Press Enter or Space to return it.`
+                                          : "Empty letter blank."
+                                    }
+                                    onClick={(event) => {
+                                      /*
+                                            فقط إذا الخانة
+                                            ما زالت editable
+                                          */
+
+                                      if (
+                                        answers[qIndex][blankIndex] &&
+                                        !lockedInputs.has(targetId)
+                                      ) {
+                                        event.stopPropagation();
+
+                                        removeLetter(targetId);
+                                      }
+                                    }}
+                                    onKeyDown={(event) =>
+                                      keyboard.handleTargetKeyDown(
+                                        event,
+                                        targetId,
+                                      )
+                                    }
+                                    className={`
+                                          missing-input-review4-p2-q1
+
+                                          ${
+                                            snapshot.isDraggingOver
+                                              ? "drag-over-cell"
+                                              : ""
+                                          }
+
+                                          ${
+                                            preview
+                                              ? "review-keyboard-drop-preview"
+                                              : ""
+                                          }
+                                        `}
+                                  >
+                                    {(preview ||
+                                      answers[qIndex][blankIndex]) && (
+                                      <Draggable
+                                        draggableId={`filled-${
+                                          preview || answers[qIndex][blankIndex]
+                                        }-${qIndex}-${blankIndex}`}
+                                        index={0}
+                                        isDragDisabled
+                                      >
+                                        {(provided) => (
+                                          <span
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            {preview ||
+                                              answers[qIndex][blankIndex]}
+                                          </span>
+                                        )}
+                                      </Draggable>
+                                    )}
+
+                                    {provided.placeholder}
+
+                                    {wrongInputs.has(
+                                      `${qIndex}-${blankIndex}`,
+                                    ) && (
+                                      <span
+                                        className="wrong-icon-review4-p2-q1"
+                                        aria-hidden="true"
+                                      >
+                                        ✕
+                                      </span>
+                                    )}
+                                  </div>
+                                );
+                              }}
+                            </Droppable>
+                          </div>
+
+                          {part.after}
+                        </span>
+                      );
+                    })}
+                  </div>
+
+                  {/* =========================================
+                        IMAGE
+                        مجرد صورة
+                        NO AUDIO
+                        NO TAB
+                    ========================================= */}
+
+                  <img
+                    src={item.img}
+                    className="middle-img-review9-p2-q2"
+                    alt={item.alt}
+                  />
                 </div>
-                <img
-                  src={item.img}
-                  className="middle-img-review9-p2-q2"
-                  alt=""
-                />
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* =================================================
+            BUTTONS
+        ================================================= */}
+
         <div className="action-buttons-container">
-          <button
-            className="try-again-button"
-            onClick={() => {
-              setAnswers(data.map((d) => Array(d.correct.length).fill("")));
-              setWrongInputs([]);
-              setLocked(false); // ⭐ NEW — فتح التعديل من جديد
-            }}
-          >
+          <button className="try-again-button" onClick={resetAll}>
             Start Again ↻
           </button>
 
-          {/* ⭐⭐⭐ NEW BUTTON */}
           <button
             onClick={showAnswer}
             className="show-answer-btn swal-continue"

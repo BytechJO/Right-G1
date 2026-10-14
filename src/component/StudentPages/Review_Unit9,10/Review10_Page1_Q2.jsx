@@ -1,8 +1,18 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from "react";
 
 import deer from "../../../assets/unit10/imgs/U10P90EXEB.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review10_Page1_Q2.css";
+import breadAudio from "../../../assets/Review_9,10/Page 90 - B/bread.mp3";
+import chickenAudio from "../../../assets/Review_9,10/Page 90 - B/chicken.mp3";
+import fruitAudio from "../../../assets/Review_9,10/Page 90 - B/fruit.mp3";
+import iceCreamAudio from "../../../assets/Review_9,10/Page 90 - B/ice cream.mp3";
+import milkAudio from "../../../assets/Review_9,10/Page 90 - B/milk.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
+import useReviewDragKeyboard from "./useReviewDragKeyboard";
 
 const data = [
   { question: "", correct: "fruit" },
@@ -23,7 +33,7 @@ import {
 } from "@dnd-kit/core";
 
 // ─── Bank chip ────────────────────────────────────────────────────────────────
-const BankChip = ({ word, isUsed, locked }) => {
+const BankChip = ({ word, isUsed, locked, onPlay, playing, keyboard }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `bank-${word}`,
     disabled: isUsed || locked,
@@ -31,9 +41,24 @@ const BankChip = ({ word, isUsed, locked }) => {
 
   return (
     <span
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        keyboard.registerBank(`bank-${word}`, node);
+      }}
       {...listeners}
       {...attributes}
+      role="button"
+      tabIndex={keyboard.picked ? -1 : 0}
+      aria-label={`${isUsed || locked ? "Play audio" : "Pick up"}: ${word}`}
+      className="review-audio-control"
+      onClick={onPlay}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onPlay();
+          keyboard.handleBankKeyDown(event, word, `bank-${word}`, !isUsed && !locked);
+        }
+      }}
       style={{
         padding: "7px 14px",
         border: "2px solid #2c5287",
@@ -47,18 +72,27 @@ const BankChip = ({ word, isUsed, locked }) => {
         color: isUsed ? "#999" : "",
       }}
     >
+      {playing && <ReviewPlayingAudioIcon />}
       {word}
     </span>
   );
 };
 
 // ─── Drop slot ────────────────────────────────────────────────────────────────
-const DropSlot = ({ index, answer, isWrong, locked, onRemove }) => {
-  const { setNodeRef, isOver } = useDroppable({ id: `slot-${index}` });
+const DropSlot = ({ index, answer, isWrong, locked, onRemove, keyboard }) => {
+  const id = `slot-${index}`;
+  const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
+  const preview = keyboard.previewFor(id);
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        keyboard.registerTarget(id, node);
+      }}
+      role="button"
+      tabIndex={keyboard.targetTabIndex(id)}
+      aria-label={preview ? `Place ${preview} in blank ${index + 1}.` : answer ? `${answer} in blank ${index + 1}. Press Enter or Space to return it.` : `Blank ${index + 1}.`}
       className={`q-input-unit10-p5-q3${isOver ? " drag-over-cell" : ""}`}
       style={{
         position: "relative",
@@ -71,9 +105,14 @@ const DropSlot = ({ index, answer, isWrong, locked, onRemove }) => {
       onClick={() => {
         if (answer && !locked) onRemove(index);
       }}
+      onKeyDown={(event) => keyboard.handleTargetKeyDown(event, id)}
       title={answer && !locked ? "Click to remove" : ""}
     >
-      {answer && <span>{answer}</span>}
+      {(preview || answer) && (
+        <span className={preview ? "review-keyboard-drop-preview" : ""}>
+          {preview || answer}
+        </span>
+      )}
 
       {isWrong && <span className="wrong-icon-review6-p1-q3">✕</span>}
     </div>
@@ -83,9 +122,18 @@ const DropSlot = ({ index, answer, isWrong, locked, onRemove }) => {
 // ─── Main component ───────────────────────────────────────────────────────────
 const Review10_Page1_Q2 = () => {
   const [answers, setAnswers] = useState(Array(data.length).fill(null));
-  const [wrongInputs, setWrongInputs] = useState([]);
-  const [locked, setLocked] = useState(false);
+  const [wrongInputs, setWrongInputs] = useState(new Set());
+  const [lockedInputs, setLockedInputs] = useState(new Set());
+  const [showAnswer, setShowAnswer] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
+  const wordAudio = {
+    bread: breadAudio,
+    chicken: chickenAudio,
+    fruit: fruitAudio,
+    "ice cream": iceCreamAudio,
+    milk: milkAudio,
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -94,40 +142,65 @@ const Review10_Page1_Q2 = () => {
   const usedWords = new Set(answers.filter(Boolean));
   const activeWord = activeId ? activeId.replace("bank-", "") : null;
 
-  const handleDragStart = ({ active }) => setActiveId(active.id);
-
-  const handleDragEnd = ({ active, over }) => {
-    setActiveId(null);
-    if (!over || locked) return;
-
-    const word = active.id.replace("bank-", "");
-    const slotId = over.id;
-    if (!slotId.startsWith("slot-")) return;
-
-    const index = Number(slotId.split("-")[1]);
-
+  const placeWord = (targetId, word) => {
+    const index = Number(targetId.replace("slot-", ""));
+    if (lockedInputs.has(targetId) || showAnswer) return;
     setAnswers((prev) => {
       const updated = [...prev];
-      const oldIndex = updated.findIndex((a) => a === word);
-      if (oldIndex !== -1) updated[oldIndex] = null;
+      const oldIndex = updated.findIndex((value) => value === word);
+      if (oldIndex !== -1 && !lockedInputs.has(`slot-${oldIndex}`)) updated[oldIndex] = null;
       updated[index] = word;
       return updated;
     });
-
-    setWrongInputs([]);
+    setWrongInputs((current) => {
+      const next = new Set(current);
+      next.delete(index);
+      return next;
+    });
   };
 
-  const handleRemove = (index) => {
+  const removeByTargetId = (targetId) => {
+    const index = Number(targetId.replace("slot-", ""));
+    if (lockedInputs.has(targetId) || showAnswer) return;
     setAnswers((prev) => {
       const updated = [...prev];
       updated[index] = null;
       return updated;
     });
-    setWrongInputs([]);
+    setWrongInputs((current) => {
+      const next = new Set(current);
+      next.delete(index);
+      return next;
+    });
+  };
+
+  const keyboard = useReviewDragKeyboard({
+    targetIds: data.map((_, index) => `slot-${index}`),
+    lockedIds: lockedInputs,
+    getValue: (targetId) => answers[Number(targetId.replace("slot-", ""))],
+    onPlace: placeWord,
+    onRemove: removeByTargetId,
+  });
+
+  const handleDragStart = ({ active }) => setActiveId(active.id);
+
+  const handleDragEnd = ({ active, over }) => {
+    setActiveId(null);
+    if (!over || showAnswer || lockedInputs.has(String(over.id))) return;
+
+    const word = active.id.replace("bank-", "");
+    const slotId = over.id;
+    if (!slotId.startsWith("slot-")) return;
+
+    placeWord(slotId, word);
+  };
+
+  const handleRemove = (index) => {
+    removeByTargetId(`slot-${index}`);
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (showAnswer || lockedInputs.size === data.length) return;
 
     if (answers.some((a) => !a)) {
       ValidationAlert.info("Please fill in all blanks before checking!");
@@ -135,15 +208,18 @@ const Review10_Page1_Q2 = () => {
     }
 
     let correctCount = 0;
-    const wrong = [];
+    const wrong = new Set();
+    const nextLocked = new Set(lockedInputs);
 
     answers.forEach((ans, i) => {
-      if (ans === data[i].correct) correctCount++;
-      else wrong.push(i);
+      if (ans === data[i].correct) {
+        correctCount++;
+        nextLocked.add(`slot-${i}`);
+      } else wrong.add(i);
     });
 
     setWrongInputs(wrong);
-    setLocked(true);
+    setLockedInputs(nextLocked);
 
     const color =
       correctCount === data.length
@@ -163,14 +239,17 @@ const Review10_Page1_Q2 = () => {
 
   const showCorrectAnswers = () => {
     setAnswers(data.map((d) => d.correct));
-    setWrongInputs([]);
-    setLocked(true);
+    setWrongInputs(new Set());
+    setLockedInputs(new Set(data.map((_, index) => `slot-${index}`)));
+    setShowAnswer(true);
   };
 
   const reset = () => {
     setAnswers(Array(data.length).fill(null));
-    setWrongInputs([]);
-    setLocked(false);
+    setWrongInputs(new Set());
+    setLockedInputs(new Set());
+    setShowAnswer(false);
+    stopAudio();
   };
 
   return (
@@ -190,10 +269,11 @@ const Review10_Page1_Q2 = () => {
         }}
       >
         <div className="div-forall" style={{ gap: "50px" }}>
-          <h3 className="header-title-page8">
-            <span className="mr-2">B</span> Look, read, and drag the correct words to complete the sentences. 
-         
-          </h3>
+          <ExerciseHeaderReview
+            sectionLetter="B"
+            title="Look and write."
+            subTitle="Use the numbered table to drag fruit, ice cream, bread, milk, and chicken into the lines."
+          />
 
           {/* ── Word Bank ── */}
           <div
@@ -213,7 +293,10 @@ const Review10_Page1_Q2 = () => {
                 key={item.correct}
                 word={item.correct}
                 isUsed={usedWords.has(item.correct)}
-                locked={locked}
+                locked={showAnswer}
+                onPlay={() => playAudio(`bank-${item.correct}`, wordAudio[item.correct])}
+                playing={activeAudioKey === `bank-${item.correct}`}
+                keyboard={keyboard}
               />
             ))}
           </div>
@@ -249,9 +332,10 @@ const Review10_Page1_Q2 = () => {
                   <DropSlot
                     index={index}
                     answer={answers[index]}
-                    isWrong={wrongInputs.includes(index)}
-                    locked={locked}
+                    isWrong={wrongInputs.has(index)}
+                    locked={lockedInputs.has(`slot-${index}`) || showAnswer}
                     onRemove={handleRemove}
+                    keyboard={keyboard}
                   />
                 </div>
               ))}
@@ -260,7 +344,7 @@ const Review10_Page1_Q2 = () => {
             <img
               src={deer}
               className="shape-img-unit5-p5-q3"
-              alt=""
+              alt="A numbered party table showing fruit, ice cream, bread, milk, and chicken."
               style={{ height: "200px", width: "auto" }}
             />
           </div>

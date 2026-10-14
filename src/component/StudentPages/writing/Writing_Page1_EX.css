@@ -1,0 +1,302 @@
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.writing-page1-ex-wrapper {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  width: 100%;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.writing-page1-ex-header {
+  width: 70%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.writing-page1-ex-squirrel {
+  height: 65px;
+
+  width: auto;
+
+  object-fit: contain;
+
+  flex-shrink: 0;
+}
+
+.writing-page1-ex-title {
+  margin: 0;
+
+  line-height: 1.4;
+}
+
+/* =====================================================
+   PAGE NUMBER
+===================================================== */
+
+.writing-page1-ex-page-number {
+  margin: 8px 0;
+
+  font-size: 18px;
+
+  font-weight: 700;
+}
+
+/* =====================================================
+   TOOLS
+===================================================== */
+
+.writing-page1-ex-tools {
+  width: 100%;
+
+  margin-bottom: 10px;
+}
+
+/* =====================================================
+   CANVAS AREA
+===================================================== */
+
+.writing-page1-ex-canvas-area {
+  position: relative;
+
+  width: 600px;
+
+  height: 600px;
+}
+
+/* =====================================================
+   CANVAS WRAPPER
+===================================================== */
+
+.writing-page1-ex-canvas-wrapper {
+  position: absolute;
+
+  inset: 0;
+
+  width: 600px;
+
+  height: 600px;
+}
+
+/* =====================================================
+   ACTIVE PAGE
+===================================================== */
+
+.writing-page1-ex-canvas-wrapper.active {
+  display: block;
+}
+
+/* =====================================================
+   HIDDEN PAGE
+
+   Canvas remains mounted so its strokes are preserved.
+===================================================== */
+
+.writing-page1-ex-canvas-wrapper.hidden-page {
+  visibility: hidden;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+.writing-page1-ex-canvas {
+  display: block;
+
+  width: 600px;
+
+  height: 600px;
+
+  box-sizing: border-box;
+
+  background-repeat: no-repeat;
+
+  background-size: contain;
+
+  background-position: center;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  touch-action: none;
+
+  outline: none;
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.writing-page1-ex-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   ACTIVE KEYBOARD DRAWING
+===================================================== */
+
+.writing-page1-ex-canvas.keyboard-drawing-active {
+  box-shadow: inset 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+/* =====================================================
+   KEYBOARD CURSOR
+===================================================== */
+
+.writing-page1-ex-keyboard-cursor {
+  position: absolute;
+
+  width: 20px;
+
+  height: 20px;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 20;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   MOVE MODE
+===================================================== */
+
+.writing-page1-ex-keyboard-cursor.moving {
+  border: 3px solid #2563eb;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  color: #2563eb;
+}
+
+/* =====================================================
+   DRAW / ERASE MODE
+===================================================== */
+
+.writing-page1-ex-keyboard-cursor.drawing {
+  border: 3px solid #dc2626;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  color: #dc2626;
+
+}
+
+
+
+/* =====================================================
+   CURSOR CENTER
+===================================================== */
+
+.writing-page1-ex-cursor-center {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+/* =====================================================
+   CURSOR STATUS
+===================================================== */
+
+.writing-page1-ex-cursor-status {
+  position: absolute;
+
+  top: 25px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  padding: 2px 7px;
+
+  border: 1px solid currentColor;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.writing-page1-ex-navigation {
+  margin-top: 15px;
+}
+
+.writing-page1-ex-navigation button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 750px) {
+  .writing-page1-ex-canvas-area,
+  .writing-page1-ex-canvas-wrapper,
+  .writing-page1-ex-canvas {
+    width: 500px;
+
+    height: 500px;
+  }
+}
+
+@media (max-width: 550px) {
+  .writing-page1-ex-canvas-area,
+  .writing-page1-ex-canvas-wrapper,
+  .writing-page1-ex-canvas {
+    width: 390px;
+
+    height: 390px;
+  }
+
+  .writing-page1-ex-header {
+    width: 95%;
+  }
+}
