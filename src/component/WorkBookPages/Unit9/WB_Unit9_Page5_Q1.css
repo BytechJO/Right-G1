@@ -102,7 +102,6 @@
 
 .cell-wb-u9-p5-q1:focus-visible,
 .active-keyboard-cell-wb-u9-p5-q1 {
-  outline: 3px solid #2563eb;
 
   outline-offset: -3px;
 
@@ -117,7 +116,6 @@
 
 .keyboard-grid-selecting-wb-u9-p5-q1
   .active-keyboard-cell-wb-u9-p5-q1 {
-  outline: 3px dashed #2563eb;
 
   outline-offset: -3px;
 }

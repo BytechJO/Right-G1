@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import "./WB_Unit10_Page2_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeader from "../../ExerciseHeader";
+import useUnit10Audio from "./useUnit10Audio";
+import Unit10PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import audio1 from "../../../assets/U1 WB/U10/audio/page58- D/Item_001_I_want_ice_cream.mp3";
+import audio2 from "../../../assets/U1 WB/U10/audio/page58- D/Item_002_I_want_fruit.mp3";
+import audio3 from "../../../assets/U1 WB/U10/audio/page58- D/Item_003_I_want_chicken.mp3";
+import audio4 from "../../../assets/U1 WB/U10/audio/page58- D/Item_004_I_want_milk.mp3";
 import mainImg from "../../../assets/U1 WB/U10/U10P58EXED.svg";
 import img1 from "../../../assets/U1 WB/U10/U10P58EXED01-01.svg";
 import img2 from "../../../assets/U1 WB/U10/U10P58EXED01-02.svg";
@@ -22,53 +29,79 @@ const data = [
   {
     id: 1,
     mainImg: img1,
+    mainAlt: "A boy who wants ice cream.",
+    audio: audio1,
     images: [
-      { id: 1, src: img2, value: "kite" },
-      { id: 2, src: img3, value: "girl" },
-      { id: 3, src: img4, value: "key" },
+      { id: 1, src: img2, value: "kite", alt: "A glass of orange juice." },
+      { id: 2, src: img3, value: "girl", alt: "A glass of ice cream." },
+      { id: 3, src: img4, value: "key", alt: "A red apple." },
     ],
     correct: ["girl"],
   },
   {
     id: 2,
     mainImg: img5,
+    mainAlt: "A woman who wants fruit.",
+    audio: audio2,
     images: [
-      { id: 1, src: img6, value: "grass" },
-      { id: 2, src: img7, value: "kitchen" },
-      { id: 3, src: img8, value: "fruit" },
+      { id: 1, src: img6, value: "grass", alt: "A glass of ice cream." },
+      { id: 2, src: img7, value: "kitchen", alt: "A glass of orange juice." },
+      { id: 3, src: img8, value: "fruit", alt: "A bowl of fruit." },
     ],
     correct: ["fruit"],
   },
   {
     id: 3,
     mainImg: img9,
+    mainAlt: "A girl who wants chicken.",
+    audio: audio3,
     images: [
-      { id: 1, src: img10, value: "kitchen" },
-      { id: 2, src: img11, value: "grass" },
-      { id: 3, src: img12, value: "garden" },
+      {
+        id: 1,
+        src: img10,
+        value: "kitchen",
+        alt: "A roast chicken on a plate.",
+      },
+      { id: 2, src: img11, value: "grass", alt: "A carton of milk." },
+      { id: 3, src: img12, value: "garden", alt: "A can of food." },
     ],
     correct: ["kitchen"],
   },
   {
     id: 4,
     mainImg: img13,
+    mainAlt: "A man who wants milk.",
+    audio: audio4,
     images: [
-      { id: 1, src: img14, value: "grass" },
-      { id: 2, src: img15, value: "kitchen" },
-      { id: 3, src: img16, value: "milk" },
+      { id: 1, src: img14, value: "grass", alt: "A red apple." },
+      {
+        id: 2,
+        src: img15,
+        value: "kitchen",
+        alt: "A roast chicken on a plate.",
+      },
+      { id: 3, src: img16, value: "milk", alt: "A carton of milk." },
     ],
     correct: ["milk"],
   },
 ];
 
+const topSoundAreas = [
+  { id: 1, left: "18%", top: "4%", width: "29%", height: "19%" },
+  { id: 2, left: "77%", top: "4%", width: "20%", height: "19%" },
+  { id: 3, left: "18%", top: "58%", width: "25%", height: "19%" },
+  { id: 4, left: "77%", top: "58%", width: "20%", height: "19%" },
+];
+
 export default function WB_Unit10_Page2_Q2() {
   const [answers, setAnswers] = useState({});
-  const [score, setScore] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [lockedIds, setLockedIds] = useState([]);
+  const { activeAudioKey, playAudio, stopAudio } = useUnit10Audio();
 
   const handleSelect = (qId, value) => {
-    if (showAnswer || submitted) return;
+    if (showAnswer || lockedIds.includes(qId)) return;
 
     setAnswers((prev) => {
       const current = prev[qId]?.[0];
@@ -132,6 +165,16 @@ export default function WB_Unit10_Page2_Q2() {
       ValidationAlert.warning(scoreMessage);
     }
     setSubmitted(true);
+    setLockedIds((previous) => [
+      ...new Set([
+        ...previous,
+        ...data
+          .filter((q) =>
+            (answers[q.id] || []).some((value) => q.correct.includes(value)),
+          )
+          .map((q) => q.id),
+      ]),
+    ]);
   };
   const handleShowAnswer = () => {
     const correctAnswersObj = {};
@@ -142,13 +185,16 @@ export default function WB_Unit10_Page2_Q2() {
 
     setAnswers(correctAnswersObj);
     setShowAnswer(true);
+    setLockedIds(data.map((q) => q.id));
+    stopAudio();
   };
 
   const handleReset = () => {
     setAnswers({});
     setSubmitted(false);
-    setScore(null);
     setShowAnswer(false); // 🔥 إلغاء وضع Show Answer
+    setLockedIds([]);
+    stopAudio();
   };
 
   return (
@@ -169,13 +215,48 @@ export default function WB_Unit10_Page2_Q2() {
           }
         }
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">D</span>What do they want? Tap or click the
-          word for each one.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="D"
+          title="Read, look, and circle."
+          subTitle="Look at each person and tap the food shown in the thought bubble."
+        />
         <div className="img-options-container-wb-unit10-p2-q2 w-full">
           <div className="img-container-wb-unit10-p2-q2">
-            <img src={mainImg} style={{ height: "160px", width: "auto" }} />
+            <div className="wb-unit10-p2-q2-top-audio-map">
+              <img
+                src={mainImg}
+                alt="Four people saying which food they want."
+                style={{ height: "160px", width: "auto" }}
+              />
+              {topSoundAreas.map((area) => {
+                const question = data.find((item) => item.id === area.id);
+                const audioKey = `top-sentence-${area.id}`;
+                return (
+                  <div
+                    key={area.id}
+                    className="wb-unit10-p2-q2-top-sound-area wb-unit10-audio-control"
+                    style={{
+                      left: area.left,
+                      top: area.top,
+                      width: area.width,
+                      height: area.height,
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Play sentence ${area.id}`}
+                    onClick={() => playAudio(audioKey, question.audio)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        playAudio(audioKey, question.audio);
+                      }
+                    }}
+                  >
+                    {activeAudioKey === audioKey && <Unit10PlayingAudioIcon />}
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <div>
             {data.map((q) => (
@@ -193,6 +274,7 @@ export default function WB_Unit10_Page2_Q2() {
                   </span>
                   <img
                     src={q.mainImg}
+                    alt={q.mainAlt}
                     style={{ height: "120px", width: "auto" }}
                   />
                 </div>
@@ -214,8 +296,18 @@ export default function WB_Unit10_Page2_Q2() {
                 
                     ${isWrong ? "wrong" : ""}`}
                         onClick={() => handleSelect(q.id, img.value)}
+                        role="button"
+                        tabIndex={lockedIds.includes(q.id) ? -1 : 0}
+                        aria-label={`Choose ${img.alt}`}
+                        aria-pressed={isSelected}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            handleSelect(q.id, img.value);
+                          }
+                        }}
                       >
-                        <img src={img.src} alt="" />
+                        <img src={img.src} alt={img.alt} />
                         {/* علامة X تظهر فقط عند الغلط */}
                         {isWrong && submitted && (
                           <div className="wrong-mark-Unit5_Page5_Q2 ">✕</div>

@@ -8,6 +8,68 @@
   cursor: crosshair;
 }
 
+.wb-unit10-p3-q2-drawing-area {
+  position: relative;
+  display: inline-flex;
+  border-radius: 14px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.wb-unit10-p3-q2-drawing-area.is-drawing {
+  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.28);
+  transform: scale(1.01);
+}
+
+.wb-unit10-p3-q2-drawing-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+}
+/* Keyboard drawing cursor */
+.wb-unit10-p3-q2-keyboard-cursor {
+  position: absolute;
+
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  background-color: #2563eb;
+  border: 2px solid #ffffff;
+
+  box-shadow:
+    0 0 0 2px #2563eb,
+    0 2px 6px rgba(0, 0, 0, 0.25);
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* Cursor while drawing */
+.wb-unit10-p3-q2-keyboard-cursor.drawing {
+  background-color: #ef4444;
+
+  box-shadow:
+    0 0 0 2px #ef4444,
+    0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Keyboard focus */
+.wb-unit10-p3-q2-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .wb-unit10-p3-q2-canvas {
     height: 160px;

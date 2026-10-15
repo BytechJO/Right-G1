@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import img1 from "../../../assets/U1 WB/U10/U10P59EXEE-01-01.svg";
 import img2 from "../../../assets/U1 WB/U10/U10P59EXEE-01-02.svg";
 import img3 from "../../../assets/U1 WB/U10/U10P59EXEE-02-01.svg";
@@ -8,40 +8,67 @@ import img6 from "../../../assets/U1 WB/U10/U10P59EXEE-03-02.svg";
 import img7 from "../../../assets/U1 WB/U10/U10P59EXEE-04-01.svg";
 import img8 from "../../../assets/U1 WB/U10/U10P59EXEE-04-02.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import "./WB_Unit10_Page3_Q1.css"
+import ExerciseHeader from "../../ExerciseHeader";
+import useUnit10Audio from "./useUnit10Audio";
+import Unit10PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import audio1 from "../../../assets/U1 WB/U10/audio/page59- E/Item_001_I_want_fruit.mp3";
+import audio2 from "../../../assets/U1 WB/U10/audio/page59- E/Item_002_I_want_chicken.mp3";
+import audio3 from "../../../assets/U1 WB/U10/audio/page59- E/Item_003_I_want_bread.mp3";
+import audio4 from "../../../assets/U1 WB/U10/audio/page59- E/Item_004_I_want_ice_cream.mp3";
+import "./WB_Unit10_Page3_Q1.css";
 
 const WB_Unit10_Page3_Q1 = () => {
   const data = [
     {
       id: 1,
       word: "I want fruit.",
+      audio: audio1,
       imgs: [
-        { src: img1, answer: false }, // short i
-        { src: img2, answer: true },
+        {
+          src: img1,
+          answer: false,
+          alt: "A girl thinking about orange juice.",
+        },
+        {
+          src: img2,
+          answer: true,
+          alt: "A girl thinking about a bowl of fruit.",
+        },
       ],
     },
     {
       id: 2,
       word: "I want chicken.",
+      audio: audio2,
       imgs: [
-        { src: img3, answer: false}, // short i
-        { src: img4, answer: true },
+        { src: img3, answer: false, alt: "A girl thinking about milk." },
+        {
+          src: img4,
+          answer: true,
+          alt: "A girl thinking about roast chicken.",
+        },
       ],
     },
     {
       id: 3,
       word: "I want bread.",
+      audio: audio3,
       imgs: [
-        { src: img5, answer: false },
-        { src: img6, answer: true }, // short i
+        {
+          src: img5,
+          answer: false,
+          alt: "A boy thinking about a can of food.",
+        },
+        { src: img6, answer: true, alt: "A boy thinking about bread." },
       ],
     },
     {
       id: 4,
       word: "I want ice cream.",
+      audio: audio4,
       imgs: [
-        { src: img7, answer: true }, // short i
-        { src: img8, answer: false },
+        { src: img7, answer: true, alt: "A boy thinking about ice cream." },
+        { src: img8, answer: false, alt: "A boy thinking about bread." },
       ],
     },
   ];
@@ -50,8 +77,10 @@ const WB_Unit10_Page3_Q1 = () => {
 
   const [showResult, setShowResult] = useState(false);
   const [showAnswerState, setShowAnswerState] = useState(false);
+  const [lockedIds, setLockedIds] = useState([]);
+  const { activeAudioKey, playAudio, stopAudio } = useUnit10Audio();
   const handleSelect = (qId, index) => {
-     if (showAnswerState || showResult) return;
+    if (showAnswerState || lockedIds.includes(qId)) return;
 
     setSelected((prev) => ({ ...prev, [qId]: index }));
     setShowResult(false);
@@ -68,6 +97,8 @@ const WB_Unit10_Page3_Q1 = () => {
     setSelected(correctSelections);
     setShowResult(false);
     setShowAnswerState(true);
+    setLockedIds(data.map((q) => q.id));
+    stopAudio();
   };
 
   const checkAnswers = () => {
@@ -111,6 +142,12 @@ const WB_Unit10_Page3_Q1 = () => {
       ValidationAlert.warning(scoreMessage);
     }
     setShowResult(true);
+    setLockedIds((previous) => [
+      ...new Set([
+        ...previous,
+        ...data.filter((q) => q.imgs[selected[q.id]]?.answer).map((q) => q.id),
+      ]),
+    ]);
   };
 
   return (
@@ -127,13 +164,17 @@ const WB_Unit10_Page3_Q1 = () => {
         className="div-forall"
         style={{
           gap: "30px",
-     
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">E</span>Tap or click the correct box.
-          <span style={{ color: "red" }}>✓</span> .
-        </h5>
+        <ExerciseHeader
+          sectionLetter="E"
+          title={
+            <>
+              Read, look, and write <span style={{ color: "red" }}>✓</span>.
+            </>
+          }
+          subTitle="Read the sentence and tap the picture that matches it."
+        />
 
         <div className="shorti-container-wb-u1-q2 w-full">
           {data.map((question) => (
@@ -156,7 +197,26 @@ const WB_Unit10_Page3_Q1 = () => {
                 >
                   {question.id}
                 </span>
-                {question.word}
+                <span
+                  className="wb-unit10-audio-control"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Play audio: ${question.word}`}
+                  onClick={() =>
+                    playAudio(`sentence-${question.id}`, question.audio)
+                  }
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      playAudio(`sentence-${question.id}`, question.audio);
+                    }
+                  }}
+                >
+                  {activeAudioKey === `sentence-${question.id}` && (
+                    <Unit10PlayingAudioIcon />
+                  )}
+                  {question.word}
+                </span>
               </div>
               <div className="shorti-container-wb-u1-q2 ">
                 {question.imgs.map((img, index) => {
@@ -164,9 +224,21 @@ const WB_Unit10_Page3_Q1 = () => {
                     <div
                       key={index}
                       className={`img-box-wb-unit10-p3-q1  ${
-                        selected[question.id] === index ? "selected-wb-u1-q2" : ""
+                        selected[question.id] === index
+                          ? "selected-wb-u1-q2"
+                          : ""
                       }`}
                       onClick={() => handleSelect(question.id, index)}
+                      role="button"
+                      tabIndex={lockedIds.includes(question.id) ? -1 : 0}
+                      aria-label={`Choose ${img.alt}`}
+                      aria-pressed={selected[question.id] === index}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleSelect(question.id, index);
+                        }
+                      }}
                     >
                       {showResult &&
                         !showAnswerState &&
@@ -175,7 +247,7 @@ const WB_Unit10_Page3_Q1 = () => {
                           <span className="wrong-x-circle-wb-u1-p3-q2">✕</span>
                         )}
 
-                      <img src={img.src} alt="TEST" />
+                      <img src={img.src} alt={img.alt} />
                       <div className="check-box-wb-unit10-p3-q1 ">
                         {selected[question.id] === index ? "✓" : ""}
                       </div>
@@ -194,6 +266,8 @@ const WB_Unit10_Page3_Q1 = () => {
             setSelected({});
             setShowResult(false);
             setShowAnswerState(false);
+            setLockedIds([]);
+            stopAudio();
           }}
         >
           Start Again ↻

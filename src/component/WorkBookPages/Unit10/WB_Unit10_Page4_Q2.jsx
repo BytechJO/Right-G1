@@ -4,6 +4,16 @@ import cap from "../../../assets/U1 WB/U10/U10P60EXEH-02.svg";
 import ant from "../../../assets/U1 WB/U10/U10P60EXEH-03.svg";
 import dad from "../../../assets/U1 WB/U10/U10P60EXEH-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeader from "../../ExerciseHeader";
+import PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import useUnit10Audio from "./useUnit10Audio";
+import useUnit10TabDrag from "./useUnit10TabDrag";
+import appleAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_001_apple.mp3";
+import iceCreamAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_002_want_ice_cream.mp3";
+import chickenAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_003_want_chicken.mp3";
+import milkAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_004_want_milk.mp3";
+import iWantAnAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_005_Il_want_an.mp3";
+import I_want_an_appleAudio from "../../../assets/U1 WB/U10/audio/page60- H/Item_003_I_want_an_apple.mp3";
 import {
   DndContext,
   DragOverlay,
@@ -16,7 +26,7 @@ import {
 import "./WB_Unit10_Page4_Q2.css";
 
 // ─── Word chip in the bank ───────────────────────────────────────────────────
-const BankChip = ({ word, used, locked }) => {
+const BankChip = ({ word, used, locked, playing, onPlay, tabDrag }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `bank::${word}`,
     disabled: used || locked,
@@ -24,9 +34,20 @@ const BankChip = ({ word, used, locked }) => {
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(element) => {
+        setNodeRef(element);
+        tabDrag.registerItem(`bank::${word}`, element);
+      }}
       {...listeners}
       {...attributes}
+      className={`wb-unit10-audio-control ${tabDrag.keyboardItemId === `bank::${word}` ? "wb-unit10-keyboard-preview" : ""}`}
+      role="button"
+      tabIndex={used || locked ? -1 : 0}
+      onClick={onPlay}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onPlay();
+        tabDrag.handleItemKeyDown(event, `bank::${word}`);
+      }}
       style={{
         padding: "6px 12px",
         border: "2px solid #2c5287",
@@ -40,21 +61,47 @@ const BankChip = ({ word, used, locked }) => {
         color: used ? "#aaa" : "",
         // textDecoration: used ? "line-through" : "none",
         touchAction: "none",
-        pointerEvents: used || locked ? "none" : "auto",
       }}
     >
       {word}
+      <PlayingAudioIcon active={playing} />
     </div>
   );
 };
 
 // ─── Drop zone inside a sentence ─────────────────────────────────────────────
-const DropCell = ({ id, value, isWrong, locked, onRemove }) => {
+const DropCell = ({
+  id,
+  value,
+  isWrong,
+  locked,
+  onRemove,
+  tabDrag,
+  preview,
+}) => {
   const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(element) => {
+        setNodeRef(element);
+        tabDrag.registerTarget(id, element);
+      }}
+      role="button"
+      tabIndex={!locked && (tabDrag.keyboardItemId || value) ? 0 : -1}
+      onKeyDown={(event) => {
+        if (tabDrag.keyboardItemId) tabDrag.handleTargetKeyDown(event, id);
+        else if (
+          (event.key === "Enter" || event.key === " ") &&
+          value &&
+          !locked
+        ) {
+          event.preventDefault();
+          onRemove();
+          tabDrag.focusItemById(`bank::${value}`);
+        }
+      }}
+      onFocus={() => tabDrag.focusTarget(id)}
       className={`inline-input-wb-unit8-p1-q2 ${isOver ? "drag-over-cell" : ""}`}
       style={{
         minHeight: "40px",
@@ -81,6 +128,9 @@ const DropCell = ({ id, value, isWrong, locked, onRemove }) => {
         }}
       >
         {value || ""}
+        {preview && (
+          <span className="wb-unit10-keyboard-preview">{preview}</span>
+        )}
       </span>
 
       {/* ✕ علامة الخطأ بعد التصحيح */}
@@ -96,6 +146,8 @@ const WB_Unit10_Page4_Q2 = () => {
   const questions = [
     {
       img: bat,
+      alt: "An apple",
+      fullAudio: [I_want_an_appleAudio],
       parts: [
         { type: "text", value: "I want an" },
         { type: "input", answer: "apple" },
@@ -103,6 +155,8 @@ const WB_Unit10_Page4_Q2 = () => {
     },
     {
       img: cap,
+      alt: "A bowl of ice cream",
+      fullAudio: [iceCreamAudio],
       parts: [
         { type: "input", answer: "I want ice cream" },
         { type: "text", value: "." },
@@ -110,6 +164,8 @@ const WB_Unit10_Page4_Q2 = () => {
     },
     {
       img: ant,
+      alt: "A roast chicken",
+      fullAudio: [chickenAudio],
       parts: [
         { type: "input", answer: "I want chicken" },
         { type: "text", value: "." },
@@ -117,6 +173,8 @@ const WB_Unit10_Page4_Q2 = () => {
     },
     {
       img: dad,
+      alt: "A glass of milk",
+      fullAudio: [milkAudio],
       parts: [
         { type: "input", answer: "I want milk" },
         { type: "text", value: "." },
@@ -137,17 +195,64 @@ const WB_Unit10_Page4_Q2 = () => {
   );
   const [wrongInputs, setWrongInputs] = useState([]);
   const [locked, setLocked] = useState(false);
+  const [lockedInputs, setLockedInputs] = useState(new Set());
+  const [completedRows, setCompletedRows] = useState(new Set());
   const [activeWord, setActiveWord] = useState(null); // for DragOverlay
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
+  const { activeAudioKey, playAudio, playAudioSequence, stopAudio } =
+    useUnit10Audio();
+  const audioByWord = {
+    apple: appleAudio,
+    "I want ice cream": iceCreamAudio,
+    "I want chicken": chickenAudio,
+    "I want milk": milkAudio,
+  };
 
   // كل الكلمات المستخدمة حالياً
   const usedWords = answers.flat().filter(Boolean);
+  const targetIds = questions.flatMap((q, qIndex) =>
+    q.parts
+      .map((part, pIndex) =>
+        part.type === "input" ? `drop-${qIndex}-${pIndex}` : null,
+      )
+      .filter(Boolean),
+  );
+  const tabDrag = useUnit10TabDrag({
+    itemIds: wordBank.map((word) => `bank::${word}`),
+    targetIds,
+    isItemDisabled: (id) =>
+      locked || usedWords.includes(id.replace("bank::", "")),
+    isTargetDisabled: (id) => {
+      const [, qIndex, pIndex] = id.split("-");
+      return locked || lockedInputs.has(`${qIndex}-${pIndex}`);
+    },
+    onPlace: (itemId, targetId) => {
+      const word = itemId.replace("bank::", "");
+      const [, qString, pString] = targetId.split("-");
+      const qIndex = Number(qString);
+      const pIndex = Number(pString);
+      setAnswers((prev) => {
+        const copy = prev.map((row) => [...row]);
+        copy.forEach((row, qi) =>
+          row.forEach((value, pi) => {
+            if (value === word) copy[qi][pi] = "";
+          }),
+        );
+        copy[qIndex][pIndex] = word;
+        return copy;
+      });
+      setWrongInputs((prev) =>
+        prev.filter((key) => key !== `${qIndex}-${pIndex}`),
+      );
+    },
+  });
 
   // ─── حذف كلمة من الدروب زون وإرجاعها للبنك ──────────────────────────────
   const removeWord = (qIndex, pIndex) => {
+    if (locked || lockedInputs.has(`${qIndex}-${pIndex}`)) return;
     setAnswers((prev) => {
       const copy = prev.map((r) => [...r]);
       copy[qIndex][pIndex] = "";
@@ -185,6 +290,7 @@ const WB_Unit10_Page4_Q2 = () => {
     const [, qStr, pStr] = dest.split("-");
     const qIndex = Number(qStr);
     const pIndex = Number(pStr);
+    if (lockedInputs.has(`${qIndex}-${pIndex}`)) return;
 
     setAnswers((prev) => {
       const copy = prev.map((r) => [...r]);
@@ -232,7 +338,26 @@ const WB_Unit10_Page4_Q2 = () => {
     );
 
     setWrongInputs(wrong);
-    setLocked(true);
+    setLockedInputs((old) => {
+      const next = new Set(old);
+      questions.forEach((q, qi) =>
+        q.parts.forEach((p, pi) => {
+          if (p.type === "input" && answers[qi][pi]?.trim() === p.answer)
+            next.add(`${qi}-${pi}`);
+        }),
+      );
+      return next;
+    });
+    setCompletedRows((old) => {
+      const next = new Set(old);
+      questions.forEach((q, qi) =>
+        q.parts.forEach((part, pi) => {
+          if (part.type === "input" && answers[qi][pi]?.trim() === part.answer)
+            next.add(qi);
+        }),
+      );
+      return next;
+    });
     const msg = `Score: ${score} / ${total}`;
     if (score === total) ValidationAlert.success(msg);
     else if (score === 0) ValidationAlert.error(msg);
@@ -247,6 +372,7 @@ const WB_Unit10_Page4_Q2 = () => {
     );
     setWrongInputs([]);
     setLocked(true);
+    setCompletedRows(new Set(questions.map((_, index) => index)));
   };
 
   const reset = () => {
@@ -257,6 +383,9 @@ const WB_Unit10_Page4_Q2 = () => {
     );
     setWrongInputs([]);
     setLocked(false);
+    setLockedInputs(new Set());
+    setCompletedRows(new Set());
+    stopAudio();
   };
 
   return (
@@ -276,9 +405,11 @@ const WB_Unit10_Page4_Q2 = () => {
         }}
       >
         <div className="div-forall">
-          <h5 className="header-title-page8">
-            <span className="ex-A">H</span>Drag and drop.
-          </h5>
+          <ExerciseHeader
+            sectionLetter="H"
+            title="Look and write."
+            subTitle="Look at each food picture and drag the correct sentence to the line."
+          />
 
           {/* ─── Word Bank ─────────────────────────────────────────────── */}
           <div
@@ -299,6 +430,9 @@ const WB_Unit10_Page4_Q2 = () => {
                 word={word}
                 used={usedWords.includes(word)}
                 locked={locked}
+                playing={activeAudioKey === `bank-${word}`}
+                onPlay={() => playAudio(`bank-${word}`, audioByWord[word])}
+                tabDrag={tabDrag}
               />
             ))}
           </div>
@@ -306,7 +440,35 @@ const WB_Unit10_Page4_Q2 = () => {
           {/* ─── Questions ─────────────────────────────────────────────── */}
           <div className="content-container-wb-unit8-p1-q2 w-full">
             {questions.map((q, qIndex) => (
-              <div key={qIndex} className="row2-wb-unit10-p4-q2">
+              <div
+                key={qIndex}
+                className={`row2-wb-unit10-p4-q2 ${completedRows.has(qIndex) ? "wb-unit10-audio-control wb-unit10-completed-audio" : ""}`}
+                role={completedRows.has(qIndex) ? "button" : undefined}
+                tabIndex={completedRows.has(qIndex) ? 0 : undefined}
+                aria-label={
+                  completedRows.has(qIndex)
+                    ? `Play complete sentence ${qIndex + 1}`
+                    : undefined
+                }
+                onClick={
+                  completedRows.has(qIndex)
+                    ? () => playAudioSequence(`full-${qIndex}`, q.fullAudio)
+                    : undefined
+                }
+                onKeyDown={
+                  completedRows.has(qIndex)
+                    ? (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          playAudioSequence(`full-${qIndex}`, q.fullAudio);
+                        }
+                      }
+                    : undefined
+                }
+              >
+                <PlayingAudioIcon
+                  active={activeAudioKey === `full-${qIndex}`}
+                />
                 <div
                   style={{
                     display: "flex",
@@ -321,11 +483,41 @@ const WB_Unit10_Page4_Q2 = () => {
                   <div className="sentence-wrapper-wb-unit10-p4-q2">
                     {q.parts.map((part, pIndex) => {
                       if (part.type === "text") {
+                        const isIWant =
+                          part.value.trim().toLowerCase() === "i want an";
                         return (
                           <p
                             key={pIndex}
-                            className="sentence-text-wb-unit10-p4-q2"
+                            className={`sentence-text-wb-unit10-p4-q2 ${isIWant ? "wb-unit10-audio-control" : ""}`}
+                            role={isIWant ? "button" : undefined}
+                            tabIndex={isIWant ? 0 : undefined}
+                            aria-label={isIWant ? "Play I want an" : undefined}
+                            onClick={
+                              isIWant
+                                ? (event) => {
+                                    event.stopPropagation();
+                                    playAudio("i-want-an", iWantAnAudio);
+                                  }
+                                : undefined
+                            }
+                            onKeyDown={
+                              isIWant
+                                ? (event) => {
+                                    if (
+                                      event.key === "Enter" ||
+                                      event.key === " "
+                                    ) {
+                                      event.preventDefault();
+                                      event.stopPropagation();
+                                      playAudio("i-want-an", iWantAnAudio);
+                                    }
+                                  }
+                                : undefined
+                            }
                           >
+                            <PlayingAudioIcon
+                              active={isIWant && activeAudioKey === "i-want-an"}
+                            />
                             {part.value}
                           </p>
                         );
@@ -343,15 +535,23 @@ const WB_Unit10_Page4_Q2 = () => {
                             isWrong={wrongInputs.includes(
                               `${qIndex}-${pIndex}`,
                             )}
-                            locked={locked}
+                            locked={
+                              locked || lockedInputs.has(`${qIndex}-${pIndex}`)
+                            }
                             onRemove={() => removeWord(qIndex, pIndex)}
+                            tabDrag={tabDrag}
+                            preview={
+                              tabDrag.keyboardTargetId === cellKey
+                                ? tabDrag.keyboardItemId?.replace("bank::", "")
+                                : ""
+                            }
                           />
                         </span>
                       );
                     })}
                   </div>
                 </div>
-                <img src={q.img} alt="" className="q-img-wb-unit8-p1-q2" />
+                <img src={q.img} alt={q.alt} className="q-img-wb-unit8-p1-q2" />
               </div>
             ))}
           </div>

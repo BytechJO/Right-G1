@@ -10,7 +10,7 @@
 .word-btn-wb-unit10-p5-q2 {
     display: grid;
     flex-direction: column;
-    /* gap: 20px; */
+    gap: 10px;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -77,4 +77,78 @@
     height: 40px;
   
 }
+}/* =====================================================
+   POINTER SUPPORT
+   Mouse + Touch + iPad + Apple Pencil
+===================================================== */
+
+.grid-wb-u1-p6-q2 {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cell-wb-unit10-p5-q2 {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  outline: none;
+}
+
+/* =====================================================
+   KEYBOARD ACTIVE CELL
+===================================================== */
+
+.cell-wb-unit10-p5-q2 {
+  outline: none;
+}
+
+.cell-wb-unit10-p5-q2:focus {
+  outline: none;
+}
+
+.cell-wb-unit10-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -3px;
+  position: relative;
+  z-index: 3;
+}
+/* =====================================================
+   KEYBOARD SELECTING
+===================================================== */
+
+.keyboard-grid-selecting-wb-u10-p5-q2
+  .active-keyboard-cell-wb-u10-p5-q2 {
+  outline: 3px dashed #2563eb;
+  outline-offset: -3px;
+}
+
+/* =====================================================
+   WORD AUDIO CONTROL
+===================================================== */
+
+.word-audio-control-wb-u10-p5-q2 {
+  position: relative;
+  outline: none;
+  cursor: pointer;
+}
+
+.word-audio-control-wb-u10-p5-q2:focus-visible {
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-u10-p5-q2 {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 5;
 }

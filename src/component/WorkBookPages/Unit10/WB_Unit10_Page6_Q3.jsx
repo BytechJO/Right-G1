@@ -1,161 +1,95 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./WB_Unit10_Page6_Q3.css";
+import ExerciseHeader from "../../ExerciseHeader";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import useUnit10Audio from "./useUnit10Audio";
+import fedAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_001_fed.mp3";
+import wetAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_002_wet.mp3";
+import jetAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_003_jet.mp3";
+import netAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_004_net.mp3";
+import henAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_005_hen.mp3";
+import redAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_006_red.mp3";
+import tenAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_007_ten.mp3";
+import bedAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_008_bed.mp3";
+import setAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_009_set.mp3";
+import menAudio from "../../../assets/U1 WB/U10/audio/page62- C/Item_010_men.mp3";
+
+const rows = [["wet", "net", "ten", "set"], ["net", "ten", "hen", "men"], ["fed", "jet", "red", "bed"]];
+const correct = [2, 0, 1];
+const audioByWord = { fed: fedAudio, wet: wetAudio, jet: jetAudio, net: netAudio, hen: henAudio, red: redAudio, ten: tenAudio, bed: bedAudio, set: setAudio, men: menAudio };
 
 const WB_Unit10_Page6_Q3 = () => {
-  const sentences = [
-    { word1: "wet", word2: "net", word3: "ten", word4: "set", num: 1 },
-    { word1: "net", word2: "ten", word3: "hen", word4: "men", num: 2 },
-    { word1: "fed", word2: "jet", word3: "red", word4: "bed", num: 3 },
-  ];
+  const [answers, setAnswers] = useState({});
+  const [wrongRows, setWrongRows] = useState(new Set());
+  const [lockedRows, setLockedRows] = useState(new Set());
+  const { activeAudioKey, playAudio, stopAudio } = useUnit10Audio();
 
-  const correct = {
-    0: [2],
-    1: [0],
-    2: [1],
-  };
-
-  const [circledWords, setCircledWords] = useState({});
-  const [checked, setChecked] = useState(false);
-  const [locked, setLocked] = useState(false); // ⭐ NEW — يمنع التعديل بعد Show Answer
-
-
-  const handleWordClick = (sIndex, wIndex) => {
-    if (locked) return; // ⭐ منع التغيير عند القفل
-
-    setCircledWords((prev) => ({
-      ...prev,
-      [sIndex]: [wIndex],
-    }));
-
-    setChecked(false);
+  const choose = (rowIndex, wordIndex) => {
+    playAudio(`word-${rowIndex}-${wordIndex}`, audioByWord[rows[rowIndex][wordIndex]]);
+    if (lockedRows.has(rowIndex)) return;
+    setAnswers((old) => ({ ...old, [rowIndex]: wordIndex }));
+    setWrongRows((old) => { const next = new Set(old); next.delete(rowIndex); return next; });
   };
 
   const checkAnswers = () => {
-    if (locked) return; // ⭐ منع التغيير عند القفل
-    if (Object.keys(circledWords).length < sentences.length) {
-      ValidationAlert.info("Oops!", "Please circle at least one mistake.");
+    if (rows.some((_, index) => answers[index] === undefined)) {
+      ValidationAlert.info("Please answer all the questions before checking.");
       return;
     }
-
-    let totalCorrect = 0;
-    let studentCorrect = 0;
-
-    for (let sIndex in correct) totalCorrect += correct[sIndex].length;
-
-    for (let sIndex in circledWords) {
-      circledWords[sIndex].forEach((wIndex) => {
-        if (correct[sIndex]?.includes(wIndex)) studentCorrect++;
-      });
-    }
-
-    setChecked(true);
-
-    const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
-    if (studentCorrect === totalCorrect) ValidationAlert.success(scoreMessage);
-    else if (studentCorrect === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-
-    setLocked(true); // ⭐ NEW — يمنع التعديل بعد Check Answer
+    const nextWrong = new Set();
+    const nextLocked = new Set(lockedRows);
+    rows.forEach((_, index) => answers[index] === correct[index] ? nextLocked.add(index) : nextWrong.add(index));
+    setLockedRows(nextLocked);
+    setWrongRows(nextWrong);
+    const score = rows.filter((_, index) => answers[index] === correct[index]).length;
+    const message = `Score: ${score} / ${rows.length}`;
+    if (score === rows.length) ValidationAlert.success(message);
+    else if (score === 0) ValidationAlert.error(message);
+    else ValidationAlert.warning(message);
   };
 
   const showAnswer = () => {
-    const correctSelections = {};
+    setAnswers(Object.fromEntries(correct.map((value, index) => [index, value])));
+    setWrongRows(new Set());
+    setLockedRows(new Set(rows.map((_, index) => index)));
+  };
 
-    Object.keys(correct).forEach((sIndex) => {
-      correctSelections[sIndex] = correct[sIndex]; // ضع الدوائر على الإجابات الصحيحة فقط
-    });
-
-    setCircledWords(correctSelections);
-    setChecked(false); // إزالة الأخطاء
-    setLocked(true); // قفل التعديل
+  const reset = () => {
+    stopAudio();
+    setAnswers({});
+    setWrongRows(new Set());
+    setLockedRows(new Set());
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "30px",
-      }}
-    >
-      <div
-        className="div-forall"
-        style={{
-          gap: "30px",
-      
-        }}
-      >
-
-          <h5 className="header-title-page8">
-            <span className="ex-A">C</span>Read the words. Tap or click the word with a
-            a<span style={{ color: "red" }}>different sound.</span>
-          </h5>
-      
-          <div className="review3-p2-q2-sentence-container2 w-full">
-            {sentences.map((sentence, sIndex) => (
-              <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num">{sIndex + 1}</span>
-
-                <div className="wb-unit10-p6-q2-word-box">
-                  {[
-                    sentence.word1,
-                    sentence.word2,
-                    sentence.word3,
-                    sentence.word4,
-                  ].map((word, wIndex) => {
-                    const isCircled = circledWords[sIndex]?.includes(wIndex);
-                    const isWrong =
-                      checked &&
-                      isCircled &&
-                      !correct[sIndex]?.includes(wIndex);
-
-                    return (
-                      <span
-                        key={wIndex}
-                        className={`wb-unit10-p6-q2-word ${
-                          isCircled ? "circled" : ""
-                        }`}
-                        onClick={() => handleWordClick(sIndex, wIndex)}
-                      >
-                        {word}
-                        {isWrong && (
-                          <span className="review3-p2-q2-wrong-x">✕</span>
-                        )}
-                      </span>
-                    );
-                  })}
-                </div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "30px" }}>
+      <div className="div-forall" style={{ gap: "30px" }}>
+        <ExerciseHeader sectionLetter="C" title="Read the words. Circle the word with a different sound." subTitle="Read each group aloud and tap the word with the different vowel sound." />
+        <div className="review3-p2-q2-sentence-container2 w-full">
+          {rows.map((words, rowIndex) => (
+            <div className="review3-p2-q2-sentence-row" key={rowIndex}>
+              <span className="review3-p2-q2-num">{rowIndex + 1}</span>
+              <div className="wb-unit10-p6-q2-word-box">
+                {words.map((word, wordIndex) => {
+                  const selected = answers[rowIndex] === wordIndex;
+                  return (
+                    <span key={`${word}-${wordIndex}`} className={`wb-unit10-p6-q2-word wb-unit10-audio-control ${selected ? "circled" : ""}`} role="button" tabIndex={0} aria-label={`Listen to and choose ${word}`} onClick={() => choose(rowIndex, wordIndex)} onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); choose(rowIndex, wordIndex); }
+                    }}>
+                      {word}<PlayingAudioIcon active={activeAudioKey === `word-${rowIndex}-${wordIndex}`} />
+                      {wrongRows.has(rowIndex) && selected && <span className="review3-p2-q2-wrong-x">✕</span>}
+                    </span>
+                  );
+                })}
               </div>
-            ))}
-          </div>
-
-
+            </div>
+          ))}
+        </div>
         <div className="action-buttons-container">
-          <button
-            onClick={() => {
-              setCircledWords({});
-              setChecked(false);
-              setLocked(false); // ⭐ فتح التعديل من جديد
-            }}
-            className="try-again-button"
-          >
-            Start Again ↻
-          </button>
-
-          {/* ⭐⭐⭐ تمت إضافة زر Show Answer */}
-          <button
-            onClick={showAnswer}
-            className="show-answer-btn swal-continue"
-          >
-            Show Answer
-          </button>
-
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
+          <button onClick={reset} className="try-again-button">Start Again ↻</button>
+          <button onClick={showAnswer} className="show-answer-btn swal-continue">Show Answer</button>
+          <button onClick={checkAnswers} className="check-button2">Check Answer ✓</button>
         </div>
       </div>
     </div>
