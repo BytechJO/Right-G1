@@ -313,8 +313,7 @@ const WB_Unit9_Page4_Q2 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
-
+    if (showAnswer || lockedSlots.length === correctData.length) return;
     if (answers.includes("")) {
       ValidationAlert.info("Please fill in all blanks before checking!");
       return;

@@ -53,7 +53,10 @@ function DraggableNumber({ id, text, disabled, onKeyboardPick, bankRef }) {
 
   return (
     <div
-      ref={(element) => { setNodeRef(element); bankRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        bankRef(element);
+      }}
       {...listeners}
       {...attributes}
       role="button"
@@ -102,7 +105,10 @@ function DroppableCell({
 
   return (
     <div
-      ref={(element) => { setNodeRef(element); targetRef(element); }}
+      ref={(element) => {
+        setNodeRef(element);
+        targetRef(element);
+      }}
       className={`wb-unit9-p2-q3-input ${isOver ? "drag-over-cell" : ""}`}
       style={{
         background: isOver ? "#e3f2fd" : "transparent",
@@ -111,10 +117,18 @@ function DroppableCell({
       onClick={() => !disabled && displayText && onClear(id)}
       role="button"
       tabIndex={!disabled && (keyboardActive || displayText) ? 0 : -1}
-      aria-label={displayText ? `Number ${displayText}. Press Enter to remove` : "Empty number box"}
+      aria-label={
+        displayText
+          ? `Number ${displayText}. Press Enter to remove`
+          : "Empty number box"
+      }
       onKeyDown={onKeyDown}
     >
-      {preview ? <span className="keyboard-drag-preview-wb-unit9-p2-q3">{preview}</span> : displayText}
+      {preview ? (
+        <span className="keyboard-drag-preview-wb-unit9-p2-q3">{preview}</span>
+      ) : (
+        displayText
+      )}
       {isWrong && <div className="unit3-q3-wrong">✕</div>}
     </div>
   );
@@ -168,7 +182,11 @@ const WB_Unit9_Page2_Q3 = () => {
       return copy;
     });
 
-    setShowResult((current) => current.map((result, resultIndex) => resultIndex === index ? undefined : result));
+    setShowResult((current) =>
+      current.map((result, resultIndex) =>
+        resultIndex === index ? undefined : result,
+      ),
+    );
   };
 
   // ── Click to clear ──
@@ -181,11 +199,18 @@ const WB_Unit9_Page2_Q3 = () => {
       copy[index] = "";
       return copy;
     });
-    setShowResult((current) => current.map((result, resultIndex) => resultIndex === index ? undefined : result));
-    if (returnFocus) requestAnimationFrame(() => bankRefs.current[returnedId]?.focus());
+    setShowResult((current) =>
+      current.map((result, resultIndex) =>
+        resultIndex === index ? undefined : result,
+      ),
+    );
+    if (returnFocus)
+      requestAnimationFrame(() => bankRefs.current[returnedId]?.focus());
   };
 
-  const availableTargets = options.map((_, index) => index).filter((index) => !lockedSlots.includes(index));
+  const availableTargets = options
+    .map((_, index) => index)
+    .filter((index) => !lockedSlots.includes(index));
 
   const pickWithKeyboard = (id) => {
     if (showAnswer || answers.includes(id)) return;
@@ -228,7 +253,11 @@ const WB_Unit9_Page2_Q3 = () => {
       event.preventDefault();
       const currentIndex = availableTargets.indexOf(index);
       const direction = event.shiftKey ? -1 : 1;
-      const next = availableTargets[(currentIndex + direction + availableTargets.length) % availableTargets.length];
+      const next =
+        availableTargets[
+          (currentIndex + direction + availableTargets.length) %
+            availableTargets.length
+        ];
       setKeyboardTarget(next);
       targetRefs.current[next]?.focus();
       return;
@@ -237,11 +266,15 @@ const WB_Unit9_Page2_Q3 = () => {
       event.preventDefault();
       const item = keyboardItem;
       setAnswers((current) => {
-        const next = current.map((value) => value === item ? "" : value);
+        const next = current.map((value) => (value === item ? "" : value));
         next[index] = item;
         return next;
       });
-      setShowResult((current) => current.map((result, resultIndex) => resultIndex === index ? undefined : result));
+      setShowResult((current) =>
+        current.map((result, resultIndex) =>
+          resultIndex === index ? undefined : result,
+        ),
+      );
       setKeyboardItem(null);
       setKeyboardTarget(null);
       focusNextBank(item);
@@ -261,7 +294,7 @@ const WB_Unit9_Page2_Q3 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || lockedSlots.length === correctData.length) return;
 
     if (answers.includes("")) {
       ValidationAlert.info("Please fill all answer boxes before checking!");
@@ -273,7 +306,11 @@ const WB_Unit9_Page2_Q3 = () => {
     );
 
     setShowResult(results);
-    setLockedSlots(results.map((result, index) => result === "correct" ? index : null).filter((index) => index !== null));
+    setLockedSlots(
+      results
+        .map((result, index) => (result === "correct" ? index : null))
+        .filter((index) => index !== null),
+    );
 
     const correctCount = results.filter((r) => r === "correct").length;
     const total = correctData.length;
@@ -319,7 +356,11 @@ const WB_Unit9_Page2_Q3 = () => {
         }}
       >
         <div className="div-forall" style={{ gap: "15px" }}>
-          <ExerciseHeader sectionLetter="E" title="Read and number the pictures." subTitle="Read each animal-count sentence and drag its number to the matching picture." />
+          <ExerciseHeader
+            sectionLetter="E"
+            title="Read and number the pictures."
+            subTitle="Read each animal-count sentence and drag its number to the matching picture."
+          />
 
           {/* ── Number bank ── */}
           <div
@@ -341,7 +382,9 @@ const WB_Unit9_Page2_Q3 = () => {
                 text={num.text}
                 disabled={showAnswer || answers.includes(num.id)} // ← هون التعديل
                 onKeyboardPick={() => pickWithKeyboard(num.id)}
-                bankRef={(element) => { bankRefs.current[num.id] = element; }}
+                bankRef={(element) => {
+                  bankRefs.current[num.id] = element;
+                }}
               />
             ))}
           </div>
@@ -362,7 +405,9 @@ const WB_Unit9_Page2_Q3 = () => {
                   role="button"
                   tabIndex={0}
                   aria-label={`Play sentence ${index + 1}`}
-                  onClick={() => playAudio(`sentence-${index}`, sentenceAudios[index])}
+                  onClick={() =>
+                    playAudio(`sentence-${index}`, sentenceAudios[index])
+                  }
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
@@ -370,7 +415,9 @@ const WB_Unit9_Page2_Q3 = () => {
                     }
                   }}
                 >
-                  {activeAudioKey === `sentence-${index}` && <Unit9PlayingAudioIcon />}
+                  {activeAudioKey === `sentence-${index}` && (
+                    <Unit9PlayingAudioIcon />
+                  )}
                   <span className="number-wb-unit7-p5-q1">{index + 1}</span>
                   <p className="sentence-wb-unit8-p1-q1">{item}</p>
                 </div>
@@ -381,7 +428,10 @@ const WB_Unit9_Page2_Q3 = () => {
             <div className="wb-unit9-p2-q3-grid">
               {options.map((item, index) => (
                 <div key={index} className="wb-unit9-p2-q3-box">
-                  <img src={item.img} alt={`Farm animal picture ${index + 1}`} />
+                  <img
+                    src={item.img}
+                    alt={`Farm animal picture ${index + 1}`}
+                  />
 
                   <div className="wb-unit9-p2-q3-input-wrapper">
                     <DroppableCell
@@ -391,10 +441,16 @@ const WB_Unit9_Page2_Q3 = () => {
                       isWrong={showResult[index] === "wrong"}
                       disabled={showAnswer || lockedSlots.includes(index)}
                       onClear={handleClear}
-                      preview={keyboardItem && keyboardTarget === index ? getNumberText(keyboardItem) : ""}
+                      preview={
+                        keyboardItem && keyboardTarget === index
+                          ? getNumberText(keyboardItem)
+                          : ""
+                      }
                       keyboardActive={Boolean(keyboardItem)}
                       onKeyDown={(event) => handleTargetKeyDown(event, index)}
-                      targetRef={(element) => { targetRefs.current[index] = element; }}
+                      targetRef={(element) => {
+                        targetRefs.current[index] = element;
+                      }}
                     />
                   </div>
                 </div>

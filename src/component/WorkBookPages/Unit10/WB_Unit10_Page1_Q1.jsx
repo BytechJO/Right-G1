@@ -397,7 +397,7 @@ const WB_Unit10_Page1_Q1 = () => {
 
   // ── Check ──────────────────────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked || lockedRows.size === questions.length) return;
     const hasEmpty = questions.some(
       (q) => !filled[q.id] || filled[q.id].length === 0,
     );
@@ -463,7 +463,7 @@ const WB_Unit10_Page1_Q1 = () => {
       <div
         style={{ display: "flex", justifyContent: "center", padding: "30px" }}
       >
-        <div style={{gap:"0px"}} className="div-forall mb-10">
+        <div style={{ gap: "0px" }} className="div-forall mb-10">
           <ExerciseHeader
             sectionLetter="A"
             title="Look, read, unscramble, and write."

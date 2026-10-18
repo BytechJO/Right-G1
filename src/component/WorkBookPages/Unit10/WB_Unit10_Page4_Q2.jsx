@@ -309,11 +309,14 @@ const WB_Unit10_Page4_Q2 = () => {
 
     setWrongInputs([]);
   };
-
+  const totalInputs = questions.reduce(
+    (total, q) => total + q.parts.filter((p) => p.type === "input").length,
+    0,
+  );
   // ─── Check ───────────────────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (locked) return;
-
+    if (locked || (totalInputs > 0 && lockedInputs.size === totalInputs))
+      return;
     for (let qi = 0; qi < questions.length; qi++) {
       for (let pi = 0; pi < questions[qi].parts.length; pi++) {
         if (questions[qi].parts[pi].type === "input" && !answers[qi][pi]) {

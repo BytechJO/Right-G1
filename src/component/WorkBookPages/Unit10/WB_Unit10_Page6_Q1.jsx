@@ -304,8 +304,7 @@ const WB_Unit10_Page6_Q1 = () => {
 
   // ─── Check ─────────────────────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (locked) return;
-
+    if (locked || (data.length > 0 && lockedRows.size === data.length)) return;
     if (inputs.some((arr) => arr.length === 0)) {
       ValidationAlert.info("Please fill in all the answers before checking.");
       return;

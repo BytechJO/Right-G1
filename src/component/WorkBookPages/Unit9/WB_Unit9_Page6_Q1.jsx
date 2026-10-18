@@ -296,7 +296,7 @@ const WB_Unit9_Page6_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return;
+    if (showAnswer || lockedSlots.length === data.length) return;
 
     if (inputs.some((val) => val === "")) {
       ValidationAlert.info("Please fill in all the answers before checking.");

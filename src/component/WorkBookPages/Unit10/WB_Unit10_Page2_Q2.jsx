@@ -113,10 +113,19 @@ export default function WB_Unit10_Page2_Q2() {
       return { ...prev, [qId]: [value] }; // استبدال
     });
   };
-
   const handleCheck = () => {
-    if (showAnswer) return; // 🔥 يمنع الضغط بعد إظهار الحل
-    // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
+    if (showAnswer) return;
+
+    const allCorrect = data.every((q) => {
+      const selected = answers[q.id] || [];
+
+      return (
+        selected.length === q.correct.length &&
+        q.correct.every((value) => selected.includes(value))
+      );
+    });
+
+    if (allCorrect) return; // فحص إذا الطالب مختار على الأقل إجابة من السؤال الأول
     if (!answers[data[0].id] || answers[data[0].id].length === 0) {
       ValidationAlert.info("Please select at least one picture in question 1.");
       return;

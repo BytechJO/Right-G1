@@ -372,10 +372,14 @@ const WB_Unit10_Page1_Q2 = () => {
     });
     setWrongInputs([]);
   };
-
+  const totalInputs = questions.reduce(
+    (total, q) => total + q.parts.filter((p) => p.type === "input").length,
+    0,
+  );
   // ─── Buttons ─────────────────────────────────────────────────────────────────
   const checkAnswers = () => {
-    if (locked) return;
+    if (locked || (totalInputs > 0 && lockedInputs.size === totalInputs))
+      return;
     for (let qIndex = 0; qIndex < questions.length; qIndex++) {
       for (let pIndex = 0; pIndex < questions[qIndex].parts.length; pIndex++) {
         if (questions[qIndex].parts[pIndex].type === "input") {
@@ -482,7 +486,7 @@ const WB_Unit10_Page1_Q2 = () => {
           padding: "30px",
         }}
       >
-        <div style={{gap:"10px"}} className="div-forall">
+        <div style={{ gap: "10px" }} className="div-forall">
           <ExerciseHeader
             sectionLetter="B"
             title="Look and write."

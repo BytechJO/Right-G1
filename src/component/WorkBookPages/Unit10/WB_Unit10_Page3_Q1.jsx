@@ -102,7 +102,11 @@ const WB_Unit10_Page3_Q1 = () => {
   };
 
   const checkAnswers = () => {
-    if (showAnswerState) return;
+    if (
+      showAnswerState ||
+      (data.length > 0 && lockedIds.length === data.length)
+    )
+      return;
     const totalQuestions = data.length; // لأن أول سؤال لا يُحسب
 
     let correct = 0;
