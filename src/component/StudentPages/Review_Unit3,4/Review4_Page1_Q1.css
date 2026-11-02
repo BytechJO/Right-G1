@@ -14,4 +14,37 @@
   font-weight: bold;
   z-index: 5;
   border: 2px solid white;
+} /* =====================================================
+   DRAG PATTERN - KEYBOARD
+===================================================== */
+
+.review4-p1-q1-bank-chip:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-review4-p1-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.review4-p1-q1-drop-zone:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-review4-p1-q1 {
+  animation: keyboardDropPreviewReview4P1Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewReview4P1Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
 }

@@ -27,3 +27,23 @@
     line-height: normal;
     height: 40px;
 }
+
+.keyboard-drop-preview {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2c5287;
+    background: rgba(255, 255, 255, 0.9);
+    font-weight: 700;
+    pointer-events: none;
+    z-index: 4;
+    animation: unit9-keyboard-preview-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes unit9-keyboard-preview-blink {
+    0%,
+    100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}

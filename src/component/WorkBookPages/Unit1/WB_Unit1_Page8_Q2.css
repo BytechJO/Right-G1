@@ -1,120 +1,491 @@
-.word-box-wb-u1-p8-q2 {
-  display: inline-block;
-  padding: 8px 18px;
-  border: 2px solid #444;
-  border-radius: 10px;
-  font-size: 20px;
-  margin: 10px;
-  font-weight: 600;
-
-  background: #fff;
-}
-
-.sorting-table-wb-u1-p8-q2 {
-  width: 60%;
-  margin-top: 20px;
-  border-collapse: collapse;
-  font-size: 20px;
-}
-
-.missing-input-wb-unit1-p8-q2 {
-    width: 90%;
-    /* border: none; */
-    border-bottom: 2px solid black;
-    margin: 0 6px;
-    font-size: 25px;
-    text-align: center;
-    height: 40px;
-    /* outline: none; */
-}
-.sorting-table-wb-u1-p8-q2 th {
-  border: 2px solid black;
-  padding: 10px;
-  text-align: center;
-  background: #f3f3f3;
-}
-.sorting-table-wb-u1-p8-q2 tbody {
-  border: 2px solid black;
-  height: 200px;
-}
-.sorting-table-wb-u1-p8-q2 td {
-  border-right: 2px solid black;
-  height: 40px;
-  text-align: center;
-}
-
-.table-word-wb-u1-p8-q2 {
-  font-weight: 600;
-}
-
-.page8-wrapper-wb-u1-p8-q2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.table-div-wb-u1-p8-q2 {
-  display: flex;
-  justify-content: center;
-}
+/* =====================================================
+   WORD BANK
+===================================================== */
 
 .word-bank-wb-u1-p8-q2 {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin: 15px 0;
+
+  width: 100%;
+
+  padding: 10px;
+
+  margin: 10px 0 20px;
+
+  border: 2px dashed #ccc;
+
+  border-radius: 10px;
+
   align-items: center;
   justify-content: center;
 }
 
-.action-buttons-container-wb-u1-p8-q2 {
+/* =====================================================
+   BANK WORD
+===================================================== */
+
+.bank-word-wb-u1-p8-q2 {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: inherit;
+
+  font-weight: bold;
+
+  cursor: grab;
+
+  user-select: none;
+
+  touch-action: none;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    outline 0.15s ease,
+    transform 0.15s ease;
+}
+
+.bank-word-wb-u1-p8-q2:hover {
+  background: #f2f6ff;
+}
+
+/* selected keyboard word */
+
+.bank-word-selected-wb-u1-p8-q2 {
+  background: #dbeafe;
+
+  border-color: #2563eb;
+
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* used */
+
+.bank-word-used-wb-u1-p8-q2 {
+  background: #e0e0e0;
+
+  border-color: #ccc;
+
+  color: #aaa;
+
+  opacity: 0.5;
+
+  pointer-events: none;
+}
+
+/* focus */
+
+.bank-word-wb-u1-p8-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-div-wb-u1-p8-q2 {
   display: flex;
-  gap: 10px;
+
+  justify-content: center;
+
+  width: 100%;
+
+  overflow: hidden;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.sorting-table-wb-u1-p8-q2 {
+  width: 60%;
+
   margin-top: 20px;
+
+  border-collapse: collapse;
+
+  font-size: 20px;
+
+  /* ⭐ مهم جدًا */
+  table-layout: fixed;
 }
 
-.try-again-button-wb-u1-p8-q2,
-.show-answer-btn-wb-u1-p8-q2,
-.check-button2-wb-u1-p8-q2 {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+/* العمودين نفس العرض دائمًا */
+
+.sorting-table-wb-u1-p8-q2 th,
+.sorting-table-wb-u1-p8-q2 td {
+  width: 50%;
+
+  box-sizing: border-box;
 }
 
-.input-cell-wb-u1-p8-q2 {
-  width: 90%;
-  font-size: 18px;
-  padding: 5px;
-  border: none;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.411);
-  outline: none;
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+.sorting-table-wb-u1-p8-q2 th {
+  border: 2px solid black;
+
+  padding: 10px;
+
   text-align: center;
+
+  background: #f3f3f3;
+
+  font-weight: 700;
 }
+
+/* =====================================================
+   TABLE BODY
+===================================================== */
+
+.sorting-table-wb-u1-p8-q2 tbody {
+  border: 2px solid black;
+
+  height: 200px;
+}
+
+/* =====================================================
+   TABLE CELL
+===================================================== */
+
+.sorting-table-wb-u1-p8-q2 td {
+  border-right: 2px solid black;
+
+  height: 55px;
+
+  text-align: center;
+
+  padding: 5px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+/* آخر عمود ما يحتاج border زيادة إذا بدك */
+
+.sorting-table-wb-u1-p8-q2 td:last-child {
+  border-right: none;
+}
+
+/* =====================================================
+   DROP CELL WRAPPER
+===================================================== */
+
+.drop-cell-wrapper-wb-u1-p8-q2 {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 100%;
+
+  min-width: 0;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* =====================================================
+   DROP CELL
+===================================================== */
+
+.missing-input-wb-unit1-p8-q2 {
+  width: 90%;
+
+  min-width: 90%;
+
+  max-width: 90%;
+
+  height: 42px;
+
+  min-height: 42px;
+
+  max-height: 42px;
+
+  border-bottom: 2px solid black;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  flex: 0 0 90%;
+
+  cursor: default;
+
+  position: relative;
+
+  transition:
+    background 0.15s ease,
+    outline 0.15s ease;
+}
+
+/* =====================================================
+   CONTENT INSIDE DROP CELL
+===================================================== */
+
+.missing-input-wb-unit1-p8-q2 > span {
+  display: block;
+
+  max-width: 100%;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  flex-shrink: 1;
+}
+
+/* =====================================================
+   MOUSE DRAG OVER
+===================================================== */
+
+.missing-input-wb-unit1-p8-q2.drag-over-cell {
+  background: #e3f2fd;
+
+  outline: 2px solid #60a5fa;
+
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   KEYBOARD TARGET
+===================================================== */
+
+.missing-input-wb-unit1-p8-q2.keyboard-target-wb-u1-p8-q2 {
+  background: #eff6ff;
+
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-wb-u1-p8-q2 {
+  max-width: 100%;
+
+  padding: 3px 10px;
+
+  border: 2px dashed #2563eb;
+
+  border-radius: 7px;
+
+  color: #2563eb;
+
+  background: rgba(219, 234, 254, 0.55);
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  box-sizing: border-box;
+
+  animation: keyboardDropPulseP8 0.8s ease-in-out infinite alternate;
+}
+
+/* =====================================================
+   MOUSE PREVIEW
+===================================================== */
+
+.mouse-preview-wb-u1-p8-q2 {
+  max-width: 100%;
+
+  color: #2563eb;
+
+  opacity: 0.7;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   WRONG X
+===================================================== */
 
 .wrong-x-circle-wb-u1-p8-q2 {
   position: absolute;
-  top: 4px;
-  right: 12px;
-  background: red;
-  color: white;
+
+  top: 0;
+
+  right: 0;
+
   width: 22px;
+
   height: 22px;
+
   border-radius: 50%;
+
+  background: red;
+
+  color: white;
+
+  border: 2px solid white;
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
-  font-weight: bold;
+
   font-size: 14px;
+
+  font-weight: bold;
+
+  z-index: 10;
+
+  pointer-events: none;
 }
 
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
 
+.drag-overlay-word-wb-u1-p8-q2 {
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: bold;
+
+  cursor: grabbing;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   SCREEN READER
+===================================================== */
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  padding: 0;
+
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
   .word-bank-wb-u1-p8-q2 {
     flex-wrap: nowrap;
-    gap: 2px;
+
+    gap: 5px;
   }
-  .word-box-wb-u1-p8-q2 {
+
+  .bank-word-wb-u1-p8-q2 {
     font-size: 16px;
+
+    padding: 5px 9px;
+  }
+
+  .sorting-table-wb-u1-p8-q2 {
+    width: 70%;
+
+    table-layout: fixed;
+  }
+
+  .missing-input-wb-unit1-p8-q2 {
+    font-size: 18px;
+
+    width: 90%;
+
+    min-width: 90%;
+
+    max-width: 90%;
+
+    flex-basis: 90%;
+  }
+}
+
+@media (max-width: 700px) {
+  .sorting-table-wb-u1-p8-q2 {
+    width: 95%;
+
+    table-layout: fixed;
+  }
+
+  .word-bank-wb-u1-p8-q2 {
+    flex-wrap: wrap;
+  }
+
+  .missing-input-wb-unit1-p8-q2 {
+    width: 90%;
+
+    min-width: 90%;
+
+    max-width: 90%;
+
+    flex-basis: 90%;
   }
 }

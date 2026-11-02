@@ -68,17 +68,179 @@
   height: 120px;
 }
 
-
-.content-container-wb-unit4-p1-q2{
-        display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    gap: 30px;
+.content-container-wb-unit4-p1-q2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  gap: 30px;
 }
 
 .row2-wb-unit4-p1-q2 {
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+} /* =====================================================
+   DRAG KEYBOARD
+===================================================== */
+
+.word-bank-item-wb-unit4-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-wb-unit4-p1-q2 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.inline-input-wrapper-wb-unit4-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.keyboard-drop-preview-wb-unit4-p1-q2 {
+  animation: keyboardDropPreviewWBU4P1Q2 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewWBU4P1Q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   COLORABLE SVG KEYBOARD
+===================================================== */
+
+.wb-svg-colorable {
+  outline: none;
+}
+
+.wb-svg-colorable:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   COLOR PALETTE
+===================================================== */
+
+.color-palette-wb-unit4-p1-q2 {
+  position: absolute;
+  z-index: 50;
+
+  display: flex;
+  gap: 8px;
+
+  padding: 8px;
+
+  background: white;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.color-circle {
+  width: 32px;
+  height: 32px;
+
+  border: 2px solid #777;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.color-circle:focus {
+  outline: none;
+}
+
+.color-circle:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   WORD BANK AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit4-p1-q2 {
+  position: absolute;
+
+  top: -9px;
+  right: -9px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-audio-wb-unit4-p1-q2:focus {
+  outline: none;
+}
+
+.sentence-audio-wb-unit4-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.sentence-audio-icon-wb-unit4-p1-q2 {
+  position: absolute;
+
+  top: -11px;
+  right: -17px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+.wrong-color-x-wb-unit4-p1-q2 {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: red;
+  color: white;
+
+  border: 2px solid white;
+  border-radius: 50%;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  z-index: 30;
 }

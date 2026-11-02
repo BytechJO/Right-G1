@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import "./Unit10_Page5_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import img1 from "../../../assets/unit10/imgs/U10P86EXEA2-01.svg";
@@ -7,68 +7,76 @@ import img3 from "../../../assets/unit10/imgs/U10P86EXEA2-03.svg";
 import sound1 from "../../../assets/unit10/sound/cd80pg86-instruction1-adult-lady_uiAasTyt.mp3";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 const Unit10_Page5_Q2 = () => {
   const stopAtSecond = 3.5;
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  const [lockedQuestions, setLockedQuestions] = useState([]);
 
   // ================================
   // ✔ Captions Array
   // ================================
-const captions = [
-  {
-    start: 0.519,
-    end: 5.799,
-    text: "Page 85, Right Activities. Exercise A, Number 2."
-  },
-  {
-    start: 6.759,
-    end: 11.819,
-    text: "Do they both have a short E? Listen and write check or X."
-  },
+  const captions = [
+    {
+      start: 0.519,
+      end: 5.799,
+      text: "Page 85, Right Activities. Exercise A, Number 2.",
+    },
+    {
+      start: 6.759,
+      end: 11.819,
+      text: "Do they both have a short E? Listen and write check or X.",
+    },
 
-  {
-    start: 12.539,
-    end: 13.819,
-    text: "1."
-  },
-  {
-    start: 13.819,
-    end: 15.839,
-    text: "Sled, cup."
-  },
+    {
+      start: 12.539,
+      end: 13.819,
+      text: "1.",
+    },
+    {
+      start: 13.819,
+      end: 15.839,
+      text: "Sled, cup.",
+    },
 
-  {
-    start: 15.839,
-    end: 17.02,
-    text: "2."
-  },
-  {
-    start: 17.02,
-    end: 19.299,
-    text: "Nest, bee."
-  },
+    {
+      start: 15.839,
+      end: 17.02,
+      text: "2.",
+    },
+    {
+      start: 17.02,
+      end: 19.299,
+      text: "Nest, bee.",
+    },
 
-  {
-    start: 19.299,
-    end: 20.379,
-    text: "3."
-  },
-  {
-    start: 20.379,
-    end: 22.18,
-    text: "Ten, jet."
-  }
-];
+    {
+      start: 19.299,
+      end: 20.379,
+      text: "3.",
+    },
+    {
+      start: 20.379,
+      end: 22.18,
+      text: "Ten, jet.",
+    },
+  ];
   const questions = [
     {
       id: 1,
       image: img1,
+      alt: "A sled and a cup of tea.",
       correct: "✗",
     },
-    { id: 2, image: img2, correct: "✗" },
+    {
+      id: 2,
+      image: img2,
+      alt: "A bird's nest and a bee.",
+      correct: "✗",
+    },
     {
       id: 3,
       image: img3,
+      alt: "The number ten and a passenger jet.",
       correct: "✓",
     },
   ];
@@ -77,9 +85,15 @@ const captions = [
   const [showResult, setShowResult] = useState([]);
 
   const selectAnswer = (id, value) => {
-    if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
-    setAnswers({ ...answers, [id]: value });
-    setShowResult(false);
+    if (lockedQuestions.includes(id)) return;
+    setAnswers((previous) => ({ ...previous, [id]: value }));
+    setShowResult((previous) =>
+      Array.isArray(previous)
+        ? previous.map((result, index) =>
+            questions[index].id === id ? undefined : result,
+          )
+        : [],
+    );
   };
   const showAnswers = () => {
     const corrects = {};
@@ -88,12 +102,12 @@ const captions = [
     });
 
     setAnswers(corrects);
-    setShowResult([]); // إخفاء كل X
-    setLocked(true); // 🔒 قفل التعديل
+    setShowResult([]);
+    setLockedQuestions(questions.map((question) => question.id));
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (lockedQuestions.length === questions.length) return;
     // 1) فحص الخانات الفارغة
     const isEmpty = questions.some((q) => !answers[q.id]);
     if (isEmpty) {
@@ -107,7 +121,14 @@ const captions = [
     );
 
     setShowResult(results);
-    setLocked(true);
+    setLockedQuestions((previous) => [
+      ...new Set([
+        ...previous,
+        ...questions
+          .filter((question) => answers[question.id] === question.correct)
+          .map((question) => question.id),
+      ]),
+    ]);
     // 3) حساب السكور
     const correctCount = results.filter((r) => r === "correct").length;
     const total = questions.length;
@@ -132,7 +153,7 @@ const captions = [
   const resetAnswers = () => {
     setAnswers({});
     setShowResult([]);
-    setLocked(false); // ← مهم جداً
+    setLockedQuestions([]);
   };
 
   return (
@@ -151,16 +172,22 @@ const captions = [
           gap: "60px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span style={{ color: "purple" }}> 2 </span> Do they both have
-          <span style={{ color: "red" }}> short e </span>? Listen and choose
-          <span style={{ color: "red" }}> ✓ </span> or
-          <span style={{ color: "red" }}> ✗</span>.
-        </h5>
+        <ExerciseHeader
+          questionNumber="2"
+          title={
+            <>
+              Do they both have <span style={{ color: "red" }}>short e</span>?
+              Listen and write <span style={{ color: "red" }}>✓</span> or{" "}
+              <span style={{ color: "red" }}>✗</span>.
+            </>
+          }
+          subTitle="Listen to each pair, then choose check or X."
+        />
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
           stopAtSecond={stopAtSecond}
+          pageId="unit10-page86-q2"
         />
 
         <div className="unit10-p1-q2-container">
@@ -179,7 +206,7 @@ const captions = [
                 <div style={{ display: "flex" }}>
                   <img
                     src={q.image}
-                    alt=""
+                    alt={q.alt}
                     className="unit10-p5-q2-question-img"
                   />
                 </div>
@@ -188,10 +215,19 @@ const captions = [
                   {/* خيار الصح */}
                   <div className="option-wrapper">
                     <div
+                      role="button"
+                      tabIndex={lockedQuestions.includes(q.id) ? -1 : 0}
+                      aria-label={`Choose check for question ${q.id}`}
                       className={`option-btn-unit10-p5-q2 ${
                         answers[q.id] === "✓" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✓")}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✓");
+                        }
+                      }}
                     >
                       ✓
                     </div>
@@ -204,10 +240,19 @@ const captions = [
                   {/* خيار الخطأ */}
                   <div className="option-wrapper">
                     <div
+                      role="button"
+                      tabIndex={lockedQuestions.includes(q.id) ? -1 : 0}
+                      aria-label={`Choose X for question ${q.id}`}
                       className={`option-btn-unit10-p5-q2 ${
                         answers[q.id] === "✗" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✗")}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✗");
+                        }
+                      }}
                     >
                       ✗
                     </div>

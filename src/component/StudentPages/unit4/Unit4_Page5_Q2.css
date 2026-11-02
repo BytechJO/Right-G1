@@ -22,3 +22,32 @@
     margin-top: 0px;
   }
 }
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.keyboard-picked-letter-unit4-page5-q2 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.q-input-unit3-page6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.keyboard-drop-preview-unit4-page5-q2 {
+  animation: keyboardDropPreviewUnit4P5Q2 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewUnit4P5Q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}

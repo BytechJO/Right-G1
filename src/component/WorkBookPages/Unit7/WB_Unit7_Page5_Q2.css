@@ -1,9 +1,138 @@
-
 .container-word-grid-wb-u7-p5-q2 {
-    display: flex;
-    width: 100%;
-    margin-top: 20px;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: row-reverse;
+  display: flex;
+  width: 100%;
+  margin-top: 20px;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row-reverse;
+} /* =====================================================
+   GRID
+
+   مهم للـ iPad / Touch / Apple Pencil
+===================================================== */
+
+.grid-wb-u1-p6-q2 {
+  touch-action: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+}
+
+/* =====================================================
+   CELL
+===================================================== */
+
+.cell-wb-u1-p6-q2 {
+  outline: none;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+
+  touch-action: none;
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.cell-wb-u1-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: -3px;
+
+  position: relative;
+
+  z-index: 4;
+}
+
+/* =====================================================
+   CURRENT PREVIEW
+
+   Mouse / Touch / Pencil / Keyboard
+===================================================== */
+
+.grid-preview-wb-u7-p5-q2 {
+  background: #cdfffa;
+
+  outline: 2px solid rgb(0, 179, 255);
+
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   FOUND
+
+   إذا عندك already .found
+   خليه، أو استخدمي هذا.
+===================================================== */
+
+.cell-wb-u1-p6-q2.found {
+  background-color: #dcffcd;
+
+  border: 2px solid green;
+
+  font-weight: bold;
+}
+
+/* =====================================================
+   WORD LABEL FOCUS
+===================================================== */
+
+.word-label-wb-u1-p6-q2 {
+  outline: none;
+}
+
+.word-label-wb-u1-p6-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+
+   بالزاوية وما بتاخذ مساحة من النص
+===================================================== */
+
+.grid-word-audio-icon-wb-u7-p5-q2 {
+  position: absolute;
+
+  top: 2px;
+  right: 3px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   WRONG SHAKE
+===================================================== */
+
+.shake {
+  animation: shake-wb-u7-p5-q2 0.3s ease-in-out;
+}
+
+@keyframes shake-wb-u7-p5-q2 {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
 }

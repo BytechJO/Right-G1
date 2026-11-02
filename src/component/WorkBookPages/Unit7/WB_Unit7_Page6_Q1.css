@@ -1,0 +1,56 @@
+/* =====================================================
+   DROP KEYBOARD FOCUS
+===================================================== */
+
+.wb-unit7-p5-q1-input {
+  outline: none;
+}
+
+.wb-unit7-p5-q1-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD DROP TARGET
+===================================================== */
+
+.keyboard-drop-preview-wb-unit7-p6-q1 {
+  background: rgba(219, 234, 254, 0.45);
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW VALUE
+===================================================== */
+
+.drop-preview-value-wb-unit7-p6-q1 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  animation: blink-letter-wb-unit7-p6-q1 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-letter-wb-unit7-p6-q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}

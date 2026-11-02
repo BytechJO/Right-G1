@@ -53,3 +53,31 @@
     font-size: 16px;
   }
 }
+.option-word-review5-p2-q3 {
+  outline: none;
+}
+
+.option-word-review5-p2-q3:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sentence-text-review5-p2-q3[role="button"] {
+  outline: none;
+}
+
+.sentence-text-review5-p2-q3[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+.completed-answer-wrapper-wb-unit6-p3-q1 {
+  outline: none;
+}
+
+.completed-answer-wrapper-wb-unit6-p3-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 8px;
+}

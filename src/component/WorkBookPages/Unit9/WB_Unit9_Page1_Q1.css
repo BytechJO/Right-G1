@@ -44,3 +44,12 @@
         margin-bottom: 10px;
   }
 }
+.lines-layer2 {
+  pointer-events: none;
+}
+
+.matched-img2:focus-visible,
+.h5-wb-unit9-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}

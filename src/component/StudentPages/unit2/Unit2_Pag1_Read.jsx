@@ -19,20 +19,21 @@ const Unit2_Page1_Read = () => {
     new Audio(boy),
   ];
 
-const captions = [
-   { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
+  const captions = [
+    { start: 0, end: 3.05, text: "Page 10. Listen and read along." },
     { start: 3.07, end: 6.14, text: "B, bird, ball, boy " },
-    
   ];
   return (
     <>
       <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 2.9, 3.4, 4.2, 5.1]}
+        checkpoints={[0, 2.9, 3.4, 4.4, 5.1]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
+        pageId="unit2-page10-3"
+        subHeader="Press Play, follow the b words, then tap each card to hear it again."
         captions={captions}
       />
     </>

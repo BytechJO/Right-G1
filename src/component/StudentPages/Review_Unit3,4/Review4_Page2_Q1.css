@@ -8,29 +8,29 @@
   margin-bottom: 25px;
 }
 .input-wrapper-review4-p2-q1 {
-    position: relative;
-    display: inline-block;
-    /* width: 100%; */
+  position: relative;
+  display: inline-block;
+  /* width: 100%; */
 }
 .row-missing {
   display: flex;
   align-items: center;
   /* margin-bottom: 20px; */
 }
-.word-bank-review4-p2-q1{
-    display: flex;
-    gap: 5px;
-    margin: 15px 0 25px;
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
+.word-bank-review4-p2-q1 {
+  display: flex;
+  gap: 5px;
+  margin: 15px 0 25px;
+  flex-wrap: wrap;
+  border: 2px solid #4b74ff;
+  background-color: #f2f6ff;
+  border-radius: 8px;
+  padding: 10px;
+  /* height: 60px; */
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
 .num {
   width: 25px;
@@ -57,7 +57,7 @@
   margin: 0 6px;
   font-size: 20px;
   text-align: center;
-      height: 40px;
+  height: 40px;
   /* outline: none; */
 }
 
@@ -95,4 +95,38 @@
   width: auto;
   height: 80px;
   margin: 0 8px;
+}
+/* =====================================================
+   DRAG PATTERN - KEYBOARD
+===================================================== */
+
+.review4-p2-q1-bank-letter:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-letter-review4-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.missing-input-review4-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-review4-p2-q1 {
+  animation: keyboardDropPreviewReview4P2Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewReview4P2Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
 }

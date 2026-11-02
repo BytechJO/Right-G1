@@ -1,0 +1,113 @@
+/* =====================================================
+   WORD BANK TAB FOCUS
+===================================================== */
+
+[role="button"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD TARGET SLOT
+===================================================== */
+
+.keyboard-target-unit3-page6-q1 {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.18),
+    0 0 12px rgba(37, 99, 235, 0.3);
+}
+
+/* =====================================================
+   KEYBOARD WORD PREVIEW
+===================================================== */
+
+.keyboard-word-preview-unit3-page6-q1 {
+  padding: 3px 8px;
+
+  border: 2px dashed #2563eb;
+
+  border-radius: 6px;
+
+  color: #1d4ed8;
+
+  font-weight: 700;
+
+  background: #dbeafe;
+
+  animation: keyboard-preview-unit3-page6-q1 0.8s ease-in-out infinite;
+}
+
+/* =====================================================
+   REPLACE PREVIEW
+===================================================== */
+
+.keyboard-replace-preview-unit3-page6-q1 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  padding: 3px 8px;
+
+  border: 2px dashed #2563eb;
+
+  border-radius: 6px;
+
+  color: #1d4ed8;
+
+  background: #dbeafe;
+
+  font-weight: 700;
+
+  z-index: 3;
+
+  animation: keyboard-preview-unit3-page6-q1 0.8s ease-in-out infinite;
+}
+
+@keyframes keyboard-preview-unit3-page6-q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+/* مجرد Tab واقف على الخيار */
+.draggable-word-unit3-page6-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.15),
+    0 0 10px rgba(37, 99, 235, 0.3);
+}
+
+/* بعد Enter:
+   الخيار صار "ممسوك"
+   ويظل واضح حتى بعد انتقال focus للـslot
+*/
+.keyboard-picked-word-unit3-page6-q1 {
+  background: #dbeafe !important;
+
+  border-color: #2563eb !important;
+
+  color: #1d4ed8 !important;
+
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, 0.18),
+    0 0 12px rgba(37, 99, 235, 0.35);
+}
+.row-content10-review3-p2-q1 {
+  margin-bottom: 50px;
+}

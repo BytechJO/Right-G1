@@ -1,53 +1,246 @@
-import React, { useState, useRef, useEffect } from "react";
-import CD13_Pg14_Instruction1_AdultLady from "../../../assets/img_unit2/sounds-unit2/CD13.Pg14_Instruction1_Adult Lady.mp3";
+import React, { useEffect, useRef, useState } from "react";
+import { FaVolumeUp } from "react-icons/fa";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review8_Page2_Q1.css";
+
 import img1 from "../../../assets/unit8/imgs/U8P73EXED-01.svg";
 import img2 from "../../../assets/unit8/imgs/U8P73EXED-02.svg";
 
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+import closeEyesAudio from "../../../assets/unit8/sound/Page 73 - D/Close your eyes..mp3";
+import openMouthAudio from "../../../assets/unit8/sound/Page 73 - D/Open your mouth..mp3";
+import raiseHandAudio from "../../../assets/unit8/sound/Page 73 - D/Raise your hand..mp3";
+import touchHeadAudio from "../../../assets/unit8/sound/Page 73 - D/Touch your head..mp3";
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const items = [
+  {
+    img: img1,
+
+    alt: "Two boys facing each other; one boy is opening his mouth while the other looks at him.",
+
+    options: [
+      {
+        text: "Open your mouth.",
+        audio: openMouthAudio,
+      },
+      {
+        text: "Close your eyes.",
+        audio: closeEyesAudio,
+      },
+    ],
+
+    correctIndex: 0,
+  },
+
+  {
+    img: img2,
+
+    alt: "A smiling boy raising one hand high above his head.",
+
+    options: [
+      {
+        text: "Touch your head.",
+        audio: touchHeadAudio,
+      },
+      {
+        text: "Raise your hand.",
+        audio: raiseHandAudio,
+      },
+    ],
+
+    correctIndex: 1,
+  },
+];
+
+/* =====================================================
+   MAIN COMPONENT
+===================================================== */
+
 const Review8_Page2_Q1 = () => {
-  const [answers, setAnswers] = useState(Array(2).fill(null));
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false);
+  const [answers, setAnswers] = useState(Array(items.length).fill(null));
 
-  // 🔥 الداتا المطابقة للصورة
-  const items = [
-    {
-      img: img1,
-      text: "",
-      options: ["Open your mouth.", "Close your eyes."],
-      correctIndex: 0,
-    },
-    {
-      img: img2,
-      text: "",
-      options: ["Touch your head.", "Raise your hand."],
-      correctIndex: 1,
-    },
-  ];
+  /*
+    null | correct | wrong
+  */
+  const [results, setResults] = useState(Array(items.length).fill(null));
 
-  const handleSelect = (qIndex, optionIndex) => {
-    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    const newAns = [...answers];
-    newAns[qIndex] = optionIndex;
-    setAnswers(newAns);
-    setShowResult(false);
+  const [showAnswerMode, setShowAnswerMode] = useState(false);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
+  const audioRef = useRef(null);
+
+  const [playingKey, setPlayingKey] = useState(null);
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.onended = null;
+      audioRef.current.onerror = null;
+
+      audioRef.current = null;
+    }
+
+    setPlayingKey(null);
   };
 
-  const checkAnswers = () => {
-    if (locked || showResult) return; // ❌ لا يسمح بالتعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please circle all words first.");
+  const playAudio = (key, src) => {
+    if (!src) return;
+
+    stopAudio();
+
+    const audio = new Audio(src);
+
+    audioRef.current = audio;
+
+    setPlayingKey(key);
+
+    audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    });
+
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+
+    audio.onerror = audio.onended;
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const isQuestionCorrect = (index) =>
+    results[index] === "correct" || showAnswerMode;
+
+  const allCorrect = items.every((_, index) => results[index] === "correct");
+
+  /* =====================================================
+     SELECT
+  ===================================================== */
+
+  const handleSelect = (qIndex, optionIndex) => {
+    const questionCorrect = isQuestionCorrect(qIndex);
+
+    const option = items[qIndex].options[optionIndex];
+
+    /*
+      إذا السؤال صح:
+      الخيار الصح للصوت فقط
+    */
+
+    if (questionCorrect) {
+      if (optionIndex === items[qIndex].correctIndex) {
+        playAudio(`option-${qIndex}-${optionIndex}`, option.audio);
+      }
+
       return;
     }
 
-    let correctCount = answers.filter(
-      (ans, i) => ans === items[i].correctIndex,
-    ).length;
+    /*
+      قبل الصح:
+      اختيار + صوت
+    */
+
+    playAudio(`option-${qIndex}-${optionIndex}`, option.audio);
+
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      updated[qIndex] = optionIndex;
+
+      return updated;
+    });
+
+    /*
+      تعديل نفس السؤال:
+      شيل X عنه فقط
+    */
+
+    setResults((prev) => {
+      const updated = [...prev];
+
+      if (updated[qIndex] === "wrong") {
+        updated[qIndex] = null;
+      }
+
+      return updated;
+    });
+  };
+
+  /* =====================================================
+     CHECK
+  ===================================================== */
+
+  const checkAnswers = () => {
+    if (showAnswerMode || allCorrect) return;
+
+    const hasEmpty = items.some(
+      (_, index) => results[index] !== "correct" && answers[index] === null,
+    );
+
+    if (hasEmpty) {
+      ValidationAlert.info("Oops!", "Please circle all words first.");
+
+      return;
+    }
+
+    const nextResults = [...results];
+
+    let correctCount = 0;
+
+    items.forEach((item, index) => {
+      if (results[index] === "correct") {
+        nextResults[index] = "correct";
+        correctCount++;
+
+        return;
+      }
+
+      if (answers[index] === item.correctIndex) {
+        nextResults[index] = "correct";
+        correctCount++;
+      } else {
+        nextResults[index] = "wrong";
+      }
+    });
+
+    setResults(nextResults);
 
     const total = items.length;
 
-    let color =
+    const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const msg = `
@@ -58,26 +251,46 @@ const Review8_Page2_Q1 = () => {
       </div>
     `;
 
-    if (correctCount === total) ValidationAlert.success(msg);
-    else if (correctCount === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
-
-    setShowResult(true);
+    if (correctCount === total) {
+      ValidationAlert.success(msg);
+    } else if (correctCount === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
+  const showAnswers = () => {
+    stopAudio();
+
+    setAnswers(items.map((item) => item.correctIndex));
+
+    setResults(items.map(() => "correct"));
+
+    setShowAnswerMode(true);
+  };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const reset = () => {
-    setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setLocked(false);
-  };
-  const showAnswers = () => {
-    // كل سؤال → نضع correctIndex بدل null
-    const filled = items.map((item) => item.correctIndex);
+    stopAudio();
 
-    setAnswers(filled);
-    setShowResult(true);
-    setLocked(true); // 🔒 قفل الإجابات
+    setAnswers(Array(items.length).fill(null));
+
+    setResults(Array(items.length).fill(null));
+
+    setShowAnswerMode(false);
   };
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <div
@@ -93,92 +306,161 @@ const Review8_Page2_Q1 = () => {
         className="div-forall"
         style={{
           gap: "90px",
-      
         }}
       >
-        <div  className="w-full">
-          <h5 className="header-title-page8">
-            <span className="mr-2">D</span> Look, read, and tap or click the
-            correct sentence.
-          </h5>
-        </div>
-        <div className="container-review8-p2-q1 w-full">
-          {items.map((q, i) => (
-            <div
-              key={i}
-              className="question-box-review6-p1-q1"
-              style={{ width: "100%" }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  width: "80%",
-                }}
-              ></div>
+        <ExerciseHeaderReview
+          sectionLetter="D"
+          title="Look, read, and circle."
+          subTitle="Look at each picture, then tap the sentence that describes it."
+        />
 
-              <div style={{ display: "flex", gap: "10px" }}>
-                <span
+        <div className="container-review8-p2-q1 w-full">
+          {items.map((q, i) => {
+            const questionCorrect = isQuestionCorrect(i);
+
+            const isWrongQuestion = results[i] === "wrong";
+
+            return (
+              <div
+                key={i}
+                className="question-box-review6-p1-q1"
+                style={{ width: "100%" }}
+              >
+                <div
                   style={{
-                    color: "#2c5287",
-                    fontSize: "20px",
-                    fontWeight: "700",
+                    display: "flex",
+                    gap: "10px",
                   }}
                 >
-                  {i + 1}
-                </span>
-                <div className="img-div-review6-p1-q1">
-                  <img
-                    src={q.img}
-                    className="q3-image-review6-p1-q1"
-                    style={{ height: "150px", width: "auto" }}
-                  />
-                </div>
+                  {/* NUMBER */}
 
-                <div className="options-row-review6-p1-q1">
-                  {q.options.map((word, optIndex) => {
-                    const isSelected = answers[i] === optIndex;
-                    const isCorrect = optIndex === q.correctIndex;
+                  <span
+                    style={{
+                      color: "#2c5287",
+                      fontSize: "20px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
 
-                    return (
-                      <p
-                        key={optIndex}
-                        className={`
-                    option-word-review6-p1-q1
-                    ${isSelected ? "selected3" : ""}
-                    ${showResult && isSelected && !isCorrect ? "wrong" : ""}
-                    ${showResult && isCorrect ? "correct" : ""}
-                  `}
-                        onClick={() => handleSelect(i, optIndex)}
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
-                      >
-                        {word}
-                        {showResult && isSelected && !isCorrect && !locked && (
-                          <span className="wrong-x-review4-p2-q3">✕</span>
-                        )}
-                      </p>
-                    );
-                  })}
+                  {/* IMAGE */}
+
+                  <div className="img-div-review6-p1-q1 w-full">
+                    <img
+                      src={q.img}
+                      alt={q.alt}
+                      className="q3-image-review6-p1-q1"
+                      style={{
+                        height: "200px",
+                        width: "auto",
+                      }}
+                    />
+                  </div>
+
+                  {/* OPTIONS */}
+
+                  <div className="options-row-review6-p1-q1">
+                    {q.options.map((option, optIndex) => {
+                      const isSelected = answers[i] === optIndex;
+
+                      const isCorrect = optIndex === q.correctIndex;
+
+                      const isWrongSelected = isWrongQuestion && isSelected;
+
+                      /*
+                        بعد السؤال الصح:
+                        الصحيح فقط يظل tabbable للصوت
+                      */
+
+                      const audioAccessible = questionCorrect && isCorrect;
+
+                      const playing = playingKey === `option-${i}-${optIndex}`;
+
+                      return (
+                        <p
+                          key={optIndex}
+                          role="button"
+                          tabIndex={
+                            questionCorrect ? (audioAccessible ? 0 : -1) : 0
+                          }
+                          aria-disabled={questionCorrect && !audioAccessible}
+                          aria-pressed={isSelected}
+                          aria-label={
+                            audioAccessible
+                              ? `${option.text} Correct answer. Press Enter or Space to play audio.`
+                              : `${option.text}${
+                                  isSelected ? " Selected." : ""
+                                }`
+                          }
+                          className={`
+                            option-word-review6-p1-q1
+
+                            ${isSelected ? "selected3" : ""}
+
+                            ${isWrongSelected ? "wrong" : ""}
+
+                            ${questionCorrect && isCorrect ? "correct" : ""}
+                          `}
+                          onClick={() => handleSelect(i, optIndex)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              handleSelect(i, optIndex);
+                            }
+                          }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "relative",
+                          }}
+                        >
+                          {option.text}
+
+                          {/* AUDIO ICON */}
+
+                          {playing && (
+                            <FaVolumeUp
+                              aria-hidden="true"
+                              className="audio-icon-review8-p2-q1"
+                            />
+                          )}
+
+                          {/* WRONG X */}
+
+                          {isWrongSelected && (
+                            <span
+                              className="wrong-x-review4-p2-q3"
+                              aria-hidden="true"
+                            >
+                              ✕
+                            </span>
+                          )}
+                        </p>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      {/* BUTTONS */}
+
       <div className="action-buttons-container">
         <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
+
         <button onClick={showAnswers} className="show-answer-btn">
           Show Answer
         </button>
+
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>

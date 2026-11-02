@@ -42,3 +42,89 @@
   width: 100%;
   display: flex;
 }
+/* =====================================================
+   DRAG PATTERN - KEYBOARD
+===================================================== */
+
+.review4-p1-q4-bank-chip:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-review4-p1-q4 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.q-input-review4-p1-q4:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-drop-preview-review4-p1-q4 {
+  animation: keyboardDropPreviewReview4P1Q4 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewReview4P1Q4 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   QUESTION AUDIO
+===================================================== */
+
+.question-audio-review4-p1-q4:focus {
+  outline: none;
+}
+
+.question-audio-review4-p1-q4:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 5px;
+}
+
+.question-audio-icon-review4-p1-q4 {
+  position: absolute;
+
+  top: -9px;
+  right: -20px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   WORD BANK AUDIO
+===================================================== */
+
+.audio-icon-review4-p1-q4 {
+  position: absolute;
+
+  top: -9px;
+  right: -9px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  padding: 2px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}

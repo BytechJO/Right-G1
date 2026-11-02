@@ -8,17 +8,27 @@
   width: 60%;
 }
 
+/* =====================================================
+   TABLE
+===================================================== */
 
 .unit4-q2-p6-table {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  width: 100%;
 }
+
+/* =====================================================
+   QUESTION ROW
+===================================================== */
 
 .unit4-q2-p6-row {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  gap: 30px;
+  width: 100%;
 }
 
 .unit4-q2-p6-text {
@@ -28,54 +38,202 @@
   width: 40%;
 }
 
+/* =====================================================
+   ANSWER AREA
+===================================================== */
+
+.unit4-q2-p6-answer-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
 .unit4-q2-p6-canvas {
   border: 3px solid #6ec1ff;
   background: #ffffff;
   border-radius: 12px;
+
   height: 100px !important;
   width: 270px !important;
+
   box-sizing: border-box;
-  cursor: crosshair;
+
+  touch-action: none;
+
+  user-select: none;
 }
 
+.unit4-q2-p6-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
 
-/* حاوية الأدوات */
+/* =====================================================
+   TOOL BAR
+===================================================== */
+
 .unit4-q2-p6-tools {
   display: flex;
   gap: 10px;
-  /* margin-bottom: 15px; */
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-/* زر الأداة */
+/* =====================================================
+   TOOL BUTTON
+===================================================== */
+
 .unit4-q2-p6-tool-btn {
   padding: 6px 14px;
+
   border: 1.5px solid #ccc;
+
   border-radius: 20px;
+
   background: #f9f9f9;
+
   font-size: 14px;
-  /* cursor: pointer; */
-  transition: all 0.2s ease;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
-/* Hover */
 .unit4-q2-p6-tool-btn:hover {
   background: #eee;
 }
 
-/* الأداة المختارة */
+.unit4-q2-p6-tool-btn:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   ACTIVE TOOL
+===================================================== */
+
 .unit4-q2-p6-tool-btn.active-tool {
   background: #e6ddff;
+
   border-color: #7b5cff;
+
   color: #4b2fb8;
+
   font-weight: 600;
 }
 
+/* =====================================================
+   KEYBOARD OPTIONS
+===================================================== */
 
-/* .canvas-pen {
-  cursor: url('/src/assets/unit1/imgs/pencil.png'), auto;
+.unit4-q2-p6-keyboard-options {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+  padding-top: 4px;
 }
 
-.canvas-eraser {
-  cursor: url('/src/assets/unit1/imgs/eraser.png'), auto;
-} */
+/* =====================================================
+   SHAPE BUTTON
+===================================================== */
+
+.unit4-q2-p6-shape-btn {
+  padding: 5px 10px;
+
+  border: 2px solid #8cc2f5;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #2c5287;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.unit4-q2-p6-shape-btn:hover {
+  background: #eef7ff;
+}
+
+.unit4-q2-p6-shape-btn:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+
+  transform: scale(1.06);
+}
+
+/* =====================================================
+   SELECTED SHAPE
+===================================================== */
+
+.unit4-q2-p6-shape-btn.selected-shape {
+  background: #dbeafe;
+
+  border-color: #2563eb;
+
+  color: #1e3a8a;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1024px) {
+  .unit4-q2-p6-row {
+    gap: 15px;
+  }
+
+  .unit4-q2-p6-text {
+    width: 35%;
+  }
+
+  .unit4-q2-p6-canvas {
+    width: 240px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .unit4-q2-p6-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .unit4-q2-p6-text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .unit4-q2-p6-canvas {
+    width: 270px !important;
+    max-width: 100%;
+  }
+}

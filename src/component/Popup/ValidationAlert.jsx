@@ -21,8 +21,8 @@ const ValidationAlert = {
       imageHeight: 200,
       background: "#dfeaf6",
       confirmButtonText: "Good Job",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       buttonsStyling: false,
       customClass: {
         popup: "my-popup",
@@ -50,8 +50,8 @@ const ValidationAlert = {
       imageHeight: 200,
       background: "#fff4d9",
       confirmButtonText: "Continue",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       buttonsStyling: false,
       customClass: {
         popup: "my-popup",
@@ -79,8 +79,8 @@ const ValidationAlert = {
       imageHeight: 200,
       background: "#fde4e4",
       confirmButtonText: "Try Again",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       buttonsStyling: false,
       customClass: {
         popup: "my-popup",
@@ -102,8 +102,8 @@ const ValidationAlert = {
       imageHeight: 200,
       background: "#dfeaf6",
       confirmButtonText: "OK",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
       buttonsStyling: false,
       customClass: {
         popup: "my-popup",

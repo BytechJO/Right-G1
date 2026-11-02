@@ -33,6 +33,7 @@ import Unit3_Page5_Q1 from "./unit3/Unit3_Page5_Q1";
 import Unit3_Page5_Q2 from "./unit3/Unit3_Page5_Q2";
 import Unit3_Page5_Q3 from "./unit3/Unit3_Page5_Q3";
 import Unit3_Page5_Q4 from "./unit3/Unit3_Page5_Q4";
+import Unit3_Page6_Q1 from "./unit3/Unit3_Page6_Q1";
 import Unit3_Page6_Q2 from "./unit3/Unit3_Page6_Q2";
 import Unit3_Page6_Q3 from "./unit3/Unit3_Page6_Q3";
 
@@ -61,12 +62,14 @@ import Unit5_Page5_Q2 from "./unit5/Unit5_Page5_Q2";
 import Unit5_Page5_Q3 from "./unit5/Unit5_Page5_Q3";
 import Unit5_Page5_Q4 from "./unit5/Unit5_Page5_Q4";
 import Unit5_Page6_Q1 from "./unit5/Unit5_Page6_Q1";
+import Unit5_Page6_Q2 from "./unit5/Unit5_Page6_Q2";
 import Unit5_Page6_Q3 from "./unit5/Unit5_Page6_Q3";
 
 import Unit6_Page5_Q1 from "./unit6/Unit6_Page5_Q1";
 import Unit6_Page5_Q2 from "./unit6/Unit6_Page5_Q2";
 import Unit6_Page5_Q3 from "./unit6/Unit6_Page5_Q3";
 import Unit6_Page5_Q4 from "./unit6/Unit6_Page5_Q4";
+import Unit6_Page6_Q1 from "./unit6/Unit6_Page6_Q1";
 import Unit6_Page6_Q2 from "./unit6/Unit6_Page6_Q2";
 import Unit6_Page6_Q3 from "./unit6/Unit6_Page6_Q3";
 
@@ -87,6 +90,7 @@ import Unit7_Page5_Q1 from "./unit7/Unit7_Page5_Q1";
 import Unit7_Page5_Q2 from "./unit7/Unit7_Page5_Q2";
 import Unit7_Page5_Q3 from "./unit7/Unit7_Page5_Q3";
 import Unit7_Page5_Q4 from "./unit7/Unit7_Page5_Q4";
+import Unit7_Page6_Q1 from "./unit7/Unit7_Page6_Q1";
 import Unit7_Page6_Q2 from "./unit7/Unit7_Page6_Q2";
 import Unit7_Page6_Q3 from "./unit7/Unit7_Page6_Q3";
 
@@ -95,6 +99,7 @@ import Unit8_Page5_Q2 from "./unit8/Unit8_Page5_Q2";
 import Unit8_Page5_Q3 from "./unit8/Unit8_Page5_Q3";
 import Unit8_Page5_Q4 from "./unit8/Unit8_Page5_Q4";
 import Unit8_Page6_Q1 from "./unit8/Unit8_Page6_Q1";
+import Unit8_Page6_Q2 from "./unit8/Unit8_Page6_Q2";
 import Unit8_Page6_Q3 from "./unit8/Unit8_Page6_Q3";
 
 import Review7_Page1_Q1 from "./Review_Unit7,8/Review7_Page1_Q1";
@@ -122,6 +127,7 @@ import Unit10_Page5_Q1 from "./unit10/Unit10_Page5_Q1";
 import Unit10_Page5_Q2 from "./unit10/Unit10_Page5_Q2";
 import Unit10_Page5_Q3 from "./unit10/Unit10_Page5_Q3";
 import Unit10_Page5_Q4 from "./unit10/Unit10_Page5_Q4";
+import Unit10_Page6_Q1 from "./unit10/Unit10_Page6_Q1";
 import Unit10_Page6_Q2 from "./unit10/Unit10_Page6_Q2";
 import Unit10_Page6_Q3 from "./unit10/Unit10_Page6_Q3";
 
@@ -175,6 +181,7 @@ export const lessons = [
   { component: Unit3_Page5_Q2, unit: 3 },
   { component: Unit3_Page5_Q3, unit: 3 },
   { component: Unit3_Page5_Q4, unit: 3 },
+  { component: Unit3_Page6_Q1, unit: 3 },
   { component: Unit3_Page6_Q2, unit: 3 },
   { component: Unit3_Page6_Q3, unit: 3, lastOfUnit: true }, //30
 
@@ -206,12 +213,14 @@ export const lessons = [
   { component: Unit5_Page5_Q3, unit: 5 },
   { component: Unit5_Page5_Q4, unit: 5 },
   { component: Unit5_Page6_Q1, unit: 5 },
+  { component: Unit5_Page6_Q2, unit: 5 },
   { component: Unit5_Page6_Q3, unit: 5, lastOfUnit: true }, //54
 
   { component: Unit6_Page5_Q1, unit: 6 },
   { component: Unit6_Page5_Q2, unit: 6 },
   { component: Unit6_Page5_Q3, unit: 6 },
   { component: Unit6_Page5_Q4, unit: 6 },
+  { component: Unit6_Page6_Q1, unit: 6 },
   { component: Unit6_Page6_Q2, unit: 6 },
   { component: Unit6_Page6_Q3, unit: 6, lastOfUnit: true }, //60
 
@@ -233,6 +242,7 @@ export const lessons = [
   { component: Unit7_Page5_Q2, unit: 7 }, //74
   { component: Unit7_Page5_Q3, unit: 7 }, //75
   { component: Unit7_Page5_Q4, unit: 7 }, //76
+  { component: Unit7_Page6_Q1, unit: 7 }, //77
   { component: Unit7_Page6_Q2, unit: 7 }, //77
   { component: Unit7_Page6_Q3, unit: 7, lastOfUnit: true }, //78
 
@@ -241,6 +251,7 @@ export const lessons = [
   { component: Unit8_Page5_Q3, unit: 8 }, //81
   { component: Unit8_Page5_Q4, unit: 8 }, //82
   { component: Unit8_Page6_Q1, unit: 8 }, //83
+  { component: Unit8_Page6_Q2, unit: 8 }, //83
   { component: Unit8_Page6_Q3, unit: 8, lastOfUnit: true }, //84
 
   { component: Review7_Page1_Q1, unit: 8, isReview: true }, //85
@@ -268,6 +279,7 @@ export const lessons = [
   { component: Unit10_Page5_Q2, unit: 10 }, //105
   { component: Unit10_Page5_Q3, unit: 10 }, //106
   { component: Unit10_Page5_Q4, unit: 10 }, //107
+  { component: Unit10_Page6_Q1, unit: 10 }, //108
   { component: Unit10_Page6_Q2, unit: 10 }, //108
   { component: Unit10_Page6_Q3, unit: 10, lastOfUnit: true }, //109
 

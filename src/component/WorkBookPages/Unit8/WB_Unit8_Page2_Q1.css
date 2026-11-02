@@ -25,3 +25,29 @@
   font-weight: 700;
   color: #2c5287;
 }
+/* =====================================================
+   ACCESSIBILITY - KEYBOARD FOCUS
+===================================================== */
+
+.unit4-q2-p6-tool-btn:focus-visible,
+.try-again-button:focus-visible,
+.wb-unit4-p3-q2-draw-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   DRAWING CANVAS
+===================================================== */
+
+.wb-unit4-p3-q2-draw-canvas {
+  touch-action: none;
+}
+
+/* =====================================================
+   ACTIVE TOOL
+===================================================== */
+
+.unit4-q2-p6-tool-btn[aria-pressed="true"] {
+  font-weight: 600;
+}

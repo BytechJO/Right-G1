@@ -1,151 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
+
 import find_img from "../../../assets/img_unit2/imgs/02-03 New copy.jpg";
-import Rabbit from "../../../assets/img_unit2/imgs/Rabbit.svg";
-import ValidationAlert from "../../Popup/ValidationAlert";
 import MySVG from "../../../assets/img_unit2/imgs/U2P10 highlight.svg";
 
+import targetAudio from "../../../assets/unit2/Page 10/boat.mp3";
+
+import FindQuestion from "../../FindQuestion";
+
+const targetArea = {
+  x1: 18,
+  y1: 67.5,
+  x2: 24,
+  y2: 74,
+};
+
 const Unit2_Page1_find = () => {
-  const [clickedPoint, setClickedPoint] = useState(null);
-  const [checkResult, setCheckResult] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
-  // ✅ منطقة المطعم (بالنسب المئوية)
-  const targetArea = {
-    x1: 18,
-    y1: 69,
-    x2: 24,
-    y2: 74,
-  };
-
-  const handleImageClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
-
-    setClickedPoint({
-      x: xPercent,
-      y: yPercent,
-      inside:
-        xPercent >= targetArea.x1 &&
-        xPercent <= targetArea.x2 &&
-        yPercent >= targetArea.y1 &&
-        yPercent <= targetArea.y2,
-    });
-  };
-
-  const handleCheck = () => {
-    if (showAnswer) return;
-    if (!clickedPoint) {
-      ValidationAlert.info(
-        "Pay attention!",
-        "Please click on the image first.",
-      );
-      return;
-    }
-
-    if (clickedPoint.inside) {
-      setCheckResult("success");
-      ValidationAlert.success("Bravo!", "You clicked on the restaurant! 🏆");
-    } else {
-      setCheckResult("fail");
-      ValidationAlert.error("Oops!", "This is not the restaurant. Try again!");
-    }
-  };
-
-  const handleStartAgain = () => {
-    setClickedPoint(null);
-    setCheckResult(null);
-    setShowAnswer(false);
-  };
-
-  const handleShowAnswer = () => {
-    setShowAnswer(true);
-    setClickedPoint(null); // نمسح النقطة اللي كبسها الطالب
-    setCheckResult("success"); // اختيارية إذا بدك يظهر نجاح
-  };
-
   return (
-    <div>
-      <div
-        style={{
-          textAlign: "center",
-          display: "flex",
-           gap:"40px",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <img src={Rabbit} style={{ height: "50px", width: "auto" }} />{" "}
-          <h5 className="header-title-page8">
-            I need your help. Can you help me find the boat in the picture?
-          </h5>
-        </div>
-        <div style={{ position: "relative", display: "inline-block" }}>
-          <img
-            src={find_img}
-            alt="interactive"
-            style={{
-              width: "auto",
-              height: "75vh",
-              borderRadius: "8px",
-              cursor: "pointer",
-              display: "block",
-            }}
-            onClick={handleImageClick}
-          />
-
-          {/* ✅ الدائرة الحمراء في مكان الكبس */}
-          {clickedPoint && (
-            <div
-              style={{
-                position: "absolute",
-                top: `${clickedPoint.y}%`,
-                left: `${clickedPoint.x}%`,
-                width: "3%",
-                height: "3%",
-                backgroundColor: "red",
-                borderRadius: "50%",
-                transform: "translate(-50%, -50%)",
-                pointerEvents: "none",
-              }}
-            ></div>
-          )}
-
-          {/* ✅ تلوين المنطقة الصحيحة إذا الجواب صح */}
-          {(checkResult === "success" || showAnswer) && (
-            <img
-              src={MySVG}
-              alt="answer highlight"
-              style={{
-                position: "absolute",
-                top: `67%`,
-                left: `18.5%`,
-                height: `7%`,
-                pointerEvents: "none",
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <div className="action-buttons-container ">
-        <button className="try-again-button" onClick={handleStartAgain}>
-          Start Again ↻
-        </button>
-        <button className="show-answer-btn" onClick={handleShowAnswer}>
-          Show Answer
-        </button>
-        <button className="check-button2" onClick={handleCheck}>
-          Check Answer ✓
-        </button>
-      </div>
-    </div>
+    <FindQuestion
+      title="I need your help. Can you help me find the boat in the picture?"
+      subtitle="Look carefully around the party, then tap the boat."
+      image={find_img}
+      imageAlt="A birthday party scene with children, decorations, balloons, cake, gifts, and a small boat hidden in the scene."
+      targetName="boat"
+      targetArea={targetArea}
+      answerHighlight={MySVG}
+      targetAudio={targetAudio}
+      imageHeight="75vh"
+      highlightTop="67%"
+      highlightLeft="18.5%"
+      highlightHeight="7%"
+      targetAriaLabel="Select the boat"
+      pointerSelectedMessage="A point in the birthday party scene was selected. Use Check Answer to check it."
+      keyboardSelectedMessage="Boat selected. Use Check Answer to check your answer."
+      correctAnnouncement="Correct. You found the boat."
+      correctAlertMessage="You found the boat! 🏆"
+      wrongAnnouncement="That is not the boat. Try again."
+      wrongAlertMessage="This is not the boat. Try again!"
+      resetAnnouncement="Activity reset. Find the boat."
+      showAnswerAnnouncement="The boat is highlighted."
+    />
   );
 };
 

@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import img1 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-01.svg";
 import img2 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-03.svg";
 import img3 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-02.svg";
 import img4 from "../../../assets/U1 WB/U1/SVG/U1P4EXEC-04.svg";
+
+// AUDIO
+import goodbyeAudio from "../../../assets/U1 WB/U1/page_4/Item_002_Goodbye!.mp3";
+import goodMorningAudio from "../../../assets/U1 WB/U1/page_4/Item_004_Good_morning!.mp3";
+import goodAfternoonAudio from "../../../assets/U1 WB/U1/page_4/Item_003_Good_afternoon!.mp3";
+import helloStellaAudio from "../../../assets/U1 WB/U1/page_4/Item_001_Hello!_I'm_Stella.mp3";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 import {
@@ -17,43 +25,136 @@ import {
 } from "@dnd-kit/core";
 
 import "./WB_Unit1_Page4_Q1.css";
+import ExerciseHeader from "../../ExerciseHeader";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ======================================================
+// DATA
+// ======================================================
 
 const data = [
-  { img: img1, answer: "Goodbye!" },
-  { img: img2, answer: "Good morning!" },
-  { img: img3, answer: "Good afternoon!" },
-  { img: img4, answer: "Hello! I'm Stella." },
+  {
+    img: img1,
+    answer: "Goodbye!",
+    audio: goodbyeAudio,
+    alt: "A girl waving goodbye to two people standing at the door.",
+  },
+  {
+    img: img2,
+    answer: "Good morning!",
+    audio: goodMorningAudio,
+    alt: "A girl waking up in bed while a man greets her.",
+  },
+  {
+    img: img3,
+    answer: "Good afternoon!",
+    audio: goodAfternoonAudio,
+    alt: "A person riding a bicycle outside during the day.",
+  },
+  {
+    img: img4,
+    answer: "Hello! I'm Stella.",
+    audio: helloStellaAudio,
+    alt: "Two girls standing and talking to each other.",
+  },
 ];
 
-// ─── Bank Chip (Draggable) ─────────────────────────────────────────────────────
+// ======================================================
+// BANK CHIP
+// ======================================================
 
-const BankChip = ({ id, word, isUsed, locked }) => {
+const BankChip = ({
+  id,
+  word,
+  isUsed,
+  locked,
+  showAnswer,
+  selectedWordId,
+  onSelect,
+  registerRef,
+}) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
     disabled: isUsed || locked,
   });
 
+  const isSelected = selectedWordId === id;
+
+  const anotherWordSelected = selectedWordId && !isSelected;
+
+  const setRefs = (node) => {
+    setNodeRef(node);
+
+    if (registerRef) {
+      registerRef(id, node);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (isUsed || locked) return;
+
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onSelect(id);
+    }
+  };
+
   return (
     <span
-      ref={setNodeRef}
+      ref={setRefs}
       {...listeners}
       {...attributes}
+      role="button"
+      tabIndex={isUsed || locked || anotherWordSelected ? -1 : 0}
+      aria-disabled={isUsed || locked}
+      aria-pressed={isSelected}
+      aria-label={
+        isSelected
+          ? `${word}. Selected. Use Tab to choose an answer box.`
+          : `${word}. Press Enter or Space to select and hear it.`
+      }
+      onKeyDown={handleKeyDown}
+      onClick={(e) => {
+        if (isUsed || locked || isDragging) {
+          return;
+        }
+
+        e.stopPropagation();
+
+        onSelect(id);
+      }}
       style={{
-        padding: "2px 5px",
-        border: `2px solid ${isUsed ? "#b0b0b0" : "#2c5287"}`,
+        padding: "4px 8px",
+
+        border: `2px solid ${
+          isSelected ? "#2563eb" : isUsed ? "#b0b0b0" : "#2c5287"
+        }`,
+
         borderRadius: "8px",
-        background: isUsed ? "#e0e0e0" : "white",
+
+        background: isSelected ? "#dbeafe" : isUsed ? "#e0e0e0" : "white",
+
         fontWeight: "bold",
+
         color: isUsed ? "#999" : undefined,
-        cursor: isUsed || locked ? "not-allowed" : isDragging ? "grabbing" : "grab",
-        opacity: isDragging ? 0.35 : 1,
-        transition: "opacity 0.2s, background 0.2s, border-color 0.2s, color 0.2s",
+
+        cursor: isUsed || locked ? "default" : isDragging ? "grabbing" : "grab",
+
+        opacity: isDragging || showAnswer ? 0.35 : 1,
+
+        transition: "all 0.15s",
+
         userSelect: "none",
         touchAction: "none",
+
         display: "inline-block",
+
         pointerEvents: isUsed ? "none" : undefined,
+
+        outline: isSelected ? "3px solid #2563eb" : undefined,
+
+        outlineOffset: "3px",
       }}
     >
       {word}
@@ -61,35 +162,191 @@ const BankChip = ({ id, word, isUsed, locked }) => {
   );
 };
 
-// ─── Slot Drop Zone (Droppable) ───────────────────────────────────────────────
+// ======================================================
+// DROP ZONE
+// ======================================================
 
-const SlotDropZone = ({ id, value, activeWord, isWrong, showAnswer, answerText, locked, onRemove }) => {
-  const { setNodeRef, isOver } = useDroppable({ id });
+const SlotDropZone = ({
+  id,
+  value,
+  activeWord,
 
-  const displayValue = showAnswer ? answerText : (isOver && activeWord ? activeWord : value);
-  const isPlaceholder = !showAnswer && isOver && activeWord && !value;
+  isWrong,
+
+  showAnswer,
+  answerText,
+
+  locked,
+
+  selectedWord,
+  selectedWordId,
+
+  onKeyboardDrop,
+  onRemove,
+
+  registerDropRef,
+}) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id,
+    disabled: locked || showAnswer,
+  });
+
+  const [isFocused, setIsFocused] = useState(false);
+
+  const isKeyboardTarget =
+    Boolean(selectedWordId) && isFocused && !locked && !showAnswer;
+
+  const setRefs = (node) => {
+    setNodeRef(node);
+
+    if (registerDropRef) {
+      registerDropRef(id, node);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (showAnswer || locked) {
+      return;
+    }
+
+    if (selectedWordId && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onKeyboardDrop(id);
+
+      return;
+    }
+
+    if (!selectedWordId && value && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onRemove(id);
+    }
+  };
 
   return (
-    <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-      <input
-        ref={setNodeRef}
-        className={`missing-input-wb-unit1-p3-q1${isOver && !showAnswer ? " drag-over-cell" : ""}`}
-        style={{
-          width: "100%",
-          height: "40px",
-          borderBottom: "2px solid black",
-          fontSize: "20px",
-          fontWeight: "600",
-          background: isOver && !showAnswer ? "#e3f2fd" : undefined,
-          // color: isPlaceholder ? "#90a4ae" : undefined,
-          cursor: value && !locked && !showAnswer ? "pointer" : "default",
-          transition: "background 0.15s, color 0.15s",
+    <div className="slot-wrapper-wb-u1-p4-q1">
+      <div
+        ref={setRefs}
+        role="button"
+        aria-disabled={locked || showAnswer}
+        tabIndex={
+          showAnswer || locked ? -1 : selectedWordId ? 0 : value ? 0 : -1
+        }
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        aria-label={
+          locked
+            ? `Correct answer ${value}. Answer locked.`
+            : selectedWordId
+              ? `Answer box. Press Enter or Space to place ${selectedWord}.`
+              : value
+                ? `${value}. Press Enter or Space to return it to the word bank.`
+                : "Empty answer box."
+        }
+        onKeyDown={handleKeyDown}
+        onClick={() => {
+          if (value && !selectedWordId && !locked && !showAnswer) {
+            onRemove(id);
+          }
         }}
-        value={value || ""}
-        readOnly
-        onClick={() => { if (value && !locked && !showAnswer) onRemove(id); }}
-        title={value && !locked && !showAnswer ? "Click to remove" : ""}
-      />
+        className={`missing-input-wb-unit1-p3-q1${
+          isOver && !showAnswer && !locked ? " drag-over-cell" : ""
+        }`}
+        style={{
+          flex: 1,
+
+          minWidth: "220px",
+
+          height: "40px",
+
+          borderBottom: "2px solid black",
+
+          fontSize: "20px",
+
+          fontWeight: "600",
+
+          display: "flex",
+
+          alignItems: "center",
+
+          padding: "0 8px",
+
+          background: locked
+            ? undefined
+            : isKeyboardTarget
+              ? "#eff6ff"
+              : isOver && !showAnswer
+                ? "#e3f2fd"
+                : undefined,
+
+          outline:
+            !locked && isKeyboardTarget ? "3px solid #2563eb" : undefined,
+
+          outlineOffset: "3px",
+
+          cursor: locked
+            ? "default"
+            : isKeyboardTarget
+              ? "pointer"
+              : value && !showAnswer
+                ? "pointer"
+                : "default",
+
+          transition: "background 0.15s, outline 0.15s",
+
+          position: "relative",
+        }}
+      >
+        {showAnswer ? (
+          answerText
+        ) : (
+          <>
+            {value && <span>{value}</span>}
+
+            {isKeyboardTarget && selectedWord && (
+              <span
+                aria-hidden="true"
+                style={{
+                  marginLeft: value ? "10px" : "0",
+
+                  padding: "3px 10px",
+
+                  border: "2px dashed #2563eb",
+
+                  borderRadius: "7px",
+
+                  color: "#2563eb",
+
+                  background: "rgba(219,234,254,0.5)",
+
+                  animation:
+                    "keyboardDropPulse 0.8s ease-in-out infinite alternate",
+
+                  pointerEvents: "none",
+
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {selectedWord}
+              </span>
+            )}
+
+            {!selectedWordId && isOver && activeWord && !value && !locked && (
+              <span
+                style={{
+                  color: "#2563eb",
+                }}
+              >
+                {activeWord}
+              </span>
+            )}
+          </>
+        )}
+      </div>
+
       {!showAnswer && isWrong && (
         <div className="wrong-icon-wb-u1-p4-q1">✕</div>
       )}
@@ -97,209 +354,698 @@ const SlotDropZone = ({ id, value, activeWord, isWrong, showAnswer, answerText, 
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ======================================================
+// MAIN COMPONENT
+// ======================================================
 
 export default function WB_Unit1_Page4_Q1() {
   const [inputs, setInputs] = useState(["", "", "", ""]);
+
   const [wrong, setWrong] = useState([false, false, false, false]);
+
   const [showAnswer, setShowAnswer] = useState(false);
-  const [locked, setLocked] = useState(false);
+
+  // كل خانة صح تتقفل لحالها
+  const [lockedSlots, setLockedSlots] = useState([false, false, false, false]);
+
+  // بعد النجاح النهائي فقط
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
   const [activeId, setActiveId] = useState(null);
 
+  const [selectedWordId, setSelectedWordId] = useState(null);
+
+  const [announcement, setAnnouncement] = useState("");
+
+  // ====================================================
+  // AUDIO
+  // ====================================================
+
+  const audioRef = useRef(null);
+
+  const stopAudio = () => {
+    if (!audioRef.current) {
+      return;
+    }
+
+    audioRef.current.pause();
+
+    audioRef.current.currentTime = 0;
+
+    audioRef.current = null;
+  };
+
+  const playWordAudio = (word) => {
+    const item = data.find((item) => item.answer === word);
+
+    if (!item?.audio) {
+      return;
+    }
+
+    stopAudio();
+
+    const audio = new Audio(item.audio);
+
+    audioRef.current = audio;
+
+    audio.play().catch(() => {});
+
+    audio.onended = () => {
+      audioRef.current = null;
+    };
+  };
+
+  // ====================================================
+  // REFS
+  // ====================================================
+
+  const bankRefs = useRef({});
+
+  const dropRefs = useRef({});
+
+  const registerBankRef = (id, node) => {
+    if (node) {
+      bankRefs.current[id] = node;
+    } else {
+      delete bankRefs.current[id];
+    }
+  };
+
+  const registerDropRef = (id, node) => {
+    if (node) {
+      dropRefs.current[id] = node;
+    } else {
+      delete dropRefs.current[id];
+    }
+  };
+
+  // ====================================================
+  // DND
+  // ====================================================
+
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
   );
 
-  // استخرج الكلمة من الـ id (format: "bank-answer-index")
-  const parseWord = (id) =>
-    id.split("-").slice(1, -1).join("-");
+  const parseWord = (id) => String(id).split("-").slice(1, -1).join("-");
 
   const activeWord = activeId ? parseWord(activeId) : null;
 
+  const selectedWord = selectedWordId ? parseWord(selectedWordId) : null;
+
   const isWordUsed = (word) => inputs.includes(word);
 
-  // ─── Drag Handlers ────────────────────────────────────────────────────────
+  // ====================================================
+  // DRAG START
+  // ====================================================
 
-  const handleDragStart = ({ active }) => setActiveId(active.id);
+  const handleDragStart = ({ active }) => {
+    setActiveId(active.id);
+  };
+
+  // ====================================================
+  // DRAG END
+  // ====================================================
 
   const handleDragEnd = ({ active, over }) => {
     setActiveId(null);
-    if (!over || showAnswer || locked) return;
+
+    if (!over || showAnswer || checkCompleted) {
+      return;
+    }
 
     const word = parseWord(active.id);
-    if (!over.id.startsWith("blank-")) return;
 
-    const destIndex = Number(over.id.replace("blank-", ""));
+    const destination = String(over.id);
+
+    if (!destination.startsWith("blank-")) {
+      return;
+    }
+
+    const destIndex = Number(destination.replace("blank-", ""));
+
+    if (lockedSlots[destIndex]) {
+      return;
+    }
+
+    let oldIndex = -1;
 
     setInputs((prev) => {
       const updated = [...prev];
-      // شيل الكلمة من مكانها القديم
-      updated.forEach((val, i) => { if (val === word) updated[i] = ""; });
+
+      updated.forEach((currentValue, index) => {
+        if (currentValue === word) {
+          oldIndex = index;
+
+          /*
+              إذا مكانه القديم صح ومقفول
+              ما بنسمح نسحبه أصلاً.
+            */
+
+          if (lockedSlots[index]) {
+            return;
+          }
+
+          updated[index] = "";
+        }
+      });
+
       updated[destIndex] = word;
+
       return updated;
     });
 
-    setWrong([false, false, false, false]);
+    /*
+      شيل X فقط من الخانة الجديدة
+      ومن مكان الكلمة القديم إذا تحركت منه.
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[destIndex] = false;
+
+      if (oldIndex !== -1) {
+        updated[oldIndex] = false;
+      }
+
+      return updated;
+    });
   };
 
-  // ─── Remove on Click ──────────────────────────────────────────────────────
+  // ====================================================
+  // SELECT WORD
+  // ====================================================
+
+  const handleWordSelect = (id) => {
+    if (showAnswer || checkCompleted) {
+      return;
+    }
+
+    const word = parseWord(id);
+
+    /*
+      لو الكلمة مستخدمة بمكان صح مقفول
+      ما نسمح بتحريكها.
+    */
+
+    const usedIndex = inputs.findIndex((value) => value === word);
+
+    if (usedIndex !== -1 && lockedSlots[usedIndex]) {
+      return;
+    }
+
+    playWordAudio(word);
+
+    setSelectedWordId(id);
+
+    setAnnouncement(
+      `${word} selected. Use Tab to choose an answer box, then press Enter.`,
+    );
+  };
+
+  // ====================================================
+  // KEYBOARD DROP
+  // ====================================================
+
+  const handleKeyboardDrop = (slotId) => {
+    if (!selectedWordId || showAnswer || checkCompleted) {
+      return;
+    }
+
+    const word = parseWord(selectedWordId);
+
+    const destIndex = Number(slotId.replace("blank-", ""));
+
+    if (lockedSlots[destIndex]) {
+      return;
+    }
+
+    let updatedInputs = null;
+    let oldIndex = -1;
+
+    setInputs((prev) => {
+      const updated = [...prev];
+
+      updated.forEach((currentValue, index) => {
+        if (currentValue === word) {
+          oldIndex = index;
+
+          if (lockedSlots[index]) {
+            return;
+          }
+
+          updated[index] = "";
+        }
+      });
+
+      updated[destIndex] = word;
+
+      updatedInputs = updated;
+
+      return updated;
+    });
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[destIndex] = false;
+
+      if (oldIndex !== -1) {
+        updated[oldIndex] = false;
+      }
+
+      return updated;
+    });
+
+    setSelectedWordId(null);
+
+    setAnnouncement(`${word} placed in answer box ${destIndex + 1}.`);
+
+    /*
+      بعد الوضع
+      ارجع لأول خيار غير مستخدم.
+    */
+
+    window.setTimeout(() => {
+      const currentInputs = updatedInputs || [];
+
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+
+        if (currentInputs.includes(item.answer)) {
+          continue;
+        }
+
+        const id = `bank-${item.answer}-${i}`;
+
+        const element = bankRefs.current[id];
+
+        if (element) {
+          element.focus();
+
+          return;
+        }
+      }
+    }, 0);
+  };
+
+  // ====================================================
+  // REMOVE FROM SLOT
+  // ====================================================
 
   const handleRemove = (slotId) => {
     const index = Number(slotId.replace("blank-", ""));
+
+    if (showAnswer || checkCompleted || lockedSlots[index]) {
+      return;
+    }
+
+    const removedWord = inputs[index];
+
     setInputs((prev) => {
       const updated = [...prev];
+
       updated[index] = "";
+
       return updated;
     });
-    setWrong([false, false, false, false]);
+
+    /*
+      فقط X نفس الخانة
+    */
+
+    setWrong((prev) => {
+      const updated = [...prev];
+
+      updated[index] = false;
+
+      return updated;
+    });
+
+    window.setTimeout(() => {
+      if (!removedWord) {
+        return;
+      }
+
+      const itemIndex = data.findIndex((item) => item.answer === removedWord);
+
+      if (itemIndex === -1) {
+        return;
+      }
+
+      const id = `bank-${removedWord}-${itemIndex}`;
+
+      bankRefs.current[id]?.focus();
+    }, 0);
   };
 
-  // ─── Check ────────────────────────────────────────────────────────────────
+  // ====================================================
+  // CHECK ANSWERS
+  // ====================================================
 
   const checkAnswers = () => {
-    if (showAnswer || locked) return;
+    if (showAnswer || checkCompleted) {
+      return;
+    }
 
-    if (inputs.some((v) => v.trim() === "")) {
-      ValidationAlert.info("Oops!", "Please complete all answers before checking.");
+    if (inputs.some((value) => value.trim() === "")) {
+      ValidationAlert.info(
+        "Oops!",
+        "Please complete all answers before checking.",
+      );
+
       return;
     }
 
     let correct = 0;
-    const wrongStatus = inputs.map((v, i) => {
-      const ok = v.trim().toLowerCase() === data[i].answer.toLowerCase();
-      if (ok) correct++;
-      return !ok;
+
+    const wrongStatus = inputs.map(() => false);
+
+    const newlyLocked = inputs.map(() => false);
+
+    inputs.forEach((value, index) => {
+      const ok =
+        value.trim().toLowerCase() === data[index].answer.toLowerCase();
+
+      if (ok) {
+        correct++;
+
+        newlyLocked[index] = true;
+      } else {
+        wrongStatus[index] = true;
+      }
     });
 
+    /*
+      LOCK ONLY CORRECT SLOTS
+    */
+
+    setLockedSlots((prev) =>
+      prev.map((locked, index) => locked || newlyLocked[index]),
+    );
+
     setWrong(wrongStatus);
-    setLocked(true);
+
+    setSelectedWordId(null);
 
     const total = data.length;
-    const color = correct === total ? "green" : correct === 0 ? "red" : "orange";
+
+    const color =
+      correct === total ? "green" : correct === 0 ? "red" : "orange";
+
     const msg = `
       <div style="font-size:20px; text-align:center;">
         <span style="color:${color}; font-weight:bold;">
           Score: ${correct} / ${total}
         </span>
-      </div>`;
+      </div>
+    `;
 
-    if (correct === total) ValidationAlert.success(msg);
-    else if (correct === 0) ValidationAlert.error(msg);
-    else ValidationAlert.warning(msg);
+    if (correct === total) {
+      setLockedSlots(data.map(() => true));
+
+      setWrong(data.map(() => false));
+
+      setCheckCompleted(true);
+
+      setAnnouncement("All answers are correct.");
+
+      ValidationAlert.success(msg);
+
+      return;
+    }
+
+    if (correct === 0) {
+      ValidationAlert.error(msg);
+    } else {
+      ValidationAlert.warning(msg);
+    }
   };
 
-  // ─── Reset ────────────────────────────────────────────────────────────────
+  // ====================================================
+  // SHOW ANSWER
+  // ====================================================
+
+  const handleShowAnswer = () => {
+    setSelectedWordId(null);
+
+    setWrong(data.map(() => false));
+
+    setLockedSlots(data.map(() => true));
+
+    setCheckCompleted(true);
+
+    setShowAnswer(true);
+
+    setAnnouncement("Correct answers are displayed.");
+  };
+
+  // ====================================================
+  // RESET
+  // ====================================================
 
   const reset = () => {
+    stopAudio();
+
     setInputs(["", "", "", ""]);
+
     setWrong([false, false, false, false]);
+
     setShowAnswer(false);
-    setLocked(false);
+
+    setLockedSlots([false, false, false, false]);
+
+    setCheckCompleted(false);
+
+    setActiveId(null);
+
+    setSelectedWordId(null);
+
+    setAnnouncement("Activity reset.");
   };
 
-  // ─── Render ───────────────────────────────────────────────────────────────
+  // ====================================================
+  // AUDIO CLEANUP
+  // ====================================================
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  // ====================================================
+  // RENDER
+  // ====================================================
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="page8-wrapper" style={{ padding: "30px" }}>
-        <div className="div-forall">
-          <h3 className="header-title-page8">
-            <span className="ex-A">C</span> Drag and drop.
-          </h3>
+    <>
+      <style>
+        {`
+          @keyframes keyboardDropPulse {
+            0% {
+              opacity: 0.35;
+              transform: scale(0.96);
+              border-color: #93c5fd;
+              background: rgba(219,234,254,0.25);
+            }
 
-          {/* ── Word Bank ── */}
+            100% {
+              opacity: 1;
+              transform: scale(1);
+              border-color: #2563eb;
+              background: rgba(219,234,254,0.75);
+              box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+            }
+          }
+        `}
+      </style>
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div
+          className="page8-wrapper"
+          style={{
+            padding: "30px",
+          }}
+        >
+          {/* Screen Reader */}
+
           <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
             style={{
-              display: "flex",
-              gap: "10px",
-              padding: "10px",
-              width: "100%",
-              border: "2px dashed #ccc",
-              borderRadius: "10px",
-              margin: "10px 0",
-              alignItems: "center",
-              justifyContent: "center",
-              flexWrap: "wrap",
+              position: "absolute",
+
+              width: "1px",
+
+              height: "1px",
+
+              padding: 0,
+
+              margin: "-1px",
+
+              overflow: "hidden",
+
+              clip: "rect(0,0,0,0)",
+
+              clipPath: "inset(50%)",
+
+              whiteSpace: "nowrap",
+
+              border: 0,
             }}
           >
-            {data.map((item, i) => (
-              <BankChip
-                key={`bank-${item.answer}-${i}`}
-                id={`bank-${item.answer}-${i}`}
-                word={item.answer}
-                isUsed={isWordUsed(item.answer)}
-                locked={locked || showAnswer}
-              />
-            ))}
+            {announcement}
           </div>
 
-          {/* ── Questions ── */}
-          <div className="question-container-wb-u1-p4-q1">
-            {data.map((item, i) => (
-              <div key={i} className="question-row-wb-u1-q4">
-                <div className="img-box-wb-u1-q4" style={{ display: "flex" }}>
-                  <span style={{ color: "darkblue", fontWeight: "700", fontSize: "20px" }}>
-                    {i + 1}
-                  </span>{" "}
-                  <img className="img-wb-unit1-p4-q1" src={item.img} alt="" />
+          <div className="div-forall">
+            <ExerciseHeader
+              sectionLetter="C"
+              title="Read, look, and write."
+              subTitle="Look at each scene, then drag the matching greeting to the line."
+            />
 
-                  <SlotDropZone
-                    id={`blank-${i}`}
-                    value={inputs[i]}
-                    activeWord={activeWord}
-                    isWrong={wrong[i]}
+            {/* =================================
+                WORD BANK
+            ================================= */}
+
+            <div className="word-bank-accessible-wb-u1-p4-q1">
+              {data.map((item, i) => {
+                const id = `bank-${item.answer}-${i}`;
+
+                const used = isWordUsed(item.answer);
+
+                /*
+                    إذا الكلمة مستخدمة بخانة صح
+                    فهي أصلًا used.
+                    باقي البنك ما نقفله بسبب Check جزئي.
+                  */
+
+                return (
+                  <BankChip
+                    key={id}
+                    id={id}
+                    word={item.answer}
+                    isUsed={used}
+                    locked={showAnswer || checkCompleted}
+                    selectedWordId={selectedWordId}
+                    onSelect={handleWordSelect}
+                    registerRef={registerBankRef}
                     showAnswer={showAnswer}
-                    answerText={item.answer}
-                    locked={locked}
-                    onRemove={handleRemove}
                   />
-                </div>
-              </div>
-            ))}
+                );
+              })}
+            </div>
+
+            {/* =================================
+                QUESTIONS
+            ================================= */}
+
+            <div className="question-container-wb-u1-p4-q1">
+              {data.map((item, i) => {
+                const isLocked = lockedSlots[i];
+
+                return (
+                  <div key={i} className="question-row-wb-u1-q4">
+                    <div className="img-box-wb-u1-q4">
+                      <span className="question-number-wb-u1-p4-q1">
+                        {i + 1}
+                      </span>
+
+                      <img
+                        className="img-wb-unit1-p4-q1"
+                        src={item.img}
+                        alt={item.alt}
+                      />
+
+                      <SlotDropZone
+                        id={`blank-${i}`}
+                        value={inputs[i]}
+                        activeWord={activeWord}
+                        isWrong={wrong[i]}
+                        showAnswer={showAnswer}
+                        answerText={item.answer}
+                        locked={isLocked || checkCompleted}
+                        selectedWord={selectedWord}
+                        selectedWordId={selectedWordId}
+                        onKeyboardDrop={handleKeyboardDrop}
+                        onRemove={handleRemove}
+                        registerDropRef={registerDropRef}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* =================================
+              BUTTONS
+          ================================= */}
+
+          <div className="action-buttons-container">
+            <button onClick={reset} className="try-again-button">
+              Start Again ↻
+            </button>
+
+            <button
+              className="show-answer-btn swal-continue"
+              onClick={handleShowAnswer}
+            >
+              Show Answer
+            </button>
+
+            <button onClick={checkAnswers} className="check-button2">
+              Check Answer ✓
+            </button>
           </div>
         </div>
 
-        {/* ── Buttons ── */}
-        <div className="action-buttons-container">
-          <button onClick={reset} className="try-again-button">
-            Start Again ↻
-          </button>
-          <button
-            className="show-answer-btn swal-continue"
-            onClick={() => setShowAnswer(true)}
-          >
-            Show Answer
-          </button>
-          <button onClick={checkAnswers} className="check-button2">
-            Check Answer ✓
-          </button>
-        </div>
-      </div>
+        {/* =================================
+            DRAG OVERLAY
+        ================================= */}
 
-      {/* ── Drag Overlay ── */}
-      <DragOverlay>
-        {activeWord ? (
-          <span
-            style={{
-              padding: "2px 5px",
-              border: "2px solid #2c5287",
-              borderRadius: "8px",
-              background: "white",
-              fontWeight: "bold",
-              cursor: "grabbing",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-              display: "inline-block",
-            }}
-          >
-            {activeWord}
-          </span>
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+        <DragOverlay>
+          {activeWord ? (
+            <span
+              style={{
+                padding: "4px 8px",
+
+                border: "2px solid #2c5287",
+
+                borderRadius: "8px",
+
+                background: "white",
+
+                fontWeight: "bold",
+
+                cursor: "grabbing",
+
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+
+                display: "inline-block",
+              }}
+            >
+              {activeWord}
+            </span>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+    </>
   );
 }

@@ -1,11 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./Review10_Page2_Q1.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
-import sound1 from "../../../assets/unit6/sounds/CD50.Pg53_Instruction1_Adult Lady.mp3";
+import sound1 from "../../../assets/unit10/sound/cd84pg91-instruction1-adult-lady_DBgg7djJ.mp3";
+
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
 const Review10_Page2_Q1 = () => {
-  const stopAtSecond = 3.5;
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  const stopAtSecond = 9;
+  const [lockedIds, setLockedIds] = useState(new Set());
+  const [showAnswer, setShowAnswer] = useState(false);
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
 
   // ================================
   // ✔ Captions Array
@@ -13,18 +19,20 @@ const Review10_Page2_Q1 = () => {
   const captions = [
     {
       start: 0,
-      end: 4.23,
-      text: "Page 8. Right Activities. Exercise A, number 1. ",
+      end: 2.46,
+      text: "Page 91, exercise D.",
     },
     {
-      start: 4.25,
-      end: 8.28,
-      text: "Listen and write the missing letters. Number the pictures.  ",
+      start: 3.54,
+      end: 8.88,
+      text: "Do they both have a short e? Listen and write check or X.",
     },
-    { start: 8.3, end: 11.05, text: "1-tiger." },
-    { start: 11.07, end: 13.12, text: "2-taxi." },
-    { start: 13.14, end: 15.14, text: "3-duck." },
-    { start: 15.16, end: 17.13, text: "4-deer." },
+    { start: 9.56, end: 12.5, text: "1. bet, beet." },
+    { start: 12.94, end: 16, text: "2. net, set." },
+    { start: 16.42, end: 19.4, text: "3. tea, leg." },
+    { start: 20.06, end: 23.4, text: "4. web, pen." },
+    { start: 23.86, end: 27, text: "5. bee, hen." },
+    { start: 27.4, end: 30.9, text: "6. seal, pet." },
   ];
 
   const questions = [
@@ -67,12 +75,16 @@ const Review10_Page2_Q1 = () => {
   ];
 
   const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState([]);
+  const [wrongIds, setWrongIds] = useState(new Set());
 
   const selectAnswer = (id, value) => {
-    if (locked) return; // 🔒 ممنوع التعديل بعد Show Answer
+    if (showAnswer || lockedIds.has(id)) return;
     setAnswers({ ...answers, [id]: value });
-    setShowResult(false);
+    setWrongIds((current) => {
+      const next = new Set(current);
+      next.delete(id);
+      return next;
+    });
   };
   const showAnswers = () => {
     const corrects = {};
@@ -81,12 +93,13 @@ const Review10_Page2_Q1 = () => {
     });
 
     setAnswers(corrects);
-    setShowResult([]); // إخفاء كل X
-    setLocked(true); // 🔒 قفل التعديل
+    setWrongIds(new Set());
+    setLockedIds(new Set(questions.map((q) => q.id)));
+    setShowAnswer(true);
   };
 
   const checkAnswers = () => {
-    if (locked) return;
+    if (showAnswer || lockedIds.size === questions.length) return;
     // 1) فحص الخانات الفارغة
     const isEmpty = questions.some((q) => !answers[q.id]);
     if (isEmpty) {
@@ -95,14 +108,18 @@ const Review10_Page2_Q1 = () => {
     }
 
     // 2) مقارنة الإجابات
-    const results = questions.map((q) =>
-      answers[q.id] === q.correct ? "correct" : "wrong",
-    );
-
-    setShowResult(results);
-    setLocked(true); // 🔒 قفل التعديل
+    const nextLocked = new Set(lockedIds);
+    const nextWrong = new Set();
+    questions.forEach((q) => {
+      if (answers[q.id] === q.correct) nextLocked.add(q.id);
+      else nextWrong.add(q.id);
+    });
+    setLockedIds(nextLocked);
+    setWrongIds(nextWrong);
     // 3) حساب السكور
-    const correctCount = results.filter((r) => r === "correct").length;
+    const correctCount = questions.filter(
+      (q) => answers[q.id] === q.correct,
+    ).length;
     const total = questions.length;
     const scoreMsg = `${correctCount} / ${total}`;
 
@@ -124,8 +141,10 @@ const Review10_Page2_Q1 = () => {
 
   const resetAnswers = () => {
     setAnswers({});
-    setShowResult([]);
-    setLocked(false); // ← مهم جداً
+    setWrongIds(new Set());
+    setLockedIds(new Set());
+    setShowAnswer(false);
+    stopAudio();
   };
 
   return (
@@ -138,29 +157,33 @@ const Review10_Page2_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div
-        className="div-forall"
-        style={{
-     
-        }}
-      >
-        <h5 className="header-title-page8">
-          <span className="mr-2">D</span> Do they both have a
-          <span style={{ color: "red" }}> short e </span>? Listen and tap or
-          click
-          <span style={{ color: "red" }}> ✓ </span> or
-          <span style={{ color: "red" }}> ✗</span>.
-        </h5>
+      <div className="div-forall" style={{}}>
+        <ExerciseHeaderReview
+          sectionLetter="D"
+          title={
+            <>
+              Do they both have a <span style={{ color: "red" }}>short e</span>?
+              Listen and write <span style={{ color: "red" }}>✓</span> or{" "}
+              <span style={{ color: "red" }}>✗</span>.
+            </>
+          }
+          subTitle="Listen to each word pair, then choose check or X."
+        />
 
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
           stopAtSecond={stopAtSecond}
+          pageId="review10-page90-qD"
         />
 
         <div className="review10-p2-q1-container w-full">
-          {questions.map((q, index) => (
-            <div key={q.id} className="review10-p2-q1-question-box">
+          {questions.map((q) => (
+            <div
+              key={q.id}
+              className="review10-p2-q1-question-box review-audio-control"
+            >
+              {activeAudioKey === `pair-${q.id}` && <ReviewPlayingAudioIcon />}
               <p
                 className="unit6-p1-q1-question-text"
                 style={{ fontSize: "20px" }}
@@ -171,8 +194,12 @@ const Review10_Page2_Q1 = () => {
               </p>
 
               <div className="review10-p2-q1-flex">
-                <div className="word-pair-box-review10-p2-q1">
+                <div
+                  className="word-pair-box-review10-p2-q1"
+                  onClick={() => playAudio(`pair-${q.id}`, q.audio)}
+                >
                   <span className="word-text-review10-p2-q1">{q.left}</span>
+
                   <span className="word-text-review10-p2-q1">{q.right}</span>
                 </div>
 
@@ -180,15 +207,24 @@ const Review10_Page2_Q1 = () => {
                   {/* خيار الصح */}
                   <div className="option-wrapper">
                     <div
+                      role="button"
+                      tabIndex={lockedIds.has(q.id) || showAnswer ? -1 : 0}
+                      aria-label={`Choose check for item ${q.id}.`}
                       className={`option-btn ${
                         answers[q.id] === "✓" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✓")}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✓");
+                        }
+                      }}
                     >
                       ✓
                     </div>
 
-                    {showResult[index] === "wrong" && answers[q.id] === "✓" && (
+                    {wrongIds.has(q.id) && answers[q.id] === "✓" && (
                       <div className="unit6-p1-q1-wrong-icon">✕</div>
                     )}
                   </div>
@@ -196,15 +232,24 @@ const Review10_Page2_Q1 = () => {
                   {/* خيار الخطأ */}
                   <div className="option-wrapper">
                     <div
+                      role="button"
+                      tabIndex={lockedIds.has(q.id) || showAnswer ? -1 : 0}
+                      aria-label={`Choose X for item ${q.id}.`}
                       className={`option-btn ${
                         answers[q.id] === "✗" ? "selected" : ""
                       }`}
                       onClick={() => selectAnswer(q.id, "✗")}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          selectAnswer(q.id, "✗");
+                        }
+                      }}
                     >
                       ✗
                     </div>
 
-                    {showResult[index] === "wrong" && answers[q.id] === "✗" && (
+                    {wrongIds.has(q.id) && answers[q.id] === "✗" && (
                       <div className="unit6-p1-q1-wrong-icon">✕</div>
                     )}
                   </div>

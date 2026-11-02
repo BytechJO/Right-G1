@@ -1,0 +1,59 @@
+.unit10-audio-control {
+  position: relative;
+  outline: none;
+}
+
+.unit10-audio-control:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.unit10-playing-audio-icon {
+  position: absolute;
+  top: -17px;
+  right: -13px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  color: #000000;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.unit10-playing-audio-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.unit10-completed-audio {
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.unit10-completed-audio:hover,
+.unit10-completed-audio:focus-visible {
+  background-color: rgba(37, 99, 235, 0.08);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.22);
+}
+
+.unit10-keyboard-preview {
+  animation: blink-preview-unit10 0.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes blink-preview-unit10 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}

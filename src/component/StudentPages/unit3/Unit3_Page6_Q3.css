@@ -64,3 +64,32 @@
     font-size: 20px;
   }
 }
+/* =========================================
+   CANVAS KEYBOARD FOCUS
+========================================= */
+
+.unit3-q6-canvas {
+  outline: none;
+}
+
+.unit3-q6-canvas:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: -4px;
+  background-color: #f4f8ff;
+}
+
+/* =========================================
+   TOOL BUTTON FOCUS
+========================================= */
+
+.unit4-q2-p6-tool-btn:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* الأداة المختارة */
+.unit4-q2-p6-tool-btn.active-tool {
+  background-color: #dbeafe;
+  border-color: #2563eb;
+  font-weight: 700;
+}

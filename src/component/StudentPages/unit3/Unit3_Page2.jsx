@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useContext } from "react";
 import page_2 from "../../../assets/unit3/imgs3/right1-unit3-page2.jpg";
 import soundSong from "../../../assets/unit3/sound3/come and sing.mp3";
 import sound1 from "../../../assets/unit3/sound3/Pg23_1.1_Bebo.mp3";
@@ -24,31 +24,29 @@ import FourImagesWithAudio from "../../FourImagesWithAudio";
 import sound2_4 from "../../../assets/unit3/sound3/U3P22VOC-04.mp3";
 import sound2_5 from "../../../assets/unit3/sound3/U3P22VOC-05.mp3";
 import sound2_6 from "../../../assets/unit3/sound3/U3P22VOC-06.mp3";
-import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 import "./Unit3_Page2.css";
+
 const Unit3_Page2 = ({ openPopup }) => {
   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
- 
-  // أصوات الصور
+
   const imageSounds = [
-    null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
+    null,
     new Audio(sound3),
     new Audio(sound4),
     new Audio(sound5),
     new Audio(sound6),
   ];
-  const imageSounds2 = [
-    null, // الصورة الأولى الكبيرة (إن ما بدك صوت إلها)
-    new Audio(sound1),
-    new Audio(sound2_2),
-  ];
+
+  const imageSounds2 = [null, new Audio(sound1), new Audio(sound2_2)];
+
   const captionsExample = [
     { start: 0, end: 3.06, text: "Page 23, come and sing." },
     { start: 3.1, end: 6.1, text: "I love school. We open our books." },
     { start: 6.13, end: 10.06, text: "We make a line. We do many things." },
     { start: 10.09, end: 13.3, text: " My teacher plays songs. We listen." },
   ];
+
   const captions = [
     { start: 0, end: 3.17, text: "Page 23. Listen, read, and repeat." },
     {
@@ -62,67 +60,108 @@ const Unit3_Page2 = ({ openPopup }) => {
       text: "My favorite subject is art.",
     },
   ];
+
   const captions2 = [
     { start: 0, end: 3.18, text: "Page 23. Listen and read along." },
     { start: 3.2, end: 7.01, text: "Short A. Bat, cap, dad." },
   ];
 
   const areas = [
-    // الصوت الأول – المنطقة الأساسية
-    { x1: 23.0, y1: 18.4, sound: 1, isPrimary: true },
+    {
+      x1: 23.0,
+      y1: 18.4,
+      sound: 1,
+      isPrimary: true,
+    },
+    {
+      x1: 8.4,
+      y1: 5.6,
+      x2: 32.8,
+      y2: 17.47,
+      sound: 1,
+      isPrimary: false,
+    },
 
-    // الصوت الأول – منطقة إضافية
-    { x1: 8.4, y1: 5.6, x2: 32.8, y2:17.47, sound: 1, isPrimary: false },
+    {
+      x1: 19.2,
+      y1: 27.7,
+      sound: 2,
+      isPrimary: true,
+    },
+    {
+      x1: 7.4,
+      y1: 26.7,
+      x2: 21.2,
+      y2: 38.8,
+      sound: 2,
+      isPrimary: false,
+    },
 
-    // الصوت الثاني – الأساسية
-    { x1: 19.2, y1: 27.7, sound: 2, isPrimary: true },
-
-    // الصوت الثاني – الإضافية
-    { x1: 7.4, y1: 26.7, x2: 21.2, y2: 38.8, sound: 2, isPrimary: false },
-    // الصوت الثاني – الأساسية
-    { x1:19.9, y1: 41.1,  sound: 3, isPrimary: true },
-
-    // الصوت الثاني – الإضافية
-    { x1: 21.4, y1: 35.07, x2: 38.3, y2: 45.7, sound: 3, isPrimary: false },
+    {
+      x1: 19.9,
+      y1: 41.1,
+      sound: 3,
+      isPrimary: true,
+    },
+    {
+      x1: 21.4,
+      y1: 35.07,
+      x2: 38.3,
+      y2: 45.7,
+      sound: 3,
+      isPrimary: false,
+    },
   ];
+
   const sounds = {
     1: sound2_4,
     2: sound2_5,
     3: sound2_6,
   };
 
+  const soundLabels = {
+    1: "Make a line",
+    2: "Listen",
+    3: "Quiet",
+  };
+
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
+
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
- const playSound = (path, id) => {
+
+  const playSound = (path, id) => {
     if (!audioRef.current) return;
 
-    // 🔥 وقف أي صوت شغال بأي صفحة
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
 
     audioRef.current.src = path;
     audioRef.current.play();
 
-    setActiveId(id); // 🔥 مهم للهايلايت
+    setActiveId(id);
 
     audioRef.current.onended = () => {
       setActiveId(null);
     };
   };
+
   return (
     <div
       className="page1-img-wrapper"
       onClick={handleImageClick}
-      style={{ backgroundImage: `url(${page_2})` }}
+      style={{
+        backgroundImage: `url(${page_2})`,
+      }}
     >
       <audio ref={audioRef} style={{ display: "none" }} />
-      {/* <img src={page_2} /> */}
+
       {areas.map((area, index) => {
-        const isActive = activeId === `p23-${area.sound}`;
+        const isActive = activeId === `p4-${area.sound}`;
 
         // ============================
         // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
@@ -131,13 +170,25 @@ const Unit3_Page2 = ({ openPopup }) => {
           return (
             <div
               key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
               style={{
                 left: `${area.x1}%`,
                 top: `${area.y1}%`,
               }}
               onClick={() => {
-                playSound(sounds[area.sound], `p23-${area.sound}`);
+                playSound(sounds[area.sound], `p4-${area.sound}`);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  playSound(sounds[area.sound], `p4-${area.sound}`);
+                }
               }}
             ></div>
           );
@@ -151,6 +202,7 @@ const Unit3_Page2 = ({ openPopup }) => {
           <div
             key={index}
             className="clickable-area"
+            aria-hidden="true"
             style={{
               position: "absolute",
               left: `${area.x1}%`,
@@ -159,11 +211,12 @@ const Unit3_Page2 = ({ openPopup }) => {
               height: `${area.y2 - area.y1}%`,
             }}
             onClick={() => {
-             playSound(sounds[area.sound], `p23-${area.sound}`);
+              playSound(sounds[area.sound], `p4-${area.sound}`);
             }}
           ></div>
         );
       })}
+
       <div
         className="headset-icon-CD-unit3-page2-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -172,13 +225,35 @@ const Unit3_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open come and sing audio"
           onClick={() =>
             openPopup(
               "audio",
-              <AudioWithCaption src={soundSong} captions={captionsExample} />,
-              true
+              <AudioWithCaption
+                src={soundSong}
+                captions={captionsExample}
+                pageId="unit3-page23-main"
+              />,
+              true,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <AudioWithCaption
+                  src={soundSong}
+                  captions={captionsExample}
+                  pageId="unit3-page23-main"
+                />,
+                true,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -191,6 +266,7 @@ const Unit3_Page2 = ({ openPopup }) => {
           />
         </svg>
       </div>
+
       <div
         className="headset-icon-CD-unit3-page2-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -199,6 +275,9 @@ const Unit3_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open listen read and repeat activity"
           onClick={() =>
             openPopup(
               "html",
@@ -207,12 +286,34 @@ const Unit3_Page2 = ({ openPopup }) => {
                 audioSrc={CD21_Pg23_Instruction1_AdultLady}
                 checkpoints={[0, 4.9, 7.14]}
                 popupOpen={true}
-                titleQ={`Listen, read, and repeat.`}
+                titleQ="Listen, read, and repeat."
                 audioArr={imageSounds2}
                 captions={captions}
-              />
+                pageId="unit3-page23-listen"
+                subHeader="Press Play, then tap each card to hear it again."
+              />,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[read, repeat1, repeat2]}
+                  audioSrc={CD21_Pg23_Instruction1_AdultLady}
+                  checkpoints={[0, 4.9, 7.14]}
+                  popupOpen={true}
+                  titleQ="Listen, read, and repeat."
+                  audioArr={imageSounds2}
+                  captions={captions}
+                  pageId="unit3-page23-listen"
+                  subHeader="Press Play, then tap each card to hear it again."
+                />,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -225,6 +326,7 @@ const Unit3_Page2 = ({ openPopup }) => {
           />
         </svg>
       </div>
+
       <div
         className="click-icon-unit3-page2-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -233,6 +335,9 @@ const Unit3_Page2 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open listen and read along activity"
           onClick={() =>
             openPopup(
               "html",
@@ -241,12 +346,34 @@ const Unit3_Page2 = ({ openPopup }) => {
                 audioSrc={sound7}
                 checkpoints={[0, 4.0, 5.1, 6.09, 7.03]}
                 popupOpen={true}
-                titleQ={"Listen and read along."}
+                titleQ="Listen and read along."
                 audioArr={imageSounds}
                 captions={captions2}
-              />
+                pageId="unit3-page23-read"
+                subHeader="Press Play, follow the short-a words, then tap each card to hear it again."
+              />,
             )
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "html",
+                <FourImagesWithAudio
+                  images={[Rabbit, img1, img2, img3, img4]}
+                  audioSrc={sound7}
+                  checkpoints={[0, 4.0, 5.1, 6.09, 7.03]}
+                  popupOpen={true}
+                  titleQ="Listen and read along."
+                  audioArr={imageSounds}
+                  captions={captions2}
+                  pageId="unit3-page23-read"
+                  subHeader="Press Play, follow the short-a words, then tap each card to hear it again."
+                />,
+              );
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image

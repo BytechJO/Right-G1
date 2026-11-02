@@ -1,113 +1,546 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+
 import "./Review6_Page2_Q3.css";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+
+import { FaVolumeUp } from "react-icons/fa";
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+import pitAudio from "../../../assets/unit6/sounds/Page 55 - F/pit.mp3";
+import chipAudio from "../../../assets/unit6/sounds/Page 55 - F/chip.mp3";
+import topAudio from "../../../assets/unit6/sounds/Page 55 - F/top.mp3";
+
+import bitAudio from "../../../assets/unit6/sounds/Page 55 - F/bit.mp3";
+import sunAudio from "../../../assets/unit6/sounds/Page 55 - F/sun.mp3";
+import fixAudio from "../../../assets/unit6/sounds/Page 55 - F/fix.mp3";
+
+import cupAudio from "../../../assets/unit6/sounds/Page 55 - F/cup.mp3";
+import pickAudio from "../../../assets/unit6/sounds/Page 55 - F/pick.mp3";
+import fitAudio from "../../../assets/unit6/sounds/Page 55 - F/fit.mp3";
+
+import boxAudio from "../../../assets/unit6/sounds/Page 55 - F/box.mp3";
+import mixAudio from "../../../assets/unit6/sounds/Page 55 - F/mix.mp3";
+import tipAudio from "../../../assets/unit6/sounds/Page 55 - F/tip.mp3";
+
+import kickAudio from "../../../assets/unit6/sounds/Page 55 - F/kick.mp3";
+import deskAudio from "../../../assets/unit6/sounds/Page 55 - F/desk.mp3";
+import ripAudio from "../../../assets/unit6/sounds/Page 55 - F/rip.mp3";
+
+import sipAudio from "../../../assets/unit6/sounds/Page 55 - F/sip.mp3";
+import capAudio from "../../../assets/unit6/sounds/Page 55 - F/cap.mp3";
+import pinAudio from "../../../assets/unit6/sounds/Page 55 - F/pin.mp3";
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const sentences = [
+  {
+    num: 1,
+    words: [
+      {
+        word: "pit",
+        audio: pitAudio,
+      },
+      {
+        word: "chip",
+        audio: chipAudio,
+      },
+      {
+        word: "top",
+        audio: topAudio,
+      },
+    ],
+  },
+
+  {
+    num: 2,
+    words: [
+      {
+        word: "bit",
+        audio: bitAudio,
+      },
+      {
+        word: "sun",
+        audio: sunAudio,
+      },
+      {
+        word: "fix",
+        audio: fixAudio,
+      },
+    ],
+  },
+
+  {
+    num: 3,
+    words: [
+      {
+        word: "cup",
+        audio: cupAudio,
+      },
+      {
+        word: "pick",
+        audio: pickAudio,
+      },
+      {
+        word: "fit",
+        audio: fitAudio,
+      },
+    ],
+  },
+
+  {
+    num: 4,
+    words: [
+      {
+        word: "box",
+        audio: boxAudio,
+      },
+      {
+        word: "mix",
+        audio: mixAudio,
+      },
+      {
+        word: "tip",
+        audio: tipAudio,
+      },
+    ],
+  },
+
+  {
+    num: 5,
+    words: [
+      {
+        word: "kick",
+        audio: kickAudio,
+      },
+      {
+        word: "desk",
+        audio: deskAudio,
+      },
+      {
+        word: "rip",
+        audio: ripAudio,
+      },
+    ],
+  },
+
+  {
+    num: 6,
+    words: [
+      {
+        word: "sip",
+        audio: sipAudio,
+      },
+      {
+        word: "cap",
+        audio: capAudio,
+      },
+      {
+        word: "pin",
+        audio: pinAudio,
+      },
+    ],
+  },
+];
+
+/* =====================================================
+   CORRECT ANSWERS
+===================================================== */
+
+const correct = {
+  0: [0, 1],
+  1: [0, 2],
+  2: [1, 2],
+  3: [1, 2],
+  4: [0, 2],
+  5: [0, 2],
+};
+
+/* =====================================================
+   MAIN
+===================================================== */
 
 const Review6_Page2_Q3 = () => {
-  const sentences = [
-    { word1: "pit", word2: "chip", word3: "top", num: 1 },
-    { word1: "bit", word2: "sun", word3: "fix", num: 2 },
-    { word1: "cup", word2: "pick", word3: "fit", num: 3 },
-    { word1: "box", word2: "mix", word3: "tip", num: 4 },
-    { word1: "kick", word2: "desk", word3: "rip", num: 5 },
-    { word1: "sip", word2: "cap", word3: "pin", num: 6 },
-  ];
-
-  const correct = {
-    0: [0, 1],
-    1: [0, 2],
-    2: [1, 2],
-    3: [1, 2],
-    4: [0, 2],
-    5: [0, 2],
-  };
+  /* =====================================================
+     SELECTED WORDS
+  ===================================================== */
 
   const [circledWords, setCircledWords] = useState({});
-  const [checked, setChecked] = useState(false);
 
-  // ⭐ NEW — Show Answer Mode
+  /* =====================================================
+     WRONG WORDS
+  ===================================================== */
+
+  const [wrongWords, setWrongWords] = useState({});
+
+  /* =====================================================
+     LOCKED CORRECT WORDS
+  ===================================================== */
+
+  const [lockedWords, setLockedWords] = useState({});
+
+  /* =====================================================
+     FINAL STATES
+  ===================================================== */
+
   const [showAnswerMode, setShowAnswerMode] = useState(false);
 
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
+  const audioRef = useRef(null);
+
+  const [playingKey, setPlayingKey] = useState(null);
+
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+
+      audioRef.current.currentTime = 0;
+
+      audioRef.current.onended = null;
+
+      audioRef.current.onerror = null;
+
+      audioRef.current = null;
+    }
+
+    setPlayingKey(null);
+  };
+
+  const playAudio = (key, src) => {
+    if (!src) {
+      return;
+    }
+
+    stopAudio();
+
+    const audio = new Audio(src);
+
+    audioRef.current = audio;
+
+    setPlayingKey(key);
+
+    audio.play().catch(() => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    });
+
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        audioRef.current = null;
+      }
+
+      setPlayingKey(null);
+    };
+  };
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const isWordLocked = (sIndex, wIndex) =>
+    lockedWords[sIndex]?.includes(wIndex);
+
+  const isWordWrong = (sIndex, wIndex) => wrongWords[sIndex]?.includes(wIndex);
+
+  /* =====================================================
+     SELECT / UNSELECT
+  ===================================================== */
+
   const handleWordClick = (sIndex, wIndex) => {
-    if (showAnswerMode || checked) return; // ⛔ منع النقر أثناء الشو أنسر
+    if (showAnswerMode || checkCompleted || isWordLocked(sIndex, wIndex)) {
+      return;
+    }
 
     setCircledWords((prev) => {
       const existing = prev[sIndex] || [];
 
+      /* ===============================================
+         UNSELECT
+      =============================================== */
+
       if (existing.includes(wIndex)) {
         return {
           ...prev,
-          [sIndex]: existing.filter((i) => i !== wIndex),
+
+          [sIndex]: existing.filter((index) => index !== wIndex),
         };
       }
 
+      /* ===============================================
+         MAXIMUM TWO WORDS
+      =============================================== */
+
       if (existing.length >= 2) {
-        return {
-          ...prev,
-          [sIndex]: existing.filter((i) => i !== wIndex),
-        };
+        return prev;
       }
+
+      /* ===============================================
+         SELECT
+      =============================================== */
 
       return {
         ...prev,
+
         [sIndex]: [...existing, wIndex],
       };
     });
-    setChecked(false);
+
+    /* =================================================
+       CLEAR X ONLY FROM SAME WORD
+    ================================================= */
+
+    setWrongWords((prev) => ({
+      ...prev,
+
+      [sIndex]: (prev[sIndex] || []).filter((index) => index !== wIndex),
+    }));
   };
 
-  const checkAnswers = () => {
-    if (showAnswerMode || checked) return; // ⛔ منع النقر أثناء الشو أنسر
+  /* =====================================================
+     AUDIO + SELECT
+  ===================================================== */
 
-    if (
-      Object.keys(circledWords).length < sentences.length ||
-      Object.values(circledWords).some((arr) => arr.length < 2)
-    ) {
+  const activateWord = (sIndex, wIndex, word, audio) => {
+    playAudio(`word-${sIndex}-${wIndex}`, audio);
+
+    /*
+      حتى لو الكلمة locked:
+      الصوت يضل شغال.
+
+      الاختيار فقط إذا editable.
+    */
+
+    if (!showAnswerMode && !checkCompleted && !isWordLocked(sIndex, wIndex)) {
+      handleWordClick(sIndex, wIndex);
+    }
+  };
+
+  /* =====================================================
+     CHECK ANSWER
+  ===================================================== */
+
+  const checkAnswers = () => {
+    if (showAnswerMode || checkCompleted) {
+      return;
+    }
+
+    /* =================================================
+       EACH ROW MUST HAVE TWO SELECTED WORDS
+    ================================================= */
+
+    const allAnswered = sentences.every(
+      (_, sIndex) => (circledWords[sIndex] || []).length === 2,
+    );
+
+    if (!allAnswered) {
       ValidationAlert.info(
         "Oops!",
         "Please circle two words in each sentence!",
       );
+
       return;
     }
 
-    let totalCorrect = 0;
     let studentCorrect = 0;
 
-    for (let sIndex in correct) totalCorrect += correct[sIndex].length;
+    let totalCorrect = 0;
 
-    for (let sIndex in circledWords) {
-      circledWords[sIndex].forEach((wIndex) => {
-        if (correct[sIndex]?.includes(wIndex)) studentCorrect++;
+    const newWrongWords = {};
+
+    const newLockedWords = {};
+
+    /* =================================================
+       CHECK EACH ROW
+    ================================================= */
+
+    Object.keys(correct).forEach((sIndex) => {
+      const numericIndex = Number(sIndex);
+
+      const correctIndexes = correct[numericIndex];
+
+      const selectedIndexes = circledWords[numericIndex] || [];
+
+      totalCorrect += correctIndexes.length;
+
+      newWrongWords[numericIndex] = [];
+
+      newLockedWords[numericIndex] = [...(lockedWords[numericIndex] || [])];
+
+      selectedIndexes.forEach((wIndex) => {
+        if (correctIndexes.includes(wIndex)) {
+          studentCorrect++;
+
+          /*
+            LOCK CORRECT WORD
+          */
+
+          if (!newLockedWords[numericIndex].includes(wIndex)) {
+            newLockedWords[numericIndex].push(wIndex);
+          }
+        } else {
+          /*
+            WRONG WORD
+          */
+
+          newWrongWords[numericIndex].push(wIndex);
+        }
       });
-    }
-
-    setChecked(true);
-
-    const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
-    if (studentCorrect === totalCorrect) ValidationAlert.success(scoreMessage);
-    else if (studentCorrect === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
-  };
-
-  // ⭐⭐⭐ NEW — Show Answer Function
-  const showAnswers = () => {
-    const final = {};
-
-    Object.keys(correct).forEach((index) => {
-      final[index] = correct[index]; // ضع الإجابات الصحيحة كما هي
     });
 
-    setCircledWords(final);
-    setChecked(true);
-    setShowAnswerMode(true);
+    /* =================================================
+       APPLY PROGRESSIVE LOCKING
+    ================================================= */
+
+    setLockedWords(newLockedWords);
+
+    /* =================================================
+       APPLY WRONG X
+    ================================================= */
+
+    setWrongWords(newWrongWords);
+
+    /* =================================================
+       SCORE
+    ================================================= */
+
+    const color =
+      studentCorrect === totalCorrect
+        ? "green"
+        : studentCorrect === 0
+          ? "red"
+          : "orange";
+
+    const scoreMessage = `
+      <div style="
+        font-size:20px;
+        margin-top:10px;
+        text-align:center;
+      ">
+        <span style="
+          color:${color};
+          font-weight:bold;
+        ">
+          Score: ${studentCorrect} / ${totalCorrect}
+        </span>
+      </div>
+    `;
+
+    /* =================================================
+       ALL CORRECT
+    ================================================= */
+
+    if (studentCorrect === totalCorrect) {
+      const finalLocked = {};
+
+      Object.keys(correct).forEach((sIndex) => {
+        finalLocked[sIndex] = [...correct[sIndex]];
+      });
+
+      setLockedWords(finalLocked);
+
+      setWrongWords({});
+
+      setCheckCompleted(true);
+
+      ValidationAlert.success(scoreMessage);
+
+      return;
+    }
+
+    /* =================================================
+       PARTIAL / WRONG
+    ================================================= */
+
+    if (studentCorrect === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
+  const showAnswers = () => {
+    stopAudio();
+
+    const finalAnswers = {};
+
+    const finalLocked = {};
+
+    Object.keys(correct).forEach((sIndex) => {
+      finalAnswers[sIndex] = [...correct[sIndex]];
+
+      finalLocked[sIndex] = [...correct[sIndex]];
+    });
+
+    setCircledWords(finalAnswers);
+
+    setLockedWords(finalLocked);
+
+    setWrongWords({});
+
+    setShowAnswerMode(true);
+
+    setCheckCompleted(true);
+  };
+
+  /* =====================================================
+     START AGAIN
+  ===================================================== */
+
+  const reset = () => {
+    stopAudio();
+
+    setCircledWords({});
+
+    setWrongWords({});
+
+    setLockedWords({});
+
+    setShowAnswerMode(false);
+
+    setCheckCompleted(false);
+  };
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <div
       style={{
         display: "flex",
+
         flexDirection: "column",
+
         justifyContent: "center",
+
         alignItems: "center",
+
         padding: "30px",
       }}
     >
@@ -117,62 +550,144 @@ const Review6_Page2_Q3 = () => {
           gap: "120px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">F</span> Circle{" "}
-          <span style={{ color: "red" }}>the short i</span> words.
-        </h5>
+        <ExerciseHeaderReview
+          sectionLetter="F"
+          title={
+            <>
+              Circle the{" "}
+              <span
+                style={{
+                  color: "",
+                }}
+              >
+                short i
+              </span>{" "}
+              words.
+            </>
+          }
+          subTitle="Read each column and tap every short-i word."
+        />
+
+        {/* =================================================
+            WORDS
+        ================================================= */}
 
         <div className="review6-p2-q3-sentence-container2 w-full">
           {sentences.map((sentence, sIndex) => (
             <div className="review3-p2-q2-sentence-row" key={sIndex}>
               <span
                 className="review3-p2-q2-num"
-                style={{ color: "#2c5287", fontWeight: "700" }}
+                style={{
+                  color: "#2c5287",
+
+                  fontWeight: "700",
+                }}
               >
-                {sIndex + 1}
+                {sentence.num}
               </span>
 
               <div className="review3-p2-q2-word-box">
-                {[sentence.word1, sentence.word2, sentence.word3].map(
-                  (word, wIndex) => {
-                    const isCircled = circledWords[sIndex]?.includes(wIndex);
+                {sentence.words.map((item, wIndex) => {
+                  const isCircled = circledWords[sIndex]?.includes(wIndex);
 
-                    const isWrong =
-                      checked &&
-                      isCircled &&
-                      !correct[sIndex]?.includes(wIndex);
+                  const isWrong = isWordWrong(sIndex, wIndex);
 
-                    return (
-                      <span
-                        key={wIndex}
-                        className={`review3-p2-q2-word ${
-                          isCircled ? "circled" : ""
-                        }`}
-                        onClick={() => handleWordClick(sIndex, wIndex)}
-                      >
-                        {word}
+                  const isLocked = isWordLocked(sIndex, wIndex);
 
-                        {isWrong && !showAnswerMode && (
-                          <span className="review3-p2-q2-wrong-x">✕</span>
-                        )}
-                      </span>
-                    );
-                  },
-                )}
+                  const audioKey = `word-${sIndex}-${wIndex}`;
+
+                  const isPlaying = playingKey === audioKey;
+
+                  return (
+                    <span
+                      key={wIndex}
+                      className={`review3-p2-q2-word ${
+                        isCircled ? "circled" : ""
+                      }`}
+                      role="button"
+                      /*
+                        كل الكلمات تظل بالـTab
+                        حتى لو locked
+                        عشان الصوت يضل قابل للإعادة.
+                      */
+
+                      tabIndex={0}
+                      aria-pressed={isCircled}
+                      aria-label={
+                        isLocked || showAnswerMode || checkCompleted
+                          ? `Play audio: ${item.word}`
+                          : `${item.word}. Press Enter or Space to hear and ${
+                              isCircled ? "unselect" : "select"
+                            } this word.`
+                      }
+                      onClick={() =>
+                        activateWord(sIndex, wIndex, item.word, item.audio)
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+
+                          e.stopPropagation();
+
+                          activateWord(sIndex, wIndex, item.word, item.audio);
+                        }
+                      }}
+                      style={{
+                        position: "relative",
+
+                        cursor: "pointer",
+                      }}
+                    >
+                      {item.word}
+
+                      {/* =================================================
+                          AUDIO ICON
+                      ================================================= */}
+
+                      {isPlaying && (
+                        <FaVolumeUp
+                          size={14}
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+
+                            right: "-18px",
+
+                            top: "50%",
+
+                            transform: "translateY(-50%)",
+
+                            pointerEvents: "none",
+                          }}
+                        />
+                      )}
+
+                      {/* =================================================
+                          WRONG X
+                      ================================================= */}
+
+                      {isWrong && !showAnswerMode && (
+                        <span
+                          className="review3-p2-q2-wrong-x"
+                          aria-hidden="true"
+                        >
+                          ✕
+                        </span>
+                      )}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
 
+        {/* =================================================
+            BUTTONS
+        ================================================= */}
+
         <div className="action-buttons-container">
-          <button
-            onClick={() => {
-              setCircledWords({});
-              setChecked(false);
-              setShowAnswerMode(false);
-            }}
-            className="try-again-button"
-          >
+          <button onClick={reset} className="try-again-button">
             Start Again ↻
           </button>
 

@@ -160,3 +160,84 @@
     font-size: 18px;
   }
 }
+/* =====================================================
+   AUDIO SENTENCE
+===================================================== */
+
+.unit3-q5-audio-sentence {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+
+  padding: 6px 8px;
+
+  border-radius: 8px;
+
+  outline: none;
+  font-size: 20px;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Tab على الجملة */
+.unit3-q5-audio-sentence:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* أثناء تشغيل الصوت */
+.unit3-q5-audio-sentence.sentence-playing {
+  background-color: #fff3a3;
+}
+
+/* أيقونة الصوت */
+.unit3-q5-volume-icon {
+  font-size: 20px;
+  color: #243b7b;
+
+  animation: unit3-q5-audio-pulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes unit3-q5-audio-pulse {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.2);
+  }
+}
+
+/* =====================================================
+   OPTIONS ACCESSIBILITY
+===================================================== */
+
+.option-btn {
+  outline: none;
+}
+
+.option-btn:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   LOCKED CORRECT ANSWER
+===================================================== */
+
+.option-btn.option-locked {
+  cursor: default;
+}
+
+/* السؤال الصحيح ممكن يبين بشكل خفيف */
+.unit3-q5-question-box.question-locked {
+  /* إذا ما بدك أي تغيير بصري احذفيه */
+}
+
+/* =====================================================
+   DISABLED ACTION BUTTONS
+   يظلوا قابلين للوصول بالـ Tab
+===================================================== */

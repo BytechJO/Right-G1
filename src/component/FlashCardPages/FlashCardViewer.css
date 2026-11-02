@@ -22,3 +22,9 @@
   transform: scale(1.1);
   transition: 0.2s ease-in-out;
 }
+
+.audio-btn-wrapper:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 50%;
+}

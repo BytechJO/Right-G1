@@ -1,45 +1,84 @@
 .row-missing {
-    display: flex;
-    /* margin-bottom: 20px; */
-    align-items: baseline;
-    gap: 20px;
-        width: 100%;
+  display: flex;
+  /* margin-bottom: 20px; */
+  align-items: baseline;
+  gap: 20px;
+  width: 100%;
 }
-#text{
-    width: 100%;
+#text {
+  width: 100%;
 }
 .input-wrapper-review9-p2-q2 {
-    position: relative;
-    display: inline-block;
-    /* width: 100%; */
+  position: relative;
+  display: inline-block;
+  /* width: 100%; */
 }
-
 
 .word-bank-review9-p2-q2 {
-    display: flex;
-    gap: 5px;
-    /* margin: 15px 0 25px; */
-    flex-wrap: wrap;
-    border: 2px solid #4b74ff;
-    background-color: #f2f6ff;
-    justify-content: center;
-    border-radius: 8px;
-    padding: 10px;
-    /* height: 60px; */
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  gap: 5px;
+  /* margin: 15px 0 25px; */
+  flex-wrap: wrap;
+  border: 2px solid #4b74ff;
+  background-color: #f2f6ff;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 10px;
+  /* height: 60px; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
-.middle-img-review9-p2-q2{
-    height: 110px;
-    width: auto;
+.middle-img-review9-p2-q2 {
+  height: 110px;
+  width: auto;
 }
 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
-    .middle-img-review9-p2-q2{
+  .middle-img-review9-p2-q2 {
     height: 110px;
     width: auto;
+  }
+} /* =====================================================
+   CORRECT SENTENCE AUDIO
+===================================================== */
+
+.correct-sentence-audio-review9-p2-q1 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 8px;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
+/* Mouse Hover */
+
+.correct-sentence-audio-review9-p2-q1:hover {
+  background: rgba(44, 82, 135, 0.05);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+  transform: translateY(-1px);
+}
+
+/* No mouse focus outline */
+
+.correct-sentence-audio-review9-p2-q1:focus {
+  outline: none;
+}
+
+/* Keyboard Tab focus */
+
+.correct-sentence-audio-review9-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
 }

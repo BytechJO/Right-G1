@@ -1,9 +1,27 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "./WB_Unit10_Page6_Q2.css";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import sound1 from "../../../assets/U1 WB/U10/audio/cd14pg62-instruction1-adult-lady_lR3Ssqcr.mp3";
 
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
+import useUnit10Audio from "./useUnit10Audio";
+import Unit10PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import petAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_003_pet.mp3";
+import pitAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_006_pit.mp3";
+import jetAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_011_jet.mp3";
+import tapAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_004_tap.mp3";
+import betAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_007_bet.mp3";
+import setAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_013_set.mp3";
+import redAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_001_red.mp3";
+import hotAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_008_hot.mp3";
+import nestAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_014_nest.mp3";
+import metAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_005_met.mp3";
+import runAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_010_run.mp3";
+import wetAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_015_wet.mp3";
+import webAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_002_web.mp3";
+import fedAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_009_fed.mp3";
+import hipAudio from "../../../assets/U1 WB/U10/audio/page62- B/Item_012_hip.mp3";
 const WB_Unit10_Page6_Q2 = () => {
   const sentences = [
     { word1: "pet", word2: "pit", word3: "jet", num: 1 },
@@ -24,6 +42,25 @@ const WB_Unit10_Page6_Q2 = () => {
   const [circledWords, setCircledWords] = useState({});
   const [checked, setChecked] = useState(false);
   const [locked, setLocked] = useState(false); // ⭐ NEW — يمنع التعديل
+  const [lockedGroups, setLockedGroups] = useState([]);
+  const { activeAudioKey, playAudio, stopAudio } = useUnit10Audio();
+  const wordAudio = {
+    pet: petAudio,
+    pit: pitAudio,
+    jet: jetAudio,
+    tap: tapAudio,
+    bet: betAudio,
+    set: setAudio,
+    red: redAudio,
+    hot: hotAudio,
+    nest: nestAudio,
+    met: metAudio,
+    run: runAudio,
+    wet: wetAudio,
+    web: webAudio,
+    fed: fedAudio,
+    hip: hipAudio,
+  };
 
   const stopAtSecond = 5.56;
 
@@ -63,8 +100,9 @@ const WB_Unit10_Page6_Q2 = () => {
     },
   ];
 
-  const handleWordClick = (sIndex, wIndex) => {
-    if (locked) return;
+  const handleWordClick = (sIndex, wIndex, word) => {
+    playAudio(`word-${sIndex}-${wIndex}`, wordAudio[word]);
+    if (locked || lockedGroups.includes(sIndex)) return;
 
     setCircledWords((prev) => {
       const current = prev[sIndex] || [];
@@ -111,13 +149,22 @@ const WB_Unit10_Page6_Q2 = () => {
     }
 
     setChecked(true);
+    const correctGroups = sentences
+      .map((_, index) => {
+        const chosen = [...(circledWords[index] || [])].sort().join(",");
+        return chosen === [...correct[index]].sort().join(",") ? index : null;
+      })
+      .filter((value) => value !== null);
+    setLockedGroups((previous) => [
+      ...new Set([...previous, ...correctGroups]),
+    ]);
 
     const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
     if (studentCorrect === totalCorrect) ValidationAlert.success(scoreMessage);
     else if (studentCorrect === 0) ValidationAlert.error(scoreMessage);
     else ValidationAlert.warning(scoreMessage);
 
-    setLocked(true); // ⭐ NEW — يمنع التعديل بعد Check Answer
+    if (correctGroups.length === sentences.length) setLocked(true);
   };
 
   const showAnswer = () => {
@@ -130,6 +177,8 @@ const WB_Unit10_Page6_Q2 = () => {
     setCircledWords(correctSelections);
     setChecked(false); // إزالة الأخطاء
     setLocked(true); // قفل التعديل
+    setLockedGroups(sentences.map((_, index) => index));
+    stopAudio();
   };
 
   return (
@@ -148,52 +197,67 @@ const WB_Unit10_Page6_Q2 = () => {
           gap: "30px",
         }}
       >
-       
-          <h5 className="header-title-page8">
-            <span className="ex-A">B</span>Listen and tap or click the words
-            with the
-            <span style={{ color: "red" }}>short e.</span>
-          </h5>
-          <QuestionAudioPlayer
-            src={sound1}
-            captions={captions}
-            stopAtSecond={stopAtSecond}
-          />
-          <div className="review3-p2-q2-sentence-container2" style={{margin:"50px 0px"}}>
-            {sentences.map((sentence, sIndex) => (
-              <div className="review3-p2-q2-sentence-row" key={sIndex}>
-                <span className="review3-p2-q2-num">{sIndex + 1}</span>
+        <ExerciseHeader
+          sectionLetter="B"
+          title="Listen and circle the words with short e."
+          subTitle="Listen to each group and tap the word with the short-e sound."
+        />
+        <QuestionAudioPlayer
+          src={sound1}
+          captions={captions}
+          stopAtSecond={stopAtSecond}
+          pageId="wb-unit10-page6-q2"
+        />
+        <div
+          className="review3-p2-q2-sentence-container2"
+          style={{ margin: "50px 0px" }}
+        >
+          {sentences.map((sentence, sIndex) => (
+            <div className="review3-p2-q2-sentence-row" key={sIndex}>
+              <span className="review3-p2-q2-num">{sIndex + 1}</span>
 
-                <div className="wb-unit10-p6-q2-word-box">
-                  {[sentence.word1, sentence.word2, sentence.word3].map(
-                    (word, wIndex) => {
-                      const isCircled = circledWords[sIndex]?.includes(wIndex);
-                      const isWrong =
-                        checked &&
-                        isCircled &&
-                        !correct[sIndex]?.includes(wIndex);
+              <div className="wb-unit10-p6-q2-word-box">
+                {[sentence.word1, sentence.word2, sentence.word3].map(
+                  (word, wIndex) => {
+                    const isCircled = circledWords[sIndex]?.includes(wIndex);
+                    const isWrong =
+                      checked &&
+                      isCircled &&
+                      !correct[sIndex]?.includes(wIndex);
 
-                      return (
-                        <span
-                          key={wIndex}
-                          className={`wb-unit10-p6-q2-word ${
-                            isCircled ? "circled" : ""
-                          }`}
-                          onClick={() => handleWordClick(sIndex, wIndex)}
-                        >
-                          {word}
-                          {isWrong && (
-                            <span className="review3-p2-q2-wrong-x">✕</span>
-                          )}
-                        </span>
-                      );
-                    },
-                  )}
-                </div>
+                    return (
+                      <span
+                        key={wIndex}
+                        className={`wb-unit10-p6-q2-word ${
+                          isCircled ? "circled" : ""
+                        }`}
+                        onClick={() => handleWordClick(sIndex, wIndex, word)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${isCircled ? "Selected. " : ""}${word}. Play audio and select.`}
+                        aria-pressed={isCircled}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            handleWordClick(sIndex, wIndex, word);
+                          }
+                        }}
+                      >
+                        {activeAudioKey === `word-${sIndex}-${wIndex}` && (
+                          <Unit10PlayingAudioIcon />
+                        )}
+                        {word}
+                        {isWrong && (
+                          <span className="review3-p2-q2-wrong-x">✕</span>
+                        )}
+                      </span>
+                    );
+                  },
+                )}
               </div>
-            ))}
-          </div>
-     
+            </div>
+          ))}
+        </div>
 
         <div className="action-buttons-container">
           <button
@@ -201,6 +265,8 @@ const WB_Unit10_Page6_Q2 = () => {
               setCircledWords({});
               setChecked(false);
               setLocked(false); // ⭐ فتح التعديل من جديد
+              setLockedGroups([]);
+              stopAudio();
             }}
             className="try-again-button"
           >

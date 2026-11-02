@@ -5,7 +5,6 @@ import AudioWithCaption from "../../AudioWithCaption";
 import Unit6_Page1_find from "./Unit6_Page1_find";
 import Unit6_Page1_Vocab from "./Unit6_Page1_Vocab";
 import Unit6_Page1_Read from "./Unit6_Pag1_Read";
-import { useState, useRef } from "react";
 import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
 import sound1 from "../../../assets/unit6/sounds/U6P46VOC-01.mp3";
@@ -20,15 +19,12 @@ import sound8 from "../../../assets/unit6/sounds/U6P46VOC-08.mp3";
 import { useContext } from "react";
 import { AudioContext } from "../../../AudioContext";
 const Unit6_Page1 = ({ openPopup }) => {
-  const [activeAreaIndex, setActiveAreaIndex] = useState(null);
-  const [hoveredAreaIndex, setHoveredAreaIndex] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const { audioRef, activeId, setActiveId } = useContext(AudioContext);
   const captionsExample = [
     { start: 0, end: 5.02, text: "Page 46, Unit 6. Can we go to the park? " },
     { start: 5.05, end: 8.13, text: "Page 46, Unit 6, Vocabulary" },
     { start: 8.15, end: 11.08, text: "1. Fly a kite." },
-    { start: 11.10, end: 13.23, text: "2. Play the violin." },
+    { start: 11.1, end: 13.23, text: "2. Play the violin." },
     { start: 13.25, end: 16.23, text: "3. Ride a bike." },
     { start: 16.25, end: 19.25, text: "4. Ride a scooter. " },
     { start: 19.27, end: 22.29, text: "5. Feed the birds." },
@@ -39,21 +35,20 @@ const Unit6_Page1 = ({ openPopup }) => {
     { start: 33.25, end: 37.22, text: "Page 46, Listen and read along. " },
     {
       start: 37.25,
-      end: 42.20,
+      end: 42.2,
       text: "Short I. Sit.Hill. Pin. ",
     },
     { start: 42.23, end: 45.25, text: "Page 47, Look at my kite." },
     {
       start: 45.28,
-      end: 56.00,
+      end: 56.0,
       text: "I can fly a kite. My kite is in the sky. It is colorful.Tilly likes to watch. She can't fly a kite. She can jump. ",
     },
     { start: 56.03, end: 59.16, text: "Page 47, Listen and read along." },
-    { start: 59.20, end: 62.22, text: " Can you climb a tree? Yes, I can. " },
+    { start: 59.2, end: 62.22, text: " Can you climb a tree? Yes, I can. " },
     { start: 62.26, end: 66.21, text: "Page 47, Listen and read along." },
     { start: 66.24, end: 71.05, text: "Short I. Wig. Mitt. Dig." },
   ];
-
 
   const areas = [
     // الصوت الأول – المنطقة الأساسية
@@ -94,13 +89,22 @@ const Unit6_Page1 = ({ openPopup }) => {
     5: sound7,
     6: sound8,
   };
+  const soundLabels = {
+    1: "Fly a kite",
+    2: "Ride a bike",
+    3: "Ride a scooter",
+    4: "Feed the birds",
+    5: "Fish",
+    6: "Paint a picture",
+  };
+
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
     const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
     const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
     console.log("X%:", xPercent.toFixed(2), "Y%:", yPercent.toFixed(2));
   };
-const playSound = (soundPath, id) => {
+  const playSound = (soundPath, id) => {
     if (!audioRef.current) return;
 
     // 🔥 وقف أي صوت شغال بأي صفحة
@@ -125,50 +129,6 @@ const playSound = (soundPath, id) => {
     >
       {/* <img src={page_1} /> */}
       <audio ref={audioRef} style={{ display: "none" }} />
-      {areas.map((area, index) => {
-       const isActive = activeId === `p23-${area.sound}`;
-
-        // ============================
-        // 1️⃣ المنطقة الأساسية → دائرة تظهر فقط عندما تكون Active
-        // ============================
-        if (area.isPrimary) {
-          return (
-            <div
-              key={index}
-              className={`circle-area ${isActive ? "active" : ""}`}
-              style={{
-                left: `${area.x1}%`,
-                top: `${area.y1}%`,
-              }}
-              onClick={() => {
-                playSound(sounds[area.sound], `p46-${area.sound}`);
-              }}
-            ></div>
-          );
-        }
-
-        // ============================
-        // 2️⃣ المناطق الفرعية → مربعات داكنة مخفية ولازم
-        //    عند الضغط عليها → تفعّل الدائرة الأساسية
-        // ============================
-        return (
-          <div
-            key={index}
-            className="clickable-area"
-            style={{
-              position: "absolute",
-              left: `${area.x1}%`,
-              top: `${area.y1}%`,
-              width: `${area.x2 - area.x1}%`,
-              height: `${area.y2 - area.y1}%`,
-            }}
-            onClick={() => {
-             playSound(sounds[area.sound], `p46-${area.sound}`);
-            }}
-          ></div>
-        );
-      })}
-
       <div
         className="headset-icon-CD-unit6-page1-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -177,6 +137,9 @@ const playSound = (soundPath, id) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open Unit 6 main audio"
           onClick={() =>
             openPopup(
               "audio",
@@ -190,11 +153,37 @@ const playSound = (soundPath, id) => {
                 <AudioWithCaption
                   src={Pg22_U3_Intro_AdultLady}
                   captions={captionsExample}
+                  pageId="unit6-page46-main-audio"
                 />
-              </div>
+              </div>,
             )
           }
-          style={{ overflow: "visible" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup(
+                "audio",
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <AudioWithCaption
+                    src={Pg22_U3_Intro_AdultLady}
+                    captions={captionsExample}
+                    pageId="unit6-page46-main-audio"
+                  />
+                </div>,
+              );
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -207,24 +196,30 @@ const playSound = (soundPath, id) => {
         </svg>
       </div>
 
+      {/* Find */}
       <div
-        className="click-icon-unit6-page1-1  hover:scale-110 transition"
+        className="click-icon-unit6-page1-1 hover:scale-110 transition"
         style={{ overflow: "visible" }}
       >
         <svg
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit6_Page1_find />
-              </>,
-              false
-            )
-          }
-          style={{ overflow: "visible" }}
+          tabIndex={0}
+          role="button"
+          aria-label="Open find activity"
+          onClick={() => openPopup("html", <Unit6_Page1_find />, false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup("html", <Unit6_Page1_find />, false);
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -237,6 +232,7 @@ const playSound = (soundPath, id) => {
         </svg>
       </div>
 
+      {/* Vocabulary */}
       <div
         className="headset-icon-CD-unit6-page1-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -245,15 +241,21 @@ const playSound = (soundPath, id) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit6_Page1_Vocab />
-              </>
-            )
-          }
-          style={{ overflow: "visible" }}
+          tabIndex={0}
+          role="button"
+          aria-label="Open vocabulary activity"
+          onClick={() => openPopup("html", <Unit6_Page1_Vocab />)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup("html", <Unit6_Page1_Vocab />);
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -266,6 +268,7 @@ const playSound = (soundPath, id) => {
         </svg>
       </div>
 
+      {/* Read */}
       <div
         className="click-icon-unit6-page1-2 hover:scale-110 transition"
         style={{ overflow: "visible" }}
@@ -274,15 +277,21 @@ const playSound = (soundPath, id) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-          onClick={() =>
-            openPopup(
-              "html",
-              <>
-                <Unit6_Page1_Read />
-              </>
-            )
-          }
-          style={{ overflow: "visible" }}
+          tabIndex={0}
+          role="button"
+          aria-label="Open reading activity"
+          onClick={() => openPopup("html", <Unit6_Page1_Read />)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+
+              openPopup("html", <Unit6_Page1_Read />);
+            }
+          }}
+          style={{
+            overflow: "visible",
+            cursor: "pointer",
+          }}
         >
           <image
             className="svg-img"
@@ -294,6 +303,58 @@ const playSound = (soundPath, id) => {
           />
         </svg>
       </div>
+      {/* Vocabulary audio hotspots */}
+      {areas.map((area, index) => {
+        const areaId = `p46-${area.sound}`;
+        const isActive = activeId === areaId;
+
+        if (area.isPrimary) {
+          return (
+            <div
+              key={index}
+              className={`circle-area page4-audio-hotspot ${
+                isActive ? "active" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              aria-label={`Play pronunciation: ${soundLabels[area.sound]}`}
+              aria-pressed={isActive}
+              style={{
+                left: `${area.x1}%`,
+                top: `${area.y1}%`,
+              }}
+              onClick={() => {
+                playSound(sounds[area.sound], areaId);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+
+                  playSound(sounds[area.sound], areaId);
+                }
+              }}
+            />
+          );
+        }
+
+        return (
+          <div
+            key={index}
+            className="clickable-area"
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              left: `${area.x1}%`,
+              top: `${area.y1}%`,
+              width: `${area.x2 - area.x1}%`,
+              height: `${area.y2 - area.y1}%`,
+            }}
+            onClick={() => {
+              playSound(sounds[area.sound], areaId);
+            }}
+          />
+        );
+      })}
     </div>
   );
 };

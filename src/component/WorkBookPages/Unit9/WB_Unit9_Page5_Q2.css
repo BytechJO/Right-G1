@@ -18,12 +18,22 @@
 }
 .wb-unit9-qk-svg-wrapper {
   cursor: pointer;
+  position: relative;
+  outline: none;
+}
+
+.wb-unit9-qk-svg-wrapper:focus-visible,
+.wb-unit9-qk-option:focus-visible,
+.color-circle:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
 }
 
 .wb-unit9-qk-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .wb-unit9-qk-item.right {

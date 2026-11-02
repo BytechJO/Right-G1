@@ -170,3 +170,9 @@
   z-index: 999999;
   border: 2px solid white;
 }
+.clickable-img-unit2-p7-q2:focus-visible,
+.clickable-word-unit2-p7-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}

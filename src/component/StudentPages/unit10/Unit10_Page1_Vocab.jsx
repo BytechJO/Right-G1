@@ -23,7 +23,7 @@ import sound9 from "../../../assets/unit10/sound/unit10-sound9.mp3";
 import sound10 from "../../../assets/unit10/sound/unit10-sound10.mp3";
 import ModernVocabularyComponent from "../../ModernVocabularyComponent";
 const Unit10_Page1_Vocab = () => {
- return (
+  return (
     <ModernVocabularyComponent
       backgroundImage={backgroundImage}
       mainAudio={vocabulary}
@@ -78,6 +78,7 @@ const Unit10_Page1_Vocab = () => {
         { start: 13.68, end: 14.12, text: "Wait." },
         { start: 14.8, end: 15.6, text: "Cafeteria." },
       ]}
+      pageId="unit10-page82-vocab"
     />
   );
 };

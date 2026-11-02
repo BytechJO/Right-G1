@@ -1,28 +1,66 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./WB_Unit4_Page6_Q1.css";
+
 import sound1 from "../../../assets/U1 WB/U4/audio/cd6pg26-instruction1-adult-lady_6zu0SVay.mp3";
+
 import bat from "../../../assets/U1 WB/U4/U4P26EXEA-01.svg";
 import box from "../../../assets/U1 WB/U4/U4P26EXEA-02.svg";
 import bucket from "../../../assets/U1 WB/U4/U4P26EXEA-03.svg";
 import boat from "../../../assets/U1 WB/U4/U4P26EXEA-04.svg";
-import QuestionAudioPlayer from "../../QuestionAudioPlayer";
-const WB_Unit4_Page6_Q1 = () => {
-  const [answers, setAnswers] = useState([null, null, null]);
 
-  const [showResult, setShowResult] = useState(false);
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
+
+const WB_Unit4_Page6_Q1 = () => {
+  /* =====================================================
+     DATA
+  ===================================================== */
+
   const items = [
-    { img: bat, correct: "f" },
-    { img: box, correct: "v" },
-    { img: bucket, correct: "f" },
-    { img: boat, correct: "v" },
+    {
+      img: bat,
+      alt: "A red flag on a pole.",
+      correct: "f",
+    },
+    {
+      img: box,
+      alt: "A violin with a bow.",
+      correct: "v",
+    },
+    {
+      img: bucket,
+      alt: "A bowl filled with fruit.",
+      correct: "f",
+    },
+    {
+      img: boat,
+      alt: "A group of vegetables.",
+      correct: "v",
+    },
   ];
+
+  /* =====================================================
+     STATE
+  ===================================================== */
+
+  const [answers, setAnswers] = useState(Array(items.length).fill(null));
+
+  const [wrongItems, setWrongItems] = useState([]);
+
+  const [lockedItems, setLockedItems] = useState([]);
+
+  const [showAnswerState, setShowAnswerState] = useState(false);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     AUDIO PLAYER DATA
+  ===================================================== */
+
   const stopAtSecond = 4.86;
 
-  // ================================
-  // ✔ Captions Array
-  // ================================
   const captions = [
     {
       start: 0,
@@ -51,60 +89,151 @@ const WB_Unit4_Page6_Q1 = () => {
     },
   ];
 
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+
+  const isLocked = (index) => lockedItems.includes(index);
+
+  /* =====================================================
+     SELECT
+  ===================================================== */
+
   const handleSelect = (index, value) => {
-    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
-
-    // 🔥 يمنع بقاء الإكس بعد ما يغيّر الطالب جوابه
-    setShowResult(false);
-  };
-
-  const checkAnswers = () => {
-    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please answer all items first.");
+    if (showAnswerState || checkCompleted || isLocked(index)) {
       return;
     }
 
-    const correctCount = answers.filter(
-      (a, i) => a?.toLowerCase() === items[i].correct?.toLowerCase(),
-    ).length;
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      updated[index] = value;
+
+      return updated;
+    });
+
+    /*
+      شيل X فقط عن نفس السؤال
+    */
+
+    setWrongItems((prev) => prev.filter((itemIndex) => itemIndex !== index));
+  };
+
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
+
+  const checkAnswers = () => {
+    if (showAnswerState || checkCompleted) {
+      return;
+    }
+
+    if (answers.includes(null)) {
+      ValidationAlert.info("Oops!", "Please answer all items first.");
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const wrong = [];
+
+    const newlyLocked = [];
+
+    answers.forEach((answer, index) => {
+      const isCorrect =
+        answer?.toLowerCase() === items[index].correct.toLowerCase();
+
+      if (isCorrect) {
+        correctCount++;
+
+        newlyLocked.push(index);
+      } else {
+        wrong.push(index);
+      }
+    });
+
+    /*
+      الصح فقط يقفل
+    */
+
+    setLockedItems((prev) => Array.from(new Set([...prev, ...newlyLocked])));
+
+    /*
+      الغلط فقط عليه X
+    */
+
+    setWrongItems(wrong);
 
     const total = items.length;
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-        <span style="color:${color}; font-weight:bold;">
+      <div style="font-size:20px;text-align:center;margin-top:8px;">
+        <span style="color:${color};font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
-    setLocked(true); // ⭐ NEW — قفل التعديل بعد Check
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
 
-    setTimeout(() => setShowResult(true), 200);
+    if (correctCount === total) {
+      setLockedItems(items.map((_, index) => index));
+
+      setWrongItems([]);
+
+      setCheckCompleted(true);
+
+      ValidationAlert.success(scoreMessage);
+
+      return;
+    }
+
+    if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const resetAnswers = () => {
-    setAnswers([null, null, null]);
-    setShowResult(false);
-    setLocked(false); // ⭐ NEW — إعادة فتح التعديل
+    setAnswers(Array(items.length).fill(null));
+
+    setWrongItems([]);
+
+    setLockedItems([]);
+
+    setShowAnswerState(false);
+
+    setCheckCompleted(false);
   };
 
-  // ⭐⭐⭐ NEW — Show Answer
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
   const showAnswer = () => {
     const correctFilled = items.map((item) => item.correct);
 
-    setAnswers(correctFilled); // ضع الإجابات الصحيحة
-    setShowResult(true); // إظهار النتيجة
-    setLocked(true); // قفل الخيارات
+    setAnswers(correctFilled);
+
+    setWrongItems([]);
+
+    setLockedItems(items.map((_, index) => index));
+
+    setShowAnswerState(true);
+
+    setCheckCompleted(true);
   };
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <div
@@ -116,19 +245,18 @@ const WB_Unit4_Page6_Q1 = () => {
         padding: "30px",
       }}
     >
-      <div className="div-forall" style={{}}>
-        <div className="w-full">
-          <h5 className="header-title-page8">
-            <span className="ex-A">A</span> Does it start with{" "}
-            <span className="text-red-500">F </span>or{" "}
-            <span className="text-red-500">V</span>? Tap or click the beginning
-            letter.
-          </h5>
-        </div>
+      <div className="div-forall">
+        <ExerciseHeader
+          sectionLetter="A"
+          title="Listen, look, and circle."
+          subTitle="Listen to each word and tap f or v for its beginning sound."
+        />
+
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
           stopAtSecond={stopAtSecond}
+          pageId="unit4-page26-q1-WB"
         />
 
         <div
@@ -141,85 +269,153 @@ const WB_Unit4_Page6_Q1 = () => {
           }}
         >
           <div className="fv-container-wb-unit4-p6-q1">
-            {items.map((item, index) => (
-              <div className="fv-item-wb-unit4-p6-q1" key={index}>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "13px",
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <span
+            {items.map((item, index) => {
+              const locked = isLocked(index);
+
+              return (
+                <div className="fv-item-wb-unit4-p6-q1" key={index}>
+                  <div
                     style={{
-                      fontSize: "20px",
-                      color: "darkblue",
-                      fontWeight: "600",
+                      display: "flex",
+                      gap: "13px",
+                      flexDirection: "row",
+                      alignItems: "flex-start",
                     }}
                   >
-                    {index + 1}
-                  </span>
-                  <img src={item.img} className="fv-image-wb-unit4-p6-q1" />
-                </div>
-                <div className="fv-options-wb-unit4-p6-q1">
-                  {/* B OPTION */}
-                  <span
-                    style={{ position: "relative" }}
-                    className={`fv-option 
-                    ${answers[index] === "f" ? "selected-review4-p2-q2" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "f" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "f")}
-                  >
-                    f
-                    {showResult &&
-                      answers[index] === "f" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-x-fv">✕</span>
-                      )}
-                  </span>
+                    <span
+                      style={{
+                        fontSize: "20px",
+                        color: "darkblue",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {index + 1}
+                    </span>
 
-                  {/* P OPTION */}
-                  <span
-                    style={{ position: "relative" }}
-                    className={`fv-option 
-                    ${answers[index] === "v" ? "selected-review4-p2-q2" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "v" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "v")}
-                  >
-                    v
-                    {showResult &&
-                      answers[index] === "v" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-x-fv">✕</span>
-                      )}
-                  </span>
+                    <img
+                      src={item.img}
+                      alt={item.alt}
+                      className="fv-image-wb-unit4-p6-q1"
+                    />
+                  </div>
+
+                  <div className="fv-options-wb-unit4-p6-q1">
+                    {/* =========================
+                        F OPTION
+                    ========================= */}
+
+                    <span
+                      role="button"
+                      tabIndex={
+                        locked || showAnswerState || checkCompleted ? -1 : 0
+                      }
+                      aria-pressed={answers[index] === "f"}
+                      aria-label={`Choose f for item ${index + 1}`}
+                      style={{
+                        position: "relative",
+                        cursor:
+                          locked || showAnswerState || checkCompleted
+                            ? "default"
+                            : "pointer",
+                      }}
+                      className={`fv-option
+                        ${
+                          answers[index] === "f" ? "selected-review4-p2-q2" : ""
+                        }
+                        ${
+                          wrongItems.includes(index) && answers[index] === "f"
+                            ? "wrong-answer"
+                            : ""
+                        }
+                      `}
+                      onClick={() => handleSelect(index, "f")}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          handleSelect(index, "f");
+                        }
+                      }}
+                    >
+                      f
+                      {wrongItems.includes(index) &&
+                        answers[index] === "f" &&
+                        answers[index] !== item.correct && (
+                          <span className="wrong-x-fv" aria-hidden="true">
+                            ✕
+                          </span>
+                        )}
+                    </span>
+
+                    {/* =========================
+                        V OPTION
+                    ========================= */}
+
+                    <span
+                      role="button"
+                      tabIndex={
+                        locked || showAnswerState || checkCompleted ? -1 : 0
+                      }
+                      aria-pressed={answers[index] === "v"}
+                      aria-label={`Choose v for item ${index + 1}`}
+                      style={{
+                        position: "relative",
+                        cursor:
+                          locked || showAnswerState || checkCompleted
+                            ? "default"
+                            : "pointer",
+                      }}
+                      className={`fv-option
+                        ${
+                          answers[index] === "v" ? "selected-review4-p2-q2" : ""
+                        }
+                        ${
+                          wrongItems.includes(index) && answers[index] === "v"
+                            ? "wrong-answer"
+                            : ""
+                        }
+                      `}
+                      onClick={() => handleSelect(index, "v")}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          handleSelect(index, "v");
+                        }
+                      }}
+                    >
+                      v
+                      {wrongItems.includes(index) &&
+                        answers[index] === "v" &&
+                        answers[index] !== item.correct && (
+                          <span className="wrong-x-fv" aria-hidden="true">
+                            ✕
+                          </span>
+                        )}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
+
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
+
       <div className="action-buttons-container">
         <button onClick={resetAnswers} className="try-again-button">
           Start Again ↻
         </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+
         <button onClick={showAnswer} className="show-answer-btn swal-continue">
           Show Answer
         </button>
+
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>

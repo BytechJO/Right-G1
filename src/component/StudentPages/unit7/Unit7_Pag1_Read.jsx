@@ -19,10 +19,9 @@ const Unit7_Page1_Read = () => {
     new Audio(boy),
   ];
 
-const captions = [
-   { start: 0, end: 4.04, text: " Page 58. Listen and read along." },
+  const captions = [
+    { start: 0, end: 4.04, text: " Page 58. Listen and read along." },
     { start: 3.07, end: 8.15, text: "  H. Hand, hat, house." },
-    
   ];
 
   return (
@@ -30,11 +29,13 @@ const captions = [
       <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 4.57, 5.60, 6.21, 7.71]}
+        checkpoints={[0, 4.57, 5.6, 6.21, 7.71]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
         captions={captions}
+        subHeader="Press Play, follow the h words, then tap each card to hear it again."
+        pageId="unit7-page58-read"
       />
     </>
   );

@@ -1,29 +1,66 @@
 import { useState } from "react";
+
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Unit5_Page5_Q1.css";
+
 import sound1 from "../../../assets/unit5/sounds/U5P44EXEA1.mp3";
+
 import bat from "../../../assets/unit5/imgs/U5P44EXEA1-01.svg";
 import box from "../../../assets/unit5/imgs/U5P44EXEA1-02.svg";
 import bucket from "../../../assets/unit5/imgs/U5P44EXEA1-03.svg";
 import boat from "../../../assets/unit5/imgs/U5P44EXEA1-04.svg";
+
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
+import ExerciseHeader from "../../ExerciseHeader";
 
 const Unit5_Page5_Q1 = () => {
-  const [answers, setAnswers] = useState([null, null, null, null]);
-  const [showResult, setShowResult] = useState(false);
-  const stopAtSecond = 10.8;
-
-  const [locked, setLocked] = useState(false); // ⭐ NEW — قفل التعديل بعد Show Answer
+  /* =====================================================
+     DATA
+  ===================================================== */
 
   const items = [
-    { img: bat, correct: "g" },
-    { img: box, correct: "k" },
-    { img: bucket, correct: "k" },
-    { img: boat, correct: "g" },
+    {
+      img: bat,
+      alt: "A goat standing.",
+      correct: "g",
+    },
+    {
+      img: box,
+      alt: "A kangaroo standing upright.",
+      correct: "k",
+    },
+    {
+      img: bucket,
+      alt: "A colorful kite with a tail.",
+      correct: "k",
+    },
+    {
+      img: boat,
+      alt: "A bunch of purple grapes.",
+      correct: "g",
+    },
   ];
-  // ================================
-  // ✔ Captions Array
-  // ================================
+
+  /* =====================================================
+     STATE
+  ===================================================== */
+
+  const [answers, setAnswers] = useState(Array(items.length).fill(null));
+
+  const [wrongItems, setWrongItems] = useState([]);
+
+  const [lockedItems, setLockedItems] = useState([]);
+
+  const [showAnswerState, setShowAnswerState] = useState(false);
+
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  /* =====================================================
+     AUDIO
+  ===================================================== */
+
+  const stopAtSecond = 10.8;
+
   const captions = [
     {
       start: 0,
@@ -33,64 +70,173 @@ const Unit5_Page5_Q1 = () => {
     {
       start: 5.15,
       end: 10.25,
-      text: " Does it begin with G or K? Listen and circle.",
+      text: "Does it begin with G or K? Listen and circle.",
     },
-    { start: 10.27, end: 13.04, text: "1. Goat" },
-    { start: 13.07, end: 15.1, text: "2. Kangaroo " },
-    { start: 15.12, end: 17.18, text: "3. Kite " },
-    { start: 17.2, end: 20.04, text: "4. Grapes" },
+    {
+      start: 10.27,
+      end: 13.04,
+      text: "1. Goat",
+    },
+    {
+      start: 13.07,
+      end: 15.1,
+      text: "2. Kangaroo",
+    },
+    {
+      start: 15.12,
+      end: 17.18,
+      text: "3. Kite",
+    },
+    {
+      start: 17.2,
+      end: 20.04,
+      text: "4. Grapes",
+    },
   ];
 
-  const handleSelect = (index, value) => {
-    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
-    const newAnswers = [...answers];
-    newAnswers[index] = value;
-    setAnswers(newAnswers);
-  };
+  /* =====================================================
+     HELPERS
+  ===================================================== */
 
-  const checkAnswers = () => {
-    if (locked) return; // ⭐ NEW — منع التعديل بعد Show Answer
-    if (answers.includes(null)) {
-      ValidationAlert.info("Oops!", "Please answer all items first.");
+  const isLocked = (index) => lockedItems.includes(index);
+
+  /* =====================================================
+     SELECT
+  ===================================================== */
+
+  const handleSelect = (index, value) => {
+    if (showAnswerState || checkCompleted || isLocked(index)) {
       return;
     }
 
-    const correctCount = answers.filter(
-      (a, i) => a?.toLowerCase() === items[i].correct?.toLowerCase(),
-    ).length;
+    setAnswers((prev) => {
+      const updated = [...prev];
+
+      updated[index] = value;
+
+      return updated;
+    });
+
+    /*
+      شيل الـ X فقط من نفس السؤال
+    */
+
+    setWrongItems((prev) => prev.filter((itemIndex) => itemIndex !== index));
+  };
+
+  /* =====================================================
+     CHECK ANSWERS
+  ===================================================== */
+
+  const checkAnswers = () => {
+    if (showAnswerState || checkCompleted) {
+      return;
+    }
+
+    if (answers.includes(null)) {
+      ValidationAlert.info("Oops!", "Please answer all items first.");
+
+      return;
+    }
+
+    let correctCount = 0;
+
+    const wrong = [];
+
+    const newlyLocked = [];
+
+    answers.forEach((answer, index) => {
+      const correct =
+        answer?.toLowerCase() === items[index].correct.toLowerCase();
+
+      if (correct) {
+        correctCount++;
+
+        newlyLocked.push(index);
+      } else {
+        wrong.push(index);
+      }
+    });
+
+    /*
+      الصح فقط يقفل
+    */
+
+    setLockedItems((prev) => Array.from(new Set([...prev, ...newlyLocked])));
+
+    /*
+      الغلط فقط يظل عليه X
+    */
+
+    setWrongItems(wrong);
 
     const total = items.length;
+
     const color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
 
     const scoreMessage = `
-      <div style="font-size: 20px; text-align:center; margin-top: 8px;">
-        <span style="color:${color}; font-weight:bold;">
+      <div style="font-size:20px;text-align:center;margin-top:8px;">
+        <span style="color:${color};font-weight:bold;">
           Score: ${correctCount} / ${total}
         </span>
       </div>
     `;
-    setLocked(true); // ⭐ NEW — قفل التعديل بعد Check
-    if (correctCount === total) ValidationAlert.success(scoreMessage);
-    else if (correctCount === 0) ValidationAlert.error(scoreMessage);
-    else ValidationAlert.warning(scoreMessage);
 
-    setTimeout(() => setShowResult(true), 200);
+    if (correctCount === total) {
+      setLockedItems(items.map((_, index) => index));
+
+      setWrongItems([]);
+
+      setCheckCompleted(true);
+
+      ValidationAlert.success(scoreMessage);
+
+      return;
+    }
+
+    if (correctCount === 0) {
+      ValidationAlert.error(scoreMessage);
+    } else {
+      ValidationAlert.warning(scoreMessage);
+    }
   };
+
+  /* =====================================================
+     RESET
+  ===================================================== */
 
   const resetAnswers = () => {
     setAnswers(Array(items.length).fill(null));
-    setShowResult(false);
-    setLocked(false); // ⭐ NEW — إعادة فتح التعديل
-  };
-  // ⭐⭐⭐ NEW — Show Answer
-  const showAnswer = () => {
-    const correctFilled = items.map((item) => item.correct);
 
-    setAnswers(correctFilled); // ضع الإجابات الصحيحة
-    setShowResult(true); // إظهار النتيجة
-    setLocked(true); // قفل الخيارات
+    setWrongItems([]);
+
+    setLockedItems([]);
+
+    setShowAnswerState(false);
+
+    setCheckCompleted(false);
   };
+
+  /* =====================================================
+     SHOW ANSWER
+  ===================================================== */
+
+  const showAnswer = () => {
+    setAnswers(items.map((item) => item.correct));
+
+    setWrongItems([]);
+
+    setLockedItems(items.map((_, index) => index));
+
+    setShowAnswerState(true);
+
+    setCheckCompleted(true);
+  };
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
 
   return (
     <div
@@ -108,18 +254,29 @@ const Unit5_Page5_Q1 = () => {
           gap: "60px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">A</span>
-          <span style={{ color: "purple" }}>1</span>Does it begin with
-          <span style={{ color: "red" }}>g</span> or{" "}
-          <span style={{ color: "red" }}>k</span> ? Tap or click the beginning
-          letter.
-        </h5>
+        <ExerciseHeader
+          sectionLetter="A"
+          questionNumber="1"
+          title={
+            <>
+              Does it begin with <span style={{ color: "red" }}>g</span> or{" "}
+              <span style={{ color: "red" }}>k</span>? Listen and circle.
+            </>
+          }
+          subTitle={
+            <>
+              Look at each picture, then tap{" "}
+              <span style={{ color: "red" }}>g</span> or{" "}
+              <span style={{ color: "red" }}>k</span>.
+            </>
+          }
+        />
 
         <QuestionAudioPlayer
           src={sound1}
           captions={captions}
           stopAtSecond={stopAtSecond}
+          pageId="unit5-page44-Q-A-SB"
         />
 
         <div
@@ -132,79 +289,150 @@ const Unit5_Page5_Q1 = () => {
           }}
         >
           <div className="gk-container-unit5-pg5-q1">
-            {items.map((item, index) => (
-              <div className="gk-item" key={index}>
-                <div style={{ display: "flex", gap: "20px" }}>
-                  <span
-                    className="q-number"
+            {items.map((item, index) => {
+              const locked = isLocked(index);
+
+              return (
+                <div className="gk-item" key={index}>
+                  <div
                     style={{
-                      color: "#2c5287",
-                      fontSize: "20px",
-                      fontWeight: "700",
+                      display: "flex",
+                      gap: "20px",
                     }}
                   >
-                    {index + 1}
-                  </span>
-                  <img src={item.img} className="gk-image" />
-                </div>
+                    <span
+                      className="q-number"
+                      style={{
+                        color: "#2c5287",
+                        fontSize: "20px",
+                        fontWeight: "700",
+                      }}
+                    >
+                      {index + 1}
+                    </span>
 
-                <div className="gk-options">
-                  {/* B OPTION */}
-                  <span
-                    className={`gk-option 
-                    ${answers[index] === "g" ? "selected3" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "g" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "g")}
-                  >
-                    g
-                    {showResult &&
-                      answers[index] === "g" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-mark-Unit5_Page5_Q1">✕</span>
-                      )}
-                  </span>
+                    <img src={item.img} alt={item.alt} className="gk-image" />
+                  </div>
 
-                  {/* P OPTION */}
-                  <span
-                    className={`gk-option 
-                    ${answers[index] === "k" ? "selected3" : ""}
-                    ${
-                      showResult &&
-                      answers[index] === "k" &&
-                      answers[index] !== item.correct
-                        ? "wrong-answer"
-                        : ""
-                    }`}
-                    onClick={() => handleSelect(index, "k")}
-                  >
-                    k
-                    {showResult &&
-                      answers[index] === "k" &&
-                      answers[index] !== item.correct && (
-                        <span className="wrong-mark-Unit5_Page5_Q1">✕</span>
-                      )}
-                  </span>
+                  <div className="gk-options">
+                    {/* =========================
+                        G OPTION
+                    ========================= */}
+
+                    <span
+                      role="button"
+                      tabIndex={
+                        locked || showAnswerState || checkCompleted ? -1 : 0
+                      }
+                      aria-pressed={answers[index] === "g"}
+                      aria-label={`Choose g for item ${index + 1}`}
+                      className={`gk-option
+                        ${answers[index] === "g" ? "selected3" : ""}
+                        ${
+                          wrongItems.includes(index) && answers[index] === "g"
+                            ? "wrong-answer"
+                            : ""
+                        }
+                      `}
+                      style={{
+                        position: "relative",
+                        cursor:
+                          locked || showAnswerState || checkCompleted
+                            ? "default"
+                            : "pointer",
+                      }}
+                      onClick={() => handleSelect(index, "g")}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          handleSelect(index, "g");
+                        }
+                      }}
+                    >
+                      g
+                      {wrongItems.includes(index) &&
+                        answers[index] === "g" &&
+                        answers[index] !== item.correct && (
+                          <span
+                            className="wrong-mark-Unit5_Page5_Q1"
+                            aria-hidden="true"
+                          >
+                            ✕
+                          </span>
+                        )}
+                    </span>
+
+                    {/* =========================
+                        K OPTION
+                    ========================= */}
+
+                    <span
+                      role="button"
+                      tabIndex={
+                        locked || showAnswerState || checkCompleted ? -1 : 0
+                      }
+                      aria-pressed={answers[index] === "k"}
+                      aria-label={`Choose k for item ${index + 1}`}
+                      className={`gk-option
+                        ${answers[index] === "k" ? "selected3" : ""}
+                        ${
+                          wrongItems.includes(index) && answers[index] === "k"
+                            ? "wrong-answer"
+                            : ""
+                        }
+                      `}
+                      style={{
+                        position: "relative",
+                        cursor:
+                          locked || showAnswerState || checkCompleted
+                            ? "default"
+                            : "pointer",
+                      }}
+                      onClick={() => handleSelect(index, "k")}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          handleSelect(index, "k");
+                        }
+                      }}
+                    >
+                      k
+                      {wrongItems.includes(index) &&
+                        answers[index] === "k" &&
+                        answers[index] !== item.correct && (
+                          <span
+                            className="wrong-mark-Unit5_Page5_Q1"
+                            aria-hidden="true"
+                          >
+                            ✕
+                          </span>
+                        )}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
+
+      {/* =================================================
+          BUTTONS
+      ================================================= */}
 
       <div className="action-buttons-container">
         <button onClick={resetAnswers} className="try-again-button">
           Start Again ↻
         </button>
-        {/* ⭐⭐⭐ NEW — زر Show Answer */}
+
         <button onClick={showAnswer} className="show-answer-btn swal-continue">
           Show Answer
         </button>
+
         <button onClick={checkAnswers} className="check-button2">
           Check Answer ✓
         </button>

@@ -102,7 +102,47 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(40, 108, 167, 0.3);
 }
+.main-audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  background: #430f68;
+  border-radius: 30px;
+
+  padding: 5px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+  gap: 2px;
+}
+
+.main-audio-btn {
+  width: 45px;
+  height: 35px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.main-audio-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.main-audio-btn:active {
+  transform: scale(0.92);
+}
 .play-btn2 {
   width: 50px;
   height: 50px;

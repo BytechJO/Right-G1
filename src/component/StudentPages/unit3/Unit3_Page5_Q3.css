@@ -11,7 +11,7 @@
   gap: 40px 50px;
   margin: 30px 0px;
   width: 100%;
-    justify-items: center;
+  justify-items: center;
 }
 
 /* كل سؤال */
@@ -26,25 +26,123 @@
 .unit3-q3-images {
   display: flex;
   flex-wrap: wrap;
-
   gap: 8px;
 }
 
 /* الصور */
 .unit3-q3-image {
- width: auto;
-    height: 150px;
+  width: auto;
+  height: 150px;
   object-fit: contain;
 }
+
+/* =====================================================
+   NUMBER BANK
+===================================================== */
+
+.unit3-q3-number-bank {
+  display: flex;
+  gap: 40px;
+  padding: 10px;
+  width: 100%;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* الرقم نفسه */
+.unit3-q3-bank-number {
+  width: 40px;
+  height: 40px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  font-weight: bold;
+
+  background: white;
+
+  cursor: grab;
+
+  user-select: none;
+  touch-action: none;
+
+  transition: 0.2s;
+
+  outline: none;
+}
+
+/* Tab focus */
+.unit3-q3-bank-number:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 5px;
+}
+
+/* الرقم مستخدم */
+.unit3-q3-bank-number.used {
+  border-color: #aab3c4;
+  background: #f0f2f5;
+  opacity: 0.45;
+  color: #9aa3b0;
+  cursor: default;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.unit3-q3-volume-icon {
+  position: absolute;
+
+  top: -12px;
+  right: -12px;
+
+  font-size: 18px;
+
+  background: white;
+
+  padding: 3px;
+
+  border-radius: 50%;
+
+  z-index: 10;
+
+  animation: unit3-q3-audio-pulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes unit3-q3-audio-pulse {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.2);
+  }
+}
+
+/* =====================================================
+   INPUT WRAPPER
+===================================================== */
 
 /* مربع الإدخال */
 .unit3-q3-input-wrapper {
   width: 50px;
   height: 50px;
+
   border: 2px solid #ff3030;
   border-radius: 6px;
+
   position: relative;
+
   background: white;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,31 +152,169 @@
   color: red !important;
   font-weight: bold;
 }
-/* input */
+
+/* =====================================================
+   INPUT
+===================================================== */
+
 .unit3-q3-input {
   width: 100%;
   height: 100%;
+
   font-size: 28px;
+
   border: none;
   outline: none;
+
   text-align: center;
+
+  font-weight: bold;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  position: relative;
+
+  background: transparent;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   TAB FOCUS ON INPUT
+===================================================== */
+
+.unit3-q3-input:focus-visible {
+  outline: 4px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   INPUT أثناء الـ Drag
+===================================================== */
+
+.unit3-q3-input.drag-over-cell {
+  background: #e3f2fd;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+   الرقم يومض داخل الخانة قبل وضعه
+===================================================== */
+
+.unit3-q3-input.keyboard-target {
+  background: #eff6ff;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.unit3-q3-keyboard-preview {
+  color: #2c5287;
+
+  font-size: 28px;
+  font-weight: bold;
+
+  animation: unit3-q3-preview-blink 0.65s ease-in-out infinite;
+}
+
+@keyframes unit3-q3-preview-blink {
+  0% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
+}
+
+/* الرقم الموضوع داخل الخانة */
+.unit3-q3-value {
+  font-size: 28px;
   font-weight: bold;
 }
+
+/* =====================================================
+   WRONG
+===================================================== */
 
 /* علامة الخطأ */
 .unit3-q3-wrong {
   position: absolute;
   top: -12px;
   right: -12px;
+
   width: 22px;
   height: 22px;
+
   background: red;
   color: white;
+
   border-radius: 50%;
+
   font-size: 12px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   border: 3px solid white;
+
   font-weight: bold;
+
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   CORRECT / LOCKED
+===================================================== */
+
+.unit3-q3-input-wrapper.correct-input-wrapper {
+  border-color: green;
+}
+
+.unit3-q3-input.locked-input {
+  cursor: default;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.unit3-q3-drag-overlay {
+  width: 40px;
+  height: 40px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+
+  background: white;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* =====================================================
+   CHECK COMPLETED
+   يضل بالـ Tab لكن ما يشتغل
+===================================================== */
+
+
+
+.show-answer-btn.disabled-action {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

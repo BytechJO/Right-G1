@@ -18,21 +18,21 @@ const Unit3_Page1_Read = () => {
     new Audio(Pg22_1_4_AdultLady),
   ];
   const captions = [
-   { start: 0, end: 3.05, text: "Page 22. Listen and read along." },
+    { start: 0, end: 3.05, text: "Page 22. Listen and read along." },
     { start: 3.07, end: 6.14, text: "Short A. Ant, pan, rat." },
-    
   ];
   return (
     <>
-
-         <FourImagesWithAudio
+      <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 3.95, 5.11,6.05, 7.00]}
+        checkpoints={[0, 3.95, 5.11, 6.05, 7.0]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
         captions={captions}
+        pageId="unit3-page22-read"
+        subHeader="Press Play, follow the short-a words, then tap each card to hear it again."
       />
     </>
   );

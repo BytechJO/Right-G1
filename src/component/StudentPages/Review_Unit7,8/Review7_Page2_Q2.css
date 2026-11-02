@@ -48,3 +48,136 @@
     flex-direction: column-reverse;
   }
 }
+/* =====================================================
+   DROP FOCUS
+===================================================== */
+
+.q-input-review7-p2-q2 {
+  position: relative;
+  outline: none;
+}
+
+.q-input-review7-p2-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD TARGET PREVIEW
+===================================================== */
+
+.keyboard-drop-preview-review7-p2-q2 {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   REAL VALUE
+===================================================== */
+
+.drop-real-value-review7-p2-q2 {
+  position: relative;
+
+  z-index: 1;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   KEYBOARD WORD PREVIEW
+===================================================== */
+
+.drop-preview-value-review7-p2-q2 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  padding: 3px 10px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  animation:
+    blink-preview-review7-p2-q2
+    0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-review7-p2-q2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق يمين كلمة البنك
+===================================================== */
+
+.audio-icon-review7-p2-q2 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   MOUSE DRAG OVERLAY
+===================================================== */
+
+.mouse-drag-overlay-review7-p2-q2 {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  font-weight: bold;
+
+  color: #2c5287;
+
+  white-space: nowrap;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+
+  pointer-events: none;
+
+  transform: translateY(-12px);
+}

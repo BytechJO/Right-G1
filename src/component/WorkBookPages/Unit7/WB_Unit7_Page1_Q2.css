@@ -26,3 +26,113 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+/* =====================================================
+   OPTION WRAPPER
+===================================================== */
+
+.color-option-wrapper-wb-u7-p1-q2 {
+  position: relative;
+
+  display: inline-block;
+}
+
+/* =====================================================
+   WORD FOCUS
+===================================================== */
+
+.number-option-wb-u7-p1-q2 {
+  outline: none;
+}
+
+.number-option-wb-u7-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 5px;
+
+  border-radius: 8px;
+}
+
+/* =====================================================
+   COLOR PALETTE NEXT TO WORD
+===================================================== */
+
+.color-palette-inline-wb-u7-p1-q2 {
+  position: absolute;
+
+  /* جنب الكلمة مباشرة */
+  left: calc(100% + 12px);
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 7px 9px;
+
+  background: #ffffff;
+
+  border: 2px solid #6ec1ff;
+
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+
+  z-index: 100;
+}
+
+/* =====================================================
+   COLORS
+===================================================== */
+
+.color-circle {
+  width: 25px;
+
+  height: 25px;
+
+  flex-shrink: 0;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  box-shadow: 0 0 0 1px #777;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+}
+
+.color-circle:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+.color-circle.erase {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #ffffff;
+
+  color: #d00;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}

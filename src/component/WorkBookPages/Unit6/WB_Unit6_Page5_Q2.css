@@ -104,3 +104,118 @@
     flex-wrap: wrap;
   }
 }
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.wb-unit6-p5-q2-sentence-audio-wrapper {
+  position: relative;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.wb-unit6-p5-q2-sentence-audio-wrapper:focus {
+  outline: none;
+}
+
+.wb-unit6-p5-q2-sentence-audio-wrapper:focus-visible {
+  outline: 3px solid #1e88e5;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/*
+  الأيقونة فوق يمين.
+  absolute بالكامل،
+  فما بتأثر على حجم أو مكان الجملة.
+*/
+
+.wb-unit6-p5-q2-audio-icon {
+  position: absolute;
+  top: -8px;
+  right: -18px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* =====================================================
+   LETTERS
+===================================================== */
+
+.wb-unit6-p5-q2-letters {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    مهم للموبايل / القلم أثناء السحب.
+  */
+  touch-action: none;
+}
+
+.wb-unit6-p5-q2-letter {
+  position: relative;
+  cursor: pointer;
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.wb-unit6-p5-q2-letter:focus {
+  outline: none;
+}
+
+.wb-unit6-p5-q2-letter:focus-visible {
+  outline: 3px solid #1e88e5;
+  outline-offset: 3px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+/* =====================================================
+   RANGE PREVIEW
+===================================================== */
+
+.wb-unit6-p5-q2-letter-preview {
+  background-color: rgba(255, 214, 0, 0.25);
+  outline: 2px dashed #e53935;
+  outline-offset: 1px;
+}
+
+/* =====================================================
+   LOCKED QUESTION
+===================================================== */
+
+.wb-unit6-p5-q2-letters-locked
+  .wb-unit6-p5-q2-letter {
+  cursor: default;
+}
+
+/* =====================================================
+   WRONG QUESTION
+===================================================== */
+
+.wb-unit6-p5-q2-question-wrong {
+  position: absolute;
+  top: 50px;
+  right: -25px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: red;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  pointer-events: none;
+  z-index: 4;
+}

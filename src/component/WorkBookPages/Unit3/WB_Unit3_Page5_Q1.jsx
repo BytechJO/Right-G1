@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import img1 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-01.svg";
 import img2 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI01-02.svg";
 import img3 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI02-01.svg";
@@ -7,6 +7,15 @@ import img5 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI03-01.svg";
 import img6 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI03-02.svg";
 import img7 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-01.svg";
 import img8 from "../../../assets/U1 WB/U3/SVG/U3P19EXEI04-02.svg";
+/* ================================
+   AUDIO
+================================ */
+
+import Take_out_your_pencilAudio from "../../../assets/U1 WB/U3/page_16/Item_003_Take_out_your_pencil.mp3";
+import QuietAudio from "../../../assets/U1 WB/U3/page_16/Item_004_Quiet!.mp3";
+import Make_a_lineAudio from "../../../assets/U1 WB/U3/page_16/Item_002_Make_a_line.mp3";
+import Open_your_bookAudio from "../../../assets/U1 WB/U3/page_16/Item_003_Open_your_book.mp3";
+import ExerciseHeader from "../../ExerciseHeader";
 import ValidationAlert from "../../Popup/ValidationAlert";
 
 const WB_Unit3_Page5_Q1 = () => {
@@ -14,198 +23,535 @@ const WB_Unit3_Page5_Q1 = () => {
     {
       id: 1,
       word: "Make a line.",
+      audio: Make_a_lineAudio,
       imgs: [
-        { src: img1, answer: true }, // short i
-        { src: img2, answer: false },
+        {
+          src: img1,
+          answer: true,
+          alt: "Students standing in a line.",
+        },
+        {
+          src: img2,
+          answer: false,
+          alt: "A student opening a book with the teacher.",
+        },
       ],
     },
+
     {
       id: 2,
       word: "Open your book.",
+      audio: Open_your_bookAudio,
       imgs: [
-        { src: img3, answer: true }, // short i
-        { src: img4, answer: false },
+        {
+          src: img3,
+          answer: true,
+          alt: "A student opening his book at his desk.",
+        },
+        {
+          src: img4,
+          answer: false,
+          alt: "A student with the teacher holding a book.",
+        },
       ],
     },
+
     {
       id: 3,
       word: "Take out your pencil.",
+      audio: Take_out_your_pencilAudio,
       imgs: [
-        { src: img5, answer: true },
-        { src: img6, answer: false }, // short i
+        {
+          src: img5,
+          answer: true,
+          alt: "A student taking out a pencil at his desk.",
+        },
+        {
+          src: img6,
+          answer: false,
+          alt: "A teacher standing with students in the classroom.",
+        },
       ],
     },
+
     {
       id: 4,
       word: "Quiet!",
+      audio: QuietAudio,
       imgs: [
-        { src: img7, answer: true }, // short i
-        { src: img8, answer: false },
+        {
+          src: img7,
+          answer: true,
+          alt: "A teacher asking the class to be quiet.",
+        },
+        {
+          src: img8,
+          answer: false,
+          alt: "A teacher standing with students in the classroom.",
+        },
       ],
     },
   ];
 
+  /* ================================
+     STATE
+  ================================ */
+
   const [selected, setSelected] = useState({});
 
-  const [showResult, setShowResult] = useState(false);
-  const [showAnswerState, setShowAnswerState] = useState(false);
-  const handleSelect = (qId, index) => {
-    if (showAnswerState || showResult) return;
+  /*
+    بعد Check:
+    نخزن فقط الأسئلة الغلط
+  */
+  const [wrongQuestions, setWrongQuestions] = useState([]);
 
-    setSelected((prev) => ({ ...prev, [qId]: index }));
-    setShowResult(false);
+  /*
+    الأسئلة الصح فقط
+  */
+  const [lockedQuestions, setLockedQuestions] = useState([]);
+
+  const [showAnswerState, setShowAnswerState] = useState(false);
+
+  /*
+    بعد النجاح النهائي فقط
+  */
+  const [checkCompleted, setCheckCompleted] = useState(false);
+
+  const [playingQuestion, setPlayingQuestion] = useState(null);
+
+  const audioRef = useRef(null);
+
+  const isQuestionLocked = (qId) => lockedQuestions.includes(qId);
+
+  /* ================================
+     AUDIO
+  ================================ */
+
+  const stopCurrentAudio = () => {
+    if (!audioRef.current) return;
+
+    audioRef.current.pause();
+
+    audioRef.current.currentTime = 0;
+
+    audioRef.current = null;
+
+    setPlayingQuestion(null);
   };
 
-  const showCorrectAnswers = () => {
-    let correctSelections = {};
+  const playQuestionAudio = (question) => {
+    if (!question.audio) return;
 
-    data.forEach((q) => {
-      const correctIndex = q.imgs.findIndex((img) => img.answer === true);
-      correctSelections[q.id] = correctIndex;
+    stopCurrentAudio();
+
+    const audio = new Audio(question.audio);
+
+    audioRef.current = audio;
+
+    setPlayingQuestion(question.id);
+
+    audio.play().catch(() => {
+      setPlayingQuestion(null);
+    });
+
+    audio.onended = () => {
+      setPlayingQuestion(null);
+
+      audioRef.current = null;
+    };
+  };
+
+  /* ================================
+     SELECT IMAGE
+  ================================ */
+
+  const handleSelect = (qId, index) => {
+    if (showAnswerState || checkCompleted || isQuestionLocked(qId)) {
+      return;
+    }
+
+    setSelected((prev) => ({
+      ...prev,
+
+      [qId]: index,
+    }));
+
+    /*
+      إذا السؤال كان عليه X
+      وشغّلنا اختيار جديد،
+      شيل X تبعه فقط.
+    */
+
+    setWrongQuestions((prev) => prev.filter((id) => id !== qId));
+  };
+
+  /* ================================
+     SHOW ANSWER
+  ================================ */
+
+  const showCorrectAnswers = () => {
+    const correctSelections = {};
+
+    data.forEach((question) => {
+      const correctIndex = question.imgs.findIndex(
+        (img) => img.answer === true,
+      );
+
+      correctSelections[question.id] = correctIndex;
     });
 
     setSelected(correctSelections);
-    setShowResult(false);
+
+    setWrongQuestions([]);
+
+    setLockedQuestions(data.map((question) => question.id));
+
     setShowAnswerState(true);
+
+    setCheckCompleted(true);
   };
 
+  /* ================================
+     CHECK ANSWER
+  ================================ */
+
   const checkAnswers = () => {
-    if (showAnswerState) return;
-    const totalQuestions = data.length; // لأن أول سؤال لا يُحسب
+    if (showAnswerState || checkCompleted) {
+      return;
+    }
 
-    let correct = 0;
+    const totalQuestions = data.length;
 
-    // تأكد إنو جاوب كل الأسئلة
-    for (let q of data) {
-      if (selected[q.id] === undefined) {
-        ValidationAlert.info("");
+    /* لازم يجاوب الكل */
+
+    for (const question of data) {
+      if (selected[question.id] === undefined) {
+        ValidationAlert.info(
+          "Oops!",
+          "Please answer all questions before checking.",
+        );
+
         return;
       }
     }
 
-    // حساب عدد الإجابات الصحيحة
-    data.forEach((q) => {
-      const chosenIndex = selected[q.id];
-      if (q.imgs[chosenIndex].answer === true) {
+    let correct = 0;
+
+    const wrongIds = [];
+
+    const correctIds = [];
+
+    data.forEach((question) => {
+      const chosenIndex = selected[question.id];
+
+      const isCorrect = question.imgs[chosenIndex]?.answer === true;
+
+      if (isCorrect) {
         correct++;
+
+        correctIds.push(question.id);
+      } else {
+        wrongIds.push(question.id);
       }
     });
 
+    /* =================================
+       قفل الصح فقط
+    ================================= */
+
+    setLockedQuestions((prev) => Array.from(new Set([...prev, ...correctIds])));
+
+    setWrongQuestions(wrongIds);
+
     const color =
       correct === totalQuestions ? "green" : correct === 0 ? "red" : "orange";
-    const scoreMessage = `
-    <div style="font-size: 20px; margin-top: 10px; text-align:center;">
-      <span style="color:${color}; font-weight:bold;">
-      Score: ${correct} / ${totalQuestions}
-      </span>
-    </div>
-  `;
 
-    // النتيجة
+    const scoreMessage = `
+      <div
+        style="
+          font-size:20px;
+          margin-top:10px;
+          text-align:center;
+        "
+      >
+        <span
+          style="
+            color:${color};
+            font-weight:bold;
+          "
+        >
+          Score: ${correct} / ${totalQuestions}
+        </span>
+      </div>
+    `;
+
+    /* =============================
+       ALL CORRECT
+    ============================= */
+
     if (correct === totalQuestions) {
+      setLockedQuestions(data.map((question) => question.id));
+
+      setWrongQuestions([]);
+
+      setCheckCompleted(true);
+
       ValidationAlert.success(scoreMessage);
-    } else if (correct === 0) {
+
+      return;
+    }
+
+    /* =============================
+       WRONG / PARTIAL
+    ============================= */
+
+    if (correct === 0) {
       ValidationAlert.error(scoreMessage);
     } else {
       ValidationAlert.warning(scoreMessage);
     }
-    setShowResult(true);
   };
+
+  /* ================================
+     RESET
+  ================================ */
+
+  const reset = () => {
+    stopCurrentAudio();
+
+    setSelected({});
+
+    setWrongQuestions([]);
+
+    setLockedQuestions([]);
+
+    setShowAnswerState(false);
+
+    setCheckCompleted(false);
+  };
+
+  /* ================================
+     CLEANUP
+  ================================ */
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+
+        audioRef.current.currentTime = 0;
+      }
+    };
+  }, []);
+
+  /* ================================
+     RENDER
+  ================================ */
 
   return (
     <div
       style={{
         display: "flex",
+
         flexDirection: "column",
+
         justifyContent: "center",
+
         alignItems: "center",
+
         padding: "30px",
       }}
     >
       <div
         className="div-forall"
         style={{
-          gap: "40px",
-        
+          gap: "30px ",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="ex-A">I</span> Tap or click the correct box.
-        </h5>
-
-        <div className="shorti-container-wb-unit3-p5-q1 ">
-          {data.map((question) => (
-            <div key={question.id} className="question-box-wb-unit3-p5-q1">
-              <div
+        <ExerciseHeader
+          sectionLetter="E"
+          title={
+            <>
+              Read and write
+              <span
                 style={{
-                  display: "flex",
-                  gap: "20px",
-                  alignItems: "center",
-                  fontWeight: "600",
-                  fontSize: "20px",
+                  color: "red",
                 }}
               >
-                <span
+                {" "}
+                ✓
+              </span>
+              .
+            </>
+          }
+          subTitle="Read the command and tap the picture that shows it."
+        />
+
+        <div
+          className="shorti1-container-wb-u1-q2"
+          style={{
+            rowGap: "30px",
+            columnGap: "60px",
+          }}
+        >
+          {data.map((question) => {
+            const isPlaying = playingQuestion === question.id;
+
+            const questionLocked = isQuestionLocked(question.id);
+
+            const questionWrong = wrongQuestions.includes(question.id);
+
+            return (
+              <div key={question.id} className="question-box-wb-u1-q2">
+                {/* ============================
+                      QUESTION + AUDIO
+                  ============================ */}
+
+                <div
                   style={{
-                    color: "darkblue",
-                    fontWeight: "700",
+                    display: "flex",
+
+                    gap: "20px",
+
+                    alignItems: "center",
+
+                    fontWeight: "600",
+
                     fontSize: "20px",
                   }}
                 >
-                  {question.id}
-                </span>
-                {question.word}
-              </div>
-              <div className="shorti-container-wb-u1-q2 ">
-                {question.imgs.map((img, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`img-box-wb-unit3-p5-q1  ${
-                        selected[question.id] === index
-                          ? "selected-wb-u1-q2"
-                          : ""
-                      }`}
-                      onClick={() => handleSelect(question.id, index)}
-                    >
-                      {showResult &&
-                        !showAnswerState &&
-                        selected[question.id] === index &&
-                        img.answer === false && (
-                          <span className="wrong-x-circle-wb-unit3-p5-q1">
+                  <span
+                    style={{
+                      color: "darkblue",
+
+                      fontWeight: "700",
+
+                      fontSize: "20px",
+                    }}
+                  >
+                    {question.id}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => playQuestionAudio(question)}
+                    aria-label={`Play audio: ${question.word}`}
+                    aria-pressed={isPlaying}
+                    className="question-audio-wb-u1-q2"
+                  >
+                    {question.word}
+
+                    {isPlaying && (
+                      <span
+                        aria-hidden="true"
+                        className="playing-audio-wb-u1-q2"
+                      >
+                        🔊
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* ============================
+                      IMAGE OPTIONS
+                  ============================ */}
+
+                <div className="shorti-container-wb-u1-q2">
+                  {question.imgs.map((img, index) => {
+                    const isSelected = selected[question.id] === index;
+
+                    /*
+                          X فقط على الاختيار الغلط
+                          بعد Check
+                        */
+
+                    const isWrong =
+                      questionWrong && isSelected && img.answer === false;
+
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`img-box-wb-u1-q2 ${
+                          isSelected && !showAnswerState
+                            ? "selected-wb-u1-q2"
+                            : ""
+                        }`}
+                        onClick={() => handleSelect(question.id, index)}
+                        disabled={
+                          showAnswerState || checkCompleted || questionLocked
+                        }
+                        aria-disabled={
+                          showAnswerState || checkCompleted || questionLocked
+                        }
+                        aria-pressed={isSelected}
+                        aria-label={`${img.alt}${
+                          isSelected ? ". Selected." : ""
+                        }${
+                          questionLocked
+                            ? " Correct answer. Question locked."
+                            : ""
+                        }`}
+                        style={{
+                          /*
+                                ما بنغير شكل الصح لأخضر.
+                                فقط نخليه غير قابل للتعديل.
+                              */
+
+                          cursor:
+                            questionLocked || showAnswerState || checkCompleted
+                              ? "default"
+                              : "pointer",
+                        }}
+                      >
+                        {/* =========================
+                                WRONG X
+                            ========================= */}
+
+                        {isWrong && (
+                          <span
+                            className="wrong-x-circle-wb-u1-p3-q2"
+                            aria-hidden="true"
+                          >
                             ✕
                           </span>
                         )}
 
-                      <img src={img.src} alt="TEST" />
-                      <div className="check-box-wb-unit3-p4-q2 ">
-                        {selected[question.id] === index ? "✓" : ""}
-                      </div>
-                    </div>
-                  );
-                })}
+                        <img src={img.src} alt={img.alt} />
+
+                        {/* =========================
+                                CHECK BOX
+                            ========================= */}
+
+                        <div className="check-box-wb-u1-q2" aria-hidden="true">
+                          {isSelected ? "✓" : ""}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      {/* ================================
+          ACTION BUTTONS
+      ================================ */}
+
       <div className="action-buttons-container">
-        <button
-          className="try-again-button"
-          onClick={() => {
-            setSelected({});
-            setShowResult(false);
-            setShowAnswerState(false);
-          }}
-        >
+        <button className="try-again-button" onClick={reset}>
           Start Again ↻
         </button>
+
         <button
           className="show-answer-btn swal-continue"
           onClick={showCorrectAnswers}
         >
           Show Answer
         </button>
+
         <button className="check-button2" onClick={checkAnswers}>
           Check Answer ✓
         </button>

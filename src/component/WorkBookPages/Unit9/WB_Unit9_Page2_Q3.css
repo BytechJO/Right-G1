@@ -68,3 +68,17 @@
     gap: 10px;
   }
 }
+.keyboard-drag-preview-wb-unit9-p2-q3 {
+  animation: blink-preview-wb-unit9-p2-q3 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-wb-unit9-p2-q3 {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.wb-unit9-p2-q3-input:focus-visible,
+[aria-label^="Pick number"]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}

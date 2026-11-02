@@ -22,8 +22,16 @@ const Page8 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 1"
           onClick={() => openPopup("exercise", { startIndex: 0 })}
-          // className="click-icon-page8-1 hover:scale-110 transition"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 0 });
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -45,9 +53,17 @@ const Page8 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 2"
           onClick={() => openPopup("exercise", { startIndex: 1 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 1 });
+            }
+          }}
           style={{ overflow: "visible" }}
-          // className="click-icon-page8-2 hover:scale-110 transition"
         >
           <image
             className="svg-img"
@@ -69,8 +85,16 @@ const Page8 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 3"
           onClick={() => openPopup("exercise", { startIndex: 2 })}
-          // className="click-icon-page8-3 hover:scale-110 transition"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 2 });
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image
@@ -92,8 +116,16 @@ const Page8 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise 4"
           onClick={() => openPopup("exercise", { startIndex: 3 })}
-          // className="click-icon-page8-4 hover:scale-110 transition"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 3 });
+            }
+          }}
           style={{ overflow: "visible" }}
         >
           <image

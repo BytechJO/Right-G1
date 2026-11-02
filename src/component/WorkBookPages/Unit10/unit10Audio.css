@@ -1,0 +1,8 @@
+.wb-unit10-audio-control { position: relative; outline: none; }
+.wb-unit10-audio-control:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+.wb-unit10-playing-audio-icon { position: absolute; top: -17px; right: -13px; z-index: 20; display: inline-flex; align-items: center; justify-content: center; width: 27px; height: 27px; border: 2px solid #fff; border-radius: 50%; color: #000; box-shadow: 0 2px 7px rgba(15, 23, 42, .28); pointer-events: none; line-height: 1; }
+.wb-unit10-playing-audio-icon svg { width: 15px; height: 15px; }
+.wb-unit10-completed-audio { cursor: pointer; transition: background-color .2s ease, box-shadow .2s ease; }
+.wb-unit10-completed-audio:hover, .wb-unit10-completed-audio:focus-visible { background-color: rgba(37, 99, 235, .08); box-shadow: 0 0 0 2px rgba(37, 99, 235, .22); }
+.wb-unit10-keyboard-preview { animation: blink-preview-wb-unit10 .8s ease-in-out infinite; pointer-events: none; }
+@keyframes blink-preview-wb-unit10 { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }

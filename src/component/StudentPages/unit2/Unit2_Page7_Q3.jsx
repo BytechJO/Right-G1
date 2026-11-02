@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Unit2_Page7_Q3.css"; // ضيفي فيه الكود الي فوق
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
 const Unit2_Page7_Q3 = () => {
   const sentences = [
     "hello, I'm John? this is Stella.",
@@ -10,14 +11,14 @@ const Unit2_Page7_Q3 = () => {
   const [checked, setChecked] = useState(false);
   const [circledWords, setCircledWords] = useState({});
   const [showAnswer, setShowAnswer] = useState(false);
-
+  const [checkCompleted, setCheckCompleted] = useState(false);
   const correct = {
     0: [0, 5, 15], // جملة رقم 0، الأحرف التي يجب أن تُحاط بدائرة
     1: [0, 11], // جملة رقم 1، حرفين خاطئين
     2: [0, 4, 6, 15], // جملة رقم 2، الأحرف الخاطئة
   };
   const checkAnswers = (circledWords, correctAnswers) => {
-    if (showAnswer) return;
+    if (showAnswer || checkCompleted) return;
     if (Object.keys(circledWords).length === 0) {
       ValidationAlert.info("Please circle at least one mistake.");
       return;
@@ -45,27 +46,34 @@ const Unit2_Page7_Q3 = () => {
 
     const scoreMessage = `Score: ${studentCorrect} / ${totalCorrect}`;
 
-    if (studentCorrect === totalCorrect)
+    if (studentCorrect === totalCorrect) {
+      setCheckCompleted(true);
       return ValidationAlert.success(scoreMessage);
+    }
     if (studentCorrect === 0) return ValidationAlert.error(scoreMessage);
     return ValidationAlert.warning(scoreMessage);
   };
 
   const handleWordClick = (sIndex, wIndex) => {
-    if (showAnswer) return; // 🔒 يمنع التعديل بعد Check أو Show Answer
+    if (showAnswer) return;
+
+    const isLockedCorrect =
+      checked &&
+      circledWords[sIndex]?.includes(wIndex) &&
+      correct[sIndex]?.includes(wIndex);
+
+    if (isLockedCorrect) {
+      return;
+    }
+
     setCircledWords((prev) => {
       const updated = { ...prev };
 
-      // إذا ما كان في دوائر مسبقة للجملة → نعمل مصفوفة جديدة
       if (!updated[sIndex]) {
         updated[sIndex] = [wIndex];
-      }
-      // إذا الكلمة عليها دائرة → نشيلها
-      else if (updated[sIndex].includes(wIndex)) {
+      } else if (updated[sIndex].includes(wIndex)) {
         updated[sIndex] = updated[sIndex].filter((i) => i !== wIndex);
-      }
-      // إذا بدنا نضيف دائرة جديدة مع الإبقاء على الباقي
-      else {
+      } else {
         updated[sIndex] = [...updated[sIndex], wIndex];
       }
 
@@ -74,7 +82,6 @@ const Unit2_Page7_Q3 = () => {
 
     setChecked(false);
   };
-
   //   console.log(result.status); // "all-correct" | "all-wrong" | "partial"
   return (
     <div
@@ -92,10 +99,11 @@ const Unit2_Page7_Q3 = () => {
           gap: "80px",
         }}
       >
-        <h5 className="header-title-page8">
-          <span className="mr-2">C</span> Tap or click the mistakes.
-        </h5>
-
+        <ExerciseHeaderReview
+          sectionLetter="C"
+          title="Read and circle the mistakes."
+          subTitle="Read each sentence carefully and tap every mistake."
+        />
         <div className="sentence-container-review1-p16-exc">
           {sentences.map((sentence, sIndex) => (
             <div
@@ -122,12 +130,25 @@ const Unit2_Page7_Q3 = () => {
                 return (
                   <span
                     key={wIndex}
-                    onClick={() => handleWordClick(sIndex, wIndex)} // 🔒 يمنع التعديل بعد الفحص
-                    className={`char-container ${
-                      isCircled ? "circled" : ""
-                    } ${isCorrect ? "correct" : ""}`}
+                    role="button"
+                    tabIndex={showAnswer || (checked && isCorrect) ? -1 : 0}
+                    aria-label={`Character ${char || "space"} in sentence ${
+                      sIndex + 1
+                    }${isCircled ? ", selected" : ""}`}
+                    onClick={() => handleWordClick(sIndex, wIndex)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+
+                        handleWordClick(sIndex, wIndex);
+                      }
+                    }}
+                    className={`char-container ${isCircled ? "circled" : ""} ${
+                      isCorrect ? "correct" : ""
+                    }`}
                   >
                     {char}
+
                     {isWrong && <span className="wrong-x-unit2-q3">✕</span>}
                   </span>
                 );
@@ -143,6 +164,7 @@ const Unit2_Page7_Q3 = () => {
             setCircledWords({});
             setChecked(false);
             setShowAnswer(false);
+            setCheckCompleted(false);
           }}
           className="try-again-button"
         >

@@ -1,5 +1,18 @@
 import React, { useState } from "react";
 import ValidationAlert from "../../Popup/ValidationAlert";
+import ExerciseHeader from "../../ExerciseHeader";
+import useUnit10Audio from "./useUnit10Audio";
+import useUnit10TabDrag from "./useUnit10TabDrag";
+import Unit10PlayingAudioIcon from "./Unit10PlayingAudioIcon";
+import full1Audio from "../../../assets/U1 WB/U10/audio/page58- C/full1.mp3";
+import full2Audio from "../../../assets/U1 WB/U10/audio/page58- C/full2.mp3";
+import full3Audio from "../../../assets/U1 WB/U10/audio/page58- C/full3.mp3";
+import q1QuestionAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_005_Do_you_want_chicken.mp3";
+import q1AnswerAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_006_Yes,_I_do.mp3";
+import q2QuestionAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_001_you_want_ice_cream_[cut_1sec].mp3";
+import q2AnswerAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_003_Ido.mp3";
+import q3QuestionAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_004_Do_you_want.mp3";
+import q3AnswerAudio from "../../../assets/U1 WB/U10/audio/page58- C/Item_002_I_don't.mp3";
 import q1Img from "../../../assets/U1 WB/U10/U10P58EXEC-01.svg";
 import q2Img from "../../../assets/U1 WB/U10/U10P58EXEC-02.svg";
 import q3Img from "../../../assets/U1 WB/U10/U10P58EXEC-03.svg";
@@ -16,7 +29,7 @@ import {
 } from "@dnd-kit/core";
 
 // ─── Draggable Word Chip ──────────────────────────────────────────────────────
-const DraggableWord = ({ id, text, disabled, isUsed }) => {
+const DraggableWord = ({ id, text, disabled, isUsed, audio, playing, onPlay, tabDrag }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id,
     disabled: disabled || isUsed,
@@ -25,9 +38,18 @@ const DraggableWord = ({ id, text, disabled, isUsed }) => {
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(element) => { setNodeRef(element); tabDrag.registerItem(id, element); }}
       {...listeners}
       {...attributes}
+      role="button"
+      tabIndex={disabled || isUsed ? -1 : 0}
+      aria-label={`Play ${text}${!disabled && !isUsed ? " and drag it" : ""}`}
+      className={`wb-unit10-audio-control ${tabDrag.keyboardItemId === id ? "wb-unit10-keyboard-preview" : ""}`}
+      onClick={onPlay}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onPlay();
+        tabDrag.handleItemKeyDown(event, id);
+      }}
       style={{
         padding: "6px 12px",
         border: `2px solid ${isUsed ? "#c0c0c0" : "#2c5287"}`,
@@ -43,13 +65,13 @@ const DraggableWord = ({ id, text, disabled, isUsed }) => {
         transition: "background 0.2s, color 0.2s, border-color 0.2s",
       }}
     >
-      {text}
+      {playing && audio && <Unit10PlayingAudioIcon />}{text}
     </div>
   );
 };
 
 // ─── Word Bank ────────────────────────────────────────────────────────────────
-const WordBank = ({ wordBank, locked, usedValues }) => {
+const WordBank = ({ wordBank, locked, usedValues, audioMap, activeAudioKey, playAudio, tabDrag }) => {
   const { setNodeRef, isOver } = useDroppable({ id: "bank" });
 
   return (
@@ -75,6 +97,10 @@ const WordBank = ({ wordBank, locked, usedValues }) => {
           text={w}
           disabled={locked}
           isUsed={usedValues.has(w)}
+          audio={audioMap[w]}
+          playing={activeAudioKey === `bank-${w}`}
+          onPlay={() => playAudio(`bank-${w}`, audioMap[w])}
+          tabDrag={tabDrag}
         />
       ))}
     </div>
@@ -82,13 +108,24 @@ const WordBank = ({ wordBank, locked, usedValues }) => {
 };
 
 // ─── Inline Droppable Cell ────────────────────────────────────────────────────
-const DroppableCell = ({ id, value, isWrong, locked, onClear }) => {
+const DroppableCell = ({ id, value, isWrong, locked, onClear, tabDrag, preview }) => {
   const { setNodeRef, isOver } = useDroppable({ id, disabled: locked });
 
   return (
     <div style={{ position: "relative", display: "inline-block" }}>
       <span
-        ref={setNodeRef}
+        ref={(element) => { setNodeRef(element); tabDrag.registerTarget(id, element); }}
+        role="button"
+        tabIndex={!locked && (tabDrag.keyboardItemId || value) ? 0 : -1}
+        onKeyDown={(event) => {
+          if (tabDrag.keyboardItemId) tabDrag.handleTargetKeyDown(event, id);
+          else if ((event.key === "Enter" || event.key === " ") && value && !locked) {
+            event.preventDefault();
+            onClear();
+            tabDrag.focusItemById(value);
+          }
+        }}
+        onFocus={() => tabDrag.focusTarget(id)}
         className={`line-input-wb-unit10-p2-q1 ${isOver ? "drag-over-cell" : ""}`}
         onClick={() => {
           if (!locked && value) onClear();
@@ -104,6 +141,7 @@ const DroppableCell = ({ id, value, isWrong, locked, onClear }) => {
         title={!locked && value ? "Click to return to bank" : ""}
       >
         {value}
+        {preview && <span className="wb-unit10-keyboard-preview">{preview}</span>}
       </span>
       {isWrong && <span className="wrong-circle-x-wb-unit10-p2-q1">✕</span>}
     </div>
@@ -113,13 +151,14 @@ const DroppableCell = ({ id, value, isWrong, locked, onClear }) => {
 // ─── Main Component ───────────────────────────────────────────────────────────
 const WB_Unit10_Page2_Q1 = () => {
   const correctAnswers = {
-    q2_question: "want ice cream",
+    q2_question: "you want ice cream",
     q2_answer: "I do",
     q3_question: "Do you want",
     q3_answer: "I don't",
   };
 
-  const wordBank = ["want ice cream", "I do", "Do you want", "I don't"];
+  const wordBank = ["you want ice cream", "I do", "Do you want", "I don't"];
+  const bankAudio = { "you want ice cream": q2QuestionAudio, "I do": q2AnswerAudio, "Do you want": q3QuestionAudio, "I don't": q3AnswerAudio };
 
   const emptyAnswers = {
     q2_question: "",
@@ -130,8 +169,11 @@ const WB_Unit10_Page2_Q1 = () => {
 
   const [answers, setAnswers] = useState(emptyAnswers);
   const [wrongInputs, setWrongInputs] = useState([]);
-  const [locked, setLocked] = useState(false);
+  const [lockedInputs, setLockedInputs] = useState([]);
+  const [completedRows, setCompletedRows] = useState([]);
   const [activeId, setActiveId] = useState(null);
+  const { activeAudioKey, playAudio, stopAudio } = useUnit10Audio();
+  const locked = lockedInputs.length === Object.keys(correctAnswers).length;
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -139,6 +181,22 @@ const WB_Unit10_Page2_Q1 = () => {
 
   // القيم الموجودة حالياً في الخانات
   const usedValues = new Set(Object.values(answers).filter(Boolean));
+  const targetIds = Object.keys(correctAnswers);
+  const tabDrag = useUnit10TabDrag({
+    itemIds: wordBank,
+    targetIds,
+    isItemDisabled: (id) => locked || usedValues.has(id),
+    isTargetDisabled: (id) => lockedInputs.includes(id),
+    onPlace: (word, targetId) => {
+      setAnswers((prev) => {
+        const copy = { ...prev };
+        Object.keys(copy).forEach((key) => { if (copy[key] === word) copy[key] = ""; });
+        copy[targetId] = word;
+        return copy;
+      });
+      setWrongInputs((prev) => prev.filter((key) => key !== targetId));
+    },
+  });
 
   // ─── Drag Handlers ──────────────────────────────────────────────────────────
   const handleDragStart = ({ active }) => setActiveId(active.id);
@@ -164,7 +222,7 @@ const WB_Unit10_Page2_Q1 = () => {
     }
 
     // نزل على خانة → ضعه فيها وشيله من أي خانة ثانية
-    if (Object.keys(correctAnswers).includes(destId)) {
+    if (Object.keys(correctAnswers).includes(destId) && !lockedInputs.includes(destId)) {
       setAnswers((prev) => {
         const copy = { ...prev };
         // شيل الكلمة من مكانها القديم
@@ -180,8 +238,9 @@ const WB_Unit10_Page2_Q1 = () => {
 
   // ─── Click على خانة مليانة → ارجع للبانك ───────────────────────────────────
   const handleClear = (key) => {
+    if (lockedInputs.includes(key)) return;
     setAnswers((prev) => ({ ...prev, [key]: "" }));
-    setWrongInputs([]);
+    setWrongInputs((previous) => previous.filter((item) => item !== key));
   };
 
   // ─── Buttons ─────────────────────────────────────────────────────────────────
@@ -191,17 +250,23 @@ const WB_Unit10_Page2_Q1 = () => {
       ValidationAlert.info("Please complete all answers.");
       return;
     }
-    let wrong = [],
+    let wrong = [], correctKeys = [],
       score = 0;
     Object.keys(correctAnswers).forEach((key) => {
       if (
         answers[key].trim().toLowerCase() === correctAnswers[key].toLowerCase()
       )
-        score++;
+        { score++; correctKeys.push(key); }
       else wrong.push(key);
     });
     setWrongInputs(wrong);
-    setLocked(true);
+    const nextLocked = [...new Set([...lockedInputs, ...correctKeys])];
+    setLockedInputs(nextLocked);
+    setCompletedRows([
+      1,
+      ...(nextLocked.includes("q2_question") && nextLocked.includes("q2_answer") ? [2] : []),
+      ...(nextLocked.includes("q3_question") && nextLocked.includes("q3_answer") ? [3] : []),
+    ]);
     const total = Object.keys(correctAnswers).length;
     const color = score === total ? "green" : score === 0 ? "red" : "orange";
     const msg = `<div style="font-size:20px;text-align:center"><b style="color:${color}">Score: ${score}/${total}</b></div>`;
@@ -215,14 +280,31 @@ const WB_Unit10_Page2_Q1 = () => {
   const showAnswers = () => {
     setAnswers(correctAnswers);
     setWrongInputs([]);
-    setLocked(true);
+    setLockedInputs(Object.keys(correctAnswers));
+    setCompletedRows([1, 2, 3]);
+    stopAudio();
   };
 
   const resetAll = () => {
     setAnswers(emptyAnswers);
     setWrongInputs([]);
-    setLocked(false);
+    setLockedInputs([]);
+    setCompletedRows([]);
+    stopAudio();
   };
+
+  const audioBubble = (key, source, children) => (
+    <span className="wb-unit10-audio-control" role="button" tabIndex={0} aria-label="Play this sentence" onClick={(event) => { event.stopPropagation(); playAudio(key, source); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); playAudio(key, source); } }}>
+      {activeAudioKey === key && <Unit10PlayingAudioIcon />}{children}
+    </span>
+  );
+
+  const rowAudioProps = (row, source) => completedRows.includes(row) ? {
+    role: "button", tabIndex: 0, className: "conversation-row-wb-unit10-p2-q1 w-full wb-unit10-audio-control wb-unit10-completed-audio",
+    "aria-label": `Play complete dialogue ${row}`,
+    onClick: () => playAudio(`full-${row}`, source),
+    onKeyDown: (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); playAudio(`full-${row}`, source); } },
+  } : { className: "conversation-row-wb-unit10-p2-q1 w-full" };
 
   return (
     <DndContext
@@ -240,35 +322,39 @@ const WB_Unit10_Page2_Q1 = () => {
         }}
       >
         <div className="div-forall" style={{ gap: "10px" }}>
-          <h5 className="header-title-page8">
-            <span className="ex-A">C</span> Drag and drop.
-          </h5>
+          <ExerciseHeader sectionLetter="C" title="Look, read, and write." subTitle="Use the pictures to complete the questions and answers about food." />
 
           {/* ── Word Bank ── */}
           <WordBank
             wordBank={wordBank}
             locked={locked}
             usedValues={usedValues}
+            audioMap={bankAudio}
+            activeAudioKey={activeAudioKey}
+            playAudio={playAudio}
+            tabDrag={tabDrag}
           />
 
           {/* ── ROW 1 (example) ── */}
-          <div className="conversation-row-wb-unit10-p2-q1 w-full">
+          <div {...rowAudioProps(1, full1Audio)}>
+            {activeAudioKey === "full-1" && <Unit10PlayingAudioIcon />}
             <span className="num-wb-unit10-p2-q1">1</span>
             <div className="bubble question-bubble-wb-unit10-p2-q1">
-              Do you want chicken?
+              {audioBubble("q1-question", q1QuestionAudio, "Do you want chicken?")}
             </div>
             <img
               src={q1Img}
-              alt="girl"
+              alt="A girl who wants chicken."
               className="person-img-wb-unit10-p2-q1"
             />
             <div className="bubble answer-bubble-wb-unit10-p2-q1">
-              Yes, I do.
+              {audioBubble("q1-answer", q1AnswerAudio, "Yes, I do.")}
             </div>
           </div>
 
           {/* ── ROW 2 ── */}
-          <div className="conversation-row-wb-unit10-p2-q1">
+          <div {...rowAudioProps(2, full2Audio)}>
+            {activeAudioKey === "full-2" && <Unit10PlayingAudioIcon />}
             <span className="num-wb-unit10-p2-q1">2</span>
 
             <div className="bubble question-bubble-wb-unit10-p2-q1">
@@ -277,15 +363,17 @@ const WB_Unit10_Page2_Q1 = () => {
                 id="q2_question"
                 value={answers.q2_question}
                 isWrong={wrongInputs.includes("q2_question")}
-                locked={locked}
+                locked={lockedInputs.includes("q2_question")}
                 onClear={() => handleClear("q2_question")}
+                tabDrag={tabDrag}
+                preview={tabDrag.keyboardTargetId === "q2_question" ? tabDrag.keyboardItemId : ""}
               />
               ?
             </div>
 
             <img
               src={q2Img}
-              alt="girl"
+              alt="A girl who wants ice cream."
               className="person-img-wb-unit10-p2-q1"
             />
 
@@ -295,15 +383,18 @@ const WB_Unit10_Page2_Q1 = () => {
                 id="q2_answer"
                 value={answers.q2_answer}
                 isWrong={wrongInputs.includes("q2_answer")}
-                locked={locked}
+                locked={lockedInputs.includes("q2_answer")}
                 onClear={() => handleClear("q2_answer")}
+                tabDrag={tabDrag}
+                preview={tabDrag.keyboardTargetId === "q2_answer" ? tabDrag.keyboardItemId : ""}
               />
               .
             </div>
           </div>
 
           {/* ── ROW 3 ── */}
-          <div className="conversation-row-wb-unit10-p2-q1">
+          <div {...rowAudioProps(3, full3Audio)}>
+            {activeAudioKey === "full-3" && <Unit10PlayingAudioIcon />}
             <span className="num-wb-unit10-p2-q1">3</span>
 
             <div className="bubble question-bubble-wb-unit10-p2-q1">
@@ -311,13 +402,15 @@ const WB_Unit10_Page2_Q1 = () => {
                 id="q3_question"
                 value={answers.q3_question}
                 isWrong={wrongInputs.includes("q3_question")}
-                locked={locked}
+                locked={lockedInputs.includes("q3_question")}
                 onClear={() => handleClear("q3_question")}
+                tabDrag={tabDrag}
+                preview={tabDrag.keyboardTargetId === "q3_question" ? tabDrag.keyboardItemId : ""}
               />{" "}
               bread?
             </div>
 
-            <img src={q3Img} alt="boy" className="person-img-wb-unit10-p2-q1" />
+            <img src={q3Img} alt="A boy who wants milk instead of bread." className="person-img-wb-unit10-p2-q1" />
 
             <div className="bubble answer-bubble-wb-unit10-p2-q1">
               No,{" "}
@@ -325,8 +418,10 @@ const WB_Unit10_Page2_Q1 = () => {
                 id="q3_answer"
                 value={answers.q3_answer}
                 isWrong={wrongInputs.includes("q3_answer")}
-                locked={locked}
+                locked={lockedInputs.includes("q3_answer")}
                 onClear={() => handleClear("q3_answer")}
+                tabDrag={tabDrag}
+                preview={tabDrag.keyboardTargetId === "q3_answer" ? tabDrag.keyboardItemId : ""}
               />
               .
             </div>

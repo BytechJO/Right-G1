@@ -37,3 +37,36 @@
     flex-direction: row;
   }
 }
+/* =====================================================
+   SELECT OPTION FOCUS
+===================================================== */
+
+.option-word-review6-p1-q1 {
+  outline: none;
+}
+
+.option-word-review6-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+
+  border-radius: 6px;
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق يمين بدون ما يأثر على النص
+===================================================== */
+
+.audio-icon-wb-unit7-p6-q2 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}

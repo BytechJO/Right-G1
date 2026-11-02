@@ -1,0 +1,123 @@
+/* =====================================================
+   DRAG KEYBOARD
+===================================================== */
+
+.word-bank-item-wb-unit4-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.keyboard-picked-word-wb-unit4-p2-q1 {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  background: #dbeafe !important;
+}
+
+.answer-input-wrapper-wb-unit4-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.keyboard-drop-preview-wb-unit4-p2-q1 {
+  animation: keyboardDropPreviewWBU4P2Q1 1.4s ease-in-out infinite;
+}
+
+@keyframes keyboardDropPreviewWBU4P2Q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-unit4-p2-q1 {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+
+  background: white;
+  border-radius: 50%;
+  padding: 2px;
+
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* =====================================================
+   SHAPE
+===================================================== */
+
+.shape-color-container-wb-unit4-p2-q1 {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: visible !important;
+}
+
+.colorable-shape-wb-unit4-p2-q1 {
+  cursor: pointer;
+  outline: none;
+}
+
+.colorable-shape-wb-unit4-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 5px;
+  border-radius: 8px;
+}
+
+/* =====================================================
+   PALETTE
+   فوق نفس الشكل
+===================================================== */
+
+
+
+/* السهم الصغير تحت الـpalette */
+.color-pallet-wb-unit4-p2-q1::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 100%;
+
+  transform: translateX(-50%);
+
+  border-width: 7px;
+  border-style: solid;
+
+  border-color: white transparent transparent transparent;
+}
+
+.color-option-wb-unit4-p2-q1 {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+.color-option-wb-unit4-p2-q1:focus {
+  outline: none;
+}
+
+.color-option-wb-unit4-p2-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}

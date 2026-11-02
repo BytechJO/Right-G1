@@ -25,3 +25,13 @@
 
 }
 }
+
+.option-word-review6-p1-q1:focus {
+  outline: none;
+}
+
+.option-word-review6-p1-q1:focus-visible {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 4px;
+  border-radius: 8px;
+}

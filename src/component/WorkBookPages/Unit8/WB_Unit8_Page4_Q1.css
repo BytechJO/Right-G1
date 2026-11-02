@@ -1,34 +1,633 @@
+/* =====================================================
+   QUESTIONS GRID
+===================================================== */
+
 .content-container-wb-unit8-p4-q1 {
   display: grid;
-  justify-items: center;
-  gap: 30px;
-    width: 100%;
-  grid-template-columns: repeat(2, 1fr);
-}
 
-.sentence-wrapper-wb-unit8-p4-q1 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 18px;
+  grid-template-columns: repeat(2, 1fr);
+
+  justify-items: center;
+
+  gap: 30px;
+
   width: 100%;
 }
 
-
-.wb-unit8-p4-q1-canvas {
-    /* border: 3px solid #6ec1ff; */
-    background: #ffffff;
-    border-radius: 12px;
-    height: 160px;
-    width: 220px;
-    box-sizing: border-box;
-    cursor: crosshair;
-}
+/* =====================================================
+   QUESTION
+===================================================== */
 
 .row2-wb-unit8-p4-q1 {
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+/* =====================================================
+   IMAGE ROW
+===================================================== */
+
+.wb-u8-p4-image-row {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+/* =====================================================
+   CANVAS WRAPPER
+===================================================== */
+
+.wb-u8-p4-canvas-wrapper {
+  position: relative;
+
+  width: 220px;
+  height: 160px;
+}
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+.wb-unit8-p4-q1-canvas {
+  width: 220px;
+  height: 160px;
+
+  display: block;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  touch-action: none;
+
+  outline: none;
+}
+
+/* =====================================================
+   CANVAS KEYBOARD FOCUS
+===================================================== */
+
+.wb-unit8-p4-q1-canvas:focus {
+  outline: none;
+}
+
+.wb-unit8-p4-q1-canvas:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD DRAWING CURSOR
+===================================================== */
+
+.wb-u8-p4-keyboard-cursor {
+  position: absolute;
+
+  transform: translate(-50%, -50%);
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  border: 2px solid #2563eb;
+
+  box-shadow: 0 0 0 1px #ffffff;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+.wb-u8-p4-keyboard-cursor.drawing-active {
+  width: 12px;
+  height: 12px;
+
+  border-width: 3px;
+}
+
+/* =====================================================
+   SCREEN READER ONLY
+===================================================== */
+
+.wb-u8-p4-sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =====================================================
+   DRAWING TOOLS
+===================================================== */
+
+.unit4-q2-p6-tools {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+/* =====================================================
+   TOOL FOCUS
+===================================================== */
+
+.unit4-q2-p6-tool-btn:focus {
+  outline: none;
+}
+
+.unit4-q2-p6-tool-btn:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   ACTIVE TOOL
+===================================================== */
+
+.unit4-q2-p6-tool-btn[aria-pressed="true"] {
+  font-weight: 700;
+}
+
+/* =====================================================
+   COLOR
+===================================================== */
+
+.wb-u8-p4-color-label {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  cursor: pointer;
+}
+
+.wb-u8-p4-color-input {
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+/* =====================================================
+   SENTENCE
+===================================================== */
+
+.sentence-wrapper-wb-unit8-p4-q1 {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  width: 100%;
+
+  font-size: 18px;
+}
+
+/* =====================================================
+   DROP WRAPPER
+===================================================== */
+
+.drop-wrapper-wb-u8-p4-q1 {
+  position: relative;
+
+  display: inline-flex;
+
+  width: 90%;
+}
+
+/* =====================================================
+   WORD BANK
+===================================================== */
+
+.wb-u8-p4-q1-word-bank {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  border: 2px dashed #cccccc;
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+.wb-u8-p4-q1-word-bank-over {
+  border-color: #2c5287;
+
+  background: #f5f9ff;
+}
+
+/* =====================================================
+   DRAG WORD
+===================================================== */
+
+.wb-u8-p4-q1-drag-word {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 8px 12px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  font-weight: 700;
+
+  user-select: none;
+
+  touch-action: none;
+
+  outline: none;
+}
+
+/* =====================================================
+   BANK KEYBOARD FOCUS
+===================================================== */
+
+.wb-u8-p4-q1-drag-word:focus {
+  outline: none;
+}
+
+.wb-u8-p4-q1-drag-word:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD SELECTED WORD
+===================================================== */
+
+.wb-u8-p4-q1-drag-word-selected {
+  outline: 3px dashed #2563eb;
+
+  outline-offset: 4px;
+}
+
+.wb-u8-p4-q1-drag-word-selected:focus-visible {
+  outline: 3px dashed #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   BANK AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-u8-p4-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 13px;
+  height: 13px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.inline-input-wb-unit4-p1-q2 {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  width: 100%;
+
+  min-height: 32px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+/* =====================================================
+   INPUT TAB FOCUS
+===================================================== */
+
+.inline-input-wb-unit4-p1-q2:focus {
+  outline: none;
+}
+
+.inline-input-wb-unit4-p1-q2:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   MOUSE DRAG OVER
+===================================================== */
+
+.drag-over-cell {
+  background: rgba(219, 234, 254, 0.55) !important;
+
+  outline: 2px dashed #2563eb;
+
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-wb-u8-p4-q1 {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb !important;
+
+  outline-offset: -2px;
+
+  animation: wb-u8-p4-preview-pulse 0.8s ease-in-out infinite;
+}
+
+/* =====================================================
+   PREVIEW TEXT
+===================================================== */
+
+.preview-text-wb-u8-p4-q1 {
+  opacity: 0.65;
+
+  font-style: italic;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   PREVIEW ANIMATION
+===================================================== */
+
+@keyframes wb-u8-p4-preview-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* =====================================================
+   FIXED "THIS" AUDIO
+===================================================== */
+
+.fixed-audio-wb-u8-p4-q1 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.fixed-audio-wb-u8-p4-q1:focus {
+  outline: none;
+}
+
+.fixed-audio-wb-u8-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 5px;
+}
+
+/* =====================================================
+   FIXED AUDIO ICON
+===================================================== */
+
+.small-audio-icon-wb-u8-p4-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -13px;
+
+  width: 12px;
+  height: 12px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   CORRECT SENTENCE
+===================================================== */
+
+.completed-sentence-wb-u8-p4-q1 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 8px;
+}
+
+/* mouse hover */
+
+.completed-sentence-wb-u8-p4-q1:hover {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+
+  outline-offset: 5px;
+}
+
+/* keyboard */
+
+.completed-sentence-wb-u8-p4-q1:focus {
+  outline: none;
+}
+
+.completed-sentence-wb-u8-p4-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 5px;
+}
+
+/* =====================================================
+   FULL AUDIO ICON
+===================================================== */
+
+.full-audio-icon-wb-u8-p4-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -18px;
+
+  width: 14px;
+  height: 14px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   WRONG MARK
+===================================================== */
+
+.error-mark-input-wb-unit2-page3-q2 {
+  position: absolute;
+
+  top: 50%;
+  right: -25px;
+
+  transform: translateY(-50%);
+
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: red;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  pointer-events: none;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.drag-overlay-wb-u8-p4-q1 {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 8px 12px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  font-weight: 700;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  cursor: grabbing;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1024px) {
+  .content-container-wb-unit8-p4-q1 {
+    gap: 20px;
+  }
+
+  .wb-u8-p4-canvas-wrapper,
+  .wb-unit8-p4-q1-canvas {
+    width: 195px;
+    height: 140px;
+  }
+
+  .sentence-wrapper-wb-unit8-p4-q1 {
+    font-size: 17px;
+  }
+}
+
+@media screen and (max-width: 1024px) and (max-height: 600px) {
+  .content-container-wb-unit8-p4-q1 {
+    gap: 12px 20px;
+  }
+
+  .wb-u8-p4-canvas-wrapper,
+  .wb-unit8-p4-q1-canvas {
+    width: 165px;
+    height: 115px;
+  }
+
+  .sentence-wrapper-wb-unit8-p4-q1 {
+    font-size: 16px;
+  }
+
+  .row2-wb-unit8-p4-q1 {
+    gap: 5px;
+  }
 }

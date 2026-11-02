@@ -1,0 +1,74 @@
+.error-mark8-wb-unit2-p5-q1 {
+  left: 2%;
+  top: 12%;
+}
+/* =====================================================
+   SENTENCE KEYBOARD
+===================================================== */
+
+.word-text2-wb-unit3-p5-q2 {
+  outline: none;
+}
+
+.word-text2-wb-unit3-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* =====================================================
+   IMAGE KEYBOARD TARGET
+===================================================== */
+
+.matched-img2 {
+  outline: none;
+}
+
+.matched-img2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   DOTS ARE CLICKABLE TOO
+===================================================== */
+
+.dot2 {
+  cursor: pointer;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-u5-p2-q1 {
+  position: absolute;
+
+  top: -10px;
+  right: -20px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  z-index: 20;
+}
+.word-text2-wb-unit3-p5-q2 {
+  outline: none;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 5;
+}
+
+.word-text2-wb-unit3-p5-q2.disabled-word {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.word-text2-wb-unit3-p5-q2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}

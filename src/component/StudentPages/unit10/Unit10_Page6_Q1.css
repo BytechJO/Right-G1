@@ -1,0 +1,228 @@
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.unit10-page6-q1-wrapper {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+/* =====================================================
+   DIALOGUE
+===================================================== */
+
+.unit10-page6-q1-dialogue {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 120px;
+
+  margin-top: 20px;
+  margin-bottom: 35px;
+}
+
+/* =====================================================
+   DIALOGUE ITEM
+===================================================== */
+
+.unit10-page6-q1-dialogue-item {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+/* =====================================================
+   SPEAKER IMAGE
+===================================================== */
+
+.unit10-page6-q1-speaker-img {
+  width: auto;
+  height: 80px;
+
+  object-fit: contain;
+}
+
+/* =====================================================
+   SPEECH BOX
+===================================================== */
+
+.unit10-page6-q1-bubble {
+  position: relative;
+
+  padding: 8px 28px 8px 12px;
+
+  background: #ffffff;
+
+  border: 2px solid #111;
+
+  border-radius: 8px;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+/* =====================================================
+   BUBBLE FOCUS
+===================================================== */
+
+.unit10-page6-q1-bubble:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.unit10-page6-q1-audio-icon {
+  position: absolute;
+  top: -17px;
+  right: -13px;
+  width: 15px;
+  height: 15px;
+  padding: 5px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  color: #000000;
+  box-sizing: content-box;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* =====================================================
+   PICTURES
+===================================================== */
+
+.unit10-page6-q1-pictures {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 120px;
+}
+
+/* =====================================================
+   PICTURE ITEM
+===================================================== */
+
+.unit10-page6-q1-picture-item {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+.unit10-page6-q1-number {
+  color: #243f91;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   IMAGE BOX
+===================================================== */
+
+.unit10-page6-q1-picture-box {
+  position: relative;
+
+  width: 130px;
+  height: 115px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  outline: none;
+
+  border-radius: 10px;
+}
+
+/* =====================================================
+   IMAGE BOX FOCUS
+===================================================== */
+
+.unit10-page6-q1-picture-box:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.unit10-page6-q1-picture-img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+/* =====================================================
+   PICTURE AUDIO ICON
+===================================================== */
+
+.unit10-page6-q1-picture-audio-icon {
+  position: absolute;
+  top: -17px;
+  right: -13px;
+  width: 15px;
+  height: 15px;
+  padding: 5px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  color: #000000;
+  box-sizing: content-box;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+  .unit10-page6-q1-dialogue {
+    gap: 45px;
+
+    flex-wrap: wrap;
+  }
+
+  .unit10-page6-q1-pictures {
+    gap: 45px;
+
+    flex-wrap: wrap;
+  }
+}

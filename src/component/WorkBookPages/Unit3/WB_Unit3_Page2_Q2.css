@@ -1,0 +1,343 @@
+/* =====================================================
+   MAIN
+===================================================== */
+
+.wb-u1-p7-q1-wrapper {
+  display: flex;
+
+  justify-content: center;
+
+  padding: 30px;
+
+  position: relative;
+
+  width: 100%;
+}
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.color-toolbar-wb-u1-p7-q1 {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+
+  padding: 10px 14px;
+
+  border: 2px solid #ddd;
+
+  border-radius: 12px;
+
+  background: white;
+
+  width: fit-content;
+}
+
+/* =====================================================
+   COLOR PALETTE
+===================================================== */
+
+.color-palette-wb-u1-p7-q1 {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+/* =====================================================
+   COLOR BUTTON
+===================================================== */
+
+.color-circle-wb-u1-p7-q1 {
+  width: 36px;
+
+  height: 36px;
+
+  border-radius: 50%;
+
+  border: 3px solid transparent;
+
+  cursor: pointer;
+
+  padding: 0;
+
+  transition:
+    transform 0.15s ease,
+    outline 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.color-circle-wb-u1-p7-q1:hover {
+  transform: scale(1.1);
+}
+
+/* selected color */
+
+.color-circle-wb-u1-p7-q1.selected-color-wb-u1-p7-q1 {
+  border-color: black;
+
+  transform: scale(1.12);
+}
+
+/* keyboard focus */
+
+.color-circle-wb-u1-p7-q1:focus-visible {
+  outline: 4px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   TOOL BUTTONS
+===================================================== */
+
+.tool-button-wb-u1-p7-q1 {
+  min-height: 38px;
+
+  padding: 6px 14px;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #222;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  transition:
+    background 0.15s ease,
+    outline 0.15s ease;
+}
+
+.tool-button-wb-u1-p7-q1:hover:not(:disabled) {
+  background: #eef4ff;
+}
+
+.tool-button-wb-u1-p7-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+.tool-button-wb-u1-p7-q1:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.selected-tool-wb-u1-p7-q1 {
+  background: #dbeafe;
+
+  border-color: #2563eb;
+}
+
+/* =====================================================
+   SELECTED COLOR LABEL
+===================================================== */
+
+.selected-color-text-wb-u1-p7-q1 {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #555;
+
+  min-height: 22px;
+}
+
+/* =====================================================
+   WORD CONTAINER
+===================================================== */
+
+.container3-wb-u1-p7-q1 {
+  display: flex;
+
+  flex-direction: column;
+
+  position: relative;
+
+  user-select: none;
+
+  align-items: flex-start;
+
+  width: 100%;
+}
+
+.word-section1-wb-u1-p7-q1 {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 7px;
+
+  width: 100%;
+}
+
+/* =====================================================
+   WORD TARGET
+===================================================== */
+
+.word-color-target-wb-u1-p7-q1 {
+  position: relative;
+
+  display: block;
+
+  width: fit-content;
+
+  min-width: 300px;
+
+  padding: 3px 8px;
+
+  border: 2px solid transparent;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  text-align: left;
+
+  font-family: inherit;
+
+  font-size: clamp(30px, 4vw, 48px);
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    outline 0.15s ease,
+    transform 0.15s ease;
+}
+
+/* =====================================================
+   UNCOLORED WORD
+
+   transparent text + text stroke keeps
+   the original coloring-page appearance
+===================================================== */
+
+.word-outline-wb-u1-p7-q1 {
+  color: transparent;
+
+  -webkit-text-stroke: 1.5px #777;
+
+  text-stroke: 1.5px #777;
+}
+
+/* =====================================================
+   COLORED WORD
+===================================================== */
+
+.word-colored-wb-u1-p7-q1 {
+  -webkit-text-stroke: 1px #777;
+
+  text-stroke: 1px #777;
+}
+
+/* =====================================================
+   WORD HOVER
+===================================================== */
+
+.word-color-target-wb-u1-p7-q1:hover {
+  background: rgba(37, 99, 235, 0.05);
+
+  transform: translateX(3px);
+}
+
+/* =====================================================
+   KEYBOARD FOCUS
+===================================================== */
+
+.word-color-target-wb-u1-p7-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+
+  background: #eff6ff;
+}
+
+/* =====================================================
+   SCREEN READER
+===================================================== */
+
+.sr-only {
+  position: absolute;
+
+  width: 1px;
+
+  height: 1px;
+
+  padding: 0;
+
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1024px) {
+  .word-color-target-wb-u1-p7-q1 {
+    font-size: clamp(24px, 5vw, 40px);
+
+    min-width: 240px;
+  }
+
+  .color-circle-wb-u1-p7-q1 {
+    width: 32px;
+
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .color-toolbar-wb-u1-p7-q1 {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .color-palette-wb-u1-p7-q1 {
+    flex-wrap: wrap;
+
+    justify-content: center;
+  }
+
+  .word-color-target-wb-u1-p7-q1 {
+    min-width: 0;
+
+    width: 100%;
+
+    font-size: 28px;
+  }
+}
+.playing-word-wb-u1-p7-q1 {
+  margin-left: 10px;
+  font-size: 18px;
+
+  -webkit-text-stroke: 0;
+  color: #2563eb;
+}

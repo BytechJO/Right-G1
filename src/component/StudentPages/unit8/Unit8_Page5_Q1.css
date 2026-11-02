@@ -121,3 +121,134 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* =====================================================
+   DROP FOCUS
+===================================================== */
+
+.text-input {
+  outline: none;
+}
+
+.text-input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD TARGET
+===================================================== */
+
+.keyboard-drop-preview-unit8-p5-q1 {
+  background: rgba(219, 234, 254, 0.45) !important;
+
+  outline: 2px dashed #2563eb;
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   REAL VALUE
+===================================================== */
+
+.drop-real-value-unit8-p5-q1 {
+  position: relative;
+
+  z-index: 1;
+
+  white-space: nowrap;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.drop-preview-value-unit8-p5-q1 {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 5;
+
+  padding: 3px 10px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+
+  animation: blink-preview-unit8-p5-q1 0.8s ease-in-out infinite;
+}
+
+@keyframes blink-preview-unit8-p5-q1 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* =====================================================
+   AUDIO ICON
+   فوق يمين الخيار
+===================================================== */
+
+.audio-icon-unit8-p5-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}
+
+/* =====================================================
+   MOUSE DRAG OVERLAY
+===================================================== */
+
+.mouse-drag-overlay-unit8-p5-q1 {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  padding: 7px 14px;
+
+  border: 2px solid #2c5287;
+  border-radius: 8px;
+
+  background: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  color: #2c5287;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  pointer-events: none;
+
+  transform: translateY(-12px);
+}

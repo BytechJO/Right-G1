@@ -48,3 +48,37 @@
   font-size: 25px;
   text-align: center;
 }
+.full-audio-ready-review10-p2-q3 {
+  position: relative;
+
+  cursor: pointer;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.full-audio-ready-review10-p2-q3:hover {
+  background: rgba(44, 82, 135, 0.05);
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.1);
+
+  transform: translateY(-1px);
+}
+
+.full-audio-ready-review10-p2-q3:focus {
+  outline: none;
+}
+
+.full-audio-ready-review10-p2-q3:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}

@@ -1,0 +1,186 @@
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.unit8-page6-q2-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+/* =====================================================
+   MAIN CONTENT
+   نفس الترتيب الحالي - بس أكبر
+===================================================== */
+
+.unit8-page6-q2-content {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 85px;
+
+  margin-top: 35px;
+}
+
+/* =====================================================
+   SPEAKER AREA
+===================================================== */
+
+.unit8-page6-q2-speaker {
+  position: relative;
+
+  width: 235px;
+  height: 185px;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   BOY
+===================================================== */
+
+.unit8-page6-q2-boy {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: auto;
+  height: 135px;
+
+  object-fit: contain;
+}
+
+/* =====================================================
+   SPEECH BUBBLE
+===================================================== */
+
+.unit8-page6-q2-bubble {
+  position: absolute;
+
+  top: 0;
+  left: 65px;
+
+  min-width: 185px;
+
+  padding: 11px 28px 11px 16px;
+
+  background: #ffffff;
+
+  border: 2px solid #222;
+
+  border-radius: 12px;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  outline: none;
+
+  z-index: 5;
+}
+
+/* ما في سهم */
+
+.unit8-page6-q2-bubble::after {
+  display: none;
+  content: none;
+}
+
+/* =====================================================
+   BUBBLE FOCUS
+===================================================== */
+
+.unit8-page6-q2-bubble:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.unit8-page6-q2-audio-icon {
+  position: absolute;
+
+  top: 4px;
+  right: 5px;
+
+  width: 16px;
+  height: 16px;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   ACTIVITY IMAGES
+===================================================== */
+
+.unit8-page6-q2-images {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+}
+
+/* =====================================================
+   IMAGE BOX
+===================================================== */
+
+.unit8-page6-q2-image-box {
+  width: 160px;
+  height: 135px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border: 2px solid #49bfff;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+}
+
+/* =====================================================
+   ACTIVITY IMAGE
+===================================================== */
+
+.unit8-page6-q2-activity-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+  .unit8-page6-q2-content {
+    gap: 35px;
+
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+}

@@ -79,3 +79,253 @@
     gap: 3px;
   }
 }
+/* =====================================================
+   NUMBER BANK OPTION
+===================================================== */
+
+.number-drag-wb-u8-p5-q1 {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  font-weight: 700;
+
+  user-select: none;
+
+  touch-action: none;
+
+  outline: none;
+}
+
+.number-drag-wb-u8-p5-q1:focus {
+  outline: none;
+}
+
+.number-drag-wb-u8-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD SELECTED NUMBER
+===================================================== */
+
+.number-drag-selected-wb-u8-p5-q1 {
+  outline: 3px dashed #2563eb;
+
+  outline-offset: 4px;
+}
+
+.number-drag-selected-wb-u8-p5-q1:focus-visible {
+  outline: 3px dashed #2563eb;
+
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   NUMBER AUDIO ICON
+===================================================== */
+
+.audio-icon-wb-u8-p5-q1 {
+  position: absolute;
+
+  top: -8px;
+  right: -8px;
+
+  width: 13px;
+  height: 13px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   SENTENCE AUDIO
+===================================================== */
+
+.sentence-wb-unit7-p5-q1 {
+  position: relative;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.sentence-wb-unit7-p5-q1:focus {
+  outline: none;
+}
+
+.sentence-wb-unit7-p5-q1:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 5px;
+}
+
+.sentence-audio-icon-wb-u8-p5-q1 {
+  width: 14px;
+  height: 14px;
+
+  color: #2c5287;
+
+  pointer-events: none;
+
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   NUMBER BANK OVER
+===================================================== */
+
+.number-bank-over-wb-u8-p5-q1 {
+  background: rgba(219, 234, 254, 0.35);
+}
+
+/* =====================================================
+   DROP CELL FOCUS
+===================================================== */
+
+.number-input {
+  outline: none;
+}
+
+.number-input:focus {
+  outline: none;
+}
+
+.number-input:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 3px;
+}
+
+/* =====================================================
+   KEYBOARD PREVIEW
+===================================================== */
+
+.keyboard-preview-wb-u8-p5-q1 {
+  background: rgba(219, 234, 254, 0.55) !important;
+
+  outline: 2px dashed #2563eb !important;
+
+  outline-offset: -2px;
+
+  animation: wb-u8-p5-preview-pulse 0.8s ease-in-out infinite;
+}
+
+.preview-number-wb-u8-p5-q1 {
+  opacity: 0.65;
+
+  font-style: italic;
+
+  pointer-events: none;
+}
+
+@keyframes wb-u8-p5-preview-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* =====================================================
+   MOUSE DRAG OVER
+===================================================== */
+
+.drag-over-cell {
+  background: rgba(219, 234, 254, 0.55) !important;
+
+  outline: 2px dashed #2563eb;
+
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   WRONG MARK
+===================================================== */
+
+.wrong-circle {
+  position: absolute;
+
+  top: -10px;
+  right: -10px;
+
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dc2626;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   DRAG OVERLAY
+===================================================== */
+
+.drag-overlay-number-wb-u8-p5-q1 {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 2px solid #2c5287;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  font-weight: 700;
+
+  box-shadow: 0 4px 12px
+    rgba(0, 0, 0, 0.2);
+
+  cursor: grabbing;
+}

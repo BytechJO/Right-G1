@@ -1,0 +1,187 @@
+/* =====================================================
+   WRAPPER
+===================================================== */
+
+.unit7-page6-q1-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+}
+
+/* =====================================================
+   DIALOGUE
+===================================================== */
+
+.unit7-page6-q1-dialogue {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 45px;
+
+  margin-top: 15px;
+  margin-bottom: 40px;
+
+  flex-wrap: wrap;
+}
+
+.unit7-page6-q1-dialogue-item {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+/* =====================================================
+   SPEAKER IMAGE
+===================================================== */
+
+.unit7-page6-q1-speaker-img {
+  width: auto;
+  height: 85px;
+
+  object-fit: contain;
+}
+
+/* =====================================================
+   SPEECH BUBBLE
+===================================================== */
+
+.unit7-page6-q1-bubble {
+  position: relative;
+
+  min-width: 135px;
+
+  padding: 8px 12px;
+
+  background: white;
+
+  border: 2px solid #111;
+
+  border-radius: 10px;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  outline: none;
+
+  user-select: none;
+}
+
+.unit7-page6-q1-bubble:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* speech bubble tail */
+
+.unit7-page6-q1-bubble::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: -10px;
+  left: 20px;
+
+  width: 16px;
+  height: 16px;
+
+  background: white;
+
+  border-left: 2px solid #111;
+  border-bottom: 2px solid #111;
+
+  transform: rotate(-45deg);
+}
+
+/* =====================================================
+   AUDIO ICON
+===================================================== */
+
+.unit7-page6-q1-audio-icon {
+  position: absolute;
+
+  top: -10px;
+  right: -12px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 10;
+}
+
+/* =====================================================
+   PICTURES
+===================================================== */
+
+.unit7-page6-q1-pictures {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 70px;
+
+  align-items: center;
+  justify-items: center;
+
+  margin-top: 20px;
+}
+
+.unit7-page6-q1-picture-item {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.unit7-page6-q1-number {
+  color: #2c5287;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.unit7-page6-q1-activity-img {
+  width: auto;
+  height: 125px;
+
+  object-fit: contain;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+  .unit7-page6-q1-pictures {
+    grid-template-columns: 1fr;
+
+    gap: 30px;
+  }
+
+  .unit7-page6-q1-dialogue {
+    gap: 25px;
+  }
+}

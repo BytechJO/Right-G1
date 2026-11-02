@@ -1,0 +1,139 @@
+/* =====================================================
+   BANK FOCUS
+===================================================== */
+
+.drag-letter {
+  outline: none;
+}
+
+.drag-letter:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   PICKED BANK LETTER
+===================================================== */
+
+.keyboard-picked-letter-unit8-p5-q4 {
+  outline: 3px solid #2563eb !important;
+  outline-offset: 3px;
+
+  background: #dbeafe;
+}
+
+/* =====================================================
+   MOUSE DRAG
+===================================================== */
+
+.mouse-dragging-letter-unit8-p5-q4 {
+  opacity: 0.65;
+}
+
+/* =====================================================
+   DROP SLOT FOCUS
+===================================================== */
+
+.drop-slot {
+  position: relative;
+  outline: none;
+}
+
+.drop-slot:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   KEYBOARD SLOT
+===================================================== */
+
+.keyboard-slot-preview-unit8-p5-q4 {
+  background: rgba(219, 234, 254, 0.45);
+
+  outline: 2px dashed #2563eb;
+
+  outline-offset: -2px;
+}
+
+/* =====================================================
+   BLINK PREVIEW
+===================================================== */
+
+.keyboard-preview-letter-unit8-p5-q4 {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: inherit;
+  font-weight: 700;
+
+  pointer-events: none;
+
+  z-index: 4;
+
+  animation: blink-puzzle-unit8-p5-q4 0.7s ease-in-out infinite;
+}
+
+@keyframes blink-puzzle-unit8-p5-q4 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* =====================================================
+   LOCKED SLOT
+===================================================== */
+
+.locked-slot-unit8-p5-q4 {
+  cursor: default;
+}
+
+/* =====================================================
+   COMPLETED SENTENCE
+===================================================== */
+
+.completed-sentence-unit8-p5-q4 {
+  position: relative;
+
+  cursor: pointer;
+
+  outline: none;
+}
+
+.completed-sentence-unit8-p5-q4:focus-visible {
+  outline: 3px solid #2563eb;
+
+  outline-offset: 4px;
+
+  border-radius: 8px;
+}
+
+/* =====================================================
+   SENTENCE AUDIO ICON
+
+   زاوية وما بتاخذ من مساحة النص
+===================================================== */
+
+.sentence-audio-icon-unit8-p5-q4 {
+  position: absolute;
+
+  top: 5px;
+  right: 6px;
+
+  width: 15px;
+  height: 15px;
+
+  pointer-events: none;
+
+  z-index: 5;
+}

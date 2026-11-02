@@ -1,22 +1,25 @@
 .h5-wb-unit5-p1-q1 {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* padding: 6px 14px; */
-    /* border: 2px solid #4a90e2; */
-    border-radius: 20px;
-    /* background-color: #eef6ff; */
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    position: relative;
-    width: fit-content;
-    margin-bottom: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 6px 14px; */
+  /* border: 2px solid #4a90e2; */
+  border-radius: 20px;
+  /* background-color: #eef6ff; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  position: relative;
+  width: fit-content;
+  margin-bottom: 25px;
 }
 
-.h5-wb-unit5-p1-q1  {
+.h5-wb-unit5-p1-q1 {
   /* display: inline-block; مهم للـ transform */
-  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease,
     box-shadow 0.2s ease;
   /* padding: 4px 6px; */
   border-radius: 6px;
@@ -31,4 +34,42 @@
 
 .h5-wb-unit5-p1-q1:active {
   transform: scale(0.98);
+}
+.matched-img2 {
+  outline: none;
+}
+
+.matched-img2:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+.h5-wb-unit5-p1-q1 {
+  outline: none;
+}
+
+.h5-wb-unit5-p1-q1:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.audio-icon-wb-u5-p1-q1 {
+  position: absolute;
+
+  top: -10px;
+  right: -17px;
+
+  padding: 2px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+.error-mark-img-unit7-p6-q2 {
+  font-size: 16px;
 }

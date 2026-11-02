@@ -28,6 +28,28 @@
     right: 26.5%;
     cursor: pointer;
 }
+.word-with-dot2 {
+  position: relative;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-text2 {
+  width: 100%;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+}
+
+.span-num2 {
+  position: absolute;
+  left: 0;
+}
 /* 
 @media screen and (max-width: 1024px) and (max-height: 600px) {
       .click-icon-unit2-page8-3 {

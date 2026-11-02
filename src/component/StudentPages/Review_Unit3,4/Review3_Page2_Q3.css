@@ -75,3 +75,20 @@
   align-items: center;
   border: 2px solid white;
 }
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.shortA-word {
+  cursor: pointer;
+}
+
+.shortA-word:focus {
+  outline: none;
+}
+
+.shortA-word:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 6px;
+}

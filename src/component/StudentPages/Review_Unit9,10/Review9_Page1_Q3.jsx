@@ -5,6 +5,17 @@ import img3 from "../../../assets/unit10/imgs/U10P88EXEC-03.svg";
 import img4 from "../../../assets/unit10/imgs/U10P88EXEC-04.svg";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import "./Review9_Page1_Q3.css";
+import whatSheLikesAudio from "../../../assets/Review_9,10/Page 88 - C/What does she like.mp3";
+import whatHeLikesAudio from "../../../assets/Review_9,10/Page 88 - C/What does he like.mp3";
+import horsesAudio from "../../../assets/Review_9,10/Page 88 - C/She likes horses..mp3";
+import chickensAudio from "../../../assets/Review_9,10/Page 88 - C/She likes chickens..mp3";
+import dogsAudio from "../../../assets/Review_9,10/Page 88 - C/He likes dogs..mp3";
+import catsAudio from "../../../assets/Review_9,10/Page 88 - C/He likes cats..mp3";
+import full1Audio from "../../../assets/Review_9,10/Page 88 - C/full1.mp3";
+import full2Audio from "../../../assets/Review_9,10/Page 88 - C/full2.mp3";
+import ExerciseHeaderReview from "../../ExerciseHeaderReview";
+import ReviewPlayingAudioIcon from "./ReviewPlayingAudioIcon";
+import useReviewAudio from "./useReviewAudio";
 
 const Review9_Page1_Q3 = () => {
   const questions = [
@@ -12,43 +23,59 @@ const Review9_Page1_Q3 = () => {
       id: 1,
       image: img3,
       mainImg: img1,
+      mainAlt: "A girl asking a question.",
+      imageAlt: "A girl standing near chickens on a farm.",
       text: "What does she like?",
+      questionAudio: whatSheLikesAudio,
+      fullAudio: full1Audio,
       items: [
-        { text: "She likes horses.", correct: "x" },
-        { text: "She likes chickens.", correct: "✓" },
+        { text: "She likes horses.", correct: "x", audio: horsesAudio },
+        { text: "She likes chickens.", correct: "✓", audio: chickensAudio },
       ],
     },
     {
       id: 2,
       image: img4,
       mainImg: img2,
+      mainAlt: "A boy asking a question.",
+      imageAlt: "A boy standing near cats on a farm.",
       text: "What does he like?",
+      questionAudio: whatHeLikesAudio,
+      fullAudio: full2Audio,
       items: [
-        { text: "He likes dogs.", correct: "x" },
-        { text: "He likes cats.", correct: "✓" },
+        { text: "He likes dogs.", correct: "x", audio: dogsAudio },
+        { text: "He likes cats.", correct: "✓", audio: catsAudio },
       ],
     },
   ];
 
   const [answers, setAnswers] = useState({});
-  const [results, setResults] = useState({});
+  const [lockedIds, setLockedIds] = useState(new Set());
+  const [wrongIds, setWrongIds] = useState(new Set());
   const [showAnswer, setShowAnswer] = useState(false);
+  const [fullAudioQuestions, setFullAudioQuestions] = useState([]);
+  const { activeAudioKey, playAudio, stopAudio } = useReviewAudio();
 
   // -------------------------
   // اختيار جواب واحد فقط لكل سؤال
   // -------------------------
   const handleSelect = (qId, idx) => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
+    if (showAnswer || lockedIds.has(qId)) return;
     setAnswers({
       ...answers,
       [qId]: idx, // نخزن رقم الخيار المختار
     });
-    setResults({});
+    setWrongIds((current) => {
+      const next = new Set(current);
+      next.delete(qId);
+      return next;
+    });
   };
 
   const checkAnswers = () => {
-    if (showAnswer) return; // ❌ ممنوع التعديل بعد Show Answer
-    const temp = {};
+    if (showAnswer || lockedIds.size === questions.length) return;
+    const tempLocked = new Set(lockedIds);
+    const tempWrong = new Set();
     let correctCount = 0;
     let total = questions.length;
 
@@ -56,23 +83,26 @@ const Review9_Page1_Q3 = () => {
       const chosenIndex = answers[q.id];
 
       if (chosenIndex === undefined) {
-        temp[q.id] = "empty";
         return;
       }
 
       const isCorrect = q.items[chosenIndex].correct.toLowerCase() === "✓";
 
-      temp[q.id] = isCorrect ? "correct" : "wrong";
-
-      if (isCorrect) correctCount++;
+      if (isCorrect) {
+        correctCount++;
+        tempLocked.add(q.id);
+      } else {
+        tempWrong.add(q.id);
+      }
     });
 
-    setResults(temp);
-    setShowAnswer(true);
-    if (Object.values(temp).includes("empty")) {
+    if (questions.some((q) => answers[q.id] === undefined)) {
       ValidationAlert.info("Please answer all questions!");
       return;
     }
+    setLockedIds(tempLocked);
+    setWrongIds(tempWrong);
+    setFullAudioQuestions(Array.from(tempLocked));
 
     let color =
       correctCount === total ? "green" : correctCount === 0 ? "red" : "orange";
@@ -90,8 +120,11 @@ const Review9_Page1_Q3 = () => {
   };
   const reset = () => {
     setAnswers({});
-    setResults({});
-    setShowAnswer(false); // ← مهم جداً
+    setLockedIds(new Set());
+    setWrongIds(new Set());
+    setShowAnswer(false);
+    setFullAudioQuestions([]);
+    stopAudio();
   };
   const handleShowAnswer = () => {
     const correctAnswers = {};
@@ -100,12 +133,26 @@ const Review9_Page1_Q3 = () => {
       const correctIndex = q.items.findIndex(
         (item) => item.correct.toLowerCase() === "✓",
       );
+
       correctAnswers[q.id] = correctIndex;
     });
 
     setAnswers(correctAnswers);
-    setResults({});
+
+    setLockedIds(new Set(questions.map((q) => q.id)));
+
+    setWrongIds(new Set());
+
     setShowAnswer(true);
+
+    /*
+    ✅ بعد Show Answer
+    خلي كل سؤال كامل clickable / tabbable
+    لتشغيل full audio
+  */
+    setFullAudioQuestions(questions.map((q) => q.id));
+
+    stopAudio();
   };
 
   return (
@@ -122,19 +169,57 @@ const Review9_Page1_Q3 = () => {
         className="div-forall"
         style={{
           gap: "60px",
-     
         }}
       >
         <div className="review3-p1-q3-wrapper">
-          <h4 className="header-title-page8">
-            <span className="mr-2">C</span> Look, read, and tap the correct answer. 
-          
-          </h4>
+          <ExerciseHeaderReview
+            sectionLetter="C"
+            title={
+              <>
+                Look, read, and write <span style={{ color: "red" }}>✓</span>.
+              </>
+            }
+            subTitle="Look at each picture, then tap the correct likes sentence."
+          />
 
           <div className="review9-p1-q3-grid">
             <div className="flex flex-col gap-20">
               {questions.map((q) => (
-                <div key={q.id} className="review9-p1-q3-box">
+                <div
+                  key={q.id}
+                  className={`review9-p1-q3-box review-audio-control${
+                    fullAudioQuestions.includes(q.id)
+                      ? " review-full-audio-ready"
+                      : ""
+                  }`}
+                  role={
+                    fullAudioQuestions.includes(q.id) ? "button" : undefined
+                  }
+                  tabIndex={fullAudioQuestions.includes(q.id) ? 0 : undefined}
+                  aria-label={
+                    fullAudioQuestions.includes(q.id)
+                      ? `Play the complete correct exchange for item ${q.id}.`
+                      : undefined
+                  }
+                  onClick={
+                    fullAudioQuestions.includes(q.id)
+                      ? () => playAudio(`full-${q.id}`, q.fullAudio)
+                      : undefined
+                  }
+                  onKeyDown={
+                    fullAudioQuestions.includes(q.id)
+                      ? (event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            playAudio(`full-${q.id}`, q.fullAudio);
+                          }
+                        }
+                      : undefined
+                  }
+                >
+                  {activeAudioKey === `full-${q.id}` && (
+                    <ReviewPlayingAudioIcon />
+                  )}
                   <div
                     style={{
                       display: "flex",
@@ -150,7 +235,11 @@ const Review9_Page1_Q3 = () => {
                         alignItems: "center",
                       }}
                     >
-                      <img src={q.mainImg} className="review9-p1-q3-img" />{" "}
+                      <img
+                        src={q.mainImg}
+                        alt={q.mainAlt}
+                        className="review9-p1-q3-img"
+                      />{" "}
                       <div
                         style={{
                           position: "relative",
@@ -166,6 +255,21 @@ const Review9_Page1_Q3 = () => {
                             borderRadius: "8px",
                           }}
                           value={q.text}
+                          readOnly
+                          aria-label={`Play audio: ${q.text}`}
+                          role="button"
+                          tabIndex={0}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            playAudio(`question-${q.id}`, q.questionAudio);
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              playAudio(`question-${q.id}`, q.questionAudio);
+                            }
+                          }}
                         />
                       </div>{" "}
                     </div>
@@ -179,15 +283,45 @@ const Review9_Page1_Q3 = () => {
                       alignItems: "center",
                     }}
                   >
-                    <img src={q.image} alt="" className="review9-p1-q3-img" />
+                    <img
+                      src={q.image}
+                      alt={q.imageAlt}
+                      className="review9-p1-q3-img"
+                    />
                     <div>
                       {q.items.map((item, idx) => {
                         const isSelected = answers[q.id] === idx;
-                        const isWrong = results[q.id] === "wrong" && isSelected;
+                        const isWrong = wrongIds.has(q.id) && isSelected;
+                        const isLocked = lockedIds.has(q.id) || showAnswer;
 
                         return (
                           <div key={idx} className="review3-p1-q3-row">
-                            <span className="review9-p1-q3-text">
+                            <span
+                              className="review9-p1-q3-text review-audio-control"
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`Play audio: ${item.text}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                playAudio(`option-${q.id}-${idx}`, item.audio);
+                              }}
+                              onKeyDown={(event) => {
+                                if (
+                                  event.key === "Enter" ||
+                                  event.key === " "
+                                ) {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  playAudio(
+                                    `option-${q.id}-${idx}`,
+                                    item.audio,
+                                  );
+                                }
+                              }}
+                            >
+                              {activeAudioKey === `option-${q.id}-${idx}` && (
+                                <ReviewPlayingAudioIcon />
+                              )}
                               {item.text}
                             </span>
 
@@ -196,17 +330,32 @@ const Review9_Page1_Q3 = () => {
                                 type="text"
                                 readOnly
                                 value={isSelected ? "✓" : ""}
-                                onFocus={() => handleSelect(q.id, idx)}
+                                role="button"
+                                tabIndex={isLocked ? -1 : 0}
+                                aria-label={`Select ${item.text} for item ${q.id}.`}
+                                aria-pressed={isSelected}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  handleSelect(q.id, idx);
+                                }}
+                                onKeyDown={(event) => {
+                                  if (
+                                    event.key === "Enter" ||
+                                    event.key === " "
+                                  ) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    handleSelect(q.id, idx);
+                                  }
+                                }}
                                 className={`review3-p1-q3-input`}
-                                disabled={showAnswer}
+                                disabled={isLocked}
                                 style={{
-                                  cursor: showAnswer
-                                    ? "not-allowed"
-                                    : "pointer",
+                                  cursor: isLocked ? "not-allowed" : "pointer",
                                 }}
                               />
 
-                              { isWrong && (
+                              {isWrong && (
                                 <span className="review3-p1-q3-x">✕</span>
                               )}
                             </div>

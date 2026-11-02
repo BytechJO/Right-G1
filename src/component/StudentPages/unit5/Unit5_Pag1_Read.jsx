@@ -19,7 +19,7 @@ const Unit5_Page1_Read = () => {
   ];
   const captions = [
     { start: 0, end: 3.05, text: "Page 40. Listen and read along" },
-    { start: 3.07, end:7, text: "G, girl, green, garden. " },
+    { start: 3.07, end: 7, text: "G, girl, green, garden. " },
   ];
   return (
     <>
@@ -30,6 +30,8 @@ const Unit5_Page1_Read = () => {
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
+        pageId="unit5-page1-read"
+        subHeader="Press Play, follow the g words, then tap each card to hear it again."
         captions={captions}
       />
     </>

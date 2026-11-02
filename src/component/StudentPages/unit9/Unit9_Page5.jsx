@@ -1,7 +1,5 @@
 import page_5 from "../../../assets/unit9/imgs/Right 1 Unit 09 A Day on the Farm5.png";
-import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import arrowBtn from "../../../assets/unit1/imgs/Page 01/Arrow.svg";
-import pauseBtn from "../../../assets/unit1/imgs/Right Video Button.svg";
 import "./Unit9_Page5.css";
 
 const Unit9_Page5 = ({ openPopup }) => {
@@ -20,17 +18,26 @@ const Unit9_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 98 })}
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise A1"
+          style={{ overflow: "visible" }}
+          onClick={() => openPopup("exercise", { startIndex: 103 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 103 });
+            }
+          }}
         >
-       <image
-                   href={arrowBtn}
-                   className="svg-img"
-                   x="0"
-                   y="0"
-                   width="90"
-                   height="90"
-                 />
+          <image
+            href={arrowBtn}
+            className="svg-img"
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
 
@@ -42,17 +49,26 @@ const Unit9_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 99 })}
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise A2"
+          style={{ overflow: "visible" }}
+          onClick={() => openPopup("exercise", { startIndex: 104 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 104 });
+            }
+          }}
         >
-       <image
-                   href={arrowBtn}
-                   className="svg-img"
-                   x="0"
-                   y="0"
-                   width="90"
-                   height="90"
-                 />
+          <image
+            href={arrowBtn}
+            className="svg-img"
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
 
@@ -64,10 +80,19 @@ const Unit9_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 100 })}
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise B"
+          style={{ overflow: "visible" }}
+          onClick={() => openPopup("exercise", { startIndex: 105 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 105 });
+            }
+          }}
         >
-<image
+          <image
             href={arrowBtn}
             className="svg-img"
             x="0"
@@ -86,17 +111,26 @@ const Unit9_Page5 = ({ openPopup }) => {
           width="22"
           height="22"
           viewBox="0 0 90 90"
-           style={{ overflow: "visible" }}
-          onClick={() => openPopup("exercise", { startIndex: 101 })}
+          tabIndex={0}
+          role="button"
+          aria-label="Open exercise C"
+          style={{ overflow: "visible" }}
+          onClick={() => openPopup("exercise", { startIndex: 106 })}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openPopup("exercise", { startIndex: 106 });
+            }
+          }}
         >
-        <image
-                    href={arrowBtn}
-                    className="svg-img"
-                    x="0"
-                    y="0"
-                    width="90"
-                    height="90"
-                  />
+          <image
+            href={arrowBtn}
+            className="svg-img"
+            x="0"
+            y="0"
+            width="90"
+            height="90"
+          />
         </svg>
       </div>
     </div>

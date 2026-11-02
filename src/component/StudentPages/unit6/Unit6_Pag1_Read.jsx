@@ -17,22 +17,22 @@ const Unit6_Page1_Read = () => {
     new Audio(Pg22_1_3_AdultLady),
     new Audio(Pg22_1_4_AdultLady),
   ];
-   const captions = [
-   { start: 0, end: 3.8, text: "Page 46, Listen and read along. " },
-    { start: 3.9, end: 7.00, text: "Short I. Sit.Hill. Pin. " },
-    
+  const captions = [
+    { start: 0, end: 3.8, text: "Page 46, Listen and read along. " },
+    { start: 3.9, end: 7.0, text: "Short I. Sit.Hill. Pin. " },
   ];
   return (
     <>
-
-         <FourImagesWithAudio
+      <FourImagesWithAudio
         images={[Rabbit, img1, img2, img3, img4]}
         audioSrc={longAudio}
-        checkpoints={[0, 3.8, 5.11,6.05, 7.00]}
+        checkpoints={[0, 3.8, 5.11, 6.05, 7.0]}
         popupOpen={true}
         titleQ={"Listen and read along."}
         audioArr={imageSounds}
+        pageId="unit6-page46-read"
         captions={captions}
+        subHeader="Press Play, follow the short-i words, then tap each card to hear it again."
       />
     </>
   );
