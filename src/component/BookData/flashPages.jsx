@@ -27,6 +27,7 @@ export const flashPages = Object.keys(images)
   .map((key, index) => {
     return {
       img: images[key].default,
+      pageId: `flashcard_page_${index + 1}`,
 
       // الصورة الأولى بدون صوت
       // الصور التالية تأخذ الأصوات بالتسلسل الصحيح

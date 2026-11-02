@@ -1,36 +1,52 @@
-import { useRef,useState} from "react";
+import { useRef, useState } from "react";
 import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
 import "./FlashCardViewer.css";
-import AudioWithCaption from "../AudioWithCaption";
-export default function FlashCardViewer({ card, openPopup }) {
+export default function FlashCardViewer({ card }) {
   const [isPlaying, setIsPlaying] = useState(false);
-
   const audioRef = useRef(null);
-  const playSound = (soundPath) => {
-    if (audioRef.current) {
-      audioRef.current.src = soundPath;
-      audioRef.current.play();
 
-      audioRef.current.onended = () => {
-        setIsPlaying(false);
-      };
+  const playSound = (soundPath) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    document.querySelectorAll("audio, video").forEach((media) => {
+      if (media !== audio) media.pause();
+    });
+    audio.src = soundPath;
+    audio.currentTime = 0;
+    setIsPlaying(true);
+    audio.play().catch(() => setIsPlaying(false));
+  };
+
+  const openFlashcardAudio = () => {
+    if (card.audio) playSound(card.audio);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (!event.repeat) {
+        openFlashcardAudio();
+      }
     }
   };
- 
-  
-  return (
-    <div       className="page1-img-wrapper-flashcard"
-      style={{ backgroundImage: `url(${card.img})` }}>
-      {/* <img
-        src={card.img}
-        alt="flash"
-        className="w-[350px] h-auto rounded-xl shadow-lg"
-      /> */}
 
+  return (
+    <div
+      className="page1-img-wrapper-flashcard"
+      style={{ backgroundImage: `url(${card.img})` }}
+    >
       {card.audio && (
         <div
           className="audio-btn-wrapper"
-          onClick={() => playSound(card.audio)}
+          role="button"
+          tabIndex={0}
+          aria-label="Play flashcard audio"
+          aria-pressed={isPlaying}
+          onClick={openFlashcardAudio}
+          onKeyDown={handleKeyDown}
         >
           <svg width="22" height="22" viewBox="0 0 90 90">
             <image
@@ -44,7 +60,14 @@ export default function FlashCardViewer({ card, openPopup }) {
           </svg>
         </div>
       )}
-      <audio ref={audioRef} style={{ display: "none" }} />
+      <audio
+        ref={audioRef}
+        id={`audio-${card.pageId}`}
+        data-page-id={card.pageId}
+        onEnded={() => setIsPlaying(false)}
+        onPause={() => setIsPlaying(false)}
+        style={{ display: "none" }}
+      />
     </div>
   );
 }
