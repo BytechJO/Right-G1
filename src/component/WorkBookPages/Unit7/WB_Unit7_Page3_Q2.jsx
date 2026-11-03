@@ -37,7 +37,7 @@ import areYouSadAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_006_A
 import yesAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_007_Yes.mp3";
 import yesIamAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_003_a_Yes,lam.mp3";
 import noImNotImAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_008_No,_I'm_not._I'm.mp3";
-import areYouAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_009_Are_you.mp3";
+import areYouAudio from "../../../assets/missing/Are you.mp3";
 
 /* =====================================================
    WORD BANK
@@ -940,7 +940,7 @@ const WB_Unit7_Page3_Q2 = () => {
      CHECK
   ===================================================== */
 
-  const checkAnswers = () => {
+  const checkAnswers = (event) => {
     if (showAnswer || allCompleted) {
       return;
     }
@@ -1009,6 +1009,7 @@ const WB_Unit7_Page3_Q2 = () => {
       `;
 
     if (completed) {
+      event?.currentTarget?.parentElement?.querySelector(".try-again-button")?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
     } else if (correctCount === 0) {
       ValidationAlert.error(msg);
@@ -1432,7 +1433,7 @@ const WB_Unit7_Page3_Q2 = () => {
               Show Answer
             </button>
 
-            <button onClick={checkAnswers} className="check-button2">
+            <button onClick={checkAnswers} className="check-button2" disabled={showAnswer || allCompleted} style={{ cursor: (showAnswer || allCompleted) ? "not-allowed" : undefined }}>
               Check Answer ✓
             </button>
           </div>

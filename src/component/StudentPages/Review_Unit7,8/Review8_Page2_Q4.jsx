@@ -21,11 +21,11 @@ import full2Audio from "../../../assets/unit8/sound/Page 73 - G/full2.mp3";
 import isInTheAudio from "../../../assets/unit8/sound/Page 73 - G/is in the.mp3";
 import isOverTheAudio from "../../../assets/unit8/sound/Page 73 - G/is over the.mp3";
 
-import seaAudio from "../../../assets/unit8/sound/Page 73 - G/sea.mp3";
+import seaAudio from "../../../assets/missing/Sea.mp3";
 import sockAudio from "../../../assets/unit8/sound/Page 73 - G/Sock.mp3";
 import sunAudio from "../../../assets/unit8/sound/Page 73 - G/sun.mp3";
-import theAudio from "../../../assets/unit8/sound/Page 73 - G/The.mp3";
-import zebraAudio from "../../../assets/unit8/sound/Page 73 - G/zebra.mp3";
+import theAudio from "../../../assets/missing/The.mp3";
+import zebraAudio from "../../../assets/missing/Zebra.mp3";
 import zooAudio from "../../../assets/unit8/sound/Page 73 - G/zoo.mp3";
 
 /* =====================================================
@@ -329,7 +329,7 @@ const Review8_Page2_Q4 = () => {
      CHECK
   ===================================================== */
 
-  const checkAnswers = () => {
+  const checkAnswers = (event) => {
     if (showAnswerMode || allCorrect) {
       return;
     }
@@ -397,6 +397,7 @@ const Review8_Page2_Q4 = () => {
     `;
 
     if (correctCount === total) {
+      event?.currentTarget?.parentElement?.querySelector(".try-again-button")?.focus({ preventScroll: true });
       ValidationAlert.success(scoreMessage);
     } else if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
@@ -773,7 +774,7 @@ const Review8_Page2_Q4 = () => {
           Show Answer
         </button>
 
-        <button onClick={checkAnswers} className="check-button2">
+        <button onClick={checkAnswers} className="check-button2" disabled={showAnswerMode || allCorrect} style={{ cursor: (showAnswerMode || allCorrect) ? "not-allowed" : undefined }}>
           Check Answer ✓
         </button>
       </div>

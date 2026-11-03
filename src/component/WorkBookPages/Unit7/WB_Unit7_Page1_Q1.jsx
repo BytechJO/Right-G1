@@ -33,7 +33,8 @@ import AreYouScaredAudio from "../../../assets/U1 WB/U7/audio/page 39 - A/Item_0
 import AreYouBoredAudio from "../../../assets/U1 WB/U7/audio/page 39 - A/Item_006_Are_you_bored.mp3";
 import AreYouColdAudio from "../../../assets/U1 WB/U7/audio/page 39 - A/Item_007_Are_you_cold.mp3";
 import NoAudio from "../../../assets/U1 WB/U7/audio/page 39 - A/Item_008_No,.mp3";
-import AreAudio from "../../../assets/U1 WB/U7/audio/page 39 - A/Item_009_Are.mp3";
+import YesAudio from "../../../assets/U1 WB/U7/audio/page 41- F/Item_007_Yes.mp3";
+import AreAudio from "../../../assets/missing/Are.mp3";
 import "./WB_Unit7_Page1_Q1.css";
 
 /* =====================================================
@@ -507,6 +508,7 @@ const FixedAudioText = ({
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           e.stopPropagation();
+          if (e.repeat) return;
 
           onPlay(audioKey, audio);
         }
@@ -1056,7 +1058,7 @@ const WB_Unit7_Page1_Q1 = () => {
      CHECK
   ===================================================== */
 
-  const checkAnswers = () => {
+  const checkAnswers = (event) => {
     if (showAnswer || checkCompleted) {
       return;
     }
@@ -1123,6 +1125,7 @@ const WB_Unit7_Page1_Q1 = () => {
 
       setCheckCompleted(true);
 
+      event?.currentTarget?.parentElement?.querySelector(".try-again-button")?.focus({ preventScroll: true });
       ValidationAlert.success(scoreMessage);
     } else if (correctCount === 0) {
       ValidationAlert.error(scoreMessage);
@@ -1396,21 +1399,14 @@ const WB_Unit7_Page1_Q1 = () => {
                     alignItems: "flex-end",
                   }}
                 >
-                  <input
-                    type="text"
-                    value="Yes,"
-                    readOnly
-                    tabIndex={-1}
-                    aria-hidden="true"
-                    style={{
-                      borderBottom: "2px solid black",
-
-                      width: "10%",
-
-                      fontSize: 20,
-
-                      pointerEvents: "none",
-                    }}
+                  <FixedAudioText
+                    text="Yes,"
+                    audio={YesAudio}
+                    audioKey="fixed-yes"
+                    isPlaying={playingAudioKey === "fixed-yes"}
+                    onPlay={playSingleAudio}
+                    disabled={s1.complete}
+                    style={{ width: "10%" }}
                   />
 
                   {dz("input1", s1.complete)}
@@ -1621,7 +1617,7 @@ const WB_Unit7_Page1_Q1 = () => {
               Show Answer
             </button>
 
-            <button className="check-button2" onClick={checkAnswers}>
+            <button className="check-button2" onClick={checkAnswers} disabled={showAnswer || checkCompleted} style={{ cursor: (showAnswer || checkCompleted) ? "not-allowed" : undefined }}>
               Check Answer ✓
             </button>
           </div>

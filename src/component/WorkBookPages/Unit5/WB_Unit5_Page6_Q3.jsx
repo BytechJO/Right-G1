@@ -16,7 +16,7 @@ import { FaVolumeUp } from "react-icons/fa";
    AUDIO
 ===================================================== */
 
-import kiteAudio from "../../../assets/U1 WB/U5/audio/page_32_qC/Item_001_kite.mp3";
+import kiteAudio from "../../../assets/missing/Kite.mp3";
 import goatAudio from "../../../assets/U1 WB/U5/audio/page_32_qC/Item_002_goat.mp3";
 import girlAudio from "../../../assets/U1 WB/U5/audio/page_32_qC/Item_004_girl.mp3";
 import kitchenAudio from "../../../assets/U1 WB/U5/audio/page_32_qC/Item_005_kitchen.mp3";
@@ -213,7 +213,7 @@ const WB_Unit5_Page6_Q3 = () => {
      CHECK ANSWERS
   ================================================= */
 
-  const checkAnswers = () => {
+  const checkAnswers = (event) => {
     if (showAnswer || checkCompleted) {
       return;
     }
@@ -274,6 +274,7 @@ const WB_Unit5_Page6_Q3 = () => {
 
       setCheckCompleted(true);
 
+      event?.currentTarget?.parentElement?.querySelector(".try-again-button")?.focus({ preventScroll: true });
       ValidationAlert.success(msg);
 
       return;
@@ -536,7 +537,7 @@ const WB_Unit5_Page6_Q3 = () => {
           Show Answer
         </button>
 
-        <button className="check-button2" onClick={checkAnswers}>
+        <button className="check-button2" onClick={checkAnswers} disabled={showAnswer || checkCompleted} style={{ cursor: (showAnswer || checkCompleted) ? "not-allowed" : undefined }}>
           Check Answer ✓
         </button>
       </div>
