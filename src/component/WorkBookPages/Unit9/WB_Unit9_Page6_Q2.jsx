@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./WB_Unit9_Page6_Q2.css";
-import sound1 from "../../../assets/U1 WB/U9/audio/cd11pg56-instruction1-adult-lady_ynLikPrn.mp3";
+import sound1 from "../../../assets/missing/wb-page 56-EXB.mp3";
 import ValidationAlert from "../../Popup/ValidationAlert";
 import QuestionAudioPlayer from "../../QuestionAudioPlayer";
 import ExerciseHeader from "../../ExerciseHeader";
@@ -42,28 +42,26 @@ const WB_Unit9_Page6_Q2 = () => {
   const [lockedQuestions, setLockedQuestions] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
 
-  const stopAtSecond = 7.28;
+  const stopAtSecond = 4.58;
 
   // ================================
   // ✔ Captions Array
   // ================================
-  const captions = [
-    {
-      start: 0,
-      end: 7.28,
-      text: "Phonics exercise B. Which picture has a different sound? Listen and write X.",
-    },
-    {
-      start: 7.87,
-      end: 12.08,
-      text: "1, pink, moon, needle.",
-    },
-    {
-      start: 12.73,
-      end: 17.18,
-      text: "2, note, mule, newspaper.",
-    },
-  ];
+const captions = [
+  {
+    start: 0.12,
+    end: 4.58,
+    text: "Which picture has a different beginning sound? Listen and write X.",
+  },
+  { start: 5.02, end: 5.38, text: "1," },
+  { start: 6.08, end: 6.48, text: "pink," },
+  { start: 7.28, end: 7.66, text: "night," },
+  { start: 8.48, end: 8.9, text: "needle." },
+  { start: 9.62, end: 9.94, text: "2," },
+  { start: 10.76, end: 11.12, text: "note," },
+  { start: 11.88, end: 12.4, text: "donkey," },
+  { start: 13.12, end: 13.82, text: "newspaper." },
+];
 
   const checkAnswers = () => {
     if (showAnswer || lockedQuestions.length === data.length) return;
