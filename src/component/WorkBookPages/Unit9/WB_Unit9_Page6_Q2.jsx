@@ -51,7 +51,7 @@ const WB_Unit9_Page6_Q2 = () => {
     {
       start: 0,
       end: 7.28,
-      text: "Phonics exercise B. Which picture has a different sound? Listen and write X.",
+      text: "Phonics exercise B. Which picture has a different beginning sound? Listen and write X.",
     },
     {
       start: 7.87,
