@@ -65,7 +65,7 @@ const Unit7_Page1_Vocab = () => {
         { id: 10, top: "53%", left: "53%" },
       ]}
       captions={[
-        { start: 0, end: 3.88, text: "Page 10, Unit 2, Vocabulary." },
+        { start: 0, end: 3.88, text: "Page 10, Unit 7, Vocabulary." },
         { start: 4.0, end: 7.34, text: " 1. cold " },
         { start: 7.4, end: 10.08, text: "2. shiver" },
         { start: 10.1, end: 12.63, text: "3. hungry" },
