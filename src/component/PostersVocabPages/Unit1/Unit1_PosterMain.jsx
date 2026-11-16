@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn.svg";
+import audioBtn from "../../../assets/unit1/imgs/Page 01/Audio btn2.svg";
 import AudioWithCaption from "../../AudioWithCaption";
 import "../../../index.css";
 import "./Unit1_PosterMain.css";

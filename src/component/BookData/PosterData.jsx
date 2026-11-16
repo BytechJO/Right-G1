@@ -684,22 +684,21 @@ export const posterData = [
       sound9_unit10,
       sound10_unit10,
     ],
-    
 
     vocabularyAudio: vocabulary_unit10,
     captions: [
-      { start: 0.52, end: 3.24, text: "Unit 10 vocabulary." },
+      { start: 0.52, end: 1.66, text: "Unit 10 vocabulary." },
 
-      { start: 3.92, end: 4.56, text: "Ice cream." },
-      { start: 5.18, end: 5.6, text: "Milk." },
-      { start: 6.26, end: 6.72, text: "Bread." },
-      { start: 7.44, end: 7.98, text: "Sweet." },
-      { start: 8.74, end: 9.12, text: "Apple." },
-      { start: 9.84, end: 10.3, text: "Fruit." },
-      { start: 11.12, end: 11.6, text: "Chicken." },
-      { start: 12.44, end: 12.9, text: "Order." },
-      { start: 13.68, end: 14.12, text: "Wait." },
-      { start: 14.8, end: 15.6, text: "Cafeteria." },
+      { start: 2.23, end: 3.2, text: "Ice cream." },
+      { start: 2.9, end: 4.5, text: "Milk." },
+      { start: 4.86, end: 5.7, text: "Bread." },
+      { start: 5.9, end: 7.0, text: "Sweet." },
+      { start: 7.18, end: 8, text: "Apple." },
+      { start: 8.3, end: 9.2, text: "Fruit." },
+      { start: 9.54, end: 10.5, text: "Chicken." },
+      { start: 10.88, end: 12, text: "Order." },
+      { start: 12.12, end: 13.0, text: "Wait." },
+      { start: 13.22, end: 14.04, text: "Cafeteria." },
     ],
   },
 ];

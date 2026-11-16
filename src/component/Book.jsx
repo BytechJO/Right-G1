@@ -46,6 +46,7 @@ import {
 import WorkBookNavigator from "./WorkBookPages/WorkBookNavigator";
 import { postersVocabPages } from "./BookData/postersVocabPages";
 import PosterVocabNavigator from "./PostersVocabPages/PosterVocabNavigator";
+import { getScormLaunchLocation, saveScormLocation, trackScormPageVisits } from "../scorm.js";
 import TeacherBook from "./TeacherBookPages/TeacherBook";
 
 const BOOK_TABS = new Set([
@@ -58,6 +59,9 @@ const BOOK_TABS = new Set([
 ]);
 
 const getInitialActiveTab = () => {
+  const launchLocation = getScormLaunchLocation();
+  if (launchLocation && BOOK_TABS.has(launchLocation.tab)) return launchLocation.tab;
+
   const savedTab = localStorage.getItem("activeTab");
   return BOOK_TABS.has(savedTab) ? savedTab : "student";
 };
@@ -78,7 +82,7 @@ export default function Book() {
   // ===========================================================
   const [activeTab, setActiveTab] = useState(getInitialActiveTab);
   const [pageIndex, setPageIndex] = useState(() =>
-    getSavedPageIndex(getInitialActiveTab(), true),
+    getScormLaunchLocation()?.index ?? getSavedPageIndex(getInitialActiveTab(), true),
   );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1200);
   const touchStart = useRef({ x: 0, y: 0 });
@@ -169,10 +173,21 @@ export default function Book() {
   useEffect(() => {
     localStorage.setItem("activeTab", activeTab);
     localStorage.setItem(`pageIndex-${activeTab}`, String(pageIndex));
+    saveScormLocation(activeTab, pageIndex);
 
     // إزالة المفتاح العام القديم بعد نقله إلى مفتاح القسم الحالي.
     localStorage.removeItem("pageIndex");
   }, [activeTab, pageIndex]);
+
+  useEffect(() => {
+    if (!["student", "work", "teacher"].includes(activeTab)) return;
+
+    const visiblePages = [pageIndex];
+    if (!isMobile && viewMode === "spread" && pageIndex + 1 < pages.length) {
+      visiblePages.push(pageIndex + 1);
+    }
+    trackScormPageVisits(activeTab, visiblePages, pages.length);
+  }, [activeTab, pageIndex, isMobile, viewMode, pages.length]);
 
   useEffect(() => {
     const lastAvailableIndex = Math.max(0, pages.length - 1);

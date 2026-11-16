@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn.svg";
+import audioBtn from "../../assets/unit1/imgs/Page 01/Audio btn2.svg";
 import "./FlashCardViewer.css";
 export default function FlashCardViewer({ card }) {
   const [isPlaying, setIsPlaying] = useState(false);

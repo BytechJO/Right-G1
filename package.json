@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package:scorm": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-scorm.ps1"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
